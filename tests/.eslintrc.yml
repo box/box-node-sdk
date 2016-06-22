@@ -1,0 +1,11 @@
+---
+
+env:
+    node: true
+    mocha: true
+
+rules:
+    # JSDoc is not required in test files, obviously
+    require-jsdoc: 0
+    # We often require a file AFTER mocking its dependencies in tests
+    global-require: 0

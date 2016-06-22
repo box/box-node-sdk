@@ -1,0 +1,25 @@
+{{#if error}}
+	<div class="alert alert-danger" role="alert">{{error}}</div>
+{{/if}}
+
+<h1>Upload a File</h1>
+<form method="post" action="/upload" enctype="multipart/form-data">
+	<input type="file" name="file">
+	<button type="submit" class="btn btn-lg btn-success">Upload</button>
+</form>
+
+<h1>{{email}}'s Files</h1>
+<ul class="media-list">
+	{{#each files as |file|}}
+		<li class="media" id="{{file.id}}">
+			<div class="media-left">
+				<img src="/thumbnail/{{file.id}}" alt="" />
+			</div>
+			<div class="media-body">
+				{{file.name}}
+				<a href="/download/{{file.id}}" class="btn btn-primary">Download</a>
+				<a href="/preview/{{file.id}}" class="btn btn-primary">Preview</a>
+			</div>
+		</li>
+	{{/each}}
+</ul>

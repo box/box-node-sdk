@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "uri": "box.com/package.json",
+    "id": "package.json",
+    "title": "package.json schema",
+    "description": "A schema to validate package.json at Box",
+    "type": "object",
+
+    "properties": {
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "author": {
+            "type": "string",
+            "required": true
+        },
+        "version": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "required": true
+        },
+        "private": {
+            "type": "boolean",
+            "required": true,
+            "enum": [ true ]
+        },
+        "main": {
+            "type": "string",
+            "required": true
+        },
+        "scripts": {
+            "type": "object",
+            "required": true,
+            "properties": {
+                "test": {
+                    "type": "string",
+                    "required": true
+                },
+                "lint": {
+                    "type": "string",
+                    "required": true
+                },
+                "docs": {
+                    "type": "string",
+                    "required": true
+                }
+            }
+        }
+    }
+}
