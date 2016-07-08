@@ -1,0 +1,59 @@
+Users
+=====
+
+Users represent an individual's account on Box.
+
+* [Get the Current User's Information](#get-the-current-users-information)
+* [Update User](#update-user)
+* [Get Email Aliases](#get-email-aliases)
+* [Add Email Alias](#add-email-alias)
+* [Delete Email Alias](#delete-email-alias)
+
+Get the Current User's Information
+----------------------------------
+
+To get the current user, call [`users.get(userID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Users.html#get) with the `CURRENT_USER_ID` constant.
+
+```js
+client.users.get(client.CURRENT_USER_ID, null, callback);
+```
+
+
+Update User
+-----------
+
+To update a user call the [`users.update(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#update) method where `options` contains the fields to update.
+
+```js
+client.users.update(userID, {name: newName, job_title: newTitle, phone: newPhone}, callback);
+```
+
+
+Get Email Aliases
+-----------------
+
+To get a users email aliases call the [`users.getEmailAliases(userID, callback)`](http://opensource.box.com/box-node-sdk/Users.html#getEmailAliases) method.
+
+```js
+client.users.getEmailAliases(userID, callback);
+```
+
+
+Add Email Alias
+---------------
+
+To add an email alias for a user call the [`users.addEmailAlias(userID, email, callback`](http://opensource.box.com/box-node-sdk/Users.html#addEmailAlias) method.
+
+```js
+client.users.addEmailAlias(userID, email, callback);
+```
+
+
+Delete Email Alias
+------------------
+
+To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID, callback)`](http://opensource.box.com/box-node-sdk/Users.html#removeEmailAlias) method.
+
+```js
+client.users.addEmailAlias(userID, aliasID, callback);
+```
