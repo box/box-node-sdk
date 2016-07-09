@@ -14,7 +14,7 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Rename a Folder](#rename-a-folder)
 * [Delete a Folder](#delete-a-folder)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
-* [Get All Collaborations for a Folder](#get-all-collaborations-for-a-folder)
+* [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
 
 Get a Folder's Information
 --------------------------
