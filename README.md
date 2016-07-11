@@ -249,7 +249,7 @@ The following commands are available:
 
 * `npm test` - runs linting and unit tests (plus code coverage)
 * `npm run lint` - runs just linting
-* `npm run jsdoc` - creates JSDoc documentation
+* `npm run docs` - creates JSDoc documentation
 * `npm run deps` - updates remote dependencies
 
 
