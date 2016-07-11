@@ -56,43 +56,23 @@ describe('Metadata', function() {
 		mockery.disable();
 	});
 
-	describe('createProperties()', function() {
-		it('should make POST request to create properties metadata', function(done) {
-			var fileID = '7594',
-				properties = {
-					key: 'value'
-				};
+	describe('getTemplateSchema()', function() {
+		it('should make GET request to get schema', function(done) {
 
-			var expectedAPIPath = '/files/7594/metadata/properties',
-				expectedParams = {
-					body: properties
-				};
-			sandbox.mock(boxClientFake).expects('post').withArgs(expectedAPIPath, expectedParams);
+			var expectedAPIPath = '/metadata_templates/enterprise/productSpec/schema';
+			sandbox.mock(boxClientFake).expects('get').withArgs(expectedAPIPath, null);
 			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
-			metadata.createProperties(fileID, properties, done);
-		});
-
-		it('should pass empty properties object if none is passed in', function(done) {
-			var fileID = '7594';
-
-			var expectedAPIPath = '/files/7594/metadata/properties',
-				expectedParams = {
-					body: {}
-				};
-			sandbox.mock(boxClientFake).expects('post').withArgs(expectedAPIPath, expectedParams);
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
-			metadata.createProperties(fileID, null, done);
+			metadata.getTemplateSchema('enterprise', 'productSpec', done);
 		});
 	});
 
-	describe('getProperties()', function() {
-		it('should make a GET request to retrieve properties metadata', function(done) {
-			var fileID = '85234';
+	describe('getTemplates()', function() {
+		it('should make a GET request to retrieve metadata templates', function(done) {
 
-			var expectedAPIPath = '/files/85234/metadata/properties';
+			var expectedAPIPath = '/metadata_templates/enterprise';
 			sandbox.mock(boxClientFake).expects('get').withArgs(expectedAPIPath, null);
 			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
-			metadata.getProperties(fileID, done);
+			metadata.getTemplates('enterprise', done);
 		});
 	});
 });

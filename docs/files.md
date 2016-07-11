@@ -15,6 +15,10 @@ file's contents, upload new versions, and perform other common file operations
 * [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
 * [Create a Shared Link](#create-a-shared-link)
 * [Get Thumbnail](#get-thumbnail)
+* [Create Metadata](#create-metadata)
+* [Get Metadata](#get-metadata)
+* [Update Metadata](#update-metadata)
+* [Delete Metadata](#delete-metadata)
 
 Get a File's Information
 ------------------------
@@ -158,7 +162,7 @@ Get Thumbnail
 -------------
 
 A thumbnail for a file can be retrieved by calling
-[`files.getThumbnail(fileID, qs, callback)`]((http://opensource.box.com/box-node-sdk/Files.html#getThumbnail)).
+[`files.getThumbnail(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getThumbnail).
 
 ```js
 client.files.getThumbnail('12345', null, function(error, response) {
@@ -175,4 +179,55 @@ client.files.getThumbnail('12345', null, function(error, response) {
 		// no thumbnail available
 	}
 });
+```
+
+Create Metadata
+---------------
+
+Metadata can be created on a file by calling
+[`files.addMetadata(fileID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/Files.html#addMetadata)
+with a metadata template and an object of key/value pairs to add as metadata.
+
+```js
+var metadata = {foo: 'bar'};
+client.files.addMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, metadata, callback);
+```
+
+Get Metadata
+------------
+
+Retrieve a file's metadata by calling
+[`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getAllMetadata),
+to retrieve all metadata, or
+[`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getMetadata)
+to retrieve a single template.
+
+```js
+client.files.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec', callback);
+```
+
+Update Metadata
+---------------
+
+Update a file's metadata by calling
+[`files.updateMetadata(fileID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/Files.html#updateMetadata)
+with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
+
+```js
+var patch = [{
+	op: 'add',
+	path: '/baz',
+	value: 'quux'
+}];
+client.files.updateMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, patch, callback);
+```
+
+Delete Metadata
+---------------
+
+A file's metadata can be removed by calling
+[`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/Files.html#deleteMetadata).
+
+```js
+client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
 ```

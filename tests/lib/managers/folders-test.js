@@ -205,4 +205,75 @@ describe('Folders', function() {
 		});
 	});
 
+	describe('getAllMetadata()', function() {
+
+		it('should make GET call to fetch metadata', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/1234/metadata', null);
+			folders.getAllMetadata(FOLDER_ID, done);
+		});
+	});
+
+	describe('getMetadata()', function() {
+
+		it('should make GET call to fetch metadata', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/1234/metadata/global/properties', null);
+			folders.getMetadata(FOLDER_ID, 'global', 'properties', done);
+		});
+	});
+
+	describe('addMetadata()', function() {
+
+		it('should make POST call to add metadata', function(done) {
+
+			var metadata = {
+				foo: 'bar'
+			};
+
+			var expectedParams = {
+				body: metadata
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234/metadata/global/properties', expectedParams);
+			folders.addMetadata(FOLDER_ID, 'global', 'properties', metadata, done);
+		});
+	});
+
+	describe('updateMetadata()', function() {
+
+		it('should make PUT call with JSON Patch to update metadata', function(done) {
+
+			var patch = [{
+				op: 'add',
+				path: '/foo',
+				value: 'bar'
+			}];
+
+			var expectedParams = {
+				body: patch,
+				headers: {
+					'Content-Type': 'application/json-patch+json'
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('put').withArgs('/folders/1234/metadata/global/properties', expectedParams);
+			folders.updateMetadata(FOLDER_ID, 'global', 'properties', patch, done);
+		});
+	});
+
+	describe('deleteMetadata()', function() {
+
+		it('should make DELETE call to remove metadata', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/1234/metadata/global/properties', null);
+			folders.deleteMetadata(FOLDER_ID, 'global', 'properties', done);
+		});
+	});
+
 });

@@ -471,4 +471,75 @@ describe('Files', function() {
 			files.uploadNewFileVersion(FILE_ID, CONTENT, filesCallbackMock);
 		});
 	});
+
+	describe('getAllMetadata()', function() {
+
+		it('should make GET call to fetch metadata', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/metadata', null);
+			files.getAllMetadata(FILE_ID, done);
+		});
+	});
+
+	describe('getMetadata()', function() {
+
+		it('should make GET call to fetch metadata', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/metadata/global/properties', null);
+			files.getMetadata(FILE_ID, 'global', 'properties', done);
+		});
+	});
+
+	describe('addMetadata()', function() {
+
+		it('should make POST call to add metadata', function(done) {
+
+			var metadata = {
+				foo: 'bar'
+			};
+
+			var expectedParams = {
+				body: metadata
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/1234/metadata/global/properties', expectedParams);
+			files.addMetadata(FILE_ID, 'global', 'properties', metadata, done);
+		});
+	});
+
+	describe('updateMetadata()', function() {
+
+		it('should make PUT call with JSON Patch to update metadata', function(done) {
+
+			var patch = [{
+				op: 'add',
+				path: '/foo',
+				value: 'bar'
+			}];
+
+			var expectedParams = {
+				body: patch,
+				headers: {
+					'Content-Type': 'application/json-patch+json'
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/1234/metadata/global/properties', expectedParams);
+			files.updateMetadata(FILE_ID, 'global', 'properties', patch, done);
+		});
+	});
+
+	describe('deleteMetadata()', function() {
+
+		it('should make DELETE call to remove metadata', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('del').withArgs('/files/1234/metadata/global/properties', null);
+			files.deleteMetadata(FILE_ID, 'global', 'properties', done);
+		});
+	});
 });
