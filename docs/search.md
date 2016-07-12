@@ -1,12 +1,12 @@
 Search
 ======
 
-* [Search a Folder and Its Children](#search-a-folder-and-its-children)
+* [Search for Content](#search-for-content)
 
-Search a Folder and Its Children
---------------------------------
+Search for Content
+------------------
 
-To get a list of items matching a search query, call the [`search.query(searchQuery, queryString, callback)`](http://opensource.box.com/box-node-sdk/Search.html#query) method.
+To get a list of items matching a search query, call the [`search.query(searchQuery, qs, callback)`](http://opensource.box.com/box-node-sdk/Search.html#query) method.
 
 ```js
 client.search.query('keyword search string', queryString, callback);

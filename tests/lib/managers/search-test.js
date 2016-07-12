@@ -53,7 +53,7 @@ describe('Search', function() {
 		mockery.disable();
 	});
 
-	describe('search()', function() {
+	describe('query()', function() {
 
 		it('should make GET request to search the API and propagate results when called', function(done) {
 			var searchQuery = 'fakeQuery',
