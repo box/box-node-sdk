@@ -15,6 +15,10 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Delete a Folder](#delete-a-folder)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
+* [Create Metadata](#create-metadata)
+* [Get Metadata](#get-metadata)
+* [Update Metadata](#update-metadata)
+* [Delete Metadata](#delete-metadata)
 
 Get a Folder's Information
 --------------------------
@@ -163,4 +167,55 @@ All collaborations can be returned by passing `null` for the `queryString` param
 
 ```js
 client.folders.getCollaborations('12345', null, callback);
+```
+
+Create Metadata
+---------------
+
+Metadata can be created on a folder by calling
+[`folders.addMetadata(folderID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#addMetadata)
+with a metadata template and an object of key/value pairs to add as metadata.
+
+```js
+var metadata = {foo: 'bar'};
+client.folders.addMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, metadata, callback);
+```
+
+Get Metadata
+------------
+
+Retrieve a folder's metadata by calling
+[`folders.getAllMetadata(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getAllMetadata),
+to retrieve all metadata, or
+[`folders.getMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getMetadata)
+to retrieve a single template.
+
+```js
+client.folders.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec', callback);
+```
+
+Update Metadata
+---------------
+
+Update a folder's metadata by calling
+[`folders.updateMetadata(folderID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#updateMetadata)
+with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
+
+```js
+var patch = [{
+	op: 'add',
+	path: '/baz',
+	value: 'quux'
+}];
+client.folders.updateMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, patch, callback);
+```
+
+Delete Metadata
+---------------
+
+A folder's metadata can be removed by calling
+[`folders.deleteMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#deleteMetadata).
+
+```js
+client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
 ```
