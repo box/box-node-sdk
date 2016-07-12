@@ -117,10 +117,10 @@ client.folders.update('12345', {name: 'New Name'}, callback);
 Delete a Folder
 ---------------
 
-A folder can be deleted with the [`folders.delete(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#delete) method.
+A folder can be deleted with the [`folders.delete(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#delete) method.
 
 ```js
-client.folders.delete('12345', callback);
+client.folders.delete('12345', {recursive: true}, callback);
 ```
 
 
