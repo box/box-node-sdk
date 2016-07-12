@@ -527,18 +527,6 @@ describe('box-client', function() {
 
 	});
 
-	describe('search()', function() {
-
-		it('should make GET request to search the API and propagate results when called', function(done) {
-			var query = 'fakeQuery';
-
-			fakeParamsWithQs.qs.search = query;
-			sandbox.mock(basicClient).expects('get').withArgs('/search', fakeParamsWithQs).yieldsAsync(null, fakeOKResponse);
-			basicClient.search(query, fakeQs, done);
-		});
-
-	});
-
 	describe('plug()', function() {
 
 		var PLUGIN_API_ROOT = 'http://www.foobar.com',
