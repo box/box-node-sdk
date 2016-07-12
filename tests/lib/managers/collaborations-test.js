@@ -302,13 +302,13 @@ describe('Collaborations', function() {
 	describe('delete()', function() {
 		it('should make DELETE request to update collaboration info when called', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('del').withArgs('/collaborations/1234', testParamsWithQs);
-			collaborations.delete(COLLABORATION_ID, testQS);
+			sandbox.mock(boxClientFake).expects('del').withArgs('/collaborations/1234', null);
+			collaborations.delete(COLLABORATION_ID);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/collaborations/1234', testParamsWithQs).yieldsAsync();
-			collaborations.delete(COLLABORATION_ID, testQS, done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/collaborations/1234', null).yieldsAsync();
+			collaborations.delete(COLLABORATION_ID, done);
 		});
 	});
 

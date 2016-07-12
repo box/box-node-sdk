@@ -156,13 +156,13 @@ describe('Comments', function() {
 	describe('delete()', function() {
 		it('should make DELETE request to delete the comment when called', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('del').withArgs('/comments/1234', testParamsWithQs);
-			comments.delete(COMMENT_ID, testQS);
+			sandbox.mock(boxClientFake).expects('del').withArgs('/comments/1234', null);
+			comments.delete(COMMENT_ID);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/comments/1234', testParamsWithQs).yieldsAsync();
-			comments.delete(COMMENT_ID, testQS, done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/comments/1234', null).yieldsAsync();
+			comments.delete(COMMENT_ID, done);
 		});
 	});
 
