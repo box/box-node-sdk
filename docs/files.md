@@ -103,11 +103,11 @@ Delete a File
 -------------
 
 Calling the
-[`files.delete(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#delete)
+[`files.delete(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#delete)
 method will move the file to the user's trash.
 
 ```js
-client.files.delete('12345', null, callback);
+client.files.delete('12345', callback);
 ```
 
 Upload a New Version of a File

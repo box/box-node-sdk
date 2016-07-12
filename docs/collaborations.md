@@ -53,10 +53,10 @@ client.collaborations.update('56473', {role: client.collaborationRoles.PREVIEWER
 Remove a Collaboration
 ----------------------
 
-A collaboration can be removed by calling [`collaborations.delete(collaborationID, qs, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#delete).
+A collaboration can be removed by calling [`collaborations.delete(collaborationID, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#delete).
 
 ```js
-client.collaborations.delete('56473', null, callback);
+client.collaborations.delete('56473', callback);
 ```
 
 Get a Collaboration's Information

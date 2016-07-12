@@ -326,13 +326,13 @@ describe('Files', function() {
 	describe('delete()', function() {
 		it('should make DELETE request to update file info when called', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('del').withArgs('/files/1234', testParamsWithQs);
-			files.delete(FILE_ID, testQS);
+			sandbox.mock(boxClientFake).expects('del').withArgs('/files/1234', null);
+			files.delete(FILE_ID);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/files/1234', testParamsWithQs).yieldsAsync();
-			files.delete(FILE_ID, testQS, done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/files/1234', null).yieldsAsync();
+			files.delete(FILE_ID, done);
 		});
 	});
 

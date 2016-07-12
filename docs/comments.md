@@ -68,9 +68,9 @@ Delete a Comment
 ----------------
 
 A comment can be deleted with the
-[`comments.delete(commentID, qs, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#delete)
+[`comments.delete(commentID, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#delete)
 method.
 
 ```js
-client.comments.delete('45678', null, callback);
+client.comments.delete('45678', callback);
 ```
