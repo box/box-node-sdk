@@ -4,6 +4,10 @@
   "version": "1.0.0-beta.1",
   "description": "A Box SDK for Node.js",
   "license": "Apache-2.0",
+  "repository": {
+	  "type": "git",
+	  "url": "https://github.com/box/box-node-sdk.git"
+  },
   "engines": {
     "node": ">= 4.0.0"
   },
