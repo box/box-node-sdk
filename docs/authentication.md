@@ -22,7 +22,7 @@ The following example creates an API client with a developer token:
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
-	clientId: 'YOUR-CLIENT-ID',
+	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'YOUR-CLIENT_SECRET'
 });
 var client = sdk.getBasicClient('YOUR-DEVELOPER-TOKEN');
@@ -44,7 +44,7 @@ automatically refresh the access token as needed.
 var BoxSDK = require('box-node-sdk');
 var TokenStore = require('TOKEN-STORE-IMPLEMENTATION');
 var sdk = new BoxSDK({
-	clientId: 'YOUR-CLIENT-ID',
+	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'YOUR-CLIENT_SECRET'
 });
 
@@ -75,7 +75,7 @@ open shared links).
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
-	clientId: 'YOUR-CLIENT-ID',
+	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'YOUR-CLIENT_SECRET'
 });
 var client = sdk.getAnonymousClient();
@@ -94,7 +94,7 @@ for detailed instructions on how to use app auth.
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
-	clientId: 'YOUR-CLIENT-ID',
+	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'YOUR-CLIENT_SECRET',
 	appAuth: {
 		keyID: 'YOUR-KEY-ID',
