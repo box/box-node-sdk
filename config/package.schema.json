@@ -23,11 +23,6 @@
             "type": "string",
             "required": true
         },
-        "private": {
-            "type": "boolean",
-            "required": true,
-            "enum": [ true ]
-        },
         "main": {
             "type": "string",
             "required": true
