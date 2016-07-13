@@ -3,7 +3,8 @@ Box SDK for Node.js
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 
-A JavaScript interface to the Box API. Includes:
+A JavaScript interface to the [Box Content API](https://developers.box.com/docs/).
+Includes:
 
 - Token management and refreshing
 - Easy access to get/modify/delete your content on Box
