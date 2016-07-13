@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: token-manager.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: token-manager.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Token Manager
+ * @author bemerick
+ * @author mwiller
+ */
+
+'use strict';
+
+// ------------------------------------------------------------------------------
+// Typedefs and Callbacks
+// ------------------------------------------------------------------------------
+
+/**
+ * Token request options. Set by the consumer to add/modify the params sent to the
+ * request.
+ *
+ * @typedef {Object} TokenRequestOptions
+ * @property {string} [ip] The IP Address of the requesting user. This IP will be reflected in authentication
+ *                         notification emails sent to your users on login. Defaults to the IP address of the
+ *                         server requesting the tokens.
+ */
+
+/**
+ * An object representing all token information for a single Box user.
+ *
+ * @typedef {Object} TokenInfo
+ * @property {string} accessToken    The API access token. Used to authenticate API requests to a certain
+ *                                   user and/or application.
+ * @property {int} acquiredAtMS      The time that the tokens were acquired.
+ * @property {int} accessTokenTTLMS  The TTL of the access token. Can be used with acquiredAtMS to
+ *                                   calculate if the current access token has expired.
+ * @property {string} [refreshToken] The API refresh token is a Longer-lasting than an access token, and can
+ *                                   be used to gain a new access token if the current access token becomes
+ *                                   expired. Grants like the 'client credentials' grant don't return a
+ *                                   refresh token, and have no refresh capabilities.
+ */
+
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+var errors = require('./util/errors'),
+	jwt = require('jsonwebtoken'),
+	uuid = require('node-uuid'),
+	httpStatusCodes = require('http-status');
+
+// ------------------------------------------------------------------------------
+// Constants
+// ------------------------------------------------------------------------------
+
+/**
+ * Collection of grant types that can be used to acquire tokens via OAuth2
+ *
+ * @readonly
+ * @enum {string}
+ */
+var grantTypes = {
+	AUTHORIZATION_CODE: 'authorization_code',
+	REFRESH_TOKEN: 'refresh_token',
+	CLIENT_CREDENTIALS: 'client_credentials',
+	JWT: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+};
+
+/**
+ * Collection of paths to interact with Box OAuth2 tokening system
+ *
+ * @readonly
+ * @enum {string}
+ */
+var tokenPaths = {
+	ROOT: '/oauth2',
+	GET: '/token',
+	REVOKE: '/revoke'
+};
+
+// The XFF header label - Used to give the API better information for uploads, rate-limiting, etc.
+var HEADER_XFF = 'X-Forwarded-For';
+
+// ------------------------------------------------------------------------------
+// Private
+// ------------------------------------------------------------------------------
+
+/**
+ * Parse the response body to create a new TokenInfo object.
+ *
+ * @param {Object} grantResponseBody - (Request lib) response body containing granted token info from API
+ * @returns {TokenInfo} A TokenInfo object.
+ * @private
+ */
+function getTokensFromGrantResponse(grantResponseBody) {
+	return {
+		// Set the access token &amp; refresh token (if passed)
+		accessToken: grantResponseBody.access_token,
+		refreshToken: grantResponseBody.refresh_token,
+		// Box API sends back expires_in in seconds, we convert to ms for consistency of keeping all time in ms
+		accessTokenTTLMS: parseInt(grantResponseBody.expires_in, 10) * 1000,
+		acquiredAtMS: Date.now()
+	};
+}
+
+/**
+ * Determines if a given string could represent an authorization code or token.
+ *
+ * @param {string} codeOrToken The code or token to check.
+ * @returns {boolean} True if codeOrToken is valid, false if not.
+ * @private
+ */
+function isValidCodeOrToken(codeOrToken) {
+	return (typeof codeOrToken === 'string' &amp;&amp; codeOrToken.length > 0);
+}
+
+/**
+ * Determines if a token grant response is valid
+ *
+ * @param {string} grantType the type of token grant
+ * @param {object} responseBody the body of the response to check
+ * @returns {boolean} True if response body has expected fields, false if not.
+ * @private
+ */
+function isValidTokenResponse(grantType, responseBody) {
+	if (!isValidCodeOrToken(responseBody.access_token)) {
+		return false;
+	}
+	if (typeof responseBody.expires_in !== 'number') {
+		return false;
+	}
+	// Check the refresh_token for certain types of grants
+	if (grantType === 'authorization_code' || grantType === 'refresh_token') {
+		if (!isValidCodeOrToken(responseBody.refresh_token)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+// ------------------------------------------------------------------------------
+// Public
+// ------------------------------------------------------------------------------
+
+/**
+ * Manager for API access abd refresh tokens
+ *
+ * @param {Config} config The config object
+ * @param {APIRequestManager} requestManager The API Request Manager
+ * @constructor
+ */
+function TokenManager(config, requestManager) {
+
+	this.config = config;
+	this.oauthBaseURL = config.apiRootURL + tokenPaths.ROOT;
+	this.requestManager = requestManager;
+}
+
+TokenManager.prototype = {
+
+	/**
+	 * Given a TokenInfo object, returns whether its access token is expired. An access token is considered
+	 * expired once its TTL surpasses the current time outside of the given buffer. This is a public method so
+	 * that other modules may check the validity of their tokens.
+	 *
+	 * @param {TokenInfo} tokenInfo the token info to be written
+	 * @param {int} [bufferMS] An optional buffer we'd like to test against. The greater this buffer, the more aggressively
+	 * we'll call a token invalid.
+	 * @returns {boolean} True if token is valid outside of buffer, otherwise false
+	 */
+	isAccessTokenValid: function(tokenInfo, bufferMS) {
+		if (typeof tokenInfo.acquiredAtMS === 'undefined' || typeof tokenInfo.accessTokenTTLMS === 'undefined') {
+			return false;
+		}
+		bufferMS = bufferMS || 0;
+		var expireTime = tokenInfo.acquiredAtMS + tokenInfo.accessTokenTTLMS - bufferMS;
+		return (expireTime > Date.now());
+	},
+
+	/**
+	 * Acquires OAuth2 tokens using a grant type (authorization_code, password, refresh_token)
+	 *
+	 * @param {Object} formParams - should contain all params expected by Box OAuth2 token endpoint
+	 * @param {?TokenRequestOptions} options - Sets optional behavior for the token grant, null for default behavior
+	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
+	 * @returns {void}
+	 * @private
+	 */
+	getTokens: function(formParams, options, callback) {
+		var params = {
+			method: 'POST',
+			url: this.oauthBaseURL + tokenPaths.GET,
+			headers: {},
+			form: formParams
+		};
+		options = options || {};
+
+		// add in app-specific id and secret to auth with Box
+		params.form.client_id = this.config.clientID;
+		params.form.client_secret = this.config.clientSecret;
+
+		if (options.ip) {
+			params.headers[HEADER_XFF] = options.ip;
+		}
+
+		this.requestManager.makeRequest(params, function(err, response) {
+
+			// Serious Error: The Box client can't do anything else since this is a failed request.
+			if (err) {
+				callback(err);
+				return;
+			}
+
+			// Response Error: The API is telling us that we attempted an invalid token grant. This
+			// means that our refresh token or auth code has exipred, so propagate an "Expired Tokens"
+			// error.
+			if (response.body &amp;&amp; response.body.error &amp;&amp; response.body.error === 'invalid_grant') {
+				callback(errors.buildExpiredAuthError(response));
+				return;
+			}
+
+			// Unexpected Response: If the token request couldn't get a valid response, then we're
+			// out of options. Build an "Unexpected Response" error and propagate it out for the
+			// consumer to handle.
+			if (response.statusCode !== httpStatusCodes.OK || response.body instanceof Buffer) {
+				callback(errors.buildUnexpectedResponseError(response));
+				return;
+			}
+
+			// Check to see if token response is valid in case the API returns us a 200 with a malformed token
+			if (!isValidTokenResponse(formParams.grant_type, response.body)) {
+				callback(errors.buildResponseError(response, 'Token format from response invalid'));
+				return;
+			}
+
+			// Got valid token response. Parse out the TokenInfo and propagate it back.
+			var tokenInfo = getTokensFromGrantResponse(response.body);
+			callback(null, tokenInfo);
+		});
+	},
+
+	/**
+	 * Acquires token info using an authorization code
+	 *
+	 * @param {string} authorizationCode - authorization code issued by Box
+	 * @param {?TokenRequestOptions} options - Sets optional behavior for the token grant, null for default behavior
+	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
+	 * @returns {void}
+	 */
+	getTokensAuthorizationCodeGrant: function(authorizationCode, options, callback) {
+		if (!isValidCodeOrToken(authorizationCode)) {
+			setImmediate(function() {
+				callback(new Error('Invalid authorization code.'));
+			});
+		} else {
+			this.getTokens({
+				grant_type: grantTypes.AUTHORIZATION_CODE,
+				code: authorizationCode
+			},
+			options,
+			callback);
+		}
+	},
+
+	/**
+	 * Acquires token info using the client credentials grant.
+	 *
+	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
+	 * @returns {void}
+	 */
+	getTokensClientCredentialsGrant: function(callback) {
+		this.getTokens({
+			grant_type: grantTypes.CLIENT_CREDENTIALS
+		},
+		null,
+		callback);
+	},
+
+	/**
+	 * Refreshes the access and refresh tokens for a given refresh token.
+	 *
+	 * @param {string} refreshToken - A valid OAuth refresh token
+	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
+	 * @returns {void}
+	 */
+	getTokensRefreshGrant: function(refreshToken, callback) {
+		if (!isValidCodeOrToken(refreshToken)) {
+			setImmediate(function() {
+				callback(new Error('Invalid refresh token.'));
+			});
+		} else {
+			this.getTokens({
+				grant_type: grantTypes.REFRESH_TOKEN,
+				refresh_token: refreshToken
+			},
+			null,
+			callback);
+		}
+	},
+
+	/**
+	 * Gets tokens for enterprise administration of app users
+	 * @param {string} type The type of token to create, "user" or "enterprise"
+	 * @param {string} id The ID of the enterprise to generate a token for
+	 * @param {Function} callback Passed the tokens if successful
+	 * @returns {void}
+	 */
+	getTokensJWTGrant: function(type, id, callback) {
+
+		if (!this.config.appAuth.keyID) {
+			callback(new Error('Must provide app auth configuration to use JWT Grant'));
+			return;
+		}
+
+		var claims = {
+			box_sub_type: type
+		};
+		var options = {
+			algorithm: this.config.appAuth.algorithm,
+			audience: 'https://api.box.com/oauth2/token',
+			subject: id,
+			issuer: this.config.clientID,
+			jwtid: uuid.v4(),
+			expiresIn: this.config.appAuth.expirationTime,
+			headers: {
+				kid: this.config.appAuth.keyID
+			}
+		};
+		var keyParams = {
+			key: this.config.appAuth.privateKey,
+			passphrase: this.config.appAuth.passphrase
+		};
+
+		try {
+			var assertion = jwt.sign(claims, keyParams, options);
+		} catch (err) {
+			callback(err);
+			return;
+		}
+
+
+		this.getTokens({
+			grant_type: grantTypes.JWT,
+			assertion: assertion
+		},
+		null,
+		callback);
+	},
+
+	/**
+	 * Revokes a token pair associated with a given access or refresh token.
+	 *
+	 * @param {string} token - A valid access or refresh token to revoke
+	 * @param {Function} callback - If err, revoke failed. Otherwise, revoke succeeded.
+	 * @returns {void}
+	 */
+	revokeTokens: function(token, callback) {
+		var params = {
+			method: 'POST',
+			url: this.oauthBaseURL + tokenPaths.REVOKE,
+			form: {
+				token: token,
+				client_id: this.config.clientID,
+				client_secret: this.config.clientSecret
+			}
+		};
+
+		this.requestManager.makeRequest(params, callback);
+	}
+};
+
+/**
+ * Provides interactions with Box OAuth2 tokening system.
+ *
+ * @module box-node-sdk/lib/token-manager
+ */
+module.exports = TokenManager;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Users.html">Users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jul 13 2016 16:09:11 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

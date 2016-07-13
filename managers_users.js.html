@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: managers/users.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: managers/users.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Manager for the Box User Resource
+ * @author fschott
+ */
+
+'use strict';
+
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+var urlPath = require('../util/url-path');
+
+
+// ------------------------------------------------------------------------------
+// Private
+// ------------------------------------------------------------------------------
+var BASE_PATH = '/users',
+	EMAIL_ALIASES_SUBRESOURCE = 'email_aliases',
+	CURRENT_USER_ID = 'me';
+
+
+// ------------------------------------------------------------------------------
+// Public
+// ------------------------------------------------------------------------------
+
+/**
+ * Simple manager for interacting with all 'User' endpoints and actions.
+ *
+ * @constructor
+ * @param {BoxClient} client - The Box API Client that is responsible for making calls to the API
+ * @returns {void}
+ */
+function Users(client) {
+	this.client = client;
+}
+
+/** @const {string} */
+Users.prototype.CURRENT_USER_ID = CURRENT_USER_ID;
+
+/**
+ * Requests information for the Box user info associated with a given ID
+ *
+ * API Endpoint: '/users/:id'
+ * Method: GET
+ *
+ * @param {string} id - The ID of the user to retrieve
+ * @param {?Object} qs - Optional additional querystring to add to the request. Can be left null in most cases.
+ * @param {Function} callback - passed the user info if it was acquired successfully
+ * @returns {void}
+ */
+Users.prototype.get = function(id, qs, callback) {
+	var apiPath = urlPath(BASE_PATH, id),
+		params = {
+			qs: qs
+		};
+
+	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Update some information about a user.
+ *
+ * API Endpoint: '/users/:id'
+ * Method: PUT
+ *
+ * @param {string} id - The ID of the user to update
+ * @param {?Object} options - User fields to update
+ * @param {Function} callback - Passed the updated user information if it was acquired successfully
+ * @returns {void}
+ */
+Users.prototype.update = function(id, options, callback) {
+	var apiPath = urlPath(BASE_PATH, id),
+		params = {
+			body: options
+		};
+
+	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Get all linked email addresses for a user.
+ * @NOTE(mwiller) 2014-06-10: This does not include their primary email address!
+ *
+ * API Endpoint: '/users/:id/email_aliases'
+ * Method: GET
+ *
+ * @param {string} id - The ID of the user to retrieve email alises for
+ * @param {Function} callback - Passed the email aliases if successful
+ * @returns {void}
+ */
+Users.prototype.getEmailAliases = function(id, callback) {
+	var apiPath = urlPath(BASE_PATH, id, EMAIL_ALIASES_SUBRESOURCE);
+	this.client.get(apiPath, null, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Add a linked email address to a user's account.
+ *
+ * API Endpoint: '/users/:id/email_aliases'
+ * Method: POST
+ *
+ * @param {string} id - The ID of the user to add an email alias to
+ * @param {string} email - The email address to add
+ * @param {Function} callback - Passed the new alias if successful
+ * @returns {void}
+ */
+Users.prototype.addEmailAlias = function(id, email, callback) {
+	var apiPath = urlPath(BASE_PATH, id, EMAIL_ALIASES_SUBRESOURCE),
+		params = {
+			body: {
+				email: email,
+				is_confirmed: false // don't attempt to autoconfirm aliases for admins
+			}
+		};
+
+	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Remove a linked email address from the current user by alias ID.
+ *
+ * API Endpoint: '/users/:id/email_aliases/:aliasID'
+ * Method: DELETE
+ *
+ * @param {string} userID - The ID of the user to remove the email alias from
+ * @param {string} aliasID - The ID of the linked email alias to remove
+ * @param {Function} callback - Passed nothing on success
+ * @returns {void}
+ */
+Users.prototype.removeEmailAlias = function(userID, aliasID, callback) {
+	var apiPath = urlPath(BASE_PATH, userID, EMAIL_ALIASES_SUBRESOURCE, aliasID);
+	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+};
+
+// @NOTE(fschott) 2014-05-06: Still need to implement get, edit, create, etc.
+//  The problem is that they are only available to enterprise admins, so we'll
+//  first need to figure out how we want to handle access to those methods.
+//  Remove this comment once we have.
+
+/**
+ * @module box-node-sdk/lib/managers/users
+ * @see {@Link Users}
+ */
+module.exports = Users;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Users.html">Users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jul 13 2016 16:09:11 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
