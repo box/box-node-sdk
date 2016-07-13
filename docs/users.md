@@ -25,7 +25,7 @@ Update User
 To update a user call the [`users.update(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#update) method where `options` contains the fields to update.
 
 ```js
-client.users.update(userID, {name: newName, job_title: newTitle, phone: newPhone}, callback);
+client.users.update('123', {name: 'New Name', job_title: 'New Title', phone: '555-1111'}, callback);
 ```
 
 
@@ -35,7 +35,7 @@ Get Email Aliases
 To get a users email aliases call the [`users.getEmailAliases(userID, callback)`](http://opensource.box.com/box-node-sdk/Users.html#getEmailAliases) method.
 
 ```js
-client.users.getEmailAliases(userID, callback);
+client.users.getEmailAliases('123', callback);
 ```
 
 
@@ -45,7 +45,7 @@ Add Email Alias
 To add an email alias for a user call the [`users.addEmailAlias(userID, email, callback`](http://opensource.box.com/box-node-sdk/Users.html#addEmailAlias) method.
 
 ```js
-client.users.addEmailAlias(userID, email, callback);
+client.users.addEmailAlias('123', 'user@example.com', callback);
 ```
 
 
@@ -55,5 +55,5 @@ Delete Email Alias
 To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID, callback)`](http://opensource.box.com/box-node-sdk/Users.html#removeEmailAlias) method.
 
 ```js
-client.users.addEmailAlias(userID, aliasID, callback);
+client.users.removeEmailAlias('123', '765', callback);
 ```

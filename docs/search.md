@@ -11,7 +11,12 @@ To get a list of items matching a search query, call the [`search.query(searchQu
 ```js
 client.search.query(
     'keyword search string',
-    {file_extensions: 'pdf,doc'},
+    {
+        fields: 'name,modified_at,size,url,extension,permissions,sync_state',
+        file_extensions: 'pdf,doc',
+        limit: 20,
+        offset: 0
+    },
     callback
 );
 ```

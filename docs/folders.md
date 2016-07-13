@@ -80,7 +80,7 @@ Create a Folder
 Create a child folder by calling the [`folders.create(parentFolderID, newFolderName, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#create) method.
 
 ```js
-client.folders.create('12345', "New Folder", callback);
+client.folders.create('12345', 'New Folder', callback);
 ```
 
 

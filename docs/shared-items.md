@@ -12,8 +12,8 @@ To get the file or folder information for a shared link, call the [`sharedItems.
 
 ```js
 client.sharedItems.get(
-    sharedLinkUrl,
-    sharedLinkPassword,
+    'https://app.box.com/s/1a2b3c4d5e',
+    null,
     {fields: 'type,id,parent,extension,shared_link'},
     callback
 );
