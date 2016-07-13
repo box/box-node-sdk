@@ -97,7 +97,7 @@ BoxSDK.revokeTokens('ACCESS_TOKEN_OR_REFRESH_TOKEN', function(err) {
 
 Clients are used to communicate with the API on behalf of a user. All endpoints require some sort of authentication, which can be either as a user or an anonymous user via client credentials.
 
-Box supports three different types of client:
+Box supports four different types of client:
 
 - **Basic Client:** Simple, makes calls via the given access token
 - **Persistent Client:** More advanced, will refresh its tokens as needed and persist them via some token store
@@ -150,28 +150,21 @@ var box = sdk.getAnonymousClient();
 box.users.get(box.CURRENT_USER_ID, null, function(err, currentUser) {});
 box.folders.update(123, { name: 'New Folder Name' }, function(err, folder) {});
 box.files.uploadFile(123, 'bicycle.png', fileData, function(err, file) {});
-box.comments.delete(456, null, function(err) {});
+box.comments.delete(456, function(err) {});
 ```
 
 The following resources are supported by the SDK:
 
-- Collaborations
-- Collections
-- Comments
-- Events
-- Files
-- Folders
+- [Collaborations](https://github.com/box/box-node-sdk/blob/master/docs/collaborations.md)
+- [Collections](https://github.com/box/box-node-sdk/blob/master/docs/collections.md)
+- [Comments](https://github.com/box/box-node-sdk/blob/master/docs/comments.md)
+- [Events](https://github.com/box/box-node-sdk/blob/master/docs/events.md)
+- [Files](https://github.com/box/box-node-sdk/blob/master/docs/files.md)
+- [Folders](https://github.com/box/box-node-sdk/blob/master/docs/folders.md)
 - Metadata
-- Shared Items
-- Users
-
-### Search
-
-```js
-box.search('search query', null, function(err, results) {
-	//...
-});
-```
+- [Search](https://github.com/box/box-node-sdk/blob/master/docs/search.md)
+- [Shared Items](https://github.com/box/box-node-sdk/blob/master/docs/shared-items.md)
+- [Users](https://github.com/box/box-node-sdk/blob/master/docs/users.md)
 
 ### Helpers
 
