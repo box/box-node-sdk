@@ -17,6 +17,8 @@ Includes:
 npm install --save box-node-sdk
 ```
 
+[JSDocs](http://opensource.box.com/box-node-sdk/)
+
 
 Basic Usage
 -----------
