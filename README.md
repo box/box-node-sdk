@@ -280,7 +280,9 @@ The following commands are available:
 Support
 -------
 
-Need to contact us directly? Email oss@box.com and be sure to include the name of this project in the subject.
+Need to contact us directly? You can post to the
+[Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum);
+please be sure to mention the Node.js SDK in the subject.
 
 Copyright and License
 ---------------------
