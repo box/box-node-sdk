@@ -88,6 +88,16 @@ target.docs = function() {
 	nodeCLI.exec('jsdoc', '-r', '-d ./ ', JS_DIR);
 };
 
+target.jsdoc = function() {
+	echo('Generating documentation');
+	nodeCLI.exec('jsdoc', '-r', '-d jsdoc ', JS_DIR);
+};
+
+target.jsdocprivate = function() {
+	echo('Generating documentation');
+	nodeCLI.exec('jsdoc', '-r', '-p', '-d jsdoc ', JS_DIR);
+};
+
 target.patch = function() {
 	release('patch');
 };
