@@ -30,7 +30,7 @@
     "lodash.merge": "^4.3.5",
     "node-sha1": "^1.0.1",
     "node-uuid": "^1.4.7",
-    "request": "^2.70.0"
+    "request": "^2.74.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
