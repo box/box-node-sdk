@@ -5,8 +5,8 @@
   "description": "A Box SDK for Node.js",
   "license": "Apache-2.0",
   "repository": {
-	  "type": "git",
-	  "url": "https://github.com/box/box-node-sdk.git"
+    "type": "git",
+    "url": "https://github.com/box/box-node-sdk.git"
   },
   "engines": {
     "node": ">= 4.0.0"
@@ -26,7 +26,7 @@
     "jsonwebtoken": "^5.7.0",
     "lodash.merge": "^4.3.5",
     "node-uuid": "^1.4.7",
-    "request": "^2.70.0"
+    "request": "^2.74.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
