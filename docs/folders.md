@@ -14,13 +14,13 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Rename a Folder](#rename-a-folder)
 * [Delete a Folder](#delete-a-folder)
 * [Get a Trashed Folder](#get-a-trashed-folder)
+* [Delete Permanently](#delete-permanently)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
 * [Create Metadata](#create-metadata)
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
-* [Delete Permanently](#delete-permanently)
 
 Get a Folder's Information
 --------------------------
@@ -136,6 +136,15 @@ client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,
 , callback);
 ```
 
+Delete Permanently
+---------------
+A folder can be removed permanently from trash by calling
+[`folders.deletePermanently(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#deletePermanently).
+
+```js
+client.folders.deletePermanently('12345', callback);
+```
+
 
 Create a Shared Link for a Folder
 ---------------------------------
@@ -231,13 +240,4 @@ A folder's metadata can be removed by calling
 
 ```js
 client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
-```
-
-Delete Permanently
----------------
-A folder can be removed permanently from trash by calling
-[`folders.deletePermanently(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#deletePermanently).
-
-```js
-client.folders.deletePermanently('67890', callback);
 ```
