@@ -20,6 +20,7 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
+* [Delete Permanently](#delete-permanently)
 
 Get a Folder's Information
 --------------------------
@@ -230,4 +231,13 @@ A folder's metadata can be removed by calling
 
 ```js
 client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+```
+
+Delete Permanently
+---------------
+A folder can be removed permanently from trash by calling
+[`folders.deletePermanently(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#deletePermanently).
+
+```js
+client.folders.deletePermanently('67890', callback);
 ```

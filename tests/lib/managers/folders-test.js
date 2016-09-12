@@ -292,4 +292,20 @@ describe('Folders', function() {
 		});
 	});
 
+	describe('permanentlyDelete()', function() {
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/folders/' + FOLDER_ID + '/trash').yieldsAsync();
+			folders.deletePermanently(FOLDER_ID, done);
+		});
+
+		it('should make DELETE call to remove folder permanently', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/' + FOLDER_ID + '/trash', null);
+			folders.deletePermanently(FOLDER_ID, done);
+		});
+	});
+
 });
