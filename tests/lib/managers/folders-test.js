@@ -277,6 +277,7 @@ describe('Folders', function() {
 	});
 
 	describe('getTrashedFolder()', function() {
+
 		it('should make GET request to get trashed folder when called', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
@@ -307,7 +308,23 @@ describe('Folders', function() {
 			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/' + FOLDER_ID + '/trash', null);
 			folders.deletePermanently(FOLDER_ID);
 		});
+	});
 
+	describe('getTrashedItems()', function() {
+
+		it('should make GET call to to get trashed items', function() {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'get').withArgs('/folders/trash/items', testParamsWithQs);
+			folders.getTrashedItems(testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/trash/items', testParamsWithQs).yieldsAsync();
+			folders.getTrashedItems(testQS, done);
+		});
 	});
 
 });

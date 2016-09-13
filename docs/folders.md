@@ -15,6 +15,7 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Delete a Folder](#delete-a-folder)
 * [Get a Trashed Folder](#get-a-trashed-folder)
 * [Delete Permanently](#delete-permanently)
+* [Get trashed items](#get-trashed-items)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
 * [Create Metadata](#create-metadata)
@@ -123,6 +124,22 @@ A folder can be deleted with the [`folders.delete(folderID, qs, callback)`](http
 
 ```js
 client.folders.delete('12345', {recursive: true}, callback);
+```
+
+Get Trashed Items
+-----------------
+
+Trashed items information can be retrieved by calling the [`folders.getTrashedItems(qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getTrashedItems) method.
+
+```js
+client.folders.getTrashedItems(
+    {
+        fields: 'file_version,sha1',
+        offset: 0,
+        limit: 25
+    },
+    callback
+);
 ```
 
 
