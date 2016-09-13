@@ -128,7 +128,7 @@ client.folders.delete('12345', {recursive: true}, callback);
 Get a Trashed Folder
 ---------------
 
-A folder can be retrieved from the trash with the [`folders.getTrashedFolder(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getTrashedFolder) method.
+Information about a folder in the trash can be retrieved with the [`folders.getTrashedFolder(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getTrashedFolder) method.
 
 ```js
 client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,collections,sync_state'},
