@@ -292,7 +292,7 @@ describe('Folders', function() {
 		});
 	});
 
-	describe('permanentlyDelete()', function() {
+	describe('deletePermanently()', function() {
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
