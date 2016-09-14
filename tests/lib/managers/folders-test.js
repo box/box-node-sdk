@@ -300,12 +300,13 @@ describe('Folders', function() {
 			folders.deletePermanently(FOLDER_ID, done);
 		});
 
-		it('should make DELETE call to remove folder permanently', function(done) {
+		it('should make DELETE call to remove folder permanently', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').yields();
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/' + FOLDER_ID + '/trash', null);
-			folders.deletePermanently(FOLDER_ID, done);
+			folders.deletePermanently(FOLDER_ID);
 		});
+
 	});
 
 });
