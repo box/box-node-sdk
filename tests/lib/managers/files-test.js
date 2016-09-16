@@ -577,4 +577,20 @@ describe('Files', function() {
 		});
 	});
 
+	describe('getTrashedFile()', function() {
+
+		it('should make GET request to get trashed file when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/trash', null);
+			files.getTrashedFile(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/trash').yieldsAsync();
+			files.getTrashedFile(FILE_ID, done);
+		});
+	});
+
 });
