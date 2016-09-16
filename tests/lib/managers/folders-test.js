@@ -295,7 +295,8 @@ describe('Folders', function() {
 	describe('deletePermanently()', function() {
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'del').withArgs('/folders/' + FOLDER_ID + '/trash').yieldsAsync();
 			folders.deletePermanently(FOLDER_ID, done);
 		});
