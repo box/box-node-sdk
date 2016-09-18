@@ -312,17 +312,17 @@ describe('Folders', function() {
 
 	describe('getTrashedItems()', function() {
 
-		it('should make GET call to to get trashed items', function() {
+		it('should make GET call to get trashed items', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler');
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/trash/items', testParamsWithQs);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/trash/items', testParamsWithQs);
 			folders.getTrashedItems(testQS);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/trash/items', testParamsWithQs).yieldsAsync();
+			sandbox.stub(boxClientFake, 'get').withArgs('/folders/trash/items', testParamsWithQs).yieldsAsync();
 			folders.getTrashedItems(testQS, done);
 		});
 	});
