@@ -3,7 +3,8 @@ Authentication
 
 The Box API uses OAuth2 for authentication, which can be difficult to implement.
 The SDK makes it easier by providing classes that handle obtaining tokens and
-automatically refreshing them.
+automatically refreshing them. See the [OAuth 2 overview](https://docs.box.com/reference#oauth-2-overview) for detailed
+overview of authentication.
 
 Ways to Authenticate
 --------------------
