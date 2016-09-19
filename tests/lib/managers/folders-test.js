@@ -313,7 +313,7 @@ describe('Folders', function() {
 
 		it('should make POST call to restore a folder', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234', expectedParams);
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
 			folders.restoreFolder(FOLDER_ID, 'Folder Restored', 0);
 		});
 
