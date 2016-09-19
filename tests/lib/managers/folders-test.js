@@ -294,9 +294,26 @@ describe('Folders', function() {
 
 	describe('restoreFolder()', function() {
 
+		var name,
+			parentFolderID,
+			expectedParams;
+
+		beforeEach(function() {
+			name = 'Folder Restored';
+			parentFolderID = 0;
+			expectedParams = {
+				body: {
+					name: name,
+					parent: {
+						id: parentFolderID
+					}
+				}
+			};
+		});
+
 		it('should make POST call to restore a folder', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234', expectedParams);
 			folders.restoreFolder(FOLDER_ID, 'Folder Restored', 0);
 		});
 
