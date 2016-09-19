@@ -104,3 +104,47 @@ var sdk = new BoxSDK({
 });
 var adminClient = sdk.getAppAuthClient('enterprise', 'YOUR-ENTERPRISE-ID');
 ```
+
+### JSON Web Token Enterprise Authentication
+
+For machine-to-machine use cases, such as applications that use Box services for
+back-end storage, but which provide their own user-inteface, Box extends OAuth 2
+with JSON Web Tokens (JWT). Authentication using JWT enables your application
+to authenticate itself directly to Box without needing to display any Box user
+interface elements. See the [Authentication with JWT](https://docs.box.com/docs/app-auth)
+for detailed instructions on how to use JWT auth.
+
+```js
+var BoxSDK = require('box-node-sdk');
+var sdk = new BoxSDK({
+	clientID: 'YOUR-CLIENT-ID',
+	clientSecret: 'YOUR-CLIENT_SECRET',
+	appAuth: {
+		keyID: 'YOUR-KEY-ID',
+		privateKey: 'YOUR-PRIVATE_KEY',
+		passphrase: 'YOUR-PRIVATE-KEY-PASSPHRASE'
+	}
+});
+var adminClient = sdk.getEnterpriseAppAuthTokens('YOUR-ENTERPRISE-ID', callback);
+```
+
+### JSON Web Token User Authentication
+
+Once you have enterprise token, you can create App user and then perform
+user-specific actions. See the [Creating App Users and Managing Your Enterprise](https://docs.box.com/docs/app-auth#section-creating-app-users-and-managing-your-enterprise)
+for detailed instructions on how to manage enterprise and perform user based
+actions.
+
+```js
+var BoxSDK = require('box-node-sdk');
+var sdk = new BoxSDK({
+	clientID: 'YOUR-CLIENT-ID',
+	clientSecret: 'YOUR-CLIENT_SECRET',
+	appAuth: {
+		keyID: 'YOUR-KEY-ID',
+		privateKey: 'YOUR-PRIVATE_KEY',
+		passphrase: 'YOUR-PRIVATE-KEY-PASSPHRASE'
+	}
+});
+var client = sdk.getAppUserTokens('APP-USER-ID', callback)
+```
