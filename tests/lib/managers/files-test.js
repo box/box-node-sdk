@@ -410,7 +410,7 @@ describe('Files', function() {
 
 		it('should call BoxClient.upload() with the correct non-callback params', function() {
 			var expectedFormData = {
-				metadata: JSON.stringify({
+				attributes: JSON.stringify({
 					name: FILENAME,
 					parent: { id: PARENT_FOLDER_ID }
 				}),
