@@ -321,7 +321,7 @@ describe('Folders', function() {
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/folders/trash/items', testParamsWithQs).yieldsAsync();
 			folders.getTrashedItems(testQS, done);
 		});
