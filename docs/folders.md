@@ -15,7 +15,7 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Delete a Folder](#delete-a-folder)
 * [Get a Trashed Folder](#get-a-trashed-folder)
 * [Delete Permanently](#delete-permanently)
-* [Get trashed items](#get-trashed-items)
+* [Get Trashed Items](#get-trashed-items)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
 * [Create Metadata](#create-metadata)
