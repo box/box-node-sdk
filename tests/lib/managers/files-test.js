@@ -47,6 +47,11 @@ describe('Files', function() {
 		mockery.registerAllowable('util');
 		mockery.registerAllowable('../util/url-path');
 		mockery.registerAllowable('../util/errors');
+		mockery.registerAllowable('fs');
+		mockery.registerAllowable('path');
+		mockery.registerAllowable('dateformat');
+		mockery.registerAllowable('node-sha1');
+		mockery.registerAllowable('stream');
 		// Setup File Under Test
 		mockery.registerAllowable(MODULE_FILE_PATH);
 		Files = require(MODULE_FILE_PATH);
