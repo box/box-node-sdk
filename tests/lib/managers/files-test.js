@@ -542,4 +542,24 @@ describe('Files', function() {
 			files.deleteMetadata(FILE_ID, 'global', 'properties', done);
 		});
 	});
+
+	describe('deletePermanently()', function() {
+
+		it('should make DELETE call to remove file permanently', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/files/' + FILE_ID + '/trash', null);
+			files.deletePermanently(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/files/' + FILE_ID + '/trash').yieldsAsync();
+			files.deletePermanently(FILE_ID, done);
+		});
+
+
+	});
+
 });
