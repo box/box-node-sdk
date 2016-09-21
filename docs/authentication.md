@@ -126,25 +126,5 @@ var sdk = new BoxSDK({
 	}
 });
 var adminClient = sdk.getEnterpriseAppAuthTokens('YOUR-ENTERPRISE-ID', callback);
-```
-
-### JSON Web Token User Authentication
-
-Once you have enterprise token, you can create App user and then perform
-user-specific actions. See the [Creating App Users and Managing Your Enterprise](https://docs.box.com/docs/app-auth#section-creating-app-users-and-managing-your-enterprise)
-for detailed instructions on how to manage enterprise and perform user based
-actions.
-
-```js
-var BoxSDK = require('box-node-sdk');
-var sdk = new BoxSDK({
-	clientID: 'YOUR-CLIENT-ID',
-	clientSecret: 'YOUR-CLIENT_SECRET',
-	appAuth: {
-		keyID: 'YOUR-KEY-ID',
-		privateKey: 'YOUR-PRIVATE_KEY',
-		passphrase: 'YOUR-PRIVATE-KEY-PASSPHRASE'
-	}
-});
 var client = sdk.getAppUserTokens('APP-USER-ID', callback)
 ```
