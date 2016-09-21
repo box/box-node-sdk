@@ -149,9 +149,18 @@ client.files.deletePermanently('12345', callback);
 Get a Trashed File
 ---------------
 
-Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTrashedFile) method.
+Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTrashedFile) method.
 ```js
-client.files.getTrashedFile('12345', callback);
+client.files.getTrashedFile('12345', qs, callback);
+```
+
+Requesting information for only the fields you need with the `fields` query
+string parameter can improve performance and reduce the size of the network
+request.
+
+```js
+// Only get information about a few specific fields.
+client.files.getTrashedFile('12345', {fields: 'size,owned_by'}, callback);
 ```
 
 Upload a New Version of a File
