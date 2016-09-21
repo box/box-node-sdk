@@ -13,6 +13,7 @@
 // ------------------------------------------------------------------------------
 
 var assert = require('chai').assert,
+	Readable = require('stream').Readable,
 	Config = require('../../../lib/util/config');
 
 // ------------------------------------------------------------------------------
@@ -152,6 +153,43 @@ describe('Config', function() {
 
 			assert.deepPropertyVal(newConfig, 'request.qs.fields', 'id,name,type');
 			assert.notDeepProperty(originalConfig, 'request.qs');
+		});
+
+		it('should not clone stream objects', function() {
+
+			var stream = new Readable();
+
+			var originalConfig = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				request: {
+					strictSSL: true
+				}
+			});
+
+			var newConfig = originalConfig.extend({
+				request: {
+					formData: {
+						value: stream,
+						options: { filename: 'unused' }
+					}
+				}
+			});
+
+			assert.deepProperty(newConfig, 'request.formData.value');
+			assert.strictEqual(newConfig.request.formData.value, stream);
+		});
+
+		it('should retain properties set by a previous extension', function() {
+
+			var doubleExtendedConfig = config.extend({
+				clientID: 'newID'
+			}).extend({
+				clientSecret: 'newSecret'
+			});
+
+			assert.propertyVal(doubleExtendedConfig, 'clientID', 'newID');
+			assert.propertyVal(doubleExtendedConfig, 'clientSecret', 'newSecret');
 		});
 
 	});
