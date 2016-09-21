@@ -140,7 +140,7 @@ client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,
 Restore a Folder
 ---------------
 
-A folder can be restored from the trash with the [`folders.restoreFolder(folderID, name, parentFolderID qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#restoreFolder) method.
+A folder can be restored from the trash with the [`folders.restoreFolder(folderID, name, parentFolderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#restoreFolder) method.
 
 ```js
 client.folders.restoreFolder('12345', 'New Name', '0', callback);
