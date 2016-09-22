@@ -558,8 +558,59 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'del').withArgs('/files/' + FILE_ID + '/trash').yieldsAsync();
 			files.deletePermanently(FILE_ID, done);
 		});
+	});
 
+	describe('lockUnlock()', function() {
 
+		var type,
+			expiresAt,
+			isDownloadPrevented,
+			expectedParams;
+
+		beforeEach(function() {
+			type = 'lock';
+			expiresAt = '2016-12-12T10:55:30-08:00';
+			isDownloadPrevented = false;
+			expectedParams = {
+				body: {
+					lock: {
+						type: type
+					}
+				}
+			};
+		});
+
+		it('should make PUT request with all parameters to set or clear the lock properties when all optional parameters are passed', function() {
+
+			expectedParams.body.lock.expires_at = expiresAt;
+			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lockUnlock(FILE_ID, type, expiresAt, isDownloadPrevented);
+		});
+
+		it('should make PUT request with expires_at to set or clear the lock properties when just an expires_at is passed', function() {
+
+			expectedParams.body.lock.expires_at = expiresAt;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lockUnlock(FILE_ID, type, expiresAt);
+		});
+
+		it('should make PUT request with is_download_prevented to set or clear the lock properties when just an is_download_prevented is passed', function() {
+
+			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lockUnlock(FILE_ID, type, null, isDownloadPrevented);
+		});
+
+		it('should make PUT request with mandatory parameters to set or clear the lock properties when neither optional parameter is passed', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lockUnlock(FILE_ID, type);
+		});
 	});
 
 });
