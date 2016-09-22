@@ -7,7 +7,7 @@ file's contents, upload new versions, and perform other common file operations
 
 * [Get a File's Information](#get-a-files-information)
 * [Update a File's Information](#update-a-files-information)
-* [Get File's Tasks](#get-a-files-tasks)
+* [Get a File's Tasks](#get-a-files-tasks)
 * [Download a File](#download-a-file)
 * [Upload a File](#upload-a-file)
 * [Copy a File](#copy-a-file)
