@@ -292,4 +292,61 @@ describe('Folders', function() {
 		});
 	});
 
+	describe('restoreFolder()', function() {
+
+		var name,
+			parent,
+			expectedParams;
+
+		beforeEach(function() {
+			name = 'Folder Restored';
+			parent = {
+				id: 0
+			};
+			expectedParams = {body: {}};
+		});
+
+		it('should make POST request with all parameters to restore a folder when all optional parameters are passed', function() {
+
+			expectedParams.body = {
+				name: name,
+				parent: parent
+			};
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			folders.restoreFolder(FOLDER_ID, name, 0);
+		});
+
+		it('should make POST request with a name to restore a folder when just a name is passed', function() {
+
+			expectedParams.body.name = name;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			folders.restoreFolder(FOLDER_ID, name);
+		});
+
+		it('should make POST request with a parentFolderId to restore a folder when just parentFolderID is passed', function() {
+
+			expectedParams.body.parent = parent;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			folders.restoreFolder(FOLDER_ID, null, 0);
+		});
+
+		it('should make POST request with an empty body to restore a folder when neither optional parameter is passed', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, {body: {}});
+			folders.restoreFolder(FOLDER_ID);
+		});
+
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync();
+			folders.restoreFolder(FOLDER_ID, name, 0, done);
+		});
+	});
+
 });
