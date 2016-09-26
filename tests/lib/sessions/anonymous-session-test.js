@@ -52,7 +52,9 @@ describe('AnonymousAPISession', function() {
 		tokenManagerFake = leche.fake(TokenManager.prototype);
 		callbackQueue = leche.create(['push', 'flush']);
 		callbackQueueFake = leche.fake(callbackQueue);
-		CallbackQueueConstructor = function() { return callbackQueueFake; };
+		CallbackQueueConstructor = function() {
+			return callbackQueueFake;
+		};
 
 		// Enable Mockery
 		mockery.enable({ useCleanCache: true });

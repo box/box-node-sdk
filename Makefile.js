@@ -68,19 +68,29 @@ target.all = function() {
 };
 
 target.lint = function() {
+
+	var code = 0;
+
 	echo('Validating JSON Files');
-	nodeCLI.exec('jsonlint', '-q', '-c', JSON_FILES);
+	code += nodeCLI.exec('jsonlint', '-q', '-c', JSON_FILES).code;
 
 	echo('Validating package.json');
-	nodeCLI.exec('jsonlint', 'package.json', '-q', '-V ./config/package.schema.json');
+	code += nodeCLI.exec('jsonlint', 'package.json', '-q', '-V ./config/package.schema.json').code;
 
 	echo('Validating JavaScript files');
-	nodeCLI.exec('eslint', '--fix', JS_FILES);
+	code += nodeCLI.exec('eslint', '--fix', JS_FILES).code;
+	code += nodeCLI.exec('eslint', '--fix', './tests').code;
+
+	return code;
 };
 
 target.test = function() {
-	target.lint();
-	nodeCLI.exec('istanbul', 'cover', MOCHA_BINARY, '--', '-c', '-R nyan', TEST_FILES);
+	var code = target.lint();
+	code += nodeCLI.exec('istanbul', 'cover', MOCHA_BINARY, '--', '-c', '-R nyan', TEST_FILES).code;
+
+	if (code) {
+		exit(code);
+	}
 };
 
 target.docs = function() {
