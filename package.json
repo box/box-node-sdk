@@ -24,7 +24,7 @@
   "dependencies": {
     "http-status": "^0.2.2",
     "jsonwebtoken": "^5.7.0",
-    "lodash.merge": "^4.3.5",
+    "merge-options": "0.0.64",
     "node-uuid": "^1.4.7",
     "request": "^2.74.0"
   },
