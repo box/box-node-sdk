@@ -135,7 +135,7 @@ describe('APIRequestManager', function() {
 			sandbox.stub(apiRequestFake, 'execute');
 			requestManager.makeRequest({});
 			assert.ok(APIRequestConstructorStub.calledWithNew(), 'API Request should be constructed');
-			assert.ok(APIRequestConstructorStub.calledWithMatch({}, eventBusFake), 'API Request should be passed event bus');
+			assert.ok(APIRequestConstructorStub.calledWith(config, eventBusFake), 'API Request should be passed event bus');
 		});
 
 		it('should execute the request with the given callback when called', function() {
@@ -182,7 +182,7 @@ describe('APIRequestManager', function() {
 			sandbox.stub(apiRequestFake, 'getResponseStream');
 			requestManager.makeStreamingRequest({});
 			assert.ok(APIRequestConstructorStub.calledWithNew(), 'API Request should be constructed');
-			assert.ok(APIRequestConstructorStub.calledWithMatch({}, eventBusFake), 'API Request should be passed event bus');
+			assert.ok(APIRequestConstructorStub.calledWith(config, eventBusFake), 'API Request should be passed event bus');
 		});
 
 		it('should execute the request with no callback when called', function() {
