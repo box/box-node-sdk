@@ -560,56 +560,90 @@ describe('Files', function() {
 		});
 	});
 
-	describe('lockUnlock()', function() {
+	describe('lock()', function() {
 
-		var type,
-			expiresAt,
+		var expiresAt,
 			isDownloadPrevented,
 			expectedParams;
 
 		beforeEach(function() {
-			type = 'lock';
 			expiresAt = '2016-12-12T10:55:30-08:00';
 			isDownloadPrevented = false;
 			expectedParams = {
 				body: {
 					lock: {
-						type: type
+						type: 'lock'
 					}
 				}
 			};
 		});
 
-		it('should make PUT request with all parameters to set or clear the lock properties when all optional parameters are passed', function() {
+		it('should make PUT request with all parameters to set the lock properties when all optional parameters are passed', function() {
 
 			expectedParams.body.lock.expires_at = expiresAt;
 			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
-			files.lockUnlock(FILE_ID, type, expiresAt, isDownloadPrevented);
+			files.lock(FILE_ID, expiresAt, isDownloadPrevented);
 		});
 
-		it('should make PUT request with expires_at to set or clear the lock properties when just an expires_at is passed', function() {
+		it('should make PUT request with expires_at to set the lock properties when just an expires_at is passed', function() {
 
 			expectedParams.body.lock.expires_at = expiresAt;
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
-			files.lockUnlock(FILE_ID, type, expiresAt);
+			files.lock(FILE_ID, expiresAt);
 		});
 
-		it('should make PUT request with is_download_prevented to set or clear the lock properties when just an is_download_prevented is passed', function() {
+		it('should make PUT request with is_download_prevented to set the lock properties when just an is_download_prevented is passed', function() {
 
 			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
-			files.lockUnlock(FILE_ID, type, null, isDownloadPrevented);
+			files.lock(FILE_ID, null, isDownloadPrevented);
 		});
 
-		it('should make PUT request with mandatory parameters to set or clear the lock properties when neither optional parameter is passed', function() {
+		it('should make PUT request with mandatory parameters to set the lock properties when neither optional parameter is passed', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
-			files.lockUnlock(FILE_ID, type);
+			files.lock(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/files/' + FILE_ID).yieldsAsync();
+			files.lock(FILE_ID, expiresAt, isDownloadPrevented, done);
+		});
+	});
+
+	describe('unlock()', function() {
+
+		var expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {
+				body: {
+					lock: {
+						type: 'unlock'
+					}
+				}
+			};
+		});
+
+		it('should make PUT request to clear the lock properties', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.unlock(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/files/' + FILE_ID).yieldsAsync();
+			files.unlock(FILE_ID, done);
 		});
 	});
 
