@@ -647,11 +647,32 @@ describe('Files', function() {
 			files.getEmbedLink(FILE_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should return the embed link when a 200 ok response is returned', function(done) {
+			var embedLink = { expiring_embed_link: {url: 'https://app.box.com/preview/expiring_embed/1234'}},
+				response = {statusCode: 200, body: embedLink};
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID).yieldsAsync();
-			files.getEmbedLink(FILE_ID, done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID).yieldsAsync(null, response);
+			files.getEmbedLink(FILE_ID, function(err, data) {
+				assert.ok(!err);
+				assert.equal(data, embedLink.expiring_embed_link.url);
+				done();
+			});
+		});
+
+		it('should return a response error when API returns non-200 result', function(done) {
+
+			var response = {
+				statusCode: 404
+			};
+
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+
+			files.getEmbedLink(FILE_ID, function(err) {
+
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', response.statusCode);
+				done();
+			});
 		});
 	});
 
