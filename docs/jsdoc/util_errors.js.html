@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: util/errors.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: util/errors.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Errors Helper
+ * @author fschott
+ */
+
+'use strict';
+
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+var util = require('util'),
+	httpStatusCodes = require('http-status');
+
+
+// ------------------------------------------------------------------------------
+// Typedefs and Callbacks
+// ------------------------------------------------------------------------------
+
+/**
+ * An generic error propagated when the response has caused an error.
+ * @typedef {Error} Errors~ResponseError
+ * @property {APIRequest~ResponseObject} response The response object that generated the error
+ * @property {int} statusCode A shortcut to the status code of the response
+ */
+
+/**
+ * Error propagated whenever the SDK is unable to successfully complete an action
+ * due to an expired access token (and refresh token, if one was provided).
+ * @typedef {Errors~ResponseError} Errors~ExpiredAuthError
+ * @property {bool} authExpired - always true
+ */
+
+
+// ------------------------------------------------------------------------------
+// Public
+// ------------------------------------------------------------------------------
+
+/**
+ * A Helper for building errors across the SDK. Makes sure that easily-forgotten
+ * fields aren't missed, and that everything is formatted properly to return to the
+ * consumer.
+ *
+ * @name Errors
+ * @module box-node-sdk/lib/util/errors
+ */
+module.exports = {
+
+	/**
+	 * Build a response error with the given message, and attaching meta data from the
+	 * response data.
+	 *
+	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
+	 * @param {string} message - the response error message
+	 * @returns {Errors~ResponseError} an error describing the response error
+	 */
+	buildResponseError: function(response, message) {
+		response = response || {};
+		var responseError = new Error(message);
+		responseError.statusCode = response.statusCode;
+		responseError.response = response;
+		return responseError;
+	},
+
+	/**
+	 * Build an "Expired Auth" error. {@see Errors~ExpiredAuthError}
+	 *
+	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
+	 * @returns {Errors~ExpiredAuthError} A properly formatted error explaining the user auth info has expired
+	 */
+	buildExpiredAuthError: function(response) {
+		var responseError = this.buildResponseError(response, 'Expired Auth: Auth code or refresh token has expired.');
+		responseError.authExpired = true;
+		return responseError;
+	},
+
+	/**
+	 * Build the error for an "Unexpected Response" from the API. This is a shortcut for
+	 * responseError built specifically for the 401 UNEXPECTED response case. It
+	 * should be called and the error should be propogated to the consumer callback
+	 * whenever an unexpected response was recieved from the API.
+	 *
+	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
+	 * @returns {Errors~ResponseError} an error describing the response error
+	 */
+	buildUnexpectedResponseError: function(response) {
+		response = response || {};
+		var responseErrorMessage = '';
+
+		if (response.body &amp;&amp; (response.body.code || response.body.message)) {
+			responseErrorMessage = util.format(' (%s: "%s")', response.body.code, response.body.message);
+		}
+
+		var statusCode = response.statusCode,
+			unexpectedErrorMessage = util.format('Unexpected API Response [%d %s]%s', statusCode, httpStatusCodes[statusCode], responseErrorMessage);
+		return this.buildResponseError(response, unexpectedErrorMessage.trim());
+	}
+
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Users.html">Users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Tue Sep 27 2016 13:38:22 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

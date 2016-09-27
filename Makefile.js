@@ -95,7 +95,7 @@ target.test = function() {
 
 target.docs = function() {
 	echo('Generating documentation');
-	nodeCLI.exec('jsdoc', '-r', '-d ./ ', JS_DIR);
+	nodeCLI.exec('jsdoc', '-r', '-d ./docs/jsdoc ', JS_DIR);
 };
 
 target.patch = function() {
