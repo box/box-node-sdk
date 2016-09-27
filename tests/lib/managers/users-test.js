@@ -107,6 +107,49 @@ describe('Users', function() {
 		});
 	});
 
+	describe('delete', function() {
+		var notify,
+			force,
+			expectedParams;
+
+		beforeEach(function() {
+			notify = false;
+			force = false;
+			expectedParams = {
+				body: {
+				}
+			};
+		});
+
+		it('should make DELETE request with all parameters to delete user when all optional parameters are passed', function() {
+			expectedParams.body.notify = notify;
+			expectedParams.body.force = force;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/users/' + USER_ID, expectedParams);
+			users.delete(USER_ID, notify, force);
+		});
+
+		it('should make DELETE request with notify to delete user when just a notify is passed', function() {
+			expectedParams.body.notify = notify;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/users/' + USER_ID, expectedParams);
+			users.delete(USER_ID, notify);
+		});
+
+		it('should make DELETE request with force to delete user when just a force is passed', function() {
+			expectedParams.body.force = force;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/users/' + USER_ID, expectedParams);
+			users.delete(USER_ID, null, force);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/users/' + USER_ID).yieldsAsync();
+			users.delete(USER_ID, notify, force, done);
+		});
+	});
+
 	describe('getEmailAliases()', function() {
 		it('should make GET request to retrieve user email aliases when called', function() {
 			var id = '6493';
