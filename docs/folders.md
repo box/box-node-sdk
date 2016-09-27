@@ -14,7 +14,7 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Rename a Folder](#rename-a-folder)
 * [Delete a Folder](#delete-a-folder)
 * [Get a Trashed Folder](#get-a-trashed-folder)
-* [Restore a Folder](#restore-a-folder)
+* [Restore a Folder from Trash](#restore-a-folder-from-trash)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
 * [Create Metadata](#create-metadata)
@@ -137,13 +137,13 @@ client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,
 ```
 
 
-Restore a Folder
----------------
+Restore a Folder from Trash
+---------------------------
 
-A folder can be restored from the trash with the [`folders.restoreFolder(folderID, name, parentFolderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#restoreFolder) method.
+A folder can be restored from the trash with the [`folders.restoreFromTrash(folderID, name, parentFolderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#restoreFromTrash) method.
 
 ```js
-client.folders.restoreFolder('12345', 'New Name', '0', callback);
+client.folders.restoreFromTrash('12345', 'New Name', '0', callback);
 ```
 
 

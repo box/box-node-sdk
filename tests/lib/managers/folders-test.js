@@ -292,7 +292,7 @@ describe('Folders', function() {
 		});
 	});
 
-	describe('restoreFolder()', function() {
+	describe('restoreFromTrash()', function() {
 
 		var name,
 			parent,
@@ -314,7 +314,7 @@ describe('Folders', function() {
 			};
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
-			folders.restoreFolder(FOLDER_ID, name, 0);
+			folders.restoreFromTrash(FOLDER_ID, name, 0);
 		});
 
 		it('should make POST request with a name to restore a folder when just a name is passed', function() {
@@ -322,7 +322,7 @@ describe('Folders', function() {
 			expectedParams.body.name = name;
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
-			folders.restoreFolder(FOLDER_ID, name);
+			folders.restoreFromTrash(FOLDER_ID, name);
 		});
 
 		it('should make POST request with a parentFolderId to restore a folder when just parentFolderID is passed', function() {
@@ -330,14 +330,14 @@ describe('Folders', function() {
 			expectedParams.body.parent = parent;
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
-			folders.restoreFolder(FOLDER_ID, null, 0);
+			folders.restoreFromTrash(FOLDER_ID, null, 0);
 		});
 
 		it('should make POST request with an empty body to restore a folder when neither optional parameter is passed', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, {body: {}});
-			folders.restoreFolder(FOLDER_ID);
+			folders.restoreFromTrash(FOLDER_ID);
 		});
 
 
@@ -345,7 +345,7 @@ describe('Folders', function() {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync();
-			folders.restoreFolder(FOLDER_ID, name, 0, done);
+			folders.restoreFromTrash(FOLDER_ID, name, 0, done);
 		});
 	});
 
