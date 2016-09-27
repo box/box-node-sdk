@@ -558,8 +558,23 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'del').withArgs('/files/' + FILE_ID + '/trash').yieldsAsync();
 			files.deletePermanently(FILE_ID, done);
 		});
+	});
 
+	describe('getTasks()', function() {
 
+		it('should make GET request to retrieve all tasks for given file', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/tasks', testParamsWithQs);
+			files.getTasks(FILE_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/tasks', testParamsWithQs).yieldsAsync();
+			files.getTasks(FILE_ID, testQS, done);
+		});
 	});
 
 });

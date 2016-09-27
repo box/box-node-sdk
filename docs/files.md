@@ -7,6 +7,7 @@ file's contents, upload new versions, and perform other common file operations
 
 * [Get a File's Information](#get-a-files-information)
 * [Update a File's Information](#update-a-files-information)
+* [Get a File's Tasks](#get-a-files-tasks)
 * [Download a File](#download-a-file)
 * [Upload a File](#upload-a-file)
 * [Copy a File](#copy-a-file)
@@ -50,6 +51,24 @@ with the fields to be updated.
 
 ```js
 client.files.update('75937', {name : 'New Name'}, callback);
+```
+
+Get a File's Tasks
+------------------
+Calling the
+[`files.getTasks(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTasks)
+method will retrieve all of the tasks for given file.
+
+```js
+client.files.getTasks('75937', null, callback);
+```
+Requesting information for only the fields you need with the `fields` query
+string parameter can improve performance and reduce the size of the network
+request.
+
+```js
+// Only get information about a few specific fields.
+client.files.getTasks('75937', {fields: 'type,item'}, callback);
 ```
 
 Download a File
