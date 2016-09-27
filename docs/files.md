@@ -12,7 +12,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Copy a File](#copy-a-file)
 * [Delete a File](#delete-a-file)
 * [Delete Permanently](#delete-permanently)
-* [Restore Item](#restore-item)
+* [Restore a File From Trash](#restore-a-file-from-trash)
 * [Upload a New Version of a File](#upload-a-new-version-of-a-file)
 * [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
 * [Create a Shared Link](#create-a-shared-link)
@@ -126,15 +126,15 @@ method will remove the file permanently from the user's trash.
 client.files.deletePermanently('12345', callback);
 ```
 
-Restore Item
--------------
+Restore a File From Trash
+-------------------------
 
 Calling the
-[`files.restoreItem(fileID, name, parentFolderID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#restoreItem)
+[`files.restoreFromTrash(fileID, name, parentFolderID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#restoreFromTrash)
 will restore an item from the user's trash.
 
 ```js
-client.files.restoreItem('12345', 'New Name', 0, callback);
+client.files.restoreFromTrash('12345', 'New Name', 0, callback);
 ```
 
 Upload a New Version of a File

@@ -560,7 +560,7 @@ describe('Files', function() {
 		});
 	});
 
-	describe('restoreItem()', function() {
+	describe('restoreFromTrash()', function() {
 
 		var name,
 			parent,
@@ -582,7 +582,7 @@ describe('Files', function() {
 			};
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
-			files.restoreItem(FILE_ID, name, 0);
+			files.restoreFromTrash(FILE_ID, name, 0);
 		});
 
 		it('should make POST request with a name to restore a file when just a name is passed', function() {
@@ -590,7 +590,7 @@ describe('Files', function() {
 			expectedParams.body.name = name;
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
-			files.restoreItem(FILE_ID, name);
+			files.restoreFromTrash(FILE_ID, name);
 		});
 
 		it('should make POST request with a parentFolderId to restore a file when just parentFolderID is passed', function() {
@@ -598,21 +598,21 @@ describe('Files', function() {
 			expectedParams.body.parent = parent;
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
-			files.restoreItem(FILE_ID, null, 0);
+			files.restoreFromTrash(FILE_ID, null, 0);
 		});
 
 		it('should make POST request with an empty body to restore a file when neither optional parameter is passed', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, {body: {}});
-			files.restoreItem(FILE_ID);
+			files.restoreFromTrash(FILE_ID);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync();
-			files.restoreItem(FILE_ID, 'Item Restored', 0, done);
+			files.restoreFromTrash(FILE_ID, 'Item Restored', 0, done);
 		});
 	});
 
