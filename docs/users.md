@@ -8,6 +8,7 @@ Users represent an individual's account on Box.
 * [Get Email Aliases](#get-email-aliases)
 * [Add Email Alias](#add-email-alias)
 * [Delete Email Alias](#delete-email-alias)
+* [Change Login](#change-login)
 
 Get the Current User's Information
 ----------------------------------
@@ -56,4 +57,14 @@ To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID,
 
 ```js
 client.users.removeEmailAlias('123', '765', callback);
+```
+
+
+Change Login
+------------
+
+To convert one of the user’s confirmed email aliases into the user’s primary login call the [`users.changeLogin(userID, email, callback)`](http://opensource.box.com/box-node-sdk/Users.html#changeLogin) method.
+
+```js
+client.users.changeLogin('123', 'user@example.com', callback);
 ```

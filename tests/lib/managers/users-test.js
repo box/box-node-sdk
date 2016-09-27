@@ -25,6 +25,7 @@ var sandbox = sinon.sandbox.create(),
 	testBody = { my: 'body' },
 	testParamsWithBody,
 	testParamsWithQs,
+	USER_ID = '1234',
 	MODULE_FILE_PATH = '../../../lib/managers/users';
 
 
@@ -192,4 +193,31 @@ describe('Users', function() {
 			users.removeEmailAlias();
 		});
 	});
+
+	describe('changeLogin()', function() {
+		var newLogin,
+			expectedParams;
+
+		beforeEach(function() {
+			newLogin = 'user@example.com';
+			expectedParams = {
+				body: {
+					login: newLogin
+				}
+			};
+		});
+
+		it('should make PUT request to change user login when called', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/users/' + USER_ID, expectedParams);
+			users.changeLogin(USER_ID, newLogin);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/users/' + USER_ID).yieldsAsync();
+			users.changeLogin(USER_ID, newLogin, done);
+		});
+	});
+
 });
