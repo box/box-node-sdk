@@ -16,7 +16,8 @@ file's contents, upload new versions, and perform other common file operations
 * [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
 * [Create a Shared Link](#create-a-shared-link)
 * [Get Thumbnail](#get-thumbnail)
-* [Lock and Unlocka a File](#lock-and-unlock-a-file)
+* [Lock a File](#lock-a-file)
+* [Unlock a File](#unlock-a-file)
 * [Create Metadata](#create-metadata)
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
@@ -193,15 +194,26 @@ client.files.getThumbnail('12345', null, function(error, response) {
 });
 ```
 
-Lock and Unlock a File
-----------------------
+Lock a File
+-----------
 
-A file can be locked and unlocked by call the
-[`files.lockUnlock(fileID, type, expiresAt, isDownloadPrevented, callback)`](http://opensource.box.com/box-node-sdk/Files.html#lockUnlock)
+A file can be locked by calling the
+[`files.lock(fileID, expiresAt, isDownloadPrevented, callback)`](http://opensource.box.com/box-node-sdk/Files.html#lock)
 method.
 
 ```js
-client.files.lockUnlock('12345', 'lock', '2015-12-12T10:55:30-08:00', false, callback);
+client.files.lock('12345', '2015-12-12T10:55:30-08:00', false, callback);
+```
+
+Unlock a File
+-------------
+
+A file can be unlocked by calling the
+[`files.unlock(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#unlock)
+method.
+
+```js
+client.files.unlock('12345', callback);
 ```
 
 Create Metadata
