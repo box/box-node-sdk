@@ -85,6 +85,20 @@ describe('Users', function() {
 		});
 	});
 
+	describe('getEnterprise', function() {
+		it('should make GET request to get list of enterprise users', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/users', testParamsWithQs);
+			users.getEnterprise(testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/users').yieldsAsync();
+			users.getEnterprise(testQS, done);
+		});
+	});
+
 	describe('update()', function() {
 		it('should make PUT request to update user info when called', function() {
 			var id = '908546';
