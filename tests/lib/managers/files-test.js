@@ -587,6 +587,7 @@ describe('Files', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/trash', testParamsWithQs).yieldsAsync();
 			files.getTrashedFile(FILE_ID, testQS, done);

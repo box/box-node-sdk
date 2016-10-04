@@ -147,7 +147,7 @@ client.files.deletePermanently('12345', callback);
 ```
 
 Get a Trashed File
----------------
+------------------
 
 Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTrashedFile) method.
 ```js
