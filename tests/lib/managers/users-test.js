@@ -107,6 +107,37 @@ describe('Users', function() {
 		});
 	});
 
+	describe('moveFolder()', function() {
+		var ownedByID,
+			folderID,
+			expectedParams;
+
+		beforeEach(function() {
+			ownedByID = 4567;
+			folderID = 0;
+			expectedParams = {
+				body: {
+					owned_by: {
+						id: ownedByID
+					}
+				},
+				qs: testQS
+			};
+		});
+
+		it('should make PUT request to move all content from users folder into a new folder', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/users/' + USER_ID + '/folders/' + folderID, expectedParams);
+			users.moveFolder(USER_ID, ownedByID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/users/' + USER_ID + '/folders/' + folderID).yieldsAsync();
+			users.moveFolder(USER_ID, ownedByID, testQS, done);
+		});
+	});
+
 	describe('getEmailAliases()', function() {
 		it('should make GET request to retrieve user email aliases when called', function() {
 			var id = '6493';
