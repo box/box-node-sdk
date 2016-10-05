@@ -25,6 +25,8 @@ var sandbox = sinon.sandbox.create(),
 	testBody = { my: 'body' },
 	testParamsWithBody,
 	testParamsWithQs,
+	USER_ID = '1234',
+	CURRENT_USER_ID = 'me',
 	MODULE_FILE_PATH = '../../../lib/managers/users';
 
 
@@ -190,6 +192,26 @@ describe('Users', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
 			sandbox.stub(boxClientFake, 'del').yieldsAsync();
 			users.removeEmailAlias();
+		});
+	});
+
+	describe('getMemberships()', function() {
+		it('should make GET request to retrieve group memberships for a given user', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + USER_ID + '/memberships', testParamsWithQs);
+			users.getMemberships(USER_ID, testQS);
+		});
+
+		it('should make GET request to retrieve group memberships for the current user when passed "me" ID', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + CURRENT_USER_ID + '/memberships', testParamsWithQs);
+			users.getMemberships(CURRENT_USER_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/users/' + USER_ID + '/memberships').yieldsAsync();
+			users.getMemberships(USER_ID, testQS, done);
 		});
 	});
 });
