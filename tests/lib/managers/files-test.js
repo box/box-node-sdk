@@ -27,6 +27,7 @@ var sandbox = sinon.sandbox.create(),
 	testParamsWithBody,
 	testParamsWithQs,
 	FILE_ID = '1234',
+	FILE_VERSION_ID = '5678',
 	MODULE_FILE_PATH = '../../../lib/managers/files';
 
 
@@ -399,6 +400,32 @@ describe('Files', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
 			sandbox.stub(boxClientFake, 'options').withArgs('/files/2345/content').yieldsAsync();
 			files.preflightUploadNewFileVersion(fileID, fileData, uploadsQS, done);
+		});
+	});
+
+	describe('promoteVersion()', function() {
+
+		var expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {
+				body: {
+					type: 'file_version',
+					id: FILE_VERSION_ID
+				}
+			};
+		});
+
+		it('should make POST request to promote older file version to top of the stack', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID + '/versions/current', expectedParams);
+			files.promoteVersion(FILE_ID, FILE_VERSION_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/files/' + FILE_ID + '/versions/current').yieldsAsync();
+			files.promoteVersion(FILE_ID, FILE_VERSION_ID, done);
 		});
 	});
 
