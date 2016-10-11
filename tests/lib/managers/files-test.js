@@ -402,6 +402,21 @@ describe('Files', function() {
 		});
 	});
 
+	describe('viewVersions()', function() {
+
+		it('should make GET request to retrieve older file versions', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/versions', testParamsWithQs);
+			files.viewVersions(FILE_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/versions').yieldsAsync();
+			files.viewVersions(FILE_ID, testQS, done);
+		});
+	});
+
 	describe('uploadFile()', function() {
 
 		var PARENT_FOLDER_ID = '123',

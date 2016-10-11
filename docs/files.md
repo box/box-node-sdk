@@ -17,6 +17,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
 * [Create a Shared Link](#create-a-shared-link)
 * [Get Thumbnail](#get-thumbnail)
+* [View Versions](#view-versions)
 * [Create Metadata](#create-metadata)
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
@@ -209,6 +210,24 @@ client.files.getThumbnail('12345', null, function(error, response) {
 		// no thumbnail available
 	}
 });
+```
+
+View Versions
+-------------
+
+Retrieve file versions by calling the [`files.viewVersions(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#viewVersions).
+
+```js
+client.files.viewVersions('12345', null, callback);
+```
+
+Requesting information for only the fields you need with the `fields` query
+string parameter can improve performance and reduce the size of the network
+request.
+
+```js
+// Only get information about a few specific fields.
+client.files.viewVersions('12345', {fields: 'size,sha1'}, callback);
 ```
 
 Create Metadata
