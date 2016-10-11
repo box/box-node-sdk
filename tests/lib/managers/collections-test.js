@@ -22,6 +22,7 @@ var sandbox = sinon.sandbox.create(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	Collections,
 	collections,
+	FOLDER_ID = '4567',
 	MODULE_FILE_PATH = '../../../lib/managers/collections';
 
 
@@ -92,6 +93,33 @@ describe('Collections', function() {
 			collections.getItems(collectionID, testQS, done);
 		});
 
+	});
+
+	describe('update()', function() {
+
+		var collectionList,
+			expectedParams;
+
+		beforeEach(function() {
+			collectionList = [{id: '1234'},{id: '5678'}];
+			expectedParams = {
+				body: {
+					collections: collectionList
+				}
+			};
+		});
+
+		it('should make PUT request to create or delete item from a collection when called', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			collections.update(FOLDER_ID, ['1234', '5678']);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/folders/' + FOLDER_ID).yieldsAsync();
+			collections.update(FOLDER_ID, ['1234', '5678'], done);
+		});
 	});
 
 });
