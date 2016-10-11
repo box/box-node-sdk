@@ -27,6 +27,7 @@ var sandbox = sinon.sandbox.create(),
 	testParamsWithBody,
 	testParamsWithQs,
 	FILE_ID = '1234',
+	FILE_VERSION_ID = '5678',
 	MODULE_FILE_PATH = '../../../lib/managers/files';
 
 
@@ -399,6 +400,21 @@ describe('Files', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
 			sandbox.stub(boxClientFake, 'options').withArgs('/files/2345/content').yieldsAsync();
 			files.preflightUploadNewFileVersion(fileID, fileData, uploadsQS, done);
+		});
+	});
+
+	describe('deleteVersion()', function() {
+
+		it('should make DELETE request to delete a file version to the trash', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/files/' + FILE_ID + '/versions/' + FILE_VERSION_ID, null);
+			files.deleteVersion(FILE_ID, FILE_VERSION_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/files/' + FILE_ID + '/versions/' + FILE_VERSION_ID).yieldsAsync();
+			files.deleteVersion(FILE_ID, FILE_VERSION_ID, done);
 		});
 	});
 
