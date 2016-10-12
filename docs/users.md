@@ -5,7 +5,7 @@ Users represent an individual's account on Box.
 
 * [Get the Current User's Information](#get-the-current-users-information)
 * [Update User](#update-user)
-* [Invite User](#invite-user)
+* [Invite User to Enterprise](#invite-user-to-enterprise)
 * [Get Email Aliases](#get-email-aliases)
 * [Add Email Alias](#add-email-alias)
 * [Delete Email Alias](#delete-email-alias)
@@ -30,10 +30,11 @@ client.users.update('123', {name: 'New Name', job_title: 'New Title', phone: '55
 ```
 
 
-Invite User
------------
+Invite User to Enterprise
+-------------------------
 
 To invite an existing user to join an Enterprise call the [`users.invite(enterpriseID, login, callback)`](http://opensource.box.com/box-node-sdk/Users.html#invite) method.
+This method requires the "Manage An Enterprise" scope for the enterprise, which can be enabled within your developer console.
 ```js
 client.users.invite('456', 'user@example.com', callback);
 ```
