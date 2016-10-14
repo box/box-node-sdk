@@ -54,9 +54,9 @@ client.users.update('123', {name: 'New Name', job_title: 'New Title', phone: '55
 Delete User
 -----------
 
-To delete a user call the [`users.delete(userID, notify, force, callback)`](http://opensource.box.com/box-node-sdk/Users.html#delete) method.
+To delete a user call the [`users.delete(userID, qs, callback)`](http://opensource.box.com/box-node-sdk/Users.html#delete) method.
 ```js
-client.users.delete('123', true, false, callback);
+client.users.delete('123', null, callback);
 ```
 
 
