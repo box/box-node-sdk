@@ -5,6 +5,7 @@ Tasks enable file-centric workflows in Box. User can create tasks on files and a
 
 * [Create a Task](#create-a-task)
 * [Get a Task's Information](#get-a-tasks-information)
+* [Delete a Task Permanently](#delete-a-task-permanently)
 
 Create a Task
 -------------
@@ -20,6 +21,15 @@ client.tasks.create(
 	},
 	callback
 );
+
+```
+Delete a Task Permanently
+-------------------------
+
+To delete a task permanently call the [`tasks.deletePermanently(taskID, callback)`](http://opensource.box.com/box-node-sdk/Tasks.html#deletePermanently) method.
+
+```js
+client.tasks.deletePermanently('1234', callback);
 ```
 
 Get a Task's Information

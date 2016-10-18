@@ -134,4 +134,20 @@ describe('Tasks', function() {
 
 	});
 
+	describe('deletePermanently()', function() {
+
+		it('should make delete request to delete a task permanently when called', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs(BASE_PATH + '/' + TASK_ID);
+			tasks.deletePermanently(TASK_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
+			tasks.deletePermanently(TASK_ID, done);
+		});
+
+	});
+
 });
