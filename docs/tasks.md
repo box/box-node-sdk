@@ -1,7 +1,7 @@
 Tasks
 =====
 
-Tasks enabled file-centric workflows in Box. User can create tasks on files and assign them to collaborators on Box.
+Tasks enable file-centric workflows in Box. User can create tasks on files and assign them to collaborators on Box.
 
 * [Create a Task](#create-a-task)
 
