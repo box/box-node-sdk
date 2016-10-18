@@ -82,23 +82,23 @@ describe('Tasks', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
-			tasks.create(FILE_ID, message, dueAt);
+			tasks.create(FILE_ID, {message: message, dueAt: dueAt});
 		});
 
-		it('should make POST request with message to create a task when when just a message is passed', function() {
+		it('should make POST request with message to create a task when just a message is passed', function() {
 			expectedParams.body.message = message;
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
-			tasks.create(FILE_ID, message);
+			tasks.create(FILE_ID, {message: message});
 		});
 
-		it('should make POST request with due_at to create a task when when just a dueAt is passed', function() {
+		it('should make POST request with due_at to create a task when just a dueAt is passed', function() {
 			expectedParams.body.due_at = dueAt;
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
-			tasks.create(FILE_ID, null, dueAt);
+			tasks.create(FILE_ID, {dueAt: dueAt});
 		});
 
 		it('should make POST request with mandatory parameters to create a task when neither optional parameter is passed', function() {
@@ -110,7 +110,7 @@ describe('Tasks', function() {
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs(BASE_PATH).yieldsAsync();
-			tasks.create(FILE_ID, message, dueAt, done);
+			tasks.create(FILE_ID, {message: message, dueAt: dueAt}, done);
 		});
 
 	});
