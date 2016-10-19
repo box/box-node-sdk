@@ -57,7 +57,6 @@ describe('Tasks', function() {
 	});
 
 	describe('create()', function() {
-
 		var message,
 			dueAt,
 			expectedParams;
