@@ -283,6 +283,17 @@ describe('Files', function() {
 			files.copy(FILE_ID, NEW_PARENT_ID);
 		});
 
+		it('should make POST request to copy the folder with optional parameters when passed', function() {
+
+			var name = 'rename on copy';
+
+			expectedParams.body.name = name;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/1234/copy', expectedParams);
+			files.copy(FILE_ID, NEW_PARENT_ID, {name});
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withExactArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/files/1234/copy').yieldsAsync();

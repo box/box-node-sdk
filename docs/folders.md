@@ -95,6 +95,13 @@ Call the [`folders.copy(sourceFolderID, destinationFolderID, callback)`](http://
 client.folders.copy('12345', '67890', callback);
 ```
 
+An optional `name` parameter can also be passed to rename the folder on copy.  This can be
+used to avoid a name conflict when there is already an item with the same name in the
+target folder.
+
+```js
+client.folders.copy('12345', '0', {name: 'Renamed folder'}, callback);
+```
 
 Move a Folder
 -------------
