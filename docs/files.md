@@ -124,6 +124,14 @@ method.
 client.files.copy('12345', '0', callback);
 ```
 
+An optional `name` parameter can also be passed to rename the file on copy.  This can be
+used to avoid a name conflict when there is already an item with the same name in the
+target folder.
+
+```js
+client.files.copy('12345', '0', {name: 'Renamed file.png'}, callback);
+```
+
 Delete a File
 -------------
 
