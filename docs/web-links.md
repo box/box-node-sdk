@@ -7,6 +7,7 @@ and restore.
 
 * [Create a Web Link](#create-a-web-link)
 * [Get a Web Link's Information](#get-a-web-links-information)
+* [Update a Web Link](#update-a-web-link)
 
 Create a Web Link
 -----------------
@@ -38,4 +39,20 @@ request.
 
 ```js
 client.weblinks.get('1234', {fields: 'item_status,path_collection'}, callback);
+```
+
+Update a Web Link
+-----------------
+
+To update a web link call the [`weblinks.update(weblinkID, options, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#update)
+method.
+
+```js
+client.weblinks.update(
+	'1234',
+	{
+		name: 'Box Website!',
+		description: 'Cloud Content Management'
+	},
+	callback);
 ```
