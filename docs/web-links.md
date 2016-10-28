@@ -8,6 +8,7 @@ and restore.
 * [Create a Web Link](#create-a-web-link)
 * [Get a Web Link's Information](#get-a-web-links-information)
 * [Update a Web Link](#update-a-web-link)
+* [Delete a Web Link](#delete-a-web-link)
 
 Create a Web Link
 -----------------
@@ -55,4 +56,13 @@ client.weblinks.update(
 		description: 'Cloud Content Management'
 	},
 	callback);
+
+Delete a Web Link
+-----------------
+
+To move a web link to the trash call the [`weblinks.delete(weblinkID, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#delete)
+method.
+
+```js
+client.weblinks.delete('1234',callback);
 ```
