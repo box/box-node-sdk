@@ -131,6 +131,20 @@ describe('EventStream', function() {
 			sandbox.mock(eventStream).expects('getLongPollInfo');
 			clock.tick(1000);
 		});
+
+		it('should not retry getLongPollInfo() when API call fails with auth error', function() {
+
+			var apiError = new Error('API fail');
+			apiError.authExpired = true;
+			sandbox.stub(eventStream, 'doLongPoll');
+			sandbox.stub(eventStream, 'emit');
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').yields(apiError);
+
+			eventStream.getLongPollInfo();
+
+			sandbox.mock(eventStream).expects('getLongPollInfo').never();
+			clock.tick(1000);
+		});
 	});
 
 	describe('doLongPoll()', function() {
