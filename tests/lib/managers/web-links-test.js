@@ -19,7 +19,10 @@ var sandbox = sinon.sandbox.create(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	WebLinks,
 	weblinks,
+	testQS,
+	testParamsWithQs,
 	BASE_PATH = '/web_links',
+	WEB_LINK_ID = '1234',
 	MODULE_FILE_PATH = '../../../lib/managers/web-links';
 
 // ------------------------------------------------------------------------------
@@ -42,6 +45,8 @@ describe('WebLinks', function() {
 		// Setup File Under Test
 		WebLinks = require(MODULE_FILE_PATH);
 		weblinks = new WebLinks(boxClientFake);
+		testQS = { testQSKey: 'testQSValue'};
+		testParamsWithQs = {qs: testQS};
 	});
 
 	afterEach(function() {
@@ -111,6 +116,22 @@ describe('WebLinks', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs(BASE_PATH).yieldsAsync();
 			weblinks.create(url, parentID, {name: name, description: description}, done);
+		});
+
+	});
+
+	describe('get()', function() {
+
+		it('should make GET request to get a web link when called', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + WEB_LINK_ID, testParamsWithQs);
+			weblinks.get(WEB_LINK_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs(BASE_PATH + '/' + WEB_LINK_ID).yieldsAsync();
+			weblinks.get(WEB_LINK_ID, null, done);
 		});
 
 	});

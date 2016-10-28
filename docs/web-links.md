@@ -6,6 +6,7 @@ Web link objects are treated similarly to file objects, so they will also suppor
 and restore.
 
 * [Create a Web Link](#create-a-web-link)
+* [Get a Web Link's Information](#get-a-web-links-information)
 
 Create a Web Link
 -----------------
@@ -22,4 +23,19 @@ client.weblinks.create(
 		description: 'Cloud Content Management'
 	},
 	callback);
+```
+
+Get a Web Link's information
+----------------------------
+
+```js
+client.weblinks.get('1234', null, callback);
+```
+
+Requesting information for only the fields you need with the `fields` query
+string parameter can improve performance and reduce the size of the network
+request.
+
+```js
+client.weblinks.get('1234', {fields: 'item_status,path_collection'}, callback);
 ```
