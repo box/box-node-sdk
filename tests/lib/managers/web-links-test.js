@@ -76,7 +76,7 @@ describe('WebLinks', function() {
 			};
 		});
 
-		it('should make POST request with all parameters to create a weblink when all optional parameters are passed', function() {
+		it('should make POST request with all parameters to create a web link when all optional parameters are passed', function() {
 			expectedParams.body.name = name;
 			expectedParams.body.description = description;
 
@@ -85,7 +85,7 @@ describe('WebLinks', function() {
 			weblinks.create(url, parentID, {name: name, description: description});
 		});
 
-		it('should make POST request with name to create a weblink when just a name is passed', function() {
+		it('should make POST request with name to create a web link when just a name is passed', function() {
 			expectedParams.body.name = name;
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
@@ -93,7 +93,7 @@ describe('WebLinks', function() {
 			weblinks.create(url, parentID, {name: name});
 		});
 
-		it('should make POST request with description to create a weblink when just a description is passed', function() {
+		it('should make POST request with description to create a web link when just a description is passed', function() {
 			expectedParams.body.description = description;
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
@@ -101,7 +101,7 @@ describe('WebLinks', function() {
 			weblinks.create(url, parentID, {description: description});
 		});
 
-		it('should make POST request  with mandatory parameters to create a web link when neither optional parameter is passed', function() {
+		it('should make POST request with mandatory parameters to create a web link when neither optional parameter is passed', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			weblinks.create(url, parentID);
