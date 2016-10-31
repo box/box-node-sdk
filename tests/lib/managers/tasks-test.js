@@ -19,7 +19,10 @@ var sandbox = sinon.sandbox.create(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	Tasks,
 	tasks,
+	testQS,
+	testParamsWithQs,
 	BASE_PATH = '/tasks',
+	TASK_ID = '1234',
 	FILE_ID = '1234',
 	REVIEW_ACTION = 'review',
 	MODULE_FILE_PATH = '../../../lib/managers/tasks';
@@ -44,6 +47,8 @@ describe('Tasks', function() {
 		// Setup File Under Test
 		Tasks = require(MODULE_FILE_PATH);
 		tasks = new Tasks(boxClientFake);
+		testQS = { testQSKey: 'testQSValue'};
+		testParamsWithQs = {qs: testQS};
 	});
 
 	afterEach(function() {
@@ -110,6 +115,22 @@ describe('Tasks', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs(BASE_PATH).yieldsAsync();
 			tasks.create(FILE_ID, {message: message, dueAt: dueAt}, done);
+		});
+
+	});
+
+	describe('get()', function() {
+
+		it('should make GET request to get task info when called', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + TASK_ID, testParamsWithQs);
+			tasks.get(TASK_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
+			tasks.get(TASK_ID, testQS, done);
 		});
 
 	});
