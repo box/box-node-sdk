@@ -77,7 +77,7 @@ client.retentionPolicies.getAssignments('8763245', {type: 'enterprise'}, callbac
 Assign Retention Policy
 -----------------------
 
-To assign a retention policy, call the [`retentionPolicies.assign = function(policyID, assignType, assignID, callback)`](http://opensource.box.com/box-node-sdk/RetentionPolicies.html#assign)
+To assign a retention policy, call the [`retentionPolicies.assign(policyID, assignType, assignID, callback)`](http://opensource.box.com/box-node-sdk/RetentionPolicies.html#assign)
 method.  If assigning to an `enterprise`, no `assignID` should be provided.
 
 ```js
