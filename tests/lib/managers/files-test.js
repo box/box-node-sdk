@@ -689,4 +689,32 @@ describe('Files', function() {
 		});
 	});
 
+	describe('applyWatermark()', function() {
+		var expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {
+				body: {
+					watermark: {
+						imprint: 'default'
+					}
+				}
+			};
+		});
+
+		it('should make PUT request to apply watermark on a file', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID + '/watermark', expectedParams);
+			files.applyWatermark(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync();
+			files.applyWatermark(FILE_ID, done);
+		});
+	});
+
 });
