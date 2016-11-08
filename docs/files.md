@@ -29,6 +29,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
+* [Get Watermark](#get-watermark)
 
 Get a File's Information
 ------------------------
@@ -398,4 +399,21 @@ A file's metadata can be removed by calling
 
 ```js
 client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+```
+
+Get Watermark
+-------------
+To get watermark information for a file call the [`files.getWatermark(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getWatermark) method.
+
+```js
+client.files.getWatermark('75937', null, callback);
+```
+
+Requesting information for only the fields you need with the `fields` query
+string parameter can improve performance and reduce the size of the network
+request.
+
+```js
+// Only get information about a few specific fields.
+client.files.getWatermark('75937', {fields: 'created_at'}, callback);
 ```
