@@ -674,6 +674,19 @@ describe('Files', function() {
 				done();
 			});
 		});
+
+		it('should return a response error when API call returns error', function(done) {
+
+			var error = new Error('API Failure');
+
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(error);
+
+			files.getEmbedLink(FILE_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
 	});
 
 });
