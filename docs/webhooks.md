@@ -68,7 +68,7 @@ Update a file or folder's webhook by calling
 with the field you want to update as options.address or options.trigger.
 
 ```js
-client.webhooks.update('678901', ??, callback);
+client.webhooks.update('678901', "address": "https://NEWWEBSITE.com", callback);
 ```
 
 Delete Webhook
