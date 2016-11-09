@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for URL Path Builder
- * @author fschott
  */
 
 /* global describe, it, before, beforeEach, after, afterEach */

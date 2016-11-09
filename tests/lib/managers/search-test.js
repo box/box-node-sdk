@@ -1,6 +1,5 @@
 /**
  * @fileoverview Search Manager Tests
- * @author djordan
  */
 'use strict';
 

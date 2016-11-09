@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tasks Manager Tests
- * @author ptoth
  */
 'use strict';
 

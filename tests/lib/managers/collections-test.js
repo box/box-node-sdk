@@ -1,6 +1,5 @@
 /**
  * @fileoverview Collections Manager Tests
- * @author tjin
  */
 
 'use strict';

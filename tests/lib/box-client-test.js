@@ -1,7 +1,5 @@
 /**
  * @fileoverview API Client Tests
- * @author bemerick
- * @author fschott
  */
 /* eslint func-style: 0 */
 'use strict';

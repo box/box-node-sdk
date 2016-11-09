@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for Basic Box API Session.
- * @author mwiller
  */
 /* eslint no-new: 0 */
 /* global describe, it, before, beforeEach, after, afterEach */

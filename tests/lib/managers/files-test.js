@@ -1,6 +1,5 @@
 /**
  * @fileoverview Files Manager Tests
- * @author fschott
  */
 'use strict';
 

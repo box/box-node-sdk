@@ -1,6 +1,5 @@
 /**
  * @fileoverview Legal Hold Policies manager tests
- * @author mwiller
  */
 'use strict';
 

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for Lazy Async Queue
- * @author fschott
  */
 
 /* global describe, it, before, beforeEach, after, afterEach */

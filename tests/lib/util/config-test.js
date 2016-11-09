@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for Config
- * @author mwiller
  */
 
 /* eslint no-new: 0 */

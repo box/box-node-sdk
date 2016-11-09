@@ -1,6 +1,5 @@
 /**
  * @fileoverview Events Manager Tests
- * @author mwiller
  */
 'use strict';
 

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for Anonymous Box API Session.
- * @author fschott
  */
 
 /* global describe, it, before, beforeEach, after, afterEach */

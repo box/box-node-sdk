@@ -1,6 +1,5 @@
 /**
  * @fileoverview Request/Response Error Helper Tests
- * @author fschott
  */
 'use strict';
 

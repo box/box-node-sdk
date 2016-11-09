@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for Basic Box API Session.
- * @author mwiller
  */
 
 /* global describe, it, before, beforeEach, after, afterEach */

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Metadata Manager Tests
- * @author mwiller
  */
 'use strict';
 

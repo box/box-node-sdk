@@ -1,6 +1,5 @@
 /**
  * @fileoverview Box SDK Node Integration Tests
- * @author mwiller
  */
 'use strict';
 

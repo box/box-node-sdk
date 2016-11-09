@@ -1,6 +1,5 @@
 /**
  * @fileoverview Weblinks Manager Tests
- * @author ptoth
  */
 'use strict';
 

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for Box API Request
- * @author fschott
  */
 
 /* eslint no-new: 0 */

@@ -1,7 +1,5 @@
 /**
  * @fileoverview Token Manager Tests
- * @author bemerick
- * @author fschott
  */
 'use strict';
 

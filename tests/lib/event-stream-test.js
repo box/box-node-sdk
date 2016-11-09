@@ -1,6 +1,5 @@
 /**
  * @fileoverview Event Stream Tests
- * @author mwiller
  */
 'use strict';
 

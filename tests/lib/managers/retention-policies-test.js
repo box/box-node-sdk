@@ -1,6 +1,5 @@
 /**
  * @fileoverview Retention Policies manager tests
- * @author mwiller
  */
 'use strict';
 
