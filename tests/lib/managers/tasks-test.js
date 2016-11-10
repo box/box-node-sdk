@@ -155,7 +155,7 @@ describe('Tasks', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
-			tasks.update(TASK_ID, {message: message, dueAt: dueAt});
+			tasks.update(TASK_ID, {message: message, due_at: dueAt});
 		});
 
 		it('should make PUT request with message to update a task when just a message is passed', function() {
@@ -171,7 +171,7 @@ describe('Tasks', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
-			tasks.update(TASK_ID, {dueAt: dueAt});
+			tasks.update(TASK_ID, {due_at: dueAt});
 		});
 
 		it('should make PUT request with mandatory parameters to update a task when neither optional parameter is passed', function() {
@@ -183,7 +183,7 @@ describe('Tasks', function() {
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
-			tasks.update(TASK_ID, {message: message, dueAt: dueAt}, done);
+			tasks.update(TASK_ID, {message: message, due_at: dueAt}, done);
 		});
 	});
 
