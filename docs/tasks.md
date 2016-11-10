@@ -17,7 +17,7 @@ client.tasks.create(
 	'1234',
 	{
 		message: 'Optional Message',
-		dueAt: '2014-04-03T11:09:43-07:00'
+		due_at: '2014-04-03T11:09:43-07:00'
 	},
 	callback
 );
