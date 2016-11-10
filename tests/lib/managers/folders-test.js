@@ -320,4 +320,22 @@ describe('Folders', function() {
 
 	});
 
+	describe('getWatermark()', function() {
+
+		it('should make GET request to get folder watermark info when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/' + FOLDER_ID + '/watermark', testParamsWithQs);
+			folders.getWatermark(FOLDER_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync();
+			folders.getWatermark(FOLDER_ID, null, done);
+		});
+
+	});
+
 });
