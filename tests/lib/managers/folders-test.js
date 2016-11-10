@@ -320,4 +320,22 @@ describe('Folders', function() {
 
 	});
 
+	describe('removeWatermark()', function() {
+
+		it('should make DELETE call to remove watermark', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/' + FOLDER_ID + '/watermark', null);
+			folders.removeWatermark(FOLDER_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync();
+			folders.removeWatermark(FOLDER_ID, done);
+		});
+
+	});
+
 });
