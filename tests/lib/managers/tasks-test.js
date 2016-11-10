@@ -85,7 +85,7 @@ describe('Tasks', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
-			tasks.create(FILE_ID, {message: message, dueAt: dueAt});
+			tasks.create(FILE_ID, {message: message, due_at: dueAt});
 		});
 
 		it('should make POST request with message to create a task when just a message is passed', function() {
@@ -101,7 +101,7 @@ describe('Tasks', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
-			tasks.create(FILE_ID, {dueAt: dueAt});
+			tasks.create(FILE_ID, {due_at: dueAt});
 		});
 
 		it('should make POST request with mandatory parameters to create a task when neither optional parameter is passed', function() {
