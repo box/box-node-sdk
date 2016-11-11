@@ -302,7 +302,7 @@ Lock a File
 -----------
 
 A file can be locked, which prevents other users from editing the file, by calling the
-[`files.lock(fileID, expiresAt, isDownloadPrevented, callback)`](http://opensource.box.com/box-node-sdk/Files.html#lock)
+[`files.lock(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#lock)
 method  You may optionally prevent other users from downloading the file, as well as set
 an expiration time for the lock.
 
