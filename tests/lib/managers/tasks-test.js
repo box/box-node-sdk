@@ -22,6 +22,7 @@ var sandbox = sinon.sandbox.create(),
 	testParamsWithQs,
 	BASE_PATH = '/tasks',
 	TASK_ID = '1234',
+	ASSIGNMENT_ID = '873645',
 	FILE_ID = '1234',
 	REVIEW_ACTION = 'review',
 	MODULE_FILE_PATH = '../../../lib/managers/tasks';
@@ -130,6 +131,203 @@ describe('Tasks', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
 			tasks.get(TASK_ID, testQS, done);
+		});
+
+	});
+
+
+	describe('update()', function() {
+		var MESSAGE = 'Optional message for the test',
+			DUE_AT = '2018-04-03T11:09:43-07:00';
+
+		it('should make PUT request with all parameters to update a task when optional parameters are passed', function() {
+
+			var options = {
+				message: MESSAGE,
+				due_at: DUE_AT
+			};
+
+			var expectedParams = {
+				body: options
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
+			tasks.update(TASK_ID, options);
+		});
+
+		it('should make PUT request with mandatory parameters to update a task when no optional parameter is passed', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, {body: null});
+			tasks.update(TASK_ID, null);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
+			tasks.update(TASK_ID, null, done);
+		});
+	});
+
+	describe('delete()', function() {
+
+		it('should make delete request to delete a task permanently when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs(BASE_PATH + '/' + TASK_ID);
+			tasks.delete(TASK_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
+			tasks.delete(TASK_ID, done);
+		});
+
+	});
+
+	describe('getAssignments()', function() {
+
+		it('should make GET request to get task assignments when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + TASK_ID + '/assignments', testParamsWithQs);
+			tasks.getAssignments(TASK_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs(BASE_PATH + '/' + TASK_ID + '/assignments').yieldsAsync();
+			tasks.getAssignments(TASK_ID, testQS, done);
+		});
+
+	});
+
+	describe('getAssignment()', function() {
+
+		it('should make GET request to get task assignment when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/task_assignments/' + ASSIGNMENT_ID, testParamsWithQs);
+			tasks.getAssignment(ASSIGNMENT_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/task_assignments/' + ASSIGNMENT_ID).yieldsAsync();
+			tasks.getAssignment(ASSIGNMENT_ID, testQS, done);
+		});
+
+	});
+
+	describe('assignByUserID()', function() {
+
+		var USER_ID = '2354987';
+
+		it('should make POST request to create task assignment when called', function() {
+
+			var expectedParams = {
+				body: {
+					task: {
+						type: 'task',
+						id: TASK_ID
+					},
+					assign_to: {
+						id: USER_ID
+					}
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/task_assignments', expectedParams);
+			tasks.assignByUserID(TASK_ID, USER_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/task_assignments').yieldsAsync();
+			tasks.assignByUserID(TASK_ID, USER_ID, done);
+		});
+	});
+
+	describe('assignByEmail()', function() {
+
+		var EMAIL = 'blahblah@example.com';
+
+		it('should make POST request to create task assignment when called', function() {
+
+			var expectedParams = {
+				body: {
+					task: {
+						type: 'task',
+						id: TASK_ID
+					},
+					assign_to: {
+						login: EMAIL
+					}
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/task_assignments', expectedParams);
+			tasks.assignByEmail(TASK_ID, EMAIL);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/task_assignments').yieldsAsync();
+			tasks.assignByEmail(TASK_ID, EMAIL, done);
+		});
+	});
+
+	describe('updateAssignment()', function() {
+		var MESSAGE = 'Optional message for the test',
+			RESOLUTION_STATE = 'approved';
+
+		it('should make PUT request with all parameters to update a task when called', function() {
+
+			var options = {
+				message: MESSAGE,
+				resolution_state: RESOLUTION_STATE
+			};
+
+			var expectedParams = {
+				body: options
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/task_assignments/' + ASSIGNMENT_ID, expectedParams);
+			tasks.updateAssignment(ASSIGNMENT_ID, options);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/task_assignments/' + ASSIGNMENT_ID).yieldsAsync();
+			tasks.updateAssignment(ASSIGNMENT_ID, {}, done);
+		});
+	});
+
+	describe('deleteAssignment()', function() {
+
+		it('should make delete request to delete a task permanently when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/task_assignments/' + ASSIGNMENT_ID);
+			tasks.deleteAssignment(ASSIGNMENT_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/task_assignments/' + ASSIGNMENT_ID).yieldsAsync();
+			tasks.deleteAssignment(ASSIGNMENT_ID, done);
 		});
 
 	});
