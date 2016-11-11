@@ -14,12 +14,17 @@ file's contents, upload new versions, and perform other common file operations
 * [Delete a File](#delete-a-file)
 * [Delete Permanently](#delete-permanently)
 * [Get a Trashed File](#get-a-trashed-file)
+* [Get File Versions](#get-file-versions)
 * [Upload a New Version of a File](#upload-a-new-version-of-a-file)
 * [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
+* [Delete a Previous File Version](#delete-a-previous-file-version)
 * [Create a Shared Link](#create-a-shared-link)
 * [Promote Version](#promote-version)
 * [Get Thumbnail](#get-thumbnail)
 * [Get Embed Link](#get-embed-link)
+* [Lock a File](#lock-a-file)
+* [Unlock a File](#unlock-a-file)
+* [Restore a File From Trash](#restore-a-file-from-trash)
 * [Create Metadata](#create-metadata)
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
@@ -173,6 +178,25 @@ request.
 client.files.getTrashedFile('12345', {fields: 'size,owned_by'}, callback);
 ```
 
+Get File Versions
+-----------------
+
+Retrieve a list of previous versions of a file by calling the
+[`files.getVersions(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getVersions).
+
+```js
+client.files.getVersions('12345', null, callback);
+```
+
+Requesting information for only the fields you need with the `fields` query
+string parameter can improve performance and reduce the size of the network
+request.
+
+```js
+// Only get information about a few specific fields.
+client.files.getVersions('12345', {fields: 'name,size,sha1'}, callback);
+```
+
 Upload a New Version of a File
 ------------------------------
 
@@ -205,6 +229,17 @@ client.files.getReadStream('12345', {version: '2'}, function(error, stream) {
 	var output = fs.createWriteStream('/path/to/file');
 	stream.pipe(output);
 });
+```
+
+Delete a Previous File Version
+------------------------------
+
+An old version of a file can be moved to the trash by calling the
+[`files.deleteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#deleteVersion)
+method.
+
+```js
+client.files.deleteVersion('12345', '98768', callback)
 ```
 
 Create a Shared Link
@@ -261,6 +296,57 @@ For more information, see the [API documentation](https://docs.box.com/reference
 
 ```js
 client.files.getEmbedLink('12345', callback);
+```
+
+Lock a File
+-----------
+
+A file can be locked, which prevents other users from editing the file, by calling the
+[`files.lock(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#lock)
+method  You may optionally prevent other users from downloading the file, as well as set
+an expiration time for the lock.
+
+```js
+client.files.lock(
+		'12345',
+		{
+			expires_at: '2018-12-12T10:55:30-08:00',
+			is_download_prevented: false
+		},
+		callback
+	);
+```
+
+Unlock a File
+-------------
+
+A file can be unlocked by calling the
+[`files.unlock(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#unlock)
+method.
+
+```js
+client.files.unlock('12345', callback);
+```
+
+Restore a File From Trash
+-------------------------
+
+Calling the
+[`files.restoreFromTrash(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#restoreFromTrash)
+will restore an item from the user's trash.  Default behavior is to restore the item
+to the folder it was in before it was moved to the trash. If that parent folder
+no longer exists or if there is now an item with the same name in that parent
+folder, the new parent folder and/or new name will need to be included.
+
+```js
+client.files.restoreFromTrash(
+		'12345',
+		{
+			name: 'New Name',
+			parent_id: 0
+		},
+		callback
+	);
 ```
 
 Create Metadata
