@@ -1,6 +1,5 @@
 /**
  * @fileoverview Shared Item Manager Tests
- * @author fschott
  */
 'use strict';
 

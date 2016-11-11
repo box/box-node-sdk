@@ -1,6 +1,5 @@
 /**
  * @fileoverview Comments Manager Tests
- * @author fschott
  */
 'use strict';
 

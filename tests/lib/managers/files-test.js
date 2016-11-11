@@ -1,6 +1,5 @@
 /**
  * @fileoverview Files Manager Tests
- * @author fschott
  */
 'use strict';
 
@@ -27,6 +26,7 @@ var sandbox = sinon.sandbox.create(),
 	testParamsWithBody,
 	testParamsWithQs,
 	FILE_ID = '1234',
+	FILE_VERSION_ID = '5678',
 	MODULE_FILE_PATH = '../../../lib/managers/files';
 
 
@@ -282,6 +282,17 @@ describe('Files', function() {
 			files.copy(FILE_ID, NEW_PARENT_ID);
 		});
 
+		it('should make POST request to copy the folder with optional parameters when passed', function() {
+
+			var name = 'rename on copy';
+
+			expectedParams.body.name = name;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/1234/copy', expectedParams);
+			files.copy(FILE_ID, NEW_PARENT_ID, {name});
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withExactArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/files/1234/copy').yieldsAsync();
@@ -399,6 +410,32 @@ describe('Files', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
 			sandbox.stub(boxClientFake, 'options').withArgs('/files/2345/content').yieldsAsync();
 			files.preflightUploadNewFileVersion(fileID, fileData, uploadsQS, done);
+		});
+	});
+
+	describe('promoteVersion()', function() {
+
+		var expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {
+				body: {
+					type: 'file_version',
+					id: FILE_VERSION_ID
+				}
+			};
+		});
+
+		it('should make POST request to promote older file version to top of the stack', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID + '/versions/current', expectedParams);
+			files.promoteVersion(FILE_ID, FILE_VERSION_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/files/' + FILE_ID + '/versions/current').yieldsAsync();
+			files.promoteVersion(FILE_ID, FILE_VERSION_ID, done);
 		});
 	});
 
@@ -574,6 +611,80 @@ describe('Files', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/tasks', testParamsWithQs).yieldsAsync();
 			files.getTasks(FILE_ID, testQS, done);
+		});
+	});
+
+	describe('getTrashedFile()', function() {
+
+		it('should make GET request to get trashed file when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/trash', testParamsWithQs);
+			files.getTrashedFile(FILE_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/trash', testParamsWithQs).yieldsAsync();
+			files.getTrashedFile(FILE_ID, testQS, done);
+		});
+
+	});
+
+	describe('getEmbedLink()', function() {
+
+		var	expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {qs: {fields: 'expiring_embed_link'}};
+		});
+
+		it('should make GET request to create embed link', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID, expectedParams);
+			files.getEmbedLink(FILE_ID);
+		});
+
+		it('should return the embed link when a 200 ok response is returned', function(done) {
+			var embedLink = { expiring_embed_link: {url: 'https://app.box.com/preview/expiring_embed/1234'}},
+				response = {statusCode: 200, body: embedLink};
+
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID).yieldsAsync(null, response);
+			files.getEmbedLink(FILE_ID, function(err, data) {
+				assert.ok(!err);
+				assert.equal(data, embedLink.expiring_embed_link.url);
+				done();
+			});
+		});
+
+		it('should return a response error when API returns non-200 result', function(done) {
+
+			var response = {
+				statusCode: 404
+			};
+
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+
+			files.getEmbedLink(FILE_ID, function(err) {
+
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', response.statusCode);
+				done();
+			});
+		});
+
+		it('should return a response error when API call returns error', function(done) {
+
+			var error = new Error('API Failure');
+
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(error);
+
+			files.getEmbedLink(FILE_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
 		});
 	});
 

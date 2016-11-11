@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for Box API Request
- * @author fschott
  */
 
 /* global describe, it, before, beforeEach, after, afterEach */

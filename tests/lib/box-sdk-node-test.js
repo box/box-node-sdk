@@ -1,7 +1,5 @@
 /**
 * @fileoverview Box SDK Node Tests
-* @author bemerick
- * @author fschott
 */
 'use strict';
 

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Collaborations Manager Tests
- * @author fschott
  */
 'use strict';
 

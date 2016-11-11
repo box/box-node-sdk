@@ -1,7 +1,5 @@
 /**
  * @fileoverview API Client Tests
- * @author bemerick
- * @author fschott
  */
 /* eslint func-style: 0 */
 'use strict';
@@ -9,7 +7,7 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var assert = require('assert'),
+var assert = require('chai').assert,
 	util = require('util'),
 	sinon = require('sinon'),
 	mockery = require('mockery'),
@@ -276,6 +274,31 @@ describe('box-client', function() {
 			basicClient.get(FAKE_PATH, fakeParamsWithQs, done);
 		});
 
+		it('should make GET request with only url and method params when called with no params', function(done) {
+			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
+				method: 'GET',
+				url: (basicClient._baseURL + FAKE_PATH)
+			}, done).yields();
+			basicClient.get(FAKE_PATH, null, done);
+		});
+
+		it('should not mutate the passed-in params object when called', function(done) {
+
+			var reqParams = {
+				qs: {foo: 'bar'}
+			};
+
+			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
+				method: 'GET',
+				url: (basicClient._baseURL + FAKE_PATH),
+				qs: {foo: 'bar'}
+			}).yieldsAsync();
+			basicClient.get(FAKE_PATH, reqParams, function() {
+
+				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				done();
+			});
+		});
 	});
 
 	describe('post()', function() {
@@ -289,6 +312,31 @@ describe('box-client', function() {
 			basicClient.post(FAKE_PATH, fakeParamsWithBody, done);
 		});
 
+		it('should make POST request with only url and method params when called with no params', function(done) {
+			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
+				method: 'POST',
+				url: (basicClient._baseURL + FAKE_PATH)
+			}, done).yields();
+			basicClient.post(FAKE_PATH, null, done);
+		});
+
+		it('should not mutate the passed-in params object when called', function(done) {
+
+			var reqParams = {
+				body: {foo: 'bar'}
+			};
+
+			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
+				method: 'POST',
+				url: (basicClient._baseURL + FAKE_PATH),
+				body: {foo: 'bar'}
+			}).yieldsAsync();
+			basicClient.post(FAKE_PATH, reqParams, function() {
+
+				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				done();
+			});
+		});
 	});
 
 	describe('put()', function() {
@@ -303,6 +351,31 @@ describe('box-client', function() {
 			basicClient.put(FAKE_PATH, fakeParamsWithBody, done);
 		});
 
+		it('should make PUT request with only url and method params when called with no params', function(done) {
+			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
+				method: 'PUT',
+				url: (basicClient._baseURL + FAKE_PATH)
+			}, done).yields();
+			basicClient.put(FAKE_PATH, null, done);
+		});
+
+		it('should not mutate the passed-in params object when called', function(done) {
+
+			var reqParams = {
+				body: {foo: 'bar'}
+			};
+
+			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
+				method: 'PUT',
+				url: (basicClient._baseURL + FAKE_PATH),
+				body: {foo: 'bar'}
+			}).yieldsAsync();
+			basicClient.put(FAKE_PATH, reqParams, function() {
+
+				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				done();
+			});
+		});
 	});
 
 	describe('del()', function() {
@@ -316,6 +389,31 @@ describe('box-client', function() {
 			basicClient.del(FAKE_PATH, fakeParamsWithQs, done);
 		});
 
+		it('should make DELETE request with only url and method params when called with no params', function(done) {
+			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
+				method: 'DELETE',
+				url: (basicClient._baseURL + FAKE_PATH)
+			}, done).yields();
+			basicClient.del(FAKE_PATH, null, done);
+		});
+
+		it('should not mutate the passed-in params object when called', function(done) {
+
+			var reqParams = {
+				qs: {foo: 'bar'}
+			};
+
+			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
+				method: 'DELETE',
+				url: (basicClient._baseURL + FAKE_PATH),
+				qs: {foo: 'bar'}
+			}).yieldsAsync();
+			basicClient.del(FAKE_PATH, reqParams, function() {
+
+				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				done();
+			});
+		});
 	});
 
 	describe('options()', function() {
@@ -329,6 +427,31 @@ describe('box-client', function() {
 			basicClient.options(FAKE_PATH, fakeParamsWithBody, done);
 		});
 
+		it('should make OPTIONS request with only url and method params when called with no params', function(done) {
+			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
+				method: 'OPTIONS',
+				url: (basicClient._baseURL + FAKE_PATH)
+			}, done).yields();
+			basicClient.options(FAKE_PATH, null, done);
+		});
+
+		it('should not mutate the passed-in params object when called', function(done) {
+
+			var reqParams = {
+				qs: {foo: 'bar'}
+			};
+
+			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
+				method: 'OPTIONS',
+				url: (basicClient._baseURL + FAKE_PATH),
+				qs: {foo: 'bar'}
+			}).yieldsAsync();
+			basicClient.options(FAKE_PATH, reqParams, function() {
+
+				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				done();
+			});
+		});
 	});
 
 	describe('setCustomHeader()', function() {
@@ -547,7 +670,7 @@ describe('box-client', function() {
 		it('should throw an error when a plugin name would overwrite an existing method on box-client', function() {
 			assert.throws(function() {
 				basicClient.plug('plug', testPlugin); // plug can't be overwritten
-			}, 'You cannot define a plugin that overrides an existing property on the client');
+			}, Error, 'You cannot define a plugin that overrides an existing method on the client');
 		});
 
 		it('should override a plugin when called with a plugin name that already exists', function() {

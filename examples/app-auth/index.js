@@ -6,6 +6,7 @@ var express = require('express'),
 	session = require('express-session'),
 	path = require('path'),
 	fs = require('fs'),
+	util = require('util'),
 	multipart = require('express-formidable').parse,
 	bodyParser = require('body-parser'),
 	BoxSDK = require('box-node-sdk');
@@ -100,7 +101,8 @@ app.post('/login', function(req, res) {
 
 		if (err) {
 			res.render('login', {
-				error: 'An error occurred during login - ' + err.message
+				error: 'An error occurred during login - ' + err.message,
+				errorDetails: util.inspect(err)
 			});
 			return;
 		}
@@ -141,7 +143,8 @@ app.post('/signup', function(req, res) {
 
 		if (err) {
 			res.render('signup', {
-				error: 'An error occurred during signup - ' + err.message
+				error: 'An error occurred during signup - ' + err.message,
+				errorDetails: util.inspect(err)
 			});
 			return;
 		}
@@ -167,6 +170,7 @@ app.get('/files', function(req, res) {
 
 		res.render('files', {
 			error: err,
+			errorDetails: util.inspect(err),
 			files: data ? data.entries: []
 		});
 	});

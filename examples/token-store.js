@@ -1,6 +1,5 @@
 /**
  * @fileoverview In-Memory Token Store
- * @author mwiller
  * @module box-node-sdk/token-store
  */
 

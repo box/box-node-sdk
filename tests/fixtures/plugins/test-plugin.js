@@ -1,6 +1,5 @@
 /**
  * @fileoverview A Test Plugin
- * @author jtan
  */
 
 'use strict';

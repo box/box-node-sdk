@@ -1,6 +1,5 @@
 /**
  * @fileoverview Tests for App Auth Box API Session.
- * @author mwiller
  */
 
 /* global describe, it, before, beforeEach, after, afterEach */

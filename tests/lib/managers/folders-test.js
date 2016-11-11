@@ -1,6 +1,5 @@
 /**
  * @fileoverview Folders Manager Tests
- * @author fschott
  */
 'use strict';
 
@@ -142,6 +141,17 @@ describe('Folders', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234/copy', expectedParams);
 			folders.copy(FOLDER_ID, NEW_PARENT_ID);
+		});
+
+		it('should make POST request to copy the folder with optional parameters when passed', function() {
+
+			var name = 'rename on copy';
+
+			expectedParams.body.name = name;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234/copy', expectedParams);
+			folders.copy(FOLDER_ID, NEW_PARENT_ID, {name});
 		});
 
 		it('should call the defaultResponseHandler wrapped callback when response is returned', function(done) {

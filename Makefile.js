@@ -1,6 +1,5 @@
 /**
  * @fileoverview Build file
- * @author mwiller
  */
 /*global target, exec, echo, find*/
 
