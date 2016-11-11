@@ -16,27 +16,18 @@ Create a Webhook on a Box File
 ------------------------------
 
 Calling
-[`webhooks.create(fileID, objectType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#createFileWebhook)
+[`webhooks.create(fileID, objectType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#create)
 on a file attaches an event trigger with a URL to send notifications to
 
 ```js
-client.webhooks.create('759371', 'FILE', 'https://www.YOURWEBSITE.com', [eventTriggers.FILE.UPLOADED, eventTriggers.FILE.DOWNLOADED], callback)
+client.webhooks.create('759371', FILE, 'https://www.YOURWEBSITE.com', [webhookTriggerType.FILE.UPLOADED, webhookTriggerType.FILE.DOWNLOADED], callback)
 ```
-
-The notification URL must be a valid HTTPS URL that you specify when you create a
-webhook.
-
-The triggerTypes param is an array of strings. Available options are documented here
-(https://docs.box.com/reference#event-triggers)
-
-Create a Webhook on a Box Folder
---------------------------------
 
 alternatively, you can attach a webhook to a folder by calling
-[`webhooks.create(folderID, objectType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#createFolderWebhook)
+[`webhooks.create(folderID, objectType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#create)
 
 ```js
-client.webhooks.create('123456', 'FOLDER', 'https://www.YOURWEBSITE.com', [eventTriggers.FOLDER.CREATED, eventTriggers.FOLDER.DOWNLOADED], callback)
+client.webhooks.create('15937321', FOLDER, 'https://www.YOURWEBSITE.com', [webhookTriggerType.FOLDER.CREATED, webhookTriggerType.FOLDER.DOWNLOADED], callback)
 ```
 
 The notification URL must be a valid HTTPS URL that you specify when you create a
@@ -44,6 +35,7 @@ webhook.
 
 The triggerTypes param is an array of strings. Available options are documented here
 (https://docs.box.com/reference#event-triggers)
+
 
 Get Webhook
 -----------
@@ -60,15 +52,19 @@ The maximum limit per page of results is 200, Box uses the default limit of 100.
 client.webhooks.get('67890', null, callback);
 ```
 
+```js
+client.webhooks.getAll(null, callback);
+```
+
 Update Webhook
 ---------------
 
 Update a file or folder's webhook by calling
-[`webhooks.update(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#upate)
-with the field you want to update as options.address or options.trigger.
+[`webhooks.update(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#update)
+with the field you want to update as `options.address` or `options.trigger`.
 
 ```js
-client.webhooks.update('678901', "address": "https://NEWWEBSITE.com", callback);
+client.webhooks.update('678901', {address: "https://NEWWEBSITE.com"}, callback);
 ```
 
 Delete Webhook

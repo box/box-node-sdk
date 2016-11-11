@@ -1,6 +1,5 @@
 /**
 * @fileoverview Webhooks Manager Tests
-* @author ccheng
 */
 'use strict';
 
@@ -36,10 +35,7 @@ describe('Webhooks', function() {
 		mockery.enable({
 			useCleanCache: true
 		});
-		mockery.registerAllowable('http-status');
-		mockery.registerAllowable('util');
 		mockery.registerAllowable('../util/url-path');
-		mockery.registerAllowable('../util/errors');
 		// Setup File Under Test
 		mockery.registerAllowable(MODULE_WEBHOOKS_PATH);
 		Webhooks = require(MODULE_WEBHOOKS_PATH);
@@ -77,7 +73,7 @@ describe('Webhooks', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/webhooks').yieldsAsync();
 			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS, done);
 		});
@@ -92,7 +88,7 @@ describe('Webhooks', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/webhooks/1234', testParamsWithQs).yieldsAsync();
 			webhooks.get(WEBHOOKS_ID, testQS, done);
 		});
@@ -108,7 +104,7 @@ describe('Webhooks', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs(testParamsWithQs).yieldsAsync();
 			webhooks.getAll(testQS, done);
 			done();
@@ -133,7 +129,7 @@ describe('Webhooks', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').withArgs('/webhooks/1234').yieldsAsync();
 			webhooks.update(WEBHOOKS_ID, param, done);
 		});
@@ -145,13 +141,13 @@ describe('Webhooks', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('del').withArgs('/webhooks/1234');
-			webhooks.delete(WEBHOOKS_ID, testQS);
+			webhooks.delete(WEBHOOKS_ID);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'del').withArgs('/webhooks/1234').yieldsAsync();
-			webhooks.delete(WEBHOOKS_ID, testQS, done);
+			webhooks.delete(WEBHOOKS_ID, done);
 		});
 
 	});
