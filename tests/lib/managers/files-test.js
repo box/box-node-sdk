@@ -688,4 +688,207 @@ describe('Files', function() {
 		});
 	});
 
+	describe('lock()', function() {
+
+		var expiresAt,
+			isDownloadPrevented,
+			expectedParams;
+
+		beforeEach(function() {
+			expiresAt = '2016-12-12T10:55:30-08:00';
+			isDownloadPrevented = false;
+			expectedParams = {
+				body: {
+					lock: {
+						type: 'lock'
+					}
+				}
+			};
+		});
+
+		it('should make PUT request with all parameters to set the lock properties when all optional parameters are passed', function() {
+
+			var options = {
+				expires_at: expiresAt,
+				is_download_prevented: isDownloadPrevented
+			};
+
+			expectedParams.body.lock.expires_at = expiresAt;
+			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lock(FILE_ID, options);
+		});
+
+		it('should make PUT request with expires_at to set the lock properties when just an expires_at is passed', function() {
+
+			var options = {
+				expires_at: expiresAt
+			};
+
+			expectedParams.body.lock.expires_at = expiresAt;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lock(FILE_ID, options);
+		});
+
+		it('should make PUT request with is_download_prevented to set the lock properties when just an is_download_prevented is passed', function() {
+
+			var options = {
+				is_download_prevented: isDownloadPrevented
+			};
+
+			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lock(FILE_ID, options);
+		});
+
+		it('should make PUT request with mandatory parameters to set the lock properties when neither optional parameter is passed', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.lock(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/files/' + FILE_ID).yieldsAsync();
+			files.lock(FILE_ID, null, done);
+		});
+	});
+
+	describe('unlock()', function() {
+
+		var expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {
+				body: {
+					lock: {
+						type: 'unlock'
+					}
+				}
+			};
+		});
+
+		it('should make PUT request to clear the lock properties', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			files.unlock(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/files/' + FILE_ID).yieldsAsync();
+			files.unlock(FILE_ID, done);
+		});
+	});
+
+	describe('restoreFromTrash()', function() {
+
+		var PARENT_ID = '87364',
+			NEW_NAME = 'Item Restored',
+			parent,
+			expectedParams;
+
+		beforeEach(function() {
+			parent = {
+				id: PARENT_ID
+			};
+			expectedParams = {body: {}};
+		});
+
+		it('should make POST request with all parameters to restore a file when all optional parameters are passed', function() {
+
+			var options = {
+				name: NEW_NAME,
+				parent_id: PARENT_ID
+			};
+
+			expectedParams.body = {
+				name: NEW_NAME,
+				parent: parent
+			};
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
+			files.restoreFromTrash(FILE_ID, options);
+		});
+
+		it('should make POST request with a name to restore a file when just a name is passed', function() {
+
+			var options = {
+				name: NEW_NAME
+			};
+
+			expectedParams.body.name = NEW_NAME;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
+			files.restoreFromTrash(FILE_ID, options);
+		});
+
+		it('should make POST request with a parentFolderId to restore a file when just parentFolderID is passed', function() {
+
+			var options = {
+				parent_id: PARENT_ID
+			};
+
+			expectedParams.body.parent = parent;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
+			files.restoreFromTrash(FILE_ID, options);
+		});
+
+		it('should make POST request with an empty body to restore a file when neither optional parameter is passed', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, {body: {}});
+			files.restoreFromTrash(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync();
+			files.restoreFromTrash(FILE_ID, null, done);
+		});
+	});
+
+	describe('viewVersions()', function() {
+
+		it('should make GET request to retrieve older file versions', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/versions', testParamsWithQs);
+			files.getVersions(FILE_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/versions').yieldsAsync();
+			files.getVersions(FILE_ID, testQS, done);
+		});
+	});
+
+	describe('deleteVersion()', function() {
+
+		it('should make DELETE request to delete a file version to the trash', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/files/' + FILE_ID + '/versions/' + FILE_VERSION_ID, null);
+			files.deleteVersion(FILE_ID, FILE_VERSION_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/files/' + FILE_ID + '/versions/' + FILE_VERSION_ID).yieldsAsync();
+			files.deleteVersion(FILE_ID, FILE_VERSION_ID, done);
+		});
+	});
+
 });
