@@ -5,6 +5,7 @@ Tasks enable file-centric workflows in Box. User can create tasks on files and a
 
 * [Create a Task](#create-a-task)
 * [Get a Task's Information](#get-a-tasks-information)
+* [Update a Task](#update-a-task)
 
 Create a Task
 -------------
@@ -16,7 +17,7 @@ client.tasks.create(
 	'1234',
 	{
 		message: 'Optional Message',
-		dueAt: '2014-04-03T11:09:43-07:00'
+		due_at: '2014-04-03T11:09:43-07:00'
 	},
 	callback
 );
@@ -37,4 +38,20 @@ request.
 
 ```js
 client.tasks.get('1234', {fields: 'message,is_completed'}, callback);
+```
+
+Update a Task
+-------------
+
+To update a task call the [`tasks.update(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/Tasks.html#update) method.
+
+```js
+client.tasks.update(
+	'1234',
+	{
+		message: 'Optional Message',
+		dueAt: '2018-04-03T11:09:43-07:00'
+	},
+	callback
+);
 ```

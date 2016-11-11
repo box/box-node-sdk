@@ -134,4 +134,57 @@ describe('Tasks', function() {
 
 	});
 
+	describe('update()', function() {
+		var message,
+			dueAt,
+			expectedParams;
+
+		beforeEach(function() {
+			message = 'Optional message for the test';
+			dueAt = '2018-04-03T11:09:43-07:00';
+			expectedParams = {
+				body: {
+					action: REVIEW_ACTION
+				}
+			};
+		});
+
+		it('should make PUT request with all parameters to update a task when all optional parameters are passed', function() {
+			expectedParams.body.message = message;
+			expectedParams.body.due_at = dueAt;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
+			tasks.update(TASK_ID, {message: message, due_at: dueAt});
+		});
+
+		it('should make PUT request with message to update a task when just a message is passed', function() {
+			expectedParams.body.message = message;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
+			tasks.update(TASK_ID, {message: message});
+		});
+
+		it('should make PUT request with due_at to update a task when just a dueAt is passed', function() {
+			expectedParams.body.due_at = dueAt;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
+			tasks.update(TASK_ID, {due_at: dueAt});
+		});
+
+		it('should make PUT request with mandatory parameters to update a task when neither optional parameter is passed', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
+			tasks.update(TASK_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
+			tasks.update(TASK_ID, {message: message, due_at: dueAt}, done);
+		});
+	});
+
 });
