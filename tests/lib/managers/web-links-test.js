@@ -187,4 +187,19 @@ describe('WebLinks', function() {
 
 	});
 
+	describe('delete()', function() {
+
+		it('should make DELETE request to delete a web link when called', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs(BASE_PATH + '/' + WEB_LINK_ID, null);
+			weblinks.delete(WEB_LINK_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs(BASE_PATH + '/' + WEB_LINK_ID).yieldsAsync();
+			weblinks.delete(WEB_LINK_ID, done);
+		});
+	});
+
 });
