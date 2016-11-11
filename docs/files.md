@@ -24,6 +24,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
+* [Apply Watermark](#apply-watermark)
 
 Get a File's Information
 ------------------------
@@ -312,4 +313,13 @@ A file's metadata can be removed by calling
 
 ```js
 client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+```
+
+Apply Watermark
+---------------
+
+To apply or update the watermark for a file call the [`files.applyWatermark(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#applyWatermark).
+
+```js
+client.files.applyWatermark('67890', callback);
 ```
