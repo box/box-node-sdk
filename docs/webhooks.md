@@ -5,29 +5,28 @@ A webhook object enables you to attach events triggers to Box files and folders.
 event triggers monitor events on Box objects and notify your application, via HTTP
 requests to a URL of your choosing, when they occur.
 
-* [Create Webhook on File](#create-a-file-webhook)
-* [Create Webhook on Folder](#create-a-folder-webhook)
+* [Create Webhook on File](#create-a-webhook)
 * [Get a Webhooks Information](#get-a-webhooks-information)
 * [Get all Webhooks Information](#get-all-webhooks-information)
 * [Update a Webhook](#update-a-webhook)
 * [Delete a Webhook](#delete-a-webhook)
 
-Create a Webhook on a Box File
-------------------------------
+Create a Webhook
+----------------
 
 Calling
-[`webhooks.create(fileID, objectType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#create)
+[`webhooks.create(fileID, targetType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#create)
 on a file attaches an event trigger with a URL to send notifications to
 
 ```js
-client.webhooks.create('759371', FILE, 'https://www.YOURWEBSITE.com', [webhookTriggerType.FILE.UPLOADED, webhookTriggerType.FILE.DOWNLOADED], callback)
+client.webhooks.create('759371', itemType.FILE, 'https://www.YOURWEBSITE.com', [webhookTriggerType.FILE.UPLOADED, webhookTriggerType.FILE.DOWNLOADED], callback)
 ```
 
 alternatively, you can attach a webhook to a folder by calling
-[`webhooks.create(folderID, objectType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#create)
+[`webhooks.create(folderID, targetType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#create)
 
 ```js
-client.webhooks.create('15937321', FOLDER, 'https://www.YOURWEBSITE.com', [webhookTriggerType.FOLDER.CREATED, webhookTriggerType.FOLDER.DOWNLOADED], callback)
+client.webhooks.create('15937321', itemType.FOLDER, 'https://www.YOURWEBSITE.com', [webhookTriggerType.FOLDER.CREATED, webhookTriggerType.FOLDER.DOWNLOADED], callback)
 ```
 
 The notification URL must be a valid HTTPS URL that you specify when you create a
