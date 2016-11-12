@@ -9,6 +9,7 @@ Users represent an individual's account on Box.
 * [Get Email Aliases](#get-email-aliases)
 * [Add Email Alias](#add-email-alias)
 * [Delete Email Alias](#delete-email-alias)
+* [Get Group Memberships](#get-group-memberships)
 
 Get User's Information
 ----------------------------------
@@ -76,4 +77,16 @@ To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID,
 
 ```js
 client.users.removeEmailAlias('123', '765', callback);
+```
+
+Get Group Memberships
+---------------------
+
+To get a list of groups to which a user belongs, call the
+[`users.getGroupMemberships(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#getGroupMemberships)
+method.  Note that this method requires the calling user to have permission to
+view groups, which is restricted to enterprise administrators.
+
+```js
+client.users.getGroupMemberships('873645', null, callback);
 ```

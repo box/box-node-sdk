@@ -24,6 +24,7 @@ var sandbox = sinon.sandbox.create(),
 	testBody = { my: 'body' },
 	testParamsWithBody,
 	testParamsWithQs,
+	USER_ID = '876345',
 	MODULE_FILE_PATH = '../../../lib/managers/users';
 
 
@@ -189,6 +190,41 @@ describe('Users', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
 			sandbox.stub(boxClientFake, 'del').yieldsAsync();
 			users.removeEmailAlias();
+		});
+	});
+
+	describe('getGroupMemberships()', function() {
+
+		it('should make GET request to fetch memberships when called without optional parameters', function() {
+
+			var expectedParams = {
+				qs: null
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + USER_ID + '/memberships', expectedParams);
+			users.getGroupMemberships(USER_ID, null);
+		});
+
+		it('should make GET request to fetch memberships when called with optional parameters', function() {
+
+			var options = {
+				limit: 1000
+			};
+
+			var expectedParams = {
+				qs: options
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + USER_ID + '/memberships', expectedParams);
+			users.getGroupMemberships(USER_ID, options);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/users/' + USER_ID + '/memberships').yieldsAsync();
+			users.getGroupMemberships(USER_ID, null, done);
 		});
 	});
 });
