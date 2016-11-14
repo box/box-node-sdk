@@ -54,9 +54,18 @@ client.users.update('123', {name: 'New Name', job_title: 'New Title', phone: '55
 Delete User
 -----------
 
-To delete a user call the [`users.delete(userID, qs, callback)`](http://opensource.box.com/box-node-sdk/Users.html#delete) method.
+To delete a user call the
+[`users.delete(userID, qs, callback)`](http://opensource.box.com/box-node-sdk/Users.html#delete)
+method.  If the user still has files in their account and the `force` parameter
+is not sent, an error is returned.
+
 ```js
 client.users.delete('123', null, callback);
+```
+
+```js
+// Delete the user even if they still have files in their account
+client.users.delete('123', {force: true}, callback);
 ```
 
 
