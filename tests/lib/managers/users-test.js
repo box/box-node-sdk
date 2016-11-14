@@ -107,6 +107,39 @@ describe('Users', function() {
 		});
 	});
 
+	describe('invite()', function() {
+		var enterpriseID,
+			login,
+			expectedParams;
+
+		beforeEach(function() {
+			enterpriseID = '1234';
+			login = 'user@example.com';
+			expectedParams = {
+				body: {
+					enterprise: {
+						id: enterpriseID
+					},
+					actionable_by: {
+						login: login
+					}
+				}
+			};
+		});
+
+		it('should make POST request to invite an existing user to an Enterprise', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/invites', expectedParams);
+			users.invite(enterpriseID, login);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/invites', expectedParams).yieldsAsync();
+			users.invite(enterpriseID, login, done);
+		});
+	});
+
 	describe('getEmailAliases()', function() {
 		it('should make GET request to retrieve user email aliases when called', function() {
 			var id = '6493';
