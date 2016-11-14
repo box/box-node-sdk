@@ -143,8 +143,7 @@ describe('WebLinks', function() {
 			name = 'Box Website!';
 			description = 'Cloud Content Management';
 			expectedParams = {
-				body: {
-				}
+				body: {}
 			};
 		});
 
@@ -171,12 +170,6 @@ describe('WebLinks', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + WEB_LINK_ID, expectedParams);
 			weblinks.update(WEB_LINK_ID, {description: description});
-		});
-
-		it('should make PUT request with mandatory parameters to create a task when neither optional parameter is passed', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + WEB_LINK_ID, expectedParams);
-			weblinks.update(WEB_LINK_ID, null);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
