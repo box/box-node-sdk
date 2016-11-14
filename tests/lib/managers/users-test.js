@@ -107,6 +107,21 @@ describe('Users', function() {
 		});
 	});
 
+	describe('delete()', function() {
+
+		it('should make DELETE request to delete user when called', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/users/' + USER_ID, testParamsWithQs);
+			users.delete(USER_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/users/' + USER_ID).yieldsAsync();
+			users.delete(USER_ID, null, done);
+		});
+	});
+
 	describe('getEmailAliases()', function() {
 		it('should make GET request to retrieve user email aliases when called', function() {
 			var id = '6493';
