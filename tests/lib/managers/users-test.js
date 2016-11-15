@@ -79,9 +79,9 @@ describe('Users', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync();
-			users.get();
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/users/' + USER_ID).yieldsAsync();
+			users.get(USER_ID, testQS, done);
 		});
 	});
 
@@ -101,9 +101,9 @@ describe('Users', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').yieldsAsync();
-			users.update();
+			users.update(USER_ID, testBody, done);
 		});
 	});
 
@@ -138,16 +138,17 @@ describe('Users', function() {
 		});
 
 		it('should wrap callback in default response handler when called', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync();
-			users.getEmailAliases();
+			users.getEmailAliases(USER_ID, done);
 		});
 	});
 
 	describe('addEmailAlias()', function() {
+		var email = 'horatio@nelson.com';
+
 		it('should make POST request to add email alias to user when called', function() {
-			var email = 'horation@nelson.com',
-				id = '4567',
+			var	id = '4567',
 				expectedBody = {
 					email: email,
 					is_confirmed: false
@@ -161,8 +162,7 @@ describe('Users', function() {
 		});
 
 		it('should make POST request to add email alias to current user when passed "me" id', function() {
-			var email = 'horatio@nelson.com',
-				id = 'me',
+			var id = 'me',
 				expectedBody = {
 					email: email,
 					is_confirmed: false
@@ -176,16 +176,17 @@ describe('Users', function() {
 		});
 
 		it('should wrap callback in default response handler when called', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync();
-			users.addEmailAlias();
+			users.addEmailAlias(USER_ID, email, done);
 		});
 	});
 
 	describe('removeEmailAlias()', function() {
+		var aliasID = '23455';
+
 		it('should make DELETE call to remove email alias when called', function() {
-			var userID = '7890',
-				aliasID = '23455';
+			var userID = '7890';
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('del').withArgs('/users/7890/email_aliases/23455');
@@ -193,8 +194,7 @@ describe('Users', function() {
 		});
 
 		it('should make DELETE call to remove email alias from current user when passed "me" ID', function() {
-			var userID = 'me',
-				aliasID = '23455';
+			var userID = 'me';
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('del').withArgs('/users/me/email_aliases/23455');
@@ -202,9 +202,9 @@ describe('Users', function() {
 		});
 
 		it('should wrap callback without default response handler when called', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'del').yieldsAsync();
-			users.removeEmailAlias();
+			users.removeEmailAlias('me', aliasID, done);
 		});
 	});
 
