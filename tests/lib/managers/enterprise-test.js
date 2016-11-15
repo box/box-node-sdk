@@ -93,4 +93,42 @@ describe('WebLinks', function() {
 		});
 	});
 
+	describe('addUser()', function() {
+		var	LOGIN = 'eddard@box.com',
+			NAME = 'Ned Stark',
+			ROLE = 'user',
+			expectedParams;
+
+		beforeEach(function() {
+
+			expectedParams = {
+				body: {
+					login: LOGIN,
+					name: NAME
+				}
+			};
+		});
+
+		it('should make POST request with mandatory parameters to create an user without optional parameters', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			enterprise.addUser(LOGIN, NAME);
+		});
+
+		it('should make POST request with all parameters to create an user when called with optional parameter', function() {
+			expectedParams.body.role = ROLE;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			enterprise.addUser(LOGIN, NAME, {role: ROLE});
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/users').yieldsAsync();
+			enterprise.addUser(LOGIN, NAME, null, done);
+		});
+
+	});
+
 });

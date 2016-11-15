@@ -3,6 +3,7 @@ Enterprise
 
 * [Get Enterprise Users](#get-enterprise-users)
 * [Invite User to Enterprise](#invite-user-to-enterprise)
+* [Create New User](#create-new-user)
 
 Get Enterprise Users
 --------------------
@@ -24,4 +25,24 @@ method with the ID of the enterprise and the user's email address.
 
 ```js
 client.enterprise.inviteUser('1345', 'jsmith@box.com', callback);
+```
+
+Create New User
+---------------
+
+To provision a new user within the current enterprise, call the
+[`enterprise.addUser(login, name, options, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#addUser)
+method with the email address the user will use to log in and the user's name.
+
+```js
+client.enterprise.addUser(
+	'eddard@box.com',
+	'Ned Stark',
+	{
+		role: client.enterprise.userRoles.COADMIN,
+		address: '555 Box Lane',
+		status: client.enterprise.userStatuses.CANNOT_DELETE_OR_EDIT
+	},
+	callback
+);
 ```
