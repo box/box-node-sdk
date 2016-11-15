@@ -63,7 +63,7 @@ describe('Collections', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/collections').yieldsAsync();
 			collections.getAll(done);
 		});
@@ -86,7 +86,7 @@ describe('Collections', function() {
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/collections/1234/items', {qs: testQS}).yieldsAsync();
 			collections.getItems(collectionID, testQS, done);
 		});

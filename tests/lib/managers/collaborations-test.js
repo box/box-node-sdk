@@ -67,7 +67,7 @@ describe('Collaborations', function() {
 			collaborations.get(COLLABORATION_ID, testQS);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/collaborations/1234', testParamsWithQs).yieldsAsync();
 			collaborations.get(COLLABORATION_ID, testQS, done);
 		});
@@ -85,12 +85,12 @@ describe('Collaborations', function() {
 		it('should make GET request to get all pending collaborations when called', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('get').withArgs('/collaborations', expectedParams);
-			collaborations.getPending(COLLABORATION_ID, pendingQS);
+			collaborations.getPending();
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/collaborations', expectedParams).yieldsAsync();
-			collaborations.getPending(COLLABORATION_ID, pendingQS, done);
+			collaborations.getPending(done);
 		});
 	});
 
@@ -101,7 +101,7 @@ describe('Collaborations', function() {
 			collaborations.update(COLLABORATION_ID, testBody);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').withArgs('/collaborations/1234', testParamsWithBody).yieldsAsync();
 			collaborations.update(COLLABORATION_ID, testBody, done);
 		});
@@ -126,7 +126,7 @@ describe('Collaborations', function() {
 			collaborations.respondToPending(COLLABORATION_ID, newStatus);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').withArgs('/collaborations/1234', expectedParams).yieldsAsync();
 			collaborations.respondToPending(COLLABORATION_ID, newStatus, done);
 		});
@@ -166,7 +166,7 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, folderID, newCollabRole);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
 			collaborations.create(newCollabAccessibleBy, folderID, newCollabRole, done);
 		});
@@ -208,7 +208,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, folderID, newCollabRole);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
 			collaborations.createWithUserID(userID, folderID, newCollabRole, done);
 		});
@@ -250,7 +250,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, folderID, newCollabRole);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
 			collaborations.createWithUserEmail(userEmail, folderID, newCollabRole, done);
 		});
@@ -292,7 +292,7 @@ describe('Collaborations', function() {
 			collaborations.createWithGroupID(groupID, folderID, newCollabRole);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
 			collaborations.createWithGroupID(groupID, folderID, newCollabRole, done);
 		});
@@ -305,7 +305,7 @@ describe('Collaborations', function() {
 			collaborations.delete(COLLABORATION_ID);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'del').withArgs('/collaborations/1234', null).yieldsAsync();
 			collaborations.delete(COLLABORATION_ID, done);
 		});

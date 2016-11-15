@@ -69,7 +69,7 @@ describe('Folders', function() {
 			folders.get(FOLDER_ID, testQS);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/folders/1234', testParamsWithQs).yieldsAsync();
 			folders.get(FOLDER_ID, testQS, done);
 		});
@@ -82,7 +82,7 @@ describe('Folders', function() {
 			folders.getItems(FOLDER_ID, testQS);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/folders/1234/items', testParamsWithQs).yieldsAsync();
 			folders.getItems(FOLDER_ID, testQS, done);
 		});
@@ -95,7 +95,7 @@ describe('Folders', function() {
 			folders.getCollaborations(FOLDER_ID, testQS);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/folders/1234/collaborations', testParamsWithQs).yieldsAsync();
 			folders.getCollaborations(FOLDER_ID, testQS, done);
 		});
@@ -120,7 +120,7 @@ describe('Folders', function() {
 			folders.create(PARENT_FOLDER_ID, NEW_FOLDER_NAME);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/folders').yieldsAsync();
 			folders.create(PARENT_FOLDER_ID, NEW_FOLDER_NAME, done);
 		});
@@ -170,7 +170,7 @@ describe('Folders', function() {
 			folders.update(FOLDER_ID, testBody);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').withArgs('/folders/1234', testParamsWithBody).yieldsAsync();
 			folders.update(FOLDER_ID, testBody, done);
 		});
@@ -209,7 +209,7 @@ describe('Folders', function() {
 			folders.delete(FOLDER_ID, testQS);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'del').withArgs('/folders/1234', testParamsWithQs).yieldsAsync();
 			folders.delete(FOLDER_ID, testQS, done);
 		});

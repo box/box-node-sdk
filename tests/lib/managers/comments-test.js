@@ -69,7 +69,7 @@ describe('Comments', function() {
 			comments.get(COMMENT_ID, testQS);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'get').withArgs('/comments/1234', testParamsWithQs).yieldsAsync();
 			comments.get(COMMENT_ID, testQS, done);
 		});
@@ -101,7 +101,7 @@ describe('Comments', function() {
 			comments.create(fileID, commentText);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/comments').yieldsAsync();
 			comments.create(fileID, commentText, done);
 		});
@@ -133,7 +133,7 @@ describe('Comments', function() {
 			comments.createTaggedComment(fileID, taggedCommentText);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/comments').yieldsAsync();
 			comments.createTaggedComment(fileID, taggedCommentText, done);
 		});
@@ -146,7 +146,7 @@ describe('Comments', function() {
 			comments.update(COMMENT_ID, testBody);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').withArgs('/comments/1234', testParamsWithBody).yieldsAsync();
 			comments.update(COMMENT_ID, testBody, done);
 		});
@@ -159,7 +159,7 @@ describe('Comments', function() {
 			comments.delete(COMMENT_ID);
 		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'del').withArgs('/comments/1234', null).yieldsAsync();
 			comments.delete(COMMENT_ID, done);
 		});
