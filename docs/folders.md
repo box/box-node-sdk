@@ -22,6 +22,8 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
 * [Get Watermark](#get-watermark)
+* [Apply Watermark](#apply-watermark)
+* [Remove Watermark](#remove-watermark)
 
 Get a Folder's Information
 --------------------------
@@ -252,7 +254,9 @@ client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.met
 
 Get Watermark
 -------------
-To get watermark information for a folder call the [`folders.getWatermark(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getWatermark) method.
+To get watermark information for a folder call the
+[`folders.getWatermark(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getWatermark)
+method.
 
 ```js
 client.folders.getWatermark('75937', null, callback);
@@ -265,3 +269,25 @@ request.
 ```js
 // Only get information about a few specific fields.
 client.folders.getWatermark('75937', {fields: 'created_at'}, callback);
+```
+
+Apply Watermark
+---------------
+
+To apply or update the watermark for a folder call the
+[`folders.applyWatermark(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#applyWatermark)
+method.
+
+```js
+client.folders.applyWatermark('67890', null, callback);
+```
+
+Remove Watermark
+----------------
+
+A folder's watermark can be removed by calling
+[`folders.removeWatermark(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folder.html#removeWatermark).
+
+```js
+client.folders.removeWatermark('67890', callback);
+```

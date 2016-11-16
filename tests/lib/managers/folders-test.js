@@ -6,7 +6,8 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var sinon = require('sinon'),
+var assert = require('chai').assert,
+	sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche');
 
@@ -36,11 +37,11 @@ describe('Folders', function() {
 
 	before(function() {
 		// Enable Mockery
-		mockery.enable({ useCleanCache: true });
+		mockery.enable({
+			useCleanCache: true,
+			warnOnUnregistered: false
+		});
 		// Register Mocks
-		mockery.registerAllowable('http-status');
-		mockery.registerAllowable('../util/url-path');
-		mockery.registerAllowable('../util/errors');
 		mockery.registerAllowable(MODULE_FILE_PATH);
 	});
 
@@ -329,11 +330,92 @@ describe('Folders', function() {
 			folders.getWatermark(FOLDER_ID, testQS);
 		});
 
+		it('should call callback with error when API call returns error', function(done) {
+
+			var apiError = new Error('failed');
+			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync(apiError);
+			folders.getWatermark(FOLDER_ID, null, function(err) {
+
+				assert.equal(err, apiError);
+				done();
+			});
+		});
+
+		it('should call callback with error when API call returns non-200 status code', function(done) {
+
+			var res = {statusCode: 404};
+			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync(null, res);
+			folders.getWatermark(FOLDER_ID, null, function(err) {
+
+				assert.instanceOf(err, Error);
+				done();
+			});
+		});
+
+		it('should call callback with watermark data when API call succeeds', function(done) {
+
+			var watermark = {
+				created_at: '2016-01-01T12:55:34-08:00',
+				modified_at: '2016-01-01T12:55:34-08:00'
+			};
+
+			var res = {
+				statusCode: 200,
+				body: {watermark}
+			};
+			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync(null, res);
+			folders.getWatermark(FOLDER_ID, null, function(err, data) {
+
+				assert.isNull(err, 'Error should be absent');
+				assert.equal(data, watermark);
+				done();
+			});
+		});
+
+	});
+
+	describe('applyWatermark()', function() {
+		var expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {
+				body: {
+					watermark: {
+						imprint: 'default'
+					}
+				}
+			};
+		});
+
+		it('should make PUT request to apply watermark on a folder', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/folders/' + FOLDER_ID + '/watermark', expectedParams);
+			folders.applyWatermark(FOLDER_ID, null);
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync();
-			folders.getWatermark(FOLDER_ID, null, done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync();
+			folders.applyWatermark(FOLDER_ID, null, done);
+		});
+	});
+
+	describe('removeWatermark()', function() {
+
+		it('should make DELETE call to remove watermark', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/' + FOLDER_ID + '/watermark', null);
+			folders.removeWatermark(FOLDER_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/folders/' + FOLDER_ID + '/watermark').yieldsAsync();
+			folders.removeWatermark(FOLDER_ID, done);
 		});
 
 	});

@@ -858,24 +858,6 @@ describe('Files', function() {
 		});
 	});
 
-	describe('getWatermark()', function() {
-
-		it('should make GET request to get file watermark info when called', function() {
-
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/watermark', testParamsWithQs);
-			files.getWatermark(FILE_ID, testQS);
-		});
-
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync();
-			files.getWatermark(FILE_ID, null, done);
-		});
-
-	});
-
 	describe('viewVersions()', function() {
 
 		it('should make GET request to retrieve older file versions', function() {
@@ -891,6 +873,105 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/versions').yieldsAsync();
 			files.getVersions(FILE_ID, testQS, done);
 		});
+	});
+
+	describe('getWatermark()', function() {
+
+		it('should make GET request to get file watermark info when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/watermark', testParamsWithQs);
+			files.getWatermark(FILE_ID, testQS);
+		});
+
+		it('should call callback with error when API call returns error', function(done) {
+
+			var apiError = new Error('failed');
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync(apiError);
+			files.getWatermark(FILE_ID, null, function(err) {
+
+				assert.equal(err, apiError);
+				done();
+			});
+		});
+
+		it('should call callback with error when API call returns non-200 status code', function(done) {
+
+			var res = {statusCode: 404};
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync(null, res);
+			files.getWatermark(FILE_ID, null, function(err) {
+
+				assert.instanceOf(err, Error);
+				done();
+			});
+		});
+
+		it('should call callback with watermark data when API call succeeds', function(done) {
+
+			var watermark = {
+				created_at: '2016-01-01T12:55:34-08:00',
+				modified_at: '2016-01-01T12:55:34-08:00'
+			};
+
+			var res = {
+				statusCode: 200,
+				body: {watermark}
+			};
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync(null, res);
+			files.getWatermark(FILE_ID, null, function(err, data) {
+
+				assert.isNull(err, 'Error should be absent');
+				assert.equal(data, watermark);
+				done();
+			});
+		});
+
+	});
+
+	describe('applyWatermark()', function() {
+		var expectedParams;
+
+		beforeEach(function() {
+			expectedParams = {
+				body: {
+					watermark: {
+						imprint: 'default'
+					}
+				}
+			};
+		});
+
+		it('should make PUT request to apply watermark on a file', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID + '/watermark', expectedParams);
+			files.applyWatermark(FILE_ID, null);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync();
+			files.applyWatermark(FILE_ID, null, done);
+		});
+	});
+
+	describe('removeWatermark()', function() {
+
+		it('should make DELETE call to remove watermark', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('del').withArgs('/files/' + FILE_ID + '/watermark', null);
+			files.removeWatermark(FILE_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'del').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync();
+			files.removeWatermark(FILE_ID, done);
+		});
+
 	});
 
 	describe('deleteVersion()', function() {
