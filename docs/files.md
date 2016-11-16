@@ -335,9 +335,11 @@ Restore a File From Trash
 Calling the
 [`files.restoreFromTrash(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#restoreFromTrash)
 will restore an item from the user's trash.  Default behavior is to restore the item
-to the folder it was in before it was moved to the trash. If that parent folder
-no longer exists or if there is now an item with the same name in that parent
-folder, the new parent folder and/or new name will need to be included.
+to the folder it was in before it was moved to the trash. Options are available
+to handle possible failure cases: if an item with the same name already exists in
+folder's old location, the restored folder can be given an alternate name with
+the `name` option.  If the folder's old location no longer exists, it can be
+placed inside a new parent folder with the `parent_id` option.
 
 ```js
 client.files.restoreFromTrash(
