@@ -21,6 +21,7 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
+* [Apply Watermark](#apply-watermark)
 
 Get a Folder's Information
 --------------------------
@@ -247,4 +248,13 @@ A folder's metadata can be removed by calling
 
 ```js
 client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+```
+
+Apply Watermark
+---------------
+
+To apply or update the watermark for a folder call the [`folders.applyWatermark(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#applyWatermark).
+
+```js
+client.folders.applyWatermark('67890', callback);
 ```
