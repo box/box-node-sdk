@@ -248,3 +248,12 @@ A folder's metadata can be removed by calling
 ```js
 client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
 ```
+
+Remove Watermark
+----------------
+
+A folder's watermark can be removed by calling [`folders.removeWatermark(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folder.html#removeWatermark).
+
+```js
+client.folders.removeWatermark('67890', callback);
+```
