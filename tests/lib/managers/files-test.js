@@ -849,12 +849,31 @@ describe('Files', function() {
 			files.restoreFromTrash(FILE_ID);
 		});
 
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync();
 			files.restoreFromTrash(FILE_ID, null, done);
 		});
+	});
+
+	describe('getWatermark()', function() {
+
+		it('should make GET request to get file watermark info when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/watermark', testParamsWithQs);
+			files.getWatermark(FILE_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').yieldsAsync();
+			files.getWatermark(FILE_ID, null, done);
+		});
+
 	});
 
 	describe('viewVersions()', function() {
