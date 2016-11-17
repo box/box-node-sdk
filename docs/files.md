@@ -33,6 +33,8 @@ file's contents, upload new versions, and perform other common file operations
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
 * [Get Watermark](#get-watermark)
+* [Apply Watermark](#apply-watermark)
+* [Remove Watermark](#remove-watermark)
 
 Get a File's Information
 ------------------------
@@ -472,7 +474,9 @@ client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metad
 
 Get Watermark
 -------------
-To get watermark information for a file call the [`files.getWatermark(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getWatermark) method.
+To get watermark information for a file call the
+[`files.getWatermark(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getWatermark)
+method.
 
 ```js
 client.files.getWatermark('75937', null, callback);
@@ -485,4 +489,25 @@ request.
 ```js
 // Only get information about a few specific fields.
 client.files.getWatermark('75937', {fields: 'created_at'}, callback);
+```
+
+Apply Watermark
+---------------
+
+To apply or update the watermark to a file call the
+[`files.applyWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#applyWatermark)
+method.
+
+```js
+client.files.applyWatermark('67890', null, callback);
+```
+
+Remove Watermark
+----------------
+
+A file's watermark can be removed by calling
+[`files.removeWatermark(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#removeWatermark).
+
+```js
+client.files.removeWatermark('67890', callback);
 ```
