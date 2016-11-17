@@ -10,6 +10,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Get a File's Tasks](#get-a-files-tasks)
 * [Download a File](#download-a-file)
 * [Upload a File](#upload-a-file)
+* [Upload Preflight Check](#upload-preflight-check)
 * [Copy a File](#copy-a-file)
 * [Delete a File](#delete-a-file)
 * [Delete Permanently](#delete-permanently)
@@ -119,6 +120,48 @@ A file can also be uploaded from a `Buffer`:
 ```js
 var buffer = new Buffer(50);
 client.files.uploadFile('98768', 'New File', buffer, callback);
+```
+
+Upload Preflight Check
+----------------------
+
+The Preflight Check in the
+[`files.preflightUploadFile(parentFolderID, fileData, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadFile)
+method will verify that a file will be accepted by Box before
+you send all the bytes over the wire.  Preflight checks verify all permissions
+as if the file was actually uploaded including:
+
+* Folder upload permission
+* File name collisions
+* File size caps
+* Folder and file name restrictions
+* Folder and account storage quota
+
+A successful response does not guarantee that your upload call will succeed, but in practice
+it has been shown to reduce failed uploads by more than 99%. Highly active folders,
+common filenames, and accounts near their quota limits may get a success for the preflight,
+and then have a real conflict during the actual upload.
+
+```js
+// Verify that uploading a 200MB file named "Preso.ppt" to folder 12345 would succeed
+client.files.preflightUploadFile(
+		'12345',
+		{
+			name: 'Preso.ppt',
+			size: 200000000
+		},
+		null,
+		callback
+	);
+```
+
+For uploading a new version of a file, use the
+[`files.preflightUploadNewFileVersion(fileID, fileData, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadNewFileVersion)
+method.
+
+```js
+// Check if uploading a larger version of this file will succeed
+client.files.preflightUploadNewFileVersion('87646', {size: 300000000}, null, callback);
 ```
 
 Copy a File
