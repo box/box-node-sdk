@@ -548,4 +548,150 @@ describe('Endpoint', function() {
 		});
 
 	});
+
+	describe('Comments', function() {
+
+		describe('get()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var commentID = '123456789',
+					fixture = getFixture('comments/get_comments_id_200');
+
+				apiMock.get('/2.0/comments/' + commentID)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.comments.get(commentID, null, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('create()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var fileID = '987654321',
+					message = 'Looks good!',
+					fixture = getFixture('comments/post_comments_200');
+
+				apiMock.post('/2.0/comments')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.comments.create(fileID, message, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('createTaggedComment()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var fileID = '987654321',
+					message = '@[1357908642:Other User] Looks good!',
+					fixture = getFixture('comments/post_comments_tagged_200');
+
+				apiMock.post('/2.0/comments')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.comments.createTaggedComment(fileID, message, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('update()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var commentID = '123456789',
+					options = {message: 'Looks great!'},
+					fixture = getFixture('comments/put_comments_id_200');
+
+				apiMock.put('/2.0/comments/' + commentID, options)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.comments.update(commentID, options, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('delete()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var commentID = '123456789';
+
+				apiMock.delete('/2.0/comments/' + commentID)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				basicClient.comments.delete(commentID, function(err, data) {
+
+					assert.isNull(err);
+					assert.isUndefined(data);
+
+					done();
+				});
+			});
+		});
+
+	});
 });
