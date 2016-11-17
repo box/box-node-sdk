@@ -131,4 +131,29 @@ describe('WebLinks', function() {
 
 	});
 
+	describe('transferUserContent()', function() {
+
+		var SRC_USER_ID = '12345',
+			DEST_USER_ID = '54321';
+
+		it('should make PUT request to transfer content when called', function() {
+
+			var expectedParams = {
+				body: {
+					owned_by: {id: DEST_USER_ID}
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs('/users/' + SRC_USER_ID + '/folders/0', expectedParams);
+			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').withArgs('/users/' + SRC_USER_ID + '/folders/0').yieldsAsync();
+			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID, done);
+		});
+	});
+
 });
