@@ -1,0 +1,17 @@
+{
+    "type": "error",
+    "status": 404,
+    "code": "not_found",
+    "context_info": {
+        "errors": [
+            {
+                "reason": "invalid_parameter",
+                "name": "collab",
+                "message": "Invalid value '123456789'. 'collab' with value '123456789' not found"
+            }
+        ]
+    },
+    "help_url": "http://developers.box.com/docs/#errors",
+    "message": "Not Found",
+    "request_id": "196268517582d3b065b1f7"
+}
