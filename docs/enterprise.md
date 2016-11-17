@@ -4,6 +4,7 @@ Enterprise
 * [Get Enterprise Users](#get-enterprise-users)
 * [Invite User to Enterprise](#invite-user-to-enterprise)
 * [Add New User](#add-new-user)
+* [Transfer User Content](#transfer-user-content)
 
 Get Enterprise Users
 --------------------
@@ -45,4 +46,15 @@ client.enterprise.addUser(
 	},
 	callback
 );
+```
+
+Transfer User Content
+---------------------
+
+To transfer one managed user's content to another user's account, call the
+[`enterprise.transferUserContent(sourceUserID, destUserID, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#transferUserContent)
+method with the IDs of the source and destination users.
+
+```js
+client.enterprise.transferUserContent('12345', '54321', callback);
 ```
