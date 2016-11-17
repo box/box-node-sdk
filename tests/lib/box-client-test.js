@@ -641,6 +641,45 @@ describe('box-client', function() {
 
 	});
 
+	describe('asUser()', function() {
+
+		var USER_ID = '876345';
+
+		it('should set a well-formed "As-User" header to each request when the context has been set', function(done) {
+			var expectedParams = {
+				headers: {
+					'As-User': USER_ID
+				}
+			};
+
+			sandbox.stub(apiSessionFake, 'getAccessToken').yields(null, FAKE_ACCESS_TOKEN);
+			sandbox.stub(basicClient, '_handleResponse').yields();
+			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs(sinon.match(expectedParams)).yieldsAsync();
+
+			basicClient.asUser(USER_ID);
+			basicClient.get('/', {}, done);
+		});
+	});
+
+	describe('asSelf()', function() {
+
+		var USER_ID = '876345';
+
+		it('should remove "As-User" header from each request when the context has been unset', function(done) {
+			var expectedParams = {
+				headers: {}
+			};
+
+			sandbox.stub(apiSessionFake, 'getAccessToken').yields(null, FAKE_ACCESS_TOKEN);
+			sandbox.stub(basicClient, '_handleResponse').yields();
+			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs(sinon.match(expectedParams)).yieldsAsync();
+
+			basicClient.asUser(USER_ID);
+			basicClient.asSelf();
+			basicClient.get('/', {}, done);
+		});
+	});
+
 	describe('revokeTokens()', function() {
 
 		it('should call apiSession.revokeTokens when called', function(done) {
