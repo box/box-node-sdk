@@ -23,6 +23,8 @@ file's contents, upload new versions, and perform other common file operations
 * [Promote Version](#promote-version)
 * [Get Thumbnail](#get-thumbnail)
 * [Get Embed Link](#get-embed-link)
+* [Add File to a Collection](#add-file-to-a-collection)
+* [Remove File from a Collection](#remove-file-from-a-collection)
 * [Lock a File](#lock-a-file)
 * [Unlock a File](#unlock-a-file)
 * [Restore a File From Trash](#restore-a-file-from-trash)
@@ -340,6 +342,28 @@ For more information, see the [API documentation](https://docs.box.com/reference
 
 ```js
 client.files.getEmbedLink('12345', callback);
+```
+
+Add File to a Collection
+------------------------
+
+To add a file to a collection, call the
+[`files.addToCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#addToCollection)
+method with the IDs of the file and collection.
+
+```js
+client.files.addToCollection('87263', '235747', callback);
+```
+
+Remove File from a Collection
+-----------------------------
+
+To remove a file from a collection, call the
+[`files.removeFromCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#removeFromCollection)
+method with the IDs of the file and collection.
+
+```js
+client.files.removeFromCollection('87263', '235747', callback);
 ```
 
 Lock a File
