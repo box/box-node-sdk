@@ -6,7 +6,8 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var sinon = require('sinon'),
+var assert = require('chai').assert,
+	sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche');
 
@@ -173,6 +174,195 @@ describe('Folders', function() {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'put').withArgs('/folders/1234', testParamsWithBody).yieldsAsync();
 			folders.update(FOLDER_ID, testBody, done);
+		});
+	});
+
+	describe('addToCollection()', function() {
+
+		var COLLECTION_ID = '9873473596';
+
+		it('should get current collections and add new collection when item has no collections', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: []
+			};
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID}]}).yieldsAsync(null, folder);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and add new collection when item has other collections', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: [{id: '111'}]
+			};
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'},{id: COLLECTION_ID}]}).yieldsAsync(null, folder);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass same collections when item is already in the collection', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).yieldsAsync(null, folder);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
+		});
+
+		it('should call callback with error when getting current collections fails', function(done) {
+
+			var error = new Error('Failed get');
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(error);
+			foldersMock.expects('update').never();
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should call callback with error when adding the collection fails', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var error = new Error('Failed update');
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).yieldsAsync(error);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+	});
+
+	describe('removeFromCollection()', function() {
+
+		var COLLECTION_ID = '98763';
+
+		it('should get current collections and pass empty array when item is not in any collections', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: []
+			};
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []}).yieldsAsync(null, folder);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass empty array when item is in the collection to be removed', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: [{id: COLLECTION_ID}]
+			};
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []}).yieldsAsync(null, folder);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass filtered array when item is in multiple collections', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'}]}).yieldsAsync(null, folder);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass same array when item is in only other collections', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: [{id: '111'},{id: '222'}]
+			};
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'},{id: '222'}]}).yieldsAsync(null, folder);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
+		});
+
+		it('should call callback with error when getting current collections fails', function(done) {
+
+			var error = new Error('Failed get');
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(error);
+			foldersMock.expects('update').never();
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should call callback with error when adding the collection fails', function(done) {
+
+			var folder = {
+				id: FOLDER_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var error = new Error('Failed update');
+
+			var foldersMock = sandbox.mock(folders);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).yieldsAsync(null, folder);
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'}]}).yieldsAsync(error);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
 		});
 	});
 

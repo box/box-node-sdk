@@ -17,6 +17,8 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Delete Permanently](#delete-permanently)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
+* [Add Folder to a Collection](#add-folder-to-a-collection)
+* [Remove Folder from a Collection](#remove-folder-from-a-collection)
 * [Create Metadata](#create-metadata)
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
@@ -197,6 +199,28 @@ All collaborations can be returned by passing `null` for the `queryString` param
 
 ```js
 client.folders.getCollaborations('12345', null, callback);
+```
+
+Add Folder to a Collection
+--------------------------
+
+To add a folder to a collection, call the
+[`folders.addToCollection(folderID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#addToCollection)
+method with the IDs of the folder and collection.
+
+```js
+client.folders.addToCollection('87263', '235747', callback);
+```
+
+Remove Folder from a Collection
+-------------------------------
+
+To remove a folder from a collection, call the
+[`folders.removeFromCollection(folderID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#removeFromCollection)
+method with the IDs of the folder and collection.
+
+```js
+client.folders.removeFromCollection('87263', '235747', callback);
 ```
 
 Create Metadata

@@ -265,6 +265,195 @@ describe('Files', function() {
 		});
 	});
 
+	describe('addToCollection()', function() {
+
+		var COLLECTION_ID = '9873473596';
+
+		it('should get current collections and add new collection when item has no collections', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: []
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID}]}).yieldsAsync(null, file);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.addToCollection(FILE_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and add new collection when item has other collections', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: [{id: '111'}]
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'},{id: COLLECTION_ID}]}).yieldsAsync(null, file);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.addToCollection(FILE_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass same collections when item is already in the collection', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).yieldsAsync(null, file);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.addToCollection(FILE_ID, COLLECTION_ID, done);
+		});
+
+		it('should call callback with error when getting current collections fails', function(done) {
+
+			var error = new Error('Failed get');
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(error);
+			filesMock.expects('update').never();
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.addToCollection(FILE_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should call callback with error when adding the collection fails', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var error = new Error('Failed update');
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).yieldsAsync(error);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.addToCollection(FILE_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+	});
+
+	describe('removeFromCollection()', function() {
+
+		var COLLECTION_ID = '98763';
+
+		it('should get current collections and pass empty array when item is not in any collections', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: []
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: []}).yieldsAsync(null, file);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass empty array when item is in the collection to be removed', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: [{id: COLLECTION_ID}]
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: []}).yieldsAsync(null, file);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass filtered array when item is in multiple collections', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]}).yieldsAsync(null, file);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass same array when item is in only other collections', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: [{id: '111'},{id: '222'}]
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'},{id: '222'}]}).yieldsAsync(null, file);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
+		});
+
+		it('should call callback with error when getting current collections fails', function(done) {
+
+			var error = new Error('Failed get');
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(error);
+			filesMock.expects('update').never();
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.removeFromCollection(FILE_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should call callback with error when adding the collection fails', function(done) {
+
+			var file = {
+				id: FILE_ID,
+				collections: [{id: COLLECTION_ID},{id: '111'}]
+			};
+
+			var error = new Error('Failed update');
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).yieldsAsync(null, file);
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]}).yieldsAsync(error);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+
+			files.removeFromCollection(FILE_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+	});
+
 	describe('copy()', function() {
 
 		var NEW_PARENT_ID = '23434qtges4TEST',
