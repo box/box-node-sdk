@@ -14,6 +14,7 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Rename a Folder](#rename-a-folder)
 * [Delete a Folder](#delete-a-folder)
 * [Get a Trashed Folder](#get-a-trashed-folder)
+* [Restore a Folder from Trash](#restore-a-folder-from-trash)
 * [Delete Permanently](#delete-permanently)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
@@ -147,6 +148,29 @@ Information about a folder in the trash can be retrieved with the [`folders.getT
 ```js
 client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,collections,sync_state'},
 , callback);
+```
+
+Restore a Folder from Trash
+---------------------------
+
+A folder can be restored from the trash with the
+[`folders.restoreFromTrash(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#restoreFromTrash)
+method.  Default behavior is to restore the item to the folder it was in before
+it was moved to the trash.  Options are available to handle possible failure
+cases: if an item with the same name already exists in folder's old location, the
+restored folder can be given an alternate name with the `name` option.  If the
+folder's old location no longer exists, it can be placed inside a new parent
+folder with the `parent_id` option.
+
+```js
+client.folders.restoreFromTrash(
+	'12345',
+	{
+		name: 'New Name',
+		parent_id: '0'
+	},
+	callback
+);
 ```
 
 Delete Permanently

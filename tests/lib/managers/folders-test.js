@@ -492,6 +492,75 @@ describe('Folders', function() {
 		});
 	});
 
+	describe('restoreFromTrash()', function() {
+
+		var NAME = 'Folder Restored',
+			PARENT_ID = '0',
+			parent,
+			expectedParams;
+
+		beforeEach(function() {
+
+			parent = {
+				id: PARENT_ID
+			};
+			expectedParams = {body: {}};
+		});
+
+		it('should make POST request with all parameters to restore a folder when all optional parameters are passed', function() {
+
+			var options = {
+				name: NAME,
+				parent_id: PARENT_ID
+			};
+
+			expectedParams.body = {
+				name: NAME,
+				parent: parent
+			};
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			folders.restoreFromTrash(FOLDER_ID, options);
+		});
+
+		it('should make POST request with a name to restore a folder when just a name is passed', function() {
+
+			var options = {name: NAME};
+
+			expectedParams.body.name = NAME;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			folders.restoreFromTrash(FOLDER_ID, options);
+		});
+
+		it('should make POST request with a parentFolderId to restore a folder when just parent_id is passed', function() {
+
+			var options = {
+				parent_id: PARENT_ID
+			};
+
+			expectedParams.body.parent = parent;
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			folders.restoreFromTrash(FOLDER_ID, options);
+		});
+
+		it('should make POST request with an empty body to restore a folder when neither optional parameter is passed', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, {body: {}});
+			folders.restoreFromTrash(FOLDER_ID, null);
+		});
+
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync();
+			folders.restoreFromTrash(FOLDER_ID, null, done);
+		});
+	});
+
 	describe('deletePermanently()', function() {
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
