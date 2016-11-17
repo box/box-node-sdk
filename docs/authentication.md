@@ -92,6 +92,12 @@ user.  See the [API documentation](https://docs.box.com/docs/getting-started-box
 and [sample app](https://github.com/box/box-node-sdk/blob/master/examples/app-auth)
 for detailed instructions on how to use app auth.
 
+For machine-to-machine use cases, such as applications that use Box services for
+back-end storage, but which provide their own user-inteface, Box extends OAuth 2
+with JSON Web Tokens (JWT). Authentication using JWT enables your application
+to authenticate itself directly to Box without needing to display any Box user
+interface elements.
+
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
@@ -104,4 +110,7 @@ var sdk = new BoxSDK({
 	}
 });
 var adminClient = sdk.getAppAuthClient('enterprise', 'YOUR-ENTERPRISE-ID');
+// Machine to machine
+var enterpriseApp = sdk.getEnterpriseAppAuthTokens('YOUR-ENTERPRISE-ID', callback);
+var userApp = sdk.getAppUserTokens('APP-USER-ID', callback)
 ```
