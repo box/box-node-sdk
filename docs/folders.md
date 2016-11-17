@@ -29,7 +29,10 @@ Get a Folder's Information
 --------------------------
 
 Folder information can be retrieved by calling the
-[`folders.get(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get) method. Use the `queryString` parameter to specify the desired fields. Requesting information for only the fields you need can improve performance and reduce the size of the network request.
+[`folders.get(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get)
+method. Use the `queryString` parameter to specify the desired fields. Requesting
+information for only the fields you need can improve performance and reduce the
+size of the network request.
 
 ```js
 client.folders.get(
