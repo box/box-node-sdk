@@ -558,6 +558,65 @@ describe('Endpoint', function() {
 
 	});
 
+	describe('Collections', function() {
+
+		describe('getAll()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var fixture = getFixture('collections/get_collections_200');
+
+				apiMock.get('/2.0/collections')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.collections.getAll(function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('getItems()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var collectionID = '123456789',
+					fixture = getFixture('collections/get_collections_id_items_200');
+
+				apiMock.get('/2.0/collections/' + collectionID + '/items')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.collections.getItems(collectionID, null, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+	});
+
 	describe('Comments', function() {
 
 		describe('get()', function() {
