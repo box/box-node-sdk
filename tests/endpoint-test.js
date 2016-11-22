@@ -763,6 +763,104 @@ describe('Endpoint', function() {
 
 	});
 
+	describe('DevicePins', function() {
+
+		describe('get()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var devicePinID = '123456789',
+					fixture = getFixture('device-pins/get_device_pinners_id_200');
+
+				apiMock.get('/2.0/device_pinners/' + devicePinID)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.devicePins.get(devicePinID, null, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('delete()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var devicePinID = '123456789';
+
+				apiMock.delete('/2.0/device_pinners/' + devicePinID)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				basicClient.devicePins.delete(devicePinID, null, function(err, data) {
+
+					assert.isNull(err);
+					assert.isUndefined(data);
+
+					done();
+				});
+			});
+		});
+
+		describe('getAll()', function() {
+
+			it('should make correct requests and correctly parse responses when API call is successful', function(done) {
+
+				var userFixture = getFixture('users/get_users_me_fields_enterprise_200'),
+					devicePinsFixture = getFixture('enterprises/get_enterprises_id_device_pinners_200');
+
+				apiMock.get('/2.0/users/me?fields=enterprise')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, userFixture);
+
+				apiMock.get('/2.0/enterprises/123456789/device_pinners')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, devicePinsFixture);
+
+				basicClient.devicePins.getAll(null, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(devicePinsFixture));
+
+					done();
+				});
+			});
+		});
+
+	});
+
 	describe('Files', function() {
 
 		describe('get()', function() {
