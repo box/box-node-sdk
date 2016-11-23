@@ -92,6 +92,7 @@ user.  See the [API documentation](https://docs.box.com/docs/getting-started-box
 and [sample app](https://github.com/box/box-node-sdk/blob/master/examples/app-auth)
 for detailed instructions on how to use app auth.
 
+Enterprise admin client example:
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
@@ -104,4 +105,19 @@ var sdk = new BoxSDK({
 	}
 });
 var adminClient = sdk.getAppAuthClient('enterprise', 'YOUR-ENTERPRISE-ID');
+```
+
+App User client example:
+```js
+var BoxSDK = require('box-node-sdk');
+var sdk = new BoxSDK({
+	clientID: 'YOUR-CLIENT-ID',
+	clientSecret: 'YOUR-CLIENT_SECRET',
+	appAuth: {
+		keyID: 'YOUR-KEY-ID',
+		privateKey: 'YOUR-PRIVATE_KEY',
+		passphrase: 'YOUR-PRIVATE-KEY-PASSPHRASE'
+	}
+});
+var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
