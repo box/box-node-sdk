@@ -58,7 +58,7 @@ describe('Webhooks', function() {
 				body: {
 					target: {
 						id: ID,
-						objectType: TYPE
+						type: TYPE
 					},
 					address: ADDRESS,
 					triggers: TRIGGERS
