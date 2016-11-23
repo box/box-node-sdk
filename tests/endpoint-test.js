@@ -1066,5 +1066,172 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('addToCollection()', function() {
+
+			it('should make correct requests and correctly parse responses when API call is successful', function(done) {
+
+				var fileID = '1234567890',
+					collectionID = '987654321',
+					collectionsFixture = getFixture('files/get_files_id_fields_collections_empty_200'),
+					fileFixture = getFixture('files/put_files_id_200');
+
+				apiMock.get('/2.0/files/' + fileID + '?fields=collections')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, collectionsFixture);
+
+				apiMock.put('/2.0/files/' + fileID, {collections: [{id: collectionID}]})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fileFixture);
+
+				basicClient.files.addToCollection(fileID, collectionID, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fileFixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('removeFromCollection()', function() {
+
+			it('should make correct requests and correctly parse responses when API call is successful', function(done) {
+
+				var fileID = '1234567890',
+					collectionID = '987654321',
+					collectionsFixture = getFixture('files/get_files_id_fields_collections_200'),
+					fileFixture = getFixture('files/put_files_id_200');
+
+				apiMock.get('/2.0/files/' + fileID + '?fields=collections')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, collectionsFixture);
+
+				apiMock.put('/2.0/files/' + fileID, {collections: []})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fileFixture);
+
+				basicClient.files.removeFromCollection(fileID, collectionID, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fileFixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('move()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var fileID = '1234567890',
+					newParentID = '987654321',
+					fixture = getFixture('files/put_files_id_200');
+
+				apiMock.put('/2.0/files/' + fileID, {parent: {id: newParentID}})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.files.move(fileID, newParentID, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('copy()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var fileID = '1234567890',
+					newParentID = '987654321',
+					fixture = getFixture('files/post_files_id_copy_200');
+
+				apiMock.post('/2.0/files/' + fileID + '/copy', {parent: {id: newParentID}})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				basicClient.files.copy(fileID, newParentID, null, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('delete()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var fileID = '1234567890';
+
+				apiMock.delete('/2.0/files/' + fileID)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				basicClient.files.delete(fileID, function(err, data) {
+
+					assert.isNull(err);
+					assert.isUndefined(data);
+
+					done();
+				});
+			});
+		});
+
 	});
 });

@@ -1,0 +1,13 @@
+{
+    "type": "file",
+    "id": "1234567890",
+    "etag": "2",
+    "collections": [
+        {
+            "type": "collection",
+            "id": "987654321",
+            "name": "Favorites",
+            "collection_type": "favorites"
+        }
+    ]
+}
