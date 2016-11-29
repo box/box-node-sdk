@@ -296,7 +296,9 @@ describe('token-manager', function() {
 				appAuth: {
 					keyID: TEST_KEY_ID,
 					privateKey: TEST_KEY,
-					passphrase: TEST_PASSPHRASE
+					passphrase: TEST_PASSPHRASE,
+					expirationTime: 1,
+					verifyTimestamp: true
 				}
 			});
 
@@ -317,6 +319,8 @@ describe('token-manager', function() {
 				audience: 'https://api.box.com/oauth2/token',
 				subject: TEST_ID,
 				issuer: config.clientID,
+				noTimestamp: false,
+				expiresIn: 1,
 				headers: {
 					kid: TEST_KEY_ID
 				}
