@@ -35,7 +35,7 @@ method.
 
 ```js
 // Create a new template, but hide it for now until it's ready for use
-client.metadata(
+client.metadata.createTemplate(
 		'Vendor Contract',
 		[
 			{
