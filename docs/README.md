@@ -20,6 +20,7 @@ the SDK are available by topic:
 - [Search](search.md)
 - [Shared Items](shared-items.md)
 - [Tasks](tasks.md)
+- [Trash](trash.md)
 - [Users](users.md)
 - [Web Links](web-links.md)
 - [Webhooks](webhooks.md)
