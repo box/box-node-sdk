@@ -263,6 +263,7 @@ describe('Box Node SDK', function() {
 				assert.deepPropertyVal(assertion, 'payload.sub', userID);
 				assert.deepPropertyVal(assertion, 'payload.box_sub_type', 'user');
 				assert.deepPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.notProperty(assertion, 'payload.iat');
 
 				return true;
 			})
