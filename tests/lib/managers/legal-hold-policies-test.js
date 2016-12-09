@@ -204,8 +204,10 @@ describe('LegalHoldPolicies', function() {
 			expectedParams = {
 				body: {
 					policy_id: POLICY_ID,
-					assign_to_type: ASSIGN_TYPE,
-					assign_to_id: ASSIGN_ID
+					assign_to: {
+						type: ASSIGN_TYPE,
+						id: ASSIGN_ID
+					}
 				}
 			};
 		});
