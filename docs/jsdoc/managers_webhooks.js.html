@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: managers/webhooks.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: managers/webhooks.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Manager for the Box Webhooks resource
+ */
+'use strict';
+
+// -----------------------------------------------------------------------------
+// Typedefs
+// -----------------------------------------------------------------------------
+
+/**
+ * A webhook trigger type constant
+ * @typedef {string} WebhookTriggerType
+ */
+
+// -----------------------------------------------------------------------------
+// Requirements
+// -----------------------------------------------------------------------------
+
+var urlPath = require('../util/url-path');
+
+// -----------------------------------------------------------------------------
+// Private
+// -----------------------------------------------------------------------------
+
+// Base path for all webhooks endpoints
+var BASE_PATH = '/webhooks';
+
+// -----------------------------------------------------------------------------
+// Public
+// -----------------------------------------------------------------------------
+
+/**
+ * Simple manager for interacting with all 'Webhooks' endpoints and actions.
+ *
+ * @param {BoxClient} client The Box API Client that is responsible for making calls to the API
+ * @constructor
+ */
+function Webhooks(client) {
+	// Attach the client, for making API calls
+	this.client = client;
+}
+
+/**
+ * Enum of valid webhooks event triggers
+ *
+ * @readonly
+ * @enum {WebhookTriggerType}
+ */
+Webhooks.prototype.triggerTypes = {
+	FILE: {
+		UPLOADED: 'FILE.UPLOADED',
+		PREVIEWED: 'FILE.PREVIEWED',
+		DOWNLOADED: 'FILE.DOWNLOADED',
+		TRASHED: 'FILE.TRASHED',
+		DELETED: 'FILE.DELETED',
+		RESTORED: 'FILE.RESTORED',
+		COPIED: 'FILE.COPIED',
+		MOVED: 'FILE.MOVED',
+		LOCKED: 'FILE.LOCKED',
+		UNLOCKED: 'FILE.UNLOCKED'
+	},
+	COMMENT: {
+		CREATED: 'COMMENT.CREATED',
+		UPDATED: 'COMMENT.UPDATED',
+		DELETED: 'COMMENT.DELETED'
+	},
+	TASK_ASSIGNMENT: {
+		CREATED: 'TASK_ASSIGNMENT.CREATED',
+		UPDATED: 'TASK_ASSIGNMENT.UPDATED'
+	},
+	METADATA_INSTANCE: {
+		CREATED: 'METADATA_INSTANCE.CREATED',
+		UPDATED: 'METADATA_INSTANCE.UPDATED',
+		DELETED: 'METADATA_INSTANCE.DELETED'
+	},
+	FOLDER: {
+		CREATED: 'FOLDER.CREATED',
+		DOWNLOADED: 'FOLDER.DOWNLOADED',
+		RESTORED: 'FOLDER.RESTORED',
+		DELETED: 'FOLDER.DELETED',
+		COPIED: 'FOLDER.COPIED',
+		MOVED: 'FOLDER.MOVED'
+	},
+	WEBHOOK: {
+		DELETED: 'WEBHOOK.DELETED'
+	}
+};
+
+/**
+ * Create a new webhook on a given Box object, specified by type and ID.
+ *
+ * API Endpoint: '/webhooks'
+ * Method: POST
+ *
+ * @param {string} targetID - Box ID  of the item to create webhook on
+ * @param {ItemType} targetType - Type of item the webhook will be created on
+ * @param {string} notificationURL - The URL of your application where Box will notify you of events triggers
+ * @param {WebhookTriggerType[]} triggerTypes - Array of event types that trigger notification for the target
+ * @param {Function} callback - Passed the new webhook information if it was acquired successfully
+ * @returns {void}
+ */
+Webhooks.prototype.create = function(targetID, targetType, notificationURL, triggerTypes, callback) {
+	var params = {
+		body: {
+			target: {
+				id: targetID,
+				type: targetType
+			},
+			address: notificationURL,
+			triggers: triggerTypes
+		}
+	};
+
+	var apiPath = urlPath(BASE_PATH);
+	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Returns a webhook object with the specified Webhook ID
+ *
+ * API Endpoint: '/webhooks/:webhookID'
+ * Method: GET
+ *
+ * @param {string} webhookID - ID of the webhook to retrieve
+ * @param {?Object} qs - Additional options can be passed with the request via querystring. Can be left null in most cases.
+ * @param {Function} callback - Passed the webhook information if it was acquired successfully
+ * @returns {void}
+ */
+Webhooks.prototype.get = function(webhookID, qs, callback) {
+	var params = {
+		qs: qs
+	};
+
+	var apiPath = urlPath(BASE_PATH, webhookID);
+	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Get a list of webhooks that are active for the current application and user.
+ *
+ * API Endpoint: '/webhooks'
+ * Method: GET
+ *
+ * @param {?Object} qs - Additional options can be passed with the request via querystring. Can be left null in most cases.
+ * @param {int} [qs.limit=100] - The number of webhooks to return
+ * @param {string} [qs.marker] - Pagination marker
+ * @param {Function} callback - Passed the list of webhooks if successful, error otherwise
+ * @returns {void}
+ */
+Webhooks.prototype.getAll = function(qs, callback) {
+	var params = {
+		qs: qs
+	};
+
+	var apiPath = urlPath(BASE_PATH);
+	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Update a webhook
+ *
+ * API Endpoint: '/webhooks/:webhookID'
+ * Method: PUT
+ *
+ * @param {string} webhookID - The ID of the webhook to be updated
+ * @param {Object} options - Webhook fields to update
+ * @param {string} [options.address] - The new URL used by Box to send a notification when webhook is triggered
+ * @param {WebhookTriggerType[]} [options.triggers] - The new events that triggers a notification
+ * @param {Function} callback - Passed the updated webhook information if successful, error otherwise
+ * @returns {void}
+ */
+Webhooks.prototype.update = function(webhookID, options, callback) {
+	var apiPath = urlPath(BASE_PATH, webhookID),
+		params = {
+			body: options
+		};
+
+	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Delete a specifed webhook by ID
+ *
+ * API Endpoint: '/webhooks/:webhookID'
+ * Method: DELETE
+ *
+ * @param {string} webhookID - ID of webhook to be deleted
+ * @param {Function} callback - Empty response body passed if successful.
+ * @returns {void}
+ */
+Webhooks.prototype.delete = function(webhookID, callback) {
+	var apiPath = urlPath(BASE_PATH, webhookID);
+	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * @module box-node-sdk/lib/managers/webhooks
+ * @see {@Link Webhooks}
+ */
+module.exports = Webhooks;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Mon Dec 12 2016 16:57:57 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

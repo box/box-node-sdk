@@ -28,7 +28,6 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @fileoverview Manager for the Box Files Resource
- * @author fschott
  */
 
 'use strict';
@@ -47,7 +46,15 @@ var urlPath = require('../util/url-path'),
 // ------------------------------------------------------------------------------
 
 // Base path for all files endpoints
-var BASE_PATH = '/files';
+var BASE_PATH = '/files',
+	VERSIONS_SUBRESOURCE = '/versions',
+	WATERMARK_SUBRESOURCE = '/watermark';
+
+// Enum of valid lock types
+var lockTypes = {
+	LOCK: 'lock',
+	UNLOCK: 'unlock'
+};
 
 /**
  * Returns the multipart form value for file upload metadata.
@@ -306,6 +313,67 @@ Files.prototype.update = function(fileID, options, callback) {
 	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
 };
 
+/**
+ * Add a file to a given collection
+ *
+ * API Endpoint: '/files/:fileID'
+ * Method: PUT
+ *
+ * @param {string} fileID - The file to add to the collection
+ * @param {string} collectionID - The collection to add the file to
+ * @param {Function} callback - Passed the updated file if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.addToCollection = function(fileID, collectionID, callback) {
+
+	this.get(fileID, {fields: 'collections'}, (err, data) => {
+
+		if (err) {
+			callback(err);
+			return;
+		}
+
+		var collections = data.collections || [];
+
+		// Convert to correct format
+		collections = collections.map(c => ({id: c.id}));
+
+		if (!collections.find(c => c.id === collectionID)) {
+
+			collections.push({id: collectionID});
+		}
+
+		this.update(fileID, {collections}, callback);
+	});
+};
+
+/**
+ * Remove a file from a given collection
+ *
+ * API Endpoint: '/files/:fileID'
+ * Method: PUT
+ *
+ * @param {string} fileID - The file to remove from the collection
+ * @param {string} collectionID - The collection to remove the file from
+ * @param {Function} callback - Passed the updated file if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.removeFromCollection = function(fileID, collectionID, callback) {
+
+	this.get(fileID, {fields: 'collections'}, (err, data) => {
+
+		if (err) {
+			callback(err);
+			return;
+		}
+
+		var collections = data.collections || [];
+		// Convert to correct object format and remove the specified collection
+		collections = collections.map(c => ({id: c.id})).filter(c => c.id !== collectionID);
+
+		this.update(fileID, {collections}, callback);
+	});
+};
 
 /**
  * Move a file into a new parent folder.
@@ -338,16 +406,28 @@ Files.prototype.move = function(fileID, newParentID, callback) {
  *
  * @param {string} fileID - The Box ID of the file being requested
  * @param {string} newParentID - The Box ID for the new parent folder. '0' to copy to All Files.
+ * @param {?Object} options - Optional parameters for the copy operation, can be left null in most cases
+ * @param {string} [options.name] - A new name to use if there is an identically-named item in the new parent folder
  * @param {Function} callback - passed the new file info if call was successful
  * @returns {void}
  */
-Files.prototype.copy = function(fileID, newParentID, callback) {
+Files.prototype.copy = function(fileID, newParentID, options, callback) {
+
+	// @NOTE(mwiller) 2016-10-25: Shuffle arguments to maintain backward compatibility
+	//  This can be removed at the v2.0 update
+	if (typeof options === 'function') {
+		callback = options;
+		options = {};
+	}
+
+	options = options || {};
+
+	options.parent = {
+		id: newParentID
+	};
+
 	var params = {
-		body: {
-			parent: {
-				id: newParentID
-			}
-		}
+		body: options
 	};
 	var apiPath = urlPath(BASE_PATH, fileID, '/copy');
 	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
@@ -435,6 +515,32 @@ Files.prototype.preflightUploadNewFileVersion = function(fileID, fileData, qs, c
 
 	var apiPath = urlPath(BASE_PATH, fileID, '/content');
 	this.client.options(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * If there are previous versions of this file, this method can be used to promote one of the older
+ * versions to the top of the stack. This actually mints a copy of the old version and puts it on
+ * the top of the versions stack. The file will have the exact same contents, the same SHA1/etag,
+ * and the same name as the original. Other properties such as comments do not get updated to their former values.
+ *
+ * API Endpoint: '/files/:fileID/versions/current'
+ * Method: POST
+ *
+ * @param {string} fileID - The file ID which version will be promoted
+ * @param {string} versionID - The ID of the file_version that you want to make current
+ * @param {Function} callback - Passed the promoted file version information if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.promoteVersion = function(fileID, versionID, callback) {
+	var apiPath = urlPath(BASE_PATH, fileID, VERSIONS_SUBRESOURCE, '/current'),
+		params = {
+			body: {
+				type: 'file_version',
+				id: versionID
+			}
+		};
+
+	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
 };
 
 /**
@@ -603,6 +709,27 @@ Files.prototype.deletePermanently = function(fileID, callback) {
 	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
 };
 
+/*
+ * Retrieves a file that has been moved to the trash.
+ *
+ * API Endpoint: '/files/:fileID/trash'
+ * Method: GET
+ *
+ * @param {string} fileID - The ID of the file being requested
+ * @param {?Object} qs - Additional options can be passed with the request via querystring. Can be left null in most cases.
+ * @param {Function} callback - Passed the trashed file information if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.getTrashedFile = function(fileID, qs, callback) {
+
+	var params = {
+		qs: qs
+	};
+
+	var apiPath = urlPath(BASE_PATH, fileID, 'trash');
+	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
 /**
  * Retrieves all of the tasks for given file.
  *
@@ -625,6 +752,250 @@ Files.prototype.getTasks = function(fileID, qs, callback) {
 };
 
 /**
+ * Used to retrieve an expiring URL for creating an embedded preview session.
+ * The URL will expire after 60 seconds and the preview session will expire after 60 minutes.
+ *
+ * API Endpoint: '/files/:fileID?fields=expiring_embed_link'
+ * Method: GET
+ *
+ * @param {string} fileID - The ID of the file to generate embed link for
+ * @param {Function} callback - Passed with the embed link if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.getEmbedLink = function(fileID, callback) {
+
+	var params = {
+		qs: {
+			fields: 'expiring_embed_link'
+		}
+	};
+
+	var apiPath = urlPath(BASE_PATH, fileID);
+	this.client.get(apiPath, params, function(err, response) {
+
+		if (err) {
+			callback(err);
+			return;
+		}
+
+		if (response.statusCode !== httpStatusCodes.OK) {
+			callback(errors.buildUnexpectedResponseError(response));
+			return;
+		}
+
+		callback(null, response.body.expiring_embed_link.url);
+	});
+};
+
+/**
+ * Locks  a file.
+ *
+ * API Endpoint: '/files/:fileID'
+ * Method: PUT
+ *
+ * @param {string} fileID - The ID of the file to lock
+ * @param {?Object} options - Optional parameters, can be left null in most cases
+ * @param {?string} [options.expires_at] - The time the lock expires
+ * @param {boolean} [options.is_download_prevented] - Whether or not the file can be downloaded while locked
+ * @param {Function} callback - Passed with the locked file information if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.lock = function(fileID, options, callback) {
+
+	var apiPath = urlPath(BASE_PATH, fileID),
+		params = {
+			body: {
+				lock: {
+					type: lockTypes.LOCK
+				}
+			}
+		};
+
+	Object.assign(params.body.lock, options);
+
+	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Unlocks a file.
+ *
+ * API Endpoint: '/files/:fileID'
+ *  Method: PUT
+ *
+ * @param {string} fileID - The ID of the file to unlock
+ * @param {Function} callback - Passed with the unlocked file information if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.unlock = function(fileID, callback) {
+
+	var apiPath = urlPath(BASE_PATH, fileID),
+		params = {
+			body: {
+				lock: {
+					type: lockTypes.UNLOCK
+				}
+			}
+		};
+
+	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Restores an item that has been moved to the trash. Default behavior is to
+ * restore the item to the folder it was in before it was moved to the trash.
+ * If that parent folder no longer exists or if there is now an item with the
+ * same name in that parent folder, the new parent folder and/or new name will
+ * need to be included in the request.
+ *
+ * API Endpoint: '/files/:fileID'
+ * Method: POST
+ *
+ * @param {string} fileID - The ID of the file to restore
+ * @param {?Object} options - Optional parameters, can be left null in most cases
+ * @param {string} [options.name] - The new name for this item
+ * @param {string} [options.parent_id] - The new parent folder for this item
+ * @param {Function} callback - Called with item information if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.restoreFromTrash = function(fileID, options, callback) {
+
+	// Set up the parent_id parameter
+	if (options &amp;&amp; options.parent_id) {
+
+		options.parent = {
+			id: options.parent_id
+		};
+
+		delete options.parent_id;
+	}
+
+	var apiPath = urlPath(BASE_PATH, fileID),
+		params = {
+			body: options || {}
+		};
+
+	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * If there are previous versions of this file, this method can be used to retrieve information
+ * about the older versions.
+ *
+ * API Endpoint: '/files/:fileID/versions'
+ * Method: GET
+ *
+ * @param {string} fileID - The ID of the file to view version for
+ * @param {?Object} qs - Additional options for the request, can be left null in most cases
+ * @param {Function} callback - Passed a list of previous file versions if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.getVersions = function(fileID, qs, callback) {
+
+	var apiPath = urlPath(BASE_PATH, fileID, VERSIONS_SUBRESOURCE),
+		params = {
+			qs: qs
+		};
+
+	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Used to retrieve the watermark for a corresponding Box file.
+ *
+ * API Endpoint: '/files/:fileID/watermark'
+ * Method: GET
+ *
+ * @param {string} fileID - The Box ID of the file to get watermark for
+ * @param {?Object} qs - Additional options can be passed with the request via querystring
+ * @param {Function} callback - Passed the watermark information if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.getWatermark = function(fileID, qs, callback) {
+
+	var apiPath = urlPath(BASE_PATH, fileID, WATERMARK_SUBRESOURCE),
+		params = {
+			qs: qs
+		};
+
+	this.client.get(apiPath, params, function(err, response) {
+
+		if (err) {
+			callback(err);
+			return;
+		}
+
+		if (response.statusCode !== 200) {
+			callback(errors.buildUnexpectedResponseError(response));
+			return;
+		}
+
+		callback(null, response.body.watermark);
+	});
+};
+
+/**
+ * Used to apply or update the watermark for a corresponding Box file.
+ *
+ * API Endpoint: '/files/:fileID/watermark'
+ * Method: PUT
+ *
+ * @param {string} fileID - The Box ID of the file to update watermark for
+ * @param {string} options - Optional parameters, can be left null
+ * @param {Function} callback - Passed the watermark information if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.applyWatermark = function(fileID, options, callback) {
+	var apiPath = urlPath(BASE_PATH, fileID, WATERMARK_SUBRESOURCE),
+		params = {
+			body: {
+				watermark: {
+					imprint: 'default' // Currently the API only supports default imprint
+				}
+			}
+		};
+
+	Object.assign(params.body.watermark, options);
+
+	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Used to remove the watermark for a corresponding Box file.
+ *
+ * API Endpoint: '/files/:fileID/watermark'
+ * Method: DELETE
+ *
+ * @param {string} fileID - The Box ID of the file to remove watermark from
+ * @param {Function} callback - Empty response body passed if successful, error otherwise
+ * @returns {void}
+ */
+Files.prototype.removeWatermark = function(fileID, callback) {
+
+	var apiPath = urlPath(BASE_PATH, fileID, WATERMARK_SUBRESOURCE);
+
+	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+};
+
+/**
+ * Discards a specific file version to the trash. Depending on the enterprise settings
+ * for this user, the item will either be actually deleted from Box or moved to the trash.
+ *
+ * API Endpoint: '/files/:fileID/version/:versionID'
+ * Method: DELETE
+ *
+ * @param {string} fileID - The file ID which old version will be moved to the trash or delete permanently
+ * @param {string} versionID - The ID of the version to move to the trash or delete permanently
+ * @param {Function} callback - Empty response body, error otherwise
+ * @returns {void}
+ */
+Files.prototype.deleteVersion = function(fileID, versionID, callback) {
+
+	var apiPath = urlPath(BASE_PATH, fileID, VERSIONS_SUBRESOURCE, versionID);
+
+	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+};
+
+/**
  * @module box-node-sdk/lib/managers/files
  * @see {@Link Files}
  */
@@ -639,13 +1010,13 @@ module.exports = Files;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Users.html">Users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Tue Sep 27 2016 13:38:22 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Mon Dec 12 2016 16:57:57 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>
