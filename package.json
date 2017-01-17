@@ -2,7 +2,7 @@
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
   "version": "1.2.0",
-  "description": "A Box SDK for Node.js",
+  "description": "Official Box SDK for Node.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
