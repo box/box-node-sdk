@@ -12,6 +12,8 @@ var sinon = require('sinon'),
 
 var BoxClient = require('../../../lib/box-client');
 
+var assert = require('assert');
+
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -36,6 +38,7 @@ describe('Webhooks', function() {
 			useCleanCache: true
 		});
 		mockery.registerAllowable('../util/url-path');
+		mockery.registerAllowable('crypto');
 		// Setup File Under Test
 		mockery.registerAllowable(MODULE_WEBHOOKS_PATH);
 		Webhooks = require(MODULE_WEBHOOKS_PATH);
@@ -150,5 +153,74 @@ describe('Webhooks', function() {
 			webhooks.delete(WEBHOOKS_ID, done);
 		});
 
+	});
+
+	describe('validateMessage()', function() {
+
+		// A sample webhook message that is signed with 'SamplePrimaryKey' and 'SampleSecondaryKey':
+		const	BODY = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt"}}',
+			HEADERS = {
+				'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
+				'box-delivery-timestamp': '2020-01-01T00:00:00-07:00',
+				'box-signature-algorithm': 'HmacSHA256',
+				'box-signature-primary': '6TfeAW3A1PASkgboxxA5yqHNKOwFyMWuEXny/FPD5hI=',
+				'box-signature-secondary': 'v+1CD1Jdo3muIcbpv5lxxgPglOqMfsNHPV899xWYydo=',
+				'box-signature-version': '1'
+			},
+			PRIMARY_SIGNATURE_KEY = 'SamplePrimaryKey',
+			SECONDARY_SIGNATURE_KEY = 'SampleSecondaryKey',
+			INCORRECT_SIGNATURE_KEY = 'IncorrectKey',
+			DATE_IN_PAST = Date.parse('2010-01-01T00:00:00-07:00'),
+			DATE_IN_FUTURE = Date.parse('2030-01-01T00:00:00-07:00'),
+			HEADERS_WITH_WRONG_SIGNATURE_VERSION = Object.assign({}, HEADERS, {'box-signature-version': '2'}),
+			HEADERS_WITH_WRONG_SIGNATURE_ALGORITHM = Object.assign({}, HEADERS, {'box-signature-algorithm': 'XXX'});
+
+		it('should validate the webhook message with two good keys', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(Webhooks.validateMessage(BODY, HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should validate the webhook message with good primary key', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(Webhooks.validateMessage(BODY, HEADERS, PRIMARY_SIGNATURE_KEY, INCORRECT_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should validate the webhook message with good secondary key', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(Webhooks.validateMessage(BODY, HEADERS, INCORRECT_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should NOT validate the webhook message with two wrong keys', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(!Webhooks.validateMessage(BODY, HEADERS, INCORRECT_SIGNATURE_KEY, INCORRECT_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should NOT validate the webhook message with two null keys', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(!Webhooks.validateMessage(BODY, HEADERS, null, null));
+			clock.restore();
+		});
+
+		it('should NOT validate the webhook message if it is too old', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_FUTURE);
+			assert.ok(!Webhooks.validateMessage(BODY, HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should NOT validate the webhook message if the signature version is wrong', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(!Webhooks.validateMessage(BODY, HEADERS_WITH_WRONG_SIGNATURE_VERSION, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should NOT validate the webhook message if the signature algorithm is wrong', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(!Webhooks.validateMessage(BODY, HEADERS_WITH_WRONG_SIGNATURE_ALGORITHM, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
 	});
 });
