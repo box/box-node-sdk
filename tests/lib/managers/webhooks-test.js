@@ -8,12 +8,10 @@
 // ------------------------------------------------------------------------------
 var sinon = require('sinon'),
 	mockery = require('mockery'),
-	leche = require('leche');
+	leche = require('leche'),
+	assert = require('chai').assert;
 
 var BoxClient = require('../../../lib/box-client');
-
-var assert = require('assert');
-
 
 // ------------------------------------------------------------------------------
 // Helpers
