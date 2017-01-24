@@ -1180,4 +1180,21 @@ describe('Files', function() {
 		});
 	});
 
+	describe('getCollaborations()', function() {
+
+		it('should make GET request to get file collaborations when called', function() {
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/collaborations', testParamsWithQs);
+			files.getCollaborations(FILE_ID, testQS);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'get').withArgs('/files/1234/collaborations', testParamsWithQs).yieldsAsync();
+			files.getCollaborations(FILE_ID, testQS, done);
+		});
+	});
+
 });

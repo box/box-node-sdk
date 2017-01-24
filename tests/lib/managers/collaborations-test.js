@@ -134,18 +134,18 @@ describe('Collaborations', function() {
 
 	describe('create()', function() {
 
-		var folderID,
+		var itemID,
 			newCollabItem,
 			newCollabAccessibleBy,
 			newCollabRole,
 			expectedParams;
 
 		beforeEach(function() {
-			folderID = '2345';
+			itemID = '2345';
 			newCollabRole = 'SOME_ROLE';
 			newCollabItem = {
 				type: 'folder',
-				id: folderID
+				id: itemID
 			};
 			newCollabAccessibleBy = {
 				type: 'user',
@@ -161,20 +161,39 @@ describe('Collaborations', function() {
 		});
 
 		it('should make POST request to create a new collaboration when called', function() {
+
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
-			collaborations.create(newCollabAccessibleBy, folderID, newCollabRole);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole);
 		});
+
+		it('should create collaboration on file when passed the correct type option', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {type: 'file'});
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
-			collaborations.create(newCollabAccessibleBy, folderID, newCollabRole, done);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {}, done);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when options is omitted', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, done);
 		});
 	});
 
 	describe('createWithUserID()', function() {
 
-		var folderID,
+		var itemID,
 			userID,
 			newCollabItem,
 			newCollabRole,
@@ -182,12 +201,12 @@ describe('Collaborations', function() {
 			expectedParams;
 
 		beforeEach(function() {
-			folderID = '2345';
+			itemID = '2345';
 			userID = 'SOME_USER_ID';
 			newCollabRole = 'SOME_ROLE';
 			newCollabItem = {
 				type: 'folder',
-				id: folderID
+				id: itemID
 			};
 			expectedAccessibleBy = {
 				type: 'user',
@@ -205,18 +224,35 @@ describe('Collaborations', function() {
 		it('should make POST request to create a new collaboration with the proper accessible_by property when called', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
-			collaborations.createWithUserID(userID, folderID, newCollabRole);
+			collaborations.createWithUserID(userID, itemID, newCollabRole);
 		});
+
+		it('should create collaboration on file when passed the correct type option', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserID(userID, itemID, newCollabRole, {type: 'file'});
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
-			collaborations.createWithUserID(userID, folderID, newCollabRole, done);
+			collaborations.createWithUserID(userID, itemID, newCollabRole, {}, done);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when options is omitted', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
+			collaborations.createWithUserID(userID, itemID, newCollabRole, done);
 		});
 	});
 
 	describe('createWithUserEmail()', function() {
 
-		var folderID,
+		var itemID,
 			userEmail,
 			newCollabItem,
 			newCollabRole,
@@ -224,12 +260,12 @@ describe('Collaborations', function() {
 			expectedParams;
 
 		beforeEach(function() {
-			folderID = '2345';
+			itemID = '2345';
 			userEmail = 'SOME_USER@gmail.com';
 			newCollabRole = 'SOME_ROLE';
 			newCollabItem = {
 				type: 'folder',
-				id: folderID
+				id: itemID
 			};
 			expectedAccessibleBy = {
 				type: 'user',
@@ -247,18 +283,35 @@ describe('Collaborations', function() {
 		it('should make POST request to create a new collaboration with the proper accessible_by property when called', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
-			collaborations.createWithUserEmail(userEmail, folderID, newCollabRole);
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole);
 		});
+
+		it('should create collaboration on file when passed the correct type option', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {type: 'file'});
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
-			collaborations.createWithUserEmail(userEmail, folderID, newCollabRole, done);
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {}, done);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when options is omitted', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, done);
 		});
 	});
 
 	describe('createWithGroupID()', function() {
 
-		var folderID,
+		var itemID,
 			groupID,
 			newCollabItem,
 			newCollabRole,
@@ -266,12 +319,12 @@ describe('Collaborations', function() {
 			expectedParams;
 
 		beforeEach(function() {
-			folderID = '2345';
+			itemID = '2345';
 			groupID = 'SOME_GROUP_ID';
 			newCollabRole = 'SOME_ROLE';
 			newCollabItem = {
 				type: 'folder',
-				id: folderID
+				id: itemID
 			};
 			expectedAccessibleBy = {
 				type: 'group',
@@ -289,12 +342,29 @@ describe('Collaborations', function() {
 		it('should make POST request to create a new collaboration with the proper accessible_by property when called', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
-			collaborations.createWithGroupID(groupID, folderID, newCollabRole);
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole);
 		});
+
+		it('should create collaboration on file when passed the correct type option', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {type: 'file'});
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
-			collaborations.createWithGroupID(groupID, folderID, newCollabRole, done);
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {}, done);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when options is omitted', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, done);
 		});
 	});
 
