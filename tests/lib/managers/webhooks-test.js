@@ -168,8 +168,8 @@ describe('Webhooks', function() {
 			PRIMARY_SIGNATURE_KEY = 'SamplePrimaryKey',
 			SECONDARY_SIGNATURE_KEY = 'SampleSecondaryKey',
 			INCORRECT_SIGNATURE_KEY = 'IncorrectKey',
-			DATE_IN_PAST = Date.parse('2010-01-01T00:00:00-07:00'),
-			DATE_IN_FUTURE = Date.parse('2030-01-01T00:00:00-07:00'),
+			DATE_IN_PAST = Date.parse('2010-01-01T00:00:00-07:00'),			// 10 years in the past
+			DATE_IN_FUTURE = Date.parse('2020-01-01T00:15:00-07:00'),		// 15 min in future
 			HEADERS_WITH_WRONG_SIGNATURE_VERSION = Object.assign({}, HEADERS, {'box-signature-version': '2'}),
 			HEADERS_WITH_WRONG_SIGNATURE_ALGORITHM = Object.assign({}, HEADERS, {'box-signature-algorithm': 'XXX'});
 
@@ -206,6 +206,18 @@ describe('Webhooks', function() {
 		it('should NOT validate the webhook message if it is too old', function() {
 			const clock = sinon.useFakeTimers(DATE_IN_FUTURE);
 			assert.ok(!Webhooks.validateMessage(BODY, HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should NOT validate the webhook message if maxMessageAge is not big enough', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_FUTURE);
+			assert.ok(!Webhooks.validateMessage(BODY, HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY, 5 * 60));
+			clock.restore();
+		});
+
+		it('should validate the webhook message if maxMessageAge is big enough', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_FUTURE);
+			assert.ok(Webhooks.validateMessage(BODY, HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY, 20 * 60));
 			clock.restore();
 		});
 
