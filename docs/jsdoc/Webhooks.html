@@ -140,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line38">line 38</a>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line123">line 123</a>
     </li></ul></dd>
     
 
@@ -405,7 +405,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line49">line 49</a>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -426,6 +426,297 @@
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".validateMessage"><span class="type-signature">(static) </span>validateMessage<span class="signature">(body, headers, primarySignatureKey, secondarySignatureKey<span class="signature-attributes">opt</span>, maxMessageAge<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Validate a webhook message by verifying the signature and the delivery timestamp
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The request body of the webhook message</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>headers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The request headers of the webhook message</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>primarySignatureKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The primary signature to verify the message with</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>secondarySignatureKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The secondary signature to verify the message with</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxMessageAge</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The maximum message age (in seconds).  Defaults to 10 minutes</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line291">line 291</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - True or false
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
         
             
@@ -627,7 +918,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line102">line 102</a>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -683,7 +974,7 @@ Method: POST
 
 
 <div class="description">
-    Delete a specifed webhook by ID
+    Delete a specified webhook by ID
 
 API Endpoint: '/webhooks/:webhookID'
 Method: DELETE
@@ -802,7 +1093,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line191">line 191</a>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line276">line 276</a>
     </li></ul></dd>
     
 
@@ -1028,7 +1319,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line129">line 129</a>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line214">line 214</a>
     </li></ul></dd>
     
 
@@ -1329,7 +1620,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line150">line 150</a>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
@@ -1621,7 +1912,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line172">line 172</a>
+        <a href="managers_webhooks.js.html">managers/webhooks.js</a>, <a href="managers_webhooks.js.html#line257">line 257</a>
     </li></ul></dd>
     
 
@@ -1687,7 +1978,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Mon Dec 12 2016 16:57:58 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:26 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>
