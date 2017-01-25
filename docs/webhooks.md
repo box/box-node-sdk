@@ -10,6 +10,7 @@ requests to a URL of your choosing, when they occur.
 * [Get all Webhooks Information](#get-all-webhooks-information)
 * [Update a Webhook](#update-a-webhook)
 * [Delete a Webhook](#delete-a-webhook)
+* [Validate a Webhook Message](#validate-a-webhook-message)
 
 Create a Webhook
 ----------------
@@ -97,4 +98,33 @@ A file or folder's webhook can be removed by calling
 
 ```js
 client.webhooks.delete('678901', callback);
+```
+
+Validate a Webhook Message
+--------------------------
+
+When you receive a webhook message from Box, you should validate it by calling
+[`BoxSDK.validateWebhookMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`](http://opensource.box.com/box-node-sdk/Webhooks.html#validateMessage),
+also available as `webhooks.validateMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`.
+
+```js
+const BoxSDK = require('box-node-sdk');
+let body = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt"}}',
+	headers = {
+		'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
+		'box-delivery-timestamp': '2020-01-01T00:00:00-07:00',
+		'box-signature-algorithm': 'HmacSHA256',
+		'box-signature-primary': '6TfeAW3A1PASkgboxxA5yqHNKOwFyMWuEXny/FPD5hI=',
+		'box-signature-secondary': 'v+1CD1Jdo3muIcbpv5lxxgPglOqMfsNHPV899xWYydo=',
+		'box-signature-version': '1'
+	},
+	primaryKey = 'SamplePrimaryKey',
+	secondaryKey = 'SampleSecondaryKey';
+
+let isValid = BoxSDK.validateWebhookMessage(body, headers, primaryKey, secondaryKey, 60);
+if (isValid) {
+	// message is valid, accept
+} else {
+	// message is NOT valid, reject
+}
 ```

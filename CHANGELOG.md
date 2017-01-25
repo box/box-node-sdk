@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- Added `BoxSDK.validateWebhookMessage()` and `client.webhooks.validateMessage()` for validating webhook messages from Box
+
 ## 1.2.0
 
 - Added methods for all API endpoints; we now have full API coverage :tada:
