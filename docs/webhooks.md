@@ -121,7 +121,7 @@ let body = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FIL
 	primaryKey = 'SamplePrimaryKey',
 	secondaryKey = 'SampleSecondaryKey';
 
-let isValid = BoxSDK.validateWebhookMessage(body, headers, primaryKey, secondaryKey, 60);
+let isValid = BoxSDK.validateWebhookMessage(body, headers, primaryKey, secondaryKey);
 if (isValid) {
 	// message is valid, accept
 } else {

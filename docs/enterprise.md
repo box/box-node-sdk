@@ -48,6 +48,23 @@ client.enterprise.addUser(
 );
 ```
 
+Add New App User
+----------------
+
+To provision a new app user within the current enterprise, call the
+[`enterprise.addAppUser(name, options, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#addAppUser)
+method with the user's name.
+
+```js
+client.enterprise.addAppUser(
+	'Daenerys Targaryen',
+	{
+		job_title: 'Mother of Dragons',
+	},
+	callback
+);
+```
+
 Transfer User Content
 ---------------------
 

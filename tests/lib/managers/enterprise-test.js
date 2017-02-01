@@ -131,6 +131,43 @@ describe('WebLinks', function() {
 
 	});
 
+	describe('addAppUser()', function() {
+		var	NAME = 'Daenerys Targaryen',
+			JOB_TITLE = 'Breaker of Chains',
+			expectedParams;
+
+		beforeEach(function() {
+
+			expectedParams = {
+				body: {
+					name: NAME,
+					is_platform_access_only: true
+				}
+			};
+		});
+
+		it('should make POST request with mandatory parameters to create an app user without optional parameters', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			enterprise.addAppUser(NAME);
+		});
+
+		it('should make POST request with all parameters to create an user when called with optional parameter', function() {
+			expectedParams.body.job_title = JOB_TITLE;
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			enterprise.addAppUser(NAME, {job_title: JOB_TITLE});
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/users').yieldsAsync();
+			enterprise.addAppUser(NAME, null, done);
+		});
+
+	});
+
 	describe('transferUserContent()', function() {
 
 		var SRC_USER_ID = '12345',

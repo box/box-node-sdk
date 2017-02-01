@@ -187,13 +187,22 @@ The following resources are supported by the SDK:
 - [Collaborations](https://github.com/box/box-node-sdk/blob/master/docs/collaborations.md)
 - [Collections](https://github.com/box/box-node-sdk/blob/master/docs/collections.md)
 - [Comments](https://github.com/box/box-node-sdk/blob/master/docs/comments.md)
+- [Device Pins](https://github.com/box/box-node-sdk/blob/master/docs/device-pins.md)
+- [Enterprise](https://github.com/box/box-node-sdk/blob/master/docs/enterprise.md)
 - [Events](https://github.com/box/box-node-sdk/blob/master/docs/events.md)
 - [Files](https://github.com/box/box-node-sdk/blob/master/docs/files.md)
 - [Folders](https://github.com/box/box-node-sdk/blob/master/docs/folders.md)
-- Metadata
+- [Groups](https://github.com/box/box-node-sdk/blob/master/docs/groups.md)
+- [Legal Hold Policies](https://github.com/box/box-node-sdk/blob/master/docs/legal-hold-policies.md)
+- [Metadata](https://github.com/box/box-node-sdk/blob/master/docs/metadata.md)
+- [Retention Policies](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md)
 - [Search](https://github.com/box/box-node-sdk/blob/master/docs/search.md)
 - [Shared Items](https://github.com/box/box-node-sdk/blob/master/docs/shared-items.md)
+- [Tasks](https://github.com/box/box-node-sdk/blob/master/docs/tasks.md)
+- [Trash](https://github.com/box/box-node-sdk/blob/master/docs/trash.md)
 - [Users](https://github.com/box/box-node-sdk/blob/master/docs/users.md)
+- [Web Links](https://github.com/box/box-node-sdk/blob/master/docs/web-links.md)
+- [Webhooks](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md)
 
 ### Helpers
 
