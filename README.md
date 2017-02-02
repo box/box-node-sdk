@@ -33,10 +33,10 @@ var sdk = new BoxSDK({
 });
 
 // Create a basic API client
-var box = sdk.getBasicClient('USER_ACCESS_TOKEN');
+var client = sdk.getBasicClient('USER_ACCESS_TOKEN');
 
 // Get some of that sweet, sweet data!
-box.users.get(box.CURRENT_USER_ID, null, function(err, currentUser) {
+client.users.get(client.CURRENT_USER_ID, null, function(err, currentUser) {
   if(err) throw err;
   console.log('Hello, ' + currentUser.name + '!');
 });
@@ -116,7 +116,7 @@ Box supports four different types of client:
 Returns a Box Client with a Basic API Session. The client is able to make requests on behalf of a user. A basic session has no access to a user's refresh token. Because of this, once the session's tokens expire the client cannot recover and a new session will need to be generated.
 
 ```js
-var box = sdk.getBasicClient('ACCESS_TOKEN');
+var client = sdk.getBasicClient('ACCESS_TOKEN');
 ```
 
 ### Persistent Client
@@ -126,7 +126,7 @@ Returns a Box Client with a persistent API session. A persistent API session hel
 > NOTE: If tokenInfo or tokenStore are formatted incorrectly, this method will throw an error. If you haven't explicitly created either of these objects or are otherwise not completely confident in their validity, you should wrap your call to getPersistentClient in a try-catch to handle any potential errors.
 
 ```js
-var box = sdk.getPersistentClient(tokenInfo[, tokenStore]);
+var client = sdk.getPersistentClient(tokenInfo[, tokenStore]);
 ```
 
 #### Optional: Token Store
@@ -146,7 +146,7 @@ Notice that these methods don't pass in identifying information as arguments. Yo
 Returns a Box Client with an Anonymous API Session. An Anonymous API Session has access to an anonymous client-credentials token, which isn't tied to any specific user. Because of this, the client will only have access to endpoints that allow client-credential tokens. All Anonymous API Sessions share the same tokens, which allows them to refresh them efficiently and reduce load on both the application and the API.
 
 ```js
-var box = sdk.getAnonymousClient();
+var client = sdk.getAnonymousClient();
 ```
 
 ### App Auth Client
@@ -176,10 +176,10 @@ Accessing Data on Box
 ### Resource Managers
 
 ```js
-box.users.get(box.CURRENT_USER_ID, null, function(err, currentUser) {});
-box.folders.update('123', { name: 'New Folder Name' }, function(err, folder) {});
-box.files.uploadFile('123', 'bicycle.png', fileData, function(err, file) {});
-box.comments.delete('456', function(err) {});
+client.users.get(client.CURRENT_USER_ID, null, function(err, currentUser) {});
+client.folders.update('123', { name: 'New Folder Name' }, function(err, folder) {});
+client.files.uploadFile('123', 'bicycle.png', fileData, function(err, file) {});
+client.comments.delete('456', function(err) {});
 ```
 
 The following resources are supported by the SDK:
@@ -187,13 +187,22 @@ The following resources are supported by the SDK:
 - [Collaborations](https://github.com/box/box-node-sdk/blob/master/docs/collaborations.md)
 - [Collections](https://github.com/box/box-node-sdk/blob/master/docs/collections.md)
 - [Comments](https://github.com/box/box-node-sdk/blob/master/docs/comments.md)
+- [Device Pins](https://github.com/box/box-node-sdk/blob/master/docs/device-pins.md)
+- [Enterprise](https://github.com/box/box-node-sdk/blob/master/docs/enterprise.md)
 - [Events](https://github.com/box/box-node-sdk/blob/master/docs/events.md)
 - [Files](https://github.com/box/box-node-sdk/blob/master/docs/files.md)
 - [Folders](https://github.com/box/box-node-sdk/blob/master/docs/folders.md)
-- Metadata
+- [Groups](https://github.com/box/box-node-sdk/blob/master/docs/groups.md)
+- [Legal Hold Policies](https://github.com/box/box-node-sdk/blob/master/docs/legal-hold-policies.md)
+- [Metadata](https://github.com/box/box-node-sdk/blob/master/docs/metadata.md)
+- [Retention Policies](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md)
 - [Search](https://github.com/box/box-node-sdk/blob/master/docs/search.md)
 - [Shared Items](https://github.com/box/box-node-sdk/blob/master/docs/shared-items.md)
+- [Tasks](https://github.com/box/box-node-sdk/blob/master/docs/tasks.md)
+- [Trash](https://github.com/box/box-node-sdk/blob/master/docs/trash.md)
 - [Users](https://github.com/box/box-node-sdk/blob/master/docs/users.md)
+- [Web Links](https://github.com/box/box-node-sdk/blob/master/docs/web-links.md)
+- [Webhooks](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md)
 
 ### Helpers
 
@@ -202,9 +211,9 @@ The following resources are supported by the SDK:
 Box exposes some bare request methods for constructing your own API calls. These can be useful for adding your own API calls that aren't yet explicitly supported by the SDK.
 
 ```js
-box.get('/files/123', {qs: {fields: 'id,name'}}, function(err, response) {});
-box.put('/files/123', {body: {name: 'New File Name'}}, function(err, response) {});
-box.del('/files/123', null, function(err, response) {});
+client.get('/files/123', {qs: {fields: 'id,name'}}, function(err, response) {});
+client.put('/files/123', {body: {name: 'New File Name'}}, function(err, response) {});
+client.del('/files/123', null, function(err, response) {});
 ```
 
 #### Collaboration Roles
