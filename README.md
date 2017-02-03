@@ -166,8 +166,11 @@ var sdk = new BoxSDK({
 	}
 });
 
-// Get the enterprise client, used to create and manage app user accounts
-sdk.getAppAuthClient('enterprise', 'APP_ENTERPRISE_ID');
+// Get the service account client, used to create and manage app user accounts
+var serviceAccountClient = sdk.getAppAuthClient('enterprise', 'APP_ENTERPRISE_ID');
+
+// Get an app user client
+var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 
 Accessing Data on Box
