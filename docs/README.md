@@ -16,6 +16,7 @@ the SDK are available by topic:
 - [Folders](folders.md)
 - [Groups](groups.md)
 - [Legal Hold Policies](legal-hold-policies.md)
+- [Metadata](metadata.md)
 - [Retention Policies](retention-policies.md)
 - [Search](search.md)
 - [Shared Items](shared-items.md)

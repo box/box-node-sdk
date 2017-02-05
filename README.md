@@ -187,6 +187,7 @@ client.comments.delete('456', function(err) {});
 
 The following resources are supported by the SDK:
 
+- [Authentication](https://github.com/box/box-node-sdk/blob/master/docs/authentication.md)
 - [Collaborations](https://github.com/box/box-node-sdk/blob/master/docs/collaborations.md)
 - [Collections](https://github.com/box/box-node-sdk/blob/master/docs/collections.md)
 - [Comments](https://github.com/box/box-node-sdk/blob/master/docs/comments.md)
