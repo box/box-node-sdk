@@ -17,7 +17,7 @@ Add a Collaboration
 -------------------
 
 A collaboration can be added for an existing user with
-[`collaborations.createWithUserID(userID, folderID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserID).
+[`collaborations.createWithUserID(userID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserID).
 The `role` parameter determines what permissions the collaborator will have on the
 folder.  You can create a collaboration on a file by setting the `type` option to `'file'`.
 
@@ -40,7 +40,7 @@ client.collaborations.createWithUserID(
 ```
 
 You can also add a collaboration by providing an email address with
-[`collaborations.createWithUserEmail(email, folderID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserEmail). If the recipient
+[`collaborations.createWithUserEmail(email, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserEmail). If the recipient
 doesn't have a Box account, they will be asked create one.
 
 ```js
@@ -48,7 +48,7 @@ client.collaborations.createWithUserEmail('user@example.com', '987654', client.c
 ```
 
 Groups can also be added as collaborators by providing the group ID to
-[`collaborations.createWithGroupID(groupID, folderID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithGroupID).
+[`collaborations.createWithGroupID(groupID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithGroupID).
 All members of the group will receive the same role and permissions.
 
 ```js
