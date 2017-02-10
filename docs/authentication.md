@@ -86,13 +86,13 @@ var client = sdk.getAnonymousClient();
 
 App Users allows your application to provision and control Box accounts that do
 not have an associated login and can only be accessed through the Content API by
-the controlling application.  You may authenticate as the app enterprise to
+the controlling application.  You may authenticate as the service account to
 provision and manage users, or as an individual app user to make calls as that
 user.  See the [API documentation](https://docs.box.com/docs/getting-started-box-platform)
 and [sample app](https://github.com/box/box-node-sdk/blob/master/examples/app-auth)
 for detailed instructions on how to use app auth.
 
-Enterprise admin client example:
+Service account client example:
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
@@ -104,7 +104,7 @@ var sdk = new BoxSDK({
 		passphrase: 'YOUR-PRIVATE-KEY-PASSPHRASE'
 	}
 });
-var adminClient = sdk.getAppAuthClient('enterprise', 'YOUR-ENTERPRISE-ID');
+var serviceAccountClient = sdk.getAppAuthClient('enterprise', 'YOUR-ENTERPRISE-ID');
 ```
 
 App User client example:
