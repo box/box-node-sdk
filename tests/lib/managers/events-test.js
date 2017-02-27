@@ -218,55 +218,55 @@ describe('Events', function() {
 			});
 		});
 
-		describe('getEventStream()', function() {
+	});
 
-			it('should return event stream from starting stream position when passed stream position', function(done) {
+	describe('getEventStream()', function() {
 
-				var streamPosition = '38746523';
-				sandbox.mock(events).expects('getCurrentStreamPosition').never();
-				events.getEventStream(streamPosition, function(err, stream) {
+		it('should return event stream from starting stream position when passed stream position', function(done) {
 
-					assert.ifError(err);
-					assert.ok(EventStreamConstructorStub.calledOnce, 'Should call EventStream constructor');
-					assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, streamPosition), 'Should pass correct args to EventStream constructor');
-					assert.equal(stream, eventStreamFake);
-					done();
-				});
+			var streamPosition = '38746523';
+			sandbox.mock(events).expects('getCurrentStreamPosition').never();
+			events.getEventStream(streamPosition, function(err, stream) {
+
+				assert.ifError(err);
+				assert.ok(EventStreamConstructorStub.calledOnce, 'Should call EventStream constructor');
+				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, streamPosition), 'Should pass correct args to EventStream constructor');
+				assert.equal(stream, eventStreamFake);
+				done();
 			});
+		});
 
-			it('should make API call to get stream position when called without stream position', function() {
+		it('should make API call to get stream position when called without stream position', function() {
 
-				sandbox.mock(events).expects('getCurrentStreamPosition');
+			sandbox.mock(events).expects('getCurrentStreamPosition');
 
-				events.getEventStream();
+			events.getEventStream();
+		});
+
+		it('should return an error when the API call fails', function(done) {
+
+			var apiError = new Error('There is no stream');
+			sandbox.stub(events, 'getCurrentStreamPosition').yieldsAsync(apiError);
+
+			events.getEventStream(function(err) {
+
+				assert.equal(err, apiError);
+				done();
 			});
+		});
 
-			it('should return an error when the API call fails', function(done) {
+		it('should return a new event stream from the stream position when the API call succeeds', function(done) {
 
-				var apiError = new Error('There is no stream');
-				sandbox.stub(events, 'getCurrentStreamPosition').yieldsAsync(apiError);
+			sandbox.stub(events, 'getCurrentStreamPosition').yieldsAsync(null, TEST_STREAM_POSITION);
 
-				events.getEventStream(function(err) {
+			events.getEventStream(function(err, stream) {
 
-					assert.equal(err, apiError);
-					done();
-				});
+				assert.ifError(err);
+				assert.ok(EventStreamConstructorStub.calledWithNew(), 'Should call EventStream constructor');
+				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, TEST_STREAM_POSITION), 'Should pass correct args to EventStream constructor');
+				assert.equal(stream, eventStreamFake);
+				done();
 			});
-
-			it('should return a new event stream from the stream position when the API call succeeds', function(done) {
-
-				sandbox.stub(events, 'getCurrentStreamPosition').yieldsAsync(null, TEST_STREAM_POSITION);
-
-				events.getEventStream(function(err, stream) {
-
-					assert.ifError(err);
-					assert.ok(EventStreamConstructorStub.calledWithNew(), 'Should call EventStream constructor');
-					assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, TEST_STREAM_POSITION), 'Should pass correct args to EventStream constructor');
-					assert.equal(stream, eventStreamFake);
-					done();
-				});
-			});
-
 		});
 
 	});

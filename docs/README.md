@@ -12,6 +12,7 @@ the SDK are available by topic:
 - [Device Pins](device-pins.md)
 - [Enterprise](enterprise.md)
 - [Events](events.md)
+- [Enterprise Events](enterprise-events.md)
 - [Files](files.md)
 - [Folders](folders.md)
 - [Groups](groups.md)

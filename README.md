@@ -194,6 +194,7 @@ The following resources are supported by the SDK:
 - [Device Pins](https://github.com/box/box-node-sdk/blob/master/docs/device-pins.md)
 - [Enterprise](https://github.com/box/box-node-sdk/blob/master/docs/enterprise.md)
 - [Events](https://github.com/box/box-node-sdk/blob/master/docs/events.md)
+- [Enterprise Events](https://github.com/box/box-node-sdk/blob/master/docs/enterprise-events.md)
 - [Files](https://github.com/box/box-node-sdk/blob/master/docs/files.md)
 - [Folders](https://github.com/box/box-node-sdk/blob/master/docs/folders.md)
 - [Groups](https://github.com/box/box-node-sdk/blob/master/docs/groups.md)

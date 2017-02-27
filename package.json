@@ -16,6 +16,7 @@
     "test": "node Makefile.js",
     "lint": "node Makefile.js lint",
     "docs": "node Makefile.js docs",
+    "docs-dev": "node Makefile.js docsDev",
     "deps": "npm prune && npm install",
     "patch": "node Makefile.js patch",
     "minor": "node Makefile.js minor",
