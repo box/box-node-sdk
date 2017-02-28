@@ -32,10 +32,12 @@ var sandbox = sinon.sandbox.create(),
 describe('EnterpriseEventStream', function() {
 
 	var TEST_STREAM_POSITION = '76592376495823';
+	var TEST_DATE = Date.parse('2001-01-01T00:00:00-07:00');
+	var TEST_DATE2 = Date.parse('2001-12-31T00:00:00-07:00');
 
 	beforeEach(function() {
 
-		clock = sandbox.useFakeTimers();
+		clock = sandbox.useFakeTimers(TEST_DATE);
 
 		boxClientFake = leche.fake(BoxClient.prototype);
 		boxClientFake.enterpriseEvents = leche.fake(EnterpriseEvents.prototype);
@@ -69,6 +71,42 @@ describe('EnterpriseEventStream', function() {
 			assert.instanceOf(enterpriseEventStream, Readable);
 		});
 
+		it('should set stream position when stream position = 0', function() {
+
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, { streamPosition: 0 });
+			assert.propertyVal(enterpriseEventStream2, '_streamPosition', 0);
+		});
+
+		it('should set all of the options correctly', function() {
+
+			var options = {
+				streamPosition: TEST_STREAM_POSITION,
+				startDate: new Date(TEST_DATE),
+				endDate: new Date(TEST_DATE2),
+				eventTypeFilterArray: ['UPLOAD', 'DOWNLOAD'],
+				pollingInterval: 50,
+				chunkSize: 80
+			};
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, options);
+			assert.propertyVal(enterpriseEventStream2, '_streamPosition', TEST_STREAM_POSITION);
+			assert.equal(enterpriseEventStream2._options.startDate.valueOf(), TEST_DATE);
+			assert.equal(enterpriseEventStream2._options.endDate.valueOf(), TEST_DATE2);
+			assert.propertyVal(enterpriseEventStream2._options, 'pollingInterval', 50);
+			assert.propertyVal(enterpriseEventStream2._options, 'chunkSize', 80);
+		});
+
+		it('should set start date to now when stream position and start date are not present', function() {
+
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, { });
+			assert.equal(enterpriseEventStream2._options.startDate.valueOf(), TEST_DATE);
+		});
+
+		it('should set start date to now when stream position and start date are not present', function() {
+
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, null);
+			assert.equal(enterpriseEventStream2._options.startDate.valueOf(), TEST_DATE);
+		});
+
 	});
 
 	describe('getStreamPosition()', function() {
@@ -91,6 +129,40 @@ describe('EnterpriseEventStream', function() {
 			enterpriseEventStream.fetchEvents();
 		});
 
+		it('should make API call to get events with the correct options when called', function() {
+
+			var options = {
+				streamPosition: 0,
+				startDate: new Date(TEST_DATE),
+				endDate: new Date(TEST_DATE2),
+				eventTypeFilterArray: ['UPLOAD', 'DOWNLOAD'],
+				pollingInterval: 50,
+				chunkSize: 80
+			};
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, options);
+
+			sandbox.mock(boxClientFake.enterpriseEvents).expects('get').withArgs(sinon.match({
+				streamPosition: 0,
+				createdAfterDate: new Date(TEST_DATE),
+				createdBeforeDate: new Date(TEST_DATE2),
+				eventTypeFilterArray: ['UPLOAD', 'DOWNLOAD'],
+				limit: 80
+			}));
+
+			enterpriseEventStream2.fetchEvents();
+		});
+
+		it('should make API call to get events with empty options when called', function() {
+
+			var options = {};
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, options);
+
+			sandbox.mock(boxClientFake.enterpriseEvents).expects('get').withArgs(sinon.match({
+			}));
+
+			enterpriseEventStream2.fetchEvents();
+		});
+
 		it('should emit error event when the API call fails', function() {
 
 			var apiError = new Error('Whoops');
@@ -102,9 +174,9 @@ describe('EnterpriseEventStream', function() {
 
 		it('should re-poll when API call does not return any events', function() {
 
+			var newStreamPosition = '5263748952387465';
 			sandbox.stub(boxClientFake.enterpriseEvents, 'get').yields(null, {
-				chunk_size: 0,
-				next_stream_position: TEST_STREAM_POSITION
+				next_stream_position: newStreamPosition
 			});
 			sandbox.mock(global).expects('setTimeout');
 
@@ -134,6 +206,32 @@ describe('EnterpriseEventStream', function() {
 			enterpriseEventStream.fetchEvents(function() {
 
 				assert.propertyVal(enterpriseEventStream, '_streamPosition', newStreamPosition);
+				done();
+			});
+		});
+
+		it('should NOT set next stream position when no events are returned', function() {
+
+			var newStreamPosition = '5263748952387465';
+			sandbox.stub(boxClientFake.enterpriseEvents, 'get').yields(null, {
+				entries: [],
+				next_stream_position: newStreamPosition
+			});
+
+			enterpriseEventStream.fetchEvents();
+			assert.propertyVal(enterpriseEventStream, '_streamPosition', TEST_STREAM_POSITION);
+		});
+
+		it('should NOT re-poll when pollingInterval = 0', function(done) {
+
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, { pollingInterval: 0 });
+
+			var newStreamPosition = '5263748952387465';
+			sandbox.stub(boxClientFake.enterpriseEvents, 'get').yields(null, {
+				next_stream_position: newStreamPosition
+			});
+
+			enterpriseEventStream2.fetchEvents(function() {
 				done();
 			});
 		});
