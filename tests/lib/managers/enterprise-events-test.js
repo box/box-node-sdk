@@ -67,8 +67,8 @@ describe('EnterpriseEvents', function() {
 				limit: 50,
 				streamPosition: TEST_STREAM_POSITION,
 				eventTypeFilterArray: [enterpriseEvents.types.UPLOAD, enterpriseEvents.types.DOWNLOAD],
-				createdAfterDate: new Date('Jan 1, 2017'),
-				createdBeforeDate: new Date('Dec 31, 2017')
+				createdAfterDate: new Date('2017-01-01T08:00:00.000Z'),
+				createdBeforeDate: new Date('2017-12-31T08:00:00.000Z')
 			};
 			var callbackMock = sandbox.mock().never();
 
