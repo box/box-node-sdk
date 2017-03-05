@@ -84,7 +84,7 @@ describe('EnterpriseEvents', function() {
 			enterpriseEvents.get(options, callbackMock);
 		});
 
-		it('should pass streamPosition = 0 to client.events.get() when called', function() {
+		it('should pass stream_position === 0 to client.events.get() when called with streamPosition === 0', function() {
 
 			var options = {
 				streamPosition: 0
@@ -94,6 +94,21 @@ describe('EnterpriseEvents', function() {
 			sandbox.mock(boxClientFake.events).expects('get').withArgs({
 				stream_type: 'admin_logs',
 				stream_position: 0
+			}, callbackMock);
+
+			enterpriseEvents.get(options, callbackMock);
+		});
+
+		it('should pass stream_position === \'0\' to client.events.get() when called with streamPosition === \'0\'', function() {
+
+			var options = {
+				streamPosition: '0'
+			};
+			var callbackMock = sandbox.mock().never();
+
+			sandbox.mock(boxClientFake.events).expects('get').withArgs({
+				stream_type: 'admin_logs',
+				stream_position: '0'
 			}, callbackMock);
 
 			enterpriseEvents.get(options, callbackMock);
@@ -141,77 +156,99 @@ describe('EnterpriseEvents', function() {
 
 	});
 
-	describe('getSourceID()', function() {
-
-		var TEST_ID = '76592376495823';
-
-		it('should return event.source.id, if present', function() {
-			var event = { source: { id: TEST_ID } };
-			assert.equal(enterpriseEvents.getSourceID(event), TEST_ID);
-		});
-
-		it('should return event.source.item_id, if present', function() {
-			var event = { source: { item_id: TEST_ID } };
-			assert.equal(enterpriseEvents.getSourceID(event), TEST_ID);
-		});
-
-		it('should return event.source.api_key, if present', function() {
-			var event = { source: { api_key: TEST_ID } };
-			assert.equal(enterpriseEvents.getSourceID(event), TEST_ID);
-		});
-
-		it('should return null, if event.source is not present', function() {
-			var event = { };
-			assert.equal(enterpriseEvents.getSourceID(event), null);
-		});
-
-	});
-
-	describe('getSourceType()', function() {
-
-		var TEST_TYPE = 'file';
-
-		it('should return event.source.type, if present', function() {
-			var event = { source: { type: TEST_TYPE } };
-			assert.equal(enterpriseEvents.getSourceType(event), TEST_TYPE);
-		});
-
-		it('should return event.source.item_type, if present', function() {
-			var event = { source: { item_type: TEST_TYPE } };
-			assert.equal(enterpriseEvents.getSourceType(event), TEST_TYPE);
-		});
-
-		it('should return null, if event.source is not present', function() {
-			var event = { };
-			assert.equal(enterpriseEvents.getSourceType(event), null);
-		});
-
-	});
-
-	describe('getSourceName()', function() {
-
-		var TEST_NAME = 'Hello.txt';
-
-		it('should return event.source.name, if present', function() {
-			var event = { source: { name: TEST_NAME } };
-			assert.equal(enterpriseEvents.getSourceName(event), TEST_NAME);
-		});
-
-		it('should return event.source.item_name, if present', function() {
-			var event = { source: { item_name: TEST_NAME } };
-			assert.equal(enterpriseEvents.getSourceName(event), TEST_NAME);
-		});
-
-		it('should return null, if event.source is not present', function() {
-			var event = { };
-			assert.equal(enterpriseEvents.getSourceName(event), null);
-		});
-
-	});
+	// describe('getSourceID()', function() {
+	//
+	// 	var TEST_ID = '76592376495823';
+	//
+	// 	it('should return event.source.id, if present', function() {
+	// 		var event = { source: { id: TEST_ID } };
+	// 		assert.equal(enterpriseEvents.getSourceID(event), TEST_ID);
+	// 	});
+	//
+	// 	it('should return event.source.item_id, if present', function() {
+	// 		var event = { source: { item_id: TEST_ID } };
+	// 		assert.equal(enterpriseEvents.getSourceID(event), TEST_ID);
+	// 	});
+	//
+	// 	it('should return event.source.api_key, if present', function() {
+	// 		var event = { source: { api_key: TEST_ID } };
+	// 		assert.equal(enterpriseEvents.getSourceID(event), TEST_ID);
+	// 	});
+	//
+	// 	it('should return null, if event.source is not present', function() {
+	// 		var event = { };
+	// 		assert.equal(enterpriseEvents.getSourceID(event), null);
+	// 	});
+	//
+	// });
+	//
+	// describe('getSourceType()', function() {
+	//
+	// 	var TEST_TYPE = 'file';
+	//
+	// 	it('should return event.source.type, if present', function() {
+	// 		var event = { source: { type: TEST_TYPE } };
+	// 		assert.equal(enterpriseEvents.getSourceType(event), TEST_TYPE);
+	// 	});
+	//
+	// 	it('should return event.source.item_type, if present', function() {
+	// 		var event = { source: { item_type: TEST_TYPE } };
+	// 		assert.equal(enterpriseEvents.getSourceType(event), TEST_TYPE);
+	// 	});
+	//
+	// 	it('should return null, if event.source is not present', function() {
+	// 		var event = { };
+	// 		assert.equal(enterpriseEvents.getSourceType(event), null);
+	// 	});
+	//
+	// });
+	//
+	// describe('getSourceName()', function() {
+	//
+	// 	var TEST_NAME = 'Hello.txt';
+	//
+	// 	it('should return event.source.name, if present', function() {
+	// 		var event = { source: { name: TEST_NAME } };
+	// 		assert.equal(enterpriseEvents.getSourceName(event), TEST_NAME);
+	// 	});
+	//
+	// 	it('should return event.source.item_name, if present', function() {
+	// 		var event = { source: { item_name: TEST_NAME } };
+	// 		assert.equal(enterpriseEvents.getSourceName(event), TEST_NAME);
+	// 	});
+	//
+	// 	it('should return null, if event.source is not present', function() {
+	// 		var event = { };
+	// 		assert.equal(enterpriseEvents.getSourceName(event), null);
+	// 	});
+	//
+	// });
 
 	describe('getDescription()', function() {
 
-		it('should return source and service, if present', function() {
+		it('should return time and type', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				event_type: 'UPLOAD'
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 UPLOAD');
+		});
+
+		it('should return time, type, and user', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				created_by: {
+					id: '12345678',
+					name: 'A User'
+				},
+				event_type: 'UPLOAD'
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 UPLOAD by "A User" (12345678)');
+		});
+
+		it('should return time, type, user, and service', function() {
 			var event = {
 				created_at: '2017-01-01T00:00:00-08:00',
 				created_by: {
@@ -219,20 +256,34 @@ describe('EnterpriseEvents', function() {
 					name: 'A User'
 				},
 				event_type: 'UPLOAD',
-				source: {
-					type: 'file',
-					id: '23456789',
-					name: 'A File'
-				},
 				additional_details: {
-					service_id: '34567890',
-					service_name: 'An App'
+					service_name: 'A Service',
+					service_id: '23456789'
 				}
 			};
-			assert.equal(enterpriseEvents.getDescription(event), '2017-01-01T00:00:00-08:00 UPLOAD file: "A File" (23456789) by "A User" (12345678) using "An App" (34567890)');
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 UPLOAD by "A User" (12345678) using "A Service" (23456789)');
 		});
 
-		it('should return source, if present', function() {
+		it('should return user source, if present', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				created_by: {
+					id: '12345678',
+					name: 'A User'
+				},
+				event_type: 'NEW_USER',
+				source: {
+					type: 'user',
+					id: '23456789',
+					name: 'Another User'
+				}
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 NEW_USER user: "Another User" (23456789) by "A User" (12345678)');
+		});
+
+		it('should return item source, if present', function() {
 			var event = {
 				created_at: '2017-01-01T00:00:00-08:00',
 				created_by: {
@@ -246,35 +297,150 @@ describe('EnterpriseEvents', function() {
 					item_name: 'A File'
 				}
 			};
-			assert.equal(enterpriseEvents.getDescription(event), '2017-01-01T00:00:00-08:00 UPLOAD file: "A File" (23456789) by "A User" (12345678)');
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 UPLOAD file: "A File" (23456789) by "A User" (12345678)');
 		});
 
-		it('should return service, if present', function() {
+		it('should return user source for device association events', function() {
 			var event = {
 				created_at: '2017-01-01T00:00:00-08:00',
 				created_by: {
 					id: '12345678',
 					name: 'A User'
 				},
-				event_type: 'UPLOAD',
-				additional_details: {
-					service_id: '34567890',
-					service_name: 'An App'
+				event_type: 'ADD_DEVICE_ASSOCIATION',
+				source: {
+					type: 'user',
+					user_id: '34567890',
+					name: 'Another User'
 				}
 			};
-			assert.equal(enterpriseEvents.getDescription(event), '2017-01-01T00:00:00-08:00 UPLOAD by "A User" (12345678) using "An App" (34567890)');
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 ADD_DEVICE_ASSOCIATION user: "Another User" (34567890) by "A User" (12345678)');
 		});
 
-		it('should return neither source nor service, if not present', function() {
+		it('should return group source, if present', function() {
 			var event = {
 				created_at: '2017-01-01T00:00:00-08:00',
 				created_by: {
 					id: '12345678',
 					name: 'A User'
 				},
-				event_type: 'UPLOAD'
+				event_type: 'GROUP_CREATION',
+				source: {
+					group_id: '23456789',
+					group_name: 'A Group'
+				}
 			};
-			assert.equal(enterpriseEvents.getDescription(event), '2017-01-01T00:00:00-08:00 UPLOAD by "A User" (12345678)');
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 GROUP_CREATION group: "A Group" (23456789) by "A User" (12345678)');
+		});
+
+		it('should return application source, if present', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				created_by: {
+					id: '12345678',
+					name: 'A User'
+				},
+				event_type: 'APPLICATION_PUBLIC_KEY_ADDED',
+				source: {
+					type: 'application',
+					api_key: 'abcdefghijklmnopqrstuvwxyz',
+					name: 'An App'
+				}
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 APPLICATION_PUBLIC_KEY_ADDED application: "An App" (abcdefghijklmnopqrstuvwxyz) by "A User" (12345678)');
+		});
+
+		it('should return folder and user for collaboration events', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				created_by: {
+					id: '12345678',
+					name: 'A User'
+				},
+				event_type: 'COLLABORATION_INVITE',
+				source: {
+					folder_id: '23456789',
+					folder_name: 'A Folder',
+					user_id: '34567890',
+					user_name: 'Another User'
+				}
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 COLLABORATION_INVITE folder: "A Folder" (23456789), user: "Another User" (34567890) by "A User" (12345678)');
+		});
+
+		it('should return file and group for collaboration events', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				created_by: {
+					id: '12345678',
+					name: 'A User'
+				},
+				event_type: 'COLLABORATION_INVITE',
+				source: {
+					file_id: '23456789',
+					file_name: 'A File',
+					group_id: '34567890',
+					group_name: 'A Group'
+				}
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 COLLABORATION_INVITE file: "A File" (23456789), group: "A Group" (34567890) by "A User" (12345678)');
+		});
+
+		it('should return user and group for group membership events', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				created_by: {
+					id: '12345678',
+					name: 'A User'
+				},
+				event_type: 'GROUP_ADD_USER',
+				source: {
+					type: 'user',
+					id: '23456789',
+					name: 'Another User'
+				},
+				additional_details: {
+					group_id: '34567890',
+					group_name: 'A Group'
+				}
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 GROUP_ADD_USER user: "Another User" (23456789), group: "A Group" (34567890) by "A User" (12345678)');
+		});
+
+		it('should not return a source if there isn\'t one', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				event_type: 'UPLOAD',
+				source: {
+					other_stuff: 'Extra'
+				}
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 UPLOAD');
+		});
+
+		it('should not return a secondary collaboration source if there isn\'t one', function() {
+			var event = {
+				created_at: '2017-01-01T00:00:00-08:00',
+				created_by: {
+					id: '12345678',
+					name: 'A User'
+				},
+				event_type: 'COLLABORATION_INVITE',
+				source: {
+					folder_id: '23456789',
+					folder_name: 'A Folder'
+				}
+			};
+			assert.equal(enterpriseEvents.getDescription(event),
+				'2017-01-01T00:00:00-08:00 COLLABORATION_INVITE folder: "A Folder" (23456789) by "A User" (12345678)');
 		});
 
 	});

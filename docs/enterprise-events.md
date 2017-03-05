@@ -21,12 +21,15 @@ Events received from the API are then forwarded to any listeners.
 const stream = client.enterpriseEvents.getEventStream();
 
 stream.on('data', function(event) {
-    // handle the event
+    // Handle the event.
 });
 ```
 
 By default, the stream will start at the current time.  You can start the stream
-at a specific date or at a previous stream position.  You can also filter the event stream to
+at a specific date or at a previous stream position.  To start from the earliest available events (~1 year),
+pass `streamPosition = '0'`.
+
+You can also filter the event stream to
 only receive specific event types.
 
 ```js
@@ -50,7 +53,7 @@ const stream = client.enterpriseEvents.getEventStream({
 });
 
 stream.on('end', function(event) {
-    // Reached the end of the stream
+    // Reached the end of the stream.
 });
 ```
 
@@ -60,11 +63,11 @@ You can handle errors as follows:
 
 ```js
 stream.on('error', function(event) {
-    // handle the error
+    // Handle the error.
 });
 ```
 
-If an error occurs, the stream will continue polling as usual until the connection can be re-established.
+If an error occurs, the stream will continue polling at the usual rate until the connection can be re-established.
 
 Get the Stream Position
 -----------------------
@@ -91,3 +94,4 @@ client.enterpriseEvents.get({
     createdBeforeDate: new Date('Dec 31, 2017')
 }, callback);
 ```
+The response will include a `next_stream_position` field that can be used to fetch the next chunk of events.
