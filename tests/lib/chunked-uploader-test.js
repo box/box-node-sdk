@@ -1,5 +1,5 @@
 /**
- * @fileoverview Upload Manager Tests
+ * @fileoverview Chunked Uploader Tests
  */
 'use strict';
 
@@ -22,15 +22,15 @@ const BoxClient = require('../../lib/box-client'),
 // ------------------------------------------------------------------------------
 let sandbox = sinon.sandbox.create(),
 	boxClientFake,
-	UploadManager,
-	uploadManager,
-	MODULE_FILE_PATH = '../../lib/upload-manager';
+	ChunkedUploader,
+	uploader,
+	MODULE_FILE_PATH = '../../lib/chunked-uploader';
 
 // ------------------------------------------------------------------------------
 // Tests
 // ------------------------------------------------------------------------------
 
-describe('UploadManager', function() {
+describe('ChunkedUploader', function() {
 
 	const TEST_SESSION_ID = 'gn879wr4tguw4t7g345',
 		TEST_UPLOAD_SESSION_INFO = {
@@ -53,8 +53,8 @@ describe('UploadManager', function() {
 		});
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
 
-		UploadManager = require(MODULE_FILE_PATH);
-		uploadManager = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.length);
+		ChunkedUploader = require(MODULE_FILE_PATH);
+		uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.length);
 	});
 
 	afterEach(function() {
@@ -67,26 +67,26 @@ describe('UploadManager', function() {
 
 		it('should create an instance of EventEmitter when called', function() {
 
-			let upload = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.size);
-			assert.instanceOf(upload, EventEmitter);
+			let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.size);
+			assert.instanceOf(uploader2, EventEmitter);
 		});
 
 		it('should set client and file on instance when source buffer is passed', function() {
 
-			let upload = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.size);
-			assert.propertyVal(upload, 'client', boxClientFake);
-			assert.propertyVal(upload, 'file', TEST_FILE);
-			assert.notProperty(upload, 'stream');
+			let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.size);
+			assert.propertyVal(uploader2, 'client', boxClientFake);
+			assert.propertyVal(uploader2, 'file', TEST_FILE);
+			assert.notProperty(uploader2, 'stream');
 		});
 
 		it('should set client and file on instance when source string is passed', function() {
 
 			let file = 'abc';
 
-			let upload = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, file, file.size);
-			assert.propertyVal(upload, 'client', boxClientFake);
-			assert.propertyVal(upload, 'file', file);
-			assert.notProperty(upload, 'stream');
+			let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, file, file.size);
+			assert.propertyVal(uploader2, 'client', boxClientFake);
+			assert.propertyVal(uploader2, 'file', file);
+			assert.notProperty(uploader2, 'stream');
 		});
 
 		it('should set client and paused stream on instance when a stream is passed', function() {
@@ -94,17 +94,17 @@ describe('UploadManager', function() {
 			let streamFake = leche.fake(ReadStream.prototype);
 			sandbox.mock(streamFake).expects('pause').returnsThis();
 
-			let upload = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 0);
-			assert.propertyVal(upload, 'client', boxClientFake);
-			assert.notProperty(upload, 'file');
-			assert.propertyVal(upload, 'stream', streamFake);
+			let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 0);
+			assert.propertyVal(uploader2, 'client', boxClientFake);
+			assert.notProperty(uploader2, 'file');
+			assert.propertyVal(uploader2, 'stream', streamFake);
 		});
 
 		it('should throw an error when invalid file source is passed', function() {
 
 			assert.throws(function() {
 				/* eslint-disable no-unused-vars*/
-				let upload = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, {}, 0);
+				let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, {}, 0);
 				/* eslint-enable no-unused-vars*/
 			}, TypeError);
 		});
@@ -146,8 +146,8 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -163,7 +163,7 @@ describe('UploadManager', function() {
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
-				uploadManager.start();
+				uploader.start();
 			});
 
 			it('should upload all chunks and commit when start is called multiple times', function(done) {
@@ -198,8 +198,8 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -215,8 +215,8 @@ describe('UploadManager', function() {
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
-				uploadManager.start();
-				uploadManager.start();
+				uploader.start();
+				uploader.start();
 			});
 
 			it('should upload all chunks and commit when the file fits into fewer than the initial number of chunks', function(done) {
@@ -224,7 +224,7 @@ describe('UploadManager', function() {
 				let smallFile = 'abcdefghijklmnop',
 					hash = crypto.createHash('sha1').update(smallFile).digest('base64');
 
-				uploadManager = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, smallFile, smallFile.length);
+				uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, smallFile, smallFile.length);
 
 				let expectedChunks = [
 					{
@@ -246,8 +246,8 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -261,7 +261,7 @@ describe('UploadManager', function() {
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, hash, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
-				uploadManager.start();
+				uploader.start();
 			});
 
 			it('should upload all chunks and commit when the file is larger than the initial chunks', function(done) {
@@ -269,7 +269,7 @@ describe('UploadManager', function() {
 				let largeFile = 'part1 str.part2 str.part3 str.part4 str.part5 str.part6 str',
 					hash = crypto.createHash('sha1').update(largeFile).digest('base64');
 
-				uploadManager = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, largeFile, largeFile.length);
+				uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, largeFile, largeFile.length);
 
 				let expectedChunks = [
 					{
@@ -311,8 +311,8 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -330,7 +330,7 @@ describe('UploadManager', function() {
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, hash, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
-				uploadManager.start();
+				uploader.start();
 			});
 
 			it('should upload all chunks and commit when the file fits exactly in chunk boundaries', function(done) {
@@ -338,7 +338,7 @@ describe('UploadManager', function() {
 				let smallFile = '0123456789',
 					hash = crypto.createHash('sha1').update(smallFile).digest('base64');
 
-				uploadManager = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, smallFile, smallFile.length);
+				uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, smallFile, smallFile.length);
 
 				let expectedChunks = [
 					{
@@ -355,8 +355,8 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -369,7 +369,7 @@ describe('UploadManager', function() {
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, hash, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
-				uploadManager.start();
+				uploader.start();
 			});
 		});
 
@@ -415,9 +415,9 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 36);
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 36);
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -434,7 +434,7 @@ describe('UploadManager', function() {
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
 
-				uploadManager.start();
+				uploader.start();
 			});
 
 			it('should upload all chunks and commit when the stream does not always have the data ready', function(done) {
@@ -480,9 +480,9 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 36);
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 36);
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -499,7 +499,7 @@ describe('UploadManager', function() {
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
 
-				uploadManager.start();
+				uploader.start();
 			});
 
 			it('should upload all chunks and commit when the stream ends with a large buffer', function(done) {
@@ -540,9 +540,9 @@ describe('UploadManager', function() {
 				};
 
 				let chunks = [];
-				uploadManager = new UploadManager(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 36);
-				uploadManager.on('chunkUploaded', chunk => chunks.push(chunk));
-				uploadManager.on('uploadComplete', file => {
+				uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 36);
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
 
 					assert.equal(file, createdFile);
 					assert.sameMembers(chunks, expectedChunks);
@@ -559,7 +559,7 @@ describe('UploadManager', function() {
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
 
 
-				uploadManager.start();
+				uploader.start();
 			});
 		});
 	});
@@ -585,14 +585,14 @@ describe('UploadManager', function() {
 				}
 			];
 
-			uploadManager.on('chunkUploaded', () => assert.fail('Should not listen for chunk uploaded event'));
-			uploadManager.on('error', () => assert.fail('Should not listen for chunk error event'));
-			uploadManager.on('aborted', () => {
+			uploader.on('chunkUploaded', () => assert.fail('Should not listen for chunk uploaded event'));
+			uploader.on('chunkError', () => assert.fail('Should not listen for chunk error event'));
+			uploader.on('aborted', () => {
 
-				assert.property(uploadManager, 'chunks');
-				assert.sameMembers(uploadManager.chunks, []);
-				assert.propertyVal(uploadManager, 'file', null);
-				assert.propertyVal(uploadManager, 'stream', null);
+				assert.property(uploader, 'chunks');
+				assert.sameMembers(uploader.chunks, []);
+				assert.propertyVal(uploader, 'file', null);
+				assert.propertyVal(uploader, 'stream', null);
 				done();
 			});
 
@@ -604,8 +604,8 @@ describe('UploadManager', function() {
 
 			filesClientMock.expects('abortUploadSession').withArgs(TEST_SESSION_ID).yieldsAsync(null);
 
-			uploadManager.start();
-			uploadManager.abort();
+			uploader.start();
+			uploader.abort();
 		});
 
 		it('should emit abortFailed event when abort fails', function(done) {
@@ -628,16 +628,16 @@ describe('UploadManager', function() {
 				}
 			];
 
-			uploadManager.on('chunkUploaded', () => assert.fail('Should not listen for chunk uploaded event'));
-			uploadManager.on('error', () => assert.fail('Should not listen for chunk error event'));
-			uploadManager.on('aborted', () => assert.fail('Should not emit aborted event when abort fails'));
-			uploadManager.on('abortFailed', err => {
+			uploader.on('chunkUploaded', () => assert.fail('Should not listen for chunk uploaded event'));
+			uploader.on('chunkError', () => assert.fail('Should not listen for chunk error event'));
+			uploader.on('aborted', () => assert.fail('Should not emit aborted event when abort fails'));
+			uploader.on('abortFailed', err => {
 
 				assert.equal(err, abortError);
-				assert.property(uploadManager, 'chunks');
-				assert.sameMembers(uploadManager.chunks, []);
-				assert.propertyVal(uploadManager, 'file', null);
-				assert.propertyVal(uploadManager, 'stream', null);
+				assert.property(uploader, 'chunks');
+				assert.sameMembers(uploader.chunks, []);
+				assert.propertyVal(uploader, 'file', null);
+				assert.propertyVal(uploader, 'stream', null);
 				done();
 			});
 
@@ -649,8 +649,8 @@ describe('UploadManager', function() {
 
 			filesClientMock.expects('abortUploadSession').withArgs(TEST_SESSION_ID).yieldsAsync(abortError);
 
-			uploadManager.start();
-			uploadManager.abort();
+			uploader.start();
+			uploader.abort();
 		});
 	});
 

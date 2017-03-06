@@ -21,6 +21,7 @@ var sandbox = sinon.sandbox.create(),
 	boxClientFake,
 	Files,
 	files,
+	ChunkedUploaderStub,
 	testQS = { testQSKey: 'testQSValue' },
 	testBody = { my: 'body' },
 	testParamsWithBody,
@@ -42,6 +43,7 @@ describe('Files', function() {
 		boxClientFake._uploadBaseURL = 'https://upload-base/2.1';
 		testParamsWithBody = {body: testBody};
 		testParamsWithQs = {qs: testQS};
+		ChunkedUploaderStub = sandbox.stub();
 		// Register Mocks
 		mockery.enable({ useCleanCache: true });
 		mockery.registerAllowable('http-status');
@@ -49,6 +51,7 @@ describe('Files', function() {
 		mockery.registerAllowable('crypto');
 		mockery.registerAllowable('../util/url-path');
 		mockery.registerAllowable('../util/errors');
+		mockery.registerMock('../chunked-uploader', ChunkedUploaderStub);
 		// Setup File Under Test
 		mockery.registerAllowable(MODULE_FILE_PATH);
 		Files = require(MODULE_FILE_PATH);
@@ -1192,7 +1195,7 @@ describe('Files', function() {
 
 
 			var expectedParams = {
-				qs: {
+				body: {
 					folder_id: TEST_FOLDER_ID,
 					file_size: TEST_SIZE,
 					file_name: TEST_NAME
@@ -1220,7 +1223,7 @@ describe('Files', function() {
 
 
 			var expectedParams = {
-				qs: {
+				body: {
 					file_size: TEST_SIZE
 				}
 			};
@@ -1487,6 +1490,99 @@ describe('Files', function() {
 		});
 	});
 
+	describe('getChunkedUploader', function() {
+
+		var TEST_FOLDER_ID = '7869287364',
+			TEST_SIZE = 12345678,
+			TEST_NAME = 'test file.jpg';
+
+		it('should make call to create upload session when called', function() {
+
+			sandbox.mock(files).expects('createUploadSession').withArgs(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME);
+			files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {});
+		});
+
+		it('should return an error when upload session cannot be created', function(done) {
+
+			var error = new Error('Cannot create upload session');
+
+			sandbox.stub(files, 'createUploadSession').yieldsAsync(error);
+			files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {}, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return new chunked uploader when upload session is created', function(done) {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			var options = {};
+
+			var uploader = {};
+			ChunkedUploaderStub.returns(uploader);
+
+			sandbox.stub(files, 'createUploadSession').yieldsAsync(null, session);
+			files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', options, function(err, data) {
+
+				assert.ifError(err);
+				assert.ok(ChunkedUploaderStub.calledWithNew(), 'New chunked uploader should be constructed');
+				assert.ok(ChunkedUploaderStub.calledWith(boxClientFake, session, 'test data', TEST_SIZE, options), 'Chunked uploader should get correct options');
+				assert.equal(data, uploader);
+				done();
+			});
+		});
+	});
+
+	describe('getNewVersionChunkedUploader', function() {
+
+		var TEST_FILE_ID = '7869287364',
+			TEST_SIZE = 12345678;
+
+		it('should make call to create upload session when called', function() {
+
+			sandbox.mock(files).expects('createNewVersionUploadSession').withArgs(TEST_FILE_ID, TEST_SIZE);
+			files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {});
+		});
+
+		it('should return an error when upload session cannot be created', function(done) {
+
+			var error = new Error('Cannot create upload session');
+
+			sandbox.stub(files, 'createNewVersionUploadSession').yieldsAsync(error);
+			files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {}, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return new chunked uploader when upload session is created', function(done) {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			var options = {};
+
+			var uploader = {};
+			ChunkedUploaderStub.returns(uploader);
+
+			sandbox.stub(files, 'createNewVersionUploadSession').yieldsAsync(null, session);
+			files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', options, function(err, data) {
+
+				assert.ifError(err);
+				assert.ok(ChunkedUploaderStub.calledWithNew(), 'New chunked uploader should be constructed');
+				assert.ok(ChunkedUploaderStub.calledWith(boxClientFake, session, 'test data', TEST_SIZE, options), 'Chunked uploader should get correct options');
+				assert.equal(data, uploader);
+				done();
+			});
+		});
+	});
+
 });
 
-//@TODO: add integration tests
+// @TODO: add integration tests
