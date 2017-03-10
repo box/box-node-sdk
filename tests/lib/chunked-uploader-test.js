@@ -74,9 +74,9 @@ describe('ChunkedUploader', function() {
 		it('should set client and file on instance when source buffer is passed', function() {
 
 			let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.size);
-			assert.propertyVal(uploader2, 'client', boxClientFake);
-			assert.propertyVal(uploader2, 'file', TEST_FILE);
-			assert.notProperty(uploader2, 'stream');
+			assert.propertyVal(uploader2, '_client', boxClientFake);
+			assert.propertyVal(uploader2, '_file', TEST_FILE);
+			assert.notProperty(uploader2, '_stream');
 		});
 
 		it('should set client and file on instance when source string is passed', function() {
@@ -84,9 +84,9 @@ describe('ChunkedUploader', function() {
 			let file = 'abc';
 
 			let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, file, file.size);
-			assert.propertyVal(uploader2, 'client', boxClientFake);
-			assert.propertyVal(uploader2, 'file', file);
-			assert.notProperty(uploader2, 'stream');
+			assert.propertyVal(uploader2, '_client', boxClientFake);
+			assert.propertyVal(uploader2, '_file', file);
+			assert.notProperty(uploader2, '_stream');
 		});
 
 		it('should set client and paused stream on instance when a stream is passed', function() {
@@ -95,9 +95,9 @@ describe('ChunkedUploader', function() {
 			sandbox.mock(streamFake).expects('pause').returnsThis();
 
 			let uploader2 = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, streamFake, 0);
-			assert.propertyVal(uploader2, 'client', boxClientFake);
-			assert.notProperty(uploader2, 'file');
-			assert.propertyVal(uploader2, 'stream', streamFake);
+			assert.propertyVal(uploader2, '_client', boxClientFake);
+			assert.notProperty(uploader2, '_file');
+			assert.propertyVal(uploader2, '_stream', streamFake);
 		});
 
 		it('should throw an error when invalid file source is passed', function() {
@@ -589,10 +589,10 @@ describe('ChunkedUploader', function() {
 			uploader.on('chunkError', () => assert.fail('Should not listen for chunk error event'));
 			uploader.on('aborted', () => {
 
-				assert.property(uploader, 'chunks');
-				assert.sameMembers(uploader.chunks, []);
-				assert.propertyVal(uploader, 'file', null);
-				assert.propertyVal(uploader, 'stream', null);
+				assert.property(uploader, '_chunks');
+				assert.sameMembers(uploader._chunks, []);
+				assert.propertyVal(uploader, '_file', null);
+				assert.propertyVal(uploader, '_stream', null);
 				done();
 			});
 
@@ -634,10 +634,10 @@ describe('ChunkedUploader', function() {
 			uploader.on('abortFailed', err => {
 
 				assert.equal(err, abortError);
-				assert.property(uploader, 'chunks');
-				assert.sameMembers(uploader.chunks, []);
-				assert.propertyVal(uploader, 'file', null);
-				assert.propertyVal(uploader, 'stream', null);
+				assert.property(uploader, '_chunks');
+				assert.sameMembers(uploader._chunks, []);
+				assert.propertyVal(uploader, '_file', null);
+				assert.propertyVal(uploader, '_stream', null);
 				done();
 			});
 
