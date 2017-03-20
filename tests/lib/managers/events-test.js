@@ -12,7 +12,8 @@ var sinon = require('sinon'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client'),
-	EventStream = require('../../../lib/event-stream');
+	EventStream = require('../../../lib/event-stream'),
+	EnterpriseEventStream = require('../../../lib/enterprise-event-stream');
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -23,6 +24,8 @@ var sandbox = sinon.sandbox.create(),
 	events,
 	EventStreamConstructorStub,
 	eventStreamFake,
+	EnterpriseEventStreamConstructorStub,
+	enterpriseEventStreamFake,
 	MODULE_FILE_PATH = '../../../lib/managers/events';
 
 // ------------------------------------------------------------------------------
@@ -40,11 +43,16 @@ describe('Events', function() {
 		eventStreamFake = leche.fake(EventStream.prototype);
 		EventStreamConstructorStub.returns(eventStreamFake);
 
+		EnterpriseEventStreamConstructorStub = sandbox.stub();
+		enterpriseEventStreamFake = leche.fake(EnterpriseEventStream.prototype);
+		EnterpriseEventStreamConstructorStub.returns(enterpriseEventStreamFake);
+
 		mockery.enable({
 			warnOnUnregistered: false,
 			useCleanCache: true
 		});
 		mockery.registerMock('../event-stream', EventStreamConstructorStub);
+		mockery.registerMock('../enterprise-event-stream', EnterpriseEventStreamConstructorStub);
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
 
 		Events = require(MODULE_FILE_PATH);
@@ -267,6 +275,22 @@ describe('Events', function() {
 				assert.equal(stream, eventStreamFake);
 				done();
 			});
+		});
+
+	});
+
+	describe('getEnterpriseEventStream()', function() {
+
+		it('should return event stream from starting stream position when passed stream position', function() {
+
+			var options = {
+				streamPosition: TEST_STREAM_POSITION
+			};
+			const stream = events.getEnterpriseEventStream(options);
+
+			assert.ok(EnterpriseEventStreamConstructorStub.calledOnce, 'Should call EnterpriseEventStream constructor');
+			assert.ok(EnterpriseEventStreamConstructorStub.calledWith(boxClientFake, options), 'Should pass correct args to EnterpriseEventStream constructor');
+			assert.equal(stream, enterpriseEventStreamFake);
 		});
 
 	});
