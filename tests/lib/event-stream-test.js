@@ -71,15 +71,6 @@ describe('EventStream', function() {
 
 	});
 
-	describe('getStreamPosition()', function() {
-
-		it('should return the current stream position when called', function() {
-
-			assert.equal(eventStream.getStreamPosition(), TEST_STREAM_POSITION);
-		});
-
-	});
-
 	describe('getLongPollInfo()', function() {
 
 		it('should make API call and set long poll info when called', function() {

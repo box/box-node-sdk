@@ -10,6 +10,7 @@ var sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
 	Readable = require('stream').Readable,
+	fs = require('fs'),
 	leche = require('leche');
 
 var BoxClient = require('../../lib/box-client'),
@@ -45,6 +46,14 @@ describe('EnterpriseEventStream', function() {
 		type: 'event',
 		event_id: '783964999'
 	};
+	var TEST_FILTER = 'UPLOAD,DOWNLOAD';
+	var TEST_FILE = 'test.json';
+	var TEST_SRTEAM_POSITION_FILE_CONTENTS = JSON.stringify({
+		streamPosition: TEST_STREAM_POSITION,
+		startDate: TEST_DATE,
+		endDate: TEST_DATE2,
+		eventTypeFilter: TEST_FILTER
+	}, null, 2);
 
 	beforeEach(function() {
 
@@ -91,7 +100,7 @@ describe('EnterpriseEventStream', function() {
 				streamPosition: TEST_STREAM_POSITION,
 				startDate: TEST_DATE,
 				endDate: TEST_DATE2,
-				eventTypeFilter: 'UPLOAD,DOWNLOAD',
+				eventTypeFilter: TEST_FILTER,
 				pollingInterval: 50,
 				chunkSize: 80
 			};
@@ -99,6 +108,7 @@ describe('EnterpriseEventStream', function() {
 			assert.propertyVal(enterpriseEventStream2, '_streamPosition', TEST_STREAM_POSITION);
 			assert.propertyVal(enterpriseEventStream2._options, 'startDate', TEST_DATE);
 			assert.propertyVal(enterpriseEventStream2._options, 'endDate', TEST_DATE2);
+			assert.propertyVal(enterpriseEventStream2._options, 'eventTypeFilter', TEST_FILTER);
 			assert.propertyVal(enterpriseEventStream2._options, 'pollingInterval', 50);
 			assert.propertyVal(enterpriseEventStream2._options, 'chunkSize', 80);
 		});
@@ -121,6 +131,54 @@ describe('EnterpriseEventStream', function() {
 
 	});
 
+	describe('readStreamPositionFromFile()', function() {
+
+		it('should read the current stream position from the file', function(done) {
+
+			var spy = sandbox.stub(fs, 'readFile').yields(null, TEST_SRTEAM_POSITION_FILE_CONTENTS);
+			enterpriseEventStream.readStreamPositionFromFile(TEST_FILE, function() {
+				assert(spy.calledWith(TEST_FILE));
+				assert.propertyVal(enterpriseEventStream, '_streamPosition', TEST_STREAM_POSITION);
+				assert.propertyVal(enterpriseEventStream._options, 'startDate', TEST_DATE);
+				assert.propertyVal(enterpriseEventStream._options, 'endDate', TEST_DATE2);
+				assert.propertyVal(enterpriseEventStream._options, 'eventTypeFilter', TEST_FILTER);
+				done();
+			});
+		});
+
+		it('should return any fs error', function(done) {
+
+			var fsError = new Error('Whoops');
+			var spy = sandbox.stub(fs, 'readFile').yields(fsError);
+			enterpriseEventStream.readStreamPositionFromFile(TEST_FILE, function(error) {
+				assert(spy.calledWith(TEST_FILE));
+				assert.equal(error, fsError);
+				done();
+			});
+		});
+
+	});
+
+	describe('writeStreamPositionToFile()', function() {
+
+		it('should write the current stream position to the file', function(done) {
+
+			var options = {
+				streamPosition: TEST_STREAM_POSITION,
+				startDate: TEST_DATE,
+				endDate: TEST_DATE2,
+				eventTypeFilter: TEST_FILTER
+			};
+			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, options);
+			var spy = sandbox.stub(fs, 'writeFile').yields();
+			enterpriseEventStream2.writeStreamPositionToFile(TEST_FILE, function() {
+				assert(spy.calledWith(TEST_FILE, TEST_SRTEAM_POSITION_FILE_CONTENTS));
+				done();
+			});
+		});
+
+	});
+
 	describe('fetchEvents()', function() {
 
 		it('should make API call to get events from current stream position when called', function() {
@@ -138,7 +196,7 @@ describe('EnterpriseEventStream', function() {
 				streamPosition: 0,
 				startDate: TEST_DATE,
 				endDate: TEST_DATE2,
-				eventTypeFilter: 'UPLOAD,DOWNLOAD',
+				eventTypeFilter: TEST_FILTER,
 				pollingInterval: 50,
 				chunkSize: 80
 			};
@@ -148,7 +206,7 @@ describe('EnterpriseEventStream', function() {
 				stream_position: 0,
 				created_after: TEST_DATE,
 				created_before: TEST_DATE2,
-				event_type: 'UPLOAD,DOWNLOAD',
+				event_type: TEST_FILTER,
 				limit: 80
 			}));
 
@@ -166,36 +224,31 @@ describe('EnterpriseEventStream', function() {
 			enterpriseEventStream2.fetchEvents();
 		});
 
-		it('should emit error event when the API call fails', function() {
-
-			var apiError = new Error('Whoops');
-			sandbox.stub(boxClientFake.events, 'get').yields(apiError);
-			var spy = sandbox.stub(enterpriseEventStream, 'emit');
-
-			enterpriseEventStream.fetchEvents();
-
-			assert(spy.calledWith('error', apiError));
-		});
-
 		it('should re-poll when API call does not return any events', function() {
 
 			var newStreamPosition = '5263748952387465';
 			sandbox.stub(boxClientFake.events, 'get').yields(null, {
 				next_stream_position: newStreamPosition
 			});
+			var spy = sandbox.stub(enterpriseEventStream, 'emit');
 			sandbox.mock(global).expects('setTimeout');
 
 			enterpriseEventStream.fetchEvents();
+
+			assert(spy.calledWith('wait'));
 		});
 
 		it('should re-poll when API call returns an error', function() {
 
 			var apiError = new Error('Whoops');
 			sandbox.stub(boxClientFake.events, 'get').yields(apiError);
-			sandbox.stub(enterpriseEventStream, 'emit');
+			var spy = sandbox.stub(enterpriseEventStream, 'emit');
 			sandbox.mock(global).expects('setTimeout');
 
 			enterpriseEventStream.fetchEvents();
+
+			assert(spy.calledWith('error', apiError));
+			assert(spy.calledWith('wait'));
 		});
 
 		it('should set next stream position when API call is successful', function(done) {
@@ -207,10 +260,12 @@ describe('EnterpriseEventStream', function() {
 				],
 				next_stream_position: newStreamPosition
 			});
+			var spy = sandbox.stub(enterpriseEventStream, 'emit');
 
 			enterpriseEventStream.fetchEvents(function() {
 
 				assert.propertyVal(enterpriseEventStream, '_streamPosition', newStreamPosition);
+				assert(spy.calledWith('streamPosition', newStreamPosition));
 				done();
 			});
 		});
