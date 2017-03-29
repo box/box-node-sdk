@@ -283,7 +283,7 @@ describe('Endpoint', function() {
 				});
 			});
 
-			it.only('should make correct request with additional parameters and correctly parse response when API call is successful', function(done) {
+			it('should make correct request with additional parameters and correctly parse response when API call is successful', function(done) {
 
 				var folderID = '123456789',
 					user = {
