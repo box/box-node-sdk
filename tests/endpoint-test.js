@@ -283,6 +283,45 @@ describe('Endpoint', function() {
 				});
 			});
 
+			it.only('should make correct request with additional parameters and correctly parse response when API call is successful', function(done) {
+
+				var folderID = '123456789',
+					user = {
+						type: 'user',
+						id: '987654321'
+					},
+					options = {
+						item: {
+							type: 'folder',
+							id: folderID
+						},
+						accessible_by: user,
+						role: basicClient.collaborationRoles.PREVIEWER,
+						can_view_path: true
+					},
+					fixture = getFixture('collaborations/post_collaborations_user_200');
+
+				apiMock.post('/2.0/collaborations', options)
+					.query({notify: true})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.collaborations.create(user, folderID, basicClient.collaborationRoles.PREVIEWER, {can_view_path: true}, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+
 			it('should make correct request and pass error when API call fails', function(done) {
 
 				var folderID = '123456789',

@@ -132,7 +132,7 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe.only('create()', function() {
+	describe('create()', function() {
 
 		var itemID,
 			newCollabItem,
