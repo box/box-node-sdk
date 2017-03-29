@@ -363,7 +363,7 @@ describe('Endpoint', function() {
 
 		});
 
-		describe('createWithUserID()', function() {
+		describe.only('createWithUserID()', function() {
 
 			it('should make correct request and correctly parse response when API call is successful', function(done) {
 
@@ -395,6 +395,45 @@ describe('Endpoint', function() {
 					.reply(200, fixture);
 
 				basicClient.collaborations.createWithUserID(userID, folderID, basicClient.collaborationRoles.PREVIEWER, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+
+			it('should make correct request with additional parameters and correctly parse response when API call is successful', function(done) {
+
+				var folderID = '123456789',
+					userID = '987654321',
+					user = {
+						type: 'user',
+						id: userID
+					},
+					options = {
+						item: {
+							type: 'folder',
+							id: folderID
+						},
+						accessible_by: user,
+						role: basicClient.collaborationRoles.PREVIEWER,
+						can_view_path: true
+					},
+					fixture = getFixture('collaborations/post_collaborations_user_200');
+
+				apiMock.post('/2.0/collaborations', options)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.collaborations.createWithUserID(userID, folderID, basicClient.collaborationRoles.PREVIEWER, {can_view_path: true}, function(err, data) {
 
 					assert.isNull(err);
 					assert.deepEqual(data, JSON.parse(fixture));
@@ -485,6 +524,46 @@ describe('Endpoint', function() {
 				});
 			});
 
+			it('should make correct request with additional parameters and correctly parse response when API call is successful', function(done) {
+
+				var folderID = '123456789',
+					userEmail = 'newfriend@example.com',
+					user = {
+						type: 'user',
+						login: userEmail
+					},
+					options = {
+						item: {
+							type: 'folder',
+							id: folderID
+						},
+						accessible_by: user,
+						role: basicClient.collaborationRoles.PREVIEWER,
+						can_view_path: true
+					},
+					fixture = getFixture('collaborations/post_collaborations_user_200');
+
+				apiMock.post('/2.0/collaborations', options)
+					.query({notify: true})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.collaborations.createWithUserEmail(userEmail, folderID, basicClient.collaborationRoles.PREVIEWER, {can_view_path: true}, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+
 			it('should make correct request and pass error when API call fails', function(done) {
 
 				var folderID = '123456789',
@@ -559,6 +638,45 @@ describe('Endpoint', function() {
 					.reply(200, fixture);
 
 				basicClient.collaborations.createWithGroupID(groupID, folderID, basicClient.collaborationRoles.EDITOR, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+
+			it('should make correct request with additional parameters and correctly parse response when API call is successful', function(done) {
+
+				var folderID = '987654321',
+					groupID = '123456789',
+					group = {
+						type: 'group',
+						id: groupID
+					},
+					options = {
+						item: {
+							type: 'folder',
+							id: folderID
+						},
+						accessible_by: group,
+						role: basicClient.collaborationRoles.EDITOR,
+						can_view_path: true
+					},
+					fixture = getFixture('collaborations/post_collaborations_group_200');
+
+				apiMock.post('/2.0/collaborations', options)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.collaborations.createWithGroupID(groupID, folderID, basicClient.collaborationRoles.EDITOR, {can_view_path: true}, function(err, data) {
 
 					assert.isNull(err);
 					assert.deepEqual(data, JSON.parse(fixture));
