@@ -363,7 +363,7 @@ describe('Endpoint', function() {
 
 		});
 
-		describe.only('createWithUserID()', function() {
+		describe('createWithUserID()', function() {
 
 			it('should make correct request and correctly parse response when API call is successful', function(done) {
 

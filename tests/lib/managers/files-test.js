@@ -666,6 +666,27 @@ describe('Files', function() {
 		});
 	});
 
+	describe('uploadFileFromPath()', function() {
+
+		var PARENT_FOLDER_ID = '123',
+			FILENAME = 'abc.txt',
+			PATH = '/temp/abc.txt';
+
+		it('should wrap the given callback (without calling it) using BoxClient.defaultResponseHandler() and pass the wrapped callback to BoxClient.upload()', function() {
+			var filesCallbackMock = sandbox.mock().never(),
+				boxClientCallbackMock = sandbox.mock().never();
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler')
+				.withExactArgs(filesCallbackMock)
+				.returns(boxClientCallbackMock);
+
+			sandbox.mock(boxClientFake).expects('upload')
+				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
+
+			files.uploadFileFromPath(PARENT_FOLDER_ID, FILENAME, PATH, filesCallbackMock);
+		});
+	});
+
 	describe('uploadNewFileVersion()', function() {
 
 		var CONTENT = new Buffer('someContent');
@@ -695,6 +716,25 @@ describe('Files', function() {
 				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
 
 			files.uploadNewFileVersion(FILE_ID, CONTENT, filesCallbackMock);
+		});
+	});
+
+	describe('uploadNewFileVersionFromPath()', function() {
+
+		var PATH = '/temp/abc.txt';
+
+		it('should wrap the given callback (without calling it) using BoxClient.defaultResponseHandler() and pass the wrapped callback to BoxClient.upload()', function() {
+			var filesCallbackMock = sandbox.mock().never(),
+				boxClientCallbackMock = sandbox.mock().never();
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler')
+				.withExactArgs(filesCallbackMock)
+				.returns(boxClientCallbackMock);
+
+			sandbox.mock(boxClientFake).expects('upload')
+				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
+
+			files.uploadNewFileVersionFromPath(FILE_ID, PATH, filesCallbackMock);
 		});
 	});
 
