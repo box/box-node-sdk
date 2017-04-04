@@ -10,7 +10,6 @@
 var assert = require('chai').assert,
 	mockery = require('mockery'),
 	http = require('http'),
-	leche = require('leche'),
 	sinon = require('sinon'),
 	nock = require('nock'),
 	fs = require('fs'),
@@ -173,9 +172,14 @@ describe('Box Node SDK', function() {
 
 	it('should correctly store tokens and make API call when persistent client manager is called', function(done) {
 
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
 		var fileID = '98740596456',
 			fileName = 'Test Document.pdf',
-			tokenStoreFake = leche.create(['read', 'write', 'clear']),
+			tokenStoreFake = sdk.getTokenStore(),
 			refreshToken = 'rt',
 			ips = ['127.0.0.1', '192.168.1.1'],
 			expiredTokenInfo = {
@@ -210,11 +214,6 @@ describe('Box Node SDK', function() {
 				id: fileID,
 				name: fileName
 			});
-
-		var sdk = new BoxSDK({
-			clientID: TEST_CLIENT_ID,
-			clientSecret: TEST_CLIENT_SECRET
-		});
 
 		var client = sdk.getPersistentClient(expiredTokenInfo, tokenStoreFake);
 		client.setIPs(ips);
