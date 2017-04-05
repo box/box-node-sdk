@@ -1078,7 +1078,7 @@ describe('Endpoint', function() {
 			});
 		});
 
-		describe('getReadStream()', function() {
+		describe.only('getReadStream()', function() {
 
 			it('should make correct request and correctly parse response when API call is successful', function(done) {
 
@@ -1112,7 +1112,7 @@ describe('Endpoint', function() {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, () => fileStream);
+					.reply(200, function() {return fileStream;});
 
 				basicClient.files.getReadStream(fileID, {}, function(err, data) {
 

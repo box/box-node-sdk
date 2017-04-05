@@ -672,6 +672,26 @@ describe('Files', function() {
 			FILENAME = 'abc.txt',
 			PATH = '/temp/abc.txt';
 
+		var streamFake = {on: sandbox.stub()};
+		it('should call BoxClient.upload() with the correct non-callback params', function() {
+			var expectedFormData = {
+				attributes: JSON.stringify({
+					name: FILENAME,
+					parent: { id: PARENT_FOLDER_ID }
+				}),
+				content: {
+					options: {
+						filename: 'unused'
+					},
+					value: streamFake
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/content', null, expectedFormData);
+			files.uploadFile(PARENT_FOLDER_ID, FILENAME, streamFake, sandbox.stub());
+		});
+
 		it('should wrap the given callback (without calling it) using BoxClient.defaultResponseHandler() and pass the wrapped callback to BoxClient.upload()', function() {
 			var filesCallbackMock = sandbox.mock().never(),
 				boxClientCallbackMock = sandbox.mock().never();
