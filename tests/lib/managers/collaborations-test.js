@@ -176,6 +176,26 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {type: 'file'});
 		});
 
+		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true,
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
@@ -242,6 +262,26 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole, {}, done);
 		});
 
+		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true,
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
+		});
+
 		it('should call BoxClient defaultResponseHandler method with the callback when options is omitted', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
@@ -293,6 +333,26 @@ describe('Collaborations', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {type: 'file'});
+		});
+
+		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true,
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
@@ -352,6 +412,39 @@ describe('Collaborations', function() {
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {type: 'file'});
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {}, done);
+		});
+
+		it('should call BoxClient defaultResponseHandler method with the callback when options is omitted', function(done) {
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, done);
+		});
+
+		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true,
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
