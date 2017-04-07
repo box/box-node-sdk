@@ -9,6 +9,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Update a File's Information](#update-a-files-information)
 * [Get a File's Tasks](#get-a-files-tasks)
 * [Download a File](#download-a-file)
+* [Get a File's download URL](#get-download-url)
 * [Upload a File](#upload-a-file)
 * [Upload Preflight Check](#upload-preflight-check)
 * [Copy a File](#copy-a-file)
@@ -103,6 +104,24 @@ client.files.getReadStream('12345', null, function(error, stream) {
 	// write the file to disk
 	var output = fs.createWriteStream('/path/to/file');
 	stream.pipe(output);
+});
+```
+
+Get a File's download URL
+-------------------------
+
+The download URL of a file an be retrieved by calling
+[`files.getDownloadURL(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getDownloadURL).
+It returns the URL as a string.
+
+```js
+client.files.getDownloadURL('12345', null, function(error, downloadURL) {
+	if (error) {
+		//handle error
+	}
+
+	//process the downloadURL
+}
 });
 ```
 
