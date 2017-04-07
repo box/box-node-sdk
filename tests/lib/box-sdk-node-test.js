@@ -209,7 +209,7 @@ describe('box-node-sdk', function() {
 		});
 	});
 
-	describe.only('getTokenStore()', function() {
+	describe('getTokenStore()', function() {
 
 		beforeEach(function() {
 			sdk = new BoxSDKNode(TEST_CONFIG);

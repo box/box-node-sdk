@@ -1078,7 +1078,7 @@ describe('Endpoint', function() {
 			});
 		});
 
-		describe.only('getReadStream()', function() {
+		describe('getReadStream()', function() {
 
 			it('should make correct request and correctly parse response when API call is successful', function(done) {
 
