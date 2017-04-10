@@ -9,7 +9,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Update a File's Information](#update-a-files-information)
 * [Get a File's Tasks](#get-a-files-tasks)
 * [Download a File](#download-a-file)
-* [Get a File's download URL](#get-download-url)
+* [Get a File's Download URL](#get-download-url)
 * [Upload a File](#upload-a-file)
 * [Upload Preflight Check](#upload-preflight-check)
 * [Copy a File](#copy-a-file)
@@ -107,7 +107,7 @@ client.files.getReadStream('12345', null, function(error, stream) {
 });
 ```
 
-Get a File's download URL
+Get a File's Download URL
 -------------------------
 
 The download URL of a file an be retrieved by calling
