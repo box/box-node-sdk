@@ -199,6 +199,11 @@ describe('Collaborations', function() {
 		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
 
 			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = false;
+
+			expectedParams.qs = {
+				notify: false
+			};
 
 			var params = {
 				type: 'file',
@@ -332,6 +337,11 @@ describe('Collaborations', function() {
 		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
 
 			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = false;
+
+			expectedParams.qs = {
+				notify: false
+			};
 
 			var params = {
 				type: 'file',
@@ -452,6 +462,11 @@ describe('Collaborations', function() {
 		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
 
 			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = false;
+
+			expectedParams.qs = {
+				notify: false
+			};
 
 			var params = {
 				type: 'file',
@@ -590,6 +605,11 @@ describe('Collaborations', function() {
 		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
 
 			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = false;
+
+			expectedParams.qs = {
+				notify: false
+			};
 
 			var params = {
 				type: 'file',
