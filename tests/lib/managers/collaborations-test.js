@@ -176,7 +176,7 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {type: 'file'});
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -189,6 +189,53 @@ describe('Collaborations', function() {
 				type: 'file',
 				notify: true,
 				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			var params = {
+				type: 'file',
+				notify: false,
+				can_view_path: false
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			var params = {
+				type: 'file',
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true
 			};
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
@@ -262,7 +309,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole, {}, done);
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -274,6 +321,53 @@ describe('Collaborations', function() {
 			var params = {
 				type: 'file',
 				notify: true,
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			var params = {
+				type: 'file',
+				notify: false,
+				can_view_path: false
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			var params = {
+				type: 'file',
 				can_view_path: true
 			};
 
@@ -335,7 +429,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {type: 'file'});
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -355,6 +449,52 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
 		});
 
+		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			var params = {
+				type: 'file',
+				notify: false,
+				can_view_path: false
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			var params = {
+				type: 'file',
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
+		});
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
 			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
@@ -427,7 +567,7 @@ describe('Collaborations', function() {
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, done);
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -439,6 +579,54 @@ describe('Collaborations', function() {
 			var params = {
 				type: 'file',
 				notify: true,
+				can_view_path: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			var params = {
+				type: 'file',
+				notify: false,
+				can_view_path: false
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+
+			expectedParams.qs = {
+				notify: true
+			};
+
+			var params = {
+				type: 'file',
+				notify: true
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
+		});
+
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.can_view_path = true;
+
+			var params = {
+				type: 'file',
 				can_view_path: true
 			};
 
