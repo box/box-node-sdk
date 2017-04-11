@@ -27,7 +27,9 @@ var sandbox = sinon.sandbox.create(),
 	testParamsWithQs,
 	FILE_ID = '1234',
 	FILE_VERSION_ID = '5678',
-	MODULE_FILE_PATH = '../../../lib/managers/files';
+	MODULE_FILE_PATH = '../../../lib/managers/files',
+	fsFake,
+	streamFake;
 
 
 // ------------------------------------------------------------------------------
@@ -43,6 +45,9 @@ describe('Files', function() {
 		testParamsWithQs = {qs: testQS};
 		// Register Mocks
 		mockery.enable({ useCleanCache: true });
+		fsFake = leche.create(['createReadStream']);
+		mockery.registerMock('fs', fsFake);
+
 		mockery.registerAllowable('http-status');
 		mockery.registerAllowable('util');
 		mockery.registerAllowable('../util/url-path');
@@ -51,6 +56,7 @@ describe('Files', function() {
 		mockery.registerAllowable(MODULE_FILE_PATH);
 		Files = require(MODULE_FILE_PATH);
 		files = new Files(boxClientFake);
+		streamFake = {on: sandbox.stub()};
 	});
 
 	afterEach(function() {
@@ -136,8 +142,7 @@ describe('Files', function() {
 		});
 
 		it('should make a request with the URL returned from getDownloadURL when a 302 FOUND response is returned', function(done) {
-			var dlURL = 'https://dl.boxcloud.com/rawfile',
-				streamFake = {on: sandbox.stub()};
+			var dlURL = 'https://dl.boxcloud.com/rawfile';
 
 			sandbox.stub(files, 'getDownloadURL').yieldsAsync(null, dlURL);
 			sandbox.mock(boxClientFake).expects('get').withArgs(dlURL, sinon.match({streaming: true})).yieldsAsync(null, streamFake);
@@ -672,38 +677,13 @@ describe('Files', function() {
 			FILENAME = 'folders-test.js',
 			PATH = './folders-test.js';
 
-		var streamFake = {on: sandbox.stub()};
-		it('should call BoxClient.upload() with the correct non-callback params', function() {
-			var expectedFormData = {
-				attributes: JSON.stringify({
-					name: FILENAME,
-					parent: { id: PARENT_FOLDER_ID }
-				}),
-				content: {
-					options: {
-						filename: 'unused'
-					},
-					value: streamFake
-				}
-			};
+		it('should call BoxClient.upload() with the correct params', function() {
+			var callback = sandbox.stub();
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/content', null, expectedFormData);
-			files.uploadFile(PARENT_FOLDER_ID, FILENAME, streamFake, sandbox.stub());
-		});
+			sandbox.stub(fsFake, 'createReadStream').withArgs(PATH).returns(streamFake);
+			sandbox.mock(files).expects('uploadFile').withArgs(PARENT_FOLDER_ID, FILENAME, streamFake, callback);
 
-		it('should wrap the given callback (without calling it) using BoxClient.defaultResponseHandler() and pass the wrapped callback to BoxClient.upload()', function() {
-			var filesCallbackMock = sandbox.mock().never(),
-				boxClientCallbackMock = sandbox.mock().never();
-
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler')
-				.withExactArgs(filesCallbackMock)
-				.returns(boxClientCallbackMock);
-
-			sandbox.mock(boxClientFake).expects('upload')
-				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
-
-			files.uploadFileFromPath(PARENT_FOLDER_ID, FILENAME, PATH, filesCallbackMock);
+			files.uploadFileFromPath(PARENT_FOLDER_ID, FILENAME, PATH, callback);
 		});
 
 		it('should throw an error if file is not present', function() {
@@ -753,24 +733,13 @@ describe('Files', function() {
 
 		var	PATH = './folders-test.js';
 
-		it('should call BoxClient.upload() with the correct non-callback params', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/1234/content', null);
-			files.uploadNewFileVersionFromPath(FILE_ID, PATH, sandbox.stub());
-		});
+		it('should call BoxClient.upload() with the correct params', function() {
+			var callback = sandbox.stub();
 
-		it('should wrap the given callback (without calling it) using BoxClient.defaultResponseHandler() and pass the wrapped callback to BoxClient.upload()', function() {
-			var filesCallbackMock = sandbox.mock().never(),
-				boxClientCallbackMock = sandbox.mock().never();
+			sandbox.stub(fsFake, 'createReadStream').withArgs(PATH).returns(streamFake);
+			sandbox.mock(files).expects('uploadNewFileVersion').withArgs(FILE_ID, streamFake, callback);
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler')
-				.withExactArgs(filesCallbackMock)
-				.returns(boxClientCallbackMock);
-
-			sandbox.mock(boxClientFake).expects('upload')
-				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
-
-			files.uploadNewFileVersionFromPath(FILE_ID, PATH, filesCallbackMock);
+			files.uploadNewFileVersionFromPath(FILE_ID, PATH, callback);
 		});
 
 		it('should throw an error if file path is not present', function() {
