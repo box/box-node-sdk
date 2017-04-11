@@ -16,7 +16,7 @@ var assert = require('chai').assert,
 	path = require('path'),
 	jwt = require('jsonwebtoken');
 
-describe.only('Box Node SDK', function() {
+describe('Box Node SDK', function() {
 
   // ------------------------------------------------------------------------------
 	// Setup
@@ -179,7 +179,7 @@ describe.only('Box Node SDK', function() {
 
 		var fileID = '98740596456',
 			fileName = 'Test Document.pdf',
-			tokenStoreFake = sdk.getTokenStore(),
+			tokenStoreFake = new BoxSDK.MemoryTokenStore('10'),
 			refreshToken = 'rt',
 			ips = ['127.0.0.1', '192.168.1.1'],
 			expiredTokenInfo = {
