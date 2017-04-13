@@ -41,7 +41,12 @@ describe('box-node-sdk', function() {
 			clientSecret: 'mySecret',
 			apiRootURL: 'myUrl',
 			retryIntervalMS: 11111,
-			numMaxRetries: 3
+			numMaxRetries: 3,
+			appAuth: {
+				keyID: 'keyID',
+				privateKey: 'privateKey',
+				passphrase: 'passphrase'
+			}
 		},
 		TEST_APP_SETTINGS = {
 			boxAppSettings: {
@@ -49,7 +54,12 @@ describe('box-node-sdk', function() {
 				clientSecret: 'mySecret',
 				apiRootURL: 'myUrl',
 				retryIntervalMS: 11111,
-				numMaxRetries: 3
+				numMaxRetries: 3,
+				appAuth: {
+					publicKeyID: 'keyID',
+					privateKey: 'privateKey',
+					passphrase: 'passphrase'
+				}
 			}
 		};
 
