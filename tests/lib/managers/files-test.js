@@ -1203,14 +1203,14 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('post').withArgs('https://upload-base/2.1/files/upload-session', expectedParams);
+			sandbox.mock(boxClientFake).expects('post').withArgs('https://upload-base/2.1/files/upload_sessions', expectedParams);
 			files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('https://upload-base/2.1/files/upload-session').yieldsAsync();
+			sandbox.stub(boxClientFake, 'post').yieldsAsync();
 			files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, done);
 		});
 	});
@@ -1229,14 +1229,14 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/${FILE_ID}/upload-session`, expectedParams);
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/${FILE_ID}/upload_sessions`, expectedParams);
 			files.createNewVersionUploadSession(FILE_ID, TEST_SIZE);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs(`https://upload-base/2.1/files/${FILE_ID}/upload-session`).yieldsAsync();
+			sandbox.stub(boxClientFake, 'post').yieldsAsync();
 			files.createNewVersionUploadSession(FILE_ID, TEST_SIZE, done);
 		});
 	});
@@ -1248,7 +1248,7 @@ describe('Files', function() {
 			TEST_OFFSET = 27,
 			TEST_LENGTH = 345987;
 
-		it('should make PUT call to upload part with generated part ID when no part ID is passed in', function() {
+		it('should make PUT call to upload part when called', function() {
 
 			sandbox.stub(Math, 'random').returns(0);
 
@@ -1256,71 +1256,22 @@ describe('Files', function() {
 				headers: {
 					'Content-Type': 'application/octet-stream',
 					Digest: 'SHA=oHNRqoPkTcXiX9y4eU54ccSsPQw=',
-					'X-Box-Part-Id': '00000000',
 					'Content-Range': 'bytes 27-35/345987'
 				},
 				json: false,
 				body: TEST_PART
 			};
 
-			sandbox.mock(boxClientFake).expects('put').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}`, expectedParams);
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('put').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, expectedParams);
 			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH);
 		});
 
-		it('should make PUT call to upload part with passed-in part ID when part ID is provided', function() {
+		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
-			var partID = 'feedbeef';
-
-			var expectedParams = {
-				headers: {
-					'Content-Type': 'application/octet-stream',
-					Digest: 'SHA=oHNRqoPkTcXiX9y4eU54ccSsPQw=',
-					'X-Box-Part-Id': partID,
-					'Content-Range': 'bytes 27-35/345987'
-				},
-				json: false,
-				body: TEST_PART
-			};
-
-			sandbox.mock(boxClientFake).expects('put').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}`, expectedParams);
-			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, {partID});
-		});
-
-		it('should call callback with an error when there is an error calling the API', function(done) {
-
-			var error = new Error('Could not call API!');
-
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(error);
-			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, {}, function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
-		});
-
-		it('should call callback with an error when the API returns an error', function(done) {
-
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, {statusCode: 403});
-			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, {}, function(err) {
-
-				assert.instanceOf(err, Error);
-				done();
-			});
-		});
-
-		it('should call callback with part info when API call is successful', function(done) {
-
-			var partID = 'fab00bae';
-
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, {statusCode: 200});
-			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, {partID}, function(err, data) {
-
-				assert.isNull(err);
-				assert.propertyVal(data, 'part_id', partID);
-				assert.propertyVal(data, 'offset', TEST_OFFSET);
-				assert.propertyVal(data, 'size', TEST_PART.length);
-				done();
-			});
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync();
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, done);
 		});
 	});
 
@@ -1346,7 +1297,7 @@ describe('Files', function() {
 				}
 			};
 
-			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}/commit`, expectedParams);
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams);
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, TEST_PARTS, null);
 		});
 
@@ -1440,14 +1391,14 @@ describe('Files', function() {
 		it('should make DELETE request to destroy the upload session when called', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('del').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}`, null);
+			sandbox.mock(boxClientFake).expects('del').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, null);
 			files.abortUploadSession(TEST_SESSION_ID);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}`).yieldsAsync();
+			sandbox.stub(boxClientFake, 'del').yieldsAsync();
 			files.abortUploadSession(TEST_SESSION_ID, done);
 		});
 	});
@@ -1459,34 +1410,34 @@ describe('Files', function() {
 		it('should make GET request for the uploaded parts when called', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}/parts`, testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/parts`, testParamsWithQs);
 			files.getUploadSessionParts(TEST_SESSION_ID, testQS);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}/parts`).yieldsAsync();
+			sandbox.stub(boxClientFake, 'get').yieldsAsync();
 			files.getUploadSessionParts(TEST_SESSION_ID, testQS, done);
 		});
 	});
 
-	describe('getUploadSessionStatus', function() {
+	describe('getUploadSession', function() {
 
 		var TEST_SESSION_ID = '87nyeibt7y2v34t2';
 
-		it('should make GET request for the session status when called', function() {
+		it('should make GET request for the session info when called', function() {
 
 			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}/status`);
-			files.getUploadSessionStatus(TEST_SESSION_ID);
+			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`);
+			files.getUploadSession(TEST_SESSION_ID);
 		});
 
 		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
 
 			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs(`https://upload-base/2.1/files/upload-session/${TEST_SESSION_ID}/status`).yieldsAsync();
-			files.getUploadSessionStatus(TEST_SESSION_ID, done);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync();
+			files.getUploadSession(TEST_SESSION_ID, done);
 		});
 	});
 
@@ -1584,5 +1535,3 @@ describe('Files', function() {
 	});
 
 });
-
-// @TODO: add integration tests
