@@ -166,6 +166,65 @@ describe('ChunkedUploader', function() {
 				uploader.start();
 			});
 
+			it('should upload all chunks and commit when optional parameters are passed', function(done) {
+
+				let options = {
+					parallelism: 2,
+					retryInterval: 500
+				};
+
+				uploader = new ChunkedUploader(boxClientFake, TEST_UPLOAD_SESSION_INFO, TEST_FILE, TEST_FILE.length, options);
+
+				let expectedChunks = [
+					{
+						part_id: '00000001',
+						offset: 0,
+						size: 10
+					},
+					{
+						part_id: '00000002',
+						offset: 10,
+						size: 10
+					},
+					{
+						part_id: '00000003',
+						offset: 20,
+						size: 10
+					},
+					{
+						part_id: '00000004',
+						offset: 10,
+						size: 6
+					}
+				];
+
+				let createdFile = {
+					type: 'file',
+					id: '785692378452345',
+					sha1: TEST_HASH
+				};
+
+				let chunks = [];
+				uploader.on('chunkUploaded', chunk => chunks.push(chunk));
+				uploader.on('uploadComplete', file => {
+
+					assert.equal(file, createdFile);
+					assert.sameMembers(chunks, expectedChunks);
+					done();
+				});
+
+
+				let filesClientMock = sandbox.mock(boxClientFake.files);
+				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36).yieldsAsync(null, expectedChunks[0]);
+				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36).yieldsAsync(null, expectedChunks[1]);
+				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36).yieldsAsync(null, expectedChunks[2]);
+				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36).yieldsAsync(null, expectedChunks[3]);
+
+				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, sinon.match(expectedChunks)).yieldsAsync(null, createdFile);
+
+				uploader.start();
+			});
+
 			it('should upload all chunks and commit when start is called multiple times', function(done) {
 
 				let expectedChunks = [
