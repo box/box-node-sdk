@@ -151,10 +151,10 @@ describe('box-node-sdk', function() {
 		});
 	});
 
-	describe.only('getInstance()', function() {
+	describe('getInstanceByAppConfig()', function() {
 		it('should set config for all passed in params when called', function() {
 
-			sdk = BoxSDKNode.getInstance(TEST_APP_SETTINGS);
+			sdk = BoxSDKNode.getInstanceByAppConfig(TEST_APP_SETTINGS);
 
 			assert.ok(TokenManagerConstructorStub.calledWithNew(), 'Should construct new TokenManager');
 			assert.ok(TokenManagerConstructorStub.calledWithMatch(TEST_CONFIG), 'TokenManager should be passed config');
@@ -163,7 +163,7 @@ describe('box-node-sdk', function() {
 
 		it('should create an anonymous session with config when called', function() {
 
-			sdk = BoxSDKNode.getInstance(TEST_APP_SETTINGS);
+			sdk = BoxSDKNode.getInstanceByAppConfig(TEST_APP_SETTINGS);
 
 			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
 			assert.ok(AnonymousAPISession.calledWithMatch(TEST_CONFIG), 'Anonymous session should be passed config');
@@ -172,7 +172,7 @@ describe('box-node-sdk', function() {
 
 		it('should create an API Request Manager with config when called', function() {
 
-			sdk = BoxSDKNode.getInstance(TEST_APP_SETTINGS);
+			sdk = BoxSDKNode.getInstanceByAppConfig(TEST_APP_SETTINGS);
 
 			assert.ok(APIRequestManagerConstructorStub.calledWithNew(), 'Should construct new APIRequestManager');
 			assert.ok(APIRequestManagerConstructorStub.calledWithMatch(TEST_CONFIG), 'APIRequestManager should be passed config');
