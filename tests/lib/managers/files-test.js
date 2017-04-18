@@ -49,6 +49,7 @@ describe('Files', function() {
 		mockery.registerAllowable('http-status');
 		mockery.registerAllowable('util');
 		mockery.registerAllowable('crypto');
+		mockery.registerAllowable('async');
 		mockery.registerAllowable('../util/url-path');
 		mockery.registerAllowable('../util/errors');
 		mockery.registerMock('../chunked-uploader', ChunkedUploaderStub);
@@ -1262,16 +1263,60 @@ describe('Files', function() {
 				body: TEST_PART
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
 			sandbox.mock(boxClientFake).expects('put').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, expectedParams);
 			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should should return error when the API call fails', function(done) {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync();
-			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, done);
+			var error = new Error('Connection closed');
+
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(error);
+
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should should return error when the API call returns a non-200 status code', function(done) {
+
+			var apiResponse = {
+				statusCode: 400
+			};
+
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, apiResponse);
+
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, function(err) {
+
+				assert.instanceOf(err, Error);
+				done();
+			});
+		});
+
+		it('should return parsed body when API call is successful', function(done) {
+
+			var apiResponse = {
+				statusCode: 200,
+				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
+			};
+
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, apiResponse);
+
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, function(err, data) {
+
+				assert.ifError(err);
+				assert.deepEqual(data, {
+					part: {
+						part_id: '00000000',
+						size: 10,
+						offset: 0,
+						sha1: '0987654321abcdef'
+					}
+				});
+				done();
+			});
 		});
 	});
 
@@ -1285,20 +1330,43 @@ describe('Files', function() {
 				offset: 0
 			}];
 
-		it('should make POST request to commit the upload session when called', function() {
+		it('should make POST request to commit the upload session when called with list of parts', function() {
 
 			var expectedParams = {
 				headers: {
 					Digest: 'SHA=' + TEST_FILE_HASH
 				},
 				body: {
-					attributes: null,
+					attributes: {},
 					parts: TEST_PARTS
 				}
 			};
 
 			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams);
-			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, TEST_PARTS, null);
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS});
+		});
+
+		it('should pass non-parts options as file attribute when called with multiple options', function() {
+
+			let options = {
+				parts: TEST_PARTS,
+				name: 'foo.txt'
+			};
+
+			var expectedParams = {
+				headers: {
+					Digest: 'SHA=' + TEST_FILE_HASH
+				},
+				body: {
+					attributes: {
+						name: 'foo.txt'
+					},
+					parts: TEST_PARTS
+				}
+			};
+
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams);
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, options);
 		});
 
 		it('should return an error when there is an error making the API call', function(done) {
@@ -1306,7 +1374,7 @@ describe('Files', function() {
 			var error = new Error('API connection had a problem');
 
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(error);
-			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, TEST_PARTS, null, function(err) {
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err) {
 
 				assert.equal(err, error);
 				done();
@@ -1326,7 +1394,7 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, TEST_PARTS, null, function(err, data) {
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err, data) {
 
 				assert.isNull(err);
 				assert.equal(data, responseBody);
@@ -1358,7 +1426,7 @@ describe('Files', function() {
 			var apiStub = sandbox.stub(boxClientFake, 'post');
 			apiStub.onFirstCall().yields(null, retryResponse);
 			apiStub.onSecondCall().yields(null, successResponse);
-			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, TEST_PARTS, null, function(err, data) {
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err, data) {
 
 				assert.isNull(err);
 				assert.equal(data, responseBody);
@@ -1376,9 +1444,103 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, TEST_PARTS, null, function(err) {
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err) {
 
 				assert.instanceOf(err, Error);
+				done();
+			});
+		});
+
+		it('should fetch parts from API when parts are not passed in', function(done) {
+
+
+			var expectedParams = {
+				headers: {
+					Digest: 'SHA=' + TEST_FILE_HASH
+				},
+				body: {
+					attributes: {},
+					parts: TEST_PARTS
+				}
+			};
+
+			var expectedPagingOptions = {
+				limit: 1000
+			};
+
+			var partsResponse = {
+				next_marker: null,
+				parts: TEST_PARTS
+			};
+
+			var commitResponse = {
+				statusCode: 201
+			};
+
+			sandbox.mock(files).expects('getUploadSessionParts').withArgs(TEST_SESSION_ID, sinon.match(expectedPagingOptions)).yields(null, partsResponse);
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams).yields(null, commitResponse);
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
+
+				assert.ifError(err);
+				done();
+			});
+		});
+
+		it('should commit with all parts when API parts span multiple pages', function(done) {
+
+			var parts = [
+				{
+					part_id: '00000001',
+					offset: 0,
+					size: 3
+				},
+				{
+					part_id: '00000002',
+					offset: 3,
+					size: 3
+				}
+			];
+
+			var expectedParams = {
+				headers: {
+					Digest: 'SHA=' + TEST_FILE_HASH
+				},
+				body: {
+					attributes: {},
+					parts
+				}
+			};
+
+			var commitResponse = {
+				statusCode: 201
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('getUploadSessionParts').withArgs(TEST_SESSION_ID, sinon.match({limit: 1000})).yields(null, {
+				next_marker: 'foo',
+				parts: [parts[0]]
+			});
+			filesMock.expects('getUploadSessionParts').withArgs(TEST_SESSION_ID, sinon.match({limit: 1000, marker: 'foo'})).yields(null, {
+				next_marker: null,
+				parts: [parts[1]]
+			});
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams).yields(null, commitResponse);
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
+
+				assert.ifError(err);
+				done();
+			});
+		});
+
+		it('should respond with an error when page request returns an error', function(done) {
+
+			var partsError = new Error('Could not fetch parts');
+
+			sandbox.stub(files, 'getUploadSessionParts').yields(partsError);
+			sandbox.mock(boxClientFake).expects('post').never();
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
+
+				assert.equal(err, partsError);
 				done();
 			});
 		});
