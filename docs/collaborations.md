@@ -9,6 +9,7 @@ define what permissions a user has for a folder.
 * [Remove a Collaboration](#remove-a-collaboration)
 * [Get a Collaboration's Information](#get-a-collaborations-information)
 * [Get the Collaborations on a Folder](#get-the-collaborations-on-a-folder)
+* [Get the Collaborations on a File](#get-the-collaborations-on-a-file)
 * [Get Pending Collaborations](#get-pending-collaborations)
 * [Respond to Pending Collaborations](#respond-to-pending-collaborations)
 
@@ -16,16 +17,30 @@ Add a Collaboration
 -------------------
 
 A collaboration can be added for an existing user with
-[`collaborations.createWithUserID(userID, folderID, role, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserID).
+[`collaborations.createWithUserID(userID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserID).
 The `role` parameter determines what permissions the collaborator will have on the
-folder.
+folder.  You can create a collaboration on a file by setting the `type` option to `'file'`.
 
 ```js
+// Invite user 123456 to collaborate on folder 987654
 client.collaborations.createWithUserID('123456', '987654', client.collaborationRoles.EDITOR, callback);
 ```
 
+```js
+// Invite user 123456 to collaborate on file 987654
+client.collaborations.createWithUserID(
+		'123456',
+		'987654',
+		client.collaborationRoles.EDITOR,
+		{
+			type: client.itemTypes.FILE
+		},
+		callback
+	);
+```
+
 You can also add a collaboration by providing an email address with
-[`collaborations.createWithUserEmail(email, folderID, role, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserEmail). If the recipient
+[`collaborations.createWithUserEmail(email, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserEmail). If the recipient
 doesn't have a Box account, they will be asked create one.
 
 ```js
@@ -33,7 +48,7 @@ client.collaborations.createWithUserEmail('user@example.com', '987654', client.c
 ```
 
 Groups can also be added as collaborators by providing the group ID to
-[`collaborations.createWithGroupID(groupID, folderID, role, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithGroupID).
+[`collaborations.createWithGroupID(groupID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithGroupID).
 All members of the group will receive the same role and permissions.
 
 ```js
@@ -78,6 +93,17 @@ on the folder.
 
 ```js
 client.folders.getCollaborations('11111', {fields: 'accessible_by,role'}, callback);
+```
+
+Get the Collaborations on a File
+--------------------------------
+
+You can get the collection of collaborations on a file by calling
+[`files.getCollaborations(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getCollaborations)
+with the ID of the file.
+
+```js
+client.files.getCollaborations('22222', {limit: 100, offset: 200}, callback);
 ```
 
 Get Pending Collaborations
