@@ -270,15 +270,11 @@ client.files.createUploadSession('12345', 2147483648, 'huge.pdf', callback);
 #### Upload Part
 
 Parts are then uploaded by calling
-[`files.uploadPart(sessionID, part, offset, totalSize, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#uploadPart)
+[`files.uploadPart(sessionID, part, offset, totalSize, callback)`](http://opensource.box.com/box-node-sdk/Files.html#uploadPart)
 with the ID of the upload session that was created, a `Buffer` containing the part
 of the file starting at `offset`, and the total size of the file being uploaded.
 When the upload of a part succeeds, the callback will be called with a part record,
 which should be stored for later integrity checking.
-
-Each part requires a client-generated ID; by default, the SDK will generate one
-for you, but if you wish to generate your own you may pass them in via the
-`part_id` option.  Part IDs must be 8-digit hexadecimal strings.
 
 ```js
 // Upload the part starting at byte offset 8388608 to upload session '93D9A837B45F' with part ID 'feedbeef'
@@ -296,6 +292,10 @@ full file in the destination folder.
 Any valid file object attributes you want to assign to the newly-created file may
 be passed via the `options` parameter.  See the [File object documentation](https://docs.box.com/reference#file-object)
 for more details.
+
+If you stored a list of part records for each uploaded part, you can pass them via
+`options.parts` for additional integrity checking.  Otherwise, the API will assume that the list
+of parts is has received is the intended set.
 
 ```js
 // Finalize upload session 93D9A837B45F
@@ -334,11 +334,11 @@ client.files.getUploadSessionParts('93D9A837B45F', {limit: 100}, callback);
 
 #### Get Upload Session Status
 
-The status of an in-progress upload session can be retrieved by calling
-[`files.getUploadSessionStatus(sessionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getUploadSessionStatus).
+Information about an in-progress upload session can be retrieved by calling
+[`files.getUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getUploadSession).
 
 ```js
-// Get status of upload session 93D9A837B45F
+// Get info about upload session 93D9A837B45F
 client.files.getUploadSessionStatus('93D9A837B45F', callback);
 ```
 
