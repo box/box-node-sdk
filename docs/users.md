@@ -5,6 +5,7 @@ Users represent an individual's account on Box.
 
 * [Get User's Information](#get-users-information)
 * [Get the Current User's Information](#get-the-current-users-information)
+* [Get Enterprise Users](#get-enterprise-users)
 * [Update User](#update-user)
 * [Delete User](#delete-user)
 * [Get Email Aliases](#get-email-aliases)
@@ -38,6 +39,17 @@ To get the current user call the [`users.get(userID, queryString, callback)`](ht
 
 ```js
 client.users.get(client.CURRENT_USER_ID, null, callback);
+```
+
+
+Get Enterprise Users
+--------------------
+
+To get the list of all enterprise users call the [`users.getEnterprise(queryString, callback)`](http://opensource.box.com/box-node-sdk/Users.html#getEnterprise)
+method.
+
+```js
+client.users.getEnterprise({offset: 0, limit: 25}, callback);
 ```
 
 
