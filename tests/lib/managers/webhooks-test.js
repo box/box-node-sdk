@@ -153,6 +153,24 @@ describe('Webhooks', function() {
 
 	});
 
+	describe('setPrimarySignatureKey()', function() {
+		const PRIMARY_SIGNATURE_KEY = 'SamplePrimaryKey';
+		it('should validate the primary signature key is set', function() {
+			Webhooks.setPrimarySignatureKey(PRIMARY_SIGNATURE_KEY);
+
+			assert.equal(PRIMARY_SIGNATURE_KEY, Webhooks.primarySignatureKey);
+		});
+	});
+
+	describe('setSecondarySignatureKey()', function() {
+		const SECONDARY_SIGNATURE_KEY = 'SampleSecondaryKey';
+		it('should validate the secondary signature key is set', function() {
+			Webhooks.setSecondarySignatureKey(SECONDARY_SIGNATURE_KEY);
+
+			assert.equal(SECONDARY_SIGNATURE_KEY, Webhooks.secondarySignatureKey);
+		});
+	});
+
 	describe('validateMessage()', function() {
 
 		// A sample webhook message that is signed with 'SamplePrimaryKey' and 'SampleSecondaryKey':
