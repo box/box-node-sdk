@@ -190,6 +190,26 @@ describe('box-node-sdk', function() {
 		});
 	});
 
+	describe('configure()', function() {
+		beforeEach(function() {
+			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
+		});
+
+		it('should verify that additional parameters can be passed to the BoxSDKNode instance', function() {
+			var additonalParams = {
+				apiRootURL: 'myUrl',
+				retryIntervalMS: 11111,
+				numMaxRetries: 3
+			};
+
+			sdk.configure(additonalParams);
+			assert.equal(sdk.config.clientID, 'myId');
+			assert.equal(sdk.config.apiRootURL, 'myUrl');
+			assert.equal(sdk.config.retryIntervalMS, 11111);
+			assert.equal(sdk.config.numMaxRetries, 3);
+		});
+	});
+
 	describe('getBasicClient()', function() {
 
 		beforeEach(function() {
