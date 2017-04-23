@@ -666,6 +666,57 @@ describe('Files', function() {
 		});
 	});
 
+	describe('uploadFileFromPath()', function() {
+
+		var PARENT_FOLDER_ID = '123',
+			FILENAME = 'folders-test.js',
+			PATH = './folders-test.js';
+
+		var streamFake = {on: sandbox.stub()};
+		it('should call BoxClient.upload() with the correct non-callback params', function() {
+			var expectedFormData = {
+				attributes: JSON.stringify({
+					name: FILENAME,
+					parent: { id: PARENT_FOLDER_ID }
+				}),
+				content: {
+					options: {
+						filename: 'unused'
+					},
+					value: streamFake
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/content', null, expectedFormData);
+			files.uploadFile(PARENT_FOLDER_ID, FILENAME, streamFake, sandbox.stub());
+		});
+
+		it('should wrap the given callback (without calling it) using BoxClient.defaultResponseHandler() and pass the wrapped callback to BoxClient.upload()', function() {
+			var filesCallbackMock = sandbox.mock().never(),
+				boxClientCallbackMock = sandbox.mock().never();
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler')
+				.withExactArgs(filesCallbackMock)
+				.returns(boxClientCallbackMock);
+
+			sandbox.mock(boxClientFake).expects('upload')
+				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
+
+			files.uploadFileFromPath(PARENT_FOLDER_ID, FILENAME, PATH, filesCallbackMock);
+		});
+
+		it('should throw an error if file is not present', function() {
+			var error = new Error('API Failure');
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'upload').withArgs(error);
+			files.uploadFileFromPath(PARENT_FOLDER_ID, FILENAME, './none', function(err) {
+				assert.equal(err, error);
+			});
+		});
+	});
+
 	describe('uploadNewFileVersion()', function() {
 
 		var CONTENT = new Buffer('someContent');
@@ -695,6 +746,41 @@ describe('Files', function() {
 				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
 
 			files.uploadNewFileVersion(FILE_ID, CONTENT, filesCallbackMock);
+		});
+	});
+
+	describe('uploadNewFileVersionFromPath()', function() {
+
+		var	PATH = './folders-test.js';
+
+		it('should call BoxClient.upload() with the correct non-callback params', function() {
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/1234/content', null);
+			files.uploadNewFileVersionFromPath(FILE_ID, PATH, sandbox.stub());
+		});
+
+		it('should wrap the given callback (without calling it) using BoxClient.defaultResponseHandler() and pass the wrapped callback to BoxClient.upload()', function() {
+			var filesCallbackMock = sandbox.mock().never(),
+				boxClientCallbackMock = sandbox.mock().never();
+
+			sandbox.mock(boxClientFake).expects('defaultResponseHandler')
+				.withExactArgs(filesCallbackMock)
+				.returns(boxClientCallbackMock);
+
+			sandbox.mock(boxClientFake).expects('upload')
+				.withExactArgs(sinon.match.any, sinon.match.any, sinon.match.any, boxClientCallbackMock);
+
+			files.uploadNewFileVersionFromPath(FILE_ID, PATH, filesCallbackMock);
+		});
+
+		it('should throw an error if file path is not present', function() {
+			var error = new Error('API Failure');
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'upload').withArgs(error);
+			files.uploadNewFileVersionFromPath(FILE_ID, './none', function(err) {
+				assert.equal(err, error);
+			});
 		});
 	});
 
