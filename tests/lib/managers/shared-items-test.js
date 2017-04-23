@@ -9,6 +9,7 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -75,79 +76,144 @@ describe('SharedItems', function() {
 		});
 
 		it('should make GET request to get shared item info when called', function() {
-			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/shared_items', expectedParams);
-			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS);
-		});
-
-		it('should return the shared item info when a 200 OK response is returned', function(done) {
 			var responseBody = {id: '123', name: 'Some Shared Item'},
 				response = {statusCode: 200, body: responseBody};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get')
-				.withArgs('/shared_items', expectedParams)
-				.yieldsAsync(null, response);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/shared_items', expectedParams).returns(Promise.resolve(response));
+			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS);
+		});
+
+		it('should call callback the shared item info when a 200 OK response is returned', function(done) {
+			var responseBody = {id: '123', name: 'Some Shared Item'},
+				response = {statusCode: 200, body: responseBody};
+
+			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS, function(err, data) {
-				assert.ok(!err);
-				assert.strictEqual(data, responseBody, 'location header is returned');
+				assert.ifError(err);
+				assert.equal(data, responseBody);
 				done();
 			});
 		});
 
-		it('should return a password_missing error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
+		it('should return promise resolving to the shared item info when a 200 OK response is returned', function() {
+			var responseBody = {id: '123', name: 'Some Shared Item'},
+				response = {statusCode: 200, body: responseBody};
+
+			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
+				.then(data => {
+					assert.equal(data, responseBody);
+				});
+		});
+
+		it('should call callback with a password_missing error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
 			var response = {statusCode: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').withArgs('/shared_items').yieldsAsync(null, response);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			sharedItems.get(testSharedItemURL, null, testQS, function(err) {
-				assert.ok(err);
-				assert.strictEqual(err.message, 'password_missing');
-				assert.strictEqual(err.statusCode, response.statusCode);
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'message', 'password_missing');
+				assert.propertyVal(err, 'statusCode', response.statusCode);
 				done();
 			});
 		});
 
-		it('should return a password_incorrect error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
+		it('should return promise rejecting with a password_missing error when a password is given and a 403 FORBIDDEN response is returned', function() {
 			var response = {statusCode: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').withArgs('/shared_items').yieldsAsync(null, response);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return sharedItems.get(testSharedItemURL, null, testQS)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.propertyVal(err, 'message', 'password_missing');
+					assert.propertyVal(err, 'statusCode', response.statusCode);
+				});
+		});
+
+		it('should call callback with a password_incorrect error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
+			var response = {statusCode: 403};
+
+			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS, function(err) {
-				assert.ok(err);
-				assert.strictEqual(err.message, 'password_incorrect');
-				assert.strictEqual(err.statusCode, response.statusCode);
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'message', 'password_incorrect');
+				assert.propertyVal(err, 'statusCode', response.statusCode);
 				done();
 			});
 		});
 
-		it('should return error when the API call returns an error', function(done) {
+		it('should return promise rejecting with a password_incorrect error when a password is given and a 403 FORBIDDEN response is returned', function() {
+			var response = {statusCode: 403};
+
+			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.propertyVal(err, 'message', 'password_incorrect');
+					assert.propertyVal(err, 'statusCode', response.statusCode);
+				});
+		});
+
+		it('should call callback with an error when the API call returns an error', function(done) {
 
 			var apiError = new Error('Something bad happened!');
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').withArgs('/shared_items').yieldsAsync(apiError);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS, function(err) {
 				assert.equal(err, apiError);
 				done();
 			});
 		});
 
-		it('should return unexpected response error when the API call returns an unknown status code', function(done) {
+		it('should return promise that rejects when the API call returns an error', function() {
+
+			var apiError = new Error('Something bad happened!');
+
+			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
+				.catch(err => {
+					assert.equal(err, apiError);
+				});
+		});
+
+		it('should call callback with unexpected response error when the API call returns an unknown status code', function(done) {
 
 			var response = {
 				statusCode: 404
 			};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').withArgs('/shared_items').yieldsAsync(null, response);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS, function(err) {
 				assert.instanceOf(err, Error);
 				done();
 			});
 		});
 
+		it('should return promise rejecting with unexpected response error when the API call returns an unknown status code', function() {
+
+			var response = {
+				statusCode: 404
+			};
+
+			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
 	});
 
 });
