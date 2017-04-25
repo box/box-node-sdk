@@ -157,17 +157,17 @@ describe('Webhooks', function() {
 		const PRIMARY_SIGNATURE_KEY = 'SamplePrimaryKey';
 		const SECONDARY_SIGNATURE_KEY = 'SampleSecondaryKey';
 
-		it('should validate the primary signature key is set', function() {
+		it('should set the primary and secondary keys when both are passed', function() {
 			Webhooks.setSignatureKeys(PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY);
 
 			assert.equal(PRIMARY_SIGNATURE_KEY, Webhooks.primarySignatureKey);
 			assert.equal(SECONDARY_SIGNATURE_KEY, Webhooks.secondarySignatureKey);
 		});
 
-		it('should validate the secondary signature key is undefined', function() {
+		it('should set the primary key when no secondary key is passed', function() {
 			Webhooks.setSignatureKeys(PRIMARY_SIGNATURE_KEY);
 
-			assert.equal(PRIMARY_SIGNATURE_KEY, Webhooks.primarySignatureKey);
+			assert.equal(Webhooks.primarySignatureKey, PRIMARY_SIGNATURE_KEY);
 			assert.equal(null, Webhooks.secondarySignatureKey);
 		});
 

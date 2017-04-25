@@ -203,10 +203,10 @@ describe('box-node-sdk', function() {
 			};
 
 			sdk.configure(additonalParams);
-			assert.equal(sdk.config.clientID, 'myId');
-			assert.equal(sdk.config.apiRootURL, 'myUrl');
-			assert.equal(sdk.config.retryIntervalMS, 11111);
-			assert.equal(sdk.config.numMaxRetries, 3);
+			assert.deepPropertyVal(sdk, 'config.clientID', 'myId');
+			assert.deepPropertyVal(sdk, 'config.apiRootURL', 'myUrl');
+			assert.deepPropertyVal(sdk, 'config.retryIntervalMS', 11111);
+			assert.deepPropertyVal(sdk, 'config.numMaxRetries', 3);
 		});
 	});
 
