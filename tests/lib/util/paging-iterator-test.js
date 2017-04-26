@@ -333,6 +333,63 @@ describe('PagingIterator', function() {
 				});
 		});
 
+		it('should fetch second page of offset-based results when original call specified excessive limit', function() {
+
+			var chunk1 = [{foo: 'bar'}],
+				chunk2 = [{foo: 'baz'}];
+			var response1 = {
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=0&limit=99999',
+					uri: {
+						query: 'offset=0&limit=99999'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk1,
+					limit: 1,
+					offset: 0
+				}
+			};
+			var response2 = {
+				statusCode: 200,
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=1&limit=99999',
+					uri: {
+						query: 'offset=1&limit=99999'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk2,
+					limit: 1,
+					offset: 1
+				}
+			};
+
+			var expectedURL = 'https://api.box.com/2.0/items';
+			var expectedOptions = {
+				headers: {},
+				qs: {
+					limit: 99999,
+					offset: 1
+				}
+			};
+
+			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions).yieldsAsync(null, response2);
+
+			var iterator = new PagingIterator(response1, clientFake);
+
+			return iterator.next()
+				.then(() => iterator.next())
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', chunk2);
+				});
+		});
+
 		it('should return rejected promise when fetching page of results fails', function() {
 
 			var chunk1 = [{foo: 'bar'}];
