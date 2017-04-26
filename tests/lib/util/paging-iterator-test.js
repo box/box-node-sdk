@@ -60,6 +60,9 @@ describe('PagingIterator', function() {
 				body: {
 					id: '1234',
 					name: 'thing 1'
+				},
+				request: {
+					method: 'GET'
 				}
 			};
 
@@ -75,6 +78,9 @@ describe('PagingIterator', function() {
 			var response = {
 				body: {
 					entries: []
+				},
+				request: {
+					method: 'GET'
 				}
 			};
 
@@ -94,7 +100,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk,
@@ -125,7 +132,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk,
@@ -156,7 +164,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk,
@@ -186,7 +195,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					next_marker: null,
@@ -219,7 +229,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk,
@@ -246,7 +257,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk,
@@ -274,7 +286,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk1,
@@ -289,7 +302,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=vwxyz&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk2,
@@ -328,7 +342,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk1,
@@ -357,7 +372,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk1,
@@ -390,7 +406,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk1,
@@ -405,7 +422,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=vwxyz&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk2,
@@ -420,7 +438,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=qwerty&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk3,
@@ -460,7 +479,7 @@ describe('PagingIterator', function() {
 				});
 		});
 
-		it('should return done when end of collection is reaced', function() {
+		it('should return done when end of collection is reached', function() {
 
 			var chunk1 = [{foo: 'bar'}],
 				chunk2 = [{foo: 'baz'}];
@@ -470,7 +489,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk1,
@@ -485,7 +505,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=vwxyz&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk2,
@@ -500,7 +521,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=qwerty&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: [],
@@ -551,7 +573,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=abcdef&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk1,
@@ -566,7 +589,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=vwxyz&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: chunk2,
@@ -581,7 +605,8 @@ describe('PagingIterator', function() {
 					uri: {
 						query: 'marker=qwerty&limit=1'
 					},
-					headers: {}
+					headers: {},
+					method: 'GET'
 				},
 				body: {
 					entries: [],
