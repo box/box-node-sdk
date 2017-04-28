@@ -9,6 +9,7 @@
 // ------------------------------------------------------------------------------
 var sinon = require('sinon'),
 	mockery = require('mockery'),
+	assert = require('chai').assert,
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -61,7 +62,7 @@ describe('Groups', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/groups', expectedParams);
 			groups.create(name, null);
 		});
@@ -80,15 +81,38 @@ describe('Groups', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/groups', expectedParams);
 			groups.create(name, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/groups').yieldsAsync();
-			groups.create('Test group', null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			groups.create('test');
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			groups.create('test', null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return groups.create('test')
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -100,7 +124,7 @@ describe('Groups', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID, expectedParams);
 			groups.get(GROUP_ID, null);
 		});
@@ -117,46 +141,93 @@ describe('Groups', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID, expectedParams);
 			groups.get(GROUP_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/groups/' + GROUP_ID).yieldsAsync();
-			groups.get(GROUP_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			groups.get(GROUP_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			groups.get(GROUP_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return groups.get(GROUP_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('update()', function() {
 
-		it('should make PUT request to update the group when called', function() {
+		var options,
+			expectedParams;
 
-			var options = {
+		beforeEach(function() {
+
+			options = {
 				name: 'Test group 2',
 				description: 'Another test group'
 			};
 
-			var expectedParams = {
+			expectedParams = {
 				body: options
 			};
+		});
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+		it('should make PUT request to update the group when called', function() {
+
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs('/groups/' + GROUP_ID, expectedParams);
 			groups.update(GROUP_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			var options = {
-				name: 'Test group 2',
-				description: 'Another test group'
-			};
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			groups.update(GROUP_ID, options);
+		});
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').withArgs('/groups/' + GROUP_ID).yieldsAsync();
-			groups.update(GROUP_ID, options, done);
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			groups.update(GROUP_ID, options, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return groups.update(GROUP_ID, options)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -164,16 +235,38 @@ describe('Groups', function() {
 
 		it('should make DELETE request to delete the group when called', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs('/groups/' + GROUP_ID, null);
 			groups.delete(GROUP_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/groups/' + GROUP_ID).yieldsAsync();
-			groups.delete(GROUP_ID, done);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			groups.delete(GROUP_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			groups.delete(GROUP_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return groups.delete(GROUP_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -194,9 +287,9 @@ describe('Groups', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/group_memberships', expectedParams);
-			groups.addUser(GROUP_ID, USER_ID, null);
+			groups.addUser(GROUP_ID, USER_ID);
 		});
 
 		it('should make POST request to create group membership when called with optional parameters', function() {
@@ -217,15 +310,38 @@ describe('Groups', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/group_memberships', expectedParams);
 			groups.addUser(GROUP_ID, USER_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/group_memberships').yieldsAsync();
-			groups.addUser(GROUP_ID, USER_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			groups.addUser(GROUP_ID, USER_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			groups.addUser(GROUP_ID, USER_ID, {}, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return groups.addUser(GROUP_ID, USER_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -239,7 +355,7 @@ describe('Groups', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/group_memberships/' + MEMBERSHIP_ID, expectedParams);
 			groups.getMembership(MEMBERSHIP_ID, null);
 		});
@@ -256,15 +372,38 @@ describe('Groups', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/group_memberships/' + MEMBERSHIP_ID, expectedParams);
 			groups.getMembership(MEMBERSHIP_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/group_memberships/' + MEMBERSHIP_ID).yieldsAsync();
-			groups.getMembership(MEMBERSHIP_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			groups.getMembership(MEMBERSHIP_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			groups.getMembership(MEMBERSHIP_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return groups.getMembership(MEMBERSHIP_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -272,30 +411,54 @@ describe('Groups', function() {
 
 		var MEMBERSHIP_ID = '639457';
 
-		it('should make PUT request to update the membership when called', function() {
+		var options,
+			expectedParams;
 
-			var options = {
+		beforeEach(function() {
+
+			options = {
 				role: 'member'
 			};
 
-			var expectedParams = {
+			expectedParams = {
 				body: options
 			};
+		});
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+		it('should make PUT request to update the membership when called', function() {
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs('/group_memberships/' + MEMBERSHIP_ID, expectedParams);
 			groups.updateMembership(MEMBERSHIP_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			var options = {
-				role: 'member'
-			};
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			groups.updateMembership(MEMBERSHIP_ID, options);
+		});
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').withArgs('/group_memberships/' + MEMBERSHIP_ID).yieldsAsync();
-			groups.updateMembership(MEMBERSHIP_ID, options, done);
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			groups.updateMembership(MEMBERSHIP_ID, options, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return groups.updateMembership(MEMBERSHIP_ID, options)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -305,16 +468,38 @@ describe('Groups', function() {
 
 		it('should make DELETE request to delete the membership when called', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs('/group_memberships/' + MEMBERSHIP_ID);
 			groups.removeMembership(MEMBERSHIP_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/group_memberships/' + MEMBERSHIP_ID).yieldsAsync();
-			groups.removeMembership(MEMBERSHIP_ID, done);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			groups.removeMembership(MEMBERSHIP_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			groups.removeMembership(MEMBERSHIP_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return groups.removeMembership(MEMBERSHIP_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -327,7 +512,7 @@ describe('Groups', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/memberships', expectedParams);
 			groups.getMemberships(GROUP_ID, null);
 		});
@@ -342,15 +527,38 @@ describe('Groups', function() {
 				qs: options
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/memberships', expectedParams);
 			groups.getMemberships(GROUP_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/groups/' + GROUP_ID + '/memberships').yieldsAsync();
-			groups.getMemberships(GROUP_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			groups.getMemberships(GROUP_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			groups.getMemberships(GROUP_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return groups.getMemberships(GROUP_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -363,7 +571,7 @@ describe('Groups', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups', expectedParams);
 			groups.getAll(null);
 		});
@@ -378,15 +586,38 @@ describe('Groups', function() {
 				qs: options
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups', expectedParams);
 			groups.getAll(options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/groups').yieldsAsync();
-			groups.getAll(null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			groups.getAll();
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			groups.getAll(null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return groups.getAll()
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -399,7 +630,7 @@ describe('Groups', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/collaborations', expectedParams);
 			groups.getCollaborations(GROUP_ID, null);
 		});
@@ -414,15 +645,38 @@ describe('Groups', function() {
 				qs: options
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/collaborations', expectedParams);
 			groups.getCollaborations(GROUP_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/groups/' + GROUP_ID + '/collaborations').yieldsAsync();
-			groups.getCollaborations(GROUP_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			groups.getCollaborations(GROUP_ID, null);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			groups.getCollaborations(GROUP_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return groups.getCollaborations(GROUP_ID, null)
+				.then(data => assert.equal(data, response));
 		});
 	});
 

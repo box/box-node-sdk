@@ -137,8 +137,13 @@ describe('box-client', function() {
 
 			sandbox.mock(requestManagerFake).expects('makeRequest').yieldsAsync(null, fakeOKResponse);
 
-			sandbox.mock(basicClient).expects('_handleResponse').withExactArgs(null, fakeOKResponse, done).yieldsAsync();
-			basicClient._makeRequest({}, done);
+			sandbox.mock(basicClient).expects('_handleResponse').withArgs(null, fakeOKResponse).yieldsAsync(null, fakeOKResponse);
+			basicClient._makeRequest({}, function(err, res) {
+
+				assert.ifError(err);
+				assert.equal(res, fakeOKResponse);
+				done();
+			});
 		});
 
 		it('should propagate error when unable to upkeep tokens', function(done) {

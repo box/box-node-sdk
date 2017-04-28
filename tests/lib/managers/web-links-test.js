@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
+	assert = require('chai').assert,
 	BoxClient = require('../../../lib/box-client');
 
 // ------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ describe('WebLinks', function() {
 			expectedParams.body.name = name;
 			expectedParams.body.description = description;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			weblinks.create(url, parentID, {name: name, description: description});
 		});
@@ -92,7 +93,7 @@ describe('WebLinks', function() {
 		it('should make POST request with name to create a web link when just a name is passed', function() {
 			expectedParams.body.name = name;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			weblinks.create(url, parentID, {name: name});
 		});
@@ -100,37 +101,82 @@ describe('WebLinks', function() {
 		it('should make POST request with description to create a web link when just a description is passed', function() {
 			expectedParams.body.description = description;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			weblinks.create(url, parentID, {description: description});
 		});
 
 		it('should make POST request with mandatory parameters to create a web link when neither optional parameter is passed', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			weblinks.create(url, parentID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs(BASE_PATH).yieldsAsync();
-			weblinks.create(url, parentID, {name: name, description: description}, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			weblinks.create(url, parentID);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			weblinks.create(url, parentID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return weblinks.create(url, parentID)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('get()', function() {
 
 		it('should make GET request to get a web link when called', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + WEB_LINK_ID, testParamsWithQs);
 			weblinks.get(WEB_LINK_ID, testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs(BASE_PATH + '/' + WEB_LINK_ID).yieldsAsync();
-			weblinks.get(WEB_LINK_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			weblinks.get(WEB_LINK_ID, testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			weblinks.get(WEB_LINK_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return weblinks.get(WEB_LINK_ID, testQS)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -151,7 +197,7 @@ describe('WebLinks', function() {
 			expectedParams.body.name = name;
 			expectedParams.body.description = description;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + WEB_LINK_ID, expectedParams);
 			weblinks.update(WEB_LINK_ID, {name: name, description: description});
 		});
@@ -159,7 +205,7 @@ describe('WebLinks', function() {
 		it('should make PUT request with name to update a weblink when just a name is passed', function() {
 			expectedParams.body.name = name;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + WEB_LINK_ID, expectedParams);
 			weblinks.update(WEB_LINK_ID, {name: name});
 		});
@@ -167,31 +213,76 @@ describe('WebLinks', function() {
 		it('should make PUT request with description to update a weblink when just a description is passed', function() {
 			expectedParams.body.description = description;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + WEB_LINK_ID, expectedParams);
 			weblinks.update(WEB_LINK_ID, {description: description});
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').withArgs(BASE_PATH + '/' + WEB_LINK_ID).yieldsAsync();
-			weblinks.update(WEB_LINK_ID, {name: name, description: description}, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			weblinks.update(WEB_LINK_ID, {description: description});
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			weblinks.update(WEB_LINK_ID, {name}, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return weblinks.update(WEB_LINK_ID, {description: description})
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('delete()', function() {
 
 		it('should make DELETE request to delete a web link when called', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs(BASE_PATH + '/' + WEB_LINK_ID, null);
 			weblinks.delete(WEB_LINK_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs(BASE_PATH + '/' + WEB_LINK_ID).yieldsAsync();
-			weblinks.delete(WEB_LINK_ID, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			weblinks.delete(WEB_LINK_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			weblinks.delete(WEB_LINK_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return weblinks.delete(WEB_LINK_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
