@@ -286,6 +286,14 @@ describe('box-node-sdk', function() {
 			assert.ok(BasicClient.calledWithNew(), 'New client should be created');
 			assert.ok(BasicClient.calledWithMatch(appAuthSessionFake), 'App auth session should be passed in');
 		});
+
+		it('should throw an error when enterprise id is not passed and the SDK instance is not created from boxAppSettings', function() {
+			assert.throws(function() {
+				sdk.getAppAuthClient('enterprise');
+			}, Error, 'Enterprise ID must be passed');
+
+		});
+
 	});
 
 	describe('getAuthorizeURL', function() {
