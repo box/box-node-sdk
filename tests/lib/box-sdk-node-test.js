@@ -67,9 +67,9 @@ describe('box-node-sdk', function() {
 					publicKeyID: 'keyID',
 					privateKey: 'privateKey',
 					passphrase: 'passphrase'
-				},
-				enterpriseID: 'myEnterpriseID'
-			}
+				}
+			},
+			enterpriseID: 'myEnterpriseID'
 		};
 
 
