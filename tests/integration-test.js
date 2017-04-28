@@ -97,6 +97,51 @@ describe('Box Node SDK', function() {
 
 	});
 
+	it('should return promise when basic client manager function is called', function() {
+
+		var folderID = '98740596456',
+			folderName = 'Test Folder';
+
+		apiMock.get('/2.0/folders/' + folderID)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				return true;
+			})
+			.matchHeader('User-Agent', function(uaHeader) {
+				assert.include(uaHeader, 'Box Node.js SDK v');
+				return true;
+			})
+			.matchHeader('Accept-Encoding', function(header) {
+				assert.equal(header, 'gzip');
+				return true;
+			})
+			.reply(200, {
+				id: folderID,
+				name: folderName
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			request: {
+				headers: {
+					'Accept-Encoding': 'gzip'
+				}
+			}
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		return client.folders.get(folderID)
+			.catch(err => {
+				assert.ifError(err);
+			})
+			.then(data => {
+				assert.propertyVal(data, 'id', folderID);
+				assert.propertyVal(data, 'name', folderName);
+			});
+	});
+
 	it('should fire response event when response comes back from the API', function(done) {
 
 		var apiResponse = {

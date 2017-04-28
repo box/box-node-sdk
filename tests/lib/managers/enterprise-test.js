@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
+	assert = require('chai').assert,
 	BoxClient = require('../../../lib/box-client');
 
 // ------------------------------------------------------------------------------
@@ -25,7 +26,7 @@ var sandbox = sinon.sandbox.create(),
 // Tests
 // ------------------------------------------------------------------------------
 
-describe('WebLinks', function() {
+describe('Enterprise', function() {
 
 	beforeEach(function() {
 		// Enable Mockery
@@ -56,40 +57,86 @@ describe('WebLinks', function() {
 				filter_term: 'Brad'
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/users', {qs});
 			enterprise.getUsers(qs);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/users').yieldsAsync();
-			enterprise.getUsers(null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			enterprise.getUsers();
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			enterprise.getUsers(null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return enterprise.getUsers()
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('inviteUser()', function() {
 
-		it('should make GET request to get enterprise users when called', function() {
+		var TEST_LOGIN = 'jsmith@box.com';
 
-			var login = 'jsmith@box.com';
+		it('should make POST request to add enterprise user when called', function() {
 
 			var expectedParams = {
 				body: {
 					enterprise: {id: ENTERPRISE_ID},
-					actionable_by: {login}
+					actionable_by: {login: TEST_LOGIN}
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/invites', expectedParams);
-			enterprise.inviteUser(ENTERPRISE_ID, login);
+			enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/invites').yieldsAsync();
-			enterprise.inviteUser(ENTERPRISE_ID, 'hi@example.com', done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -110,7 +157,7 @@ describe('WebLinks', function() {
 		});
 
 		it('should make POST request with mandatory parameters to create an user without optional parameters', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
 			enterprise.addUser(LOGIN, NAME);
 		});
@@ -118,17 +165,39 @@ describe('WebLinks', function() {
 		it('should make POST request with all parameters to create an user when called with optional parameter', function() {
 			expectedParams.body.role = ROLE;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
 			enterprise.addUser(LOGIN, NAME, {role: ROLE});
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/users').yieldsAsync();
-			enterprise.addUser(LOGIN, NAME, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			enterprise.addUser(LOGIN, NAME, {role: ROLE});
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			enterprise.addUser(LOGIN, NAME, {role: ROLE}, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return enterprise.addUser(LOGIN, NAME, {role: ROLE})
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('addAppUser()', function() {
@@ -147,7 +216,7 @@ describe('WebLinks', function() {
 		});
 
 		it('should make POST request with mandatory parameters to create an app user without optional parameters', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
 			enterprise.addAppUser(NAME);
 		});
@@ -155,17 +224,39 @@ describe('WebLinks', function() {
 		it('should make POST request with all parameters to create an user when called with optional parameter', function() {
 			expectedParams.body.job_title = JOB_TITLE;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
 			enterprise.addAppUser(NAME, {job_title: JOB_TITLE});
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/users').yieldsAsync();
-			enterprise.addAppUser(NAME, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			enterprise.addAppUser(NAME, {job_title: JOB_TITLE});
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			enterprise.addAppUser(NAME, {job_title: JOB_TITLE}, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return enterprise.addAppUser(NAME, {job_title: JOB_TITLE})
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('transferUserContent()', function() {
@@ -181,15 +272,38 @@ describe('WebLinks', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs('/users/' + SRC_USER_ID + '/folders/0', expectedParams);
 			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').withArgs('/users/' + SRC_USER_ID + '/folders/0').yieldsAsync();
-			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 

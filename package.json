@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "async": "^2.3.0",
+    "bluebird": "^3.5.0",
     "http-status": "^0.2.2",
     "jsonwebtoken": "^5.7.0",
     "merge-options": "0.0.64",
