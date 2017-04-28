@@ -344,7 +344,7 @@ client.files.abortUploadSession('93D9A837B45F', callback);
 The list of parts successfully uploaded to an in-progress upload session can be
 retrieved by calling
 [`files.getUploadSessionParts(sessionID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getUploadSessionParts).
-The list is returned as a paged collection using the `limit` and `marker` options.
+The list is returned as a paged collection using the `limit` and `offset` options.
 
 ```js
 // Get the list of parts already uploaded
