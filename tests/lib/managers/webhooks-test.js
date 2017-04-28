@@ -68,30 +68,76 @@ describe('Webhooks', function() {
 
 		it('should make POST call to create webhook', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/webhooks', expectedParams);
 			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/webhooks').yieldsAsync();
-			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return webhooks.create(ID, TYPE, ADDRESS, TRIGGERS)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('get()', function() {
 
 		it('should make GET request to get Webhook info when called', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/webhooks/1234', testParamsWithQs);
 			webhooks.get(WEBHOOKS_ID, testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/webhooks/1234', testParamsWithQs).yieldsAsync();
-			webhooks.get(WEBHOOKS_ID, testQS, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			webhooks.get(WEBHOOKS_ID, testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			webhooks.get(WEBHOOKS_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return webhooks.get(WEBHOOKS_ID, testQS)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -99,16 +145,38 @@ describe('Webhooks', function() {
 
 		it('should make GET call to fetch all webhooks', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/webhooks', testParamsWithQs);
 			webhooks.getAll(testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs(testParamsWithQs).yieldsAsync();
-			webhooks.getAll(testQS, done);
-			done();
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			webhooks.getAll(testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			webhooks.getAll(testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return webhooks.getAll(testQS)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -124,15 +192,38 @@ describe('Webhooks', function() {
 		};
 		it('should make PUT call to update webhook', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs('/webhooks/1234');
 			webhooks.update(WEBHOOKS_ID, param);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').withArgs('/webhooks/1234').yieldsAsync();
-			webhooks.update(WEBHOOKS_ID, param, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			webhooks.update(WEBHOOKS_ID, param);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			webhooks.update(WEBHOOKS_ID, param, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return webhooks.update(WEBHOOKS_ID, param)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -140,17 +231,39 @@ describe('Webhooks', function() {
 
 		it('should make DELETE call to remove webhook', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs('/webhooks/1234');
 			webhooks.delete(WEBHOOKS_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/webhooks/1234').yieldsAsync();
-			webhooks.delete(WEBHOOKS_ID, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			webhooks.delete(WEBHOOKS_ID);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			webhooks.delete(WEBHOOKS_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return webhooks.delete(WEBHOOKS_ID)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('setSignatureKeys()', function() {
@@ -251,6 +364,11 @@ describe('Webhooks', function() {
 			const clock = sinon.useFakeTimers(DATE_IN_PAST);
 			assert.ok(!Webhooks.validateMessage(BODY, HEADERS_WITH_WRONG_SIGNATURE_ALGORITHM, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
 			clock.restore();
+		});
+
+		it('should attach validation method to manager instance', function() {
+
+			assert.equal(Webhooks.validateMessage, webhooks.validateMessage);
 		});
 	});
 });

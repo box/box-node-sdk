@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
+	assert = require('chai').assert,
 	BoxClient = require('../../../lib/box-client');
 
 // ------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ describe('Tasks', function() {
 			expectedParams.body.message = message;
 			expectedParams.body.due_at = dueAt;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			tasks.create(FILE_ID, {message: message, due_at: dueAt});
 		});
@@ -92,7 +93,7 @@ describe('Tasks', function() {
 		it('should make POST request with message to create a task when just a message is passed', function() {
 			expectedParams.body.message = message;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			tasks.create(FILE_ID, {message: message});
 		});
@@ -100,39 +101,83 @@ describe('Tasks', function() {
 		it('should make POST request with due_at to create a task when just a dueAt is passed', function() {
 			expectedParams.body.due_at = dueAt;
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			tasks.create(FILE_ID, {due_at: dueAt});
 		});
 
 		it('should make POST request with mandatory parameters to create a task when neither optional parameter is passed', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
 			tasks.create(FILE_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs(BASE_PATH).yieldsAsync();
-			tasks.create(FILE_ID, {message: message, dueAt: dueAt}, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			tasks.create(FILE_ID);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			tasks.create(FILE_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return tasks.create(FILE_ID)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('get()', function() {
 
 		it('should make GET request to get task info when called', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + TASK_ID, testParamsWithQs);
 			tasks.get(TASK_ID, testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
-			tasks.get(TASK_ID, testQS, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			tasks.get(TASK_ID, testQS);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			tasks.get(TASK_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return tasks.get(TASK_ID, testQS)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 
@@ -151,22 +196,45 @@ describe('Tasks', function() {
 				body: options
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
 			tasks.update(TASK_ID, options);
 		});
 
 		it('should make PUT request with mandatory parameters to update a task when no optional parameter is passed', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, {body: null});
 			tasks.update(TASK_ID, null);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
-			tasks.update(TASK_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			tasks.update(TASK_ID, null);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			tasks.update(TASK_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return tasks.update(TASK_ID, null)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -174,54 +242,117 @@ describe('Tasks', function() {
 
 		it('should make delete request to delete a task permanently when called', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs(BASE_PATH + '/' + TASK_ID);
 			tasks.delete(TASK_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs(BASE_PATH + '/' + TASK_ID).yieldsAsync();
-			tasks.delete(TASK_ID, done);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			tasks.delete(TASK_ID);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			tasks.delete(TASK_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return tasks.delete(TASK_ID)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('getAssignments()', function() {
 
 		it('should make GET request to get task assignments when called', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + TASK_ID + '/assignments', testParamsWithQs);
 			tasks.getAssignments(TASK_ID, testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs(BASE_PATH + '/' + TASK_ID + '/assignments').yieldsAsync();
-			tasks.getAssignments(TASK_ID, testQS, done);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			tasks.getAssignments(TASK_ID, testQS);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			tasks.getAssignments(TASK_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return tasks.getAssignments(TASK_ID, testQS)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('getAssignment()', function() {
 
 		it('should make GET request to get task assignment when called', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/task_assignments/' + ASSIGNMENT_ID, testParamsWithQs);
 			tasks.getAssignment(ASSIGNMENT_ID, testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/task_assignments/' + ASSIGNMENT_ID).yieldsAsync();
-			tasks.getAssignment(ASSIGNMENT_ID, testQS, done);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			tasks.getAssignment(ASSIGNMENT_ID, testQS);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			tasks.getAssignment(TASK_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return tasks.getAssignment(ASSIGNMENT_ID, testQS)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('assignByUserID()', function() {
@@ -242,16 +373,38 @@ describe('Tasks', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/task_assignments', expectedParams);
 			tasks.assignByUserID(TASK_ID, USER_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/task_assignments').yieldsAsync();
-			tasks.assignByUserID(TASK_ID, USER_ID, done);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			tasks.assignByUserID(TASK_ID, USER_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			tasks.assignByUserID(TASK_ID, USER_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return tasks.assignByUserID(TASK_ID, USER_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -273,16 +426,38 @@ describe('Tasks', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/task_assignments', expectedParams);
 			tasks.assignByEmail(TASK_ID, EMAIL);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/task_assignments').yieldsAsync();
-			tasks.assignByEmail(TASK_ID, EMAIL, done);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			tasks.assignByEmail(TASK_ID, EMAIL);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			tasks.assignByEmail(TASK_ID, EMAIL, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return tasks.assignByEmail(TASK_ID, EMAIL)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -290,27 +465,54 @@ describe('Tasks', function() {
 		var MESSAGE = 'Optional message for the test',
 			RESOLUTION_STATE = 'approved';
 
-		it('should make PUT request with all parameters to update a task when called', function() {
+		var options;
 
-			var options = {
+		beforeEach(function() {
+
+			options = {
 				message: MESSAGE,
 				resolution_state: RESOLUTION_STATE
 			};
+		});
+
+		it('should make PUT request with all parameters to update a task when called', function() {
 
 			var expectedParams = {
 				body: options
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs('/task_assignments/' + ASSIGNMENT_ID, expectedParams);
 			tasks.updateAssignment(ASSIGNMENT_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'put').withArgs('/task_assignments/' + ASSIGNMENT_ID).yieldsAsync();
-			tasks.updateAssignment(ASSIGNMENT_ID, {}, done);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			tasks.updateAssignment(ASSIGNMENT_ID, options);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			tasks.updateAssignment(ASSIGNMENT_ID, options, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return tasks.updateAssignment(ASSIGNMENT_ID, options)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -318,18 +520,39 @@ describe('Tasks', function() {
 
 		it('should make delete request to delete a task permanently when called', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs('/task_assignments/' + ASSIGNMENT_ID);
 			tasks.deleteAssignment(ASSIGNMENT_ID);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/task_assignments/' + ASSIGNMENT_ID).yieldsAsync();
-			tasks.deleteAssignment(ASSIGNMENT_ID, done);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			tasks.deleteAssignment(ASSIGNMENT_ID);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			tasks.deleteAssignment(ASSIGNMENT_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return tasks.deleteAssignment(ASSIGNMENT_ID)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 });
