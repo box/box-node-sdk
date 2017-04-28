@@ -10,6 +10,7 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client'),
@@ -63,7 +64,7 @@ describe('DevicePins', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/device_pinners/' + PIN_ID, params);
 			devicePins.get(PIN_ID, null);
 		});
@@ -74,16 +75,38 @@ describe('DevicePins', function() {
 
 			var params = {qs};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/device_pinners/' + PIN_ID, params);
 			devicePins.get(PIN_ID, qs);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/device_pinners/' + PIN_ID, {qs: null}).yieldsAsync();
-			devicePins.get(PIN_ID, null, done);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			devicePins.get(PIN_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			devicePins.get(PIN_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return devicePins.get(PIN_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -95,7 +118,7 @@ describe('DevicePins', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs('/device_pinners/' + PIN_ID, params);
 			devicePins.delete(PIN_ID, null);
 		});
@@ -106,16 +129,38 @@ describe('DevicePins', function() {
 
 			var params = {qs};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs('/device_pinners/' + PIN_ID, params);
 			devicePins.delete(PIN_ID, qs);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap with default handler when called', function() {
 
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/device_pinners/' + PIN_ID, {qs: null}).yieldsAsync();
-			devicePins.delete(PIN_ID, null, done);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			devicePins.delete(PIN_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			devicePins.delete(PIN_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return devicePins.delete(PIN_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -123,32 +168,37 @@ describe('DevicePins', function() {
 
 		var ENTERPRISE_ID = '7898345';
 
+		var user;
+
+		beforeEach(function() {
+
+			user = {
+				enterprise: {
+					id: ENTERPRISE_ID
+				}
+			};
+		});
+
 		it('should get current enterprise ID and make GET request to get device pin info when user is in enterprise', function(done) {
 
 			var params = {
 				qs: null
 			};
 
-			var user = {
-				enterprise: {
-					id: ENTERPRISE_ID
-				}
-			};
-
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
-			sandbox.mock(boxClientFake.users).expects('get').withArgs('me', {fields: 'enterprise'}).yieldsAsync(null, user);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/enterprises/' + ENTERPRISE_ID + '/device_pinners', params).yieldsAsync();
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake.users).expects('get').withArgs('me', {fields: 'enterprise'}).returns(Promise.resolve(user));
+			sandbox.mock(boxClientFake).expects('get').withArgs('/enterprises/' + ENTERPRISE_ID + '/device_pinners', params).returns(Promise.resolve({}));
 			devicePins.getAll(null, done);
 		});
 
 		it('should get current enterprise ID and call callback with error when user is not in enterprise', function(done) {
 
-			var user = {
+			user = {
 				enterprise: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
-			sandbox.mock(boxClientFake.users).expects('get').withArgs('me', {fields: 'enterprise'}).yieldsAsync(null, user);
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake.users).expects('get').withArgs('me', {fields: 'enterprise'}).returns(Promise.resolve(user));
 			sandbox.mock(boxClientFake).expects('get').never();
 			devicePins.getAll(null, function(err) {
 
@@ -157,24 +207,37 @@ describe('DevicePins', function() {
 			});
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
+		it('should wrap GET call with default handler when called', function() {
 
-			var user = {
-				enterprise: {
-					id: ENTERPRISE_ID
-				}
-			};
-
-			var pins = {
-				entries: []
-			};
-
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake.users, 'get').yieldsAsync(null, user);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, pins);
-			devicePins.getAll(null, done);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			devicePins.getAll();
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			devicePins.getAll(null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return devicePins.getAll()
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 });

@@ -9,6 +9,7 @@
 // ------------------------------------------------------------------------------
 var sinon = require('sinon'),
 	mockery = require('mockery'),
+	assert = require('chai').assert,
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -57,17 +58,39 @@ describe('Collections', function() {
 	describe('getAll()', function() {
 
 		it('should make GET request to get all collections info when called', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/collections');
 			collections.getAll();
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/collections').yieldsAsync();
-			collections.getAll(done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			collections.getAll();
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			collections.getAll(function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return collections.getAll()
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('getItems()', function() {
@@ -80,17 +103,39 @@ describe('Collections', function() {
 		});
 
 		it('should make GET request to get all items from a collection when called', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/collections/1234/items');
-			collections.getItems(collectionID);
+			collections.getItems(collectionID, testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/collections/1234/items', {qs: testQS}).yieldsAsync();
-			collections.getItems(collectionID, testQS, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			collections.getItems(collectionID, testQS);
 		});
 
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			collections.getItems(collectionID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return collections.getItems(collectionID, testQS)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 });
