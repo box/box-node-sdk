@@ -293,7 +293,7 @@ describe('box-node-sdk', function() {
 			}, Error, 'Enterprise ID must be passed');
 		});
 
-		it.only('should use the enterprise id that is passed as a parameter and should not use the config', function() {
+		it('should use the enterprise id that is passed as a parameter and should not use the config', function() {
 			var id = '87346',
 				type = 'enterprise';
 
