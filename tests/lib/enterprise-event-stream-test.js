@@ -10,7 +10,6 @@ var sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
 	Readable = require('stream').Readable,
-	fs = require('fs'),
 	leche = require('leche');
 
 var BoxClient = require('../../lib/box-client'),
@@ -46,14 +45,13 @@ describe('EnterpriseEventStream', function() {
 		type: 'event',
 		event_id: '783964999'
 	};
-	var TEST_FILTER = 'UPLOAD,DOWNLOAD';
-	var TEST_FILE = 'test.json';
-	var TEST_SRTEAM_POSITION_FILE_CONTENTS = JSON.stringify({
+	var TEST_FILTER = ['UPLOAD', 'DOWNLOAD'];
+	var TEST_STREAM_STATE = {
 		streamPosition: TEST_STREAM_POSITION,
 		startDate: TEST_DATE,
 		endDate: TEST_DATE2,
 		eventTypeFilter: TEST_FILTER
-	}, null, 2);
+	};
 
 	beforeEach(function() {
 
@@ -131,37 +129,22 @@ describe('EnterpriseEventStream', function() {
 
 	});
 
-	describe('readStreamPositionFromFile()', function() {
+	describe('setStreamState()', function() {
 
-		it('should read the current stream position from the file', function(done) {
+		it('should set the current stream state', function() {
 
-			var spy = sandbox.stub(fs, 'readFile').yields(null, TEST_SRTEAM_POSITION_FILE_CONTENTS);
-			enterpriseEventStream.readStreamPositionFromFile(TEST_FILE, function() {
-				assert(spy.calledWith(TEST_FILE));
-				assert.propertyVal(enterpriseEventStream, '_streamPosition', TEST_STREAM_POSITION);
-				assert.propertyVal(enterpriseEventStream._options, 'startDate', TEST_DATE);
-				assert.propertyVal(enterpriseEventStream._options, 'endDate', TEST_DATE2);
-				assert.propertyVal(enterpriseEventStream._options, 'eventTypeFilter', TEST_FILTER);
-				done();
-			});
-		});
-
-		it('should return any fs error', function(done) {
-
-			var fsError = new Error('Whoops');
-			var spy = sandbox.stub(fs, 'readFile').yields(fsError);
-			enterpriseEventStream.readStreamPositionFromFile(TEST_FILE, function(error) {
-				assert(spy.calledWith(TEST_FILE));
-				assert.equal(error, fsError);
-				done();
-			});
+			enterpriseEventStream.setStreamState(TEST_STREAM_STATE);
+			assert.propertyVal(enterpriseEventStream, '_streamPosition', TEST_STREAM_POSITION);
+			assert.propertyVal(enterpriseEventStream._options, 'startDate', TEST_DATE);
+			assert.propertyVal(enterpriseEventStream._options, 'endDate', TEST_DATE2);
+			assert.propertyVal(enterpriseEventStream._options, 'eventTypeFilter', TEST_FILTER);
 		});
 
 	});
 
-	describe('writeStreamPositionToFile()', function() {
+	describe('getStreamState()', function() {
 
-		it('should write the current stream position to the file', function(done) {
+		it('should return the current stream state', function() {
 
 			var options = {
 				streamPosition: TEST_STREAM_POSITION,
@@ -170,11 +153,8 @@ describe('EnterpriseEventStream', function() {
 				eventTypeFilter: TEST_FILTER
 			};
 			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, options);
-			var spy = sandbox.stub(fs, 'writeFile').yields();
-			enterpriseEventStream2.writeStreamPositionToFile(TEST_FILE, function() {
-				assert(spy.calledWith(TEST_FILE, TEST_SRTEAM_POSITION_FILE_CONTENTS));
-				done();
-			});
+			const state = enterpriseEventStream2.getStreamState();
+			assert.deepEqual(state, TEST_STREAM_STATE);
 		});
 
 	});
@@ -206,7 +186,7 @@ describe('EnterpriseEventStream', function() {
 				stream_position: 0,
 				created_after: TEST_DATE,
 				created_before: TEST_DATE2,
-				event_type: TEST_FILTER,
+				event_type: TEST_FILTER.join(','),
 				limit: 80
 			}));
 
