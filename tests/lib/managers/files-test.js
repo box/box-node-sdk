@@ -28,7 +28,9 @@ var sandbox = sinon.sandbox.create(),
 	testParamsWithQs,
 	FILE_ID = '1234',
 	FILE_VERSION_ID = '5678',
-	MODULE_FILE_PATH = '../../../lib/managers/files';
+	MODULE_FILE_PATH = '../../../lib/managers/files',
+	fsFake,
+	streamFake;
 
 
 // ------------------------------------------------------------------------------
@@ -44,6 +46,9 @@ describe('Files', function() {
 		testParamsWithQs = {qs: testQS};
 		// Register Mocks
 		mockery.enable({ useCleanCache: true });
+		fsFake = leche.create(['createReadStream']);
+		mockery.registerMock('fs', fsFake);
+
 		mockery.registerAllowable('http-status');
 		mockery.registerAllowable('util');
 		mockery.registerAllowable('../util/url-path');
@@ -52,6 +57,7 @@ describe('Files', function() {
 		mockery.registerAllowable(MODULE_FILE_PATH);
 		Files = require(MODULE_FILE_PATH);
 		files = new Files(boxClientFake);
+		streamFake = {on: sandbox.stub()};
 	});
 
 	afterEach(function() {
@@ -215,13 +221,11 @@ describe('Files', function() {
 		it('should call callback with the read stream when callback is passed', function(done) {
 
 			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
-
 			var stream = {};
 
 			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(stream));
 			files.getReadStream(FILE_ID, testQS, function(err, data) {
-
 				assert.ifError(err);
 				assert.equal(data, stream);
 				done();
@@ -1102,6 +1106,32 @@ describe('Files', function() {
 		});
 	});
 
+	describe('uploadFileFromPath()', function() {
+
+		var PARENT_FOLDER_ID = '123',
+			FILENAME = 'folders-test.js',
+			PATH = './folders-test.js';
+
+		it('should call BoxClient.upload() with the correct params', function() {
+			var callback = sandbox.stub();
+
+			sandbox.stub(fsFake, 'createReadStream').withArgs(PATH).returns(streamFake);
+			sandbox.mock(files).expects('uploadFile').withArgs(PARENT_FOLDER_ID, FILENAME, streamFake, callback);
+
+			files.uploadFileFromPath(PARENT_FOLDER_ID, FILENAME, PATH, callback);
+		});
+
+		it('should throw an error if file is not present', function() {
+			var error = new Error('API Failure');
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'upload').withArgs(error);
+			files.uploadFileFromPath(PARENT_FOLDER_ID, FILENAME, './none', function(err) {
+				assert.equal(err, error);
+			});
+		});
+	});
+
 	describe('uploadNewFileVersion()', function() {
 
 		var CONTENT = new Buffer('someContent');
@@ -1146,6 +1176,30 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve(response));
 			return files.uploadNewFileVersion(FILE_ID, CONTENT)
 				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('uploadNewFileVersionFromPath()', function() {
+
+		var	PATH = './folders-test.js';
+
+		it('should call BoxClient.upload() with the correct params', function() {
+			var callback = sandbox.stub();
+
+			sandbox.stub(fsFake, 'createReadStream').withArgs(PATH).returns(streamFake);
+			sandbox.mock(files).expects('uploadNewFileVersion').withArgs(FILE_ID, streamFake, callback);
+
+			files.uploadNewFileVersionFromPath(FILE_ID, PATH, callback);
+		});
+
+		it('should throw an error if file path is not present', function() {
+			var error = new Error('API Failure');
+
+			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'upload').withArgs(error);
+			files.uploadNewFileVersionFromPath(FILE_ID, './none', function(err) {
+				assert.equal(err, error);
+			});
 		});
 	});
 
