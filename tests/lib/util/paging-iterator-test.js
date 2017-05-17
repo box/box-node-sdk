@@ -115,7 +115,7 @@ describe('PagingIterator', function() {
 
 			assert.propertyVal(iterator, 'limit', 1);
 			assert.propertyVal(iterator, 'done', false);
-			assert.propertyVal(iterator, 'nextChunk', chunk);
+			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'offset');
 			assert.propertyVal(iterator, 'nextValue', 1);
 			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
@@ -147,7 +147,7 @@ describe('PagingIterator', function() {
 
 			assert.propertyVal(iterator, 'limit', 1);
 			assert.propertyVal(iterator, 'done', true);
-			assert.propertyVal(iterator, 'nextChunk', chunk);
+			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'offset');
 			assert.propertyVal(iterator, 'nextValue', 1);
 			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
@@ -178,7 +178,7 @@ describe('PagingIterator', function() {
 
 			assert.propertyVal(iterator, 'limit', 1);
 			assert.propertyVal(iterator, 'done', false);
-			assert.propertyVal(iterator, 'nextChunk', chunk);
+			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'marker');
 			assert.propertyVal(iterator, 'nextValue', 'vwxyz');
 			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
@@ -209,7 +209,7 @@ describe('PagingIterator', function() {
 
 			assert.propertyVal(iterator, 'limit', 1);
 			assert.propertyVal(iterator, 'done', true);
-			assert.propertyVal(iterator, 'nextChunk', chunk);
+			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'marker');
 			assert.propertyVal(iterator, 'nextValue', null);
 			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
@@ -220,9 +220,10 @@ describe('PagingIterator', function() {
 
 	describe('next()', function() {
 
-		it('should return the original page of results when called for the first time', function() {
+		it('should return the first item in original page of results when called for the first time', function() {
 
-			var chunk = [{}];
+			var item = {},
+				chunk = [item];
 			var response = {
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
@@ -244,13 +245,14 @@ describe('PagingIterator', function() {
 			return iterator.next()
 				.then(data => {
 					assert.propertyVal(data, 'done', false);
-					assert.propertyVal(data, 'value', chunk);
+					assert.propertyVal(data, 'value', item);
 				});
 		});
 
-		it('should return the original page of results and done flag when all results fit on one page', function() {
+		it('should return done flag when all results fit on one page and all items are consumed', function() {
 
-			var chunk = [{}];
+			var item = {},
+				chunk = [item];
 			var response = {
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
@@ -271,15 +273,23 @@ describe('PagingIterator', function() {
 
 			return iterator.next()
 				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'value', undefined);
 					assert.propertyVal(data, 'done', true);
-					assert.propertyVal(data, 'value', chunk);
 				});
 		});
 
-		it('should fetch second page of results when called a second time', function() {
+		it('should fetch second page of results when initial buffer is exhausted', function() {
 
-			var chunk1 = [{foo: 'bar'}],
-				chunk2 = [{foo: 'baz'}];
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'};
+			var chunk1 = [item1],
+				chunk2 = [item2];
 			var response1 = {
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
@@ -308,12 +318,12 @@ describe('PagingIterator', function() {
 				body: {
 					entries: chunk2,
 					limit: 1,
-					next_marker: 'qwerty'
+					next_marker: ''
 				}
 			};
 
 			var expectedURL = 'https://api.box.com/2.0/items';
-			var expectedOptions = {
+			var expectedOptions1 = {
 				headers: {},
 				qs: {
 					limit: 1,
@@ -321,22 +331,35 @@ describe('PagingIterator', function() {
 				}
 			};
 
-			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions).yieldsAsync(null, response2);
+			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
 			return iterator.next()
-				.then(() => iterator.next())
 				.then(data => {
 					assert.propertyVal(data, 'done', false);
-					assert.propertyVal(data, 'value', chunk2);
+					assert.propertyVal(data, 'value', item1);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item2);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'value', undefined);
+					assert.propertyVal(data, 'done', true);
 				});
 		});
 
 		it('should fetch second page of offset-based results when original call specified excessive limit', function() {
 
-			var chunk1 = [{foo: 'bar'}],
-				chunk2 = [{foo: 'baz'}];
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'};
+			var chunk1 = [item1],
+				chunk2 = [item2];
 			var response1 = {
 				request: {
 					href: 'https://api.box.com/2.0/items?offset=0&limit=99999',
@@ -349,7 +372,8 @@ describe('PagingIterator', function() {
 				body: {
 					entries: chunk1,
 					limit: 1,
-					offset: 0
+					offset: 0,
+					total_count: 2
 				}
 			};
 			var response2 = {
@@ -365,7 +389,8 @@ describe('PagingIterator', function() {
 				body: {
 					entries: chunk2,
 					limit: 1,
-					offset: 1
+					offset: 1,
+					total_count: 2
 				}
 			};
 
@@ -378,21 +403,220 @@ describe('PagingIterator', function() {
 				}
 			};
 
-			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions).yieldsAsync(null, response2);
+			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions).returns(Promise.resolve(response2));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
 			return iterator.next()
-				.then(() => iterator.next())
 				.then(data => {
 					assert.propertyVal(data, 'done', false);
-					assert.propertyVal(data, 'value', chunk2);
+					assert.propertyVal(data, 'value', item1);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item2);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'value', undefined);
+					assert.propertyVal(data, 'done', true);
+				});
+		});
+
+		it('should properly terminate offset-based results when total_count field is not present', function() {
+
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'};
+			var chunk1 = [item1],
+				chunk2 = [item2];
+			var response1 = {
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=0&limit=1',
+					uri: {
+						query: 'offset=0&limit=1'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk1,
+					limit: 1,
+					offset: 0
+				}
+			};
+			var response2 = {
+				statusCode: 200,
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
+					uri: {
+						query: 'offset=1&limit=1'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk2,
+					limit: 1,
+					offset: 1
+				}
+			};
+			var response3 = {
+				statusCode: 200,
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
+					uri: {
+						query: 'offset=2&limit=1'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: [],
+					limit: 1,
+					offset: 2
+				}
+			};
+
+			var expectedURL = 'https://api.box.com/2.0/items';
+			var expectedOptions1 = {
+				headers: {},
+				qs: {
+					limit: 1,
+					offset: 1
+				}
+			};
+			var expectedOptions2 = {
+				headers: {},
+				qs: {
+					limit: 1,
+					offset: 2
+				}
+			};
+
+			var clientMock = sandbox.mock(clientFake);
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+
+			var iterator = new PagingIterator(response1, clientFake);
+
+			return iterator.next()
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item1);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item2);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'value', undefined);
+					assert.propertyVal(data, 'done', true);
+				});
+		});
+
+		it('should continue paging when intermediate pages are empty', function() {
+
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'};
+			var chunk1 = [item1],
+				chunk2 = [item2];
+			var response1 = {
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=0&limit=1',
+					uri: {
+						query: 'offset=0&limit=1'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk1,
+					limit: 1,
+					offset: 0,
+					total_count: 3
+				}
+			};
+			var response2 = {
+				statusCode: 200,
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
+					uri: {
+						query: 'offset=1&limit=1'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: [],
+					limit: 1,
+					offset: 1,
+					total_count: 3
+				}
+			};
+			var response3 = {
+				statusCode: 200,
+				request: {
+					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
+					uri: {
+						query: 'offset=2&limit=1'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk2,
+					limit: 1,
+					offset: 2,
+					total_count: 3
+				}
+			};
+
+			var expectedURL = 'https://api.box.com/2.0/items';
+			var expectedOptions1 = {
+				headers: {},
+				qs: {
+					limit: 1,
+					offset: 1
+				}
+			};
+			var expectedOptions2 = {
+				headers: {},
+				qs: {
+					limit: 1,
+					offset: 2
+				}
+			};
+
+			var clientMock = sandbox.mock(clientFake);
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+
+			var iterator = new PagingIterator(response1, clientFake);
+
+			return iterator.next()
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item1);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item2);
+
+					return iterator.next();
 				});
 		});
 
 		it('should return rejected promise when fetching page of results fails', function() {
 
-			var chunk1 = [{foo: 'bar'}];
 			var response1 = {
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
@@ -403,7 +627,7 @@ describe('PagingIterator', function() {
 					method: 'GET'
 				},
 				body: {
-					entries: chunk1,
+					entries: [],
 					limit: 1,
 					next_marker: 'vwxyz'
 				}
@@ -411,12 +635,11 @@ describe('PagingIterator', function() {
 
 			var error = new Error('Could not connect to API');
 
-			sandbox.stub(clientFake, 'get').yieldsAsync(error);
+			sandbox.stub(clientFake, 'get').returns(Promise.reject(error));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
 			return iterator.next()
-				.then(() => iterator.next())
 				.catch(err => assert.instanceOf(err, Error));
 		});
 
@@ -443,7 +666,7 @@ describe('PagingIterator', function() {
 				statusCode: 400
 			};
 
-			sandbox.stub(clientFake, 'get').yieldsAsync(null, errorResponse);
+			sandbox.stub(clientFake, 'get').returns(Promise.resolve(errorResponse));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -452,11 +675,14 @@ describe('PagingIterator', function() {
 				.catch(err => assert.instanceOf(err, Error));
 		});
 
-		it('should fetch next page of results when called a third time', function() {
+		it('should fetch next page of results when fetched results are exhausted', function() {
 
-			var chunk1 = [{foo: 'bar'}],
-				chunk2 = [{foo: 'baz'}],
-				chunk3 = [{foo: 'quux'}];
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'},
+				item3 = {foo: 'quux'};
+			var chunk1 = [item1],
+				chunk2 = [item2],
+				chunk3 = [item3];
 			var response1 = {
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
@@ -501,7 +727,7 @@ describe('PagingIterator', function() {
 				body: {
 					entries: chunk3,
 					limit: 1,
-					next_marker: 'blargh'
+					next_marker: ''
 				}
 			};
 
@@ -522,108 +748,43 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).yieldsAsync(null, response2);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).yieldsAsync(null, response3);
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
 			return iterator.next()
-				.then(() => iterator.next())
-				.then(() => iterator.next())
 				.then(data => {
 					assert.propertyVal(data, 'done', false);
-					assert.propertyVal(data, 'value', chunk3);
-				});
-		});
+					assert.propertyVal(data, 'value', item1);
 
-		it('should return done when end of collection is reached', function() {
-
-			var chunk1 = [{foo: 'bar'}],
-				chunk2 = [{foo: 'baz'}];
-			var response1 = {
-				request: {
-					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
-					uri: {
-						query: 'marker=abcdef&limit=1'
-					},
-					headers: {},
-					method: 'GET'
-				},
-				body: {
-					entries: chunk1,
-					limit: 1,
-					next_marker: 'vwxyz'
-				}
-			};
-			var response2 = {
-				statusCode: 200,
-				request: {
-					href: 'https://api.box.com/2.0/items?marker=vwxyz&limit=1',
-					uri: {
-						query: 'marker=vwxyz&limit=1'
-					},
-					headers: {},
-					method: 'GET'
-				},
-				body: {
-					entries: chunk2,
-					limit: 1,
-					next_marker: 'qwerty'
-				}
-			};
-			var response3 = {
-				statusCode: 200,
-				request: {
-					href: 'https://api.box.com/2.0/items?marker=qwerty&limit=1',
-					uri: {
-						query: 'marker=qwerty&limit=1'
-					},
-					headers: {},
-					method: 'GET'
-				},
-				body: {
-					entries: [],
-					limit: 1,
-					next_marker: null
-				}
-			};
-
-			var expectedURL = 'https://api.box.com/2.0/items';
-			var expectedOptions1 = {
-				headers: {},
-				qs: {
-					limit: 1,
-					marker: 'vwxyz'
-				}
-			};
-			var expectedOptions2 = {
-				headers: {},
-				qs: {
-					limit: 1,
-					marker: 'qwerty'
-				}
-			};
-
-			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).yieldsAsync(null, response2);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).yieldsAsync(null, response3);
-
-			var iterator = new PagingIterator(response1, clientFake);
-
-			return iterator.next()
-				.then(() => iterator.next())
-				.then(() => iterator.next())
+					return iterator.next();
+				})
 				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item2);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item3);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'value', undefined);
 					assert.propertyVal(data, 'done', true);
-					// assert.notProperty(data, 'value');
 				});
 		});
 
 		it('should queue requests when called consecutively', function() {
 
 
-			var chunk1 = [{foo: 'bar'}],
-				chunk2 = [{foo: 'baz'}];
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'};
+			var chunk1 = [item1],
+				chunk2 = [item2];
 			var response1 = {
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
@@ -689,8 +850,8 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).yieldsAsync(null, response2);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).yieldsAsync(null, response3);
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -698,12 +859,12 @@ describe('PagingIterator', function() {
 				iterator.next()
 					.then(data => {
 						assert.propertyVal(data, 'done', false);
-						assert.propertyVal(data, 'value', chunk1);
+						assert.propertyVal(data, 'value', item1);
 					}),
 				iterator.next()
 					.then(data => {
 						assert.propertyVal(data, 'done', false);
-						assert.propertyVal(data, 'value', chunk2);
+						assert.propertyVal(data, 'value', item2);
 					}),
 				iterator.next()
 					.then(data => {
