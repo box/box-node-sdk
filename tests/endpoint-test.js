@@ -28,20 +28,32 @@ describe('Endpoint', function() {
 	var sandbox = sinon.sandbox.create();
 
 	var TEST_API_ROOT = 'https://api.box.com',
+		TEST_UPLOAD_ROOT = 'https://upload.box.com/api',
 		TEST_CLIENT_ID = 'client_id',
 		TEST_CLIENT_SECRET = 'TOP SECRET',
 		TEST_ACCESS_TOKEN = 'at',
 		MODULE_FILE_PATH = '../lib/box-node-sdk';
 
 	var apiMock,
+		uploadMock,
 		BoxSDK,
 		sdk,
 		basicClient;
 
 	beforeEach(function() {
 		apiMock = nock(TEST_API_ROOT);
+		uploadMock = nock(TEST_UPLOAD_ROOT);
 
 		apiMock.defaultReplyHeaders({
+			Age: 0,
+			'Cache-Control': 'no-cache, no-store',
+			Connection: 'keep-alive',
+			Date: 'Thu, 17 Nov 2016 06:54:58 GMT',
+			Server: 'ATS',
+			'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
+		});
+
+		uploadMock.defaultReplyHeaders({
 			Age: 0,
 			'Cache-Control': 'no-cache, no-store',
 			Connection: 'keep-alive',
@@ -1227,6 +1239,55 @@ describe('Endpoint', function() {
 
 					assert.isNull(err);
 					assert.isUndefined(data);
+
+					done();
+				});
+			});
+		});
+
+		describe('uploadFile()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var folderID = '0',
+					filename = 'foo.txt',
+					fileContent = 'foo',
+					fixture = getFixture('files/post_files_content_200');
+
+				uploadMock.post('/2.0/files/content',
+					function(body) {
+
+						// Verify the multi-part form body
+						var lines = body.split(/\r?\n/);
+						assert.match(lines[0], /^-+\d+$/);
+						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
+						assert.equal(lines[2], '');
+
+						var attributes = JSON.parse(lines[3]);
+						assert.propertyVal(attributes, 'name', filename);
+						assert.deepPropertyVal(attributes, 'parent.id', folderID);
+
+						assert.match(lines[4], /^-+\d+$/);
+						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
+						assert.equal(lines[6], '');
+						assert.equal(lines[7], fileContent);
+						assert.match(lines[8], /^-+\d+-+$/);
+						return true;
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				basicClient.files.uploadFile(folderID, filename, fileContent, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
 
 					done();
 				});

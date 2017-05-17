@@ -41,8 +41,37 @@ describe('box-node-sdk', function() {
 			clientSecret: 'mySecret',
 			apiRootURL: 'myUrl',
 			retryIntervalMS: 11111,
-			numMaxRetries: 3
+			numMaxRetries: 3,
+			appAuth: {
+				keyID: 'keyID',
+				privateKey: 'privateKey',
+				passphrase: 'passphrase'
+			},
+			enterpriseID: 'myEnterpriseID'
+		},
+		TEST_APP_SETTINGS_CONFIG = {
+			clientID: 'myId',
+			clientSecret: 'mySecret',
+			appAuth: {
+				keyID: 'keyID',
+				privateKey: 'privateKey',
+				passphrase: 'passphrase'
+			},
+			enterpriseID: 'myEnterpriseID'
+		},
+		TEST_APP_SETTINGS = {
+			boxAppSettings: {
+				clientID: 'myId',
+				clientSecret: 'mySecret',
+				appAuth: {
+					publicKeyID: 'keyID',
+					privateKey: 'privateKey',
+					passphrase: 'passphrase'
+				}
+			},
+			enterpriseID: 'myEnterpriseID'
 		};
+
 
 	beforeEach(function() {
 		TokenManagerConstructorStub = sandbox.stub();
@@ -131,6 +160,56 @@ describe('box-node-sdk', function() {
 		});
 	});
 
+	describe('getPreconfiguredInstance()', function() {
+		it('should set config for all passed in params when called', function() {
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
+
+			assert.ok(TokenManagerConstructorStub.calledWithNew(), 'Should construct new TokenManager');
+			assert.ok(TokenManagerConstructorStub.calledWithMatch(TEST_APP_SETTINGS_CONFIG), 'TokenManager should be passed config');
+			assert.ok(sdk, 'SDK should be constructed');
+		});
+
+		it('should create an anonymous session with config when called', function() {
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
+
+			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
+			assert.ok(AnonymousAPISession.calledWithMatch(TEST_APP_SETTINGS_CONFIG), 'Anonymous session should be passed config');
+			assert.ok(sdk, 'SDK should be constructed');
+		});
+
+		it('should create an API Request Manager with config when called', function() {
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
+
+			assert.ok(APIRequestManagerConstructorStub.calledWithNew(), 'Should construct new APIRequestManager');
+			assert.ok(APIRequestManagerConstructorStub.calledWithMatch(TEST_APP_SETTINGS_CONFIG), 'APIRequestManager should be passed config');
+			assert.instanceOf(APIRequestManagerConstructorStub.getCall(0).args[1], EventEmitter, 'APIRequestManager should be passed event bus');
+			assert.ok(sdk, 'SDK should be constructed');
+		});
+	});
+
+	describe('configure()', function() {
+		beforeEach(function() {
+			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
+		});
+
+		it('should verify that additional parameters can be passed to the BoxSDKNode instance', function() {
+			var additonalParams = {
+				apiRootURL: 'myUrl',
+				retryIntervalMS: 11111,
+				numMaxRetries: 3
+			};
+
+			sdk.configure(additonalParams);
+			assert.deepPropertyVal(sdk, 'config.clientID', 'myId');
+			assert.deepPropertyVal(sdk, 'config.apiRootURL', 'myUrl');
+			assert.deepPropertyVal(sdk, 'config.retryIntervalMS', 11111);
+			assert.deepPropertyVal(sdk, 'config.numMaxRetries', 3);
+		});
+	});
+
 	describe('getBasicClient()', function() {
 
 		beforeEach(function() {
@@ -206,6 +285,24 @@ describe('box-node-sdk', function() {
 			assert.isDefined(appAuthClient);
 			assert.ok(BasicClient.calledWithNew(), 'New client should be created');
 			assert.ok(BasicClient.calledWithMatch(appAuthSessionFake), 'App auth session should be passed in');
+		});
+
+		it('should throw an error when enterprise id is not passed and the SDK instance is not created from boxAppSettings', function() {
+			assert.throws(function() {
+				sdk.getAppAuthClient('enterprise');
+			}, Error, 'Enterprise ID must be passed');
+		});
+
+		it('should use the enterprise id that is passed as a parameter and should not use the config', function() {
+			var id = '87346',
+				type = 'enterprise';
+
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
+			sdk.getAppAuthClient(type, id);
+
+			assert.ok(AppAuthSessionConstructorStub.calledWithNew(), 'New client should be created');
+			assert.ok(AppAuthSessionConstructorStub.calledWithMatch(type, id, TEST_APP_SETTINGS_CONFIG, tokenManagerFake), 'Enterprise id should match the parameter value');
 		});
 	});
 
