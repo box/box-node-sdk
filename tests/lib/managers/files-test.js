@@ -22,6 +22,7 @@ var sandbox = sinon.sandbox.create(),
 	boxClientFake,
 	Files,
 	files,
+	ChunkedUploaderStub,
 	testQS = { testQSKey: 'testQSValue' },
 	testBody = { my: 'body' },
 	testParamsWithBody,
@@ -40,16 +41,17 @@ describe('Files', function() {
 	beforeEach(function() {
 		// Setup Environment
 		boxClientFake = leche.fake(BoxClient.prototype);
+		boxClientFake._uploadBaseURL = 'https://upload-base/2.1';
 		testParamsWithBody = {body: testBody};
 		testParamsWithQs = {qs: testQS};
+		ChunkedUploaderStub = sandbox.stub();
 		// Register Mocks
-		mockery.enable({ useCleanCache: true });
-		mockery.registerAllowable('http-status');
-		mockery.registerAllowable('util');
-		mockery.registerAllowable('../util/url-path');
-		mockery.registerAllowable('../util/errors');
+		mockery.enable({
+			warnOnUnregistered: false
+		});
+		mockery.registerMock('../chunked-uploader', ChunkedUploaderStub);
 		// Setup File Under Test
-		mockery.registerAllowable(MODULE_FILE_PATH);
+		mockery.registerAllowable(MODULE_FILE_PATH, true);
 		Files = require(MODULE_FILE_PATH);
 		files = new Files(boxClientFake);
 	});
@@ -2084,6 +2086,832 @@ describe('Files', function() {
 		});
 	});
 
+	describe('createUploadSession', function() {
+
+		var TEST_FOLDER_ID = '7869287364',
+			TEST_SIZE = 12345678,
+			TEST_NAME = 'test file.jpg';
+
+		it('should make POST request to create a new upload session', function() {
+
+			var expectedParams = {
+				body: {
+					folder_id: TEST_FOLDER_ID,
+					file_size: TEST_SIZE,
+					file_name: TEST_NAME
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post').withArgs('https://upload-base/2.1/files/upload_sessions', expectedParams);
+			files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('createNewVersionUploadSession', function() {
+
+		var TEST_SIZE = 12345678;
+
+		it('should make POST request to create a new upload session', function() {
+
+
+			var expectedParams = {
+				body: {
+					file_size: TEST_SIZE
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/${FILE_ID}/upload_sessions`, expectedParams);
+			files.createNewVersionUploadSession(FILE_ID, TEST_SIZE);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			files.createNewVersionUploadSession(FILE_ID, TEST_SIZE);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			files.createNewVersionUploadSession(FILE_ID, TEST_SIZE, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return files.createNewVersionUploadSession(FILE_ID, TEST_SIZE)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('uploadPart', function() {
+
+		var TEST_SESSION_ID = '872f3b4of2e5b',
+			TEST_PART = 'test part',
+			TEST_OFFSET = 27,
+			TEST_LENGTH = 345987;
+
+		it('should make PUT call to upload part when called', function() {
+
+			var apiResponse = {
+				statusCode: 200,
+				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
+			};
+
+			var expectedParams = {
+				headers: {
+					'Content-Type': 'application/octet-stream',
+					Digest: 'SHA=oHNRqoPkTcXiX9y4eU54ccSsPQw=',
+					'Content-Range': 'bytes 27-35/345987'
+				},
+				json: false,
+				body: TEST_PART
+			};
+
+			sandbox.mock(boxClientFake).expects('put').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, expectedParams)
+				.returns(Promise.resolve(apiResponse));
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH);
+		});
+
+		it('should call callback with error when the API call fails', function(done) {
+
+			var error = new Error('Connection closed');
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.reject(error));
+
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when the API call fails', function() {
+
+			var error = new Error('Connection closed');
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.reject(error));
+
+			return files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+
+		it('should call callback with error when the API call returns a non-200 status code', function(done) {
+
+			var apiResponse = {
+				statusCode: 400
+			};
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
+
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, function(err) {
+
+				assert.instanceOf(err, Error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when the API call returns a non-200 status code', function() {
+
+			var apiResponse = {
+				statusCode: 400
+			};
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
+
+			return files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should call callback with parsed body when API call is successful', function(done) {
+
+			var apiResponse = {
+				statusCode: 200,
+				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
+			};
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
+
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH, function(err, data) {
+
+				assert.ifError(err);
+				assert.deepEqual(data, {
+					part: {
+						part_id: '00000000',
+						size: 10,
+						offset: 0,
+						sha1: '0987654321abcdef'
+					}
+				});
+				done();
+			});
+		});
+
+		it('should return promise resolving to parsed body when API call is successful', function() {
+
+			var apiResponse = {
+				statusCode: 200,
+				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
+			};
+
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
+
+			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
+				.then(data => {
+
+					assert.deepEqual(data, {
+						part: {
+							part_id: '00000000',
+							size: 10,
+							offset: 0,
+							sha1: '0987654321abcdef'
+						}
+					});
+				});
+		});
+	});
+
+	describe('commitUploadSession', function() {
+
+		var TEST_SESSION_ID = '872f3b4of2e5b',
+			TEST_FILE_HASH = 'oHNRqoPkTcXiX9y4eU54ccSsPQw=',
+			TEST_PARTS = [{
+				part_id: 'cafedad1',
+				size: 9,
+				offset: 0
+			}];
+
+		it('should make POST request to commit the upload session when called with list of parts', function() {
+
+			var expectedParams = {
+				headers: {
+					Digest: 'SHA=' + TEST_FILE_HASH
+				},
+				body: {
+					attributes: {},
+					parts: TEST_PARTS
+				}
+			};
+
+			var response = {
+				statusCode: 201
+			};
+
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+				.returns(Promise.resolve(response));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS});
+		});
+
+		it('should pass non-parts options as file attribute when called with multiple options', function() {
+
+			let options = {
+				parts: TEST_PARTS,
+				name: 'foo.txt'
+			};
+
+			var expectedParams = {
+				headers: {
+					Digest: 'SHA=' + TEST_FILE_HASH
+				},
+				body: {
+					attributes: {
+						name: 'foo.txt'
+					},
+					parts: TEST_PARTS
+				}
+			};
+
+			var response = {
+				statusCode: 201
+			};
+
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+				.returns(Promise.resolve(response));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, options);
+		});
+
+		it('should call callback with an error when there is an error making the API call', function(done) {
+
+			var error = new Error('API connection had a problem');
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.reject(error));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when there is an error making the API call', function() {
+
+			var error = new Error('API connection had a problem');
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.reject(error));
+			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS})
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+
+		it('should call callback with the response body when the API returns a success', function(done) {
+
+			var responseBody = {
+				type: 'file',
+				id: '8726934856'
+			};
+
+			var response = {
+				statusCode: 201,
+				body: responseBody
+			};
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err, data) {
+
+				assert.isNull(err);
+				assert.equal(data, responseBody);
+				done();
+			});
+		});
+
+		it('should return promise resolving to the response body when the API returns a success', function() {
+
+			var responseBody = {
+				type: 'file',
+				id: '8726934856'
+			};
+
+			var response = {
+				statusCode: 201,
+				body: responseBody
+			};
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS})
+				.then(data => {
+					assert.equal(data, responseBody);
+				});
+		});
+
+		it('should retry the call when the API returns a 202 with Retry-After header', function(done) {
+
+            // Need to fake timers and make Promises resolve synchronously for this test to work
+			sandbox.useFakeTimers();
+			var originalScheduler = Promise.setScheduler(fn => fn());
+
+			var retryResponse = {
+				statusCode: 202,
+				headers: {
+					'retry-after': 1
+				}
+			};
+
+			var responseBody = {
+				type: 'file',
+				id: '8726934856'
+			};
+
+			var successResponse = {
+				statusCode: 201,
+				body: responseBody
+			};
+
+			var apiStub = sandbox.stub(boxClientFake, 'post');
+			apiStub.onFirstCall().returns(Promise.resolve(retryResponse));
+			apiStub.onSecondCall().returns(Promise.resolve(successResponse));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err, data) {
+
+				assert.isNull(err);
+				assert.equal(data, responseBody);
+				Promise.setScheduler(originalScheduler);
+				done();
+			});
+			sandbox.clock.tick(999);
+			assert.equal(apiStub.callCount, 1, 'Retry should not be called until retry interval has elapsed');
+			sandbox.clock.tick(1);
+		});
+
+		it('should call callback with an error when unknown response code is received', function(done) {
+
+			var response = {
+				statusCode: 303
+			};
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err) {
+
+				assert.instanceOf(err, Error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when unknown response code is received', function() {
+
+			var response = {
+				statusCode: 303
+			};
+
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS})
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should fetch parts from API when parts are not passed in', function(done) {
+
+
+			var expectedParams = {
+				headers: {
+					Digest: 'SHA=' + TEST_FILE_HASH
+				},
+				body: {
+					attributes: {},
+					parts: TEST_PARTS
+				}
+			};
+
+			var expectedPagingOptions = {
+				limit: 1000
+			};
+
+			var partsResponse = {
+				entries: TEST_PARTS,
+				limit: 1000,
+				offset: 0,
+				total_count: 1
+			};
+
+			var commitResponse = {
+				statusCode: 201
+			};
+
+			sandbox.mock(files).expects('getUploadSessionParts').withArgs(TEST_SESSION_ID, sinon.match(expectedPagingOptions))
+				.returns(Promise.resolve(partsResponse));
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+				.returns(Promise.resolve(commitResponse));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
+
+				assert.ifError(err);
+				done();
+			});
+		});
+
+		it('should commit with all parts when API parts span multiple pages', function(done) {
+
+			var parts = [
+				{
+					part_id: '00000001',
+					offset: 0,
+					size: 3
+				},
+				{
+					part_id: '00000002',
+					offset: 3,
+					size: 3
+				}
+			];
+
+			var expectedParams = {
+				headers: {
+					Digest: 'SHA=' + TEST_FILE_HASH
+				},
+				body: {
+					attributes: {},
+					parts
+				}
+			};
+
+			var commitResponse = {
+				statusCode: 201
+			};
+
+			var filesMock = sandbox.mock(files);
+			filesMock.expects('getUploadSessionParts').withArgs(TEST_SESSION_ID, sinon.match({limit: 1000}))
+				.returns(Promise.resolve({
+					entries: [parts[0]],
+					limit: 1,
+					offset: 0,
+					total_count: 2
+				}));
+			filesMock.expects('getUploadSessionParts').withArgs(TEST_SESSION_ID, sinon.match({limit: 1000, offset: 1}))
+				.returns(Promise.resolve({
+					entries: [parts[1]],
+					limit: 1,
+					offset: 1,
+					total_count: 2
+				}));
+			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+				.returns(Promise.resolve(commitResponse));
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
+
+				assert.ifError(err);
+				done();
+			});
+		});
+
+		it('should call callback with an error when page request returns an error', function(done) {
+
+			var partsError = new Error('Could not fetch parts');
+
+			sandbox.stub(files, 'getUploadSessionParts').returns(Promise.reject(partsError));
+			sandbox.mock(boxClientFake).expects('post').never();
+			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
+
+				assert.equal(err, partsError);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when page request returns an error', function() {
+
+			var partsError = new Error('Could not fetch parts');
+
+			sandbox.stub(files, 'getUploadSessionParts').returns(Promise.reject(partsError));
+			sandbox.mock(boxClientFake).expects('post').never();
+			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH)
+				.catch(err => {
+					assert.equal(err, partsError);
+				});
+		});
+	});
+
+	describe('abortUploadSession', function() {
+
+		var TEST_SESSION_ID = '87nyeibt7y2v34t2';
+
+		it('should make DELETE request to destroy the upload session when called', function() {
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, null);
+			files.abortUploadSession(TEST_SESSION_ID);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			files.abortUploadSession(TEST_SESSION_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			files.abortUploadSession(TEST_SESSION_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return files.abortUploadSession(TEST_SESSION_ID)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('getUploadSessionParts', function() {
+
+		var TEST_SESSION_ID = '87nyeibt7y2v34t2';
+
+		it('should make GET request for the uploaded parts when called', function() {
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/parts`, testParamsWithQs);
+			files.getUploadSessionParts(TEST_SESSION_ID, testQS);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			files.getUploadSessionParts(TEST_SESSION_ID, testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			files.getUploadSessionParts(TEST_SESSION_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return files.getUploadSessionParts(TEST_SESSION_ID, testQS)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('getUploadSession', function() {
+
+		var TEST_SESSION_ID = '87nyeibt7y2v34t2';
+
+		it('should make GET request for the session info when called', function() {
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`);
+			files.getUploadSession(TEST_SESSION_ID);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			files.getUploadSession(TEST_SESSION_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			files.getUploadSession(TEST_SESSION_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return files.getUploadSession(TEST_SESSION_ID)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('getChunkedUploader', function() {
+
+		var TEST_FOLDER_ID = '7869287364',
+			TEST_SIZE = 12345678,
+			TEST_NAME = 'test file.jpg';
+
+		it('should make call to create upload session when called', function() {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			sandbox.mock(files).expects('createUploadSession').withArgs(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME)
+				.returns(Promise.resolve(session));
+			files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {});
+		});
+
+		it('should call callback with an error when upload session cannot be created', function(done) {
+
+			var error = new Error('Cannot create upload session');
+
+			sandbox.stub(files, 'createUploadSession').returns(Promise.reject(error));
+			files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {}, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when upload session cannot be created', function() {
+
+			var error = new Error('Cannot create upload session');
+
+			sandbox.stub(files, 'createUploadSession').returns(Promise.reject(error));
+			return files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {})
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+
+		it('should call callback with new chunked uploader when upload session is created', function(done) {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			var options = {};
+
+			var uploader = {};
+			ChunkedUploaderStub.returns(uploader);
+
+			sandbox.stub(files, 'createUploadSession').returns(Promise.resolve(session));
+			files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', options, function(err, data) {
+
+				assert.ifError(err);
+				assert.ok(ChunkedUploaderStub.calledWithNew(), 'New chunked uploader should be constructed');
+				assert.ok(ChunkedUploaderStub.calledWith(boxClientFake, session, 'test data', TEST_SIZE, options), 'Chunked uploader should get correct options');
+				assert.equal(data, uploader);
+				done();
+			});
+		});
+
+		it('should return promise resolving to new chunked uploader when upload session is created', function() {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			var options = {};
+
+			var uploader = {};
+			ChunkedUploaderStub.returns(uploader);
+
+			sandbox.stub(files, 'createUploadSession').returns(Promise.resolve(session));
+			return files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', options)
+				.then(data => {
+
+					assert.ok(ChunkedUploaderStub.calledWithNew(), 'New chunked uploader should be constructed');
+					assert.ok(ChunkedUploaderStub.calledWith(boxClientFake, session, 'test data', TEST_SIZE, options), 'Chunked uploader should get correct options');
+					assert.equal(data, uploader);
+				});
+		});
+	});
+
+	describe('getNewVersionChunkedUploader', function() {
+
+		var TEST_FILE_ID = '7869287364',
+			TEST_SIZE = 12345678;
+
+		it('should make call to create upload session when called', function() {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			sandbox.mock(files).expects('createNewVersionUploadSession').withArgs(TEST_FILE_ID, TEST_SIZE)
+				.returns(Promise.resolve(session));
+			files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {});
+		});
+
+		it('should call callback with an error when upload session cannot be created', function(done) {
+
+			var error = new Error('Cannot create upload session');
+
+			sandbox.stub(files, 'createNewVersionUploadSession').returns(Promise.reject(error));
+			files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {}, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promisethat rejects  when upload session cannot be created', function() {
+
+			var error = new Error('Cannot create upload session');
+
+			sandbox.stub(files, 'createNewVersionUploadSession').returns(Promise.reject(error));
+			return files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {})
+				.catch(err => {
+
+					assert.equal(err, error);
+				});
+		});
+
+		it('should call callback with new chunked uploader when upload session is created', function(done) {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			var options = {};
+
+			var uploader = {};
+			ChunkedUploaderStub.returns(uploader);
+
+			sandbox.stub(files, 'createNewVersionUploadSession').returns(Promise.resolve(session));
+			files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', options, function(err, data) {
+
+				assert.ifError(err);
+				assert.ok(ChunkedUploaderStub.calledWithNew(), 'New chunked uploader should be constructed');
+				assert.ok(ChunkedUploaderStub.calledWith(boxClientFake, session, 'test data', TEST_SIZE, options), 'Chunked uploader should get correct options');
+				assert.equal(data, uploader);
+				done();
+			});
+		});
+
+		it('should return promise resolving to new chunked uploader when upload session is created', function() {
+
+			var session = {
+				upload_session_id: '91d2yb48qu34o82y45'
+			};
+
+			var options = {};
+
+			var uploader = {};
+			ChunkedUploaderStub.returns(uploader);
+
+			sandbox.stub(files, 'createNewVersionUploadSession').returns(Promise.resolve(session));
+			return files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', options)
+				.then(data => {
+
+					assert.ok(ChunkedUploaderStub.calledWithNew(), 'New chunked uploader should be constructed');
+					assert.ok(ChunkedUploaderStub.calledWith(boxClientFake, session, 'test data', TEST_SIZE, options), 'Chunked uploader should get correct options');
+					assert.equal(data, uploader);
+				});
+		});
+	});
+
 	describe('getCollaborations()', function() {
 
 		it('should make GET request to get file collaborations when called', function() {
@@ -2121,6 +2949,7 @@ describe('Files', function() {
 			return files.getCollaborations(FILE_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
+
 	});
 
 });
