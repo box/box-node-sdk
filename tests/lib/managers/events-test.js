@@ -435,7 +435,7 @@ describe('Events', function() {
 			streamPosition: TEST_STREAM_POSITION
 		};
 
-		it('should return event stream from starting stream position when passed stream position', function(done) {
+		it('should call callback with a new event stream from the stream position', function(done) {
 
 			events.getEnterpriseEventStream(options, function(err, stream) {
 
@@ -447,7 +447,7 @@ describe('Events', function() {
 			});
 		});
 
-		it('should return a promise that resolves to a new event stream from starting stream position', function() {
+		it('should return a promise that resolves to a new event stream', function() {
 
 			events.getEnterpriseEventStream(options)
 				.then(stream => {

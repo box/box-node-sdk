@@ -245,7 +245,7 @@ describe('EnterpriseEventStream', function() {
 			enterpriseEventStream.fetchEvents(function() {
 
 				assert.propertyVal(enterpriseEventStream, '_streamPosition', newStreamPosition);
-				assert(spy.calledWith('streamPosition', newStreamPosition));
+				assert(spy.calledWith('newStreamState'));
 				done();
 			});
 		});

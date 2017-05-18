@@ -9,7 +9,7 @@ The Box API supports two types of event streams -- one for the events specific t
 
 
 User Events
-===========
+-----------
 
 The Box API provides an events endpoint that utilizes long-polling to send
 events in real-time. The SDK provides an `EventStream` class (which implements
@@ -20,8 +20,7 @@ handles long-polling and deduplicating events.
 * [Get the Current Stream Position](#get-the-current-stream-position)
 * [Get Events](#get-events)
 
-Listening to the EventStream
-----------------------------
+### Listening to the EventStream
 
 When the `EventStream` is started, it will begin long-polling asynchronously.
 Events received from the API are then forwarded to any listeners.
@@ -52,8 +51,7 @@ When you're done listening for events, call `stream.pause()` to stop long-pollin
 
 Since the Box API [may send duplicate events](https://developers.box.com/docs/#events), the `EventStream` will remember the last 5000 received events and automatically ignore them.
 
-Get the Current Stream Position
--------------------------------
+### Get the Current Stream Position
 
 It is possible to get the current stream position, which can later be used to
 fetch events from that point in time forward.
@@ -62,8 +60,7 @@ fetch events from that point in time forward.
 client.events.getCurrentStreamPosition(callback);
 ```
 
-Get Events
-----------
+### Get Events
 
 To get the latest chunk of events, you can call
 [`events.get(qs, callback)`](http://opensource.box.com/box-node-sdk/Events.html#get).
@@ -80,7 +77,7 @@ client.events.get({stream_position: '1408838928446360'}, callback);
 ```
 
 Enterprise Events
-======
+-----------------
 
 The Box API has an enterprise events endpoint that is available to admin users and service accounts.
 The SDK includes an `EnterpriseEventStream` class (which implements
@@ -91,8 +88,7 @@ handles polling for events and delivering them to the application.
 * [Handling errors](#handling-errors)
 * [Get the Stream Position](#get-the-stream-position)
 
-Listening to the Enterprise Event Stream
-----------------------------------------
+### Listening to the Enterprise Event Stream
 
 When you attach a `'data'` event listener to an `EnterpriseEventStream`, it will begin fetching events from Box.
 Events received from the API are then forwarded to the listener.
@@ -147,7 +143,7 @@ You can also filter the event stream to only receive specific event types.  The 
 is available in `client.events.enterpriseEventTypes`.
 
 ```js
-const stream = client.events.getEnterpriseEventStream({
+client.events.getEnterpriseEventStream({
     eventTypeFilter: [client.events.enterpriseEventTypes.UPLOAD, client.events.enterpriseEventTypes.DOWNLOAD]
 }, callback);
 ```
@@ -168,8 +164,8 @@ You can also pipe the output to a [stream.Writable](https://nodejs.org/api/strea
 stream.pipe(writableObjectModeStream);
 ```
 
-Handling errors
----------------
+### Handling errors
+
 If an API or network error occurs, the stream will ignore the error and continue polling at the usual rate until
 the connection can be re-established.  You can respond to errors with an `'error'` event listener:
 
@@ -179,11 +175,10 @@ stream.on('error', function(event) {
 });
 ```
 
-Persisting the Stream State
----------------------------
+### Persisting the Stream State
 
 In many applications, you may need to persist the stream state so that you can resume processing events from the
-same point if your application is interrupted and restarted.  You can attach a `'streamPosition'` event listener
+same point if your application is interrupted and restarted.  You can attach a `newStreamState` event listener
 to be notified each time the stream position changes.
 
 ```js
@@ -194,9 +189,9 @@ client.events.getEnterpriseEventStream(function(err, stream) {
     // Restore the stream state from the previous run.
     stream.setStreamState(readState());
 
-    stream.on('streamPosition', function() {
+    stream.on('newStreamState', function(streamState) {
         // Persist the stream state each time the stream position changes.
-        writeState(stream.getStreamState());
+        writeState(streamState);
     });
 
     stream.on('data', function(event) {
