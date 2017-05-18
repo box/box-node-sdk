@@ -27,6 +27,7 @@
     "http-status": "^0.2.2",
     "jsonwebtoken": "^5.7.0",
     "merge-options": "0.0.64",
+    "promise-queue": "^2.2.3",
     "request": "^2.74.0",
     "uuid": "^3.0.0"
   },
