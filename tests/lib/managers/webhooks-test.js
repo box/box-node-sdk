@@ -284,6 +284,14 @@ describe('Webhooks', function() {
 			assert.equal(null, Webhooks.secondarySignatureKey);
 		});
 
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return webhooks.delete(WEBHOOKS_ID)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('validateMessage()', function() {
