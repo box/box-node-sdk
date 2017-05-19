@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: SharedItems</title>
+    <title>JSDoc: Class: PagingIterator</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: SharedItems</h1>
+    <h1 class="page-title">Class: PagingIterator</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>SharedItems</h2>
+        <h2>PagingIterator</h2>
         
     
 </header>
@@ -40,14 +40,14 @@
 
     
 
-    <h4 class="name" id="SharedItems"><span class="type-signature"></span>new SharedItems<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="PagingIterator"><span class="type-signature"></span>new PagingIterator<span class="signature">(response, client)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
 
 
 <div class="description">
-    Simple manager for interacting with all 'Shared Item' endpoints and actions.
+    Asynchronous iterator for paged collections
 </div>
 
 
@@ -83,6 +83,29 @@
 
         <tr>
             
+                <td class="name"><code>response</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The original API response</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>client</code></td>
             
 
@@ -99,7 +122,7 @@
 
             
 
-            <td class="description last">The Box API Client that is responsible for making calls to the API</td>
+            <td class="description last">An API client to make further requests</td>
         </tr>
 
     
@@ -140,7 +163,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_shared-items.js.html">managers/shared-items.js</a>, <a href="managers_shared-items.js.html#line31">line 31</a>
+        <a href="util_paging-iterator.js.html">util/paging-iterator.js</a>, <a href="util_paging-iterator.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -161,6 +184,35 @@
 
 
 
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Will throw when collection cannot be paged
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">Error</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
 
 
 <h5>Returns:</h5>
@@ -207,17 +259,14 @@
 
     
 
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(url, password<span class="signature-attributes">opt</span>, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id=".isIterable"><span class="type-signature">(static) </span>isIterable<span class="signature">(response)</span><span class="type-signature"> &rarr; {bool}</span></h4>
 
     
 
 
 
 <div class="description">
-    Requests a Box item associated with a shared link.
-
-API Endpoint: '/shared_items'
-Method: GET
+    Determine if a response is iterable
 </div>
 
 
@@ -241,8 +290,6 @@ Method: GET
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -255,71 +302,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Shared Link URL</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Shared Link Password (null if no password)</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>qs</code></td>
+                <td class="name"><code>response</code></td>
             
 
             <td class="type">
@@ -332,53 +315,10 @@ Method: GET
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">Optional additional querystring to add to the request. Can be left null in most cases.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">passed the shared item if it was successfully acquired</td>
+            <td class="description last">The API response</td>
         </tr>
 
     
@@ -419,7 +359,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_shared-items.js.html">managers/shared-items.js</a>, <a href="managers_shared-items.js.html#line47">line 47</a>
+        <a href="util_paging-iterator.js.html">util/paging-iterator.js</a>, <a href="util_paging-iterator.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -446,7 +386,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the shared item object
+    Whether the response is iterable
 </div>
 
 
@@ -457,7 +397,215 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">bool</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_getData"><span class="type-signature"></span>_getData<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Fetch the next page of results
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_paging-iterator.js.html">util/paging-iterator.js</a>, <a href="util_paging-iterator.js.html#line147">line 147</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving to iterator state
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="next"><span class="type-signature"></span>next<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Fetch the next page of the collection
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_paging-iterator.js.html">util/paging-iterator.js</a>, <a href="util_paging-iterator.js.html#line188">line 188</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving to iterator state
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
 
 
     </dd>

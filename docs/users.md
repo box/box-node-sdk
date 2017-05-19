@@ -97,6 +97,11 @@ To add an email alias for a user call the [`users.addEmailAlias(userID, email, c
 client.users.addEmailAlias('123', 'user@example.com', callback);
 ```
 
+Enterprise admins can automatically confirm the email alias via the `is_confirmed` option:
+```js
+client.users.addEmailAlias('123', 'userAlias@example.com', {is_confirmed: true}, callback);
+```
+
 
 Delete Email Alias
 ------------------
