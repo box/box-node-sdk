@@ -40,6 +40,11 @@ client.users.get(client.CURRENT_USER_ID, null, function(err, currentUser) {
   if(err) throw err;
   console.log('Hello, ' + currentUser.name + '!');
 });
+
+// The SDK also supports Promises
+client.users.get(client.CURRENT_USER_ID)
+	.then(user => console.log('Hello', user.name, '!'))
+	.catch(err => console.log('Got an error!', err));
 ```
 
 
@@ -220,6 +225,44 @@ client.put('/files/123', {body: {name: 'New File Name'}}, function(err, response
 client.del('/files/123', null, function(err, response) {});
 ```
 
+#### Iterators
+
+By default, the SDK returns [paged collections](https://developer.box.com/reference#pagination-1)
+as they are given by the API, and users can manually page through the collection using the given
+paging parameters.  Users may also optionally have these collections returned as
+[async iterators](https://github.com/tc39/proposal-async-iteration) by passing an SDK config flag:
+
+```js
+var sdk = new BoxSDK({
+	clientID: clientID,
+	clientSecret: clientSecret,
+	iterators: true
+});
+
+var client = sdk.getBasicClient(accessToken);
+
+client.folders.getItems(folderID).then(it => {
+
+	// Output all items in the folder using a recursive promise chain which
+	// prints each item from the iterator until done
+	function printAllItems() {
+
+        // Get the next item from the iterator
+		return it.next().then(res => {
+
+			if (res.done) return;
+
+			console.log(res.value);
+
+			// Recurse to get the next item
+			return printAllItems();
+		})
+	}
+
+	printAllItems();
+});
+```
+
 #### Collaboration Roles
 
 All valid collaboration roles. These are helpful when creating & updating collaborators.
@@ -300,7 +343,7 @@ please be sure to mention the Node.js SDK in the subject.
 Copyright and License
 ---------------------
 
-Copyright 2016 Box, Inc. All rights reserved.
+Copyright 2017 Box, Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

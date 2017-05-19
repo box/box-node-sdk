@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: util/errors.js</title>
+    <title>JSDoc: Source: util/paging-iterator.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: util/errors.js</h1>
+    <h1 class="page-title">Source: util/paging-iterator.js</h1>
 
     
 
@@ -27,102 +27,215 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @fileoverview Errors Helper
+ * @fileoverview Iterator for paged responses
  */
 
 'use strict';
 
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Typedefs
+// -----------------------------------------------------------------------------
+
+/**
+ * The iterator response object
+ * @typedef {Object} IteratorData
+ * @property {Array} [value] - The next set of values from the iterator
+ * @property {bool} done - Whether the iterator is completed
+ */
+
+/**
+ * Iterator callback
+ * @callback IteratorCallback
+ * @param {?Error} err - An error if the iterator encountered one
+ * @param {IteratorData} [data] - New data from the iterator
+ * @returns {void}
+ */
+
+// -----------------------------------------------------------------------------
 // Requirements
-// ------------------------------------------------------------------------------
-var util = require('util'),
-	httpStatusCodes = require('http-status');
+// -----------------------------------------------------------------------------
 
+var querystring = require('querystring'),
+	Promise = require('bluebird'),
+	PromiseQueue = require('promise-queue'),
+	errors = require('./errors');
 
-// ------------------------------------------------------------------------------
-// Typedefs and Callbacks
-// ------------------------------------------------------------------------------
+PromiseQueue.configure(Promise);
 
-/**
- * An generic error propagated when the response has caused an error.
- * @typedef {Error} Errors~ResponseError
- * @property {APIRequest~ResponseObject} response The response object that generated the error
- * @property {int} statusCode A shortcut to the status code of the response
- */
+// -----------------------------------------------------------------------------
+// Private
+// -----------------------------------------------------------------------------
 
-/**
- * Error propagated whenever the SDK is unable to successfully complete an action
- * due to an expired access token (and refresh token, if one was provided).
- * @typedef {Errors~ResponseError} Errors~ExpiredAuthError
- * @property {bool} authExpired - always true
- */
+const PAGING_MODES = Object.freeze({
+	MARKER: 'marker',
+	OFFSET: 'offset'
+});
 
-
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Public
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-/**
- * A Helper for building errors across the SDK. Makes sure that easily-forgotten
- * fields aren't missed, and that everything is formatted properly to return to the
- * consumer.
- *
- * @name Errors
- * @module box-node-sdk/lib/util/errors
- */
-module.exports = {
+class PagingIterator {
 
 	/**
-	 * Build a response error with the given message, and attaching meta data from the
-	 * response data.
-	 *
-	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
-	 * @param {string} message - the response error message
-	 * @returns {Errors~ResponseError} an error describing the response error
+	 * Determine if a response is iterable
+	 * @param {Object} response - The API response
+	 * @returns {bool} Whether the response is iterable
 	 */
-	buildResponseError: function(response, message) {
-		response = response || {};
-		var responseError = new Error(message);
-		responseError.statusCode = response.statusCode;
-		responseError.response = response;
-		return responseError;
-	},
-
-	/**
-	 * Build an "Expired Auth" error. {@see Errors~ExpiredAuthError}
-	 *
-	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
-	 * @returns {Errors~ExpiredAuthError} A properly formatted error explaining the user auth info has expired
-	 */
-	buildExpiredAuthError: function(response) {
-		var responseError = this.buildResponseError(response, 'Expired Auth: Auth code or refresh token has expired.');
-		responseError.authExpired = true;
-		return responseError;
-	},
-
-	/**
-	 * Build the error for an "Unexpected Response" from the API. This is a shortcut for
-	 * responseError built specifically for the 401 UNEXPECTED response case. It
-	 * should be called and the error should be propogated to the consumer callback
-	 * whenever an unexpected response was recieved from the API.
-	 *
-	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
-	 * @returns {Errors~ResponseError} an error describing the response error
-	 */
-	buildUnexpectedResponseError: function(response) {
-		response = response || {};
-		var responseErrorMessage = '';
-
-		if (response.body &amp;&amp; (response.body.code || response.body.message)) {
-			responseErrorMessage = util.format(' (%s: "%s")', response.body.code, response.body.message);
-		}
-
-		var statusCode = response.statusCode,
-			unexpectedErrorMessage = util.format('Unexpected API Response [%d %s]%s', statusCode, httpStatusCodes[statusCode], responseErrorMessage);
-		return this.buildResponseError(response, unexpectedErrorMessage.trim());
+	static isIterable(response) {
+		return response.request.method === 'GET' &amp;&amp; Array.isArray(response.body.entries);
 	}
 
-};
+	/**
+	 * Asynchronous iterator for paged collections
+	 * @constructor
+	 * @param {Object} response - The original API response
+	 * @param {BoxClient} client - An API client to make further requests
+	 * @returns {void}
+	 * @throws {Error} Will throw when collection cannot be paged
+	 */
+	constructor(response, client) {
+
+		if (!PagingIterator.isIterable(response)) {
+			throw new Error('Cannot create paging iterator for non-paged response!');
+		}
+
+		var data = response.body;
+
+		if (Number.isSafeInteger(data.offset)) {
+			this.nextField = PAGING_MODES.OFFSET;
+			this.nextValue = data.offset;
+		} else if (typeof data.next_marker !== 'undefined') {
+			this.nextField = PAGING_MODES.MARKER;
+			this.nextValue = data.next_marker;
+		} else {
+			throw new Error('Unable to determine paging strategy for response!');
+		}
+
+		this.limit = data.limit || data.entries.length;
+		this.done = false;
+
+		var href = response.request.href.split('?')[0];
+		this.options = {
+			headers: response.request.headers,
+			qs: querystring.parse(response.request.uri.query)
+		};
+
+		// querystring.parse() makes everything a string, ensure numeric params are the correct type
+		if (this.options.qs.limit) {
+			this.options.qs.limit = parseInt(this.options.qs.limit, 10);
+		}
+		if (this.options.qs.offset) {
+			this.options.qs.offset = parseInt(this.options.qs.offset, 10);
+		}
+
+		delete this.options.headers.Authorization;
+		this.fetch = client.get.bind(client, href);
+		this.buffer = response.body.entries;
+		this.queue = new PromiseQueue(1, Infinity);
+		this._updatePaging(response);
+	}
+
+	/**
+	 * Update the paging parameters for the iterator
+	 * @private
+	 * @param {Object} response - The latest API response
+	 * @returns {void}
+	 */
+	_updatePaging(response) {
+
+		var data = response.body;
+
+		if (this.nextField === PAGING_MODES.OFFSET) {
+
+			this.nextValue += this.limit;
+
+			if (Number.isSafeInteger(data.total_count)) {
+				this.done = data.offset + this.limit >= data.total_count;
+			} else {
+				this.done = data.entries.length === 0;
+			}
+		} else if (this.nextField === PAGING_MODES.MARKER) {
+
+			if (data.next_marker) {
+				this.nextValue = data.next_marker;
+			} else {
+				this.nextValue = null;
+				this.done = true;
+			}
+		}
+
+		this.options.qs[this.nextField] = this.nextValue;
+	}
+
+	/**
+	 * Fetch the next page of results
+	 * @returns {Promise} Promise resolving to iterator state
+	 */
+	_getData() {
+
+		return this.fetch(this.options)
+			.then(response => {
+
+				if (response.statusCode !== 200) {
+					throw errors.buildUnexpectedResponseError(response);
+				}
+
+				this._updatePaging(response);
+
+				this.buffer = this.buffer.concat(response.body.entries);
+
+				if (!this.buffer.length) {
+
+					if (this.done) {
+
+						return {
+							value: undefined,
+							done: true
+						};
+					}
+
+					// If we didn't get any data in this page, but the paging
+					// parameters indicate that there is more data, attempt
+					// to fetch more.  This occurs in multiple places in the API
+					return this._getData();
+				}
+
+
+				return {
+					value: this.buffer.shift(),
+					done: false
+				};
+			});
+	}
+
+	/**
+	 * Fetch the next page of the collection
+	 * @returns {Promise} Promise resolving to iterator state
+	 */
+	next() {
+
+		if (this.buffer.length) {
+
+			return Promise.resolve({
+				value: this.buffer.shift(),
+				done: false
+			});
+		}
+
+		if (this.done) {
+
+			return Promise.resolve({
+				value: undefined,
+				done: true
+			});
+		}
+
+		return this.queue.add(this._getData.bind(this));
+	}
+}
+
+module.exports = PagingIterator;
 </code></pre>
         </article>
     </section>
