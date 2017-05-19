@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.4.0
+
+- Added support for [file collaborations](./docs/collaborations.md#add-a-collaboration).
+Users can now invite others to collaborate on single files.
+See [the blog post](https://blog.box.com/blog/file-collaboration-api/) for more information.
+- Fixed an issue where users were unable to use JWT Server Auth when their computers' clocks
+were not synchronized with the Box API servers.
+- All asynchronous client methods now return Promises in addition to taking a
+(now-optional) callback parameter, so you can write more modern JS with the SDK.
+- The SDK can now be preconfigured using a JSON blob that can be downloaded in the
+Box Dev Console for JWT Server Authentication apps, making it easier to get started
+developing!
+- Added support for [chunked upload](./docs/files.md#chunked-upload), where a large
+file can be uploaded one piece at a time.  This makes large file uploads much faster
+and more reliable, since parts can be uploaded in parallel and failed parts can be
+retried in isolation.
+- Added an `is_confirmed` option to [email alias creation](./docs/users.md#add-email-alias) for
+admins to auto-confirm the alias.
+- Added support for the [Enterprise Events stream](./docs/events.md#enterprise-events).
+- Added an option to have collections methods (e.g. `folders.getItems()`, 
+`enterprise.getUsers()`, etc) return [async iterators](./README.md#iterators) that will automatically
+page through the collection.  This conforms to the [proposed async iteration spec](https://github.com/tc39/proposal-async-iteration),
+which will eventually allow them to be used in ergonomic for-await-of loop syntax.
+
 ## 1.3.0
 
 - Added `BoxSDK.validateWebhookMessage()` and `client.webhooks.validateMessage()` for validating webhook messages from Box
