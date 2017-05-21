@@ -378,5 +378,12 @@ describe('Webhooks', function() {
 
 			assert.equal(Webhooks.validateMessage, webhooks.validateMessage);
 		});
+
+		it('should validate using statically set keys when ones are not passed in', function() {
+
+			Webhooks.setSignatureKeys(PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY);
+
+			assert.ok(Webhooks.validateMessage(BODY, HEADERS));
+		});
 	});
 });

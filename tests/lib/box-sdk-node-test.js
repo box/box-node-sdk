@@ -15,6 +15,7 @@ var assert = require('chai').assert,
 var TokenManager = require('../../lib/token-manager'),
 	APIRequestManager = require('../../lib/api-request-manager'),
 	AppAuthSession = require('../../lib/sessions/app-auth-session'),
+	Webhooks = require('../../lib/managers/webhooks'),
 	EventEmitter = require('events').EventEmitter;
 
 describe('box-node-sdk', function() {
@@ -34,6 +35,7 @@ describe('box-node-sdk', function() {
 		PersistentAPISession,
 		AnonymousAPISession,
 		AppAuthSessionConstructorStub,
+		WebhooksFake,
 		appAuthSessionFake,
 		DEFAULT_BOX_ROOT_URL = 'https://api.box.com',
 		TEST_CONFIG = {
@@ -86,6 +88,7 @@ describe('box-node-sdk', function() {
 		AnonymousAPISession = sandbox.stub();
 		appAuthSessionFake = leche.fake(AppAuthSession.prototype);
 		AppAuthSessionConstructorStub = sandbox.stub();
+		WebhooksFake = leche.fake(Webhooks);
 
 		// Setup Mockery
 		mockery.enable({ useCleanCache: true, warnOnUnregistered: false });
@@ -96,6 +99,7 @@ describe('box-node-sdk', function() {
 		mockery.registerMock('./sessions/persistent-session', PersistentAPISession);
 		mockery.registerMock('./sessions/anonymous-session', AnonymousAPISession);
 		mockery.registerMock('./sessions/app-auth-session', AppAuthSessionConstructorStub);
+		mockery.registerMock('./managers/webhooks', WebhooksFake);
 
 		// Setup File Under Test
 		mockery.registerAllowable('../../lib/box-node-sdk', true);
@@ -187,6 +191,91 @@ describe('box-node-sdk', function() {
 			assert.ok(APIRequestManagerConstructorStub.calledWithMatch(TEST_APP_SETTINGS_CONFIG), 'APIRequestManager should be passed config');
 			assert.instanceOf(APIRequestManagerConstructorStub.getCall(0).args[1], EventEmitter, 'APIRequestManager should be passed event bus');
 			assert.ok(sdk, 'SDK should be constructed');
+		});
+
+		it('should correctly preconfigure instance when app auth settings are not filled in', function() {
+
+			var settings = {
+				boxAppSettings: {
+					clientID: 'id',
+					clientSecret: 'secret',
+					appAuth: {
+						publicKeyID: '',
+						privateKey: '',
+						passphrase: ''
+					}
+				}
+			};
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(settings);
+			assert.ok(sdk, 'SDK object should be constucted without error');
+		});
+
+		it('should throw when nested settings object is not present', function() {
+
+			var settings = {
+				clientID: 'id',
+				clientSecret: 'secret'
+			};
+
+			assert.throws(function() {
+				BoxSDKNode.getPreconfiguredInstance(settings);
+			});
+		});
+
+		it('should set webhook signature keys when present in the config', function() {
+
+			var primaryKey = 'aljhglsdkjfbglsjdfg',
+				secondaryKey = 'ihdlfkgjbsldjfhgsdfg';
+			var settings = {
+				boxAppSettings: {
+					clientID: 'id',
+					clientSecret: 'secret',
+					webhooks: { primaryKey, secondaryKey }
+				}
+			};
+
+			sandbox.mock(WebhooksFake).expects('setSignatureKeys').withArgs(primaryKey, secondaryKey);
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(settings);
+
+			assert.ok(sdk, 'SDK should be constructed correctly');
+		});
+
+		it('should throw when client ID and secret are not present in config', function() {
+
+			var settings = {
+				boxAppSettings: {
+					webhooks: {
+						primaryKey: 'alsdhg',
+						secondaryKey: 'luhlshdbfg'
+					}
+				}
+			};
+
+			sandbox.stub(WebhooksFake, 'setSignatureKeys');
+
+			assert.throws(function() {
+				BoxSDKNode.getPreconfiguredInstance(settings);
+			});
+		});
+
+		it('should throw when passphrase is not present in app auth config', function() {
+
+			var settings = {
+				boxAppSettings: {
+					clientID: 'id',
+					clientSecret: 'secret',
+					appAuth: {
+						publicKeyID: 'kjsdi45',
+						privateKey: 'iq3yo8byv4ov7weiorntie7byro8wyeort7ybweo8'
+					}
+				}
+			};
+
+			assert.throws(function() {
+				BoxSDKNode.getPreconfiguredInstance(settings);
+			});
 		});
 	});
 
@@ -304,6 +393,17 @@ describe('box-node-sdk', function() {
 			assert.ok(AppAuthSessionConstructorStub.calledWithNew(), 'New client should be created');
 			assert.ok(AppAuthSessionConstructorStub.calledWithMatch(type, id, TEST_APP_SETTINGS_CONFIG, tokenManagerFake), 'Enterprise id should match the parameter value');
 		});
+
+		it('should use enterprise ID from config when one is set and none is passed in', function() {
+
+			var type = 'enterprise';
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
+			sdk.getAppAuthClient(type);
+
+			assert.ok(AppAuthSessionConstructorStub.calledWithNew(), 'New client should be created');
+			assert.ok(AppAuthSessionConstructorStub.calledWithMatch(type, TEST_APP_SETTINGS.enterpriseID, TEST_APP_SETTINGS_CONFIG, tokenManagerFake), 'Enterprise id should match the parameter value');
+		});
 	});
 
 	describe('getAuthorizeURL', function() {
@@ -368,6 +468,36 @@ describe('box-node-sdk', function() {
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs('enterprise', enterpriseID, done).yieldsAsync();
 
 			sdk.getEnterpriseAppAuthTokens(enterpriseID, done);
+		});
+
+		it('should use enterprise ID from config when one is present and none is passed in', function(done) {
+
+			var id = '98273649';
+			var settings = {
+				boxAppSettings: {
+					clientID: 'id',
+					clientSecret: 'secret'
+				},
+				enterpriseID: id
+			};
+
+			sdk = BoxSDKNode.getPreconfiguredInstance(settings);
+
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs('enterprise', id, done).yieldsAsync();
+
+			sdk.getEnterpriseAppAuthTokens(null, done);
+		});
+
+		it('should throw when no enterprise ID is passed in or in config', function() {
+
+			sdk = new BoxSDKNode({
+				clientID: 'id',
+				clientSecret: 'secret'
+			});
+
+			assert.throws(function() {
+				sdk.getEnterpriseAppAuthTokens(null, function() {});
+			});
 		});
 	});
 
