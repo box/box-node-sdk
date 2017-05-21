@@ -971,4 +971,265 @@ describe('PagingIterator', function() {
 			]);
 		});
 	});
+
+	describe('forEach()', function() {
+
+		it('should run the provided function against all items in the iterator when called', function() {
+
+			var item1 = {},
+				item2 = {},
+				item3 = {},
+				chunk = [
+					item1,
+					item2,
+					item3
+				];
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+
+			var fn = sandbox.stub();
+			return iterator.forEach(fn)
+				.then(() => {
+					assert.ok(fn.calledThrice);
+					assert.ok(fn.firstCall.calledWith(item1));
+					assert.ok(fn.secondCall.calledWith(item2));
+					assert.ok(fn.thirdCall.calledWith(item3));
+				});
+		});
+
+		it('should return a promise that rejects when the provided fn throws', function() {
+
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: [{}],
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+			var fn = sandbox.stub().throws();
+
+			return iterator.forEach(fn)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+	});
+
+	describe('find()', function() {
+
+		it('should resolve to the matching item when one matches', function() {
+
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'},
+				item3 = {foo: 'quux'},
+				chunk = [
+					item1,
+					item2,
+					item3
+				];
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+
+			var fn = sandbox.spy(item => item.foo === 'baz');
+			return iterator.find(fn)
+				.then(item => {
+					assert.ok(fn.calledTwice);
+					assert.ok(fn.firstCall.calledWith(item1));
+					assert.ok(fn.secondCall.calledWith(item2));
+
+					assert.equal(item, item2);
+				});
+		});
+
+		it('should return a promise that rejects when the provided fn throws', function() {
+
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: [{}],
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+			var fn = sandbox.stub().throws();
+
+			return iterator.find(fn)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should resolve to undefined when no matching item is found', function() {
+
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'},
+				item3 = {foo: 'quux'},
+				chunk = [
+					item1,
+					item2,
+					item3
+				];
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+
+			var fn = sandbox.stub().returns(false);
+			return iterator.find(fn)
+				.then(item => {
+					assert.ok(fn.calledThrice);
+					assert.ok(fn.firstCall.calledWith(item1));
+					assert.ok(fn.secondCall.calledWith(item2));
+					assert.ok(fn.thirdCall.calledWith(item3));
+
+					assert.isUndefined(item);
+				});
+		});
+
+		it('should resolve to the first matching item when multiple items match', function() {
+
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'},
+				item3 = {foo: 'quux'},
+				chunk = [
+					item1,
+					item2,
+					item3
+				];
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+
+			var fn = item => item.foo !== 'bar';
+			return iterator.find(fn)
+				.then(item => {
+					assert.equal(item, item2);
+				});
+		});
+	});
+
+	describe('reduce()', function() {
+
+		it('should resolve to the reduction of the items when called', function() {
+
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'},
+				item3 = {foo: 'quux'},
+				chunk = [
+					item1,
+					item2,
+					item3
+				];
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+
+			var fn = (acc, item) => acc + item.foo;
+			return iterator.reduce(fn, '')
+				.then(acc => {
+					assert.equal(acc, 'barbazquux');
+				});
+		});
+
+		it('should reject when the reducer function throws', function() {
+
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: [{}],
+					limit: 100,
+					next_marker: null
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+
+			var fn = sandbox.stub().throws();
+			return iterator.reduce(fn)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+	});
 });
