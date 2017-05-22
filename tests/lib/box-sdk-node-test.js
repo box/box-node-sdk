@@ -18,7 +18,7 @@ var TokenManager = require('../../lib/token-manager'),
 	Webhooks = require('../../lib/managers/webhooks'),
 	EventEmitter = require('events').EventEmitter;
 
-describe.only('box-node-sdk', function() {
+describe('box-node-sdk', function() {
 
 	// ------------------------------------------------------------------------------
 	// Setup
