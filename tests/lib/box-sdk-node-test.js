@@ -230,9 +230,10 @@ describe('box-node-sdk', function() {
 			var settings = {
 				boxAppSettings: {
 					clientID: 'id',
-					clientSecret: 'secret',
-					webhooks: { primaryKey, secondaryKey }
-				}
+					clientSecret: 'secret'
+				},
+				webhooks: { primaryKey, secondaryKey }
+
 			};
 
 			sandbox.mock(WebhooksFake).expects('setSignatureKeys').withArgs(primaryKey, secondaryKey);
@@ -245,11 +246,9 @@ describe('box-node-sdk', function() {
 		it('should throw when client ID and secret are not present in config', function() {
 
 			var settings = {
-				boxAppSettings: {
-					webhooks: {
-						primaryKey: 'alsdhg',
-						secondaryKey: 'luhlshdbfg'
-					}
+				webhooks: {
+					primaryKey: 'alsdhg',
+					secondaryKey: 'luhlshdbfg'
 				}
 			};
 
