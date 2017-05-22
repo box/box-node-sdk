@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2
+
+- Fixed `BoxSDK.getPreconfiguredInstance()` to configure webhook keys
+
 ## 1.4.1
 
 - Fixed `BoxSDK.getPreconfiguredInstance()` when app auth setttings are not populated
