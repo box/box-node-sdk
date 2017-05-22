@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- Fixed `BoxSDK.getPreconfiguredInstance()` when app auth setttings are not populated
+
 ## 1.4.0
 
 - Added support for [file collaborations](./docs/collaborations.md#add-a-collaboration).
