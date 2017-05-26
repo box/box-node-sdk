@@ -432,6 +432,29 @@ describe('token-manager', function() {
 		});
 	});
 
+	describe('getLowerScopedToken()', function() {
+		it('should make request to get lower scoped tokens with expected params when called', function(done) {
+
+			var accessToken = 'access-token';
+			var scope = 'item_download';
+			var resource = 'resource_with_id';
+
+			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
+				method: 'POST',
+				url: 'api.box.com/oauth2/token',
+				form: {
+					grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+					subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+					subject_token: accessToken,
+					scope: scope,
+					resource: resource
+				}
+			}).yieldsAsync();
+
+			tokenManager.getLowerScopedToken(accessToken, scope, resource, done);
+		});
+	});
+
 	describe('revokeTokens()', function() {
 		it('should make request to revoke tokens with expected revoke params when called', function(done) {
 			var refreshToken = 'rt';

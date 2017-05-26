@@ -516,6 +516,34 @@ describe('box-node-sdk', function() {
 		});
 	});
 
+	describe('getLowerScopedToken()', function() {
+
+		beforeEach(function() {
+			sdk = new BoxSDKNode(TEST_CONFIG);
+		});
+
+		it('should call to token manager getLowerScopedToken() and propagate result when called', function(done) {
+
+			var accessToken = '138475693475';
+			var scope = 'item_download';
+			var resource = 'https://api.box.com/2.0/files/fileId';
+
+			sandbox.mock(tokenManagerFake).expects('getLowerScopedToken').withArgs(accessToken, scope, resource).yieldsAsync();
+
+			sdk.getLowerScopedToken(accessToken, scope, resource, done);
+		});
+
+		it('should call to token manager getLowerScopedToken() with null resource and propagate result when called', function(done) {
+
+			var accessToken = '138475693475';
+			var scope = 'item_download';
+
+			sandbox.mock(tokenManagerFake).expects('getLowerScopedToken').withArgs(accessToken, scope, null).yieldsAsync();
+
+			sdk.getLowerScopedToken(accessToken, scope, null, done);
+		});
+	});
+
 	describe('revokeTokens()', function() {
 
 		beforeEach(function() {
