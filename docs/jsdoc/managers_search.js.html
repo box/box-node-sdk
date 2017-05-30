@@ -28,24 +28,42 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @fileoverview Manager for the Box Search Resource
- * @author djordan
  */
 
 'use strict';
 
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Requirements
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
+var urlPath = require('../util/url-path'),
+	Promise = require('bluebird');
 
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Typedefs
+// -----------------------------------------------------------------------------
+
+/**
+ * Search metadata filter
+ * @typedef {Object} SearchMetadataFilter
+ * @property {string} templateKey The template to filter against
+ * @property {string} scope The scope of the template, e.g. 'global' or 'enterprise'
+ * @property {Object} filters Key/value filters against individual metadata template properties
+ */
+
+ /** @typedef {string} SearchScope */
+
+ /** @typedef {string} SearchTrashContent */
+
+// -----------------------------------------------------------------------------
 // Private
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
 var API_PATHS_SEARCH = '/search';
 
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Public
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 /**
  * Simple manager for interacting with the search endpoints and actions.
@@ -58,24 +76,58 @@ function Search(client) {
 	this.client = client;
 }
 
-
 Search.prototype = {
+
+	/**
+	 * Valid search scopes
+	 * @readonly
+	 * @enum {SearchScope}
+	 */
+	scopes: Object.freeze({
+		USER: 'user_content',
+		ENTERPRISE: 'enterprise_content'
+	}),
 
 	/**
 	 * Searches Box for the given query.
 	 *
 	 * @param {string} searchString - The query string to use for search
-	 * @param {?Object} qs - Optional additional querystring to add to the request. Can be left null in most cases.
-	 * @param {APIRequest~Callback} callback - passed the new comment data if it was posted successfully
-	 * @returns {void}
+	 * @param {Object} [options] - Additional search filters. Can be left null in most cases.
+	 * @param {SearchScope} [options.scope] - The scope on which you want search. Can be user_content for a search limited to the current user or enterprise_content to search an entire enterprise
+	 * @param {string} [options.file_extensions] - Single or comma-delimited list of file extensions to filter against
+	 * @param {string} [options.created_at_range] - Date range for filtering on item creation time, e.g. '2014-05-15T13:35:01-07:00,2014-05-17T13:35:01-07:00'
+	 * @param {string} [options.updated_at_range] - Date range for filtering on item update time, e.g. '2014-05-15T13:35:01-07:00,2014-05-17T13:35:01-07:00'
+	 * @param {string} [options.size_range] - Range of item sizes (in bytes) to filter on, as lower_bound,upper_bound.  Either bound can be ommitted, e.g. ',100000' for &lt;= 100KB
+	 * @param {string} [options.owner_user_ids] - Comma-delimited list of user IDs to filter item owner against
+	 * @param {string} [options.ancestor_folder_ids] - Comma-delimited list of folder IDs, search results will contain only items in these folders (and folders within them)
+	 * @param {string} [options.content_types] - Query within specified comma-delimited fields. The types can be name, description, file_content, comments, or tags
+	 * @param {string} [options.type] - The type of objects you want to include in the search results. The type can be file, folder, or web_link
+	 * @param {string} [options.trash_content=non_trashed_only] - Controls whether to search in the trash. The value can be trashed_only or non_trashed_only
+	 * @param {SearchMetadataFilter[]} [options.mdfilters] - Searches for objects with a specific metadata object association.  Searches with the this parameter do not require a query string
+	 * @param {int} [options.limit=30] - The number of search results to return, max 200
+	 * @param {int} [options.offset=0] - The search result at which to start the response, must be a multiple of limit
+	 * @param {APIRequest~Callback} [callback] - passed the new comment data if it was posted successfully
+	 * @returns {Promise&lt;Object>} A promise resolving to the collection of search results
 	 */
-	query: function(searchString, qs, callback) {
-		qs = qs || {};
+	query: function(searchString, options, callback) {
+
+		var apiPath = urlPath(API_PATHS_SEARCH),
+			qs = options || {};
+
 		qs.query = searchString;
+
+		if (qs.mdfilters) {
+			if (Array.isArray(qs.mdfilters)) {
+				qs.mdfilters = JSON.stringify(qs.mdfilters);
+			} else {
+				return Promise.reject(new Error('Invalid mdfilters parameter: must be a valid array')).asCallback(callback);
+			}
+		}
+
 		var params = {
 			qs: qs
 		};
-		this.client.get(API_PATHS_SEARCH, params, this.client.defaultResponseHandler(callback));
+		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 	}
 
 };
@@ -91,13 +143,13 @@ module.exports = Search;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Users.html">Users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Tue Sep 27 2016 13:38:22 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 22 2017 13:18:52 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

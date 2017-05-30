@@ -110,7 +110,7 @@ rules:
     arrow-parens: [2, "as-needed"]
     arrow-spacing: 2
     generator-star-spacing: [2, {"before": false, "after": true}]
-    no-confusing-arrow: 2
+    no-confusing-arrow: [2, {"allowParens": true}]
     no-const-assign: 2
     require-yield: 2
 

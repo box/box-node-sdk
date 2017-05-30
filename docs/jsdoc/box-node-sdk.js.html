@@ -28,8 +28,6 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @fileoverview Box SDK for Node.js
- * @author bemerick
- * @author fschott
  */
 
 'use strict';
@@ -89,7 +87,8 @@ var EventEmitter = require('events').EventEmitter,
 	PersistentAPISession = require('./sessions/persistent-session'),
 	AnonymousAPISession = require('./sessions/anonymous-session'),
 	AppAuthSession = require('./sessions/app-auth-session'),
-	BoxClient = require('./box-client');
+	BoxClient = require('./box-client'),
+	Webhooks = require('./managers/webhooks');
 
 // ------------------------------------------------------------------------------
 // Private
@@ -147,6 +146,66 @@ BoxSDKNode.collaborationRoles = BoxSDKNode.prototype.collaborationRoles = BoxCli
 BoxSDKNode.CURRENT_USER_ID = BoxSDKNode.prototype.CURRENT_USER_ID = BoxClient.prototype.CURRENT_USER_ID;
 
 /**
+ * Gets the BoxSDKNode instance by passing boxAppSettings json downloaded from the developer console.
+ *
+ * @param {Object} appConfig boxAppSettings object retrieved from Dev Console.
+ * @returns {BoxSDKNode} an instance that has been preconfigured with the values from the Dev Console
+ */
+BoxSDKNode.getPreconfiguredInstance = function(appConfig) {
+	if (typeof appConfig.boxAppSettings !== 'object') {
+		throw new Error('Configuration does not include boxAppSettings object.');
+	}
+
+	var boxAppSettings = appConfig.boxAppSettings;
+	var webhooks = boxAppSettings.webhooks;
+	if (typeof webhooks === 'object') {
+		Webhooks.setSignatureKeys(webhooks.primaryKey, webhooks.secondaryKey);
+	}
+
+	var params = {};
+	if (typeof boxAppSettings.clientID === 'string') {
+		params.clientID = boxAppSettings.clientID;
+	}
+
+	if (typeof boxAppSettings.clientSecret === 'string') {
+		params.clientSecret = boxAppSettings.clientSecret;
+	}
+
+	// Only try to assign app auth settings if they are present
+	// Some configurations do not include them (but might include other info, e.g. webhooks)
+	if (typeof boxAppSettings.appAuth === 'object' &amp;&amp; boxAppSettings.appAuth.publicKeyID) {
+
+		var appAuth = {};
+		// Assign publicKeyID to keyID
+		appAuth.keyID = boxAppSettings.appAuth.publicKeyID;
+
+		appAuth.privateKey = boxAppSettings.appAuth.privateKey;
+
+		var passphrase = boxAppSettings.appAuth.passphrase;
+		if (typeof passphrase === 'string') {
+			appAuth.passphrase = passphrase;
+		}
+		params.appAuth = appAuth;
+	}
+
+	if (typeof appConfig.enterpriseID === 'string') {
+		params.enterpriseID = appConfig.enterpriseID;
+	}
+
+	return new BoxSDKNode(params);
+};
+
+/**
+ * Updates the SDK configuration with new parameters.
+ *
+ * @param {UserConfigurationOptions} params User settings
+ * @returns {void}
+ */
+BoxSDKNode.prototype.configure = function(params) {
+	this.config = this.config.extend(params);
+};
+
+/**
  * Returns a Box Client with a Basic API Session. The client is able to make requests on behalf of a user.
  * A basic session has no access to a user's refresh token. Because of this, once the session's tokens
  * expire the client cannot recover and a new session will need to be generated.
@@ -200,6 +259,14 @@ BoxSDKNode.prototype.getAnonymousClient = function() {
  * @returns {BoxClient} A new client authorized as the app user or enterprise
  */
 BoxSDKNode.prototype.getAppAuthClient = function(type, id) {
+	if (type === 'enterprise' &amp;&amp; !id) {
+		if (this.config.enterpriseID) {
+			id = this.config.enterpriseID;
+		} else {
+			throw new Error('Enterprise ID must be passed');
+		}
+	}
+
 	var appAuthSession = new AppAuthSession(type, id, this.config, this.tokenManager);
 	return new BoxClient(appAuthSession, this.config, this.requestManager);
 };
@@ -248,6 +315,14 @@ BoxSDKNode.prototype.getTokensRefreshGrant = function(refreshToken, callback) {
  * @returns {void}
  */
 BoxSDKNode.prototype.getEnterpriseAppAuthTokens = function(enterpriseID, callback) {
+	if (!enterpriseID) {
+		if (this.config.enterpriseID) {
+			enterpriseID = this.config.enterpriseID;
+		} else {
+			throw new Error('Enterprise id must be passed');
+		}
+	}
+
 	this.tokenManager.getTokensJWTGrant('enterprise', enterpriseID, callback);
 };
 
@@ -272,6 +347,13 @@ BoxSDKNode.prototype.revokeTokens = function(token, callback) {
 	this.tokenManager.revokeTokens(token, callback);
 };
 
+/**
+ * Expose Webhooks.validateMessage() to the SDK as a whole. This allows
+ * the consumer to call BoxSDK.validateWebhookMessage() by just requiring the SDK,
+ * instead of needing to create a client (which is not needed to validate messages).
+ */
+BoxSDKNode.validateWebhookMessage = Webhooks.validateMessage;
+
 /** @module box-node-sdk/lib/box-node-sdk */
 module.exports = BoxSDKNode;
 </code></pre>
@@ -284,13 +366,13 @@ module.exports = BoxSDKNode;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Users.html">Users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Tue Sep 27 2016 13:38:22 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 22 2017 13:18:52 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -5,7 +5,7 @@ Collections are used to store a custom user-defined set of items that may not
 all be in the same folder.
 
 * [Get a User's Collections](#get-a-users-collections)
-* [Get the Items in a Collection](#edit-a-collaboration)
+* [Get the Items in a Collection](#get-the-items-in-a-collection)
 
 Get a User's Collections
 ------------------------

@@ -8,6 +8,7 @@
 // ------------------------------------------------------------------------------
 var sinon = require('sinon'),
 	mockery = require('mockery'),
+	assert = require('chai').assert,
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -65,146 +66,303 @@ describe('Users', function() {
 
 	describe('get()', function() {
 		it('should make GET request to get user info when called', function() {
-			var id = '1234';
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('get').withArgs('/users/1234', testParamsWithQs);
-			users.get(id, testQS);
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + USER_ID, testParamsWithQs);
+			users.get(USER_ID, testQS);
 		});
 
 		it('should make GET request to get info for current user when passed "me" ID', function() {
-			var id = 'me';
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/users/me', testParamsWithQs);
-			users.get(id, testQS);
+			users.get('me', testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync();
-			users.get();
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			users.get(USER_ID, testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			users.get(USER_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return users.get(USER_ID, testQS)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('update()', function() {
 		it('should make PUT request to update user info when called', function() {
-			var id = '908546';
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('put').withArgs('/users/908546', testParamsWithBody);
-			users.update(id, testBody);
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('put').withArgs('/users/' + USER_ID, testParamsWithBody);
+			users.update(USER_ID, testBody);
 		});
 
 		it('should make PUT request to update current user info when passed "me" ID', function() {
-			var id = 'me';
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put').withArgs('/users/me', testParamsWithBody);
-			users.update(id, testBody);
+			users.update('me', testBody);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync();
-			users.update();
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'put');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			users.update(USER_ID, testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
+			users.update(USER_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			return users.update(USER_ID, testQS)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('delete()', function() {
 
 		it('should make DELETE request to delete user when called', function() {
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del').withArgs('/users/' + USER_ID, testParamsWithQs);
 			users.delete(USER_ID, testQS);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'del').withArgs('/users/' + USER_ID).yieldsAsync();
-			users.delete(USER_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'del');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			users.delete(USER_ID, testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			users.delete(USER_ID, testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return users.delete(USER_ID, testQS)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('getEmailAliases()', function() {
 		it('should make GET request to retrieve user email aliases when called', function() {
-			var id = '6493';
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('get').withArgs('/users/6493/email_aliases');
-			users.getEmailAliases(id);
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + USER_ID + '/email_aliases');
+			users.getEmailAliases(USER_ID);
 		});
 
 		it('should make GET request to retrieve current user email aliases when passed "me" ID', function() {
-			var id = 'me';
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/users/me/email_aliases');
-			users.getEmailAliases(id);
+			users.getEmailAliases('me');
 		});
 
-		it('should wrap callback in default response handler when called', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync();
-			users.getEmailAliases();
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			users.getEmailAliases(USER_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			users.getEmailAliases(USER_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return users.getEmailAliases(USER_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('addEmailAlias()', function() {
-		it('should make POST request to add email alias to user when called', function() {
-			var email = 'horation@nelson.com',
-				id = '4567',
-				expectedBody = {
-					email: email,
-					is_confirmed: false
-				};
+		var email = 'horatio@nelson.com';
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('post').withArgs('/users/4567/email_aliases', {
+		it('should make POST request to add email alias to user when called', function() {
+			var expectedBody = {
+				email: email,
+				is_confirmed: false
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post').withArgs('/users/' + USER_ID + '/email_aliases', {
 				body: expectedBody
 			});
-			users.addEmailAlias(id, email);
+			users.addEmailAlias(USER_ID, email);
 		});
 
 		it('should make POST request to add email alias to current user when passed "me" id', function() {
-			var email = 'horatio@nelson.com',
-				id = 'me',
-				expectedBody = {
-					email: email,
-					is_confirmed: false
-				};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			var expectedBody = {
+				email: email,
+				is_confirmed: false
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/users/me/email_aliases', {
 				body: expectedBody
 			});
-			users.addEmailAlias(id, email);
+			users.addEmailAlias('me', email);
 		});
 
-		it('should wrap callback in default response handler when called', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync();
-			users.addEmailAlias();
+		it('should make POST request with additional parameters when options are passed', function() {
+
+			var expectedBody = {
+				email: email,
+				is_confirmed: true
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post').withArgs('/users/' + USER_ID + '/email_aliases', {
+				body: expectedBody
+			});
+			users.addEmailAlias(USER_ID, email, {is_confirmed: true});
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'post');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			users.addEmailAlias(USER_ID, email);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			users.addEmailAlias(USER_ID, email, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should pass results to callback when callback is present and options are passed', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			users.addEmailAlias(USER_ID, email, {}, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return users.addEmailAlias(USER_ID, email)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('removeEmailAlias()', function() {
-		it('should make DELETE call to remove email alias when called', function() {
-			var userID = '7890',
-				aliasID = '23455';
+		var aliasID = '23455';
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('del').withArgs('/users/7890/email_aliases/23455');
-			users.removeEmailAlias(userID, aliasID);
+		it('should make DELETE call to remove email alias when called', function() {
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del').withArgs('/users/' + USER_ID + '/email_aliases/' + aliasID);
+			users.removeEmailAlias(USER_ID, aliasID);
 		});
 
 		it('should make DELETE call to remove email alias from current user when passed "me" ID', function() {
-			var userID = 'me',
-				aliasID = '23455';
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
-			sandbox.mock(boxClientFake).expects('del').withArgs('/users/me/email_aliases/23455');
-			users.removeEmailAlias(userID, aliasID);
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del').withArgs('/users/me/email_aliases/' + aliasID);
+			users.removeEmailAlias('me', aliasID);
 		});
 
-		it('should wrap callback without default response handler when called', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').returns(done);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync();
-			users.removeEmailAlias();
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'del');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			users.removeEmailAlias(USER_ID, aliasID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			users.removeEmailAlias(USER_ID, aliasID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var id = '1234';
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return users.removeEmailAlias(id, aliasID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -216,7 +374,7 @@ describe('Users', function() {
 				qs: null
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + USER_ID + '/memberships', expectedParams);
 			users.getGroupMemberships(USER_ID, null);
 		});
@@ -231,15 +389,38 @@ describe('Users', function() {
 				qs: options
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/users/' + USER_ID + '/memberships', expectedParams);
 			users.getGroupMemberships(USER_ID, options);
 		});
 
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'get').withArgs('/users/' + USER_ID + '/memberships').yieldsAsync();
-			users.getGroupMemberships(USER_ID, null, done);
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get');
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			users.getGroupMemberships(USER_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			users.getGroupMemberships(USER_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return users.getGroupMemberships(USER_ID)
+				.then(data => assert.equal(data, response));
 		});
 	});
 });

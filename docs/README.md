@@ -9,12 +9,22 @@ the SDK are available by topic:
 - [Collaborations](collaborations.md)
 - [Collections](collections.md)
 - [Comments](comments.md)
+- [Device Pins](device-pins.md)
+- [Enterprise](enterprise.md)
 - [Events](events.md)
 - [Files](files.md)
 - [Folders](folders.md)
+- [Groups](groups.md)
+- [Legal Hold Policies](legal-hold-policies.md)
+- [Metadata](metadata.md)
+- [Retention Policies](retention-policies.md)
 - [Search](search.md)
 - [Shared Items](shared-items.md)
+- [Tasks](tasks.md)
+- [Trash](trash.md)
 - [Users](users.md)
+- [Web Links](web-links.md)
+- [Webhooks](webhooks.md)
 
 ## JSDocs
 

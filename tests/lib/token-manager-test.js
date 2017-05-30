@@ -296,7 +296,9 @@ describe('token-manager', function() {
 				appAuth: {
 					keyID: TEST_KEY_ID,
 					privateKey: TEST_KEY,
-					passphrase: TEST_PASSPHRASE
+					passphrase: TEST_PASSPHRASE,
+					expirationTime: 1,
+					verifyTimestamp: true
 				}
 			});
 
@@ -305,7 +307,10 @@ describe('token-manager', function() {
 
 		it('should create JWT assertion with correct parameters when called', function(done) {
 
+			sandbox.useFakeTimers(100000);
+
 			var expectedClaims = {
+				exp: 101,
 				box_sub_type: 'user'
 			};
 			var keyParams = {
@@ -317,6 +322,7 @@ describe('token-manager', function() {
 				audience: 'https://api.box.com/oauth2/token',
 				subject: TEST_ID,
 				issuer: config.clientID,
+				noTimestamp: false,
 				headers: {
 					kid: TEST_KEY_ID
 				}
@@ -357,6 +363,70 @@ describe('token-manager', function() {
 
 				assert.ifError(err);
 				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should retry with new JWT using server date when server rejects exp claim', function(done) {
+
+			sandbox.useFakeTimers(100000);
+
+			var firstTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: TEST_WEB_TOKEN
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			var serverDate = 'Sat, 01 Apr 2017 16:56:53 GMT'; // 1491065813
+			var newJWT = 'jhdhioeiu4yo34875twudgshdgr';
+
+			var secondTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: newJWT
+			};
+
+			var serverError = {
+				statusCode: 400,
+				authExpired: true,
+				response: {
+					body: {
+						error: 'invalid_grant',
+						error_description: 'Please check the \'exp\' claim.'
+					},
+					headers: {
+						date: serverDate
+					}
+				}
+			};
+
+			var jwtStub = sandbox.stub(jwtFake, 'sign');
+			jwtStub.withArgs(sinon.match({exp: 101})).returns(TEST_WEB_TOKEN);
+			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1})).returns(newJWT);
+			var getTokensMock = sandbox.mock(tokenManager);
+			getTokensMock.expects('getTokens').withArgs(sinon.match(firstTokenParams)).yieldsAsync(serverError);
+			getTokensMock.expects('getTokens').withArgs(sinon.match(secondTokenParams)).yieldsAsync(null, tokenInfo);
+
+			tokenManager.getTokensJWTGrant('user', TEST_ID, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should call callback with error when the API returns any other error', function(done) {
+
+			var error = new Error('Could not get tokens');
+
+			sandbox.stub(jwtFake, 'sign').returns(TEST_WEB_TOKEN);
+			sandbox.stub(tokenManager, 'getTokens').yieldsAsync(error);
+
+			tokenManager.getTokensJWTGrant('user', TEST_ID, function(err) {
+
+				assert.equal(err, error);
 				done();
 			});
 		});

@@ -1,0 +1,8 @@
+{
+    "type": "error",
+    "status": 400,
+    "code": "external_collaboration_restricted",
+    "help_url": "http://developers.box.com/docs/#errors",
+    "message": "External collaboration is restricted on this item",
+    "request_id": "1574585486582d3f3feb050"
+}

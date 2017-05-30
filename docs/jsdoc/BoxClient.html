@@ -189,7 +189,7 @@ unauthorized responses from the API.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line194">line 194</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -288,7 +288,7 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line374">line 374</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line357">line 357</a>
     </li></ul></dd>
     
 
@@ -573,7 +573,7 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line356">line 356</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line328">line 328</a>
     </li></ul></dd>
     
 
@@ -641,7 +641,154 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line383">line 383</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line366">line 366</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="itemTypes"><span class="type-signature">(readonly) </span>itemTypes<span class="type-signature"> :<a href="global.html#ItemType">ItemType</a></span></h4>
+
+
+
+
+<div class="description">
+    Enum of Box item types
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="global.html#ItemType">ItemType</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>FILE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemType">ItemType</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>FOLDER</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemType">ItemType</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line345">line 345</a>
     </li></ul></dd>
     
 
@@ -662,6 +809,257 @@ creating and editting shared links, upload emails, etc.
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="asSelf"><span class="type-signature"></span>asSelf<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Revoke the As-User context and return to making calls on behalf of the user
+who owns the client's access token.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line437">line 437</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="asUser"><span class="type-signature"></span>asUser<span class="signature">(userID)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Set up the As-User context, which is used by enterprise admins to
+impersonate their managed users and perform actions on their behalf.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the user to impersonate</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line426">line 426</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
         
             
@@ -811,7 +1209,7 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line548">line 548</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line559">line 559</a>
     </li></ul></dd>
     
 
@@ -864,7 +1262,7 @@ creating and editting shared links, upload emails, etc.
 
     
 
-    <h4 class="name" id="defaultResponseHandler"><span class="type-signature"></span>defaultResponseHandler<span class="signature">(callback)</span><span class="type-signature"> &rarr; {<a href="APIRequest.html#~Callback">APIRequest~Callback</a>}</span></h4>
+    <h4 class="name" id="defaultResponseHandler"><span class="type-signature"></span>defaultResponseHandler<span class="signature">(callback)</span><span class="type-signature"> &rarr; (nullable) {<a href="APIRequest.html#~Callback">APIRequest~Callback</a>}</span></h4>
 
     
 
@@ -966,7 +1364,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line570">line 570</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line578">line 578</a>
     </li></ul></dd>
     
 
@@ -1193,7 +1591,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line500">line 500</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line507">line 507</a>
     </li></ul></dd>
     
 
@@ -1416,7 +1814,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line455">line 455</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line461">line 461</a>
     </li></ul></dd>
     
 
@@ -1639,7 +2037,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line515">line 515</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line523">line 523</a>
     </li></ul></dd>
     
 
@@ -1862,7 +2260,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line597">line 597</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line667">line 667</a>
     </li></ul></dd>
     
 
@@ -2097,7 +2495,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line470">line 470</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line477">line 477</a>
     </li></ul></dd>
     
 
@@ -2320,7 +2718,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line485">line 485</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line492">line 492</a>
     </li></ul></dd>
     
 
@@ -2420,7 +2818,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line432">line 432</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line415">line 415</a>
     </li></ul></dd>
     
 
@@ -2570,7 +2968,7 @@ and will be unable to make calls to the api, rendering it effectively useless.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line443">line 443</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line449">line 449</a>
     </li></ul></dd>
     
 
@@ -2743,7 +3141,7 @@ remove a header, set it's value to null.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line393">line 393</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line376">line 376</a>
     </li></ul></dd>
     
 
@@ -2893,7 +3291,7 @@ better information for uploads, rate-limiting, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line408">line 408</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line391">line 391</a>
     </li></ul></dd>
     
 
@@ -3085,7 +3483,7 @@ better information for uploads, rate-limiting, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line422">line 422</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line405">line 405</a>
     </li></ul></dd>
     
 
@@ -3341,7 +3739,7 @@ better information for uploads, rate-limiting, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line531">line 531</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line539">line 539</a>
     </li></ul></dd>
     
 
@@ -3386,6 +3784,159 @@ better information for uploads, rate-limiting, etc.
 
 
         
+            
+
+    
+
+    <h4 class="name" id="wrapWithDefaultHandler"><span class="type-signature"></span>wrapWithDefaultHandler<span class="signature">(method)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Wrap a client method with the default handler for both callback and promise styles
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The client method (e.g. client.get)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line617">line 617</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The wrapped method
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
     
 
     
@@ -3401,13 +3952,13 @@ better information for uploads, rate-limiting, etc.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Users.html">Users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Tue Sep 27 2016 13:38:22 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 22 2017 13:18:52 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

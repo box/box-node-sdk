@@ -14,19 +14,28 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 * [Rename a Folder](#rename-a-folder)
 * [Delete a Folder](#delete-a-folder)
 * [Get a Trashed Folder](#get-a-trashed-folder)
+* [Restore a Folder from Trash](#restore-a-folder-from-trash)
 * [Delete Permanently](#delete-permanently)
 * [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
 * [Get Collaborations for a Folder](#get-collaborations-for-a-folder)
+* [Add Folder to a Collection](#add-folder-to-a-collection)
+* [Remove Folder from a Collection](#remove-folder-from-a-collection)
 * [Create Metadata](#create-metadata)
 * [Get Metadata](#get-metadata)
 * [Update Metadata](#update-metadata)
 * [Delete Metadata](#delete-metadata)
+* [Get Watermark](#get-watermark)
+* [Apply Watermark](#apply-watermark)
+* [Remove Watermark](#remove-watermark)
 
 Get a Folder's Information
 --------------------------
 
 Folder information can be retrieved by calling the
-[`folders.get(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get) method. Use the `queryString` parameter to specify the desired fields. Requesting information for only the fields you need can improve performance and reduce the size of the network request.
+[`folders.get(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get)
+method. Use the `queryString` parameter to specify the desired fields. Requesting
+information for only the fields you need can improve performance and reduce the
+size of the network request.
 
 ```js
 client.folders.get(
@@ -143,6 +152,29 @@ client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,
 , callback);
 ```
 
+Restore a Folder from Trash
+---------------------------
+
+A folder can be restored from the trash with the
+[`folders.restoreFromTrash(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#restoreFromTrash)
+method.  Default behavior is to restore the item to the folder it was in before
+it was moved to the trash.  Options are available to handle possible failure
+cases: if an item with the same name already exists in folder's old location, the
+restored folder can be given an alternate name with the `name` option.  If the
+folder's old location no longer exists, it can be placed inside a new parent
+folder with the `parent_id` option.
+
+```js
+client.folders.restoreFromTrash(
+	'12345',
+	{
+		name: 'New Name',
+		parent_id: '0'
+	},
+	callback
+);
+```
+
 Delete Permanently
 ---------------
 A folder can be removed permanently from trash by calling
@@ -198,6 +230,28 @@ All collaborations can be returned by passing `null` for the `queryString` param
 client.folders.getCollaborations('12345', null, callback);
 ```
 
+Add Folder to a Collection
+--------------------------
+
+To add a folder to a collection, call the
+[`folders.addToCollection(folderID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#addToCollection)
+method with the IDs of the folder and collection.
+
+```js
+client.folders.addToCollection('87263', '235747', callback);
+```
+
+Remove Folder from a Collection
+-------------------------------
+
+To remove a folder from a collection, call the
+[`folders.removeFromCollection(folderID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#removeFromCollection)
+method with the IDs of the folder and collection.
+
+```js
+client.folders.removeFromCollection('87263', '235747', callback);
+```
+
 Create Metadata
 ---------------
 
@@ -247,4 +301,44 @@ A folder's metadata can be removed by calling
 
 ```js
 client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+```
+
+Get Watermark
+-------------
+To get watermark information for a folder call the
+[`folders.getWatermark(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getWatermark)
+method.
+
+```js
+client.folders.getWatermark('75937', null, callback);
+```
+
+Requesting information for only the fields you need with the `fields` query
+string parameter can improve performance and reduce the size of the network
+request.
+
+```js
+// Only get information about a few specific fields.
+client.folders.getWatermark('75937', {fields: 'created_at'}, callback);
+```
+
+Apply Watermark
+---------------
+
+To apply or update the watermark for a folder call the
+[`folders.applyWatermark(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#applyWatermark)
+method.
+
+```js
+client.folders.applyWatermark('67890', null, callback);
+```
+
+Remove Watermark
+----------------
+
+A folder's watermark can be removed by calling
+[`folders.removeWatermark(folderID, callback)`](http://opensource.box.com/box-node-sdk/Folder.html#removeWatermark).
+
+```js
+client.folders.removeWatermark('67890', callback);
 ```

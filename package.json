@@ -1,8 +1,8 @@
 {
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
-  "version": "1.1.0",
-  "description": "A Box SDK for Node.js",
+  "version": "1.4.2",
+  "description": "Official Box SDK for Node.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -16,17 +16,20 @@
     "test": "node Makefile.js",
     "lint": "node Makefile.js lint",
     "docs": "node Makefile.js docs",
+    "docs-dev": "node Makefile.js docsDev",
     "deps": "npm prune && npm install",
     "patch": "node Makefile.js patch",
     "minor": "node Makefile.js minor",
     "major": "node Makefile.js major"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "http-status": "^0.2.2",
     "jsonwebtoken": "^5.7.0",
     "merge-options": "0.0.64",
-    "node-uuid": "^1.4.7",
-    "request": "^2.74.0"
+    "promise-queue": "^2.2.3",
+    "request": "^2.74.0",
+    "uuid": "^3.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -37,7 +40,7 @@
     "leche": "^2.1.1",
     "mocha": "^2.4.5",
     "mockery": "^1.4.1",
-    "nock": "^8.0.0",
+    "nock": "^9.0.13",
     "shelljs": "^0.3.0",
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^1.17.3"

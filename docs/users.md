@@ -44,10 +44,19 @@ client.users.get(client.CURRENT_USER_ID, null, callback);
 Update User
 -----------
 
-To update a user call the [`users.update(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#update) method where `options` contains the fields to update.
+To update a user call the
+[`users.update(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#update)
+method where `options` contains the fields to update.
 
 ```js
 client.users.update('123', {name: 'New Name', job_title: 'New Title', phone: '555-1111'}, callback);
+```
+
+To change a user's login email, update the `login` parameter on the user.  Note
+that the new email address must already be added as a verified email alias for the
+user.
+```js
+client.users.update('123', {login: 'newemail@example.com'}, callback);
 ```
 
 
@@ -86,6 +95,11 @@ To add an email alias for a user call the [`users.addEmailAlias(userID, email, c
 
 ```js
 client.users.addEmailAlias('123', 'user@example.com', callback);
+```
+
+Enterprise admins can automatically confirm the email alias via the `is_confirmed` option:
+```js
+client.users.addEmailAlias('123', 'userAlias@example.com', {is_confirmed: true}, callback);
 ```
 
 

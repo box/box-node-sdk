@@ -3,6 +3,7 @@ Device Pins
 
 * [Get Device Pin](#get-device-pin)
 * [Delete Device Pin](#delete-device-pin)
+* [Get All Device Pins](#get-all-device-pins)
 
 Get Device Pin
 --------------
@@ -24,4 +25,15 @@ method with the ID of the device pin.
 
 ```js
 client.devicePins.delete('28345', null, callback);
+```
+
+Get All Device Pins
+-------------------
+
+Get all device pins records for the current enterprise by calling the
+[`devicePins.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/DevicePins.html#getAll)
+method.
+
+```js
+client.devicePins.getAll({limit: 500}, callback);
 ```

@@ -1,0 +1,22 @@
+{
+    "entries": [
+        {
+            "type": "device_pinner",
+            "id": "1357924680",
+            "owned_by": {
+                "type": "user",
+                "id": "9753108642",
+                "name": "Device User",
+                "login": "device@example.com"
+            },
+            "product_name": "iPhone"
+        }
+    ],
+    "limit": 100,
+    "order": [
+        {
+            "by": "id",
+            "direction": "ASC"
+        }
+    ]
+}
