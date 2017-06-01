@@ -24,7 +24,6 @@ var APIRequestManager = require('../../lib/api-request-manager'),
 // Helpers
 // ------------------------------------------------------------------------------
 var sandbox = sinon.sandbox.create(),
-	errorsFake,
 	apiSessionFake,
 	requestManagerFake,
 	BasicClient,
