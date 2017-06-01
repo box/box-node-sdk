@@ -14,8 +14,7 @@ var assert = require('chai').assert,
 	leche = require('leche'),
 	httpStatusCodes = require('http-status');
 
-var errors = require('../../lib/util/errors'),
-	APIRequestManager = require('../../lib/api-request-manager'),
+var APIRequestManager = require('../../lib/api-request-manager'),
 	BasicAPISession = require('../../lib/sessions/basic-session'),
 	testPlugin = require('../fixtures/plugins/test-plugin'),
 	Config = require('../../lib/util/config');
@@ -64,7 +63,6 @@ describe('box-client', function() {
 
 	beforeEach(function() {
 		// Setup Environment
-		errorsFake = leche.fake(errors);
 		apiSessionFake = leche.fake(BasicAPISession.prototype);
 		requestManagerFake = leche.fake(APIRequestManager.prototype);
 		var config = new Config(params);
@@ -81,8 +79,6 @@ describe('box-client', function() {
 			useCleanCache: true,
 			warnOnUnregistered: false
 		});
-		mockery.registerMock('./util/errors', errorsFake);
-		mockery.registerMock('../util/errors', errorsFake);
 
 		// Setup File Under Test
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
@@ -160,20 +156,13 @@ describe('box-client', function() {
 	});
 
 	describe('_handleStreamingResponse()', function() {
-		var accessTokenError;
-
-		beforeEach(function() {
-			accessTokenError = new Error('Expired Access Token');
-			accessTokenError.response = fakeUnauthorizedResponse;
-			sandbox.stub(errorsFake, 'buildExpiredAuthError').returns(accessTokenError);
-		});
 
 		afterEach(function() {
 			delete apiSessionFake.handleExpiredTokensError;
 		});
 
 		it('should call handleExpiredTokensError when the response is UNAUTHORIZED and the body is an empty object', function() {
-			apiSessionFake.handleExpiredTokensError = sandbox.mock().withExactArgs(accessTokenError, sinon.match.func);
+			apiSessionFake.handleExpiredTokensError = sandbox.mock().withExactArgs(sinon.match.instanceOf(Error), sinon.match.func);
 			basicClient._handleStreamingResponse(fakeUnauthorizedResponse);
 		});
 
@@ -198,13 +187,12 @@ describe('box-client', function() {
 		});
 
 		it('should propagate an expired tokens error when the response is UNAUTHORIZED and the body is an empty object', function(done) {
-			var accessTokenError = new Error('Expired Access Token');
-			accessTokenError.response = fakeUnauthorizedResponse;
+
 			fakeUnauthorizedResponse.body = {};
 
-			sandbox.stub(errorsFake, 'buildExpiredAuthError').returns(accessTokenError);
 			basicClient._handleResponse(null, fakeUnauthorizedResponse, function(err) {
-				assert.strictEqual(err, accessTokenError);
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'authExpired', true);
 				done();
 			});
 		});
@@ -254,11 +242,9 @@ describe('box-client', function() {
 		});
 
 		it('should allow the session to handle an expired tokens error when one occurs', function(done) {
-			var accessTokenError = new Error('Expired Access Token');
-			accessTokenError.response = fakeUnauthorizedResponse;
-			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(accessTokenError).yieldsAsync();
 
-			sandbox.stub(errorsFake, 'buildExpiredAuthError').returns(accessTokenError);
+			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.has('authExpired', true)).yieldsAsync();
+
 			basicClient._handleResponse(null, fakeUnauthorizedResponse, function() {
 				delete apiSessionFake.handleExpiredTokensError;
 				done();
@@ -548,11 +534,9 @@ describe('box-client', function() {
 			sandbox.stub(apiSessionFake, 'getAccessToken').yieldsAsync(null, FAKE_ACCESS_TOKEN);
 			sandbox.stub(requestManagerFake, 'makeRequest').yieldsAsync(null, fakeUnauthorizedResponse);
 
-			var accessTokenError = new Error('Access token error.');
-			sandbox.stub(errorsFake, 'buildExpiredAuthError').returns(accessTokenError);
-
 			basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData, function(err) {
-				assert.strictEqual(err, accessTokenError);
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'authExpired', true);
 				done();
 			});
 		});
@@ -688,8 +672,40 @@ describe('box-client', function() {
 	describe('revokeTokens()', function() {
 
 		it('should call apiSession.revokeTokens when called', function(done) {
-			sandbox.mock(apiSessionFake).expects('revokeTokens').withExactArgs(done).yields();
+			sandbox.mock(apiSessionFake).expects('revokeTokens').yieldsAsync();
 			basicClient.revokeTokens(done);
+		});
+
+		it('should call callback with an error when token revocation fails', function(done) {
+
+			var error = new Error('No can do');
+
+			sandbox.mock(apiSessionFake).expects('revokeTokens').yieldsAsync(error);
+			basicClient.revokeTokens(function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise resolving when tokens are revoked', function() {
+
+			sandbox.mock(apiSessionFake).expects('revokeTokens').yieldsAsync();
+			return basicClient.revokeTokens()
+				.then(data => {
+					assert.isUndefined(data);
+				});
+		});
+
+		it('should return a promise that rejects when token revocation fails', function() {
+
+			var error = new Error('No can do');
+
+			sandbox.mock(apiSessionFake).expects('revokeTokens').yieldsAsync(error);
+			return basicClient.revokeTokens()
+				.catch(err => {
+					assert.equal(err, error);
+				});
 		});
 	});
 
@@ -698,15 +714,57 @@ describe('box-client', function() {
 		var TEST_SCOPE = 'item_preview',
 			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
 
-		it('should call session to exchange token when called', function(done) {
+		it('should call session to exchange token and pass exchanged token to callback when called', function(done) {
 
 			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
 
 			sandbox.mock(apiSessionFake).expects('exchangeToken')
-				.withArgs(TEST_SCOPE, TEST_RESOURCE, done)
+				.withArgs(TEST_SCOPE, TEST_RESOURCE)
 				.yieldsAsync(null, exchangedTokenInfo);
 
-			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, done);
+			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should call callback with error when token exchange fails', function(done) {
+
+			var error = new Error('Failure');
+
+			sandbox.stub(apiSessionFake, 'exchangeToken').yieldsAsync(error);
+
+			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise that resolves to the exchanged token info when token exchage succeeds', function() {
+
+			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
+
+			sandbox.stub(apiSessionFake, 'exchangeToken').yieldsAsync(null, exchangedTokenInfo);
+
+			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
+		});
+
+		it('should return a promise that rejects when token exchange fails', function() {
+
+			var error = new Error('Failure');
+
+			sandbox.stub(apiSessionFake, 'exchangeToken').yieldsAsync(error);
+
+			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
+				.catch(err => {
+					assert.equal(err, error);
+				});
 		});
 	});
 
@@ -804,16 +862,14 @@ describe('box-client', function() {
 
 		it('should pass unexpected response error to callback when called with unsuccessful response', function(done) {
 
-			var unexpectedResponseError = new Error('dead dove, do not eat'),
-				unexpctedResponse = {
-					statusCode: 403
-				};
-
-			sandbox.stub(errorsFake, 'buildUnexpectedResponseError').returns(unexpectedResponseError);
+			var unexpctedResponse = {
+				statusCode: 403
+			};
 
 			var wrappedCallback = basicClient.defaultResponseHandler(function(err) {
 
-				assert.equal(err, unexpectedResponseError);
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', unexpctedResponse.statusCode);
 				done();
 			});
 
