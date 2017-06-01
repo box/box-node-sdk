@@ -435,10 +435,7 @@ describe('token-manager', function() {
 	describe('exchangeToken()', function() {
 
 		var TEST_ACCESS_TOKEN = 'poiudafjdbfjygsdfg',
-			TEST_WEB_TOKEN = 'laksduh5q3ufygqergtwehrg8w95tw9dhfgwr5',
 			TEST_SCOPE = 'item_preview',
-			TEST_ID = '873645827345',
-			TEST_NAME = 'John Q. Public',
 			TEST_RESOURCE = 'https://api.box.com/2.0/files/12345';
 
 		it('should exchange access token for lower scope when only scope is passed', function(done) {
@@ -456,7 +453,30 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams).yieldsAsync(null, tokenInfo);
 
-			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, null, function(err, tokens) {
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should exchange access token for lower scopes when multiple scopes are passed', function(done) {
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: 'item_preview,item_read'
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams).yieldsAsync(null, tokenInfo);
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, ['item_preview', 'item_read'], null, function(err, tokens) {
 
 				assert.ifError(err);
 				assert.equal(tokens, tokenInfo);
@@ -480,71 +500,10 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams).yieldsAsync(null, tokenInfo);
 
-			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, null, function(err, tokens) {
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, function(err, tokens) {
 
 				assert.ifError(err);
 				assert.equal(tokens, tokenInfo);
-				done();
-			});
-		});
-
-		it('should exchange access token for delegated resource-restricted token when scope, resource, and delegation info are passed', function(done) {
-
-			var expectedTokenParams = {
-				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
-				subject_token: TEST_ACCESS_TOKEN,
-				scope: TEST_SCOPE,
-				resource: TEST_RESOURCE,
-				actor_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-				actor_token: TEST_WEB_TOKEN
-			};
-
-			var tokenInfo = {
-				accessToken: 'lsdjhgo87w3h4tbd87fg54'
-			};
-
-			var expectedClaims = {
-				box_sub_type: 'external',
-				name: TEST_NAME
-			};
-			var expectedOptions = {
-				algorithm: 'none',
-				audience: 'https://api.box.com/oauth2/token',
-				subject: TEST_ID,
-				issuer: config.clientID
-			};
-
-			sandbox.mock(jwtFake).expects('sign').withArgs(expectedClaims, null, sinon.match(expectedOptions)).returns(TEST_WEB_TOKEN);
-
-			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams).yieldsAsync(null, tokenInfo);
-
-			var delegationInfo = {
-				name: TEST_NAME,
-				id: TEST_ID
-			};
-			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, delegationInfo, function(err, tokens) {
-
-				assert.ifError(err);
-				assert.equal(tokens, tokenInfo);
-				done();
-			});
-		});
-
-		it('should call callback with error when delegation JWT construction fails', function(done) {
-
-			var jwtError = new Error('Could not construct delegated token assertion');
-			sandbox.stub(jwtFake, 'sign').throws(jwtError);
-
-			sandbox.mock(tokenManager).expects('getTokens').never();
-
-			var delegationInfo = {
-				name: TEST_NAME,
-				id: TEST_ID
-			};
-			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, delegationInfo, function(err) {
-
-				assert.equal(err, jwtError);
 				done();
 			});
 		});
@@ -554,7 +513,7 @@ describe('token-manager', function() {
 			var exchangeError = new Error('Exchange failed');
 			sandbox.stub(tokenManager, 'getTokens').yieldsAsync(exchangeError);
 
-			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, null, function(err) {
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, function(err) {
 
 				assert.equal(err, exchangeError);
 				done();

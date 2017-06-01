@@ -691,7 +691,23 @@ describe('box-client', function() {
 			sandbox.mock(apiSessionFake).expects('revokeTokens').withExactArgs(done).yields();
 			basicClient.revokeTokens(done);
 		});
+	});
 
+	describe('exchangeToken()', function() {
+
+		var TEST_SCOPE = 'item_preview',
+			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
+
+		it('should call session to exchange token when called', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
+
+			sandbox.mock(apiSessionFake).expects('exchangeToken')
+				.withArgs(TEST_SCOPE, TEST_RESOURCE, done)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, done);
+		});
 	});
 
 	describe('plug()', function() {
