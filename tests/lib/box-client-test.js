@@ -861,18 +861,18 @@ describe('box-client', function() {
 
 		it('should pass unexpected response error to callback when called with unsuccessful response', function(done) {
 
-			var unexpctedResponse = {
+			var unexpectedResponse = {
 				statusCode: 403
 			};
 
 			var wrappedCallback = basicClient.defaultResponseHandler(function(err) {
 
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', unexpctedResponse.statusCode);
+				assert.propertyVal(err, 'statusCode', unexpectedResponse.statusCode);
 				done();
 			});
 
-			wrappedCallback(null, unexpctedResponse);
+			wrappedCallback(null, unexpectedResponse);
 		});
 	});
 
