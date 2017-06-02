@@ -349,6 +349,96 @@ describe('Box Node SDK', function() {
 		});
 	});
 
+	it('should correctly exchange tokens when client token exchange is called', function(done) {
+
+		var userID = '34876458977987',
+			algorithm = 'RS256',
+			keyID = 'ltf64zjk',
+			passphrase = 'Test secret key',
+			scopes = ['item_preview', 'item_read'],
+			resource = 'https://api.box.com/2.0/folders/0';
+
+		var exchangedTokenInfo = {
+			access_token: '1!938y4fncqwe8rqwoieo-05oe8ugisuedb8745y45756dfgbdfgu-wrtwergwre5yfdgber623rgfadsftw45yehr-dfg',
+			expires_in: 3987,
+			token_type: 'bearer',
+			restricted_to: [
+				{
+					scope: 'item_preview,item_read',
+					object: {
+						type: 'folder',
+						id: '0',
+						sequence_id: null,
+						etag: null,
+						name: 'All Files'
+					}
+				}
+			],
+			issued_token_type: 'urn:ietf:params:oauth:token-type:access_token'
+		};
+
+		// @NOTE(mwiller) 2016-04-12: This is an actual generated RSA key, so the key
+		//   parameters are actually meaningful and will cause the test to fail if
+		//   they change!
+		/* eslint-disable no-sync */
+		var privateKey = fs.readFileSync(path.resolve(__dirname, 'fixtures/appusers_private_key.pem'));
+		/* eslint-enable no-sync */
+
+		apiMock
+			.post('/oauth2/token', function(body) {
+				assert.propertyVal(body, 'client_id', TEST_CLIENT_ID);
+				assert.propertyVal(body, 'client_secret', TEST_CLIENT_SECRET);
+				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
+
+				var assertion = jwt.decode(body.assertion, {complete: true});
+				assert.deepPropertyVal(assertion, 'header.alg', algorithm);
+				assert.deepPropertyVal(assertion, 'header.typ', 'JWT');
+				assert.deepPropertyVal(assertion, 'header.kid', keyID);
+
+				assert.deepPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
+				assert.deepPropertyVal(assertion, 'payload.sub', userID);
+				assert.deepPropertyVal(assertion, 'payload.box_sub_type', 'user');
+				assert.deepPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.notProperty(assertion, 'payload.iat');
+
+				return true;
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				expires_in: 256
+			})
+			.post('/oauth2/token', function(body) {
+				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:token-exchange');
+				assert.propertyVal(body, 'subject_token_type', 'urn:ietf:params:oauth:token-type:access_token');
+				assert.propertyVal(body, 'subject_token', TEST_ACCESS_TOKEN);
+				assert.propertyVal(body, 'resource', resource);
+				assert.propertyVal(body, 'scope', scopes.join(','));
+
+				return true;
+			})
+			.reply(200, exchangedTokenInfo);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			appAuth: {
+				algorithm: algorithm,
+				keyID: keyID,
+				privateKey: privateKey,
+				passphrase: passphrase
+			}
+		});
+
+		var client = sdk.getAppAuthClient('user', userID);
+
+		client.exchangeToken(scopes, resource, function(err, data) {
+
+			assert.ifError(err);
+			assert.propertyVal(data, 'accessToken', exchangedTokenInfo.access_token);
+			done();
+		});
+	});
+
 	it('should retry API request when response is a temporary error', function(done) {
 
 		var folderID = '98740596456',

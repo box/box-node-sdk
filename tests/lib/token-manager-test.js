@@ -432,6 +432,95 @@ describe('token-manager', function() {
 		});
 	});
 
+	describe('exchangeToken()', function() {
+
+		var TEST_ACCESS_TOKEN = 'poiudafjdbfjygsdfg',
+			TEST_SCOPE = 'item_preview',
+			TEST_RESOURCE = 'https://api.box.com/2.0/files/12345';
+
+		it('should exchange access token for lower scope when only scope is passed', function(done) {
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: TEST_SCOPE
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams).yieldsAsync(null, tokenInfo);
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should exchange access token for lower scopes when multiple scopes are passed', function(done) {
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: 'item_preview,item_read'
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams).yieldsAsync(null, tokenInfo);
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, ['item_preview', 'item_read'], null, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should exchange access token for resource-restricted token when scope and resource are passed', function(done) {
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: TEST_SCOPE,
+				resource: TEST_RESOURCE
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams).yieldsAsync(null, tokenInfo);
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should call callback with error when call to exchange tokens fails', function(done) {
+
+			var exchangeError = new Error('Exchange failed');
+			sandbox.stub(tokenManager, 'getTokens').yieldsAsync(exchangeError);
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, function(err) {
+
+				assert.equal(err, exchangeError);
+				done();
+			});
+		});
+	});
+
 	describe('revokeTokens()', function() {
 		it('should make request to revoke tokens with expected revoke params when called', function(done) {
 			var refreshToken = 'rt';

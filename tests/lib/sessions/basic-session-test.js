@@ -62,7 +62,6 @@ describe('BasicAPISession', function() {
 				done();
 			});
 		});
-
 	});
 
 	describe('revokeTokens()', function() {
@@ -71,7 +70,40 @@ describe('BasicAPISession', function() {
 			sandbox.mock(tokenManagerFake).expects('revokeTokens').withArgs(ACCESS_TOKEN).yields();
 			basicAPISession.revokeTokens(done);
 		});
+	});
 
+	describe('exchangeToken()', function() {
+
+		var TEST_SCOPE = 'item_preview',
+			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
+
+		it('should exchange access token and call callback with exchanged token info when called', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'bnmdsbfjbsdlkfjblsdt'};
+
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE)
+				.yieldsAsync(null, exchangedTokenInfo);
+			basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should call callback with error when the token exchange fails', function(done) {
+
+			var error = new Error('Nope!');
+
+			sandbox.stub(tokenManagerFake, 'exchangeToken').yieldsAsync(error);
+
+			basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
 	});
 
 });
