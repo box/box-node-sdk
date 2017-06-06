@@ -299,6 +299,56 @@ describe('PersistentAPISession', function() {
 
 	});
 
+	describe('exchangeToken()', function() {
+
+		var TEST_SCOPE = 'item_preview',
+			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
+
+		it('should get access token and exchange for lower scope when called', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
+
+			sandbox.mock(persistentAPISession).expects('getAccessToken').yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should call callback with error when getting the access token fails', function(done) {
+
+			var error = new Error('Could not get access token');
+
+			sandbox.stub(persistentAPISession, 'getAccessToken').yieldsAsync(error);
+
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should call callback with error when the token exchange fails', function(done) {
+
+			var error = new Error('Could not exchange token');
+
+			sandbox.stub(persistentAPISession, 'getAccessToken').yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.stub(tokenManagerFake, 'exchangeToken').yieldsAsync(error);
+
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+	});
+
 	describe('handleExpiredTokensError()', function() {
 
 		it('should clear the token store (if one exists) and flush the upkeep queue with an error when called', function(done) {

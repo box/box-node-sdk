@@ -181,4 +181,33 @@ describe('AnonymousAPISession', function() {
 
 	});
 
+	describe('exchangeToken()', function() {
+
+		it('should get access token and call callback with its own token info when called', function(done) {
+
+			var tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
+			anonymousSession.tokenInfo = tokenInfo;
+
+			sandbox.mock(anonymousSession).expects('getAccessToken').yieldsAsync(null, tokenInfo.accessToken);
+			anonymousSession.exchangeToken('item_preview', null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, tokenInfo);
+				done();
+			});
+		});
+
+		it('should call callback with error when getting the access token fails', function(done) {
+
+			var error = new Error('Could not get tokens');
+
+			sandbox.mock(anonymousSession).expects('getAccessToken').yieldsAsync(error);
+			anonymousSession.exchangeToken('item_preview', null, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+	});
+
 });
