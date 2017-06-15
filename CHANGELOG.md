@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0
+
+- Added support for [Token Exchange](./docs/authentication.md#token-exchange),
+which allows a client to get downscoped tokens suitable for passing to a browser
+app or worker process.
+- Ensured deeply-nested Config properties are immutable
+
 ## 1.4.2
 
 - Fixed `BoxSDK.getPreconfiguredInstance()` to configure webhook keys
