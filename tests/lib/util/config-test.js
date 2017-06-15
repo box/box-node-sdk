@@ -105,6 +105,38 @@ describe('Config', function() {
 				config.apiVersion = '3.0';
 			});
 		});
+
+		it('should deeply freeze config object when called', function() {
+
+			var config = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				request: {
+					json: false
+				}
+			});
+
+			assert.throws(function() {
+				config.request.json = true;
+			});
+		});
+
+		it('should correctly freeze config objects with Buffers in them', function() {
+
+			var config = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				appAuth: {
+					keyID: 'fh83745',
+					privateKey: new Buffer(50),
+					passphrase: 'Such secrets, wow!'
+				}
+			});
+
+			assert.throws(function() {
+				config.appAuth.privateKey = new Buffer(51);
+			});
+		});
 	});
 
 	describe('extend()', function() {
