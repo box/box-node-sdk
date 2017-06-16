@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1
+
+- Revert deep-freezing Config properties, since it was causing errors
+
 ## 1.5.0
 
 - Added support for [Token Exchange](./docs/authentication.md#token-exchange),
