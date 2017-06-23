@@ -123,7 +123,7 @@ describe('Config', function() {
 			'unsupported algorithm': [Object.assign({algorithm: 'HS4096'}, TEST_APP_AUTH_PARAMS)],
 			'float expiration time': [Object.assign({expirationTime: 5.5}, TEST_APP_AUTH_PARAMS)],
 			'zero expiration time': [Object.assign({expirationTime: 0}, TEST_APP_AUTH_PARAMS)],
-			'too-long expiration time': [Object.assign({expirationTime: 120}, TEST_APP_AUTH_PARAMS)]
+			'too-long expiration time': [Object.assign({expirationTime: 61}, TEST_APP_AUTH_PARAMS)]
 		}, function(appAuthParams) {
 
 			it('should throw when passed invalid app auth config data', function() {
@@ -136,6 +136,17 @@ describe('Config', function() {
 					});
 				});
 			});
+		});
+
+		it('should create valid config with longer app auth expiration time', function() {
+
+			var config = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				appAuth: Object.assign({expirationTime: 60}, TEST_APP_AUTH_PARAMS)
+			});
+
+			assert.deepPropertyVal(config, 'appAuth.expirationTime', 60);
 		});
 	});
 
