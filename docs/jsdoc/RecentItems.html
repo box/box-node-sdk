@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: DevicePins</title>
+    <title>JSDoc: Class: RecentItems</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: DevicePins</h1>
+    <h1 class="page-title">Class: RecentItems</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>DevicePins</h2>
+        <h2>RecentItems</h2>
         
     
 </header>
@@ -40,14 +40,14 @@
 
     
 
-    <h4 class="name" id="DevicePins"><span class="type-signature"></span>new DevicePins<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="RecentItems"><span class="type-signature"></span>new RecentItems<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
 
 
 <div class="description">
-    Simple manager for interacting with all Device Pin endpoints and actions.
+    Simple manager for interacting with all 'RecentItem' endpoints and actions.
 </div>
 
 
@@ -140,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_device-pins.js.html">managers/device-pins.js</a>, <a href="managers_device-pins.js.html#line31">line 31</a>
+        <a href="managers_recent-items.js.html">managers/recent-items.js</a>, <a href="managers_recent-items.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -207,248 +207,16 @@
 
     
 
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(pinID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Delete a specific device pinning record
+    Requests all items that have been accessed by a user in the last 90 days or the last 1000 items accessed.
 
-API Endpoint: '/device_pinners/:pinID'
-Method: DELETE
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>pinID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The ID of the pin to delete</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Optional paramters, can be left null in many cases</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Passed nothing if successful, error otherwise</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_device-pins.js.html">managers/device-pins.js</a>, <a href="managers_device-pins.js.html#line67">line 67</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    A promise resolving to nothing
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;void></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(pinID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Get a specific device pinning record
-
-API Endpoint: '/device_pinners/:pinID'
+API Endpoint: '/recent_items'
 Method: GET
 </div>
 
@@ -487,38 +255,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>pinID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The ID of the pin to retrieve</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>qs</code></td>
             
 
             <td class="type">
@@ -544,156 +281,9 @@ Method: GET
 
             
 
-            <td class="description last">Optional paramters, can be left null in many cases</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">Additional options can be passed with the request via querystring. Can be left null in most cases.
+                <h6>Properties</h6>
                 
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Passed the device pin if successful, error otherwise</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_device-pins.js.html">managers/device-pins.js</a>, <a href="managers_device-pins.js.html#line46">line 46</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    A promise resolving to the device pin object
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Get all device pin records for the current enterprise
-
-API Endpoint: '/enterprises/:enterpriseID/device_pinners'
-Method: GET
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
 
 <table class="params">
     <thead>
@@ -719,13 +309,13 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>limit</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
             
@@ -745,7 +335,80 @@ Method: GET
 
             
 
-            <td class="description last">Optional paramters, can be left null in many cases</td>
+            <td class="description last">Maximum number of items to return</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>marker</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The position marker for marker-based paging</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Comma-separated list of fields to include in the response</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -778,7 +441,7 @@ Method: GET
 
             
 
-            <td class="description last">Passed a list of device pins if successful, error otherwise</td>
+            <td class="description last">Passed the items information if they were acquired successfully</td>
         </tr>
 
     
@@ -819,7 +482,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_device-pins.js.html">managers/device-pins.js</a>, <a href="managers_device-pins.js.html#line87">line 87</a>
+        <a href="managers_recent-items.js.html">managers/recent-items.js</a>, <a href="managers_recent-items.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -846,7 +509,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the collection of device pins
+    A promise resolving to the collection of items in the collection
 </div>
 
 
@@ -889,7 +552,7 @@ Method: GET
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 23 2017 16:15:48 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 23 2017 16:15:49 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

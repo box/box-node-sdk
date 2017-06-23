@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0
+
+- Added [Recent Items](./docs/recent-items.md) support
+- Updated app auth expiration time default value and validation
+
 ## 1.5.1
 
 - Revert deep-freezing Config properties, since it was causing errors
