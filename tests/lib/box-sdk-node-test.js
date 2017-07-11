@@ -448,9 +448,9 @@ describe('box-node-sdk', function() {
 
 		it('should call to token manager getTokensRefreshGrant() and propagate result when called', function(done) {
 			var refreshToken = 'rt';
-			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withExactArgs(refreshToken, done).yields();
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withExactArgs(refreshToken, null, done).yields();
 
-			sdk.getTokensRefreshGrant(refreshToken, done);
+			sdk.getTokensRefreshGrant(refreshToken, null, done);
 		});
 	});
 
@@ -525,9 +525,9 @@ describe('box-node-sdk', function() {
 		it('should call to token manager revokeTokens() and propagate result when called', function(done) {
 			var refreshToken = 'rt';
 
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(refreshToken, done).yields();
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(refreshToken, null, done).yields();
 
-			sdk.revokeTokens(refreshToken, done);
+			sdk.revokeTokens(refreshToken, null, done);
 		});
 	});
 });

@@ -168,9 +168,11 @@ describe('AppAuthSession', function() {
 			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
 			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
 
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withExactArgs();
+			var options = {};
+			options.ip = ['127.0.0.1'];
+			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withExactArgs(options);
 
-			appAuthSession.getAccessToken(done);
+			appAuthSession.getAccessToken(options, done);
 		});
 
 		it('should pass tokens to callback when tokens are not expired', function(done) {
@@ -187,7 +189,7 @@ describe('AppAuthSession', function() {
 
 		it('should call tokenManager.revokeTokens with its refresh token when called', function(done) {
 			appAuthSession.tokenInfo = testTokenInfo;
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, done).yields();
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, null, done).yields();
 			appAuthSession.revokeTokens(done);
 		});
 	});

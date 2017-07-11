@@ -293,7 +293,7 @@ describe('PersistentAPISession', function() {
 	describe('revokeTokens()', function() {
 
 		it('should call tokenManager.revokeTokens with its refresh token when called', function(done) {
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.refreshToken, done).yields();
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.refreshToken, null, done).yields();
 			persistentAPISession.revokeTokens(done);
 		});
 

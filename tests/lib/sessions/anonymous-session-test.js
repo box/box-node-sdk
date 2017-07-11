@@ -156,9 +156,11 @@ describe('AnonymousAPISession', function() {
 			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
 			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
 
-			sandbox.mock(anonymousSession).expects('_refreshAnonymousAccessToken').withExactArgs();
+			var options = {};
+			options.ip = ['127.0.0.1'];
+			sandbox.mock(anonymousSession).expects('_refreshAnonymousAccessToken').withExactArgs(options);
 
-			anonymousSession.getAccessToken(done);
+			anonymousSession.getAccessToken(options, done);
 		});
 
 		it('should pass tokens to callback when tokens are not expired', function(done) {
@@ -175,7 +177,7 @@ describe('AnonymousAPISession', function() {
 
 		it('should call tokenManager.revokeTokens with its refresh token when called', function(done) {
 			anonymousSession.tokenInfo = testTokenInfo;
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, done).yields();
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, null, done).yields();
 			anonymousSession.revokeTokens(done);
 		});
 
