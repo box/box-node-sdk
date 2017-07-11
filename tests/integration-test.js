@@ -279,7 +279,7 @@ describe('Box Node SDK', function() {
 		});
 	});
 
-	it.only('should make API call when persistent client manager is called and correctly match the IP headers for refresh token call', function(done) {
+	it('should make API call when persistent client manager is called and correctly match the IP headers for refresh token call', function(done) {
 
 		var fileID = '98740596456',
 			fileName = 'Test Document.pdf',
