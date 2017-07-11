@@ -279,6 +279,70 @@ describe('Box Node SDK', function() {
 		});
 	});
 
+	it.only('should make API call when persistent client manager is called and correctly match the IP headers for refresh token call', function(done) {
+
+		var fileID = '98740596456',
+			fileName = 'Test Document.pdf',
+			tokenStoreFake = leche.create(['read', 'write', 'clear']),
+			refreshToken = 'rt',
+			ips = ['127.0.0.1', '192.168.1.1'],
+			expiredTokenInfo = {
+				accessToken: 'expired_at',
+				refreshToken: refreshToken,
+				acquiredAtMS: Date.now() - 3600000,
+				accessTokenTTLMS: 60000
+			};
+
+		apiMock
+			.post('/oauth2/token', {
+				grant_type: 'refresh_token',
+				refresh_token: refreshToken,
+				client_id: TEST_CLIENT_ID,
+				client_secret: TEST_CLIENT_SECRET
+			}).matchHeader('X-Forwarded-For', function(xffHeader) {
+				assert.equal(xffHeader, '127.0.0.1, 192.168.1.1');
+				return true;
+			}).reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				refresh_token: 'new_rt',
+				expires_in: 256
+			})
+			.get('/2.0/files/' + fileID)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				return true;
+			})
+			.matchHeader('X-Forwarded-For', function(xffHeader) {
+				assert.equal(xffHeader, '127.0.0.1, 192.168.1.1');
+				return true;
+			})
+			.reply(200, {
+				id: fileID,
+				name: fileName
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		var client = sdk.getPersistentClient(expiredTokenInfo, tokenStoreFake);
+		client.setIPs(ips);
+
+		sandbox.mock(tokenStoreFake).expects('write').withArgs(sinon.match({
+			accessToken: TEST_ACCESS_TOKEN,
+			refreshToken: 'new_rt'
+		})).yieldsAsync();
+
+		client.files.get(fileID, {}, function(err, data) {
+
+			assert.ifError(err);
+			assert.propertyVal(data, 'id', fileID);
+			assert.propertyVal(data, 'name', fileName);
+			done();
+		});
+	});
+
 	it('should correctly store tokens and make API call when app auth client manager is called', function(done) {
 
 		var userID = '34876458977987',
