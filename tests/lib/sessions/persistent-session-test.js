@@ -159,6 +159,19 @@ describe('PersistentAPISession', function() {
 			persistentAPISession._refreshTokens();
 		});
 
+		it('should call getTokensRefreshGrant with the current refresh token and options.ip when called', function() {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withArgs(testTokenInfo.refreshToken, options);
+			persistentAPISession._refreshTokens(options);
+		});
+
+		it('should call getTokensRefreshGrant with the current refresh token and null options when called', function() {
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withArgs(testTokenInfo.refreshToken, null);
+			persistentAPISession._refreshTokens(null);
+		});
+
 		it('should propagate an access token when TokenInfo is propagated', function(done) {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(null, testTokenInfo);
 			sandbox.stub(callbackQueueFake, 'flush');
@@ -275,6 +288,21 @@ describe('PersistentAPISession', function() {
 			persistentAPISession.getAccessToken(done);
 		});
 
+		it('should call _refreshTokens() with the options.ip and callback when tokens are expired', function(done) {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
+			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(options).yields();
+			persistentAPISession.getAccessToken(options, done);
+		});
+
+		it('should call _refreshTokens() with the null options and callback when tokens are expired', function(done) {
+			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
+			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(null).yields();
+			persistentAPISession.getAccessToken(null, done);
+		});
+
 		it('should call _refreshTokens() in the background when tokens are stale', function(done) {
 			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
 			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
@@ -297,6 +325,18 @@ describe('PersistentAPISession', function() {
 			persistentAPISession.revokeTokens(done);
 		});
 
+		it('should call tokenManager.revokeTokens with its refresh token and options.ip when called', function(done) {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.refreshToken, options, done).yields();
+			persistentAPISession.revokeTokens(options, done);
+		});
+
+		it('should call tokenManager.revokeTokens with its refresh token and null options when called', function(done) {
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.refreshToken, null, done).yields();
+			persistentAPISession.revokeTokens(null, done);
+		});
 	});
 
 	describe('exchangeToken()', function() {
@@ -314,6 +354,42 @@ describe('PersistentAPISession', function() {
 				.yieldsAsync(null, exchangedTokenInfo);
 
 			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should get access token and exchange for lower scope with null options when called', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
+
+			sandbox.mock(persistentAPISession).expects('getAccessToken').withArgs(null).yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, null)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should get access token and exchange for lower scope with options.ip when called', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(persistentAPISession).expects('getAccessToken').withArgs(options).yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, options)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options, function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, exchangedTokenInfo);
