@@ -256,6 +256,38 @@ describe('token-manager', function() {
 		});
 	});
 
+	describe('getTokensClientCredentialsGrant', function() {
+		it('should acquire token info using the client credentials grant', function(done) {
+
+			sandbox.mock(tokenManager).expects('getTokens').withExactArgs({
+				grant_type: GRANT_TYPE_CLIENT_CREDENTIALS
+			}, null, done).yields();
+
+			tokenManager.getTokensClientCredentialsGrant(done);
+		});
+
+		it('should acquire token info using the client credentials grant with null options', function(done) {
+
+			sandbox.mock(tokenManager).expects('getTokens').withExactArgs({
+				grant_type: GRANT_TYPE_CLIENT_CREDENTIALS
+			}, null, done).yields();
+
+			tokenManager.getTokensClientCredentialsGrant(null, done);
+		});
+
+		it('should acquire token info using the client credentials grant with options.ip', function(done) {
+
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManager).expects('getTokens').withExactArgs({
+				grant_type: GRANT_TYPE_CLIENT_CREDENTIALS
+			}, options, done).yields();
+
+			tokenManager.getTokensClientCredentialsGrant(options, done);
+		});
+	});
+
 	describe('getTokensRefreshGrant()', function() {
 		it('should acquire token info when given valid refresh token', function(done) {
 			var refreshToken = 'refresh';
@@ -265,6 +297,29 @@ describe('token-manager', function() {
 			}, null, done).yields();
 
 			tokenManager.getTokensRefreshGrant(refreshToken, done);
+		});
+
+		it('should acquire token info when given valid refresh token with null options', function(done) {
+			var refreshToken = 'refresh';
+			sandbox.mock(tokenManager).expects('getTokens').withExactArgs({
+				grant_type: GRANT_TYPE_REFRESH_TOKEN,
+				refresh_token: refreshToken
+			}, null, done).yields();
+
+			tokenManager.getTokensRefreshGrant(refreshToken, null, done);
+		});
+
+		it('should acquire token info when given valid refresh token with options', function(done) {
+			var refreshToken = 'refresh';
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManager).expects('getTokens').withExactArgs({
+				grant_type: GRANT_TYPE_REFRESH_TOKEN,
+				refresh_token: refreshToken
+			}, options, done).yields();
+
+			tokenManager.getTokensRefreshGrant(refreshToken, options, done);
 		});
 
 		it('should return error when given null refresh token', function(done) {
@@ -367,6 +422,55 @@ describe('token-manager', function() {
 			});
 		});
 
+		it('should acquire token info when JWT creation succeeds with null options', function(done) {
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: TEST_WEB_TOKEN
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.stub(jwtFake, 'sign').returns(TEST_WEB_TOKEN);
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(sinon.match(expectedTokenParams), null).yieldsAsync(null, tokenInfo);
+
+			tokenManager.getTokensJWTGrant('user', TEST_ID, null, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should acquire token info when JWT creation succeeds with options.ip', function(done) {
+
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: TEST_WEB_TOKEN
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.stub(jwtFake, 'sign').returns(TEST_WEB_TOKEN);
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(sinon.match(expectedTokenParams), options).yieldsAsync(null, tokenInfo);
+
+			tokenManager.getTokensJWTGrant('user', TEST_ID, options, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
 		it('should retry with new JWT using server date when server rejects exp claim', function(done) {
 
 			sandbox.useFakeTimers(100000);
@@ -461,6 +565,55 @@ describe('token-manager', function() {
 			});
 		});
 
+		it('should exchange access token for lower scope when only scope is passed with null options', function(done) {
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: TEST_SCOPE
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, null).yieldsAsync(null, tokenInfo);
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, null, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
+		it('should exchange access token for lower scope when only scope is passed with options.ip', function(done) {
+
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: TEST_SCOPE
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, options).yieldsAsync(null, tokenInfo);
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, options, function(err, tokens) {
+
+				assert.ifError(err);
+				assert.equal(tokens, tokenInfo);
+				done();
+			});
+		});
+
 		it('should exchange access token for lower scopes when multiple scopes are passed', function(done) {
 
 			var expectedTokenParams = {
@@ -536,6 +689,43 @@ describe('token-manager', function() {
 			}).yieldsAsync();
 
 			tokenManager.revokeTokens(refreshToken, done);
+		});
+
+		it('should make request to revoke tokens with expected revoke params when called with null options', function(done) {
+			var refreshToken = 'rt';
+
+			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
+				method: 'POST',
+				url: 'api.box.com/oauth2/revoke',
+				form: {
+					token: refreshToken,
+					client_id: BOX_CLIENT_ID,
+					client_secret: BOX_CLIENT_SECRET
+				}
+			}).yieldsAsync();
+
+			tokenManager.revokeTokens(refreshToken, null, done);
+		});
+
+		it('should make request to revoke tokens with expected revoke params when called with options', function(done) {
+			var refreshToken = 'rt';
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
+				method: 'POST',
+				url: 'api.box.com/oauth2/revoke',
+				form: {
+					token: refreshToken,
+					client_id: BOX_CLIENT_ID,
+					client_secret: BOX_CLIENT_SECRET
+				},
+				headers: {
+					'X-Forwarded-For': options.ip
+				}
+			}).yieldsAsync();
+
+			tokenManager.revokeTokens(refreshToken, options, done);
 		});
 	});
 });
