@@ -109,6 +109,19 @@ describe('AppAuthSession', function() {
 			appAuthSession._refreshAppAuthAccessToken();
 		});
 
+		it('should call getTokensJWTGrant() with options.ip when called', function() {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs(TEST_TYPE, TEST_ID, options);
+			appAuthSession._refreshAppAuthAccessToken(options);
+		});
+
+		it('should call getTokensJWTGrant() with null options when called', function() {
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs(TEST_TYPE, TEST_ID, null);
+			appAuthSession._refreshAppAuthAccessToken(null);
+		});
+
 		it('should propagate a token refresh grant error when called', function(done) {
 			sandbox.stub(tokenManagerFake, 'getTokensJWTGrant').yields(refreshError);
 			sandbox.stub(callbackQueueFake, 'flush');
@@ -156,6 +169,19 @@ describe('AppAuthSession', function() {
 			appAuthSession.getAccessToken(done);
 		});
 
+		it('should call _refreshAppAuthAccessToken() with options.ip and the callback when tokens are not set', function(done) {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withExactArgs(options, done).yields();
+			appAuthSession.getAccessToken(options, done);
+		});
+
+		it('should call _refreshAppAuthAccessToken() with null options the callback when tokens are not set', function(done) {
+			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withExactArgs(null, done).yields();
+			appAuthSession.getAccessToken(null, done);
+		});
+
 		it('should call _refreshAppAuthAccessToken() with the callback when tokens are expired', function(done) {
 			appAuthSession.tokenInfo = testTokenInfo;
 			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
@@ -187,10 +213,25 @@ describe('AppAuthSession', function() {
 
 	describe('revokeTokens()', function() {
 
-		it('should call tokenManager.revokeTokens with its refresh token when called', function(done) {
+		it('should call tokenManager.revokeTokens with its access token when called', function(done) {
+			appAuthSession.tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withArgs(testTokenInfo.accessToken, null, done).yields();
+			appAuthSession.revokeTokens(done);
+		});
+
+		it('should call tokenManager.revokeTokens with null options and its access token when called', function(done) {
 			appAuthSession.tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, null, done).yields();
-			appAuthSession.revokeTokens(done);
+			appAuthSession.revokeTokens(null, done);
+		});
+
+		it('should call tokenManager.revokeTokens with options.ip and its access token when called', function(done) {
+			appAuthSession.tokenInfo = testTokenInfo;
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, options, done).yields();
+			appAuthSession.revokeTokens(options, done);
 		});
 	});
 
@@ -209,6 +250,42 @@ describe('AppAuthSession', function() {
 				.yieldsAsync(null, exchangedTokenInfo);
 
 			appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should get access token and exchange for lower scope when called with null options', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
+
+			sandbox.mock(appAuthSession).expects('getAccessToken').withArgs(null).yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, null)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should get access token and exchange for lower scope when called with options.ip', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(appAuthSession).expects('getAccessToken').withArgs(options).yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, options)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options, function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, exchangedTokenInfo);

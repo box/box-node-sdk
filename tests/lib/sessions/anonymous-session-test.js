@@ -175,7 +175,7 @@ describe('AnonymousAPISession', function() {
 			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
 
 			var options = {};
-			options.ip = ['127.0.0.1', '192.168.10.10'];
+			options.ip = '127.0.0.1, 192.168.10.10';
 			sandbox.mock(anonymousSession).expects('_refreshAnonymousAccessToken').withExactArgs(options);
 
 			anonymousSession.getAccessToken(options, done);
@@ -212,7 +212,7 @@ describe('AnonymousAPISession', function() {
 		it('should call tokenManager.revokeTokens with options.ip when called', function(done) {
 			anonymousSession.tokenInfo = testTokenInfo;
 			var options = {};
-			options.ip = ['127.0.0.1', '192.168.10.10'];
+			options.ip = '127.0.0.1, 192.168.10.10';
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, options, done).yields();
 			anonymousSession.revokeTokens(options, done);
@@ -249,7 +249,7 @@ describe('AnonymousAPISession', function() {
 			anonymousSession.tokenInfo = tokenInfo;
 
 			var options = {};
-			options.ip = ['127.0.0.1', '192.168.10.10'];
+			options.ip = '127.0.0.1, 192.168.10.10';
 
 			sandbox.mock(anonymousSession).expects('getAccessToken').withArgs(options).yieldsAsync(null, tokenInfo.accessToken);
 			anonymousSession.exchangeToken('item_preview', null, options, function(err, data) {
