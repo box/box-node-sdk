@@ -56,14 +56,6 @@ describe('BasicAPISession', function() {
 	describe('getAccessToken()', function() {
 
 		it('should return the current access token when called', function(done) {
-			basicAPISession.getAccessToken(function(err, data) {
-				assert.strictEqual(err, null);
-				assert.strictEqual(data, ACCESS_TOKEN);
-				done();
-			});
-		});
-
-		it('should return the current access token when called with null options', function(done) {
 			basicAPISession.getAccessToken(null, function(err, data) {
 				assert.strictEqual(err, null);
 				assert.strictEqual(data, ACCESS_TOKEN);
@@ -73,11 +65,6 @@ describe('BasicAPISession', function() {
 	});
 
 	describe('revokeTokens()', function() {
-
-		it('should call tokenManager.revokeTokens() with the current access token when called', function(done) {
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withArgs(ACCESS_TOKEN).yields();
-			basicAPISession.revokeTokens(done);
-		});
 
 		it('should call tokenManager.revokeTokens() with the current access token and null options when called', function(done) {
 			sandbox.mock(tokenManagerFake).expects('revokeTokens').withArgs(ACCESS_TOKEN, null).yields();
@@ -97,21 +84,6 @@ describe('BasicAPISession', function() {
 
 		var TEST_SCOPE = 'item_preview',
 			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
-
-		it('should exchange access token and call callback with exchanged token info when called', function(done) {
-
-			var exchangedTokenInfo = {accessToken: 'bnmdsbfjbsdlkfjblsdt'};
-
-			sandbox.mock(tokenManagerFake).expects('exchangeToken')
-				.withArgs(ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE)
-				.yieldsAsync(null, exchangedTokenInfo);
-			basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, exchangedTokenInfo);
-				done();
-			});
-		});
 
 		it('should exchange access token with null options and call callback with exchanged token info when called', function(done) {
 
@@ -151,7 +123,7 @@ describe('BasicAPISession', function() {
 
 			sandbox.stub(tokenManagerFake, 'exchangeToken').yieldsAsync(error);
 
-			basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
+			basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err) {
 
 				assert.equal(err, error);
 				done();
