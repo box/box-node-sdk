@@ -140,9 +140,9 @@ describe('PersistentAPISession', function() {
 
 		it('should only make 1 call to refresh tokens when called multiple times', function() {
 			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').once();
-			persistentAPISession._refreshTokens();
-			persistentAPISession._refreshTokens();
-			persistentAPISession._refreshTokens();
+			persistentAPISession._refreshTokens(null);
+			persistentAPISession._refreshTokens(null);
+			persistentAPISession._refreshTokens(null);
 		});
 
 		it('should add callback to the upkeep queue when tokens are curently being refreshed', function() {
@@ -150,19 +150,27 @@ describe('PersistentAPISession', function() {
 			var callback2 = sandbox.stub();
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant');
 			sandbox.mock(callbackQueueFake).expects('push').withExactArgs(callback2);
-			persistentAPISession._refreshTokens(callback1);
-			persistentAPISession._refreshTokens(callback2);
+			persistentAPISession._refreshTokens(null, callback1);
+			persistentAPISession._refreshTokens(null, callback2);
 		});
 
-		it('should call getTokensRefreshGrant with the current refresh token when called', function() {
-			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withArgs(testTokenInfo.refreshToken);
-			persistentAPISession._refreshTokens();
+		it('should call getTokensRefreshGrant with the current refresh token and options.ip when called', function() {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withArgs(testTokenInfo.refreshToken, options);
+			persistentAPISession._refreshTokens(options);
+		});
+
+		it('should call getTokensRefreshGrant with the current refresh token and null options when called', function() {
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withArgs(testTokenInfo.refreshToken, null);
+			persistentAPISession._refreshTokens(null);
 		});
 
 		it('should propagate an access token when TokenInfo is propagated', function(done) {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(null, testTokenInfo);
 			sandbox.stub(callbackQueueFake, 'flush');
-			persistentAPISession._refreshTokens(function(err, accessToken) {
+			persistentAPISession._refreshTokens(null, function(err, accessToken) {
 				assert.strictEqual(accessToken, testTokenInfo.accessToken);
 				done();
 			});
@@ -171,14 +179,14 @@ describe('PersistentAPISession', function() {
 		it('should flush the upkeep queue with an access token when TokenInfo is propagated', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(null, testTokenInfo);
 			sandbox.mock(callbackQueueFake).expects('flush').withExactArgs(null, testTokenInfo.accessToken);
-			persistentAPISession._refreshTokens();
+			persistentAPISession._refreshTokens(null);
 		});
 
 		it('should propagate a 400 BAD REQUEST error when called without token store', function(done) {
 			refreshError.statusCode = 400;
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(refreshError);
 			sandbox.stub(callbackQueueFake, 'flush');
-			persistentAPISession._refreshTokens(function(err) {
+			persistentAPISession._refreshTokens(null, function(err) {
 				assert.strictEqual(err, refreshError);
 				done();
 			});
@@ -188,14 +196,14 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(error);
 			sandbox.stub(tokenStoreFake, 'clear').yields();
 			sandbox.mock(callbackQueueFake).expects('flush').withExactArgs(error);
-			persistentAPISessionWithTokenStore._refreshTokens();
+			persistentAPISessionWithTokenStore._refreshTokens(null);
 		});
 
 		it('should propagate a normal error when there is a token store', function(done) {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(error);
 			sandbox.stub(callbackQueueFake, 'flush');
 			sandbox.stub(tokenStoreFake, 'clear').yields();
-			persistentAPISessionWithTokenStore._refreshTokens(function(err) {
+			persistentAPISessionWithTokenStore._refreshTokens(null, function(err) {
 				assert.strictEqual(err, error);
 				done();
 			});
@@ -204,7 +212,7 @@ describe('PersistentAPISession', function() {
 		it('should read from token store on 400 BAD REQUEST error when called and when there is a token store', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(refreshError);
 			sandbox.mock(tokenStoreFake).expects('read');
-			persistentAPISessionWithTokenStore._refreshTokens();
+			persistentAPISessionWithTokenStore._refreshTokens(null);
 		});
 
 		it('should call tokenStore.clear() when _finishTokenRefresh() is called with an error and there is a token store', function() {
@@ -212,7 +220,7 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(callbackQueueFake, 'flush');
 			sandbox.stub(tokenStoreFake, 'read').yields(error);
 			sandbox.mock(tokenStoreFake).expects('clear').withExactArgs(sinon.match.func).yields();
-			persistentAPISessionWithTokenStore._refreshTokens();
+			persistentAPISessionWithTokenStore._refreshTokens(null);
 		});
 
 		it('should propagate error when token store is present and token store read returns an error', function(done) {
@@ -220,7 +228,7 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(callbackQueueFake, 'flush');
 			sandbox.mock(tokenStoreFake).expects('read').yields(error);
 			sandbox.stub(tokenStoreFake, 'clear').yields();
-			persistentAPISessionWithTokenStore._refreshTokens(function(err) {
+			persistentAPISessionWithTokenStore._refreshTokens(null, function(err) {
 				assert.strictEqual(err, error);
 				done();
 			});
@@ -231,7 +239,7 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(callbackQueueFake, 'flush');
 			sandbox.mock(tokenStoreFake).expects('read').yields(null, testTokenInfo);
 			sandbox.stub(tokenStoreFake, 'clear').yields();
-			persistentAPISessionWithTokenStore._refreshTokens(function(err) {
+			persistentAPISessionWithTokenStore._refreshTokens(null, function(err) {
 				assert(err.authExpired);
 				done();
 			});
@@ -246,7 +254,7 @@ describe('PersistentAPISession', function() {
 				refreshToken: 'newRT'
 			}));
 			sandbox.stub(tokenStoreFake, 'clear').yields();
-			persistentAPISessionWithTokenStore._refreshTokens(function(err, accessToken) {
+			persistentAPISessionWithTokenStore._refreshTokens(null, function(err, accessToken) {
 				assert.ifError(err);
 				assert.strictEqual(accessToken, 'newAT');
 				done();
@@ -256,7 +264,7 @@ describe('PersistentAPISession', function() {
 		it('should write the new token to the store when grant is successful when called and token store exists', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').yields(null, testTokenInfo);
 			sandbox.mock(tokenStoreFake).expects('write');
-			persistentAPISessionWithTokenStore._refreshTokens();
+			persistentAPISessionWithTokenStore._refreshTokens(null);
 		});
 	});
 
@@ -269,34 +277,50 @@ describe('PersistentAPISession', function() {
 			isAccessTokenValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
 		});
 
-		it('should call _refreshTokens() with the callback when tokens are expired', function(done) {
+		it('should call _refreshTokens() with the options.ip and callback when tokens are expired', function(done) {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
 			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
-			sandbox.mock(persistentAPISession).expects('_refreshTokens').yields();
-			persistentAPISession.getAccessToken(done);
+			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(options).yields();
+			persistentAPISession.getAccessToken(options, done);
+		});
+
+		it('should call _refreshTokens() with the null options and callback when tokens are expired', function(done) {
+			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
+			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(null).yields();
+			persistentAPISession.getAccessToken(null, done);
 		});
 
 		it('should call _refreshTokens() in the background when tokens are stale', function(done) {
 			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
 			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
 			sandbox.mock(persistentAPISession).expects('_refreshTokens');
-			persistentAPISession.getAccessToken(done);
+			persistentAPISession.getAccessToken(null, done);
 		});
 
 		it('should pass tokens to callback when tokens are not expired', function(done) {
 			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
 			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(true); // stale
-			persistentAPISession.getAccessToken(done);
+			persistentAPISession.getAccessToken(null, done);
 		});
 
 	});
 
 	describe('revokeTokens()', function() {
 
-		it('should call tokenManager.revokeTokens with its refresh token when called', function(done) {
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.refreshToken, done).yields();
-			persistentAPISession.revokeTokens(done);
+		it('should call tokenManager.revokeTokens with its refresh token and options.ip when called', function(done) {
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.refreshToken, options, done).yields();
+			persistentAPISession.revokeTokens(options, done);
 		});
 
+		it('should call tokenManager.revokeTokens with its refresh token and null options when called', function(done) {
+			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.refreshToken, null, done).yields();
+			persistentAPISession.revokeTokens(null, done);
+		});
 	});
 
 	describe('exchangeToken()', function() {
@@ -304,16 +328,35 @@ describe('PersistentAPISession', function() {
 		var TEST_SCOPE = 'item_preview',
 			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
 
-		it('should get access token and exchange for lower scope when called', function(done) {
+		it('should get access token and exchange for lower scope with null options when called', function(done) {
 
 			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
 
-			sandbox.mock(persistentAPISession).expects('getAccessToken').yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(persistentAPISession).expects('getAccessToken').withArgs(null).yieldsAsync(null, testTokenInfo.accessToken);
 			sandbox.mock(tokenManagerFake).expects('exchangeToken')
-				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE)
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, null)
 				.yieldsAsync(null, exchangedTokenInfo);
 
-			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should get access token and exchange for lower scope with options.ip when called', function(done) {
+
+			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(persistentAPISession).expects('getAccessToken').withArgs(options).yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, options)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options, function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, exchangedTokenInfo);
@@ -327,7 +370,7 @@ describe('PersistentAPISession', function() {
 
 			sandbox.stub(persistentAPISession, 'getAccessToken').yieldsAsync(error);
 
-			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err) {
 
 				assert.equal(err, error);
 				done();
@@ -341,7 +384,7 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(persistentAPISession, 'getAccessToken').yieldsAsync(null, testTokenInfo.accessToken);
 			sandbox.stub(tokenManagerFake, 'exchangeToken').yieldsAsync(error);
 
-			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
+			persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err) {
 
 				assert.equal(err, error);
 				done();
@@ -399,7 +442,5 @@ describe('PersistentAPISession', function() {
 				done();
 			});
 		});
-
 	});
-
 });

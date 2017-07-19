@@ -141,6 +141,26 @@ describe('box-client', function() {
 			});
 		});
 
+		it('should set the "X-Forwarded-For" header to a new APISession token for all requests when called', function(done) {
+			var ips = ['127.0.0.1', '192.168.1.1'];
+			var ipHeader = '127.0.0.1, 192.168.1.1';
+			var options = {};
+			options.ip = ipHeader;
+
+			sandbox.mock(apiSessionFake).expects('getAccessToken').withArgs(sinon.match(options)).yields(null, FAKE_ACCESS_TOKEN);
+
+			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
+				headers: sinon.match({
+					Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN,
+					'X-Forwarded-For': ipHeader
+				})
+			}).yieldsAsync(null, fakeOKResponse);
+			sandbox.mock(basicClient).expects('_handleResponse').yields();
+
+			basicClient.setIPs(ips);
+			basicClient._makeRequest({}, done);
+		});
+
 		it('should propagate error when unable to upkeep tokens', function(done) {
 			var upkeepErr = new Error();
 			sandbox.stub(apiSessionFake, 'getAccessToken').yieldsAsync(upkeepErr);
@@ -669,9 +689,19 @@ describe('box-client', function() {
 	});
 
 	describe('revokeTokens()', function() {
-
 		it('should call apiSession.revokeTokens when called', function(done) {
 			sandbox.mock(apiSessionFake).expects('revokeTokens').yieldsAsync();
+			basicClient.revokeTokens(done);
+		});
+
+		it('should call apiSession.revokeTokens with options.ip parameter when called', function(done) {
+			var ips = ['127.0.0.1', '192.168.1.1'];
+			var ipHeader = '127.0.0.1, 192.168.1.1';
+			var options = {};
+			options.ip = ipHeader;
+			basicClient.setIPs(ips);
+
+			sandbox.mock(apiSessionFake).expects('revokeTokens').withArgs(sinon.match(options)).yieldsAsync();
 			basicClient.revokeTokens(done);
 		});
 
@@ -721,6 +751,27 @@ describe('box-client', function() {
 				.withArgs(TEST_SCOPE, TEST_RESOURCE)
 				.yieldsAsync(null, exchangedTokenInfo);
 
+			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, exchangedTokenInfo);
+				done();
+			});
+		});
+
+		it('should call session to exchange token with options.ip parameter and pass exchanged token to callback when called', function(done) {
+			var ips = ['127.0.0.1', '192.168.1.1'];
+			var ipHeader = '127.0.0.1, 192.168.1.1';
+			var options = {};
+			options.ip = ipHeader;
+
+			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
+
+			sandbox.mock(apiSessionFake).expects('exchangeToken')
+				.withArgs(TEST_SCOPE, TEST_RESOURCE, options)
+				.yieldsAsync(null, exchangedTokenInfo);
+
+			basicClient.setIPs(ips);
 			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
 
 				assert.ifError(err);
