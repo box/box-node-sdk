@@ -218,7 +218,7 @@ that wish to manage tokens themselves.
 
     
 
-    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">nullable</span>, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -330,6 +330,39 @@ that wish to manage tokens themselves.
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -395,7 +428,7 @@ that wish to manage tokens themselves.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line63">line 63</a>
+        <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -444,7 +477,7 @@ that wish to manage tokens themselves.
 
     
 
-    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -476,6 +509,8 @@ know the status of it's own token.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -484,6 +519,39 @@ know the status of it's own token.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
     
 
         <tr>
@@ -500,6 +568,14 @@ know the status of it's own token.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -545,7 +621,7 @@ know the status of it's own token.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line42">line 42</a>
+        <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -594,7 +670,7 @@ know the status of it's own token.
 
     
 
-    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -625,6 +701,8 @@ know the status of it's own token.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -633,6 +711,39 @@ know the status of it's own token.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
     
 
         <tr>
@@ -649,6 +760,14 @@ know the status of it's own token.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -694,7 +813,7 @@ know the status of it's own token.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line52">line 52</a>
+        <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -760,7 +879,7 @@ know the status of it's own token.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 23 2017 16:15:48 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jul 19 2017 13:28:27 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

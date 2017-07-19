@@ -267,7 +267,7 @@ is retrieved.
 
     
 
-    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">nullable</span>, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -379,6 +379,39 @@ is retrieved.
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -444,7 +477,7 @@ is retrieved.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_app-auth-session.js.html">sessions/app-auth-session.js</a>, <a href="sessions_app-auth-session.js.html#line148">line 148</a>
+        <a href="sessions_app-auth-session.js.html">sessions/app-auth-session.js</a>, <a href="sessions_app-auth-session.js.html#line150">line 150</a>
     </li></ul></dd>
     
 
@@ -493,7 +526,7 @@ is retrieved.
 
     
 
-    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -527,6 +560,8 @@ new refresh in the background.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -535,6 +570,39 @@ new refresh in the background.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
     
 
         <tr>
@@ -551,6 +619,14 @@ new refresh in the background.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -596,7 +672,7 @@ new refresh in the background.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_app-auth-session.js.html">sessions/app-auth-session.js</a>, <a href="sessions_app-auth-session.js.html#line105">line 105</a>
+        <a href="sessions_app-auth-session.js.html">sessions/app-auth-session.js</a>, <a href="sessions_app-auth-session.js.html#line106">line 106</a>
     </li></ul></dd>
     
 
@@ -645,7 +721,7 @@ new refresh in the background.
 
     
 
-    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -676,6 +752,8 @@ new refresh in the background.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -684,6 +762,39 @@ new refresh in the background.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
     
 
         <tr>
@@ -700,6 +811,14 @@ new refresh in the background.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -745,7 +864,7 @@ new refresh in the background.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_app-auth-session.js.html">sessions/app-auth-session.js</a>, <a href="sessions_app-auth-session.js.html#line133">line 133</a>
+        <a href="sessions_app-auth-session.js.html">sessions/app-auth-session.js</a>, <a href="sessions_app-auth-session.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -811,7 +930,7 @@ new refresh in the background.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 23 2017 16:15:48 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jul 19 2017 13:28:27 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

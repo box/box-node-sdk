@@ -163,7 +163,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line149">line 149</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line147">line 147</a>
     </li></ul></dd>
     
 
@@ -212,7 +212,7 @@
 
     
 
-    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(accessToken, scopes, resource<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(accessToken, scopes, resource<span class="signature-attributes">nullable</span>, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -356,6 +356,39 @@ an external user identifier.
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -421,7 +454,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line387">line 387</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line388">line 388</a>
     </li></ul></dd>
     
 
@@ -644,7 +677,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line247">line 247</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line245">line 245</a>
     </li></ul></dd>
     
 
@@ -693,7 +726,7 @@ an external user identifier.
 
     
 
-    <h4 class="name" id="getTokensClientCredentialsGrant"><span class="type-signature"></span>getTokensClientCredentialsGrant<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="getTokensClientCredentialsGrant"><span class="type-signature"></span>getTokensClientCredentialsGrant<span class="signature">(options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -724,6 +757,8 @@ an external user identifier.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -732,6 +767,39 @@ an external user identifier.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
     
 
         <tr>
@@ -748,6 +816,14 @@ an external user identifier.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -793,7 +869,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line268">line 268</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line267">line 267</a>
     </li></ul></dd>
     
 
@@ -842,7 +918,7 @@ an external user identifier.
 
     
 
-    <h4 class="name" id="getTokensJWTGrant"><span class="type-signature"></span>getTokensJWTGrant<span class="signature">(type, id, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="getTokensJWTGrant"><span class="type-signature"></span>getTokensJWTGrant<span class="signature">(type, id, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -873,6 +949,8 @@ an external user identifier.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -898,6 +976,14 @@ an external user identifier.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -921,10 +1007,51 @@ an external user identifier.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">The ID of the enterprise to generate a token for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
         </tr>
 
     
@@ -943,6 +1070,14 @@ an external user identifier.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -988,7 +1123,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line305">line 305</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line306">line 306</a>
     </li></ul></dd>
     
 
@@ -1037,7 +1172,7 @@ an external user identifier.
 
     
 
-    <h4 class="name" id="getTokensRefreshGrant"><span class="type-signature"></span>getTokensRefreshGrant<span class="signature">(refreshToken, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="getTokensRefreshGrant"><span class="type-signature"></span>getTokensRefreshGrant<span class="signature">(refreshToken, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -1068,6 +1203,8 @@ an external user identifier.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1093,10 +1230,51 @@ an external user identifier.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">A valid OAuth refresh token</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
         </tr>
 
     
@@ -1115,6 +1293,14 @@ an external user identifier.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1355,7 +1541,7 @@ we'll call a token invalid.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line168">line 168</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line166">line 166</a>
     </li></ul></dd>
     
 
@@ -1408,7 +1594,7 @@ we'll call a token invalid.</td>
 
     
 
-    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(token, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(token, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -1439,6 +1625,8 @@ we'll call a token invalid.</td>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1464,10 +1652,51 @@ we'll call a token invalid.</td>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">A valid access or refresh token to revoke</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
         </tr>
 
     
@@ -1486,6 +1715,14 @@ we'll call a token invalid.</td>
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1531,7 +1768,7 @@ we'll call a token invalid.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line410">line 410</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line411">line 411</a>
     </li></ul></dd>
     
 
@@ -1597,7 +1834,7 @@ we'll call a token invalid.</td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 23 2017 16:15:49 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jul 19 2017 13:28:27 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

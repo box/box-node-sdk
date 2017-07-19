@@ -300,7 +300,7 @@ must remember users across sessions.
 
     
 
-    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">nullable</span>, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -412,6 +412,39 @@ must remember users across sessions.
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -477,7 +510,7 @@ must remember users across sessions.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line280">line 280</a>
+        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line284">line 284</a>
     </li></ul></dd>
     
 
@@ -526,7 +559,7 @@ must remember users across sessions.
 
     
 
-    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(options<span class="signature-attributes">nullable</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -570,6 +603,39 @@ If tokens are expired, first attempt to refresh them.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
     
 
         <tr>
@@ -641,7 +707,7 @@ If tokens are expired, first attempt to refresh them.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line239">line 239</a>
+        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line242">line 242</a>
     </li></ul></dd>
     
 
@@ -837,7 +903,7 @@ store (if present) before continuing.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line305">line 305</a>
+        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line308">line 308</a>
     </li></ul></dd>
     
 
@@ -886,7 +952,7 @@ store (if present) before continuing.
 
     
 
-    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -919,6 +985,8 @@ Revoking either one will disable the other as well.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -927,6 +995,39 @@ Revoking either one will disable the other as well.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+        </tr>
+
     
 
         <tr>
@@ -943,6 +1044,14 @@ Revoking either one will disable the other as well.
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -988,7 +1097,7 @@ Revoking either one will disable the other as well.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line268">line 268</a>
+        <a href="sessions_persistent-session.js.html">sessions/persistent-session.js</a>, <a href="sessions_persistent-session.js.html#line271">line 271</a>
     </li></ul></dd>
     
 
@@ -1054,7 +1163,7 @@ Revoking either one will disable the other as well.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 23 2017 16:15:49 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jul 19 2017 13:28:27 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

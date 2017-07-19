@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.0
+
+- Add support for passing IP to all token methods, and fixed a bug where a client's IP was not being correctly reported on token refreshes
+
 ## 1.6.0
 
 - Added [Recent Items](./docs/recent-items.md) support
