@@ -12,6 +12,7 @@
 // ------------------------------------------------------------------------------
 
 var assert = require('chai').assert,
+	leche = require('leche'),
 	Readable = require('stream').Readable,
 	Config = require('../../../lib/util/config');
 
@@ -26,6 +27,15 @@ var assert = require('chai').assert,
 describe('Config', function() {
 
 	describe('constructor', function() {
+
+		const TEST_PRIVATE_KEY = 'wieuth;jwnfp9qun3r;ifjaodfuihglwidjnfgiauhrtp9qbdlkfjbaeirug',
+			TEST_KEY_ID = '7893y45',
+			TEST_PASSPHRASE = 'super secret',
+			TEST_APP_AUTH_PARAMS = Object.freeze({
+				keyID: TEST_KEY_ID,
+				privateKey: TEST_PRIVATE_KEY,
+				passphrase: TEST_PASSPHRASE
+			});
 
 		it('should throw when client ID is not passed', function() {
 
@@ -104,6 +114,39 @@ describe('Config', function() {
 			assert.throws(function() {
 				config.apiVersion = '3.0';
 			});
+		});
+
+		leche.withData({
+			'missing key ID': [{privateKey: TEST_PRIVATE_KEY, passphrase: TEST_PASSPHRASE}],
+			'missing private key': [{keyID: TEST_KEY_ID, passphrase: TEST_PASSPHRASE}],
+			'missing passphrase': [{keyID: TEST_KEY_ID, privateKey: TEST_PRIVATE_KEY}],
+			'unsupported algorithm': [Object.assign({algorithm: 'HS4096'}, TEST_APP_AUTH_PARAMS)],
+			'float expiration time': [Object.assign({expirationTime: 5.5}, TEST_APP_AUTH_PARAMS)],
+			'zero expiration time': [Object.assign({expirationTime: 0}, TEST_APP_AUTH_PARAMS)],
+			'too-long expiration time': [Object.assign({expirationTime: 61}, TEST_APP_AUTH_PARAMS)]
+		}, function(appAuthParams) {
+
+			it('should throw when passed invalid app auth config data', function() {
+
+				assert.throws(function() {
+					new Config({
+						clientID: 'id',
+						clientSecret: 'secret',
+						appAuth: appAuthParams
+					});
+				});
+			});
+		});
+
+		it('should create valid config with longer app auth expiration time', function() {
+
+			var config = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				appAuth: Object.assign({expirationTime: 60}, TEST_APP_AUTH_PARAMS)
+			});
+
+			assert.deepPropertyVal(config, 'appAuth.expirationTime', 60);
 		});
 	});
 

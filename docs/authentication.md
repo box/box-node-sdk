@@ -9,6 +9,7 @@ overview of authentication.
 * [Developer Tokens](#developer-tokens)
 * [OAuth2 Authentication](#oauth2-authentication)
 * [App User Authentication](#app-user-authentication)
+* [As-User](#as-user)
 * [Token Exchange](#token-exchange)
 * [Anonymous Authentication](#anonymous-authentication)
 
@@ -73,7 +74,6 @@ sdk.getTokensAuthorizationCodeGrant('YOUR-AUTH-CODE', null, function(err, tokenI
 });
 ```
 
-
 App User Authentication
 -----------------------
 
@@ -114,6 +114,25 @@ var sdk = new BoxSDK({
 });
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
+
+As-User
+-------
+
+The As-User header is used by enterprise admins to make API calls on behalf of their enterprise's users. This requires the API request to pass an `As-User: USER-ID` header. For more details see the [documentation on As-User](https://developer.box.com/v2.0/reference#as-user-1).
+
+The following examples assumes that the `client` has been instantiated with an access token belonging to an admin level user.
+
+As-User Example:
+```js
+client.asUser('USER-ID');
+```
+This method sets up the client to impersonate their user. All calls made with this instance of client will be made in context of the impersonated user.
+
+Removing the As-User Context:
+```js
+client.asSelf();
+```
+This method revokes the As-User context and returns to making calls as the user who owns the client's access token.
 
 Token Exchange
 --------------

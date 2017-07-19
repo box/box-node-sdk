@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: util/errors.js</title>
+    <title>JSDoc: Module: box-node-sdk/lib/managers/recent-items</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,132 +17,50 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: util/errors.js</h1>
+    <h1 class="page-title">Module: box-node-sdk/lib/managers/recent-items</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @fileoverview Errors Helper
- */
+        
+    
+</header>
 
-'use strict';
+<article>
+    <div class="container-overview">
+    
+        
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-var util = require('util'),
-	httpStatusCodes = require('http-status');
+        
+    
+    </div>
 
+    
 
-// ------------------------------------------------------------------------------
-// Typedefs and Callbacks
-// ------------------------------------------------------------------------------
+    
 
-/**
- * An generic error propagated when the response has caused an error.
- * @typedef {Error} Errors~ResponseError
- * @property {APIRequest~ResponseObject} response The response object that generated the error
- * @property {int} statusCode A shortcut to the status code of the response
- */
+    
 
-/**
- * Error propagated whenever the SDK is unable to successfully complete an action
- * due to an expired access token (and refresh token, if one was provided).
- * @typedef {Errors~ResponseError} Errors~ExpiredAuthError
- * @property {bool} authExpired - always true
- */
+     
 
+    
 
-// ------------------------------------------------------------------------------
-// Public
-// ------------------------------------------------------------------------------
+    
 
-/**
- * A Helper for building errors across the SDK. Makes sure that easily-forgotten
- * fields aren't missed, and that everything is formatted properly to return to the
- * consumer.
- *
- * @name Errors
- * @module box-node-sdk/lib/util/errors
- */
-module.exports = {
+    
 
-	/**
-	 * Build a response error with the given message, and attaching meta data from the
-	 * response data.
-	 *
-	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
-	 * @param {string} message - the response error message
-	 * @returns {Errors~ResponseError} an error describing the response error
-	 */
-	buildResponseError: function(response, message) {
-		response = response || {};
-		var responseError = new Error(message);
-		responseError.statusCode = response.statusCode;
-		responseError.response = response;
-		return responseError;
-	},
+    
 
-	/**
-	 * Build an "Expired Auth" error. {@see Errors~ExpiredAuthError}
-	 *
-	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
-	 * @returns {Errors~ExpiredAuthError} A properly formatted error explaining the user auth info has expired
-	 */
-	buildExpiredAuthError: function(response) {
-		var responseError = this.buildResponseError(response, 'Expired Auth: Auth code or refresh token has expired.');
-		responseError.authExpired = true;
-		return responseError;
-	},
+    
+</article>
 
-	/**
-	 * Build the error for an "Unexpected Response" from the API. This is a shortcut for
-	 * responseError built specifically for the 401 UNEXPECTED response case. It
-	 * should be called and the error should be propogated to the consumer callback
-	 * whenever an unexpected response was recieved from the API.
-	 *
-	 * @param {?APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
-	 * @returns {Errors~ResponseError} an error describing the response error
-	 */
-	buildUnexpectedResponseError: function(response) {
-		response = response || {};
-		var responseErrorMessage = '';
-
-		if (response.body &amp;&amp; (response.body.code || response.body.message)) {
-			responseErrorMessage = util.format(' (%s: "%s")', response.body.code, response.body.message);
-		}
-
-		var statusCode = response.statusCode,
-			unexpectedErrorMessage = util.format('Unexpected API Response [%d %s]%s', statusCode, httpStatusCodes[statusCode], responseErrorMessage);
-		return this.buildResponseError(response, unexpectedErrorMessage.trim());
-	},
-
-	/**
-	 * Unwrap a Bluebird error and throw it, or just re-throw if the error
-	 * is not a Bluebird error.  This is necessary to preserve errors when
-	 * a function is promisified.
-	 * @param {Error} error The error to unwrap
-	 * @returns {void}
-	 * @throws {Error} The unwrapped error
-	 */
-	unwrapAndThrow: function(error) {
-
-		if (error.cause) {
-			throw error.cause;
-		}
-
-		throw error;
-	}
-
-};
-</code></pre>
-        </article>
-    </section>
+</section>
 
 
 

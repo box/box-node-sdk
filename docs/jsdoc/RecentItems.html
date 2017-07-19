@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Trash</title>
+    <title>JSDoc: Class: RecentItems</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Trash</h1>
+    <h1 class="page-title">Class: RecentItems</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>Trash</h2>
+        <h2>RecentItems</h2>
         
     
 </header>
@@ -40,14 +40,14 @@
 
     
 
-    <h4 class="name" id="Trash"><span class="type-signature"></span>new Trash<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="RecentItems"><span class="type-signature"></span>new RecentItems<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
 
 
 <div class="description">
-    Simple manager for interacting with all Trash endpoints and actions.
+    Simple manager for interacting with all 'RecentItem' endpoints and actions.
 </div>
 
 
@@ -140,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_trash.js.html">managers/trash.js</a>, <a href="managers_trash.js.html#line34">line 34</a>
+        <a href="managers_recent-items.js.html">managers/recent-items.js</a>, <a href="managers_recent-items.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -207,16 +207,16 @@
 
     
 
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Get items in the user's trash
+    Requests all items that have been accessed by a user in the last 90 days or the last 1000 items accessed.
 
-API Endpoint: '/folders/trash/items'
+API Endpoint: '/recent_items'
 Method: GET
 </div>
 
@@ -255,7 +255,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>qs</code></td>
             
 
             <td class="type">
@@ -281,7 +281,7 @@ Method: GET
 
             
 
-            <td class="description last">Optional parameters, can be left null in most cases
+            <td class="description last">Additional options can be passed with the request via querystring. Can be left null in most cases.
                 <h6>Properties</h6>
                 
 
@@ -305,6 +305,72 @@ Method: GET
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum number of items to return</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>marker</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The position marker for marker-based paging</td>
+        </tr>
+
     
 
         <tr>
@@ -335,7 +401,7 @@ Method: GET
 
             
 
-            <td class="description last">Comma-delimited list of item fields to return</td>
+            <td class="description last">Comma-separated list of fields to include in the response</td>
         </tr>
 
     
@@ -375,7 +441,7 @@ Method: GET
 
             
 
-            <td class="description last">Passed the list of trashed items if successful, error otherwise</td>
+            <td class="description last">Passed the items information if they were acquired successfully</td>
         </tr>
 
     
@@ -416,7 +482,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_trash.js.html">managers/trash.js</a>, <a href="managers_trash.js.html#line49">line 49</a>
+        <a href="managers_recent-items.js.html">managers/recent-items.js</a>, <a href="managers_recent-items.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -443,7 +509,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the collection of trashed items
+    A promise resolving to the collection of items in the collection
 </div>
 
 

@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.7.0
+
+- Add support for passing IP to all token methods, and fixed a bug where a client's IP was not being correctly reported on token refreshes
+
+## 1.6.0
+
+- Added [Recent Items](./docs/recent-items.md) support
+- Updated app auth expiration time default value and validation
+
+## 1.5.1
+
+- Revert deep-freezing Config properties, since it was causing errors
+
+## 1.5.0
+
+- Added support for [Token Exchange](./docs/authentication.md#token-exchange),
+which allows a client to get downscoped tokens suitable for passing to a browser
+app or worker process.
+- Ensured deeply-nested Config properties are immutable
+
 ## 1.4.2
 
 - Fixed `BoxSDK.getPreconfiguredInstance()` to configure webhook keys
