@@ -268,41 +268,30 @@ describe('PersistentAPISession', function() {
 		});
 	});
 
-
 	describe('getAccessToken()', function() {
 
-		var isAccessTokenValidStub;
-
-		beforeEach(function() {
-			isAccessTokenValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
-		});
-
 		it('should call _refreshTokens() with the options.ip and callback when tokens are expired', function(done) {
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
+			var options = {ip: '127.0.0.1, 192.168.10.10'};
 
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
-			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(options).yields();
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').withArgs(testTokenInfo, 120000).returns(false); // expired
+			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(options, done).yieldsAsync();
 			persistentAPISession.getAccessToken(options, done);
 		});
 
 		it('should call _refreshTokens() with the null options and callback when tokens are expired', function(done) {
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
-			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(null).yields();
-			persistentAPISession.getAccessToken(null, done);
-		});
-
-		it('should call _refreshTokens() in the background when tokens are stale', function(done) {
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
-			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
-			sandbox.mock(persistentAPISession).expects('_refreshTokens');
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').withArgs(testTokenInfo, 120000).returns(false); // expired
+			sandbox.mock(persistentAPISession).expects('_refreshTokens').withArgs(null, done).yieldsAsync();
 			persistentAPISession.getAccessToken(null, done);
 		});
 
 		it('should pass tokens to callback when tokens are not expired', function(done) {
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
-			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(true); // stale
-			persistentAPISession.getAccessToken(null, done);
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').withArgs(testTokenInfo, 120000).returns(true);
+			persistentAPISession.getAccessToken(null, function(err, token) {
+
+				assert.ifError(err);
+				assert.equal(token, testTokenInfo.accessToken);
+				done();
+			});
 		});
 
 	});

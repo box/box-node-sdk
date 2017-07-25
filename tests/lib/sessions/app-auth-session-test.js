@@ -153,50 +153,35 @@ describe('AppAuthSession', function() {
 
 	describe('getAccessToken()', function() {
 
-		var isAccessTokenValidStub;
-
-		beforeEach(function() {
-			isAccessTokenValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
-		});
-
 		it('should call _refreshAppAuthAccessToken() with options.ip and the callback when tokens are not set', function(done) {
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
+			var options = {ip: '127.0.0.1, 192.168.10.10'};
 
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withExactArgs(options, done).yields();
+			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withArgs(options, done).yieldsAsync();
 			appAuthSession.getAccessToken(options, done);
 		});
 
 		it('should call _refreshAppAuthAccessToken() with null options the callback when tokens are not set', function(done) {
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withExactArgs(null, done).yields();
+			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withArgs(null, done).yieldsAsync();
 			appAuthSession.getAccessToken(null, done);
 		});
 
 		it('should call _refreshAppAuthAccessToken() with the callback when tokens are expired', function(done) {
 			appAuthSession.tokenInfo = testTokenInfo;
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').yields();
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').withArgs(testTokenInfo, 120000).returns(false); // expired
+			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withArgs(null, done).yieldsAsync();
 			appAuthSession.getAccessToken(null, done);
-		});
-
-		it('should call _refreshAppAuthAccessToken() in the background when tokens are stale', function(done) {
-			appAuthSession.tokenInfo = testTokenInfo;
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
-			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
-
-			var options = {};
-			options.ip = ['127.0.0.1'];
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withExactArgs(options);
-
-			appAuthSession.getAccessToken(options, done);
 		});
 
 		it('should pass tokens to callback when tokens are not expired', function(done) {
 			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').never();
 			appAuthSession.tokenInfo = testTokenInfo;
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
-			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(true); // stale
-			appAuthSession.getAccessToken(null, done);
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').withArgs(testTokenInfo, 120000).returns(true); // expired
+			appAuthSession.getAccessToken(null, function(err, token) {
+
+				assert.ifError(err);
+				assert.equal(token, testTokenInfo.accessToken);
+				done();
+			});
 		});
 
 	});
