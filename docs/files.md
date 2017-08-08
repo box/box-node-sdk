@@ -752,9 +752,9 @@ Get Representation
 ------------------
 
 A file's representation can be retrieved by calling
-[`files.getRepresentations(fileID, [representationTypes], null,
+[`files.getRepresentations(fileID, [representationTypes], options,
 callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentation).
 
 ```js
-client.files.getRepresentations('67890', [jpg?dimensions=32x32], null);
+client.files.getRepresentations('67890', [jpg?dimensions=32x32], {set_content_disposition_filename: 'New Name'}, callback);
 ```
