@@ -754,7 +754,15 @@ Get Representation
 A file's representation can be retrieved by calling
 [`files.getRepresentations(fileID, [representationTypes], options,
 callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentation).
+You will be able to fetch a pdf representation, thumbnail representation, multi-page images
+representation, and fetching text representation.
 
+You can fetch different dimensions for the representation by calling
 ```js
-client.files.getRepresentations('67890', [jpg?dimensions=32x32], {set_content_disposition_filename: 'New Name'}, callback);
+client.files.getRepresentations(67890, ['[jpg?dimensions=32x32]', '[jpg?dimensions=1024x1024]'], null, callback);
+```
+Additionally there are two header options you can include. set_content_disposition_type and set_content_disposition_filename. set_content_disposition_type must be set to either inline
+or attachment.
+```js
+client.files.getRepresentations('67890', '[jpg?dimensions=32x32]', {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline'}, callback);
 ```
