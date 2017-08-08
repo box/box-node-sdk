@@ -393,7 +393,7 @@ describe('EventStream', function() {
 
 			eventStream.fetchEvents();
 
-			assert.deepPropertyVal(eventStream, '_dedupHash.' + eventID, true);
+			assert.nestedPropertyVal(eventStream, '_dedupHash.' + eventID, true);
 		});
 
 		it('should clean up the deduplication filter when it reaches its maximum size', function() {
@@ -428,8 +428,8 @@ describe('EventStream', function() {
 
 			eventStream.cleanupDedupFilter(latestEvents);
 
-			assert.notDeepProperty(eventStream, '_dedupHash.123');
-			assert.deepPropertyVal(eventStream, '_dedupHash.456', true);
+			assert.notNestedProperty(eventStream, '_dedupHash.123');
+			assert.nestedPropertyVal(eventStream, '_dedupHash.456', true);
 		});
 	});
 
