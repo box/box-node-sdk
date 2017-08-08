@@ -2995,25 +2995,25 @@ describe('Files', function() {
 			files.getRepresentations(FILE_ID, representationTypes);
 		});
 
-	// 	it('should pass results to callback when callback is present', function(done) {
-	// 		var representationTypes = '[jpg?dimensions=32x32]';
-	// 		var response = {};
-	// 		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-	// 		sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-	// 		files.getRepresentations(FILE_ID, representationTypes, function(err, data) {
-	// 			assert.ifError(err);
-	// 			assert.equal(data, response);
-	// 			done();
-	// 		});
-	// 	});
-	//
-	// 	it('should return promise resolving to results when called', function() {
-	//
-	// 		var response = {};
-	// 		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-	// 		sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-	// 		return files.getRepresentations(FILE_ID)
-	// 			.then(data => assert.equal(data, response));
-	// 	});
-	// });
+		it('should pass results to callback when callback is present', function(done) {
+			var representationTypes = '[jpg?dimensions=32x32]';
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			files.getRepresentations(FILE_ID, representationTypes, null, function(err, data) {
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+			var representationTypes = '[jpg?dimensions=32x32]';
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return files.getRepresentations(FILE_ID, representationTypes)
+				.then(data => assert.equal(data, response));
+		});
+	});
 });
