@@ -2952,4 +2952,42 @@ describe('Files', function() {
 
 	});
 
+  describe('getRepresentations()', function() {
+
+    it('should make GET call to retrieve link to generated representation for file', function() {
+
+      sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+      sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/getRepresentations', null);
+      files.getRepresentations(FILE_ID);
+    });
+
+    it('should wrap with default handler when called', function() {
+
+      sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+      sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+      files.getRepresentations(FILE_ID);
+    });
+
+    it('should pass results to callback when callback is present', function(done) {
+
+      var response = {};
+      sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+      sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+      files.getRepresentations(FILE_ID, function(err, data) {
+
+        assert.ifError(err);
+        assert.equal(data, response);
+        done();
+      });
+    });
+
+    it('should return promise resolving to results when called', function() {
+
+      var response = {};
+      sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+      sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+      return files.getRepresentations(FILE_ID)
+        .then(data => assert.equal(data, response));
+    });
+  });
 });

@@ -37,6 +37,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Get Watermark](#get-watermark)
 * [Apply Watermark](#apply-watermark)
 * [Remove Watermark](#remove-watermark)
+* [Get Representation](#get-representation)
 
 Get a File's Information
 ------------------------
@@ -745,4 +746,15 @@ A file's watermark can be removed by calling
 
 ```js
 client.files.removeWatermark('67890', callback);
+```
+
+Get Representation
+------------------
+
+A file's representation can be retrieved by calling
+[`files.getRepresentations(fileID, [representationTypes], null,
+callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentation).
+
+```js
+client.files.getRepresentations('67890', [jpg?dimensions=32x32], null);
 ```
