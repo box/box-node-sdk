@@ -12,7 +12,8 @@ var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
-	httpStatusCodes = require('http-status');
+	httpStatusCodes = require('http-status'),
+	Promise = require('bluebird');
 
 var APIRequestManager = require('../../lib/api-request-manager'),
 	BasicAPISession = require('../../lib/sessions/basic-session'),
@@ -172,6 +173,67 @@ describe('box-client', function() {
 			});
 		});
 
+		it('should store request params and promise fulfillment functions when called in batch mode', function() {
+
+			var requestParams = {
+				method: 'get',
+				url: 'https://api.box.com/2.0/unicorns'
+			};
+
+			basicClient.batch();
+			basicClient._makeRequest(requestParams);
+
+			assert.isArray(basicClient._batch);
+			assert.lengthOf(basicClient._batch, 1);
+			var batchObj = basicClient._batch[0];
+			assert.isObject(batchObj);
+			assert.propertyVal(batchObj, 'params', requestParams);
+			assert.isFunction(batchObj.resolve);
+			assert.isFunction(batchObj.reject);
+		});
+
+		it('should return promise from batch mode that resolves when stored function is called with response', function() {
+
+			basicClient.batch();
+			var promise = basicClient._makeRequest({});
+
+			var response = {
+				body: {}
+			};
+			var requestResults = [null, response];
+			basicClient._batch[0].resolve(requestResults);
+
+			return promise.then(val => {
+				assert.equal(val, response);
+			});
+		});
+
+		it('should return promise from batch mode that rejects when stored function is called with response error', function() {
+
+			basicClient.batch();
+			var promise = basicClient._makeRequest({});
+
+			var error = new Error('Whoops!');
+			var requestResults = [error, null];
+			basicClient._batch[0].resolve(requestResults);
+
+			return promise.catch(err => {
+				assert.equal(err, error);
+			});
+		});
+
+		it('should return promise from batch mode that resolves when stored function is called with single response value', function() {
+
+			basicClient.batch();
+			var promise = basicClient._makeRequest({});
+
+			var requestResults = [fakeResponseStream];
+			basicClient._batch[0].resolve(requestResults);
+
+			return promise.then(val => {
+				assert.equal(val, fakeResponseStream);
+			});
+		});
 	});
 
 	describe('_handleStreamingResponse()', function() {
@@ -556,6 +618,197 @@ describe('box-client', function() {
 			basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData, function(err) {
 				assert.instanceOf(err, Error);
 				assert.propertyVal(err, 'authExpired', true);
+				done();
+			});
+		});
+	});
+
+	describe('batch()', function() {
+
+		it('should initialize batch array on the client when called', function() {
+
+			assert.propertyVal(basicClient, '_batch', null);
+			basicClient.batch();
+			assert.isArray(basicClient._batch);
+			assert.lengthOf(basicClient._batch, 0);
+		});
+
+		it('should return the client object when called', function() {
+
+			var ret = basicClient.batch();
+			assert.equal(ret, basicClient);
+		});
+	});
+
+	describe('execute()', function() {
+
+		it('should make batch API call with stored parameters when called', function() {
+
+			basicClient.batch();
+			basicClient.get('/foo', {qs: {fields: 'name'}});
+
+			var expectedBatchParams = {
+				body: {
+					requests: [
+						{
+							method: 'GET',
+							relative_url: '/foo?fields=name',
+							body: undefined,
+							headers: undefined
+						}
+					]
+				}
+			};
+			var response = {
+				body: {
+					responses: []
+				}
+			};
+			sandbox.mock(basicClient).expects('post')
+				.withArgs('/batch', sinon.match(expectedBatchParams))
+				.returns(Promise.resolve(response));
+
+			basicClient.execute();
+		});
+
+		it('should transform the response and pass it to individual call promises when batch call succeeds', function() {
+
+			basicClient.batch();
+			var promise = basicClient.get('/foo');
+
+			var response = {
+				statusCode: 200,
+				body: {
+					responses: [
+						{
+							status: 200,
+							headers: {},
+							response: {
+								foo: 'bar'
+							}
+						}
+					]
+				}
+			};
+			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
+
+			basicClient.execute();
+
+			return promise.then(data => {
+				assert.propertyVal(data, 'statusCode', 200);
+				assert.nestedPropertyVal(data, 'body.foo', 'bar');
+			});
+		});
+
+		it('should return promise resolving to the full batch response when batch call succeeds', function() {
+
+			basicClient.batch();
+			basicClient.get('/foo');
+
+			var response = {
+				statusCode: 200,
+				body: {
+					responses: [
+						{
+							status: 200,
+							headers: {},
+							response: {
+								foo: 'bar'
+							}
+						}
+					]
+				}
+			};
+			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
+
+			return basicClient.execute().then(data => {
+				assert.equal(data, response.body);
+			});
+		});
+
+		it('should return promise that rejects and reject individual call promises when batch call fails', function() {
+
+			var error = new Error('Nope');
+
+			basicClient.batch();
+			var promise = basicClient.get('/foo').catch(err => {
+				assert.equal(err, error);
+			});
+
+			sandbox.stub(basicClient, 'post').returns(Promise.reject(error));
+
+			var promise2 = basicClient.execute().catch(err => {
+				assert.equal(err, error);
+			});
+
+			return Promise.all([promise, promise2]);
+		});
+
+		it('should pass batch result to callback when batch call succeeds', function(done) {
+
+			basicClient.batch();
+			basicClient.get('/foo');
+
+			var response = {
+				statusCode: 200,
+				body: {
+					responses: [
+						{
+							status: 200,
+							headers: {},
+							response: {
+								foo: 'bar'
+							}
+						}
+					]
+				}
+			};
+			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
+
+			return basicClient.execute(function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response.body);
+				done();
+			});
+		});
+
+		it('should pass error to callbacks when batch call fails', function() {
+
+			var error = new Error('Nope');
+
+			basicClient.batch();
+			var promise = new Promise(function(resolve) {
+				basicClient.get('/foo', {}, function(err) {
+					assert.equal(err, error);
+					resolve();
+				});
+			});
+
+			sandbox.stub(basicClient, 'post').returns(Promise.reject(error));
+
+			var promise2 = new Promise(function(resolve) {
+				basicClient.execute(function(err) {
+					assert.equal(err, error);
+					resolve();
+				});
+			});
+
+			return Promise.all([promise, promise2]);
+		});
+
+		it('should return a promise the rejects when called before a batch is started', function() {
+
+			return basicClient.execute()
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should call callback with an error when called before a batch is started', function(done) {
+
+			basicClient.execute(function(err) {
+				assert.instanceOf(err, Error);
 				done();
 			});
 		});
