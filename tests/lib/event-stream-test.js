@@ -70,6 +70,23 @@ describe('EventStream', function() {
 			assert.instanceOf(eventStream, Readable);
 		});
 
+		it('should use default options when no options are passed', function() {
+
+			assert.deepPropertyVal(eventStream, '_options.fetchInterval', 1000);
+			assert.deepPropertyVal(eventStream, '_options.retryDelay', 1000);
+		});
+
+		it('should set options when options are passed', function() {
+
+			var options = {
+				fetchInterval: 20000
+			};
+			var customEventStream = new EventStream(boxClientFake, TEST_STREAM_POSITION, options);
+
+			assert.deepPropertyVal(customEventStream, '_options.fetchInterval', 20000);
+			assert.deepPropertyVal(eventStream, '_options.retryDelay', 1000);
+		});
+
 	});
 
 	describe('getLongPollInfo()', function() {
