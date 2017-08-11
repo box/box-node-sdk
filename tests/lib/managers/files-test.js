@@ -2952,7 +2952,7 @@ describe('Files', function() {
 
 	});
 
-	describe('getRepresentations()', function() {
+	describe('getRepresentationInfo()', function() {
 
 		it('should make GET call to retrieve link to generated representation for file', function() {
 			var representationTypes = '[jpg?dimensions=32x32]';
@@ -2966,7 +2966,7 @@ describe('Files', function() {
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID, expectedRepresentationsParams);
-			files.getRepresentations(FILE_ID, representationTypes);
+			files.getRepresentationInfo(FILE_ID, representationTypes);
 		});
 		it('should make GET call to retrieve link to generated representation for file with optional headers', function() {
 			var representationTypes = '[jpg?dimensions=32x32]';
@@ -2977,22 +2977,24 @@ describe('Files', function() {
 				headers: {
 					'x-rep-hints': representationTypes,
 					set_content_disposition_type: 'inline',
-					set_content_disposition_filename: 'NEW NAME'
+					set_content_disposition_filename: 'NEW NAME',
+					asset_path: '1.png'
 				}
 			};
 			var options = {
 				set_content_disposition_type: 'inline',
-				set_content_disposition_filename: 'NEW NAME'
+				set_content_disposition_filename: 'NEW NAME',
+				asset_path: '1.png'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID, expectedRepresentationsParams);
-			files.getRepresentations(FILE_ID, representationTypes, options);
+			files.getRepresentationInfo(FILE_ID, representationTypes, options);
 		});
 		it('should wrap with default handler when called', function() {
 			var representationTypes = '[jpg?dimensions=32x32]';
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
-			files.getRepresentations(FILE_ID, representationTypes);
+			files.getRepresentationInfo(FILE_ID, representationTypes);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
@@ -3000,7 +3002,7 @@ describe('Files', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			files.getRepresentations(FILE_ID, representationTypes, null, function(err, data) {
+			files.getRepresentationInfo(FILE_ID, representationTypes, null, function(err, data) {
 				assert.ifError(err);
 				assert.equal(data, response);
 				done();
@@ -3012,7 +3014,7 @@ describe('Files', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return files.getRepresentations(FILE_ID, representationTypes)
+			return files.getRepresentationInfo(FILE_ID, representationTypes)
 				.then(data => assert.equal(data, response));
 		});
 	});

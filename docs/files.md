@@ -759,10 +759,10 @@ representation, and fetching text representation.
 
 You can fetch different dimensions for the representation by calling
 ```js
-client.files.getRepresentations(67890, ['[jpg?dimensions=32x32]', '[jpg?dimensions=1024x1024]'], null, callback);
+client.files.getRepresentationInfo('67890', client.files.representation.PDF, null, callback);
 ```
 Additionally there are two header options you can include. set_content_disposition_type and set_content_disposition_filename. set_content_disposition_type must be set to either inline
 or attachment.
 ```js
-client.files.getRepresentations('67890', '[jpg?dimensions=32x32]', {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline'}, callback);
+client.files.getRepresentationInfo('67890', client.files.representation.PDF, {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline'}, callback);
 ```
