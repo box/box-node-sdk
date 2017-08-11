@@ -339,7 +339,23 @@ describe('EventStream', function() {
 			});
 		});
 
-		it('should push new events into the stream when API call is successful', function() {
+		it('should pause stream and push new events into the stream when API call is successful', function() {
+
+			var event = {
+				type: 'event',
+				event_id: '783964872'
+			};
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
+				entries: [event],
+				next_stream_position: TEST_STREAM_POSITION
+			}));
+			sandbox.mock(eventStream).expects('pause');
+			sandbox.mock(eventStream).expects('push').withArgs(event);
+
+			return eventStream.fetchEvents();
+		});
+
+		it('should resume stream after pushing new events when stream was flowing', function() {
 
 			var event = {
 				type: 'event',
@@ -350,7 +366,25 @@ describe('EventStream', function() {
 				next_stream_position: TEST_STREAM_POSITION
 			}));
 			sandbox.mock(eventStream).expects('push').withArgs(event);
+			sandbox.mock(eventStream).expects('resume');
 
+			return eventStream.fetchEvents();
+		});
+
+		it('should not resume stream after pushing new events when stream was already paused', function() {
+
+			var event = {
+				type: 'event',
+				event_id: '783964872'
+			};
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
+				entries: [event],
+				next_stream_position: TEST_STREAM_POSITION
+			}));
+			sandbox.mock(eventStream).expects('push').withArgs(event);
+			sandbox.mock(eventStream).expects('resume').never();
+
+			eventStream.pause();
 			return eventStream.fetchEvents();
 		});
 
