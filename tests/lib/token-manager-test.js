@@ -77,6 +77,15 @@ describe('token-manager', function() {
 
 		it('should make a POST request against the OAuth token endpoint when called', function() {
 
+			var response = {
+				statusCode: 200,
+				body: {
+					access_token: 'at',
+					refresh_token: 'rt',
+					expires_in: 23455
+				}
+			};
+
 			// Setup Data
 			var formParams = { myGet: 'tokenParams' };
 
@@ -87,10 +96,10 @@ describe('token-manager', function() {
 					url: 'api.box.com/oauth2/token',
 					form: formParams
 				}))
-				.returns(Promise.resolve({}));
+				.returns(Promise.resolve(response));
 
 			// Test the response
-			tokenManager.getTokens(formParams, null);
+			return tokenManager.getTokens(formParams, null);
 		});
 
 		leche.withData({

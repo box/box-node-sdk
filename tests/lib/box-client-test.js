@@ -123,7 +123,7 @@ describe('box-client', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			sandbox.mock(fakeResponseStream).expects('on')
 				.withArgs('response', sinon.match.func)
-				.returns(Promise.reject(fakeOKResponse));
+				.returns(Promise.resolve(fakeOKResponse));
 			sandbox.mock(requestManagerFake).expects('makeStreamingRequest').returns(fakeResponseStream);
 
 			return basicClient._makeRequest({ streaming: true });
