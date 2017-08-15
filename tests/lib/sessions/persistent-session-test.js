@@ -371,7 +371,7 @@ describe('PersistentAPISession', function() {
 				});
 		});
 
-		it('should call callback with error when getting the access token fails', function() {
+		it('should reject when getting the access token fails', function() {
 
 			var error = new Error('Could not get access token');
 
@@ -383,7 +383,7 @@ describe('PersistentAPISession', function() {
 				});
 		});
 
-		it('should call callback with error when the token exchange fails', function() {
+		it('should reject when the token exchange fails', function() {
 
 			var error = new Error('Could not exchange token');
 

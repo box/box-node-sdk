@@ -496,7 +496,7 @@ describe('token-manager', function() {
 				});
 		});
 
-		it('should call callback with error when the API returns any other error', function() {
+		it('should reject when the API returns any other error', function() {
 
 			var error = new Error('Could not get tokens');
 
@@ -604,7 +604,7 @@ describe('token-manager', function() {
 				});
 		});
 
-		it('should call callback with error when call to exchange tokens fails', function() {
+		it('should reject when call to exchange tokens fails', function() {
 
 			var exchangeError = new Error('Exchange failed');
 			sandbox.stub(tokenManager, 'getTokens').returns(Promise.reject(exchangeError));
