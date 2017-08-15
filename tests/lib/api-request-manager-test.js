@@ -137,10 +137,34 @@ describe('APIRequestManager', function() {
 			assert.ok(APIRequestConstructorStub.calledWith(config, eventBusFake), 'API Request should be passed event bus');
 		});
 
-		it('should execute the request with the given callback when called', function() {
+		it('should execute the request when called', function() {
 			var requestManager = new APIRequestManager(config, eventBusFake);
 			sandbox.mock(apiRequestFake).expects('execute').callsArg(0);
 			return requestManager.makeRequest({});
+		});
+
+		it('should resolve when the API request returns a response', function() {
+
+			var response = {statusCode: 200};
+
+			var requestManager = new APIRequestManager(config, eventBusFake);
+			sandbox.mock(apiRequestFake).expects('execute').yieldsAsync(null, response);
+			return requestManager.makeRequest({})
+				.then(data => {
+					assert.equal(data, response);
+				});
+		});
+
+		it('should reject with request error when API call fails', function() {
+
+			var apiError = new Error('Network failure');
+
+			var requestManager = new APIRequestManager(config, eventBusFake);
+			sandbox.mock(apiRequestFake).expects('execute').yieldsAsync(apiError);
+			return requestManager.makeRequest({})
+				.catch(err => {
+					assert.equal(err, apiError);
+				});
 		});
 
 	});

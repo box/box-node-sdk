@@ -13,6 +13,7 @@ var assert = require('chai').assert,
 	mockery = require('mockery'),
 	leche = require('leche'),
 	Promise = require('bluebird'),
+	EventEmitter = require('events').EventEmitter,
 	httpStatusCodes = require('http-status');
 
 var APIRequestManager = require('../../lib/api-request-manager'),
@@ -29,7 +30,6 @@ var sandbox = sinon.sandbox.create(),
 	requestManagerFake,
 	BasicClient,
 	basicClient;
-
 
 var fakeQs = { fakeQsKey: 'fakeQsValue' },
 	fakeBody = { my: 'body' },
@@ -70,7 +70,7 @@ describe('box-client', function() {
 		fakeParamsWithQs = {qs: fakeQs};
 		fakeResponseBody = {some: 'responseBody'};
 		fakeOKResponse = {statusCode: httpStatusCodes.OK, body: fakeResponseBody};
-		fakeResponseStream = leche.fake(leche.create(['on']));
+		fakeResponseStream = new EventEmitter();
 		fakeUnauthorizedResponse = {statusCode: httpStatusCodes.UNAUTHORIZED, body: {}};
 		fakeMultipartFormData = [{format: 'doesNotMatter'}];
 
@@ -122,11 +122,23 @@ describe('box-client', function() {
 		it('should call makeStreamingRequest for a streaming request', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			sandbox.mock(fakeResponseStream).expects('on')
-				.withArgs('response', sinon.match.func)
-				.returns(Promise.resolve(fakeOKResponse));
+				.withArgs('response', sinon.match.func);
 			sandbox.mock(requestManagerFake).expects('makeStreamingRequest').returns(fakeResponseStream);
 
 			return basicClient._makeRequest({ streaming: true });
+		});
+
+		it('should attach expired auth response handler to stream when making streaming request', function() {
+
+			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error));
+
+			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(requestManagerFake, 'makeStreamingRequest').returns(fakeResponseStream);
+
+			return basicClient._makeRequest({ streaming: true })
+				.then(stream => {
+					stream.emit('response', fakeUnauthorizedResponse);
+				});
 		});
 
 		it('should make a request and propagate the response when able to upkeep tokens', function() {
@@ -172,6 +184,19 @@ describe('box-client', function() {
 				});
 		});
 
+		it('should call session expired auth handler when one is available to handle auth error', function() {
+
+			var error = new Error();
+			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error)).returns(Promise.reject(error));
+
+			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(requestManagerFake).expects('makeRequest').returns(Promise.resolve(fakeUnauthorizedResponse));
+
+			return basicClient._makeRequest({})
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
 	});
 
 	describe('get()', function() {
