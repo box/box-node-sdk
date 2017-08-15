@@ -12,6 +12,7 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	leche = require('leche'),
+	Promise = require('bluebird'),
 	mockery = require('mockery');
 
 var TokenManager = require('../../../lib/token-manager');
@@ -22,9 +23,6 @@ var TokenManager = require('../../../lib/token-manager');
 // ------------------------------------------------------------------------------
 var sandbox = sinon.sandbox.create(),
 	tokenManagerFake,
-	callbackQueue,
-	callbackQueueFake,
-	CallbackQueueConstructor,
 	AnonymousAPISession,
 	anonymousSession,
 	testTokenInfo = {
@@ -49,16 +47,10 @@ describe('AnonymousAPISession', function() {
 	beforeEach(function() {
 
 		tokenManagerFake = leche.fake(TokenManager.prototype);
-		callbackQueue = leche.create(['push', 'flush']);
-		callbackQueueFake = leche.fake(callbackQueue);
-		CallbackQueueConstructor = function() {
-			return callbackQueueFake;
-		};
 
 		// Enable Mockery
-		mockery.enable({ useCleanCache: true });
+		mockery.enable({ warnOnUnregistered: false });
 		// Register Mocks
-		mockery.registerMock('../util/lazy-async-queue', CallbackQueueConstructor);
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
 
 		// Setup File Under Test
@@ -72,153 +64,172 @@ describe('AnonymousAPISession', function() {
 		mockery.disable();
 	});
 
-	// @NOTE(fschott) 2014-04-03: This private method is called in multiple places. To reduce
-	// the number of redundent tests, we decided to test this private function.
-	describe('_refreshAnonymousAccessToken()', function() {
-
-		var refreshError,
-			getTokensStub;
-
-		beforeEach(function() {
-			refreshError = new Error();
-			getTokensStub = sandbox.stub(tokenManagerFake, 'getTokensClientCredentialsGrant');
-		});
-
-		it('should add callback to the upkeep queue when tokens are curently being refreshed', function() {
-			var callback1 = sandbox.stub();
-			var callback2 = sandbox.stub();
-			sandbox.mock(callbackQueueFake).expects('push').withExactArgs(callback2);
-			anonymousSession._refreshAnonymousAccessToken(null, callback1);
-			anonymousSession._refreshAnonymousAccessToken(null, callback2);
-		});
-
-		it('should call getTokensClientCredentialsGrant when called', function() {
-			getTokensStub.restore(); // Unstub so that we can mock it out instead
-			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant');
-			anonymousSession._refreshAnonymousAccessToken(null);
-		});
-
-		it('should call getTokensClientCredentialsGrant without options when called', function() {
-			var tokenInfo = {accessToken: 'at'};
-
-			getTokensStub.restore(); // Unstub so that we can mock it out instead
-			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant').withArgs(null).returns(tokenInfo);
-			anonymousSession._refreshAnonymousAccessToken(null);
-		});
-
-		it('should call getTokensClientCredentialsGrant with options when called', function() {
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
-			var tokenInfo = {accessToken: 'at'};
-
-			getTokensStub.restore(); // Unstub so that we can mock it out instead
-			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant').withArgs(options).returns(tokenInfo);
-			anonymousSession._refreshAnonymousAccessToken(options);
-		});
-
-		it('should propagate a token refresh grant error when called', function(done) {
-			getTokensStub.yields(refreshError);
-			sandbox.stub(callbackQueueFake, 'flush');
-			anonymousSession._refreshAnonymousAccessToken(null, function(err) {
-				assert.strictEqual(err, refreshError);
-				done();
-			});
-		});
-
-		it('should flush the upkeep queue with a token refresh grant error when one occurs', function() {
-			getTokensStub.yields(refreshError);
-			sandbox.mock(callbackQueueFake).expects('flush').withExactArgs(refreshError);
-			anonymousSession._refreshAnonymousAccessToken(null);
-		});
-
-
-		it('should propagate an access token when TokenInfo is propagated', function(done) {
-			getTokensStub.yields(null, testTokenInfo);
-			sandbox.stub(callbackQueueFake, 'flush');
-			anonymousSession._refreshAnonymousAccessToken(null, function(err, accessToken) {
-				assert.strictEqual(accessToken, testTokenInfo.accessToken);
-				done();
-			});
-		});
-
-		it('should flush the upkeep queue with an access token when TokenInfo is propagated', function() {
-			getTokensStub.yields(null, testTokenInfo);
-			sandbox.mock(callbackQueueFake).expects('flush').withExactArgs(null, testTokenInfo.accessToken);
-			anonymousSession._refreshAnonymousAccessToken(null);
-		});
-
-	});
-
 	describe('getAccessToken()', function() {
 
-		var isAccessTokenValidStub;
+		var newTokenInfo;
 
 		beforeEach(function() {
-			isAccessTokenValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
+
+			newTokenInfo = {
+				accessToken: 'newAT',
+				accessTokenTTLMS: 100,
+				acquiredAtMS: 50
+			};
 		});
 
-		it('should call refreshAnonymousAccessToken() with the callback when tokens are expired', function(done) {
+		it('should resolve to stored access token when access tokens are fresh', function() {
+
 			anonymousSession.tokenInfo = testTokenInfo;
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(false); // expired
-			sandbox.mock(anonymousSession).expects('_refreshAnonymousAccessToken').yields();
-			anonymousSession.getAccessToken(null, done);
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant').never();
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
+
+			return anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, testTokenInfo.accessToken);
+				});
 		});
 
-		it('should call refreshAnonymousAccessToken() with options.ip in the background when tokens are stale', function(done) {
+		it('should request new tokens when current tokens are no longer fresh', function() {
+
 			anonymousSession.tokenInfo = testTokenInfo;
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
-			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
-			sandbox.mock(anonymousSession).expects('_refreshAnonymousAccessToken').withExactArgs(options);
-
-			anonymousSession.getAccessToken(options, done);
+			return anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
 		});
 
-		it('should call refreshAnonymousAccessToken() with null options in the background when tokens are stale', function(done) {
+		it('should request new tokens with options when options are passed in', function() {
+
+			var options = {ip: '127.0.0.1'};
+
 			anonymousSession.tokenInfo = testTokenInfo;
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
-			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(false); // stale
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
+				.withArgs(options)
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
-			sandbox.mock(anonymousSession).expects('_refreshAnonymousAccessToken').withExactArgs(null);
-
-			anonymousSession.getAccessToken(null, done);
+			return anonymousSession.getAccessToken(options)
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
 		});
 
-		it('should pass tokens to callback when tokens are not expired', function(done) {
-			sandbox.mock(anonymousSession).expects('_refreshAnonymousAccessToken').never();
+		it('should only make a single request for new tokens when called multiple times', function() {
+
 			anonymousSession.tokenInfo = testTokenInfo;
-			isAccessTokenValidStub.withArgs(testTokenInfo, 30000).returns(true); // expired
-			isAccessTokenValidStub.withArgs(testTokenInfo, 120000).returns(true); // stale
-			anonymousSession.getAccessToken(null, done);
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
+				.once()
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			var promise1 = anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			var promise2 = anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			return Promise.all([promise1, promise2]);
 		});
 
+		it('should allow a new request for tokens once in-progress call completes', function() {
+
+			anonymousSession.tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
+				.twice()
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			var promise1 = anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			var promise2 = anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			return Promise.all([promise1, promise2])
+				.then(() => anonymousSession.getAccessToken());
+		});
+
+		it('should return a promise that rejects when the request for new tokens fails', function() {
+
+			var tokensError = new Error('Oh no!');
+
+			anonymousSession.tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
+				.returns(Promise.reject(tokensError));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			return anonymousSession.getAccessToken()
+				.catch(err => {
+					assert.equal(err, tokensError);
+				});
+		});
+
+		it('should return promise resolving to new tokens when called after refresh', function() {
+
+
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
+				.once()
+				.returns(Promise.resolve(newTokenInfo));
+			var tokensValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
+			tokensValidStub.withArgs(testTokenInfo).returns(false);
+			tokensValidStub.withArgs(newTokenInfo).returns(true);
+
+			var promise1 = anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			var promise2 = anonymousSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			return Promise.all([promise1, promise2])
+				.then(() => anonymousSession.getAccessToken());
+		});
 	});
 
 	describe('revokeTokens()', function() {
 
-		it('should call tokenManager.revokeTokens with options.ip when called', function(done) {
+		it('should call tokenManager.revokeTokens with options.ip when called', function() {
 			anonymousSession.tokenInfo = testTokenInfo;
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, options, done).yields();
-			anonymousSession.revokeTokens(options, done);
+			sandbox.mock(tokenManagerFake).expects('revokeTokens')
+				.withExactArgs(testTokenInfo.accessToken, options)
+				.returns(Promise.resolve());
+
+			return anonymousSession.revokeTokens(options);
 		});
 
-		it('should call tokenManager.revokeTokens without options.ip when called', function(done) {
+		it('should call tokenManager.revokeTokens without options.ip when called', function() {
 			anonymousSession.tokenInfo = testTokenInfo;
 
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, null, done).yields();
-			anonymousSession.revokeTokens(null, done);
+			sandbox.mock(tokenManagerFake).expects('revokeTokens')
+				.withExactArgs(testTokenInfo.accessToken, null)
+				.returns(Promise.resolve());
+
+			return anonymousSession.revokeTokens(null);
 		});
 
 	});
 
 	describe('exchangeToken()', function() {
 
-		it('should get access token with options.ip and call callback with its own token info when called', function(done) {
+		it('should get access token with options.ip and return promise resolving to its own token info when called', function() {
 
 			var tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
 			anonymousSession.tokenInfo = tokenInfo;
@@ -226,39 +237,43 @@ describe('AnonymousAPISession', function() {
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 
-			sandbox.mock(anonymousSession).expects('getAccessToken').withArgs(options).yieldsAsync(null, tokenInfo.accessToken);
-			anonymousSession.exchangeToken('item_preview', null, options, function(err, data) {
+			sandbox.mock(anonymousSession).expects('getAccessToken')
+				.withArgs(options)
+				.returns(Promise.resolve(tokenInfo.accessToken));
 
-				assert.ifError(err);
-				assert.equal(data, tokenInfo);
-				done();
-			});
+			return anonymousSession.exchangeToken('item_preview', null, options)
+				.then(data => {
+					assert.equal(data, tokenInfo);
+				});
 		});
 
-		it('should get access token with null options and call callback with its own token info when called', function(done) {
+		it('should get access token with null options and return promise resolving to its own token info when called', function() {
 
 			var tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
 			anonymousSession.tokenInfo = tokenInfo;
 
-			sandbox.mock(anonymousSession).expects('getAccessToken').withArgs(null).yieldsAsync(null, tokenInfo.accessToken);
-			anonymousSession.exchangeToken('item_preview', null, null, function(err, data) {
+			sandbox.mock(anonymousSession).expects('getAccessToken')
+				.withArgs(null)
+				.returns(Promise.resolve(tokenInfo.accessToken));
 
-				assert.ifError(err);
-				assert.equal(data, tokenInfo);
-				done();
-			});
+			return anonymousSession.exchangeToken('item_preview', null, null)
+				.then(data => {
+					assert.equal(data, tokenInfo);
+				});
 		});
 
-		it('should call callback with error when getting the access token fails', function(done) {
+		it('should return promise that rejects when getting the access token fails', function() {
 
 			var error = new Error('Could not get tokens');
 
-			sandbox.mock(anonymousSession).expects('getAccessToken').yieldsAsync(error);
-			anonymousSession.exchangeToken('item_preview', null, function(err) {
+			sandbox.mock(anonymousSession)
+				.expects('getAccessToken')
+				.returns(Promise.reject(error));
 
-				assert.equal(err, error);
-				done();
-			});
+			return anonymousSession.exchangeToken('item_preview', null)
+				.catch(err => {
+					assert.equal(err, error);
+				});
 		});
 	});
 

@@ -18,7 +18,7 @@ var assert = require('chai').assert,
 	crypto = require('crypto'),
 	jwt = require('jsonwebtoken');
 
-describe.only('Box Node SDK', function() {
+describe('Box Node SDK', function() {
 
   // ------------------------------------------------------------------------------
 	// Setup

@@ -66,11 +66,11 @@ describe('APIRequestManager', function() {
 		});
 
 		// Setup Mockery
-		mockery.enable({ useCleanCache: true });
+		mockery.enable({ warnOnUnregistered: false });
 		mockery.registerMock('./api-request', APIRequestConstructorStub);
 
 		// Setup File Under Test
-		mockery.registerAllowable(MODULE_UNDER_TEST_PATH);
+		mockery.registerAllowable(MODULE_UNDER_TEST_PATH, true);
 		APIRequestManager = require(MODULE_UNDER_TEST_PATH);
 	});
 
@@ -138,10 +138,9 @@ describe('APIRequestManager', function() {
 		});
 
 		it('should execute the request with the given callback when called', function() {
-			var requestManager = new APIRequestManager(config, eventBusFake),
-				callback = sandbox.stub();
-			sandbox.mock(apiRequestFake).expects('execute').withExactArgs(callback);
-			requestManager.makeRequest({}, callback);
+			var requestManager = new APIRequestManager(config, eventBusFake);
+			sandbox.mock(apiRequestFake).expects('execute').callsArg(0);
+			return requestManager.makeRequest({});
 		});
 
 	});
