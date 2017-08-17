@@ -79,7 +79,7 @@ describe('AnonymousAPISession', function() {
 
 		it('should resolve to stored access token when access tokens are fresh', function() {
 
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant').never();
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
 
@@ -91,7 +91,7 @@ describe('AnonymousAPISession', function() {
 
 		it('should request new tokens when current tokens are no longer fresh', function() {
 
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.returns(Promise.resolve(newTokenInfo));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
@@ -106,7 +106,7 @@ describe('AnonymousAPISession', function() {
 
 			var options = {ip: '127.0.0.1'};
 
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.withArgs(options)
 				.returns(Promise.resolve(newTokenInfo));
@@ -120,7 +120,7 @@ describe('AnonymousAPISession', function() {
 
 		it('should only make a single request for new tokens when called multiple times', function() {
 
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.once()
 				.returns(Promise.resolve(newTokenInfo));
@@ -141,7 +141,7 @@ describe('AnonymousAPISession', function() {
 
 		it('should allow a new request for tokens once in-progress call completes', function() {
 
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.twice()
 				.returns(Promise.resolve(newTokenInfo));
@@ -165,7 +165,7 @@ describe('AnonymousAPISession', function() {
 
 			var tokensError = new Error('Oh no!');
 
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
@@ -204,7 +204,7 @@ describe('AnonymousAPISession', function() {
 	describe('revokeTokens()', function() {
 
 		it('should call tokenManager.revokeTokens with options.ip when called', function() {
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 
@@ -216,7 +216,7 @@ describe('AnonymousAPISession', function() {
 		});
 
 		it('should call tokenManager.revokeTokens without options.ip when called', function() {
-			anonymousSession.tokenInfo = testTokenInfo;
+			anonymousSession._tokenInfo = testTokenInfo;
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, null)
@@ -232,7 +232,7 @@ describe('AnonymousAPISession', function() {
 		it('should get access token with options.ip and return promise resolving to its own token info when called', function() {
 
 			var tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
-			anonymousSession.tokenInfo = tokenInfo;
+			anonymousSession._tokenInfo = tokenInfo;
 
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
@@ -250,7 +250,7 @@ describe('AnonymousAPISession', function() {
 		it('should get access token with null options and return promise resolving to its own token info when called', function() {
 
 			var tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
-			anonymousSession.tokenInfo = tokenInfo;
+			anonymousSession._tokenInfo = tokenInfo;
 
 			sandbox.mock(anonymousSession).expects('getAccessToken')
 				.withArgs(null)

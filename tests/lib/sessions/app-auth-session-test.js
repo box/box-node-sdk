@@ -91,7 +91,7 @@ describe('AppAuthSession', function() {
 
 		it('should resolve to stored access token when access tokens are fresh', function() {
 
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').never();
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
 
@@ -103,7 +103,7 @@ describe('AppAuthSession', function() {
 
 		it('should request new tokens when current tokens are no longer fresh', function() {
 
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs(TEST_TYPE, TEST_ID)
 				.returns(Promise.resolve(newTokenInfo));
@@ -119,7 +119,7 @@ describe('AppAuthSession', function() {
 
 			var options = {ip: '127.0.0.1'};
 
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs(TEST_TYPE, TEST_ID, options)
 				.returns(Promise.resolve(newTokenInfo));
@@ -133,7 +133,7 @@ describe('AppAuthSession', function() {
 
 		it('should only make a single request for new tokens when called multiple times', function() {
 
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.once()
 				.returns(Promise.resolve(newTokenInfo));
@@ -154,7 +154,7 @@ describe('AppAuthSession', function() {
 
 		it('should allow a new request for tokens once in-progress call completes', function() {
 
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.twice()
 				.returns(Promise.resolve(newTokenInfo));
@@ -178,7 +178,7 @@ describe('AppAuthSession', function() {
 
 			var tokensError = new Error('Oh no!');
 
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
@@ -217,7 +217,7 @@ describe('AppAuthSession', function() {
 	describe('revokeTokens()', function() {
 
 		it('should call tokenManager.revokeTokens with null options and its access token when called', function() {
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, null)
 				.returns(Promise.resolve());
@@ -226,7 +226,7 @@ describe('AppAuthSession', function() {
 		});
 
 		it('should call tokenManager.revokeTokens with options.ip and its access token when called', function() {
-			appAuthSession.tokenInfo = testTokenInfo;
+			appAuthSession._tokenInfo = testTokenInfo;
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 
