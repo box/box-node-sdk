@@ -210,7 +210,10 @@ describe('AppAuthSession', function() {
 				});
 
 			return Promise.all([promise1, promise2])
-				.then(() => appAuthSession.getAccessToken());
+				.then(() => appAuthSession.getAccessToken())
+				.then(accessToken => {
+					assert.equal(accessToken, newTokenInfo.accessToken);
+				});
 		});
 	});
 

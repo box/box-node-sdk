@@ -304,7 +304,10 @@ describe('PersistentAPISession', function() {
 				});
 
 			return Promise.all([promise1, promise2])
-				.then(() => persistentAPISession.getAccessToken());
+				.then(() => persistentAPISession.getAccessToken())
+				.then(accessToken => {
+					assert.equal(accessToken, newTokenInfo.accessToken);
+				});
 		});
 	});
 

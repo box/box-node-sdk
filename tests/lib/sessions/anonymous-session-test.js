@@ -197,7 +197,10 @@ describe('AnonymousAPISession', function() {
 				});
 
 			return Promise.all([promise1, promise2])
-				.then(() => anonymousSession.getAccessToken());
+				.then(() => anonymousSession.getAccessToken())
+				.then(accessToken => {
+					assert.equal(accessToken, newTokenInfo.accessToken);
+				});
 		});
 	});
 
