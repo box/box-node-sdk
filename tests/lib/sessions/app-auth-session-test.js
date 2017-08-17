@@ -12,6 +12,7 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	leche = require('leche'),
+	Promise = require('bluebird'),
 	mockery = require('mockery');
 
 var TokenManager = require('../../../lib/token-manager'),
@@ -23,9 +24,6 @@ var TokenManager = require('../../../lib/token-manager'),
 // ------------------------------------------------------------------------------
 var sandbox = sinon.sandbox.create(),
 	tokenManagerFake,
-	callbackQueue,
-	callbackQueueFake,
-	CallbackQueueConstructor,
 	AppAuthSession,
 	appAuthSession,
 	config,
@@ -62,16 +60,10 @@ describe('AppAuthSession', function() {
 		});
 
 		tokenManagerFake = leche.fake(TokenManager.prototype);
-		callbackQueue = leche.create(['push', 'flush']);
-		callbackQueueFake = leche.fake(callbackQueue);
-		CallbackQueueConstructor = function() {
-			return callbackQueueFake;
-		};
 
 		// Enable Mockery
-		mockery.enable({ useCleanCache: true });
+		mockery.enable({ warnOnUnregistered: false });
 		// Register Mocks
-		mockery.registerMock('../util/lazy-async-queue', CallbackQueueConstructor);
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
 
 		// Setup File Under Test
@@ -85,122 +77,168 @@ describe('AppAuthSession', function() {
 		mockery.disable();
 	});
 
-	// @NOTE(mwiller) 2016-04-12: This private method is called in multiple places. To reduce
-	// the number of redundant tests, we decided to test this private function.
-	describe('_refreshAppAuthAccessToken()', function() {
-
-		var refreshError;
-
-		beforeEach(function() {
-			refreshError = new Error();
-		});
-
-		it('should add callback to the upkeep queue when tokens are curently being refreshed', function() {
-			var callback1 = sandbox.stub();
-			var callback2 = sandbox.stub();
-			sandbox.stub(tokenManagerFake, 'getTokensJWTGrant');
-			sandbox.mock(callbackQueueFake).expects('push').withExactArgs(callback2);
-			appAuthSession._refreshAppAuthAccessToken(null, callback1);
-			appAuthSession._refreshAppAuthAccessToken(null, callback2);
-		});
-
-		it('should call getTokensJWTGrant() with options.ip when called', function() {
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
-
-			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs(TEST_TYPE, TEST_ID, options);
-			appAuthSession._refreshAppAuthAccessToken(options);
-		});
-
-		it('should call getTokensJWTGrant() with null options when called', function() {
-			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs(TEST_TYPE, TEST_ID, null);
-			appAuthSession._refreshAppAuthAccessToken(null);
-		});
-
-		it('should propagate a token refresh grant error when called', function(done) {
-			sandbox.stub(tokenManagerFake, 'getTokensJWTGrant').yields(refreshError);
-			sandbox.stub(callbackQueueFake, 'flush');
-			appAuthSession._refreshAppAuthAccessToken(null, function(err) {
-				assert.strictEqual(err, refreshError);
-				done();
-			});
-		});
-
-		it('should flush the upkeep queue with a token refresh grant error when one occurs', function() {
-			sandbox.stub(tokenManagerFake, 'getTokensJWTGrant').yields(refreshError);
-			sandbox.mock(callbackQueueFake).expects('flush').withExactArgs(refreshError);
-			appAuthSession._refreshAppAuthAccessToken(null);
-		});
-
-
-		it('should propagate an access token when TokenInfo is propagated', function(done) {
-			sandbox.stub(tokenManagerFake, 'getTokensJWTGrant').yields(null, testTokenInfo);
-			sandbox.stub(callbackQueueFake, 'flush');
-			appAuthSession._refreshAppAuthAccessToken(null, function(err, accessToken) {
-				assert.strictEqual(accessToken, testTokenInfo.accessToken);
-				done();
-			});
-		});
-
-		it('should flush the upkeep queue with an access token when TokenInfo is propagated', function() {
-			sandbox.stub(tokenManagerFake, 'getTokensJWTGrant').yields(null, testTokenInfo);
-			sandbox.mock(callbackQueueFake).expects('flush').withExactArgs(null, testTokenInfo.accessToken);
-			appAuthSession._refreshAppAuthAccessToken(null);
-		});
-
-	});
-
-
 	describe('getAccessToken()', function() {
 
-		it('should call _refreshAppAuthAccessToken() with options.ip and the callback when tokens are not set', function(done) {
-			var options = {ip: '127.0.0.1, 192.168.10.10'};
+		var newTokenInfo;
 
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withArgs(options, done).yieldsAsync();
-			appAuthSession.getAccessToken(options, done);
+		beforeEach(function() {
+
+			newTokenInfo = {
+				accessToken: 'newAT',
+				accessTokenTTLMS: 100,
+				acquiredAtMS: 50
+			};
 		});
 
-		it('should call _refreshAppAuthAccessToken() with null options the callback when tokens are not set', function(done) {
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withArgs(null, done).yieldsAsync();
-			appAuthSession.getAccessToken(null, done);
+		it('should resolve to stored access token when access tokens are fresh', function() {
+
+			appAuthSession._tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').never();
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
+
+			return appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, testTokenInfo.accessToken);
+				});
 		});
 
-		it('should call _refreshAppAuthAccessToken() with the callback when tokens are expired', function(done) {
-			appAuthSession.tokenInfo = testTokenInfo;
-			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').withArgs(testTokenInfo, 120000).returns(false); // expired
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').withArgs(null, done).yieldsAsync();
-			appAuthSession.getAccessToken(null, done);
+		it('should request new tokens when current tokens are no longer fresh', function() {
+
+			appAuthSession._tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withArgs(TEST_TYPE, TEST_ID)
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			return appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
 		});
 
-		it('should pass tokens to callback when tokens are not expired', function(done) {
-			sandbox.mock(appAuthSession).expects('_refreshAppAuthAccessToken').never();
-			appAuthSession.tokenInfo = testTokenInfo;
-			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').withArgs(testTokenInfo, 120000).returns(true); // expired
-			appAuthSession.getAccessToken(null, function(err, token) {
+		it('should request new tokens with options when options are passed in', function() {
 
-				assert.ifError(err);
-				assert.equal(token, testTokenInfo.accessToken);
-				done();
-			});
+			var options = {ip: '127.0.0.1'};
+
+			appAuthSession._tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withArgs(TEST_TYPE, TEST_ID, options)
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			return appAuthSession.getAccessToken(options)
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
 		});
 
+		it('should only make a single request for new tokens when called multiple times', function() {
+
+			appAuthSession._tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.once()
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			var promise1 = appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			var promise2 = appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			return Promise.all([promise1, promise2]);
+		});
+
+		it('should allow a new request for tokens once in-progress call completes', function() {
+
+			appAuthSession._tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.twice()
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			var promise1 = appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			var promise2 = appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			return Promise.all([promise1, promise2])
+				.then(() => appAuthSession.getAccessToken());
+		});
+
+		it('should return a promise that rejects when the request for new tokens fails', function() {
+
+			var tokensError = new Error('Oh no!');
+
+			appAuthSession._tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.returns(Promise.reject(tokensError));
+			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
+
+			return appAuthSession.getAccessToken()
+				.catch(err => {
+					assert.equal(err, tokensError);
+				});
+		});
+
+		it('should return promise resolving to new tokens when called after refresh', function() {
+
+
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.once()
+				.returns(Promise.resolve(newTokenInfo));
+			var tokensValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
+			tokensValidStub.withArgs(testTokenInfo).returns(false);
+			tokensValidStub.withArgs(newTokenInfo).returns(true);
+
+			var promise1 = appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			var promise2 = appAuthSession.getAccessToken()
+				.then(token => {
+					assert.equal(token, newTokenInfo.accessToken);
+				});
+
+			return Promise.all([promise1, promise2])
+				.then(() => appAuthSession.getAccessToken())
+				.then(accessToken => {
+					assert.equal(accessToken, newTokenInfo.accessToken);
+				});
+		});
 	});
 
 	describe('revokeTokens()', function() {
 
-		it('should call tokenManager.revokeTokens with null options and its access token when called', function(done) {
-			appAuthSession.tokenInfo = testTokenInfo;
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, null, done).yields();
-			appAuthSession.revokeTokens(null, done);
+		it('should call tokenManager.revokeTokens with null options and its access token when called', function() {
+			appAuthSession._tokenInfo = testTokenInfo;
+			sandbox.mock(tokenManagerFake).expects('revokeTokens')
+				.withExactArgs(testTokenInfo.accessToken, null)
+				.returns(Promise.resolve());
+
+			return appAuthSession.revokeTokens(null);
 		});
 
-		it('should call tokenManager.revokeTokens with options.ip and its access token when called', function(done) {
-			appAuthSession.tokenInfo = testTokenInfo;
+		it('should call tokenManager.revokeTokens with options.ip and its access token when called', function() {
+			appAuthSession._tokenInfo = testTokenInfo;
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(testTokenInfo.accessToken, options, done).yields();
-			appAuthSession.revokeTokens(options, done);
+			sandbox.mock(tokenManagerFake).expects('revokeTokens')
+				.withExactArgs(testTokenInfo.accessToken, options)
+				.returns(Promise.resolve());
+
+			return appAuthSession.revokeTokens(options);
 		});
 	});
 
@@ -209,67 +247,65 @@ describe('AppAuthSession', function() {
 		var TEST_SCOPE = 'item_preview',
 			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
 
-		it('should get access token and exchange for lower scope when called with null options', function(done) {
+		it('should get access token and exchange for lower scope when called with null options', function() {
 
 			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
 
-			sandbox.mock(appAuthSession).expects('getAccessToken').withArgs(null).yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(appAuthSession).expects('getAccessToken')
+				.withArgs(null)
+				.returns(Promise.resolve(testTokenInfo.accessToken));
 			sandbox.mock(tokenManagerFake).expects('exchangeToken')
 				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, null)
-				.yieldsAsync(null, exchangedTokenInfo);
+				.returns(Promise.resolve(exchangedTokenInfo));
 
-			appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, exchangedTokenInfo);
-				done();
-			});
+			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
 		});
 
-		it('should get access token and exchange for lower scope when called with options.ip', function(done) {
+		it('should get access token and exchange for lower scope when called with options.ip', function() {
 
 			var exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 
-			sandbox.mock(appAuthSession).expects('getAccessToken').withArgs(options).yieldsAsync(null, testTokenInfo.accessToken);
+			sandbox.mock(appAuthSession).expects('getAccessToken')
+				.withArgs(options)
+				.returns(Promise.resolve(testTokenInfo.accessToken));
 			sandbox.mock(tokenManagerFake).expects('exchangeToken')
 				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, options)
-				.yieldsAsync(null, exchangedTokenInfo);
+				.returns(Promise.resolve(exchangedTokenInfo));
 
-			appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, exchangedTokenInfo);
-				done();
-			});
+			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options)
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
 		});
 
-		it('should call callback with error when getting the access token fails', function(done) {
+		it('should return promise that rejects when getting the access token fails', function() {
 
 			var error = new Error('Could not get access token');
 
-			sandbox.stub(appAuthSession, 'getAccessToken').yieldsAsync(error);
+			sandbox.stub(appAuthSession, 'getAccessToken').returns(Promise.reject(error));
 
-			appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
+			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
+				.catch(err => {
+					assert.equal(err, error);
+				});
 		});
 
-		it('should call callback with error when the token exchange fails', function(done) {
+		it('should return promise that rejects when the token exchange fails', function() {
 
 			var error = new Error('Could not exchange token');
 
-			sandbox.stub(appAuthSession, 'getAccessToken').yieldsAsync(null, testTokenInfo.accessToken);
-			sandbox.stub(tokenManagerFake, 'exchangeToken').yieldsAsync(error);
+			sandbox.stub(appAuthSession, 'getAccessToken').returns(Promise.resolve(testTokenInfo.accessToken));
+			sandbox.stub(tokenManagerFake, 'exchangeToken').returns(Promise.reject(error));
 
-			appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null, function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
+			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
+				.catch(err => {
+					assert.equal(err, error);
+				});
 		});
 	});
 });
