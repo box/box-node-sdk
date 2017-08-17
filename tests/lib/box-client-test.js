@@ -640,7 +640,7 @@ describe('box-client', function() {
 		});
 	});
 
-	describe('execute()', function() {
+	describe('batchExec()', function() {
 
 		it('should make batch API call with stored parameters when called', function() {
 
@@ -668,7 +668,7 @@ describe('box-client', function() {
 				.withArgs('/batch', sinon.match(expectedBatchParams))
 				.returns(Promise.resolve(response));
 
-			basicClient.execute();
+			basicClient.batchExec();
 		});
 
 		it('should transform the response and pass it to individual call promises when batch call succeeds', function() {
@@ -692,7 +692,7 @@ describe('box-client', function() {
 			};
 			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
 
-			basicClient.execute();
+			basicClient.batchExec();
 
 			return promise.then(data => {
 				assert.propertyVal(data, 'statusCode', 200);
@@ -721,7 +721,7 @@ describe('box-client', function() {
 			};
 			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
 
-			return basicClient.execute().then(data => {
+			return basicClient.batchExec().then(data => {
 				assert.equal(data, response.body);
 			});
 		});
@@ -737,7 +737,7 @@ describe('box-client', function() {
 
 			sandbox.stub(basicClient, 'post').returns(Promise.reject(error));
 
-			var promise2 = basicClient.execute().catch(err => {
+			var promise2 = basicClient.batchExec().catch(err => {
 				assert.equal(err, error);
 			});
 
@@ -765,7 +765,7 @@ describe('box-client', function() {
 			};
 			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
 
-			return basicClient.execute(function(err, data) {
+			return basicClient.batchExec(function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, response.body);
@@ -788,7 +788,7 @@ describe('box-client', function() {
 			sandbox.stub(basicClient, 'post').returns(Promise.reject(error));
 
 			var promise2 = new Promise(function(resolve) {
-				basicClient.execute(function(err) {
+				basicClient.batchExec(function(err) {
 					assert.equal(err, error);
 					resolve();
 				});
@@ -799,7 +799,7 @@ describe('box-client', function() {
 
 		it('should return a promise the rejects when called before a batch is started', function() {
 
-			return basicClient.execute()
+			return basicClient.batchExec()
 				.catch(err => {
 					assert.instanceOf(err, Error);
 				});
@@ -807,7 +807,7 @@ describe('box-client', function() {
 
 		it('should call callback with an error when called before a batch is started', function(done) {
 
-			basicClient.execute(function(err) {
+			basicClient.batchExec(function(err) {
 				assert.instanceOf(err, Error);
 				done();
 			});

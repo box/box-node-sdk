@@ -980,7 +980,7 @@ describe('Box Node SDK', function() {
 				assert.instanceOf(err, Error);
 				assert.propertyVal(err, 'statusCode', 400);
 			});
-		var batchPromise = client.execute()
+		var batchPromise = client.batchExec()
 			.then(results => {
 				assert.deepEqual(results, batchResponse);
 			});
@@ -1085,7 +1085,7 @@ describe('Box Node SDK', function() {
 		});
 		var batchPromise = new Promise(function(resolve) {
 
-			client.execute(function(err, results) {
+			client.batchExec(function(err, results) {
 				assert.ifError(err);
 				assert.deepEqual(results, batchResponse);
 				resolve();

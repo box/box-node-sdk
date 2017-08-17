@@ -159,7 +159,7 @@ client.files.get('1234', null, function(err, file) { // call not made immediatel
     // handle the response for file 1234
 });
 
-client.execute(); // make the batch call
+client.batchExec(); // make the batch call
 ```
 
 __OR__
@@ -170,7 +170,7 @@ client.batch();
 client.folders.get('0') // call not made immediately
 client.files.get('1234') // call not made immediately
 
-client.execute(function(err, results) { // make the batch call
+client.batchExec(function(err, results) { // make the batch call
 
     if (err) {
         // handle error
