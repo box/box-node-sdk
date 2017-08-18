@@ -118,9 +118,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'offset');
 			assert.propertyVal(iterator, 'nextValue', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.offset', 1);
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.offset', 1);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when limit/offset response fits in one page', function() {
@@ -150,9 +150,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'offset');
 			assert.propertyVal(iterator, 'nextValue', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.offset', 1);
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.offset', 1);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when response is marker type', function() {
@@ -181,9 +181,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'marker');
 			assert.propertyVal(iterator, 'nextValue', 'vwxyz');
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.marker', 'vwxyz');
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.marker', 'vwxyz');
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when marker response fits on one page', function() {
@@ -212,9 +212,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'marker');
 			assert.propertyVal(iterator, 'nextValue', null);
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.marker', null);
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.marker', null);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 	});
 

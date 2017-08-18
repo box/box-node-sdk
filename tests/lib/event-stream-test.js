@@ -72,8 +72,8 @@ describe('EventStream', function() {
 
 		it('should use default options when no options are passed', function() {
 
-			assert.deepPropertyVal(eventStream, '_options.fetchInterval', 1000);
-			assert.deepPropertyVal(eventStream, '_options.retryDelay', 1000);
+			assert.nestedPropertyVal(eventStream, '_options.fetchInterval', 1000);
+			assert.nestedPropertyVal(eventStream, '_options.retryDelay', 1000);
 		});
 
 		it('should set options when options are passed', function() {
@@ -83,8 +83,8 @@ describe('EventStream', function() {
 			};
 			var customEventStream = new EventStream(boxClientFake, TEST_STREAM_POSITION, options);
 
-			assert.deepPropertyVal(customEventStream, '_options.fetchInterval', 20000);
-			assert.deepPropertyVal(eventStream, '_options.retryDelay', 1000);
+			assert.nestedPropertyVal(customEventStream, '_options.fetchInterval', 20000);
+			assert.nestedPropertyVal(eventStream, '_options.retryDelay', 1000);
 		});
 
 	});
@@ -464,7 +464,7 @@ describe('EventStream', function() {
 
 			return eventStream.fetchEvents()
 				.then(() => {
-					assert.deepPropertyVal(eventStream, '_dedupHash.' + eventID, true);
+					assert.nestedPropertyVal(eventStream, '_dedupHash.' + eventID, true);
 				});
 		});
 
@@ -513,8 +513,8 @@ describe('EventStream', function() {
 
 			eventStream.cleanupDedupFilter(latestEvents);
 
-			assert.notDeepProperty(eventStream, '_dedupHash.123');
-			assert.deepPropertyVal(eventStream, '_dedupHash.456', true);
+			assert.notNestedProperty(eventStream, '_dedupHash.123');
+			assert.nestedPropertyVal(eventStream, '_dedupHash.456', true);
 		});
 	});
 

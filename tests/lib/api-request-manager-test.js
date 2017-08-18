@@ -88,7 +88,7 @@ describe('APIRequestManager', function() {
 				numMaxRetries: 17
 			});
 			var requestManager = new APIRequestManager(config, eventBusFake);
-			assert.deepPropertyVal(requestManager, 'config.numMaxRetries', 17);
+			assert.nestedPropertyVal(requestManager, 'config.numMaxRetries', 17);
 		});
 
 		it('should set event bus when called', function() {
