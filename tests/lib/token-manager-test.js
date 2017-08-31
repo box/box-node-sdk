@@ -383,7 +383,7 @@ describe('token-manager', function() {
 				subject: TEST_ID,
 				issuer: config.clientID,
 				noTimestamp: false,
-				headers: {
+				header: {
 					kid: TEST_KEY_ID
 				}
 			};
