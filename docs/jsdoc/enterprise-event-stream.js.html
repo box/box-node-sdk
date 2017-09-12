@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: enterprise-event-stream.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: enterprise-event-stream.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Enterprise event stream backed by the enterprise events API
+ */
+
+'use strict';
+
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+
+const Readable = require('stream').Readable,
+	util = require('util');
+
+// ------------------------------------------------------------------------------
+// Private
+// ------------------------------------------------------------------------------
+
+const DEFAULT_OPTIONS = Object.freeze({
+	pollingInterval: 60,	// seconds
+	chunkSize: 500
+
+});// ------------------------------------------------------------------------------
+// Public
+// ------------------------------------------------------------------------------
+
+/**
+ * Stream of Box enterprise events.
+ *
+ * By default, the stream starts from the current time.
+ * Pass 'startDate' to start from a specific time.
+ * Pass 'streamPosition' to start from a previous stream position, or '0' for all available past events (~1 year).
+ * Once the stream catches up to the current time, it will begin polling every 'pollingInterval' seconds.
+ * If 'pollingInterval' = 0, then the stream will end when it catches up to the current time (no polling).
+ *
+ * @param {BoxClient} client - The client to use to get events
+ * @param {Object} [options] - Options
+ * @param {string} [options.streamPosition] - The stream position to start from (pass '0' for all past events)
+ * @param {string} [options.startDate] - The date to start from
+ * @param {string} [options.endDate] - The date to end at
+ * @param {EventType[]} [options.eventTypeFilter] - Array of event types to return
+ * @param {int} [options.pollingInterval=60] - Polling interval (in seconds).  Pass 0 for no polling.
+ * @param {int} [options.chunkSize=500] - Number of events to fetch per call (max = 500)
+ * @constructor
+ * @extends Readable
+ */
+function EnterpriseEventStream(client, options) {
+
+	Readable.call(this, {
+		objectMode: true
+	});
+
+	/**
+	 * @var {BoxClient} - The client for making API calls
+	 * @private
+	 */
+	this._client = client;
+
+	/**
+	 * @var {Object} - Options
+	 * @private
+	 */
+	this._options = Object.assign({}, DEFAULT_OPTIONS, options);
+
+	// Handle the case where the caller passes streamPosition = 0 instead of streamPosition = '0'.
+	if (!this._options.startDate &amp;&amp; !this._options.streamPosition &amp;&amp; this._options.streamPosition !== 0) {
+		// If neither startDate nor streamPosition is specified, start from the current time.
+		this._options.startDate = new Date().toISOString().replace(/\.000Z$/, '-00:00');
+	}
+
+	/**
+	 * @var {?string} - The current stream position
+	 * @private
+	 */
+	this._streamPosition = this._options.streamPosition;
+}
+
+util.inherits(EnterpriseEventStream, Readable);
+
+/**
+ * @returns {?string} - Returns null if no events have been fetched from Box yet.
+ */
+EnterpriseEventStream.prototype.getStreamPosition = function() {
+	return this._streamPosition;
+};
+
+/**
+ * Get the stream state.
+ *
+ * @returns {Object} - The stream state
+ */
+EnterpriseEventStream.prototype.getStreamState = function() {
+	// We need to return both streamPosition and startDate, since streamPosition will be null until
+	// the first set of events is returned from Box.
+	return {
+		streamPosition: this._streamPosition,
+		startDate: this._options.startDate,
+		endDate: this._options.endDate,
+		eventTypeFilter: this._options.eventTypeFilter
+	};
+};
+
+/**
+ * Set the stream state.
+ *
+ * @param {Object} state - The stream state
+ * @returns {void}
+ */
+EnterpriseEventStream.prototype.setStreamState = function(state) {
+	// We need to set both streamPosition and startDate, since streamPosition will be null until
+	// the first set of events is returned from Box.
+	this._streamPosition = state.streamPosition;
+	this._options.startDate = state.startDate;
+	this._options.endDate = state.endDate;
+	this._options.eventTypeFilter = state.eventTypeFilter;
+};
+
+/**
+ * Fetch the next chunk of events
+ *
+ * If there are no events, poll until events are available.
+ * If an error occurs, emit the error but continuing polling as usual.
+ * @param {Function} callback - Passed the array of events
+ * @returns {void}
+ * @private
+ */
+EnterpriseEventStream.prototype.fetchEvents = function(callback) {
+	const self = this,
+		params = {
+			stream_type: 'admin_logs'
+		};
+
+	// Use the current stream position.
+	// Handle the case where the caller passes streamPosition === 0 instead of streamPosition === '0'.
+	if (this._streamPosition || this._streamPosition === 0) {
+		params.stream_position = this._streamPosition;
+	}
+
+	if (this._options.startDate) {
+		params.created_after = this._options.startDate;
+	}
+
+	if (this._options.endDate) {
+		params.created_before = this._options.endDate;
+	}
+
+	if (this._options.eventTypeFilter) {
+		params.event_type = this._options.eventTypeFilter.join(',');
+	}
+
+	if (this._options.chunkSize) {
+		params.limit = this._options.chunkSize;
+	}
+
+	this._client.events.get(params, function(err, result) {
+		if (err) {
+			self.emit('error', err);
+			// If there was a "permanent" error, we would call the callback with it here.
+			// But it's not clear which errors are truly permanent?
+			// If Box is down or returning errors for an extended period, we still want to resume when it recovers.
+			// So, continue polling at the regular frequency.
+			// Don't use a shorter retry interval (to avoid DDOSing Box).
+		}
+
+		if (err || !result || !result.entries || result.entries.length === 0) {
+			if (!self._options.pollingInterval) {
+				// If polling is disabled, end the stream.
+				callback();
+				return;
+			}
+
+			// There were no events returned (or an error occurred), so schedule another poll.
+			const delay = self._options.pollingInterval * 1000;
+
+			// Stream readers can use this to flush buffered events to a downstream system.
+			self.emit('wait', delay);
+
+			setTimeout(function() {
+				self.fetchEvents(callback);
+			}, delay);
+			return;
+		}
+
+		// Only update the stream position if there were events returned.
+		// The API currently returns next_stream_position = 0 if there are no events (may be a bug?).
+		// But we don't want to start over at the beginning in that case, so ignore it.
+		self._streamPosition = result.next_stream_position;
+
+		// Notify the reader of the new stream position.
+		// Stream readers can respond to the 'newStreamState' event to persist the stream state.
+		self.emit('newStreamState', self.getStreamState());
+
+		callback(null, result.entries);
+	});
+};
+
+/**
+ * Implementation of the stream-internal read function.	This is called
+ * by the stream whenever it needs more data, and will not be called again
+ * until data is pushed into the stream.
+ * @returns {void}
+ * @private
+ */
+EnterpriseEventStream.prototype._read = function() {
+	// Fetch the next chunk of events.
+	const self = this;
+
+	// This will poll forever until events are available.
+	this.fetchEvents(function(err, events) {
+		if (err || !events || events.length === 0) {
+			// Close the stream if there was a "permanent" failure or we reached the end of the events.
+			self.push(null);
+			return;
+		}
+
+		// Pause the stream to avoid race conditions while pushing in the new events.
+		// Without this, _read() would be called again from inside each push(),
+		// resulting in multiple parallel calls to fetchEvents().
+		// See https://github.com/nodejs/node/issues/3203
+		const wasPaused = self.isPaused();
+		self.pause();
+
+		// Push all of the events into the stream.
+		events.forEach(function(event) {
+			self.push(event);
+		});
+
+		if (!wasPaused) {
+			// This will deliver the events and trigger the next call to _read() once they have been consumed.
+			self.resume();
+		}
+	});
+};
+
+module.exports = EnterpriseEventStream;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Aug 21 2017 17:33:14 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

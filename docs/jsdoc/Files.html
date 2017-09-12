@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>Files</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Files<span class="signature">(client)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -40,7 +40,9 @@
 
     
 
+    
     <h4 class="name" id="Files"><span class="type-signature"></span>new Files<span class="signature">(client)</span><span class="type-signature"></span></h4>
+    
 
     
 
@@ -140,7 +142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line78">line 78</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line92">line 92</a>
     </li></ul></dd>
     
 
@@ -166,6 +168,8 @@
 
 
 
+
+
     
     </div>
 
@@ -175,7 +179,9 @@
 
     
 
-     
+    
+
+    
 
     
 
@@ -189,7 +195,212 @@
 
     
 
-    <h4 class="name" id="addMetadata"><span class="type-signature"></span>addMetadata<span class="signature">(fileID, scope, template, data, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="abortUploadSession"><span class="type-signature"></span>abortUploadSession<span class="signature">(sessionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Abort an upload session, discarding any chunks that were uploaded to it
+
+API Endpoint: '/files/upload_sessions/:sessionID'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sessionID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the upload session to commit</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed nothing if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1128">line 1128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addMetadata"><span class="type-signature"></span>addMetadata<span class="signature">(fileID, scope, template, data, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -224,6 +435,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -249,6 +462,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -271,6 +492,14 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -295,6 +524,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -318,6 +555,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -340,6 +585,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -385,7 +640,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line614">line 614</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line598">line 598</a>
     </li></ul></dd>
     
 
@@ -411,6 +666,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the new metadata
+</div>
+
 
 
 <dl>
@@ -419,7 +678,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -429,12 +688,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="addToCollection"><span class="type-signature"></span>addToCollection<span class="signature">(fileID, collectionID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="addToCollection"><span class="type-signature"></span>addToCollection<span class="signature">(fileID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -468,6 +731,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -493,6 +758,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -516,6 +789,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -538,6 +819,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -583,7 +874,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line299">line 299</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line289">line 289</a>
     </li></ul></dd>
     
 
@@ -609,6 +900,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated file object
+</div>
+
 
 
 <dl>
@@ -617,7 +912,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -627,12 +922,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="applyWatermark"><span class="type-signature"></span>applyWatermark<span class="signature">(fileID, options, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="applyWatermark"><span class="type-signature"></span>applyWatermark<span class="signature">(fileID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -666,6 +965,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -691,6 +992,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -707,12 +1016,22 @@ Method: PUT
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -736,6 +1055,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -781,7 +1110,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line919">line 919</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line895">line 895</a>
     </li></ul></dd>
     
 
@@ -807,6 +1136,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the watermark info
+</div>
+
 
 
 <dl>
@@ -815,7 +1148,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -825,12 +1158,344 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(fileID, newParentID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="commitUploadSession"><span class="type-signature"></span>commitUploadSession<span class="signature">(sessionID, fileHash, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Commit an upload session after all parts have been uploaded, creating the new file
+
+API Endpoint: '/files/upload_sessions/:sessionID/commit'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sessionID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the upload session to commit</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The base64-encoded SHA-1 hash of the file being uploaded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters set on the created file, can be left null
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>parts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#UploadPart">UploadPart</a>></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The list of uploaded parts to be committed, will be fetched from the API otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the new file information if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1050">line 1050</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the uploaded file object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(fileID, newParentID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -955,9 +1620,9 @@ Method: POST
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -1049,6 +1714,8 @@ Method: POST
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -1099,7 +1766,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line386">line 386</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line370">line 370</a>
     </li></ul></dd>
     
 
@@ -1125,6 +1792,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the new file object
+</div>
+
 
 
 <dl>
@@ -1133,7 +1804,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1143,12 +1814,519 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(fileID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="createNewVersionUploadSession"><span class="type-signature"></span>createNewVersionUploadSession<span class="signature">(fileID, size, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates a session used to upload a new version of a file in chunks.  This
+will first verify that the version can be created and then open a session for
+uploading pieces of the file.
+
+API Endpoint: '/files/:fileID/upload_sessions'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the file to upload a new version of</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>size</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The size of the file that will be uploaded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the upload session info if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line987">line 987</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the new upload session object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createUploadSession"><span class="type-signature"></span>createUploadSession<span class="signature">(folderID, size, name, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates a session used to upload a new file in chunks..  This will first
+verify that the file can be created and then open a session for uploading
+pieces of the file.
+
+API Endpoint: '/files/upload_sessions'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folderID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the folder to upload the file to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>size</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The size of the file that will be uploaded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The name of the file to be created</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the upload session info if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line960">line 960</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the new upload session object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -1182,6 +2360,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1207,6 +2387,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1229,6 +2417,16 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1274,7 +2472,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line418">line 418</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line402">line 402</a>
     </li></ul></dd>
     
 
@@ -1300,6 +2498,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -1308,7 +2510,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1318,12 +2520,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="deleteMetadata"><span class="type-signature"></span>deleteMetadata<span class="signature">(fileID, scope, template, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="deleteMetadata"><span class="type-signature"></span>deleteMetadata<span class="signature">(fileID, scope, template, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -1357,6 +2563,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1382,6 +2590,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1404,6 +2620,14 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1428,6 +2652,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1450,6 +2682,219 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called with nothing if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line646">line 646</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Permanently deletes an item that is in the trash. The item will no longer exist in Box. This action cannot be undone.
+
+API Endpoint: '/files/:fileID/trash'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the file to remove metadata from</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1521,190 +2966,19 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(fileID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Permanently deletes an item that is in the trash. The item will no longer exist in Box. This action cannot be undone.
-
-API Endpoint: '/files/:fileID/trash'
-Method: DELETE
+<div class="param-desc">
+    A promise resolving to nothing
 </div>
 
 
 
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The ID of the file to remove metadata from</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Called with nothing if successful, error otherwise</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line678">line 678</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
 <dl>
     <dt>
         Type
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1714,12 +2988,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="deleteVersion"><span class="type-signature"></span>deleteVersion<span class="signature">(fileID, versionID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="deleteVersion"><span class="type-signature"></span>deleteVersion<span class="signature">(fileID, versionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -1754,6 +3032,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1779,6 +3059,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1802,6 +3090,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1824,6 +3120,16 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1869,7 +3175,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line963">line 963</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line939">line 939</a>
     </li></ul></dd>
     
 
@@ -1895,6 +3201,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -1903,7 +3213,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1913,12 +3223,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2012,9 +3326,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -2044,6 +3358,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -2095,7 +3411,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line94">line 94</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -2121,6 +3437,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the file object
+</div>
+
 
 
 <dl>
@@ -2129,7 +3449,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2139,12 +3459,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getAllMetadata"><span class="type-signature"></span>getAllMetadata<span class="signature">(fileID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getAllMetadata"><span class="type-signature"></span>getAllMetadata<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2178,6 +3502,8 @@ Method: GET
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2203,6 +3529,14 @@ Method: GET
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -2225,6 +3559,16 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -2270,7 +3614,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line576">line 576</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line560">line 560</a>
     </li></ul></dd>
     
 
@@ -2296,6 +3640,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to a collection of metadata on the file
+</div>
+
 
 
 <dl>
@@ -2304,7 +3652,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2314,12 +3662,809 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getComments"><span class="type-signature"></span>getComments<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getChunkedUploader"><span class="type-signature"></span>getChunkedUploader<span class="signature">(folderID, size, name, file, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="ChunkedUploader.html">ChunkedUploader</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Upload a file in chunks, which is generally faster and more reliable for
+large files.
+
+API Endpoint: '/files/upload_sessions'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folderID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the folder to upload the file to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>size</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The size of the file that will be uploaded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The name of the file to be created</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Buffer</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Readable</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The file to upload</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters for the upload
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>parallelism</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The number of chunks to upload concurrently</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retryInterval</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The amount of time to wait before retrying a failed chunk upload, in ms</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the uploader if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1193">line 1193</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the chunked uploader
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="ChunkedUploader.html">ChunkedUploader</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getCollaborations"><span class="type-signature"></span>getCollaborations<span class="signature">(fileID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Requests collaborations on a given file.
+
+API Endpoint: '/files/:fileID/collaborations'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Box ID of the file being requested</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Additional options. Can be left null in most cases.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The maximum number of collaborations to return</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Paging parameter for the collaborations collection</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Comma-separated list of fields to return on the collaboration objects</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the collaborations if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1237">line 1237</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the collection of collaborations on the file
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getComments"><span class="type-signature"></span>getComments<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2413,9 +4558,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -2445,6 +4590,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -2496,7 +4643,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line259">line 259</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line249">line 249</a>
     </li></ul></dd>
     
 
@@ -2522,6 +4669,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the collection of comments
+</div>
+
 
 
 <dl>
@@ -2530,7 +4681,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2540,12 +4691,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getDownloadURL"><span class="type-signature"></span>getDownloadURL<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getDownloadURL"><span class="type-signature"></span>getDownloadURL<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    
 
     
 
@@ -2642,9 +4797,9 @@ Special Expected Responses:
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -2674,6 +4829,8 @@ Special Expected Responses:
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -2725,7 +4882,7 @@ Special Expected Responses:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line116">line 116</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -2751,6 +4908,10 @@ Special Expected Responses:
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the file's download URL
+</div>
+
 
 
 <dl>
@@ -2759,7 +4920,7 @@ Special Expected Responses:
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;string></span>
 
 
     </dd>
@@ -2769,12 +4930,16 @@ Special Expected Responses:
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getEmbedLink"><span class="type-signature"></span>getEmbedLink<span class="signature">(fileID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getEmbedLink"><span class="type-signature"></span>getEmbedLink<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    
 
     
 
@@ -2809,6 +4974,8 @@ Method: GET
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2834,6 +5001,14 @@ Method: GET
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -2856,6 +5031,16 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -2901,7 +5086,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line737">line 737</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line721">line 721</a>
     </li></ul></dd>
     
 
@@ -2927,6 +5112,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the file embed link URL
+</div>
+
 
 
 <dl>
@@ -2935,7 +5124,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;string></span>
 
 
     </dd>
@@ -2945,12 +5134,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getMetadata"><span class="type-signature"></span>getMetadata<span class="signature">(fileID, scope, template, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getMetadata"><span class="type-signature"></span>getMetadata<span class="signature">(fileID, scope, template, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2984,6 +5177,8 @@ Method: GET
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -3009,6 +5204,14 @@ Method: GET
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -3031,6 +5234,14 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -3055,6 +5266,14 @@ Method: GET
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -3077,6 +5296,16 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -3122,7 +5351,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line594">line 594</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line578">line 578</a>
     </li></ul></dd>
     
 
@@ -3148,6 +5377,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the metadata template
+</div>
+
 
 
 <dl>
@@ -3156,7 +5389,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3166,12 +5399,415 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getReadStream"><span class="type-signature"></span>getReadStream<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getNewVersionChunkedUploader"><span class="type-signature"></span>getNewVersionChunkedUploader<span class="signature">(fileID, size, file, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="ChunkedUploader.html">ChunkedUploader</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Upload a new file version in chunks, which is generally faster and more
+reliable for large files.
+
+API Endpoint: '/files/:fileID/upload_sessions'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the file to upload a new version of</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>size</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The size of the file that will be uploaded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Buffer</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Readable</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The file to upload</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters for the upload
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>parallelism</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The number of chunks to upload concurrently</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retryInterval</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The amount of time to wait before retrying a failed chunk upload, in ms</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the uploader if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1216">line 1216</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the chunked uploader
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="ChunkedUploader.html">ChunkedUploader</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getReadStream"><span class="type-signature"></span>getReadStream<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Readable>}</span></h4>
+    
 
     
 
@@ -3268,9 +5904,9 @@ Special Expected Responses:
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -3300,6 +5936,8 @@ Special Expected Responses:
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -3351,7 +5989,7 @@ Special Expected Responses:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line169">line 169</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -3377,6 +6015,10 @@ Special Expected Responses:
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving for the file stream
+</div>
+
 
 
 <dl>
@@ -3385,7 +6027,7 @@ Special Expected Responses:
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Readable></span>
 
 
     </dd>
@@ -3395,12 +6037,16 @@ Special Expected Responses:
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getTasks"><span class="type-signature"></span>getTasks<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getTasks"><span class="type-signature"></span>getTasks<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -3494,9 +6140,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -3526,6 +6172,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -3577,7 +6225,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line716">line 716</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line700">line 700</a>
     </li></ul></dd>
     
 
@@ -3603,6 +6251,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to a collections of tasks on the file
+</div>
+
 
 
 <dl>
@@ -3611,7 +6263,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3621,12 +6273,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getThumbnail"><span class="type-signature"></span>getThumbnail<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getThumbnail"><span class="type-signature"></span>getThumbnail<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -3724,9 +6380,9 @@ Special Expected Responses:
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -3756,6 +6412,8 @@ Special Expected Responses:
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -3807,7 +6465,7 @@ Special Expected Responses:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line199">line 199</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -3833,6 +6491,10 @@ Special Expected Responses:
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the thumbnail information
+</div>
+
 
 
 <dl>
@@ -3841,7 +6503,7 @@ Special Expected Responses:
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3851,12 +6513,786 @@ Special Expected Responses:
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getVersions"><span class="type-signature"></span>getVersions<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getTrashedFile"><span class="type-signature"></span>getTrashedFile<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Retrieves a file that has been moved to the trash.
+
+API Endpoint: '/files/:fileID/trash'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the file being requested</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>qs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Additional options can be passed with the request via querystring. Can be left null in most cases.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the trashed file information if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line679">line 679</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the trashed file
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getUploadSession"><span class="type-signature"></span>getUploadSession<span class="signature">(sessionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the status of an upload session, e.g. whether or not is has started or
+finished committing
+
+API Endpoint: '/files/upload_sessions/:sessionID'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sessionID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the upload session to get the status of</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the session status if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1169">line 1169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the upload session object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getUploadSessionParts"><span class="type-signature"></span>getUploadSessionParts<span class="signature">(sessionID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get a list of all parts that have been uploaded to an upload session
+
+API Endpoint: '/files/upload_sessions/:sessionID/parts'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sessionID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the session to get a list of parts from</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters, can be left null
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Paging offset for the list of parts</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum number of parts to return</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the list of parts if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1148">line 1148</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the collection of uploaded parts
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getVersions"><span class="type-signature"></span>getVersions<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -3951,9 +7387,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -3983,6 +7419,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -4034,7 +7472,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line864">line 864</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line844">line 844</a>
     </li></ul></dd>
     
 
@@ -4060,6 +7498,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the collection of file versions
+</div>
+
 
 
 <dl>
@@ -4068,7 +7510,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -4078,12 +7520,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getWatermark"><span class="type-signature"></span>getWatermark<span class="signature">(fileID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getWatermark"><span class="type-signature"></span>getWatermark<span class="signature">(fileID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -4177,9 +7623,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -4209,6 +7655,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -4260,7 +7708,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line885">line 885</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line865">line 865</a>
     </li></ul></dd>
     
 
@@ -4286,6 +7734,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the watermark info
+</div>
+
 
 
 <dl>
@@ -4294,7 +7746,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -4304,12 +7756,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="lock"><span class="type-signature"></span>lock<span class="signature">(fileID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="lock"><span class="type-signature"></span>lock<span class="signature">(fileID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -4403,9 +7859,9 @@ Method: PUT
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -4532,6 +7988,8 @@ Method: PUT
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -4582,7 +8040,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line775">line 775</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line755">line 755</a>
     </li></ul></dd>
     
 
@@ -4608,6 +8066,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the locked file object
+</div>
+
 
 
 <dl>
@@ -4616,7 +8078,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -4626,12 +8088,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="move"><span class="type-signature"></span>move<span class="signature">(fileID, newParentID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="move"><span class="type-signature"></span>move<span class="signature">(fileID, newParentID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -4665,6 +8131,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -4690,6 +8158,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -4713,6 +8189,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -4735,6 +8219,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -4780,7 +8274,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line361">line 361</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line345">line 345</a>
     </li></ul></dd>
     
 
@@ -4806,6 +8300,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated file object
+</div>
+
 
 
 <dl>
@@ -4814,7 +8312,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -4824,12 +8322,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="preflightUploadFile"><span class="type-signature"></span>preflightUploadFile<span class="signature">(parentFolderID, fileData<span class="signature-attributes">nullable</span>, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="preflightUploadFile"><span class="type-signature"></span>preflightUploadFile<span class="signature">(parentFolderID, fileData<span class="signature-attributes">opt</span>, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -4930,9 +8432,9 @@ Method: OPTIONS
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -4963,9 +8465,9 @@ Method: OPTIONS
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -4995,6 +8497,8 @@ Method: OPTIONS
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -5046,7 +8550,7 @@ Method: OPTIONS
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line443">line 443</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line427">line 427</a>
     </li></ul></dd>
     
 
@@ -5072,6 +8576,10 @@ Method: OPTIONS
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the upload data
+</div>
+
 
 
 <dl>
@@ -5080,7 +8588,7 @@ Method: OPTIONS
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -5090,12 +8598,16 @@ Method: OPTIONS
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="preflightUploadNewFileVersion"><span class="type-signature"></span>preflightUploadNewFileVersion<span class="signature">(fileID, fileData<span class="signature-attributes">nullable</span>, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="preflightUploadNewFileVersion"><span class="type-signature"></span>preflightUploadNewFileVersion<span class="signature">(fileID, fileData<span class="signature-attributes">opt</span>, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -5196,9 +8708,9 @@ Method: OPTIONS
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -5229,9 +8741,9 @@ Method: OPTIONS
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -5261,6 +8773,8 @@ Method: OPTIONS
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -5312,7 +8826,7 @@ Method: OPTIONS
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line479">line 479</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line463">line 463</a>
     </li></ul></dd>
     
 
@@ -5338,6 +8852,10 @@ Method: OPTIONS
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the upload data
+</div>
+
 
 
 <dl>
@@ -5346,7 +8864,7 @@ Method: OPTIONS
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -5356,12 +8874,16 @@ Method: OPTIONS
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="promoteVersion"><span class="type-signature"></span>promoteVersion<span class="signature">(fileID, versionID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="promoteVersion"><span class="type-signature"></span>promoteVersion<span class="signature">(fileID, versionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -5398,6 +8920,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -5423,6 +8947,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -5446,6 +8978,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -5468,6 +9008,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -5513,7 +9063,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line506">line 506</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line490">line 490</a>
     </li></ul></dd>
     
 
@@ -5539,6 +9089,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the promoted file version
+</div>
+
 
 
 <dl>
@@ -5547,7 +9101,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -5557,12 +9111,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="removeFromCollection"><span class="type-signature"></span>removeFromCollection<span class="signature">(fileID, collectionID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="removeFromCollection"><span class="type-signature"></span>removeFromCollection<span class="signature">(fileID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -5596,6 +9154,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -5621,6 +9181,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -5644,6 +9212,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -5666,6 +9242,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -5711,7 +9297,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line333">line 333</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line320">line 320</a>
     </li></ul></dd>
     
 
@@ -5737,6 +9323,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated file object
+</div>
+
 
 
 <dl>
@@ -5745,7 +9335,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -5755,12 +9345,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="removeWatermark"><span class="type-signature"></span>removeWatermark<span class="signature">(fileID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="removeWatermark"><span class="type-signature"></span>removeWatermark<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -5794,6 +9388,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -5819,6 +9415,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -5841,6 +9445,16 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -5886,7 +9500,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line944">line 944</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line920">line 920</a>
     </li></ul></dd>
     
 
@@ -5912,6 +9526,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -5920,7 +9538,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -5930,12 +9548,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="restoreFromTrash"><span class="type-signature"></span>restoreFromTrash<span class="signature">(fileID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="restoreFromTrash"><span class="type-signature"></span>restoreFromTrash<span class="signature">(fileID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -6033,9 +9655,9 @@ Method: POST
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -6160,6 +9782,8 @@ Method: POST
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -6210,7 +9834,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line832">line 832</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line812">line 812</a>
     </li></ul></dd>
     
 
@@ -6236,6 +9860,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the restored file object
+</div>
+
 
 
 <dl>
@@ -6244,7 +9872,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -6254,12 +9882,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="unlock"><span class="type-signature"></span>unlock<span class="signature">(fileID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="unlock"><span class="type-signature"></span>unlock<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -6293,6 +9925,8 @@ API Endpoint: '/files/:fileID'
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -6318,6 +9952,14 @@ API Endpoint: '/files/:fileID'
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -6340,6 +9982,16 @@ API Endpoint: '/files/:fileID'
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -6385,7 +10037,7 @@ API Endpoint: '/files/:fileID'
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line801">line 801</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line781">line 781</a>
     </li></ul></dd>
     
 
@@ -6411,6 +10063,10 @@ API Endpoint: '/files/:fileID'
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the unlocked file object
+</div>
+
 
 
 <dl>
@@ -6419,7 +10075,7 @@ API Endpoint: '/files/:fileID'
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -6429,12 +10085,16 @@ API Endpoint: '/files/:fileID'
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(fileID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(fileID, options, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -6530,8 +10190,6 @@ Method: PUT
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
@@ -6560,6 +10218,8 @@ Method: PUT
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -6611,7 +10271,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line279">line 279</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line269">line 269</a>
     </li></ul></dd>
     
 
@@ -6637,6 +10297,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the update file object
+</div>
+
 
 
 <dl>
@@ -6645,7 +10309,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -6655,12 +10319,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="updateMetadata"><span class="type-signature"></span>updateMetadata<span class="signature">(fileID, scope, template, patch, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="updateMetadata"><span class="type-signature"></span>updateMetadata<span class="signature">(fileID, scope, template, patch, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -6694,6 +10362,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -6719,6 +10389,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -6741,6 +10419,14 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -6765,6 +10451,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -6788,6 +10482,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -6810,6 +10512,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -6855,7 +10567,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line637">line 637</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line621">line 621</a>
     </li></ul></dd>
     
 
@@ -6881,6 +10593,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated metadata
+</div>
+
 
 
 <dl>
@@ -6889,7 +10605,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -6899,12 +10615,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="uploadFile"><span class="type-signature"></span>uploadFile<span class="signature">(parentFolderID, filename, content, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="uploadFile"><span class="type-signature"></span>uploadFile<span class="signature">(parentFolderID, filename, content, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -6939,6 +10659,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -6964,6 +10686,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -6987,6 +10717,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -7009,12 +10747,20 @@ Method: POST
 <span class="param-type">Buffer</span>
 |
 
-<span class="param-type">Stream</span>
+<span class="param-type">ReadStream</span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -7039,6 +10785,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -7085,7 +10841,7 @@ upload failed</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line533">line 533</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line517">line 517</a>
     </li></ul></dd>
     
 
@@ -7111,6 +10867,10 @@ upload failed</td>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the uploaded file
+</div>
+
 
 
 <dl>
@@ -7119,7 +10879,7 @@ upload failed</td>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -7129,12 +10889,16 @@ upload failed</td>
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="uploadNewFileVersion"><span class="type-signature"></span>uploadNewFileVersion<span class="signature">(fileID, content, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="uploadNewFileVersion"><span class="type-signature"></span>uploadNewFileVersion<span class="signature">(fileID, content, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -7169,6 +10933,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -7193,6 +10959,14 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -7223,6 +10997,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -7246,6 +11028,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -7292,7 +11084,7 @@ upload failed</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line557">line 557</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line541">line 541</a>
     </li></ul></dd>
     
 
@@ -7318,6 +11110,10 @@ upload failed</td>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the uploaded file
+</div>
+
 
 
 <dl>
@@ -7326,13 +11122,314 @@ upload failed</td>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="uploadPart"><span class="type-signature"></span>uploadPart<span class="signature">(sessionID, part, offset, totalSize, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Uploads a chunk of a file to an open upload session
+
+API Endpoint: '/files/upload_sessions/:sessionID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sessionID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the upload session to upload to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>part</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Buffer</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The chunk of the file to upload</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The byte position where the chunk begins in the file</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The total size of the file being uploaded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the part definition if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1012">line 1012</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the part object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 
@@ -7352,13 +11449,13 @@ upload failed</td>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:26 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Aug 21 2017 17:33:15 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

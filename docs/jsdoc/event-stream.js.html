@@ -38,96 +38,121 @@
 
 var Readable = require('stream').Readable,
 	qs = require('querystring'),
-	util = require('util');
+	util = require('util'),
+	Promise = require('bluebird');
 
 // ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
 
-/** @const {int} The number of ms to wait before retrying after an error */
-var RETRY_DELAY = 1000;
-
-/** @const {int} Max number of IDs to track for deduplication before cleaning */
-var MAX_DEDUP_SIZE = 5000;
+const DEFAULT_OPTIONS = Object.freeze({
+	deduplicationFilterSize: 5000,
+	retryDelay: 1000,
+	fetchInterval: 1000
+});
 
 // ------------------------------------------------------------------------------
 // Public
 // ------------------------------------------------------------------------------
 
 /**
- * Stream of Box events from a given client and point in time
+ * Stream of Box events from a given client and point in time.
  * @param {BoxClient} client The client to use to get events
  * @param {string} streamPosition The point in time to start at
+ * @param {Object} [options] Optional parameters
+ * @param {int} [options.retryDelay=1000] Number of ms to wait before retrying after an error
+ * @param {int} [options.deduplicationFilterSize=5000] Number of IDs to track for deduplication
+ * @param {int} [options.fetchInterval=1000] Minimunm number of ms between calls for more events
  * @constructor
+ * @extends Readable
  */
-function EventStream(client, streamPosition) {
+function EventStream(client, streamPosition, options) {
 
 	Readable.call(this, {
 		objectMode: true
 	});
 
-	/** @var {BoxClient} The client for making API calls */
+	/**
+	 * @var {BoxClient} The client for making API calls
+	 * @private
+	 */
 	this._client = client;
 
-	/** @var {string} The latest stream position */
+	/**
+	 * @var {string} The latest stream position
+	 * @private
+	 */
 	this._streamPosition = streamPosition;
 
-	/** @var {?Object} The information for how to long poll */
+	/**
+	 * @var {?Object} The information for how to long poll
+	 * @private
+	 */
 	this._longPollInfo = null;
 
-	/** @var {int} The number of long poll requests we've made against one URL so far */
+	/**
+	 * @var {int} The number of long poll requests we've made against one URL so far
+	 * @private
+	 */
 	this._longPollRetries = 0;
 
-	/** @var {Object.&lt;string, boolean>} Hash of event IDs we've already pushed */
+	/**
+	 * @var {Object.&lt;string, boolean>} Hash of event IDs we've already pushed
+	 * @private
+	 */
 	this._dedupHash = {};
+
+	/**
+	 * Rate limiting promise to ensure that events are not fetched too often,
+	 * initially resolved to allow an immediate API call.
+	 * @var {Promise}
+	 * @private
+	 */
+	this._rateLimiter = Promise.resolve();
+
+	this._options = Object.assign({}, DEFAULT_OPTIONS, options);
 }
 
 util.inherits(EventStream, Readable);
 
 /**
  * Retrieve the url and params for long polling for new updates
- * @returns {void}
+ * @returns {Promise} Promise for testing purposes
+ * @private
  */
 EventStream.prototype.getLongPollInfo = function() {
 
-	var self = this;
-	this._client.events.getLongPollInfo(function(err, longPollInfo) {
+	return this._client.events.getLongPollInfo()
+		.then(longPollInfo => {
 
-		if (err) {
-			self.emit('error', err);
+			// On getting new long poll info, reset everything
+			this._longPollInfo = longPollInfo;
+			this._longPollRetries = 0;
+
+			this.doLongPoll();
+		})
+		.catch(err => {
+			this.emit('error', err);
 
 			// Only retry on resolvable errors
 			if (!err.authExpired) {
-				setTimeout(function() {
-					self.getLongPollInfo();
-				}, RETRY_DELAY);
+				setTimeout(() => this.getLongPollInfo(), this._options.retryDelay);
 			}
-
-			return;
-		}
-
-		// On getting new long poll info, reset everything
-		self._longPollInfo = longPollInfo;
-		self._longPollRetries = 0;
-
-		self.doLongPoll();
-	});
+		});
 };
 
 /**
  * Long poll for notification of new events.	We do this rather than
  * polling for the events directly in order to minimize the number of API
  * calls necessary.
- * @returns {void}
+ * @returns {Promise} Promise for testing pruposes
+ * @private
  */
 EventStream.prototype.doLongPoll = function() {
 
-	var self = this;
-
 	// If we're over the max number of retries, reset
 	if (this._longPollRetries > this._longPollInfo.max_retries) {
-		this.getLongPollInfo();
-		return;
+		return this.getLongPollInfo();
 	}
 
 	var url = this._longPollInfo.url,
@@ -148,83 +173,94 @@ EventStream.prototype.doLongPoll = function() {
 	};
 
 	this._longPollRetries += 1;
-	this._client.get(url, options, this._client.defaultResponseHandler(function(err, data) {
+	return this._client.wrapWithDefaultHandler(this._client.get)(url, options)
+		.then(data => {
 
-		if (err) {
-			setTimeout(function() {
-				self.getLongPollInfo();
-			}, RETRY_DELAY);
-			return;
-		}
+			if (data.message === 'reconnect') {
+				this.getLongPollInfo();
+				return;
+			}
 
-		if (data.message === 'reconnect') {
-			self.getLongPollInfo();
-			return;
-		}
+			// We don't expect any messages other than reconnect and new_change, so if
+			// we get one just retry the long poll
+			if (data.message !== 'new_change') {
+				this.doLongPoll();
+				return;
+			}
 
-		// We don't expect any messages other than reconnect and new_change, so if
-		// we get one just retry the long poll
-		if (data.message !== 'new_change') {
-			self.doLongPoll();
-			return;
-		}
-
-		self.fetchEvents();
-	}));
+			this.fetchEvents();
+		})
+		.catch(() => {
+			setTimeout(() => this.getLongPollInfo(), this._options.retryDelay);
+		});
 };
 
 /**
  * Fetch the latest group of events and push them into the stream
- * @returns {void}
+ * @returns {Promise} Promise for testing purposes
+ * @private
  */
 EventStream.prototype.fetchEvents = function() {
 
-	var self = this,
-		eventParams = {
-			stream_position: this._streamPosition
-		};
+	var eventParams = {
+		stream_position: this._streamPosition,
+		limit: 500
+	};
 
-	this._client.events.get(eventParams, function(err, events) {
+	// Get new events after the rate limiter expires
+	return this._rateLimiter.then(() => this._client.events.get(eventParams)
+			.then(events => {
 
-		if (err) {
-			self.emit('error', err);
-			setTimeout(function() {
-				self.getLongPollInfo();
-			}, RETRY_DELAY);
-			return;
-		}
+				// Reset the rate limiter
+				this._rateLimiter = Promise.delay(this._options.fetchInterval);
 
-		// If the response wasn't what we expected, re-poll
-		if (!events.entries || !events.next_stream_position) {
-			self.doLongPoll();
-			return;
-		}
+				// If the response wasn't what we expected, re-poll
+				if (!events.entries || !events.next_stream_position) {
+					this.doLongPoll();
+					return;
+				}
 
-		self._streamPosition = events.next_stream_position;
+				this._streamPosition = events.next_stream_position;
 
-		// De-duplicate the fetched events, since the API often returns
-		// the same events at multiple subsequent stream positions
-		var newEvents = events.entries.filter(function(event) {
-			return !self._dedupHash[event.event_id];
-		});
+				// De-duplicate the fetched events, since the API often returns
+				// the same events at multiple subsequent stream positions
+				var newEvents = events.entries.filter(event => !this._dedupHash[event.event_id]);
 
-		// If there aren't any non-duplicate events, go back to polling
-		if (!newEvents.length) {
-			self.doLongPoll();
-			return;
-		}
+				// If there aren't any non-duplicate events, go back to polling
+				if (!newEvents.length) {
+					this.doLongPoll();
+					return;
+				}
 
-		// Push new events into the stream
-		newEvents.forEach(function(event) {
-			self._dedupHash[event.event_id] = true;
-			self.push(event);
-		});
+				// Pause the stream to avoid race conditions while pushing in the new events.
+				// Without this, _read() would be called again from inside each push(),
+				// resulting in multiple parallel calls to fetchEvents().
+				// See https://github.com/nodejs/node/issues/3203
+				var wasPaused = this.isPaused();
+				this.pause();
 
-		// Once the deduplication filter gets too big, clean it up
-		if (Object.keys(self._dedupHash).length >= MAX_DEDUP_SIZE) {
-			self.cleanupDedupFilter(events.entries);
-		}
-	});
+				// Push new events into the stream
+				newEvents.forEach(event => {
+					this._dedupHash[event.event_id] = true;
+					this.push(event);
+				});
+
+				if (!wasPaused) {
+					// This will deliver the events and trigger the next call to _read() once they have been consumed.
+					this.resume();
+				}
+
+				// Once the deduplication filter gets too big, clean it up
+				if (Object.keys(this._dedupHash).length >= this._options.deduplicationFilterSize) {
+					this.cleanupDedupFilter(events.entries);
+				}
+			})
+			.catch(err => {
+
+				this.emit('error', err);
+				setTimeout(() => this.getLongPollInfo(), this._options.retryDelay);
+			})
+	);
 };
 
 /**
@@ -234,19 +270,17 @@ EventStream.prototype.fetchEvents = function() {
  * tracked for deduplication any more.
  * @param {Object[]} latestEvents The latest events from the API
  * @returns {void}
+ * @private
  */
 EventStream.prototype.cleanupDedupFilter = function(latestEvents) {
 
-	var self = this,
-		dedupIDs = Object.keys(this._dedupHash);
+	var dedupIDs = Object.keys(this._dedupHash);
 
-	dedupIDs.forEach(function(eventID) {
+	dedupIDs.forEach(eventID => {
 
-		var isEventCleared = !latestEvents.find(function(e) {
-			return e.event_id === eventID;
-		});
+		var isEventCleared = !latestEvents.find(e => e.event_id === eventID);
 		if (isEventCleared) {
-			delete self._dedupHash[eventID];
+			delete this._dedupHash[eventID];
 		}
 	});
 };
@@ -256,6 +290,7 @@ EventStream.prototype.cleanupDedupFilter = function(latestEvents) {
  * by the stream whenever it needs more data, and will not be called again
  * until data is pushed into the stream.
  * @returns {void}
+ * @private
  */
 EventStream.prototype._read = function() {
 
@@ -274,13 +309,13 @@ module.exports = EventStream;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Aug 21 2017 17:33:14 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

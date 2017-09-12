@@ -36,8 +36,8 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var assert = require('assert'),
-	CallbackQueue = require('../util/lazy-async-queue'),
+const assert = require('assert'),
+	Promise = require('bluebird'),
 	errors = require('../util/errors'),
 	httpStatusCodes = require('http-status');
 
@@ -96,17 +96,10 @@ function isObjectValidTokenStore(obj) {
  */
 function PersistentSession(tokenInfo, tokenStore, config, tokenManager) {
 	this._config = config;
-	this.tokenManager = tokenManager;
+	this._tokenManager = tokenManager;
 
-	// Contains client requests which are waiting for an existing client request to finish refreshing tokens.
-	// For example: client request 1 begins initializing tokens - calls to Box to get tokens.
-	// At the same time, client request 2 executes. It should not also get tokens from Box - instead, the request is
-	// adds a callback to this array. When client request 1 finishes getting tokens from Box, it will flush
-	// this queue by invoking all callbacks. This will allow client request 2 to proceed, guaranteed to have tokens.
-	this._upkeepQueue = new CallbackQueue();
-
-	// Set default properties
-	this._isRefreshingTokens = false;
+	// Keeps track of if tokens are currently being refreshed
+	this._refreshPromise = null;
 
 	// Set valid PersistentSession credentials. Throw if expected credentials are invalid or not given.
 	assert(isObjectValidTokenInfo(tokenInfo), 'tokenInfo is improperly formatted. Properties required: accessToken, refreshToken, accessTokenTTLMS and acquiredAtMS.');
@@ -115,7 +108,7 @@ function PersistentSession(tokenInfo, tokenStore, config, tokenManager) {
 	// If tokenStore was provided, set the persistent data &amp; current store operations
 	if (tokenStore) {
 		assert(isObjectValidTokenStore(tokenStore), 'Token store provided but is improperly formatted. Methods required: read(), write(), clear().');
-		this._tokenStore = tokenStore;
+		this._tokenStore = Promise.promisifyAll(tokenStore);
 	}
 }
 
@@ -136,119 +129,79 @@ PersistentSession.prototype._setTokenInfo = function(tokenInfo) {
 };
 
 /**
- * Finishes the token refresh. If given error, refresh lock is released, and an err is propagated
- * to all waiting callbacks. Otherwise, the lock is released, and the new token is propagated to
- * all waiting callbacks.
- *
- * @param {?Error} err An error, if one occurred. Null if refresh was successful.
- * @param {TokenInfo} tokenInfo A valid TokenInfo object.
- * @param {UpdateTokensCallback} [callback] Called on completion with valid access token or error
- * @returns {void}
- * @private
- */
-PersistentSession.prototype._finishTokenRefresh = function(err, tokenInfo, callback) {
-	this._isRefreshingTokens = false;
-
-	// Handle Error
-	if (err) {
-		this.handleExpiredTokensError(err, callback);
-		return;
-	}
-
-	// Set and propagate the new access token
-	this._setTokenInfo(tokenInfo);
-	this._upkeepQueue.flush(null, tokenInfo.accessToken);
-	callback(null, tokenInfo.accessToken);
-};
-
-/**
  * Attempts to refresh tokens for the client.
  * Will use the Box refresh token grant to complete the refresh. On refresh failure, we'll
  * check the token store for more recently updated tokens and load them if found. Otherwise
  * an error will be propagated.
  *
- * @param {UpdateTokensCallback} [callback] Called on completion with valid access token or error
- * @returns {void}
+ * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+ * @returns {Promise&lt;string>} Promise resolving to the access token
  * @private
  */
-PersistentSession.prototype._refreshTokens = function(callback) {
-	var self = this;
+PersistentSession.prototype._refreshTokens = function(options) {
+	// If not already refreshing, kick off a token refresh request and set a lock so that additional
+	// client requests don't try as well
+	if (!this._refreshPromise) {
 
-	// If this client is already in the process of refreshing tokens, we don't want to initiate another refresh.
-	// Add the callback (if any) to the update queue to be called later with the fresh access token.
-	if (this._isRefreshingTokens) {
-		if (callback) {
-			this._upkeepQueue.push(callback);
-		}
-		return;
+		this._refreshPromise = this._tokenManager.getTokensRefreshGrant(this._tokenInfo.refreshToken, options)
+			.catch(err => {
+				// If we got an error response from Box API, but it was 400 invalid_grant, it indicates we may have just
+				// made the request with an invalidated refresh token. Since only a max of 2 refresh tokens can be valid
+				// at any point in time, and a horizontally scaled app could have multiple Node instances running in parallel,
+				// it is possible to hit cases where too many servers all refresh a user's tokens at once
+				// and cause this server's token to become invalidated. However, the user should still be alive, but
+				// we'll need to check the central data store for the latest valid tokens that some other server in the app
+				// cluster would have received. So, instead pull tokens from the central store and attempt to use them.
+				if (err.statusCode === httpStatusCodes.BAD_REQUEST &amp;&amp; this._tokenStore) {
+					var invalidGrantError = err;
+
+					// Check the tokenStore to see if tokens have been updated recently. If they have, then another
+					// instance of the session may have already refreshed the user tokens, which would explain why
+					// we couldn't refresh.
+					return this._tokenStore.readAsync()
+						.catch(e => errors.unwrapAndThrow(e))
+						.then(storeTokenInfo => {
+							// if the tokens we got from the central store are the same as the tokens we made the failed request with
+							// already, then we can be sure that no other servers have valid tokens for this server either.
+							// Thus, this user truly has an expired refresh token. So, propagate an "Expired Tokens" error.
+							if (!storeTokenInfo || storeTokenInfo.refreshToken === this._tokenInfo.refreshToken) {
+								throw errors.buildExpiredAuthError(invalidGrantError.response);
+							}
+
+							// Propagate the fresh tokens that we found in the session
+							return storeTokenInfo;
+						});
+				}
+
+				// Box API returned a permanent error that is not retryable and we can't recover.
+				// We have no usable tokens for the user and no way to refresh them - propagate a permanent error.
+				throw err;
+			})
+			.then(tokenInfo => {
+				// Success! We got back a TokenInfo object from the API.
+				// If we have a token store, we'll write it there now before finishing up the request.
+				if (this._tokenStore) {
+					return this._tokenStore.writeAsync(tokenInfo)
+						.catch(e => errors.unwrapAndThrow(e))
+						.then(() => tokenInfo);
+				}
+
+				// If no token store, Set and propagate the access token immediately
+				return tokenInfo;
+			})
+			.then(tokenInfo => {
+				// Set and propagate the new access token
+				this._setTokenInfo(tokenInfo);
+				return tokenInfo.accessToken;
+			})
+			.catch(err => this.handleExpiredTokensError(err))
+			.finally(() => {
+				// Refresh complete, clear promise
+				this._refreshPromise = null;
+			});
 	}
 
-	// Otherwise, kick off a token refresh request and set a lock so that additional
-	// client requests don't try as well. Set a missing callback to an empty function
-	// so that we don't get any errors from calling undefined as a function.
-	callback = callback || function() {};
-	this._isRefreshingTokens = true;
-	this.tokenManager.getTokensRefreshGrant(this._tokenInfo.refreshToken, function(err, tokenInfo) {
-
-		// Handle any errors from refreshing the token
-		if (err) {
-
-			// If we got an error response from Box API, but it was 400 invalid_grant, it indicates we may have just
-			// made the request with an invalidated refresh token. Since only a max of 2 refresh tokens can be valid
-			// at any point in time, and a horizontally scaled app could have multiple Node instances running in parallel,
-			// it is possible to hit cases where too many servers all refresh a user's tokens at once
-			// and cause this server's token to become invalidated. However, the user should still be alive, but
-			// we'll need to check the central data store for the latest valid tokens that some other server in the app
-			// cluster would have received. So, instead pull tokens from the central store and attempt to use them.
-			if (err.statusCode === httpStatusCodes.BAD_REQUEST &amp;&amp; self._tokenStore) {
-				var invalidGrantError = err;
-
-				// Check the tokenStore to see if tokens have been updated recently. If they have, then another
-				// instance of the session may have already refreshed the user tokens, which would explain why
-				// we couldn't refresh.
-				self._tokenStore.read(function(storeErr, storeTokenInfo) {
-
-					// If there was an error getting from the app's central store, propagate a permanent error.
-					// This should only happen if the central store itself failed (ex: DB is unreachable) or if
-					// the database contains nothing in the store.
-					if (storeErr) {
-						self._finishTokenRefresh(storeErr, null, callback);
-						return;
-					}
-
-					// if the tokens we got from the central store are the same as the tokens we made the failed request with
-					// already, then we can be sure that no other servers have valid tokens for this server either.
-					// Thus, this user truly has an expired refresh token. So, propagate an "Expired Tokens" error.
-					if (!storeTokenInfo || storeTokenInfo.refreshToken === self._tokenInfo.refreshToken) {
-						var expiredTokensError = errors.buildExpiredAuthError(invalidGrantError.response);
-						self._finishTokenRefresh(expiredTokensError, null, callback);
-						return;
-					}
-
-					// Propogate the fresh tokens that we found in the session
-					self._finishTokenRefresh(null, storeTokenInfo, callback);
-				});
-				return;
-			}
-
-			// Box API returned a permanent error that is not retryable and we can't recover.
-			// We have no usable tokens for the user and no way to refresh them - propagate a permanent error.
-			self._finishTokenRefresh(err, null, callback);
-			return;
-		}
-
-		// Success! We got back a TokenInfo object from the API.
-		// If we have a token store, we'll write it there now before finishing up the request.
-		if (self._tokenStore) {
-			self._tokenStore.write(tokenInfo, function(storeErr) {
-				// Propagate any error that might have occurred on write with the tokenInfo
-				self._finishTokenRefresh(storeErr, tokenInfo, callback);
-			});
-		} else {
-			// If no token store, Set and propagate the access token immediately
-			self._finishTokenRefresh(null, tokenInfo, callback);
-		}
-	});
+	return this._refreshPromise;
 };
 
 
@@ -261,28 +214,19 @@ PersistentSession.prototype._refreshTokens = function(callback) {
  *
  * If tokens don't yet exist, first attempt to retrieve them.
  * If tokens are expired, first attempt to refresh them.
- * @param {UpdateTokensCallback} [callback] Called on completion with valid access token or error
- * @returns {void}
+ *
+ * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+ * @returns {Promise&lt;string>} Promise resolving to the access token
  */
-PersistentSession.prototype.getAccessToken = function(callback) {
-
-	// If our tokens are expired, we need to refresh them before passing the access token to the callback
-	if (!this.tokenManager.isAccessTokenValid(this._tokenInfo, this._config.expiredBufferMS)) {
-		this._refreshTokens(callback);
-		return;
-	}
-
-	// If our tokens are getting stale, fire off a refresh in the background. We can still return the current
-	// valid access token below.
-	// A token object is considered stale before it is considered expired, usually in the range of a few minutes.
-	// This gives the session a chance to optomistically refresh the session's tokens in the background without
-	// holding up a user request.
-	if (!this.tokenManager.isAccessTokenValid(this._tokenInfo, this._config.staleBufferMS)) {
-		this._refreshTokens();
+PersistentSession.prototype.getAccessToken = function(options) {
+	// If our tokens are not fresh, we need to refresh them
+	var expirationBuffer = Math.max(this._config.expiredBufferMS, this._config.staleBufferMS);
+	if (!this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)) {
+		return this._refreshTokens(options);
 	}
 
 	// Current access token is still valid. Return it.
-	callback(null, this._tokenInfo.accessToken);
+	return Promise.resolve(this._tokenInfo.accessToken);
 };
 
 /**
@@ -290,42 +234,49 @@ PersistentSession.prototype.getAccessToken = function(callback) {
  * since it is more likely to be up to date. Otherwise, we'll revoke the accessToken.
  * Revoking either one will disable the other as well.
  *
- * @param {Function} callback Called after tokens have been revoked
+ * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+ * @returns {Promise} Promise that resolves when the revoke succeeds
+ */
+PersistentSession.prototype.revokeTokens = function(options) {
+	return this._tokenManager.revokeTokens(this._tokenInfo.refreshToken, options);
+};
+
+/**
+ * Exchange the client access token for one with lower scope
+ * @param {string|string[]} scopes The scope(s) requested for the new token
+ * @param {string} [resource] The absolute URL of an API resource to scope the new token to
+ * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
  * @returns {void}
  */
-PersistentSession.prototype.revokeTokens = function(callback) {
-	var revokeToken = this._tokenInfo.refreshToken;
-	this.tokenManager.revokeTokens(revokeToken, callback);
+PersistentSession.prototype.exchangeToken = function(scopes, resource, options) {
+
+	return this.getAccessToken(options)
+		.then(accessToken => this._tokenManager.exchangeToken(accessToken, scopes, resource, options));
 };
 
 /**
  * Handle an an "Expired Tokens" Error. If our tokens are expired, we need to clear the token
  * store (if present) before continuing.
  *
- * @param {?Errors~ExpiredTokensError} err An "expired tokens" error including information
+ * @param {Errors~ExpiredTokensError} err An "expired tokens" error including information
  *  about the request/response.
- * @param {Function} callback called with the results of the response handling. This will
+ * @returns {Promise&lt;Error>} Promise resolving to an error.  This will
  *  usually be the original response error, but could an error from trying to access the
  *  token store as well.
- * @returns {void}
  */
-PersistentSession.prototype.handleExpiredTokensError = function(err, callback) {
-	// No token store, so just call the callback
+PersistentSession.prototype.handleExpiredTokensError = function(err) {
+
 	if (!this._tokenStore) {
-		this._upkeepQueue.flush(err);
-		callback(err);
-		return;
+		return Promise.resolve(err);
 	}
 
-	var self = this;
-	// Otherwise, call the clear method to delete the old tokens from the store
-	this._tokenStore.clear(function(clearError) {
-		var returnError = clearError || err;
-		self._upkeepQueue.flush(returnError);
-		callback(returnError);
-	});
+	// If a token store is available, clear the store and throw either error
+	return this._tokenStore.clearAsync()
+		.catch(e => errors.unwrapAndThrow(e))
+		.then(() => {
+			throw err;
+		});
 };
-
 
 /**
  * @module box-node-sdk/lib/sessions/persistent-session
@@ -342,13 +293,13 @@ module.exports = PersistentSession;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Aug 21 2017 17:33:15 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

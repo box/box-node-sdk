@@ -38,11 +38,13 @@
 var assert = require('assert'),
 	https = require('https'),
 	merge = require('merge-options'),
-	version = require('../../package.json').version;
+	sdkVersion = require('../../package.json').version;
 
 // ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
+
+var nodeVersion = process.version;
 
 /**
  * Configuration for App Auth
@@ -51,7 +53,7 @@ var assert = require('assert'),
  * @property {string|Buffer} privateKey The private key used for app auth
  * @property {string} passphrase The passphrase associated with the private key
  * @property {string} [algorithm=RS256] The signing algorithm to use, "RS256", "RS384", or "RS512"
- * @property {int} [expirationTime=60] Number of seconds the JWT should live for
+ * @property {int} [expirationTime=30] Number of seconds the JWT should live for
  * @property {bool} [verifyTimestamp=false] Whether the timestamp when the auth token is created should be validated
  */
 
@@ -67,8 +69,7 @@ var assert = require('assert'),
  * @property {int} [uploadRequestTimeoutMS] Timeout after which an upload request is aborted [Default: 60000]
  * @property {int} [retryIntervalMS] Time between auto-retries of the API call on a temp failure [Default: 2000]
  * @property {int} [numMaxRetries] Max # of times a temporarily-failed request should be retried before propagating a permanent failure [Default: 5]
- * @property {int} [expiredBufferMS] Time before expiration, in milliseconds, when we begin to treat tokens as expired [Default: 30 sec.]
- * @property {int} [staleBufferMS] Time before expiration, in milliseconds, when we begin to treat tokens as stale [Default: 3 min.]
+ * @property {int} [expiredBufferMS] Time before expiration, in milliseconds, when we begin to treat tokens as expired [Default: 3 min.]
  * @property {Object} [request] Request options
  * @property {boolean} [request.strictSSL] Set to false to disable strict SSL checking, which allows using Dev APIs [Default: true]
  * @property {?AppAuthConfig} appAuth Optional configuration for App Auth
@@ -84,9 +85,11 @@ var defaults = {
 	uploadRequestTimeoutMS: 60000,
 	retryIntervalMS: 2000,
 	numMaxRetries: 5,
-	expiredBufferMS: 30000,
-	staleBufferMS: 180000,
+	expiredBufferMS: 180000,
+	staleBufferMS: 0, // DEPRECATED -- token expiration buffer will be max(expiredBufferMS, staleBufferMS)
 	appAuth: undefined,
+	iterators: false,
+	enterpriseID: undefined,
 	request: {
 		// By default, require API SSL cert to be valid
 		strictSSL: true,
@@ -103,14 +106,14 @@ var defaults = {
 		followRedirect: false,
 		// By default, we attach a version-specific user-agent string to SDK requests
 		headers: {
-			'User-Agent': 'Box Node.js SDK v' + version
+			'User-Agent': 'Box Node.js SDK v' + sdkVersion + ' (Node ' + nodeVersion + ')'
 		}
 	}
 };
 
 var appAuthDefaults = {
 	algorithm: 'RS256',
-	expirationTime: 60,
+	expirationTime: 30,
 	verifyTimestamp: false
 };
 
@@ -139,12 +142,13 @@ function validateAppAuthParams(appAuth) {
 	assert(typeof appAuth.privateKey === 'string' || appAuth.privateKey instanceof Buffer, 'Private key must be provided in app auth params');
 	assert(typeof appAuth.passphrase === 'string' &amp;&amp; appAuth.passphrase.length > 0, 'Passphrase must be provided in app auth params');
 
+	var validAlgorithms = ['RS256', 'RS384', 'RS512'];
 	if (typeof appAuth.algorithm !== 'undefined') {
-		assert(appAuth.algorithm === 'RS256' || appAuth.algorithm === 'RS384' || appAuth.algorithm === 'RS512', 'Valid algorithm must be provided in app auth params');
+		assert(validAlgorithms.indexOf(appAuth.algorithm) > -1, 'Algorithm in app auth params must be one of: ' + validAlgorithms.join(', '));
 	}
 
 	if (typeof appAuth.expirationTime !== 'undefined') {
-		assert(typeof appAuth.expirationTime === 'number' &amp;&amp; appAuth.expirationTime > 0, 'Valid token expiration time must be provided in app auth params');
+		assert(Number.isInteger(appAuth.expirationTime) &amp;&amp; appAuth.expirationTime > 0 &amp;&amp; appAuth.expirationTime &lt;= 60, 'Valid token expiration time (0 - 60) must be provided in app auth params');
 	}
 }
 
@@ -208,13 +212,13 @@ module.exports = Config;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Aug 21 2017 17:33:14 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

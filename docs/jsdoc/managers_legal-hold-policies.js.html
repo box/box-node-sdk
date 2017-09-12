@@ -88,12 +88,13 @@ LegalHoldPolicies.prototype.assignmentTypes = Object.freeze({
  * Method: POST
  *
  * @param {string} name - The name of the legal hold policy to be created
- * @param {?Object} options - Additional parameters
+ * @param {Object} [options] - Additional parameters
  * @param {string} [options.description] - Description of the legal hold policy
  * @param {string} [options.filter_started_at] - Date filter, any Custodian assignments will apply only to file versions created or uploaded inside of the date range
  * @param {string} [options.filter_ended_at] - Date filter, any Custodian assignments will apply only to file versions created or uploaded inside of the date range
- * @param {Function} callback - Passed the new policy information if it was acquired successfully, error otherwise
- * @returns {void}
+ * @param {boolean} [options.is_ongoing] - After initialization, Assignments under this Policy will continue applying to files based on events, indefinitely
+ * @param {Function} [callback] - Passed the new policy information if it was acquired successfully, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the created policy
  */
 LegalHoldPolicies.prototype.create = function(name, options, callback) {
 	var apiPath = urlPath(BASE_PATH),
@@ -103,7 +104,7 @@ LegalHoldPolicies.prototype.create = function(name, options, callback) {
 
 	params.body.policy_name = name;
 
-	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
 };
 
 /**
@@ -113,9 +114,9 @@ LegalHoldPolicies.prototype.create = function(name, options, callback) {
  * Method: GET
  *
  * @param {string} policyID - The Box ID of the legal hold policy being requested
- * @param {?Object} qs - Additional options can be passed with the request via querystring
- * @param {Function} callback - Passed the policy information if it was acquired successfully, error otherwise
- * @returns {void}
+ * @param {Object} [qs] - Additional options can be passed with the request via querystring
+ * @param {Function} [callback] - Passed the policy information if it was acquired successfully, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the policy object
  */
 LegalHoldPolicies.prototype.get = function(policyID, qs, callback) {
 	var apiPath = urlPath(BASE_PATH, policyID),
@@ -123,7 +124,7 @@ LegalHoldPolicies.prototype.get = function(policyID, qs, callback) {
 			qs: qs
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -137,8 +138,8 @@ LegalHoldPolicies.prototype.get = function(policyID, qs, callback) {
  * @param {string} [options.policy_name] - Name of Legal Hold Policy
  * @param {string} [options.description] - Description of Legal Hold Policy
  * @param {string} [options.release_notes] - Notes around why the policy was released
- * @param {Function} callback - Passed the updated policy information if it was acquired successfully, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the updated policy information if it was acquired successfully, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the updated policy
  */
 LegalHoldPolicies.prototype.update = function(policyID, options, callback) {
 
@@ -147,7 +148,7 @@ LegalHoldPolicies.prototype.update = function(policyID, options, callback) {
 			body: options
 		};
 
-	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.put)(apiPath, params, callback);
 };
 
 /**
@@ -156,12 +157,12 @@ LegalHoldPolicies.prototype.update = function(policyID, options, callback) {
  * API Endpoint: '/legal_hold_policies'
  * Method: GET
  *
- * @param {?Object} qs - Additional options can be passed with the request via querystring
+ * @param {Object} [qs] - Additional options can be passed with the request via querystring
  * @param {string} [qs.policy_name] - A full or partial name to filter the legal hold policies by
  * @param {int} [qs.limit] - Limit result size to this number
  * @param {string} [qs.marker] - Paging marker, leave blank to start at the first page
- * @param {Function} callback - Passed the policy objects if they were acquired successfully, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the policy objects if they were acquired successfully, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of policies
  */
 LegalHoldPolicies.prototype.getAll = function(qs, callback) {
 	var apiPath = urlPath(BASE_PATH),
@@ -169,7 +170,7 @@ LegalHoldPolicies.prototype.getAll = function(qs, callback) {
 			qs: qs
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -181,14 +182,14 @@ LegalHoldPolicies.prototype.getAll = function(qs, callback) {
  * Method: DELETE
  *
  * @param {string} policyID - The legal hold policy to delete
- * @param {Function} callback - Passed nothing if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed nothing if successful, error otherwise
+ * @returns {Promise&lt;void>} A promise resolving to nothing
  */
 LegalHoldPolicies.prototype.delete = function(policyID, callback) {
 
 	var apiPath = urlPath(BASE_PATH, policyID);
 
-	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
 };
 
 /**
@@ -198,11 +199,11 @@ LegalHoldPolicies.prototype.delete = function(policyID, callback) {
  * Method: GET
  *
  * @param {string} policyID - The Box ID of the legal hold policy to get assignments for
- * @param {?Object} qs - Additional options can be passed with the request via querystring
+ * @param {Object} [qs] - Additional options can be passed with the request via querystring
  * @param {LegalHoldPolicyAssignmentType} [qs.assign_to_type] - Filter assignments of this type only
   * @param {string} [qs.assign_to_id] - Filter assignments to this ID only. Note that this will only show assignments applied directly to this entity.
- * @param {Function} callback - Passed the assignment objects if they were acquired successfully, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the assignment objects if they were acquired successfully, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of policy assignments
  */
 LegalHoldPolicies.prototype.getAssignments = function(policyID, qs, callback) {
 
@@ -211,7 +212,7 @@ LegalHoldPolicies.prototype.getAssignments = function(policyID, qs, callback) {
 			qs: qs
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -223,8 +224,8 @@ LegalHoldPolicies.prototype.getAssignments = function(policyID, qs, callback) {
  * @param {string} policyID - The ID of the policy to assign
  * @param {LegalHoldPolicyAssignmentType} assignType - The type of object the policy will be assigned to
  * @param {string} assignID - The Box ID of the object to assign the legal hold policy to
- * @param {Function} callback - Passed the new assignment object if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the new assignment object if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the created assignment object
  */
 LegalHoldPolicies.prototype.assign = function(policyID, assignType, assignID, callback) {
 
@@ -239,7 +240,7 @@ LegalHoldPolicies.prototype.assign = function(policyID, assignType, assignID, ca
 			}
 		};
 
-	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
 };
 
 /**
@@ -249,9 +250,9 @@ LegalHoldPolicies.prototype.assign = function(policyID, assignType, assignID, ca
  * Method: GET
  *
  * @param {string} assignmentID - The Box ID of the policy assignment object to fetch
- * @param {?Object} qs - Additional options can be passed with the request via querystring
- * @param {Function} callback - Passed the assignment object if it was acquired successfully, error otherwise
- * @returns {void}
+ * @param {Object} [qs] - Additional options can be passed with the request via querystring
+ * @param {Function} [callback] - Passed the assignment object if it was acquired successfully, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the assignment object
  */
 LegalHoldPolicies.prototype.getAssignment = function(assignmentID, qs, callback) {
 
@@ -260,7 +261,7 @@ LegalHoldPolicies.prototype.getAssignment = function(assignmentID, qs, callback)
 			qs: qs
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -272,14 +273,14 @@ LegalHoldPolicies.prototype.getAssignment = function(assignmentID, qs, callback)
  * Method: DELETE
  *
  * @param {string} assignmentID - The legal hold policy assignment to delete
- * @param {Function} callback - Passed nothing if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed nothing if successful, error otherwise
+ * @returns {Promise&lt;void>} A promise resolving to nothing
  */
 LegalHoldPolicies.prototype.deleteAssignment = function(assignmentID, callback) {
 
 	var apiPath = urlPath(ASSIGNMENTS_PATH, assignmentID);
 
-	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
 };
 
 /**
@@ -289,9 +290,9 @@ LegalHoldPolicies.prototype.deleteAssignment = function(assignmentID, callback) 
  * Method: GET
  *
  * @param {string} legalHoldID - The ID for the file legal hold record to retrieve
- * @param {?Object} qs - Additional options can be passed with the request via querystring
- * @param {Function} callback - Pass the file version legal hold record if successful, error otherwise
- * @returns {void}
+ * @param {Object} [qs] - Additional options can be passed with the request via querystring
+ * @param {Function} [callback] - Pass the file version legal hold record if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the legal hold record
  */
 LegalHoldPolicies.prototype.getFileVersionLegalHold = function(legalHoldID, qs, callback) {
 
@@ -300,7 +301,7 @@ LegalHoldPolicies.prototype.getFileVersionLegalHold = function(legalHoldID, qs, 
 			qs: qs
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -310,9 +311,9 @@ LegalHoldPolicies.prototype.getFileVersionLegalHold = function(legalHoldID, qs, 
  * Method: GET
  *
  * @param {string} policyID - ID of Legal Hold Policy to get File Version Legal Holds for
- * @param {?Object} qs - Additional options can be passed with the request via querystring
- * @param {Function} callback - Pass the file version legal holds records if successful, error otherwise
- * @returns {void}
+ * @param {Object} [qs] - Additional options can be passed with the request via querystring
+ * @param {Function} [callback] - Pass the file version legal holds records if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of all file version legal holds
  */
 LegalHoldPolicies.prototype.getAllFileVersionLegalHolds = function(policyID, qs, callback) {
 
@@ -323,7 +324,7 @@ LegalHoldPolicies.prototype.getAllFileVersionLegalHolds = function(policyID, qs,
 
 	params.qs.policy_id = policyID;
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 module.exports = LegalHoldPolicies;
@@ -337,13 +338,13 @@ module.exports = LegalHoldPolicies;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Aug 21 2017 17:33:15 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

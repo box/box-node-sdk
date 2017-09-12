@@ -85,7 +85,7 @@ target.lint = function() {
 
 target.test = function() {
 	var code = target.lint();
-	code += nodeCLI.exec('istanbul', 'cover', MOCHA_BINARY, '--', '-c', '-R nyan', TEST_FILES).code;
+	code += nodeCLI.exec('istanbul', 'cover', MOCHA_BINARY, '--', '-c', '-R spec', TEST_FILES).code;
 
 	if (code) {
 		exit(code);
@@ -95,6 +95,11 @@ target.test = function() {
 target.docs = function() {
 	echo('Generating documentation');
 	nodeCLI.exec('jsdoc', '-r', '-d ./docs/jsdoc ', JS_DIR);
+};
+
+target.docsDev = function() {
+	echo('Generating dev documentation');
+	nodeCLI.exec('jsdoc', '-p', '-r', '-d ./docs/jsdoc-dev ', JS_DIR);
 };
 
 target.patch = function() {

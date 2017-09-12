@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>Folders</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Folders<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
         
     
 </header>
@@ -40,7 +40,9 @@
 
     
 
+    
     <h4 class="name" id="Folders"><span class="type-signature"></span>new Folders<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -184,6 +186,8 @@
 
 
 
+
+
     
     </div>
 
@@ -193,7 +197,9 @@
 
     
 
-     
+    
+
+    
 
     
 
@@ -207,7 +213,9 @@
 
     
 
-    <h4 class="name" id="addMetadata"><span class="type-signature"></span>addMetadata<span class="signature">(folderID, scope, template, data, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="addMetadata"><span class="type-signature"></span>addMetadata<span class="signature">(folderID, scope, template, data, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -242,6 +250,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -267,6 +277,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -289,6 +307,14 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -313,6 +339,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -336,6 +370,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -358,6 +400,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -403,7 +455,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line325">line 325</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line319">line 319</a>
     </li></ul></dd>
     
 
@@ -429,6 +481,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the created metadata
+</div>
+
 
 
 <dl>
@@ -437,7 +493,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -447,12 +503,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="addToCollection"><span class="type-signature"></span>addToCollection<span class="signature">(folderID, collectionID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="addToCollection"><span class="type-signature"></span>addToCollection<span class="signature">(folderID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -486,6 +546,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -511,6 +573,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -534,6 +604,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -556,6 +634,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -627,6 +715,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
 
 
 <dl>
@@ -635,7 +727,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -645,12 +737,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="applyWatermark"><span class="type-signature"></span>applyWatermark<span class="signature">(folderID, options, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="applyWatermark"><span class="type-signature"></span>applyWatermark<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -684,6 +780,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -709,6 +807,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -725,12 +831,22 @@ Method: PUT
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -754,6 +870,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -799,7 +925,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line496">line 496</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line486">line 486</a>
     </li></ul></dd>
     
 
@@ -825,6 +951,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the watermark info
+</div>
+
 
 
 <dl>
@@ -833,7 +963,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -843,12 +973,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(folderID, newParentID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(folderID, newParentID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -973,9 +1107,9 @@ Method: POST
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -1067,6 +1201,8 @@ Method: POST
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -1143,6 +1279,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the new folder object
+</div>
+
 
 
 <dl>
@@ -1151,7 +1291,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1161,12 +1301,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(parentFolderID, name, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(parentFolderID, name, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -1200,6 +1344,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1225,6 +1371,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1248,6 +1402,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1270,6 +1432,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1341,6 +1513,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the created folder object
+</div>
+
 
 
 <dl>
@@ -1349,7 +1525,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1359,12 +1535,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(folderID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(folderID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -1458,9 +1638,9 @@ Method: DELETE
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -1490,6 +1670,8 @@ Method: DELETE
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -1541,7 +1723,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line267">line 267</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line261">line 261</a>
     </li></ul></dd>
     
 
@@ -1567,6 +1749,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -1575,7 +1761,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1585,12 +1771,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="deleteMetadata"><span class="type-signature"></span>deleteMetadata<span class="signature">(folderID, scope, template, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="deleteMetadata"><span class="type-signature"></span>deleteMetadata<span class="signature">(folderID, scope, template, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -1624,6 +1814,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1649,6 +1841,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1671,6 +1871,14 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1695,6 +1903,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1717,6 +1933,16 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1762,7 +1988,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line373">line 373</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line367">line 367</a>
     </li></ul></dd>
     
 
@@ -1788,6 +2014,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -1796,7 +2026,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1806,12 +2036,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(folderID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -1845,6 +2079,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1870,6 +2106,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1892,6 +2136,16 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1937,7 +2191,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line445">line 445</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line439">line 439</a>
     </li></ul></dd>
     
 
@@ -1963,6 +2217,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -1971,7 +2229,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1981,12 +2239,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(folderID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(folderID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2080,9 +2342,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -2112,6 +2374,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -2189,6 +2453,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the folder object
+</div>
+
 
 
 <dl>
@@ -2197,7 +2465,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2207,12 +2475,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getAllMetadata"><span class="type-signature"></span>getAllMetadata<span class="signature">(folderID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getAllMetadata"><span class="type-signature"></span>getAllMetadata<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2246,6 +2518,8 @@ Method: GET
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2271,6 +2545,14 @@ Method: GET
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -2293,6 +2575,16 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -2338,7 +2630,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line287">line 287</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line281">line 281</a>
     </li></ul></dd>
     
 
@@ -2364,6 +2656,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the collection of metadata on the folder
+</div>
+
 
 
 <dl>
@@ -2372,7 +2668,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2382,12 +2678,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getCollaborations"><span class="type-signature"></span>getCollaborations<span class="signature">(folderID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getCollaborations"><span class="type-signature"></span>getCollaborations<span class="signature">(folderID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2481,9 +2781,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -2513,6 +2813,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -2590,6 +2892,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the collection of collaborations
+</div>
+
 
 
 <dl>
@@ -2598,7 +2904,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2608,12 +2914,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getItems"><span class="type-signature"></span>getItems<span class="signature">(folderID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getItems"><span class="type-signature"></span>getItems<span class="signature">(folderID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2707,9 +3017,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -2739,6 +3049,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -2816,6 +3128,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A prmoise resolving to the collection of the items in the folder
+</div>
+
 
 
 <dl>
@@ -2824,7 +3140,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2834,12 +3150,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getMetadata"><span class="type-signature"></span>getMetadata<span class="signature">(folderID, scope, template, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getMetadata"><span class="type-signature"></span>getMetadata<span class="signature">(folderID, scope, template, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -2873,6 +3193,8 @@ Method: GET
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2898,6 +3220,14 @@ Method: GET
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -2920,6 +3250,14 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -2944,6 +3282,14 @@ Method: GET
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -2966,6 +3312,16 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -3011,7 +3367,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line305">line 305</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line299">line 299</a>
     </li></ul></dd>
     
 
@@ -3037,6 +3393,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the metadata template
+</div>
+
 
 
 <dl>
@@ -3045,7 +3405,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3055,12 +3415,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getTrashedFolder"><span class="type-signature"></span>getTrashedFolder<span class="signature">(folderID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getTrashedFolder"><span class="type-signature"></span>getTrashedFolder<span class="signature">(folderID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -3154,9 +3518,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -3186,6 +3550,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -3237,7 +3603,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line390">line 390</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line384">line 384</a>
     </li></ul></dd>
     
 
@@ -3263,6 +3629,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the trashed folder object
+</div>
+
 
 
 <dl>
@@ -3271,7 +3641,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3281,12 +3651,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getWatermark"><span class="type-signature"></span>getWatermark<span class="signature">(folderID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getWatermark"><span class="type-signature"></span>getWatermark<span class="signature">(folderID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -3380,9 +3754,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -3412,6 +3786,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -3463,7 +3839,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line462">line 462</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line456">line 456</a>
     </li></ul></dd>
     
 
@@ -3489,6 +3865,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the watermark info
+</div>
+
 
 
 <dl>
@@ -3497,7 +3877,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3507,12 +3887,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="move"><span class="type-signature"></span>move<span class="signature">(folderID, newParentID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="move"><span class="type-signature"></span>move<span class="signature">(folderID, newParentID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -3546,6 +3930,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -3571,6 +3957,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -3594,6 +3988,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -3616,6 +4018,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -3661,7 +4073,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line244">line 244</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line238">line 238</a>
     </li></ul></dd>
     
 
@@ -3687,6 +4099,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
 
 
 <dl>
@@ -3695,7 +4111,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3705,12 +4121,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="removeFromCollection"><span class="type-signature"></span>removeFromCollection<span class="signature">(folderID, collectionID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="removeFromCollection"><span class="type-signature"></span>removeFromCollection<span class="signature">(folderID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -3744,6 +4164,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -3769,6 +4191,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -3792,6 +4222,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -3814,6 +4252,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -3859,7 +4307,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line216">line 216</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line213">line 213</a>
     </li></ul></dd>
     
 
@@ -3885,6 +4333,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
 
 
 <dl>
@@ -3893,7 +4345,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -3903,12 +4355,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="removeWatermark"><span class="type-signature"></span>removeWatermark<span class="signature">(folderID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="removeWatermark"><span class="type-signature"></span>removeWatermark<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -3942,6 +4398,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -3967,6 +4425,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -3989,6 +4455,16 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -4034,7 +4510,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line521">line 521</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line511">line 511</a>
     </li></ul></dd>
     
 
@@ -4060,6 +4536,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -4068,7 +4548,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -4078,12 +4558,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="restoreFromTrash"><span class="type-signature"></span>restoreFromTrash<span class="signature">(folderID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="restoreFromTrash"><span class="type-signature"></span>restoreFromTrash<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -4180,9 +4664,9 @@ Method: POST
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -4309,6 +4793,8 @@ Method: POST
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -4359,7 +4845,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line415">line 415</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line409">line 409</a>
     </li></ul></dd>
     
 
@@ -4385,6 +4871,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the restored folder object
+</div>
+
 
 
 <dl>
@@ -4393,7 +4883,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -4403,12 +4893,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(folderID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(folderID, options, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -4504,8 +4998,6 @@ Method: PUT
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
@@ -4534,6 +5026,8 @@ Method: PUT
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -4611,6 +5105,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
 
 
 <dl>
@@ -4619,7 +5117,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -4629,12 +5127,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="updateMetadata"><span class="type-signature"></span>updateMetadata<span class="signature">(folderID, scope, template, patch, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="updateMetadata"><span class="type-signature"></span>updateMetadata<span class="signature">(folderID, scope, template, patch, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -4668,6 +5170,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -4693,6 +5197,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -4715,6 +5227,14 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -4739,6 +5259,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -4762,6 +5290,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -4784,6 +5320,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -4829,7 +5375,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line348">line 348</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line342">line 342</a>
     </li></ul></dd>
     
 
@@ -4855,6 +5401,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated metadata
+</div>
+
 
 
 <dl>
@@ -4863,13 +5413,15 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
 </dl>
 
     
+
+
 
 
 
@@ -4889,13 +5441,13 @@ Method: PUT
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:26 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Aug 21 2017 17:33:15 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
