@@ -810,7 +810,7 @@ describe('Collaborations', function() {
 				can_view_path: true
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
 		});
@@ -830,7 +830,7 @@ describe('Collaborations', function() {
 				can_view_path: false
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
 		});
@@ -848,7 +848,7 @@ describe('Collaborations', function() {
 				notify: true
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
 		});
@@ -863,22 +863,9 @@ describe('Collaborations', function() {
 				can_view_path: true
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler');
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post').withArgs('/collaborations', expectedParams);
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
-		});
-
-		it('should call BoxClient defaultResponseHandler method with the callback when response is returned', function(done) {
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
-			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {}, done);
-		});
-
-		it('should call BoxClient defaultResponseHandler method with the callback when options is omitted', function(done) {
-
-			sandbox.mock(boxClientFake).expects('defaultResponseHandler').withArgs(done).returns(done);
-			sandbox.stub(boxClientFake, 'post').withArgs('/collaborations').yieldsAsync();
-			collaborations.createWithGroupID(groupID, itemID, newCollabRole, done);
 		});
 	});
 
