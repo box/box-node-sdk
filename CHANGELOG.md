@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.9.0
+
+- Fixed token methods to return bluebird Promises instead of native Promises
+- Added support for the `notify` and `can_view_path` options on Collaborations
+
 ## 1.8.0
 
 - Added support for [Batch API](./docs/client.md#batch-api)
