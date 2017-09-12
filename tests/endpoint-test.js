@@ -967,7 +967,7 @@ describe('Endpoint', function() {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, () => fileStream);
+					.reply(200, function() {return fileStream;});
 
 				basicClient.files.getReadStream(fileID, {}, function(err, data) {
 
