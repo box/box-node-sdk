@@ -133,7 +133,7 @@ client.events.getEnterpriseEventStream({
 	
     if (err) { // Handle error }
 
-    stream.on('end', function(event) {
+    stream.on('end', function() {
         // Reached the end of the stream.
     });
 });
@@ -170,7 +170,7 @@ If an API or network error occurs, the stream will ignore the error and continue
 the connection can be re-established.  You can respond to errors with an `'error'` event listener:
 
 ```js
-stream.on('error', function(event) {
+stream.on('error', function(err) {
     // Handle the error.
 });
 ```
