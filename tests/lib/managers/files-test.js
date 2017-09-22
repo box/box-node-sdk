@@ -2953,69 +2953,143 @@ describe('Files', function() {
 	});
 
 	describe('getRepresentationInfo()', function() {
+		var testRepresentation = '[png?dimensions=1024x1024]';
+		var expectedRepresentationParam = { headers: { 'x-rep-hints': testRepresentation }, qs: { fields: 'representations' } };
+		var expectedRepresentationAllParams = { headers: { 'x-rep-hints': testRepresentation, set_content_disposition_type: 'inline', set_content_disposition_filename: 'New_File_Name.png' }, qs: { fields: 'representations' } };
+		var placeholderUrl = '.../{+asset_path}';
+		var representationOptions = {asset_path: '1.png'};
+		var representationAllOptions = {asset_path: '1.png', set_content_disposition_type: 'inline', set_content_disposition_filename: 'New_File_Name.png'};
 
-		it('should make GET call to retrieve link to generated representation for file', function() {
-			var representationTypes = '[jpg?dimensions=32x32]';
-			var expectedRepresentationsParams = {
-				qs: {
-					fields: 'representations'
-				},
-				headers: {
-					'x-rep-hints': representationTypes
+		it('should make GET request to get file representation when called', function() {
+			var response = {
+				statusCode: 200,
+				body: {
+					representations: {
+						entries: [{
+							content: {
+								url_template: placeholderUrl
+							}
+						}]
+					}
 				}
 			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID, expectedRepresentationsParams);
-			files.getRepresentationInfo(FILE_ID, representationTypes);
-		});
-		it('should make GET call to retrieve link to generated representation for file with optional headers', function() {
-			var representationTypes = '[jpg?dimensions=32x32]';
-			var expectedRepresentationsParams = {
-				qs: {
-					fields: 'representations'
-				},
-				headers: {
-					'x-rep-hints': representationTypes,
-					set_content_disposition_type: 'inline',
-					set_content_disposition_filename: 'NEW NAME',
-					asset_path: '1.png'
-				}
-			};
-			var options = {
-				set_content_disposition_type: 'inline',
-				set_content_disposition_filename: 'NEW NAME',
-				asset_path: '1.png'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID, expectedRepresentationsParams);
-			files.getRepresentationInfo(FILE_ID, representationTypes, options);
-		});
-		it('should wrap with default handler when called', function() {
-			var representationTypes = '[jpg?dimensions=32x32]';
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
-			files.getRepresentationInfo(FILE_ID, representationTypes);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234', expectedRepresentationParam)
+				.returns(Promise.resolve(response));
+			files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-			var representationTypes = '[jpg?dimensions=32x32]';
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			files.getRepresentationInfo(FILE_ID, representationTypes, null, function(err, data) {
+		it('should make GET request to get file representation when called with all optional headers', function() {
+			var response = {
+				statusCode: 200,
+				body: {
+					representations: {
+						entries: [{
+							content: {
+								url_template: placeholderUrl
+							}
+						}]
+					}
+				}
+			};
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234', expectedRepresentationAllParams)
+				.returns(Promise.resolve(response));
+			files.getRepresentationInfo(FILE_ID, testRepresentation, representationAllOptions);
+		});
+
+		it('should call callback with the representation when a 200 response is returned', function(done) {
+			var response = {
+				statusCode: 200,
+				body: {
+					representations: {
+						entries: [
+							{
+								content: {
+									url_template: placeholderUrl
+								}
+							}
+						]
+					}
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions, function(err, representationObject) {
 				assert.ifError(err);
-				assert.equal(data, response);
+				assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
+				done();
+			});
+		});
+		it('should return a promise resolving to a representation object when a 200 response is returned', function() {
+			var response = {
+				statusCode: 200,
+				body: {
+					representations: {
+						entries: [
+							{
+								content: {
+									url_template: placeholderUrl
+								}
+							}
+						]
+					}
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions)
+				.then(representationObject => {
+					assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
+				});
+		});
+		it('should call callback with an error when a 202 ACCEPTED response is returned', function(done) {
+			var response = {statusCode: 202};
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions, function(err) {
+				assert.instanceOf(err, Error);
+				assert.strictEqual(err.statusCode, response.statusCode);
+				done();
+			});
+		});
+		it('should return a promise that rejects when a 202 ACCEPTED response is returned', function() {
+			var response = {statusCode: 202};
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.strictEqual(err.statusCode, response.statusCode);
+				});
+		});
+		it('should call callback with an error when the API call does not succeed', function(done) {
+
+			var apiError = new Error('ECONNRESET');
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+
+			files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions, function(err) {
+				assert.equal(err, apiError);
 				done();
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
-			var representationTypes = '[jpg?dimensions=32x32]';
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+		it('should return a promise that rejects when the API call does not succeed', function() {
+
+			var apiError = new Error('ECONNRESET');
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+
+			return files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions)
+				.catch(err => {
+					assert.equal(err, apiError);
+				});
+		});
+
+		it('should call callback with unexpected response error when the API returns unknown status code', function() {
+			var response = {statusCode: 403};
+
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return files.getRepresentationInfo(FILE_ID, representationTypes)
-				.then(data => assert.equal(data, response));
+			files.getRepresentationInfo(FILE_ID, testRepresentation, representationOptions)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.strictEqual(err.statusCode, response.statusCode);
+				});
 		});
 	});
 });
