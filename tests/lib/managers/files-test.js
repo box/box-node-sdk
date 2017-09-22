@@ -2955,11 +2955,7 @@ describe('Files', function() {
 	describe('getRepresentationInfo()', function() {
 		var TEST_REPRESENTATION = '[png?dimensions=1024x1024]';
 		var expectedRepresentationParam = { headers: { 'x-rep-hints': TEST_REPRESENTATION }, qs: { fields: 'representations' } };
-		var expectedRepresentationAllParams = { headers: { 'x-rep-hints': TEST_REPRESENTATION, set_content_disposition_type: 'inline', set_content_disposition_filename: 'New_File_Name.png' }, qs: { fields: 'representations' } };
 		var placeholderUrl = '.../{+asset_path}';
-		var placeholderUrlWithoutAssetPath = '.../2.png';
-		var representationOptions = {asset_path: '1.png'};
-		var representationAllOptions = {asset_path: '1.png', set_content_disposition_type: 'inline', set_content_disposition_filename: 'New_File_Name.png'};
 
 		it('should make GET request to get file representation when called', function() {
 			var response = {
@@ -2976,25 +2972,7 @@ describe('Files', function() {
 			};
 			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234', expectedRepresentationParam)
 				.returns(Promise.resolve(response));
-			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions);
-		});
-
-		it('should make GET request to get file representation when called with all optional headers', function() {
-			var response = {
-				statusCode: 200,
-				body: {
-					representations: {
-						entries: [{
-							content: {
-								url_template: placeholderUrl
-							}
-						}]
-					}
-				}
-			};
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234', expectedRepresentationAllParams)
-				.returns(Promise.resolve(response));
-			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationAllOptions);
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION);
 		});
 
 		it('should call callback with the representation when a 200 response is returned', function(done) {
@@ -3005,8 +2983,7 @@ describe('Files', function() {
 						entries: [
 							{
 								content: {
-									url_template: placeholderUrl,
-									asset_url: placeholderUrlWithoutAssetPath
+									url_template: placeholderUrl
 								}
 							}
 						]
@@ -3014,10 +2991,9 @@ describe('Files', function() {
 				}
 			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions, function(err, representationObject) {
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err, representationObject) {
 				assert.ifError(err);
 				assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
-				assert.strictEqual(representationObject.entries[0].content.asset_url, response.body.representations.entries[0].content.asset_url, 'asset_url returns in correct format');
 				done();
 			});
 		});
@@ -3029,8 +3005,7 @@ describe('Files', function() {
 						entries: [
 							{
 								content: {
-									url_template: placeholderUrl,
-									asset_url: placeholderUrlWithoutAssetPath
+									url_template: placeholderUrl
 								}
 							}
 						]
@@ -3038,17 +3013,16 @@ describe('Files', function() {
 				}
 			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions)
+			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.then(representationObject => {
 					assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
-					assert.strictEqual(representationObject.entries[0].content.asset_url, response.body.representations.entries[0].content.asset_url, 'asset_url returns in correct format');
 				});
 		});
 		it('should call callback with an error when a 202 ACCEPTED response is returned', function(done) {
 			var response = {statusCode: 202};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions, function(err) {
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
 				assert.instanceOf(err, Error);
 				assert.strictEqual(err.statusCode, response.statusCode);
 				done();
@@ -3058,7 +3032,7 @@ describe('Files', function() {
 			var response = {statusCode: 202};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions)
+			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {
 					assert.instanceOf(err, Error);
 					assert.strictEqual(err.statusCode, response.statusCode);
@@ -3069,7 +3043,7 @@ describe('Files', function() {
 			var apiError = new Error('ECONNRESET');
 			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
 
-			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions, function(err) {
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
 				assert.equal(err, apiError);
 				done();
 			});
@@ -3080,7 +3054,7 @@ describe('Files', function() {
 			var apiError = new Error('ECONNRESET');
 			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
 
-			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions)
+			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {
 					assert.equal(err, apiError);
 				});
@@ -3092,7 +3066,7 @@ describe('Files', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
-			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions, function(err) {
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
 				assert.instanceOf(err, Error);
 				assert.propertyVal(err, 'statusCode', response.statusCode);
 				done();
@@ -3105,7 +3079,7 @@ describe('Files', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
-			return files.getThumbnail(FILE_ID, TEST_REPRESENTATION, representationOptions)
+			return files.getThumbnail(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', response.statusCode);

@@ -751,31 +751,13 @@ client.files.removeWatermark('67890', callback);
 Get Representation
 ------------------
 
-A file's representation can be retrieved by calling
+A file's representation info can be retrieved by calling
 [`files.getRepresentationInfo(fileID, representationTypes, options,
 callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo).
-You will be able to fetch a pdf representation, thumbnail representation, multi-page images
-representation, and fetching text representation.
+You will be able to fetch information regarding pdf representation, thumbnail representation, multi-page images
+representation, and extracting text representation.
 
-You can fetch different dimensions for the representation by calling
+You can generate different dimensions for the representation by calling
 ```js
 client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, null, callback);
-```
-Additionally there are two header options you can include. set_content_disposition_type and set_content_disposition_filename.
-
-set_content_disposition_type must be set to either 'inline' to try
-and open the representation within the browser or 'attachment' to force the browser to download the
-representation. If not supplied the user-agent of the client is allowed to interpret that however
-it wants. To ensure consistency, we recommend supplying this parameter.
-
-set_content_disposition_filename allows the application to define the downloaded representation's
-file name. If this field is not defined then the downloaded representation derives its name from the
-source file name in Box and the extension is replaced to match the representation's file type.
-
-```js
-client.files.getRepresentationInfo('67890', client.files.representation.PDF, {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline'}, callback);
-```
-For multi-page representations, please pass in the page number in the format of <pagenumber>.png for the asset_path input
-```js
-client.files.getRepresentationInfo('67890', "[png?dimensions=2048x2048]", {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline', asset_path: '1.png'}, callback);
 ```
