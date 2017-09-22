@@ -768,5 +768,5 @@ client.files.getRepresentationInfo('67890', client.files.representation.PDF, {se
 ```
 For multi-page representations, please pass in the page number in the format of <pagenumber>.png for the asset_path input
 ```js
-client.files.getRepresentationInfo('67890', client.files.representation.MULTI_PAGE.LARGE, {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline', asset_path: '1.png'}, callback);
+client.files.getRepresentationInfo('67890', "[png?dimensions=2048x2048]", {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline', asset_path: '1.png'}, callback);
 ```
