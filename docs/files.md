@@ -748,16 +748,23 @@ A file's watermark can be removed by calling
 client.files.removeWatermark('67890', callback);
 ```
 
-Get Representation
-------------------
+Get Representation Info
+-----------------------
 
 A file's representation info can be retrieved by calling
-[`files.getRepresentationInfo(fileID, representationTypes, options,
+[`files.getRepresentationInfo(fileID, representationTypes
 callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo).
 You will be able to fetch information regarding pdf representation, thumbnail representation, multi-page images
 representation, and extracting text representation.
 
-You can generate different dimensions for the representation by calling
+You can retrieve information regarding the generated representations by calling. This will retrieve information
+for a 2048x2048 jpg representation and a 2048x2038 png representation generated for your Box file.
 ```js
-client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, null, callback);
+client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, callback);
+```
+
+Similarly you can form your own request by manually passing in the representation types you want to
+retrieve.
+```js
+client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', callback);
 ```
