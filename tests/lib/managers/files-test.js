@@ -3086,14 +3086,29 @@ describe('Files', function() {
 				});
 		});
 
-		it('should call callback with unexpected response error when the API returns unknown status code', function() {
+		it('should call callback with unexpected response error when the API returns unknown status code', function(done) {
+
 			var response = {statusCode: 403};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions)
+
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, representationOptions, function(err) {
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', response.statusCode);
+				done();
+			});
+		});
+
+		it('should return a promise that rejects with unexpected response error when the API returns unknown status code', function() {
+
+			var response = {statusCode: 403};
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			return files.getThumbnail(FILE_ID, TEST_REPRESENTATION, representationOptions)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.strictEqual(err.statusCode, response.statusCode);
+					assert.propertyVal(err, 'statusCode', response.statusCode);
 				});
 		});
 	});
