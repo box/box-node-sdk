@@ -752,8 +752,8 @@ Get Representation
 ------------------
 
 A file's representation can be retrieved by calling
-[`files.getRepresentations(fileID, representationTypes, options,
-callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentation).
+[`files.getRepresentationInfo(fileID, representationTypes, options,
+callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo).
 You will be able to fetch a pdf representation, thumbnail representation, multi-page images
 representation, and fetching text representation.
 
@@ -770,7 +770,7 @@ it wants. To ensure consistency, we recommend supplying this parameter.
 
 set_content_disposition_filename allows the application to define the downloaded representation's
 file name. If this field is not defined then the downloaded representation derives its name from the
-source file name in Box and the extension is replaced to match the representation's file type. 
+source file name in Box and the extension is replaced to match the representation's file type.
 
 ```js
 client.files.getRepresentationInfo('67890', client.files.representation.PDF, {set_content_disposition_filename: 'New Name', set_content_disposition_type: 'inline'}, callback);
