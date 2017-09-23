@@ -37,7 +37,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Get Watermark](#get-watermark)
 * [Apply Watermark](#apply-watermark)
 * [Remove Watermark](#remove-watermark)
-* [Get Representation](#get-representation)
+* [Get Representation Info](#get-representation-info)
 
 Get a File's Information
 ------------------------
@@ -755,10 +755,10 @@ A file's representation info can be retrieved by calling
 [`files.getRepresentationInfo(fileID, representationTypes
 callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo).
 You will be able to fetch information regarding pdf representation, thumbnail representation, multi-page images
-representation, and extracting text representation.
+representation, and extracted text representation.
 
 You can retrieve information regarding the generated representations by calling. This will retrieve information
-for a 2048x2048 jpg representation and a 2048x2038 png representation generated for your Box file.
+for a 2048x2048 jpg representation and a 2048x2048 png representation generated for your Box file.
 ```js
 client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, callback);
 ```
