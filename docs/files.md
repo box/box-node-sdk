@@ -764,7 +764,8 @@ client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LA
 ```
 
 Similarly you can form your own request by manually passing in the representation types you want to
-retrieve.
+retrieve. For a full list of available x-rep-hints headers you can pass in please see: 
+https://developer.box.com/reference#section-x-rep-hints-header
 ```js
 client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', callback);
 ```
