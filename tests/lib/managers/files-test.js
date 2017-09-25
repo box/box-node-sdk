@@ -2440,7 +2440,7 @@ describe('Files', function() {
 
 		it('should retry the call when the API returns a 202 with Retry-After header', function(done) {
 
-            // Need to fake timers and make Promises resolve synchronously for this test to work
+			// Need to fake timers and make Promises resolve synchronously for this test to work
 			sandbox.useFakeTimers();
 			var originalScheduler = Promise.setScheduler(fn => fn());
 
@@ -2952,4 +2952,138 @@ describe('Files', function() {
 
 	});
 
+	describe('getRepresentationInfo()', function() {
+		var TEST_REPRESENTATION = '[png?dimensions=1024x1024]';
+		var expectedRepresentationParam = { headers: { 'x-rep-hints': TEST_REPRESENTATION }, qs: { fields: 'representations' } };
+		var placeholderUrl = '.../{+asset_path}';
+
+		it('should make GET request to get file representation when called', function() {
+			var response = {
+				statusCode: 200,
+				body: {
+					representations: {
+						entries: [{
+							content: {
+								url_template: placeholderUrl
+							}
+						}]
+					}
+				}
+			};
+			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234', expectedRepresentationParam)
+				.returns(Promise.resolve(response));
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION);
+		});
+
+		it('should call callback with the representation when a 200 response is returned', function(done) {
+			var response = {
+				statusCode: 200,
+				body: {
+					representations: {
+						entries: [
+							{
+								content: {
+									url_template: placeholderUrl
+								}
+							}
+						]
+					}
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err, representationObject) {
+				assert.ifError(err);
+				assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
+				done();
+			});
+		});
+		it('should return a promise resolving to a representation object when a 200 response is returned', function() {
+			var response = {
+				statusCode: 200,
+				body: {
+					representations: {
+						entries: [
+							{
+								content: {
+									url_template: placeholderUrl
+								}
+							}
+						]
+					}
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
+				.then(representationObject => {
+					assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
+				});
+		});
+		it('should call callback with an error when a 202 ACCEPTED response is returned', function(done) {
+			var response = {statusCode: 202};
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
+				assert.instanceOf(err, Error);
+				assert.strictEqual(err.statusCode, response.statusCode);
+				done();
+			});
+		});
+		it('should return a promise that rejects when a 202 ACCEPTED response is returned', function() {
+			var response = {statusCode: 202};
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.strictEqual(err.statusCode, response.statusCode);
+				});
+		});
+		it('should call callback with an error when the API call does not succeed', function(done) {
+
+			var apiError = new Error('ECONNRESET');
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
+				assert.equal(err, apiError);
+				done();
+			});
+		});
+
+		it('should return a promise that rejects when the API call does not succeed', function() {
+
+			var apiError = new Error('ECONNRESET');
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+
+			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
+				.catch(err => {
+					assert.equal(err, apiError);
+				});
+		});
+
+		it('should call callback with unexpected response error when the API returns unknown status code', function(done) {
+
+			var response = {statusCode: 403};
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', response.statusCode);
+				done();
+			});
+		});
+
+		it('should return a promise that rejects with unexpected response error when the API returns unknown status code', function() {
+
+			var response = {statusCode: 403};
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			return files.getThumbnail(FILE_ID, TEST_REPRESENTATION)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.propertyVal(err, 'statusCode', response.statusCode);
+				});
+		});
+	});
 });
