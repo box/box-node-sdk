@@ -75,8 +75,8 @@ describe('Config', function() {
 			});
 
 			assert.propertyVal(config, 'apiVersion', '2.0');
-			assert.deepPropertyVal(config, 'request.json', true);
-			assert.deepPropertyVal(config, 'request.followRedirect', false);
+			assert.nestedPropertyVal(config, 'request.json', true);
+			assert.nestedPropertyVal(config, 'request.followRedirect', false);
 		});
 
 		it('should override default options when passed override values', function() {
@@ -100,7 +100,7 @@ describe('Config', function() {
 				}
 			});
 
-			assert.deepPropertyVal(config, 'request.strictSSL', false);
+			assert.nestedPropertyVal(config, 'request.strictSSL', false);
 		});
 
 		it('should create an immutable object when called', function() {
@@ -146,7 +146,7 @@ describe('Config', function() {
 				appAuth: Object.assign({expirationTime: 60}, TEST_APP_AUTH_PARAMS)
 			});
 
-			assert.deepPropertyVal(config, 'appAuth.expirationTime', 60);
+			assert.nestedPropertyVal(config, 'appAuth.expirationTime', 60);
 		});
 	});
 
@@ -193,8 +193,8 @@ describe('Config', function() {
 				}
 			});
 
-			assert.deepPropertyVal(newConfig, 'request.qs.fields', 'id,name,type');
-			assert.notDeepProperty(originalConfig, 'request.qs');
+			assert.nestedPropertyVal(newConfig, 'request.qs.fields', 'id,name,type');
+			assert.notNestedProperty(originalConfig, 'request.qs');
 		});
 
 		it('should not clone stream objects', function() {
@@ -218,7 +218,7 @@ describe('Config', function() {
 				}
 			});
 
-			assert.deepProperty(newConfig, 'request.formData.value');
+			assert.nestedProperty(newConfig, 'request.formData.value');
 			assert.strictEqual(newConfig.request.formData.value, stream);
 		});
 

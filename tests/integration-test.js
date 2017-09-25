@@ -365,14 +365,14 @@ describe('Box Node SDK', function() {
 				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
 
 				var assertion = jwt.decode(body.assertion, {complete: true});
-				assert.deepPropertyVal(assertion, 'header.alg', algorithm);
-				assert.deepPropertyVal(assertion, 'header.typ', 'JWT');
-				assert.deepPropertyVal(assertion, 'header.kid', keyID);
+				assert.nestedPropertyVal(assertion, 'header.alg', algorithm);
+				assert.nestedPropertyVal(assertion, 'header.typ', 'JWT');
+				assert.nestedPropertyVal(assertion, 'header.kid', keyID);
 
-				assert.deepPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
-				assert.deepPropertyVal(assertion, 'payload.sub', userID);
-				assert.deepPropertyVal(assertion, 'payload.box_sub_type', 'user');
-				assert.deepPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.nestedPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
+				assert.nestedPropertyVal(assertion, 'payload.sub', userID);
+				assert.nestedPropertyVal(assertion, 'payload.box_sub_type', 'user');
+				assert.nestedPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
 				assert.notProperty(assertion, 'payload.iat');
 
 				return true;
@@ -455,14 +455,14 @@ describe('Box Node SDK', function() {
 				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
 
 				var assertion = jwt.decode(body.assertion, {complete: true});
-				assert.deepPropertyVal(assertion, 'header.alg', algorithm);
-				assert.deepPropertyVal(assertion, 'header.typ', 'JWT');
-				assert.deepPropertyVal(assertion, 'header.kid', keyID);
+				assert.nestedPropertyVal(assertion, 'header.alg', algorithm);
+				assert.nestedPropertyVal(assertion, 'header.typ', 'JWT');
+				assert.nestedPropertyVal(assertion, 'header.kid', keyID);
 
-				assert.deepPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
-				assert.deepPropertyVal(assertion, 'payload.sub', userID);
-				assert.deepPropertyVal(assertion, 'payload.box_sub_type', 'user');
-				assert.deepPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.nestedPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
+				assert.nestedPropertyVal(assertion, 'payload.sub', userID);
+				assert.nestedPropertyVal(assertion, 'payload.box_sub_type', 'user');
+				assert.nestedPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
 				assert.notProperty(assertion, 'payload.iat');
 
 				return true;
@@ -887,5 +887,210 @@ describe('Box Node SDK', function() {
 
 			uploader.start();
 		});
+	});
+
+	it('should send batch request and pass results to individual calls when batch is executed', function() {
+
+		var folderID = '1234',
+			fileID = '9876',
+			folderName = 'My Test Folder',
+			fileName = 'Batch API Test.docx',
+			batchResponse = {
+				responses: [
+					{
+						status: 200,
+						headers: {},
+						response: {
+							id: '1234',
+							name: folderName
+						}
+					},
+					{
+						status: 400,
+						headers: {},
+						response: {
+							type: 'error',
+							status: 400,
+							code: 'bad_request',
+							context_info: {
+								errors: [
+									{
+										reason: 'invalid_parameter',
+										name: 'entity-body',
+										message: 'Invalid value \'{\n    "name": "\\^&*@(*&^$&^%@()*"\n}\'. Entity body should be a correctly nested resource attribute name/value pair'
+									}
+								]
+							},
+							help_url: 'http://developers.box.com/docs/#errors',
+							message: 'Bad Request',
+							request_id: '273876906598a559f8b3f9'
+						}
+					}
+				]
+			};
+
+		apiMock.post('/2.0/batch',
+			function(body) {
+
+				assert.isArray(body.requests);
+				assert.sameDeepOrderedMembers(body.requests, [
+					{
+						method: 'GET',
+						relative_url: `/folders/${folderID}?fields=name%2Cid`
+					},
+					{
+						method: 'PUT',
+						relative_url: '/files/' + fileID,
+						body: {
+							name: fileName
+						}
+					}
+				]);
+
+				return true;
+			})
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				return true;
+			})
+			.matchHeader('User-Agent', function(uaHeader) {
+				assert.include(uaHeader, 'Box Node.js SDK v');
+				return true;
+			})
+			.reply(200, batchResponse);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		client.batch();
+		var folderPromise = client.folders.get(folderID, {fields: 'name,id'})
+			.then(folder => {
+				assert.propertyVal(folder, 'id', folderID);
+				assert.propertyVal(folder, 'name', folderName);
+			});
+		var filePromise = client.files.update(fileID, {name: fileName})
+			.then(() => {
+				assert.fail('Client request promise should not resolve on batch subrequest failure');
+			})
+			.catch(err => {
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', 400);
+			});
+		var batchPromise = client.batchExec()
+			.then(results => {
+				assert.deepEqual(results, batchResponse);
+			});
+
+		return Promise.all([folderPromise, filePromise, batchPromise]);
+	});
+
+	it('should send batch request and pass results to individual calls when batch is executed with callbacks', function() {
+
+		var folderID = '1234',
+			fileID = '9876',
+			folderName = 'My Test Folder',
+			fileName = 'Batch API Test.docx',
+			batchResponse = {
+				responses: [
+					{
+						status: 200,
+						headers: {},
+						response: {
+							id: '1234',
+							name: folderName
+						}
+					},
+					{
+						status: 400,
+						headers: {},
+						response: {
+							type: 'error',
+							status: 400,
+							code: 'bad_request',
+							context_info: {
+								errors: [
+									{
+										reason: 'invalid_parameter',
+										name: 'entity-body',
+										message: 'Invalid value \'{\n    "name": "\\^&*@(*&^$&^%@()*"\n}\'. Entity body should be a correctly nested resource attribute name/value pair'
+									}
+								]
+							},
+							help_url: 'http://developers.box.com/docs/#errors',
+							message: 'Bad Request',
+							request_id: '273876906598a559f8b3f9'
+						}
+					}
+				]
+			};
+
+		apiMock.post('/2.0/batch',
+			function(body) {
+
+				assert.isArray(body.requests);
+				assert.sameDeepOrderedMembers(body.requests, [
+					{
+						method: 'GET',
+						relative_url: `/folders/${folderID}?fields=name%2Cid`
+					},
+					{
+						method: 'PUT',
+						relative_url: '/files/' + fileID,
+						body: {
+							name: fileName
+						}
+					}
+				]);
+
+				return true;
+			})
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				return true;
+			})
+			.matchHeader('User-Agent', function(uaHeader) {
+				assert.include(uaHeader, 'Box Node.js SDK v');
+				return true;
+			})
+			.reply(200, batchResponse);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		client.batch();
+		var folderPromise = new Promise(function(resolve) {
+
+			client.folders.get(folderID, {fields: 'name,id'}, function(err, folder) {
+				assert.ifError(err);
+				assert.propertyVal(folder, 'id', folderID);
+				assert.propertyVal(folder, 'name', folderName);
+				resolve();
+			});
+		});
+		var filePromise = new Promise(function(resolve) {
+
+			client.files.update(fileID, {name: fileName}, function(err) {
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', 400);
+				resolve();
+			});
+		});
+		var batchPromise = new Promise(function(resolve) {
+
+			client.batchExec(function(err, results) {
+				assert.ifError(err);
+				assert.deepEqual(results, batchResponse);
+				resolve();
+			});
+		});
+		return Promise.all([folderPromise, filePromise, batchPromise]);
 	});
 });

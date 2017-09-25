@@ -133,7 +133,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 404);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -218,7 +218,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 404);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -327,7 +327,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 400);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -409,7 +409,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 400);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -491,7 +491,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 400);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -967,7 +967,7 @@ describe('Endpoint', function() {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, () => fileStream);
+					.reply(200, function() {return fileStream;});
 
 				basicClient.files.getReadStream(fileID, {}, function(err, data) {
 
@@ -1265,7 +1265,7 @@ describe('Endpoint', function() {
 
 						var attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', filename);
-						assert.deepPropertyVal(attributes, 'parent.id', folderID);
+						assert.nestedPropertyVal(attributes, 'parent.id', folderID);
 
 						assert.match(lines[4], /^-+\d+$/);
 						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');

@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.9.0
+
+- Fixed token methods to return bluebird Promises instead of native Promises
+- Added support for the `notify` and `can_view_path` options on Collaborations
+
+## 1.8.0
+
+- Added support for [Batch API](./docs/client.md#batch-api)
+- Fixed a bug where the Event Stream would make more API calls than necessary,
+potentially hitting Box API rate limits
+- Added Promise support to methods on the SDK object
+- Added Node.js version to the User-Agent header that the SDK sends
+- Fixed a bug where using multiple Persistent Clients instances could cause some
+clients to end up with expired tokens
+
 ## 1.7.0
 
 - Add support for passing IP to all token methods, and fixed a bug where a client's IP was not being correctly reported on token refreshes
