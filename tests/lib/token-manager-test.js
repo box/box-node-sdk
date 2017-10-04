@@ -576,7 +576,7 @@ describe('token-manager', function() {
 				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
 				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
 				subject_token: TEST_ACCESS_TOKEN,
-				scope: 'item_preview,item_read'
+				scope: 'item_preview item_read'
 			};
 
 			var tokenInfo = {
