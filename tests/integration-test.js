@@ -476,7 +476,7 @@ describe('Box Node SDK', function() {
 				assert.propertyVal(body, 'subject_token_type', 'urn:ietf:params:oauth:token-type:access_token');
 				assert.propertyVal(body, 'subject_token', TEST_ACCESS_TOKEN);
 				assert.propertyVal(body, 'resource', resource);
-				assert.propertyVal(body, 'scope', scopes.join(','));
+				assert.propertyVal(body, 'scope', scopes.join(' '));
 
 				return true;
 			})
