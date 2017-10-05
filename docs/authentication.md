@@ -115,6 +115,12 @@ var sdk = new BoxSDK({
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 
+To use the JSON provided by the developer console:
+```js
+var BoxSDK = require('box-node-sdk');
+var sdk = BoxSDK.getPreconfiguredInstance(jsonFromDeveloperConsole);
+```
+
 As-User
 -------
 
