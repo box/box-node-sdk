@@ -110,9 +110,9 @@ client.termsOfService.updateTermsOfServiceUserStatuses('5678', true, callback);
 Create User Status on Terms of Service 
 --------------------------------------
 
-To create user status on a terms of service call the [`termsOfService.createTermsOfServiceUserStatuses(termsOfServices, isAccepted, termsOfServiceUser, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#create-user-status-on-a-terms-of-service)
+To create user status on a terms of service call the [`termsOfService.createTermsOfServiceUserStatuses(termsOfServicesID, isAccepted, termsOfServiceUserID, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#create-user-status-on-a-terms-of-service)
 method.
 
 ```js
-client.termsOfService.createTermsOfServiceUserStatuses(termsOfServicesObject, true, userObject, callback);
+client.termsOfService.createTermsOfServiceUserStatuses('1234', true, '5678', callback);
 ```
