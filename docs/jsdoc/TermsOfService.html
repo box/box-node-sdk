@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: RetentionPolicies</title>
+    <title>JSDoc: Class: TermsOfService</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: RetentionPolicies</h1>
+    <h1 class="page-title">Class: TermsOfService</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>RetentionPolicies<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>TermsOfService<span class="signature">(client)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="RetentionPolicies"><span class="type-signature"></span>new RetentionPolicies<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="TermsOfService"><span class="type-signature"></span>new TermsOfService<span class="signature">(client)</span><span class="type-signature"></span></h4>
     
 
     
@@ -49,7 +49,7 @@
 
 
 <div class="description">
-    Simple manager for interacting with all Retention Policies endpoints and actions.
+    Simple manager for interacting with all 'Terms of Services' and 'Terms of Service User Statuses' endpoints and actions.
 </div>
 
 
@@ -142,7 +142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line52">line 52</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -165,24 +165,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -208,13 +190,13 @@
 
         
             
-<h4 class="name" id="assignmentTypes"><span class="type-signature">(readonly) </span>assignmentTypes<span class="type-signature"> :<a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></span></h4>
+<h4 class="name" id="status"><span class="type-signature">(readonly) </span>status<span class="type-signature"> :TermsOfServicesStatus</span></h4>
 
 
 
 
 <div class="description">
-    Enum of valid policy assignment types, which specify what object the policy applies to
+    Enum value of status of the custom terms of services, either currently enabled or currently disabled
 </div>
 
 
@@ -223,12 +205,87 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></span>
+<span class="param-type">TermsOfServicesStatus</span>
 
 
         </li>
     </ul>
 
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ENABLED</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TermsOfServicesStatus</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>DISABLED</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TermsOfServicesStatus</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -262,7 +319,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line83">line 83</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -280,14 +337,13 @@
 
         
             
-<h4 class="name" id="dispositionActions"><span class="type-signature">(readonly) </span>dispositionActions<span class="type-signature"> :<a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></span></h4>
+<h4 class="name" id="type"><span class="type-signature">(readonly) </span>type<span class="type-signature"> :<a href="global.html#TermsOfServicesType">TermsOfServicesType</a></span></h4>
 
 
 
 
 <div class="description">
-    Enum of valid retention policy disposition actions, which specify what should
-be done when the retention period is over
+    Enum value of scope of the custom terms of services set to either managed by an enterprise or enternal to an enterprise
 </div>
 
 
@@ -296,7 +352,7 @@ be done when the retention period is over
     <ul>
         <li>
             
-<span class="param-type"><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></span>
+<span class="param-type"><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></span>
 
 
         </li>
@@ -306,75 +362,77 @@ be done when the retention period is over
 
 
 
-<dl class="details">
+    <h5 class="subsection-title">Properties:</h5>
 
     
 
-    
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line73">line 73</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<h4 class="name" id="policyTypes"><span class="type-signature">(readonly) </span>policyTypes<span class="type-signature"> :<a href="global.html#RetentionPolicyType">RetentionPolicyType</a></span></h4>
-
-
-
-
-<div class="description">
-    Enum of valid retention policy types, which specify how long the policy should
-remain in effect.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+                <td class="name"><code>MANAGED</code></td>
             
-<span class="param-type"><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></span>
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></span>
 
 
-        </li>
-    </ul>
+            
+            </td>
 
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>EXTERNAL</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -408,7 +466,7 @@ remain in effect.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line62">line 62</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -436,7 +494,7 @@ remain in effect.
     
 
     
-    <h4 class="name" id="assign"><span class="type-signature"></span>assign<span class="signature">(policyID, assignType, assignID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(termsOfServicesType, termsOfServicesStatus, termsOfServicesText, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -444,9 +502,9 @@ remain in effect.
 
 
 <div class="description">
-    Assign a retention policy to a folder or the entire enterprise.
+    Creates a custom terms of services with user specified values
 
-API Endpoint: '/retention_policy_assignments
+API Endpoint: '/terms_of_services'
 Method: POST
 </div>
 
@@ -485,7 +543,69 @@ Method: POST
 
         <tr>
             
-                <td class="name"><code>policyID</code></td>
+                <td class="name"><code>termsOfServicesType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Determine if the custom terms of service is scoped internall or externally to an enterprise</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>termsOfServicesStatus</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TermsOfServicesStatus</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Determine if the custom terms of service is enabled or disabled</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>termsOfServicesText</code></td>
             
 
             <td class="type">
@@ -509,69 +629,7 @@ Method: POST
 
             
 
-            <td class="description last">The ID of the policy to assign</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>assignType</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The type of object the policy will be assigned to</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>assignID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The Box ID of the object to assign the retention policy to</td>
+            <td class="description last">Text field for message associated with custom terms of services</td>
         </tr>
 
     
@@ -604,7 +662,7 @@ Method: POST
 
             
 
-            <td class="description last">Passed the new assignment object if successful, error otherwise</td>
+            <td class="description last">Passed the terms of services information if successful, error otherwise</td>
         </tr>
 
     
@@ -645,7 +703,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line217">line 217</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -672,7 +730,7 @@ Method: POST
 
         
 <div class="param-desc">
-    A promise resolving to the created assignment object
+    A promise resolving to the terms of services object
 </div>
 
 
@@ -701,7 +759,7 @@ Method: POST
     
 
     
-    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(name, type, action, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="createUserStatus"><span class="type-signature"></span>createUserStatus<span class="signature">(termsOfServicesID, isAccepted, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -709,9 +767,9 @@ Method: POST
 
 
 <div class="description">
-    Used to create a single retention policy for an enterprise
+    Accepts/rejects custom terms of services for the user
 
-API Endpoint: '/retention_policies'
+API Endpoint: '/terms_of_service_user_statuses'
 Method: POST
 </div>
 
@@ -750,7 +808,7 @@ Method: POST
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>termsOfServicesID</code></td>
             
 
             <td class="type">
@@ -774,20 +832,20 @@ Method: POST
 
             
 
-            <td class="description last">The name of the retention policy to be created</td>
+            <td class="description last">Terms of services ID to retrieve user statuses on</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>isAccepted</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></span>
+<span class="param-type">bool</span>
 
 
             
@@ -805,38 +863,7 @@ Method: POST
 
             
 
-            <td class="description last">The type of policy to create</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>action</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The disposition action for the new policy</td>
+            <td class="description last">Determines wehether the terms of services has been accepted or rejected</td>
         </tr>
 
     
@@ -869,7 +896,7 @@ Method: POST
 
             
 
-            <td class="description last">Additional parameters
+            <td class="description last">Additional options. Can be left null in most cases.
                 <h6>Properties</h6>
                 
 
@@ -897,13 +924,13 @@ Method: POST
 
         <tr>
             
-                <td class="name"><code>retention_length</code></td>
+                <td class="name"><code>user_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">string</span>
 
 
             
@@ -923,7 +950,7 @@ Method: POST
 
             
 
-            <td class="description last">For finite policies, the number of days to retain the content</td>
+            <td class="description last">Optional, user id to retrieve terms of service status on, default is current user</td>
         </tr>
 
     
@@ -963,7 +990,7 @@ Method: POST
 
             
 
-            <td class="description last">Passed the new policy information if it was acquired successfully, error otherwise</td>
+            <td class="description last">Passed the terms of service user status information if successful, error otherwise</td>
         </tr>
 
     
@@ -1004,7 +1031,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line102">line 102</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -1031,7 +1058,7 @@ Method: POST
 
         
 <div class="param-desc">
-    A promise resolving to the new policy object
+    A promise resolving to the terms of service user status
 </div>
 
 
@@ -1060,7 +1087,7 @@ Method: POST
     
 
     
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(policyID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(termsOfServicesID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -1068,9 +1095,9 @@ Method: POST
 
 
 <div class="description">
-    Fetches details about a specific retention policy
+    Gets a specific custom terms of services with specified ID
 
-API Endpoint: '/retention_policies/:policyID'
+API Endpoint: '/terms_of_services/:termsOfServicesID'
 Method: GET
 </div>
 
@@ -1109,7 +1136,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>policyID</code></td>
+                <td class="name"><code>termsOfServicesID</code></td>
             
 
             <td class="type">
@@ -1133,14 +1160,14 @@ Method: GET
 
             
 
-            <td class="description last">The Box ID of the retention policy being requested</td>
+            <td class="description last">The id of the custom terms of services to retrieve</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>qs</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -1166,212 +1193,7 @@ Method: GET
 
             
 
-            <td class="description last">Additional options can be passed with the request via querystring</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Passed the policy information if it was acquired successfully, error otherwise</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line128">line 128</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    A promise resolving to the policy object
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Fetches a list of retention policies for the enterprise
-
-API Endpoint: '/retention_policies
-Method: GET
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>qs</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Additional options can be passed with the request via querystring
+            <td class="description last">Additional options. Can be left null in most cases.
                 <h6>Properties</h6>
                 
 
@@ -1399,7 +1221,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>policy_name</code></td>
+                <td class="name"><code>fields</code></td>
             
 
             <td class="type">
@@ -1425,73 +1247,7 @@ Method: GET
 
             
 
-            <td class="description last">A full or partial name to filter the retention policies by</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>policy_type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">A policy type to filter the retention policies by</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>created_by_user_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">A user id to filter the retention policies by</td>
+            <td class="description last">Comma-separated list of fields to return on the collaboration objects</td>
         </tr>
 
     
@@ -1531,7 +1287,7 @@ Method: GET
 
             
 
-            <td class="description last">Passed the policy objects if they were acquired successfully, error otherwise</td>
+            <td class="description last">Passed the terms of services information with specified ID if successful, error otherwise</td>
         </tr>
 
     
@@ -1572,7 +1328,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line174">line 174</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -1599,7 +1355,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the collection of policies
+    A promise resolving to the terms of services object
 </div>
 
 
@@ -1628,7 +1384,7 @@ Method: GET
     
 
     
-    <h4 class="name" id="getAllFileVersionRetentions"><span class="type-signature"></span>getAllFileVersionRetentions<span class="signature">(qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -1636,11 +1392,9 @@ Method: GET
 
 
 <div class="description">
-    Get a list of retention records for a retained file versions in an enterprise.
-To use this feature, you must have the manage retention policies scope enabled
-for your API key via your application management console.
+    Gets custom terms of services for the user's enterprise
 
-API Endpoint: '/file_version_retentions'
+API Endpoint: '/terms_of_services'
 Method: GET
 </div>
 
@@ -1679,7 +1433,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>qs</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -1705,7 +1459,7 @@ Method: GET
 
             
 
-            <td class="description last">Additional options can be passed with the request via querystring
+            <td class="description last">Additional options. Can be left null in most cases.
                 <h6>Properties</h6>
                 
 
@@ -1733,7 +1487,40 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>file_id</code></td>
+                <td class="name"><code>tos_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TermsOfServiceType</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional, indicates whether the terms of service is set for external or managed under enterprise</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fields</code></td>
             
 
             <td class="type">
@@ -1759,238 +1546,7 @@ Method: GET
 
             
 
-            <td class="description last">A file id to filter the file version retentions by</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>file_version_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">A file version id to filter the file version retentions by</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>policy_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">A policy id to filter the file version retentions by</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>disposition_action</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The disposition action of the retention policy to filter by</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>disposition_before</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Filter by retention policies which will complete before a certain time</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>disposition_after</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Filter by retention policies which will complete after a certain time</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>limit</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The maximum number of items to return in a page</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>marker</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Paging marker, left blank to begin paging from the beginning</td>
+            <td class="description last">Comma-separated list of fields to return on the collaboration objects</td>
         </tr>
 
     
@@ -2030,7 +1586,7 @@ Method: GET
 
             
 
-            <td class="description last">Pass the file version retention record if successful, error otherwise</td>
+            <td class="description last">Passed the terms of services information if successful, error otherwise</td>
         </tr>
 
     
@@ -2071,7 +1627,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line297">line 297</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -2098,7 +1654,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the collection of retention records
+    A promise resolving to the terms of services object
 </div>
 
 
@@ -2127,7 +1683,7 @@ Method: GET
     
 
     
-    <h4 class="name" id="getAssignment"><span class="type-signature"></span>getAssignment<span class="signature">(assignmentID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="getUserStatus"><span class="type-signature"></span>getUserStatus<span class="signature">(termsOfServicesID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -2135,9 +1691,9 @@ Method: GET
 
 
 <div class="description">
-    Fetch a specific policy assignment
+    Gets a terms os service status given the terms of services id
 
-API Endpoint: '/retention_policy_assignments/:assignmentID'
+API Endpoint: '/terms_of_service_user_statuses'
 Method: GET
 </div>
 
@@ -2176,7 +1732,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>assignmentID</code></td>
+                <td class="name"><code>termsOfServicesID</code></td>
             
 
             <td class="type">
@@ -2200,14 +1756,14 @@ Method: GET
 
             
 
-            <td class="description last">The Box ID of the policy assignment object to fetch</td>
+            <td class="description last">The ID of the terms of services to retrieve status on</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>qs</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -2233,243 +1789,7 @@ Method: GET
 
             
 
-            <td class="description last">Additional options can be passed with the request via querystring</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Passed the assignment object if it was acquired successfully, error otherwise</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line244">line 244</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    A promise resolving to the assignment object
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getAssignments"><span class="type-signature"></span>getAssignments<span class="signature">(policyID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Fetch a list of assignments for a given retention policy
-
-API Endpoint: '/retention_policies/:policyID/assignments'
-Method: GET
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>policyID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The Box ID of the retention policy to get assignments for</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>qs</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Additional options can be passed with the request via querystring
+            <td class="description last">Additional options. Can be left null in most cases
                 <h6>Properties</h6>
                 
 
@@ -2497,13 +1817,13 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>user_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></span>
+<span class="param-type">string</span>
 
 
             
@@ -2523,7 +1843,7 @@ Method: GET
 
             
 
-            <td class="description last">The type of the retention policy assignment to retrieve</td>
+            <td class="description last">Optional, the id of the user to retrieve status of custom terms and service on</td>
         </tr>
 
     
@@ -2563,7 +1883,7 @@ Method: GET
 
             
 
-            <td class="description last">Passed the assignment objects if they were acquired successfully, error otherwise</td>
+            <td class="description last">Passed the terms of service user status information if successful, error otherwise</td>
         </tr>
 
     
@@ -2604,7 +1924,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line195">line 195</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line205">line 205</a>
     </li></ul></dd>
     
 
@@ -2631,7 +1951,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the collection of policy assignments
+    A promise resolving to the terms of service user status
 </div>
 
 
@@ -2660,7 +1980,7 @@ Method: GET
     
 
     
-    <h4 class="name" id="getFileVersionRetention"><span class="type-signature"></span>getFileVersionRetention<span class="signature">(retentionID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="setUserStatus"><span class="type-signature"></span>setUserStatus<span class="signature">(termsOfServicesID, isAccepted, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -2668,12 +1988,10 @@ Method: GET
 
 
 <div class="description">
-    Get the specific retention record for a retained file version. To use this feature,
-you must have the manage retention policies scope enabled for your API key
-via your application management console.
+    Creates a user status for terms of service, if already exists then update existing user status for terms of service
 
-API Endpoint: '/file_version_retentions/:retentionID'
-Method: GET
+API Endpoint: '/terms_of_service_user_statuses'
+Method: POST/PUT
 </div>
 
 
@@ -2711,7 +2029,7 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>retentionID</code></td>
+                <td class="name"><code>termsOfServicesID</code></td>
             
 
             <td class="type">
@@ -2735,14 +2053,45 @@ Method: GET
 
             
 
-            <td class="description last">The ID for the file retention record to retrieve</td>
+            <td class="description last">Terms of services ID to retrieve user statuses on</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>qs</code></td>
+                <td class="name"><code>isAccepted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">bool</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Determines wehether the terms of services has been accepted or rejected</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -2768,7 +2117,68 @@ Method: GET
 
             
 
-            <td class="description last">Additional options can be passed with the request via querystring</td>
+            <td class="description last">Additional options. Can be left null in most cases.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>user_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional, user id to retrieve terms of service status on, default is current user</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2801,7 +2211,7 @@ Method: GET
 
             
 
-            <td class="description last">Pass the file version retention record if successful, error otherwise</td>
+            <td class="description last">Passed the terms of service user status information if successful, error otherwise</td>
         </tr>
 
     
@@ -2842,7 +2252,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line267">line 267</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -2869,7 +2279,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the retention record
+    A promise resolving to the terms of service user status
 </div>
 
 
@@ -2898,7 +2308,7 @@ Method: GET
     
 
     
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(policyID, options, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(termsOfServicesID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -2906,9 +2316,9 @@ Method: GET
 
 
 <div class="description">
-    Update or modify a retention policy.
+    Updates a custom terms of services with new specified values
 
-API Endpoint: '/retention_policies/:policyID'
+API Endpoint: '/terms_of_services/:termsOfServicesID'
 Method: PUT
 </div>
 
@@ -2947,7 +2357,7 @@ Method: PUT
 
         <tr>
             
-                <td class="name"><code>policyID</code></td>
+                <td class="name"><code>termsOfServicesID</code></td>
             
 
             <td class="type">
@@ -2971,7 +2381,7 @@ Method: PUT
 
             
 
-            <td class="description last">The Box ID of the retention policy to update</td>
+            <td class="description last">The id of the custom terms of services to update</td>
         </tr>
 
     
@@ -2993,6 +2403,8 @@ Method: PUT
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -3002,7 +2414,7 @@ Method: PUT
 
             
 
-            <td class="description last">The information to be updated
+            <td class="description last">Additional options. Can be left null in most cases.
                 <h6>Properties</h6>
                 
 
@@ -3030,78 +2442,45 @@ Method: PUT
 
         <tr>
             
-                <td class="name"><code>policy_name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The name of the retention policy</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>disposition_action</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The disposition action for the updated policy</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>status</code></td>
             
 
             <td class="type">
             
                 
+<span class="param-type">TermsOfServicesStatus</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Determine if the custom terms of service is scoped internall or externally to an enterprise</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
@@ -3122,7 +2501,7 @@ Method: PUT
 
             
 
-            <td class="description last">Used to retire a retention policy if status is set to retired</td>
+            <td class="description last">Text field for message associated with custom terms of services</td>
         </tr>
 
     
@@ -3162,7 +2541,7 @@ Method: PUT
 
             
 
-            <td class="description last">Passed the updated policy information if it was acquired successfully, error otherwise</td>
+            <td class="description last">Passed the terms of services updated information if successful, error otherwise</td>
         </tr>
 
     
@@ -3203,7 +2582,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line151">line 151</a>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line110">line 110</a>
     </li></ul></dd>
     
 
@@ -3230,7 +2609,241 @@ Method: PUT
 
         
 <div class="param-desc">
-    A promise resolving to the updated policy object
+    A promise resolving to the terms of services object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateUserStatus"><span class="type-signature"></span>updateUserStatus<span class="signature">(termsOfServiceUserStatusID, isAccepted, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Accepts/rejects custom terms of services for the user
+
+API Endpoint: '/terms_of_service_user_statuses'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>termsOfServiceUserStatusID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Terms of service user status object ID</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAccepted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">bool</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Determines wehether the terms of services has been accepted or rejected</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the terms of service user status updated information if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_terms-of-service.js.html">managers/terms-of-service.js</a>, <a href="managers_terms-of-service.js.html#line238">line 238</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the updated terms of service user status
 </div>
 
 

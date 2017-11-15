@@ -31,6 +31,14 @@
  */
 
 'use strict';
+// -----------------------------------------------------------------------------
+// Typedefs
+// -----------------------------------------------------------------------------
+
+/**
+ * A representation request type constant
+ * @typedef {string} FileRepresentationType Different representations we can request from reps endpoint
+ */
 
 // -----------------------------------------------------------------------------
 // Requirements
@@ -168,16 +176,16 @@ Files.prototype.getDownloadURL = function(fileID, qs, callback) {
 
 			switch (response.statusCode) {
 
-			// 302 - Found
-			// No data returned, but the location header points to a download link for that file.
+				// 302 - Found
+				// No data returned, but the location header points to a download link for that file.
 			case httpStatusCodes.FOUND:
 				return response.headers.location;
 
-			// 202 - Download isn't ready yet.
+				// 202 - Download isn't ready yet.
 			case httpStatusCodes.ACCEPTED:
 				throw errors.buildResponseError(response, 'Download not ready at this time');
 
-			// Unexpected Response
+				// Unexpected Response
 			default:
 				throw errors.buildUnexpectedResponseError(response);
 			}
@@ -204,7 +212,7 @@ Files.prototype.getReadStream = function(fileID, qs, callback) {
 	// Get the download URL to download from
 	return this.getDownloadURL(fileID, qs)
 		// Return a read stream to download the file
-		.then(url => this.client.get(url, {streaming: true}))
+		.then(url => this.client.get(url, { streaming: true }))
 		.asCallback(callback);
 };
 
@@ -237,9 +245,9 @@ Files.prototype.getThumbnail = function(fileID, qs, callback) {
 
 			switch (response.statusCode) {
 
-			// 202 - Thumbnail will be generated, but is not ready yet
-			// 302 - Thumbnail can not be generated
-			// return the url for a thumbnail placeholder
+				// 202 - Thumbnail will be generated, but is not ready yet
+				// 302 - Thumbnail can not be generated
+				// return the url for a thumbnail placeholder
 			case httpStatusCodes.ACCEPTED:
 			case httpStatusCodes.FOUND:
 				return {
@@ -247,15 +255,15 @@ Files.prototype.getThumbnail = function(fileID, qs, callback) {
 					location: response.headers.location
 				};
 
-			// 200 - Thumbnail image recieved
-			// return the thumbnail file
+				// 200 - Thumbnail image recieved
+				// return the thumbnail file
 			case httpStatusCodes.OK:
 				return {
 					statusCode: response.statusCode,
 					file: response.body
 				};
 
-			// Unexpected Response
+				// Unexpected Response
 			default:
 				throw errors.buildUnexpectedResponseError(response);
 			}
@@ -316,20 +324,20 @@ Files.prototype.update = function(fileID, options, callback) {
  */
 Files.prototype.addToCollection = function(fileID, collectionID, callback) {
 
-	return this.get(fileID, {fields: 'collections'})
+	return this.get(fileID, { fields: 'collections' })
 		.then(data => {
 
 			var collections = data.collections || [];
 
 			// Convert to correct format
-			collections = collections.map(c => ({id: c.id}));
+			collections = collections.map(c => ({ id: c.id }));
 
 			if (!collections.find(c => c.id === collectionID)) {
 
-				collections.push({id: collectionID});
+				collections.push({ id: collectionID });
 			}
 
-			return this.update(fileID, {collections});
+			return this.update(fileID, { collections });
 		})
 		.asCallback(callback);
 };
@@ -347,14 +355,14 @@ Files.prototype.addToCollection = function(fileID, collectionID, callback) {
  */
 Files.prototype.removeFromCollection = function(fileID, collectionID, callback) {
 
-	return this.get(fileID, {fields: 'collections'})
+	return this.get(fileID, { fields: 'collections' })
 		.then(data => {
 
 			var collections = data.collections || [];
 			// Convert to correct object format and remove the specified collection
-			collections = collections.map(c => ({id: c.id})).filter(c => c.id !== collectionID);
+			collections = collections.map(c => ({ id: c.id })).filter(c => c.id !== collectionID);
 
-			return this.update(fileID, {collections});
+			return this.update(fileID, { collections });
 		})
 		.asCallback(callback);
 };
@@ -1133,7 +1141,7 @@ Files.prototype.commitUploadSession = function(sessionID, fileHash, options, cal
 					.then(() => {
 
 						// Ensure we don't have to fetch parts from the API again on retry
-						options = Object.assign({}, options, {parts: params.body.parts});
+						options = Object.assign({}, options, { parts: params.body.parts });
 						return this.commitUploadSession(sessionID, fileHash, options);
 					});
 			}
@@ -1271,6 +1279,61 @@ Files.prototype.getCollaborations = function(fileID, options, callback) {
 };
 
 /**
+ * Enum of valid x-rep- hint values for generating representation info
+ *
+ * @readonly
+ * @enum {FileRepresentationType}
+ */
+Files.prototype.representation = {
+	PDF: '[pdf]',
+	THUMBNAIL: '[jpg?dimensions=320x320]',
+	IMAGE_MEDIUM: '[jpg?dimensions=1024x1024][png?dimensions=1024x1024]',
+	IMAGE_LARGE: '[jpg?dimensions=2048x2048][png?dimensions=2048x2048]',
+	EXTRACTED_TEXT: '[extracted_text]'
+};
+/**
+ * Requests information for all representation objects generated for a specific Box file
+ *
+ * API Endpoint: '/files/:fileID?fields=representations'
+ * Method : GET
+ *
+ * @param {string} fileID - Box ID of the file being requested
+ * @param {client.files.representation} representationType - The x-rep-hints value the application should create a
+ *    representation for. This value can either come from FileRepresentationType enum or manually created
+ * @param {Function} [callback] - Passed an array of representaton objects if successful
+ * @returns {Promise&lt;Object>} A promise resolving to the representation response objects
+*/
+Files.prototype.getRepresentationInfo = function(fileID, representationType, callback) {
+	var params = {
+		qs: {
+			fields: 'representations'
+		},
+		headers: {
+			'x-rep-hints': representationType
+		}
+	};
+	var apiPath = urlPath(BASE_PATH, fileID);
+
+	return this.client.get(apiPath, params)
+		.then(response => {
+			switch (response.statusCode) {
+			// 202 - A Box file representation will be generated, but is not ready yet
+			case httpStatusCodes.ACCEPTED:
+				throw errors.buildResponseError(response, 'Representation not ready at this time');
+
+			// 200 - A Boxfile representation generated successfully
+			// return the representation object
+			case httpStatusCodes.OK:
+				return response.body.representations;
+
+			// Unexpected Response
+			default:
+				throw errors.buildUnexpectedResponseError(response);
+			}
+		})
+		.asCallback(callback);
+};
+/**
  * @module box-node-sdk/lib/managers/files
  * @see {@Link Files}
  */
@@ -1285,13 +1348,13 @@ module.exports = Files;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Tue Sep 12 2017 13:37:33 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 14 2017 17:48:57 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>
