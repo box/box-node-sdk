@@ -93,17 +93,21 @@ client.termsOfService.getUserStatus('1234',
 	callback);
 ```
 
+If no user is specified, this will default to current user.
+
 Create User Status on Terms of Service 
 --------------------------------------
 
-To accept or decline a terms of service for a user who has never accepted/decline this terms of service before call the [`termsOfService.createUserStatus(termsOfServicesID, isAccepted, userID, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#createUserStatus)
+To accept or decline a terms of service for a user who has never accepted/decline this terms of service before call the [`termsOfService.createUserStatus(termsOfServicesID, isAccepted, options, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#createUserStatus)
 method.
 
 ```js
-client.termsOfService.createUserStatus('1234', true, '5678', callback);
+client.termsOfService.createUserStatus('1234', true, {user_id: "5678"}, callback);
 ```
 It is important to note that this will accept or decline a custom terms of service for a user that has 
 never taken action on this terms of service before. For a user that has, this will return a 409 Conflict Error.
+
+If no user is specified, this will default to current user.
 
 Update User Status on Terms of Service 
 --------------------------------------
