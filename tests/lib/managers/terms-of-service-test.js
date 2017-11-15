@@ -339,10 +339,9 @@ describe('TermsOfService', function() {
 	});
 
 	describe('update()', function() {
-		var options = { termsOfServiceStatus: 'enabled', termsOfServiceText: 'Test Text' };
+		var options = { status: 'enabled', text: 'Test Text' };
 		it('should make PUT request to update custom terms of service info when called', function() {
 			var expectedTermsOfServiceParam = { body: { status: 'enabled', text: 'Test Text'}};
-
 
 			var response = {
 				type: 'terms_of_service',
