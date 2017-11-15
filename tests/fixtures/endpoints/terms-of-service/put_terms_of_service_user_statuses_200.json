@@ -1,15 +1,15 @@
 {
     "type": "terms_of_service_user_status",
-    "id": "1939280",
+    "id": "5678",
     "tos": {
         "type": "terms_of_service",
-        "id": "2778"
+        "id": "1234"
     },
     "user": {
         "type": "user",
-        "id": "235699372",
-        "name": "Cary Cheng",
-        "login": "ccheng+demo@box.com"
+        "id": "7777",
+        "name": "Test User",
+        "login": "test@example.com"
     },
     "is_accepted": true,
     "created_at": "2015-06-03T18:01:31-07:00",

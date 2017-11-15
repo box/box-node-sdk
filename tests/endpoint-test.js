@@ -1296,18 +1296,18 @@ describe('Endpoint', function() {
 
 		describe('setUserStatus()', function() {
 			it('should make a post request to create user status on terms of service, if conflict update', function() {
-				var termsOfServiceID = '2778',
-					termsOfServiceUserStatusID = '1939280',
+				var termsOfServiceID = '1234',
+					termsOfServiceUserStatusID = '5678',
 					post_fixture = getFixture('terms-of-service/post_terms_of_service_user_statuses_409'),
 					get_fixture = getFixture('terms-of-service/get_terms_of_service_user_statuses_200'),
 					put_fixture = getFixture('terms-of-service/put_terms_of_service_user_statuses_200'),
 					user = {
-						id: '1234',
+						id: '7777',
 						type: 'user'
 					},
 					expected_post_body = {
 						tos: {
-							id: '2778',
+							id: termsOfServiceID,
 							type: 'terms_of_service'
 						},
 						user: user,
