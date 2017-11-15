@@ -1294,5 +1294,69 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('setUserStatus()', function() {
+			it('should make a post request to create user status on terms of service, if conflict update', function() {
+				var termsOfServiceID = '2778',
+					termsOfServiceUserStatusID = '1939280',
+					post_fixture = getFixture('terms-of-service/post_terms_of_service_user_statuses_409'),
+					get_fixture = getFixture('terms-of-service/get_terms_of_service_user_statuses_200'),
+					put_fixture = getFixture('terms-of-service/put_terms_of_service_user_statuses_200'),
+					user = {
+						id: '1234',
+						type: 'user'
+					},
+					expected_post_body = {
+						tos: {
+							id: '2778',
+							type: 'terms_of_service'
+						},
+						user: user,
+						is_accepted: true
+					},
+					expected_put_body = {
+						is_accepted: true
+					};
+
+
+				apiMock.post('/2.0/terms_of_service_user_statuses', expected_post_body)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(409, post_fixture);
+
+				apiMock.get('/2.0/terms_of_service_user_statuses')
+					.query({tos_id: termsOfServiceID, user_id: user.id, fields: 'id'})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, get_fixture);
+
+				apiMock.put('/2.0/terms_of_service_user_statuses/' + termsOfServiceUserStatusID, expected_put_body)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, put_fixture);
+
+				return basicClient.termsOfService.setUserStatus(termsOfServiceID, true, {user_id: user.id})
+					.then(tosUserStatus => {
+						assert.deepEqual(tosUserStatus, JSON.parse(put_fixture));
+					});
+			});
+		});
 	});
 });
