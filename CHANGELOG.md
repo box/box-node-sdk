@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.10.1
+
+- Updated to jsonwebtoken@8.1.0 to fix an issue where some users were getting
+an error when using App Auth
+
 ## 1.10.0
 
 - Added support for [Terms of Service](./docs/terms-of-service.md) endpoints
