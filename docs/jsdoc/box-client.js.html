@@ -56,10 +56,14 @@
 // Requirements
 // ------------------------------------------------------------------------------
 var util = require('util'),
+	qs = require('querystring'),
 	errors = require('./util/errors'),
 	httpStatusCodes = require('http-status'),
 	isIP = require('net').isIP,
-	merge = require('merge-options');
+	merge = require('merge-options'),
+	PagingIterator = require('./util/paging-iterator'),
+	Promise = require('bluebird'),
+	Readable = require('stream').Readable;
 
 // API Resource Managers
 var Users = require('./managers/users'),
@@ -80,7 +84,9 @@ var Users = require('./managers/users'),
 	WebLinks = require('./managers/web-links'),
 	RetentionPolicies = require('./managers/retention-policies'),
 	DevicePins = require('./managers/device-pins'),
-	Webhooks = require('./managers/webhooks');
+	Webhooks = require('./managers/webhooks'),
+	RecentItems = require('./managers/recent-items'),
+	TermsOfService = require('./managers/terms-of-service');
 
 // ------------------------------------------------------------------------------
 // Private
@@ -149,6 +155,41 @@ function getFullURL(defaultBasePath, url) {
 }
 
 /**
+ * Create a valid request object for the Batch API from a standard request
+ * params object
+ * @param {Object} params The request params
+ * @returns {Object} The batch API request object
+ * @private
+ */
+function formatRequestForBatch(params) {
+
+	var relativePath = params.url.replace(/^http.*?\/\d\.\d\//, '/');
+
+	return {
+		method: params.method,
+		relative_url: relativePath + (params.qs ? '?' + qs.stringify(params.qs) : ''),
+		body: params.body,
+		headers: params.headers
+	};
+}
+
+/**
+ * Format a Batch API response object into a standard request response
+ * for use in response handling
+ * @param {Object} response The batch API response object
+ * @returns {Object} The standard response object
+ * @private
+ */
+function formatResponseForBatch(response) {
+
+	return {
+		statusCode: response.status,
+		headers: response.headers,
+		body: response.response
+	};
+}
+
+/**
  * The BoxClient can make API calls on behalf of a valid API Session. It is responsible
  * for formatting the requests and handling the response. Its goal is to deliver
  * sensible results to the user.
@@ -172,6 +213,8 @@ function BoxClient(apiSession, config, requestManager) {
 	this._baseURL = util.format('%s/%s', config.apiRootURL, config.apiVersion);
 	this._uploadBaseURL = util.format('%s/%s', config.uploadAPIRootURL, config.apiVersion);
 	this._uploadRequestTimeoutMS = config.uploadRequestTimeoutMS;
+	this._useIterators = config.iterators;
+
 	// Attach API Resource Managers
 	this.users = new Users(this);
 	this.files = new Files(this);
@@ -192,6 +235,11 @@ function BoxClient(apiSession, config, requestManager) {
 	this.retentionPolicies = new RetentionPolicies(this);
 	this.devicePins = new DevicePins(this);
 	this.webhooks = new Webhooks(this);
+	this.recentItems = new RecentItems(this);
+	this.termsOfService = new TermsOfService(this);
+
+	// Array of requests when in batch mode, null otherwise
+	this._batch = null;
 }
 
 /**
@@ -225,100 +273,76 @@ BoxClient.prototype._createHeadersForRequest = function(callerHeaders, accessTok
  * a permanent error, or if usable tokens are not available.
  *
  * @param {Object} params - Request lib params to configure the request
- * @param {APIRequest~Callback} callback - passed response data
- * @returns {void}
+ * @param {APIRequest~Callback} [callback] - passed response data
+ * @returns {Promise} Promise resolving to the response
  * @private
  */
 BoxClient.prototype._makeRequest = function(params, callback) {
-	var self = this;
 
-	// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
-	this._session.getAccessToken(function(err, accessToken) {
-		// Handle Error
-		if (err) {
-			callback(err);
-			return;
-		}
+	var promise;
 
-		params.headers = self._createHeadersForRequest(params.headers, accessToken);
+	if (this._batch) {
 
-		if (params.streaming) {
-			// streaming is specific to the SDK, so delete it from params before continuing
-			delete params.streaming;
-			var responseStream = self._requestManager.makeStreamingRequest(params);
-			// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
-			// due to expired access token
-			responseStream.on('response', function(response) {
-				self._handleStreamingResponse(response);
-			});
-			// Callback with the response stream
-			callback(null, responseStream);
-			return;
-		}
-
-		// Make the request to Box, and pass the response to `_handleResponse()` with the original callback
-		self._requestManager.makeRequest(params, function handleResponseCallback(responseErr, response) {
-			self._handleResponse(responseErr, response, callback);
+		promise = new Promise((resolve, reject) => {
+			this._batch.push({ params, resolve, reject });
 		});
-	});
-};
+	} else {
 
-/**
- * Handles the API response for a streaming request. This function will do the necessary clean up if the
- * request is unauthorized due to expired access token.
- *
- * @param {http~IncomingMessage} response - the response info returned by APIRequestManager
- * @returns {void}
- * @private
- */
-BoxClient.prototype._handleStreamingResponse = function(response) {
-	// All we need to do here is to check if the response is a 401 because of token expiration. We do not care
-	// about the callback here since for streaming request, we have already called the callback with the stream object.
-	this._handleResponse(null, response, function() {});
-};
+		// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
+		promise = this._session.getAccessToken(this._tokenOptions)
+			.then(accessToken => {
 
-/**
- * Handles the API response. A response that reaches here has already been auto-retried if possible.
- * If an error still exists in the response, propagates an error. Otherwise, propagates the
- * successful result data.
- *
- * @param {?APIRequest~Error} err - If Error object, API request did not succeed. The Error obj will contain
- *  information about the response, such as statusCode &amp; response information.
- * @param {APIRequest~ResponseObject} response - the response info returned by APIRequestManager
- * @param {APIRequest~Callback} callback - The API Request callback
- * @returns {void}
- * @private
- */
-BoxClient.prototype._handleResponse = function(err, response, callback) {
+				params.headers = this._createHeadersForRequest(params.headers, accessToken);
 
-	// Serious Error: The Box client can't do anything else since this is a failed request.
-	if (err) {
-		callback(err);
-		return;
+				if (params.streaming) {
+					// streaming is specific to the SDK, so delete it from params before continuing
+					delete params.streaming;
+					var responseStream = this._requestManager.makeStreamingRequest(params);
+					// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
+					// due to expired access token
+					responseStream.on('response', response => {
+						if (isUnauthorizedDueToExpiredAccessToken(response)) {
+
+							var expiredTokensError = errors.buildExpiredAuthError(response);
+
+							// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
+							if (this._session.handleExpiredTokensError) {
+								this._session.handleExpiredTokensError(expiredTokensError);
+							}
+						}
+					});
+
+					return responseStream;
+				}
+
+				// Make the request to Box, and perform standard response handling
+				return this._requestManager.makeRequest(params);
+			});
 	}
 
-	// Unauthorized Tokens: Tokens haven't expired normally, but are somehow unauthorized. This
-	// happens with the tokens are revoked manually (ex: via a webapp logout). In this case
-	// we assume the refresh token has also been revoked (this is always the case) so getting a
-	// new token isn't an option. Propagate an "expired tokens" error after giving the session a
-	// chance to react to the error first.
-	if (isUnauthorizedDueToExpiredAccessToken(response)) {
-		var expiredTokensError = errors.buildExpiredAuthError(response);
+	return promise
+		.then(response => {
 
-		// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
-		if (this._session.handleExpiredTokensError) {
-			this._session.handleExpiredTokensError(expiredTokensError, callback);
-			return;
-		}
+			if (response instanceof Readable) {
+				// Just return the stream, it doesn't need further response handling
+				return response;
+			}
 
-		callback(expiredTokensError);
-		return;
-	}
+			if (isUnauthorizedDueToExpiredAccessToken(response)) {
+				var expiredTokensError = errors.buildExpiredAuthError(response);
 
-	// Successful Response: propagate the response
-	callback(null, response);
+				// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
+				if (this._session.handleExpiredTokensError) {
+					return this._session.handleExpiredTokensError(expiredTokensError);
+				}
+
+				throw expiredTokensError;
+			}
+
+			return response;
+		})
+		.asCallback(callback);
 };
-
 
 // ------------------------------------------------------------------------------
 // Public
@@ -396,8 +420,11 @@ BoxClient.prototype.setCustomHeader = function(header, value) {
 BoxClient.prototype.setIPs = function(ips) {
 	var validIPs = ips.filter(function(ipString) {
 		return isIP(ipString);
-	});
-	this.setCustomHeader(HEADER_XFF, validIPs.join(', '));
+	}).join(', ');
+
+	this.setCustomHeader(HEADER_XFF, validIPs);
+
+	this._tokenOptions = {ip: validIPs};
 };
 
 /**
@@ -446,13 +473,28 @@ BoxClient.prototype.asSelf = function() {
 
 /**
  * Revokes the client's access tokens. The client will no longer be tied to a user
- * and will be unable to make calls to the api, rendering it effectively useless.
+ * and will be unable to make calls to the API, rendering it effectively useless.
  *
- * @param {Function} callback Called after revoking, with an error if one existed
- * @returns {void}
+ * @param {Function} [callback] Called after revoking, with an error if one existed
+ * @returns {Promise} A promise resolving when the client's access token is revoked
  */
 BoxClient.prototype.revokeTokens = function(callback) {
-	this._session.revokeTokens(callback);
+
+	return this._session.revokeTokens(this._tokenOptions)
+		.asCallback(callback);
+};
+
+/**
+ * Exchange the client access token for one with lower scope
+ * @param {string|string[]} scopes The scope(s) requested for the new token
+ * @param {string} [resource] The absolute URL of an API resource to scope the new token to
+ * @param {Function} [callback] Called with the new token
+ * @returns {Promise&lt;TokenInfo>} A promise resolving to the exchanged token info
+ */
+BoxClient.prototype.exchangeToken = function(scopes, resource, callback) {
+
+	return this._session.exchangeToken(scopes, resource, this._tokenOptions)
+		.asCallback(callback);
 };
 
 /**
@@ -467,7 +509,8 @@ BoxClient.prototype.get = function(path, params, callback) {
 	var newParams = merge({}, params || {});
 	newParams.method = 'GET';
 	newParams.url = getFullURL(this._baseURL, path);
-	this._makeRequest(newParams, callback);
+
+	return this._makeRequest(newParams, callback);
 };
 
 /**
@@ -482,7 +525,7 @@ BoxClient.prototype.post = function(path, params, callback) {
 	var newParams = merge({}, params || {});
 	newParams.method = 'POST';
 	newParams.url = getFullURL(this._baseURL, path);
-	this._makeRequest(newParams, callback);
+	return this._makeRequest(newParams, callback);
 };
 
 /**
@@ -497,7 +540,7 @@ BoxClient.prototype.put = function(path, params, callback) {
 	var newParams = merge({}, params || {});
 	newParams.method = 'PUT';
 	newParams.url = getFullURL(this._baseURL, path);
-	this._makeRequest(newParams, callback);
+	return this._makeRequest(newParams, callback);
 };
 
 /**
@@ -512,7 +555,7 @@ BoxClient.prototype.del = function(path, params, callback) {
 	var newParams = merge({}, params || {});
 	newParams.method = 'DELETE';
 	newParams.url = getFullURL(this._baseURL, path);
-	this._makeRequest(newParams, callback);
+	return this._makeRequest(newParams, callback);
 };
 
 
@@ -529,7 +572,7 @@ BoxClient.prototype.options = function(path, params, callback) {
 	newParams.method = 'OPTIONS';
 	newParams.url = getFullURL(this._baseURL, path);
 
-	this._makeRequest(newParams, callback);
+	return this._makeRequest(newParams, callback);
 };
 
 /**
@@ -541,13 +584,61 @@ BoxClient.prototype.options = function(path, params, callback) {
  * @returns {void}
  */
 BoxClient.prototype.upload = function(path, params, formData, callback) {
-	var newParams = merge({}, params || {});
-	newParams.method = 'POST';
+
+	var defaults = {
+		method: 'POST'
+	};
+	var newParams = merge(defaults, params || {});
 	newParams.url = getFullURL(this._uploadBaseURL, path);
 	newParams.formData = formData;
 	newParams.timeout = this._uploadRequestTimeoutMS;
 
-	this._makeRequest(newParams, callback);
+	return this._makeRequest(newParams, callback);
+};
+
+/**
+ * Puts the client into batch mode, which will queue calls instead of
+ * immediately making the API request.
+ * @returns {BoxClient} Current client object
+ */
+BoxClient.prototype.batch = function() {
+
+	this._batch = [];
+	return this;
+};
+
+BoxClient.prototype.batchExec = function(callback) {
+
+	if (!this._batch) {
+		return Promise.reject(new Error('Must start a batch before executing'))
+			.asCallback(callback);
+	}
+
+	var params = {
+		body: {
+			requests: this._batch.map(batchReq => formatRequestForBatch(batchReq.params))
+		}
+	};
+
+	var batch = this._batch;
+	this._batch = null;
+	return this.post('/batch', params)
+		.then(res => {
+
+			var responses = res.body.responses;
+
+			responses.map(formatResponseForBatch).forEach((response, index) => {
+				batch[index].resolve(response);
+			});
+
+			return res.body;
+		})
+		.catch(err => {
+			batch.forEach(req => req.reject(err));
+
+			throw err;
+		})
+		.asCallback(callback);
 };
 
 /**
@@ -573,13 +664,19 @@ BoxClient.prototype.buildSharedItemAuthHeader = function(url, password) {
  * body to the original callback. Any request error or unsuccessful response codes are propagated
  * back to the callback as errors. This is the standard behavior of most endpoints.
  *
- * @NOTE(fschott) 2014-05-03: This method will most likely be phased out so that we can provide less
- * generic and more granular responses &amp; errors.
- *
  * @param {Function} callback The original callback given by the consumer
- * @returns {APIRequest~Callback} A new callback that processes the response before passing it to the callback.
+ * @returns {?APIRequest~Callback} A new callback that processes the response before passing it to the callback.
  */
 BoxClient.prototype.defaultResponseHandler = function(callback) {
+
+
+	var self = this;
+
+	if (!callback) {
+		return null;
+	}
+
+
 	return function(err, response) {
 		// Error with Request
 		if (err) {
@@ -590,11 +687,64 @@ BoxClient.prototype.defaultResponseHandler = function(callback) {
 		// Successful Response
 		if (response.statusCode >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0]
 			&amp;&amp; response.statusCode &lt;= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]) {
+
+			if (self._useIterators &amp;&amp; PagingIterator.isIterable(response)) {
+				callback(null, new PagingIterator(response, self));
+				return;
+			}
+
 			callback(null, response.body);
 			return;
 		}
 		// Unexpected Response
 		callback(errors.buildUnexpectedResponseError(response));
+	};
+};
+
+/**
+ * Wrap a client method with the default handler for both callback and promise styles
+ * @param {Function} method The client method (e.g. client.get)
+ * @returns {Function}  The wrapped method
+ */
+BoxClient.prototype.wrapWithDefaultHandler = function(method) {
+
+	var self = this;
+	return function wrappedClientMethod(/* arguments */) {
+
+		// Check if the last argument is a callback
+		var lastArg = arguments[arguments.length - 1],
+			callback;
+		if (typeof lastArg === 'function') {
+			callback = self.defaultResponseHandler(lastArg);
+			arguments[arguments.length - 1] = callback;
+		}
+
+		var ret = method.apply(self, arguments);
+
+		if (ret instanceof Promise) {
+
+			ret = ret.then(response => {
+
+				if (response.statusCode >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0]
+						&amp;&amp; response.statusCode &lt;= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]) {
+
+					if (self._useIterators &amp;&amp; PagingIterator.isIterable(response)) {
+						return new PagingIterator(response, self);
+					}
+
+					return response.body;
+				}
+
+				throw errors.buildResponseError(response);
+			});
+		}
+
+		if (callback) {
+			// If the callback will handle any errors, don't worry about the promise
+			ret.suppressUnhandledRejections();
+		}
+
+		return ret;
 	};
 };
 
@@ -637,13 +787,13 @@ module.exports = BoxClient;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 14 2017 17:48:57 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

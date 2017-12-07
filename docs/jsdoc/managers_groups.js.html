@@ -102,14 +102,14 @@ Groups.prototype.userRoles = Object.freeze({
  * Method: POST
  *
  * @param {string} name - The name for the new group
- * @param {?Object} options - Additional parameters
+ * @param {Object} [options] - Additional parameters
  * @param {string} [options.provenance] - Used to track the external source where the group is coming from
  * @param {string} [options.external_sync_identifier] - Used as a group identifier for groups coming from an external source
  * @param {string} [options.description] - Description of the group
  * @param {GroupAccessLevel} [options.invitability_level] - Specifies who can invite this group to collaborate on folders
  * @param {GroupAccessLevel} [options.member_viewability_level] - Specifies who can view the members of this group
- * @param {Function} callback - Passed the new group object if it was created successfully, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the new group object if it was created successfully, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the new group object
  */
 Groups.prototype.create = function(name, options, callback) {
 
@@ -120,7 +120,7 @@ Groups.prototype.create = function(name, options, callback) {
 
 	params.body.name = name;
 
-	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
 };
 
 /**
@@ -130,9 +130,9 @@ Groups.prototype.create = function(name, options, callback) {
  * Method: GET
  *
  * @param {string} groupID - The ID of the group to retrieve
- * @param {?Object} qs - Additional options passed by query string, can be left null in most cases
- * @param {Function} callback - Passed the group object if successful, error otherwise
- * @returns {void}
+ * @param {Object} [qs] - Additional options passed by query string, can be left null in most cases
+ * @param {Function} [callback] - Passed the group object if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the group object
  */
 Groups.prototype.get = function(groupID, qs, callback) {
 
@@ -141,7 +141,7 @@ Groups.prototype.get = function(groupID, qs, callback) {
 			qs: qs
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -151,9 +151,9 @@ Groups.prototype.get = function(groupID, qs, callback) {
  * Method: PUT
  *
  * @param {string} groupID - The ID of the group to update
- * @param {Object} options - Group fields to update
- * @param {Function} callback - Passed the updated group object if successful, error otherwise
- * @returns {void}
+ * @param {Object} [options] - Group fields to update
+ * @param {Function} [callback] - Passed the updated group object if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the updated group object
  */
 Groups.prototype.update = function(groupID, options, callback) {
 
@@ -162,7 +162,7 @@ Groups.prototype.update = function(groupID, options, callback) {
 			body: options
 		};
 
-	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.put)(apiPath, params, callback);
 };
 
 /**
@@ -172,14 +172,14 @@ Groups.prototype.update = function(groupID, options, callback) {
  * Method: DELETE
  *
  * @param {string} groupID - The ID of the group to delete
- * @param {Function} callback - Passed nothing if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed nothing if successful, error otherwise
+ * @returns {Promise&lt;void>} A promise resolving to nothing
  */
 Groups.prototype.delete = function(groupID, callback) {
 
 	var apiPath = urlPath(BASE_PATH, groupID);
 
-	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
 };
 
 /**
@@ -190,10 +190,10 @@ Groups.prototype.delete = function(groupID, callback) {
  *
  * @param {string} groupID - The ID of the group to add the user to
  * @param {string} userID - The ID of the user to add the the group
- * @param {?Object} options - Optional parameters for adding the user, can be left null in most cases
+ * @param {Object} [options] - Optional parameters for adding the user, can be left null in most cases
  * @param {GroupUserRole} [options.role] - The role of the user in the group
- * @param {Function} callback - Passed the membership record if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the membership record if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the new membership object
  */
 Groups.prototype.addUser = function(groupID, userID, options, callback) {
 
@@ -211,7 +211,7 @@ Groups.prototype.addUser = function(groupID, userID, options, callback) {
 
 	Object.assign(params.body, options);
 
-	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
 
 };
 
@@ -223,9 +223,9 @@ Groups.prototype.addUser = function(groupID, userID, options, callback) {
  * Method: GET
  *
  * @param {string} membershipID - The ID of the membership to fetch
- * @param {?Object} qs - Optional parameters, can be left null in most cases
- * @param {Function} callback - Passed the membership record if successful, error otherwise
- * @returns {void}
+ * @param {Object} [qs] - Optional parameters, can be left null in most cases
+ * @param {Function} [callback] - Passed the membership record if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the membership object
  */
 Groups.prototype.getMembership = function(membershipID, qs, callback) {
 
@@ -234,7 +234,7 @@ Groups.prototype.getMembership = function(membershipID, qs, callback) {
 			qs: qs
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -245,8 +245,8 @@ Groups.prototype.getMembership = function(membershipID, qs, callback) {
  *
  * @param {string} membershipID - The ID of the membership to update
  * @param {Object} options - Membership record fields to update
- * @param {Function} callback - Passed the updated membership object if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the updated membership object if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the updated membership object
  */
 Groups.prototype.updateMembership = function(membershipID, options, callback) {
 
@@ -255,7 +255,7 @@ Groups.prototype.updateMembership = function(membershipID, options, callback) {
 			body: options
 		};
 
-	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.put)(apiPath, params, callback);
 };
 
 /**
@@ -265,14 +265,14 @@ Groups.prototype.updateMembership = function(membershipID, options, callback) {
  * Method: DELETE
  *
  * @param {string} membershipID - The ID of the membership to be removed
- * @param {Function} callback - Passed nothing if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed nothing if successful, error otherwise
+ * @returns {Promise&lt;void>} A promise resolving to nothing
  */
 Groups.prototype.removeMembership = function(membershipID, callback) {
 
 	var apiPath = urlPath(MEMBERSHIPS_PATH, membershipID);
 
-	this.client.del(apiPath, null, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
 };
 
 /**
@@ -283,11 +283,11 @@ Groups.prototype.removeMembership = function(membershipID, callback) {
  * Method: GET
  *
  * @param {string} groupID - The ID of the group to get memberships for
- * @param {?Object} options - Optional parameters, can be left null in most cases
+ * @param {Object} [options] - Optional parameters, can be left null in most cases
  * @param {int} [options.limit] - The number of memberships to retrieve
  * @param {int} [options.offset] - Paging marker, retrieve records starting at this position in the list
- * @param {Function} callback - Passed a list of memberships if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed a list of memberships if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of memberships
  */
 Groups.prototype.getMemberships = function(groupID, options, callback) {
 
@@ -296,7 +296,7 @@ Groups.prototype.getMemberships = function(groupID, options, callback) {
 			qs: options
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -306,11 +306,11 @@ Groups.prototype.getMemberships = function(groupID, options, callback) {
  * API Endpoint: '/groups'
  * Method: GET
  *
- * @param {?Object} options - Optional parameters, can be left null in most cases
+ * @param {Object} [options] - Optional parameters, can be left null in most cases
  * @param {int} [options.limit] - The number of memberships to retrieve
  * @param {int} [options.offset] - Paging marker, retrieve records starting at this position in the list
- * @param {Function} callback - Passed a list of groups if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed a list of groups if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of groups
  */
 Groups.prototype.getAll = function(options, callback) {
 
@@ -319,7 +319,7 @@ Groups.prototype.getAll = function(options, callback) {
 			qs: options
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -330,11 +330,11 @@ Groups.prototype.getAll = function(options, callback) {
  * Method: GET
  *
  * @param {string} groupID - The ID of the group to get collaborations for
- * @param {?Object} options - Optional parameters, can be left null in most cases
+ * @param {Object} [options] - Optional parameters, can be left null in most cases
  * @param {int} [options.limit] - The number of memberships to retrieve
  * @param {int} [options.offset] - Paging marker, retrieve records starting at this position in the list
- * @param {Function} callback - Passed a list of collaborations if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed a list of collaborations if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of collaborations for the group
  */
 Groups.prototype.getCollaborations = function(groupID, options, callback) {
 
@@ -343,7 +343,7 @@ Groups.prototype.getCollaborations = function(groupID, options, callback) {
 			qs: options
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 module.exports = Groups;
@@ -357,13 +357,13 @@ module.exports = Groups;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 14 2017 17:48:57 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

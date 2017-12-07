@@ -284,6 +284,14 @@ describe('Webhooks', function() {
 			assert.equal(null, Webhooks.secondarySignatureKey);
 		});
 
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return webhooks.delete(WEBHOOKS_ID)
+				.then(data => assert.equal(data, response));
+		});
 	});
 
 	describe('validateMessage()', function() {
@@ -369,6 +377,13 @@ describe('Webhooks', function() {
 		it('should attach validation method to manager instance', function() {
 
 			assert.equal(Webhooks.validateMessage, webhooks.validateMessage);
+		});
+
+		it('should validate using statically set keys when ones are not passed in', function() {
+
+			Webhooks.setSignatureKeys(PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY);
+
+			assert.ok(Webhooks.validateMessage(BODY, HEADERS));
 		});
 	});
 });

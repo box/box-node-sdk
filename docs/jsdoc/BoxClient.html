@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>BoxClient</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>BoxClient<span class="signature">(apiSession, config, requestManager)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -40,7 +40,9 @@
 
     
 
+    
     <h4 class="name" id="BoxClient"><span class="type-signature"></span>new BoxClient<span class="signature">(apiSession, config, requestManager)</span><span class="type-signature"></span></h4>
+    
 
     
 
@@ -189,7 +191,7 @@ unauthorized responses from the API.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line134">line 134</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line175">line 175</a>
     </li></ul></dd>
     
 
@@ -215,6 +217,8 @@ unauthorized responses from the API.</td>
 
 
 
+
+
     
     </div>
 
@@ -224,7 +228,9 @@ unauthorized responses from the API.</td>
 
     
 
-     
+    
+
+    
 
     
 
@@ -288,7 +294,7 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line334">line 334</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line358">line 358</a>
     </li></ul></dd>
     
 
@@ -573,7 +579,7 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line305">line 305</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line329">line 329</a>
     </li></ul></dd>
     
 
@@ -641,7 +647,7 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line343">line 343</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line367">line 367</a>
     </li></ul></dd>
     
 
@@ -788,7 +794,7 @@ creating and editting shared links, upload emails, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line322">line 322</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line346">line 346</a>
     </li></ul></dd>
     
 
@@ -815,7 +821,9 @@ creating and editting shared links, upload emails, etc.
 
     
 
+    
     <h4 class="name" id="asSelf"><span class="type-signature"></span>asSelf<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -867,7 +875,7 @@ who owns the client's access token.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line414">line 414</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line441">line 441</a>
     </li></ul></dd>
     
 
@@ -911,12 +919,16 @@ who owns the client's access token.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="asUser"><span class="type-signature"></span>asUser<span class="signature">(userID)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -1017,7 +1029,7 @@ impersonate their managed users and perform actions on their behalf.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line403">line 403</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line430">line 430</a>
     </li></ul></dd>
     
 
@@ -1061,12 +1073,125 @@ impersonate their managed users and perform actions on their behalf.
 
 
 
+
+
         
             
 
     
 
+    
+    <h4 class="name" id="batch"><span class="type-signature"></span>batch<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="BoxClient.html">BoxClient</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Puts the client into batch mode, which will queue calls instead of
+immediately making the API request.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line576">line 576</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Current client object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="buildSharedItemAuthHeader"><span class="type-signature"></span>buildSharedItemAuthHeader<span class="signature">(url, password<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
 
     
 
@@ -1209,7 +1334,7 @@ impersonate their managed users and perform actions on their behalf.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line532">line 532</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line623">line 623</a>
     </li></ul></dd>
     
 
@@ -1257,12 +1382,16 @@ impersonate their managed users and perform actions on their behalf.
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="defaultResponseHandler"><span class="type-signature"></span>defaultResponseHandler<span class="signature">(callback)</span><span class="type-signature"> &rarr; {<a href="APIRequest.html#~Callback">APIRequest~Callback</a>}</span></h4>
+    
+    <h4 class="name" id="defaultResponseHandler"><span class="type-signature"></span>defaultResponseHandler<span class="signature">(callback)</span><span class="type-signature"> &rarr; (nullable) {<a href="APIRequest.html#~Callback">APIRequest~Callback</a>}</span></h4>
+    
 
     
 
@@ -1364,7 +1493,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line554">line 554</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line642">line 642</a>
     </li></ul></dd>
     
 
@@ -1412,12 +1541,16 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="del"><span class="type-signature"></span>del<span class="signature">(path, params<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -1591,7 +1724,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line483">line 483</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line526">line 526</a>
     </li></ul></dd>
     
 
@@ -1635,12 +1768,252 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
+    
+    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Exchange the client access token for one with lower scope
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>scopes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The scope(s) requested for the new token</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>resource</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The absolute URL of an API resource to scope the new token to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called with the new token</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line466">line 466</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the exchanged token info
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(path, params<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -1814,7 +2187,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line438">line 438</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line480">line 480</a>
     </li></ul></dd>
     
 
@@ -1858,12 +2231,16 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="options"><span class="type-signature"></span>options<span class="signature">(path, params<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -2037,7 +2414,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line499">line 499</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line542">line 542</a>
     </li></ul></dd>
     
 
@@ -2081,12 +2458,16 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="plug"><span class="type-signature"></span>plug<span class="signature">(name, plugin, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -2260,7 +2641,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line581">line 581</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line731">line 731</a>
     </li></ul></dd>
     
 
@@ -2316,12 +2697,16 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="post"><span class="type-signature"></span>post<span class="signature">(path, params<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -2495,7 +2880,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line453">line 453</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line496">line 496</a>
     </li></ul></dd>
     
 
@@ -2539,12 +2924,16 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="put"><span class="type-signature"></span>put<span class="signature">(path, params<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -2718,7 +3107,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line468">line 468</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line511">line 511</a>
     </li></ul></dd>
     
 
@@ -2762,12 +3151,16 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="revokeSharedContext"><span class="type-signature"></span>revokeSharedContext<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -2818,7 +3211,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line392">line 392</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line419">line 419</a>
     </li></ul></dd>
     
 
@@ -2862,12 +3255,16 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
 
     
 
@@ -2875,7 +3272,7 @@ back to the callback as errors. This is the standard behavior of most endpoints.
 
 <div class="description">
     Revokes the client's access tokens. The client will no longer be tied to a user
-and will be unable to make calls to the api, rendering it effectively useless.
+and will be unable to make calls to the API, rendering it effectively useless.
 </div>
 
 
@@ -2898,6 +3295,8 @@ and will be unable to make calls to the api, rendering it effectively useless.
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -2923,6 +3322,16 @@ and will be unable to make calls to the api, rendering it effectively useless.
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -2968,7 +3377,7 @@ and will be unable to make calls to the api, rendering it effectively useless.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line426">line 426</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line453">line 453</a>
     </li></ul></dd>
     
 
@@ -2994,6 +3403,10 @@ and will be unable to make calls to the api, rendering it effectively useless.
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving when the client's access token is revoked
+</div>
+
 
 
 <dl>
@@ -3002,7 +3415,7 @@ and will be unable to make calls to the api, rendering it effectively useless.
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise</span>
 
 
     </dd>
@@ -3012,12 +3425,16 @@ and will be unable to make calls to the api, rendering it effectively useless.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="setCustomHeader"><span class="type-signature"></span>setCustomHeader<span class="signature">(header, value)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -3141,7 +3558,7 @@ remove a header, set it's value to null.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line353">line 353</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line377">line 377</a>
     </li></ul></dd>
     
 
@@ -3185,12 +3602,16 @@ remove a header, set it's value to null.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="setIPs"><span class="type-signature"></span>setIPs<span class="signature">(ips)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -3291,7 +3712,7 @@ better information for uploads, rate-limiting, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line368">line 368</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line392">line 392</a>
     </li></ul></dd>
     
 
@@ -3335,12 +3756,16 @@ better information for uploads, rate-limiting, etc.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="setSharedContext"><span class="type-signature"></span>setSharedContext<span class="signature">(url, password<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -3483,7 +3908,7 @@ better information for uploads, rate-limiting, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line382">line 382</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line409">line 409</a>
     </li></ul></dd>
     
 
@@ -3527,12 +3952,16 @@ better information for uploads, rate-limiting, etc.
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="upload"><span class="type-signature"></span>upload<span class="signature">(path, params<span class="signature-attributes">nullable</span>, formData<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -3739,7 +4168,7 @@ better information for uploads, rate-limiting, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line515">line 515</a>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line558">line 558</a>
     </li></ul></dd>
     
 
@@ -3783,6 +4212,165 @@ better information for uploads, rate-limiting, etc.
 
 
 
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="wrapWithDefaultHandler"><span class="type-signature"></span>wrapWithDefaultHandler<span class="signature">(method)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Wrap a client method with the default handler for both callback and promise styles
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The client method (e.g. client.get)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-client.js.html">box-client.js</a>, <a href="box-client.js.html#line681">line 681</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The wrapped method
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
         
     
 
@@ -3799,13 +4387,13 @@ better information for uploads, rate-limiting, etc.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 14 2017 17:48:57 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>Collaborations</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Collaborations<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
         
     
 </header>
@@ -40,7 +40,9 @@
 
     
 
+    
     <h4 class="name" id="Collaborations"><span class="type-signature"></span>new Collaborations<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
     
 
@@ -184,6 +186,8 @@
 
 
 
+
+
     
     </div>
 
@@ -193,7 +197,9 @@
 
     
 
-     
+    
+
+    
 
     
 
@@ -207,7 +213,9 @@
 
     
 
-    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(accessibleBy, folderID, role, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(accessibleBy, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -244,6 +252,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -269,6 +279,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -279,7 +297,7 @@ Method: POST
 
         <tr>
             
-                <td class="name"><code>folderID</code></td>
+                <td class="name"><code>itemID</code></td>
             
 
             <td class="type">
@@ -292,10 +310,18 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Box ID of the folder to which the user should be invited</td>
+            <td class="description last">Box ID of the item to which the user should be invited</td>
         </tr>
 
     
@@ -315,10 +341,194 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">The role which the invited collaborator should have</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters for the collaboration
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemType">ItemType</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    folder
+                
+                </td>
+            
+
+            <td class="description last">Type of object to be collaborated</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notify</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Determines if the user or group will receive email notifications</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>can_view_path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Whether view path collaboration feature is enabled or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -337,6 +547,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -382,7 +602,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line124">line 124</a>
+        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line128">line 128</a>
     </li></ul></dd>
     
 
@@ -408,6 +628,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the created collaboration object
+</div>
+
 
 
 <dl>
@@ -416,7 +640,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -426,19 +650,23 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="createWithGroupID"><span class="type-signature"></span>createWithGroupID<span class="signature">(groupID, folderID, role, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="createWithGroupID"><span class="type-signature"></span>createWithGroupID<span class="signature">(groupID, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
 
 
 <div class="description">
-    Invite a group to collaborate on a folder via their group ID.
+    Invite a group to collaborate on an item via their group ID.
 
 API Endpoint: '/collaborations
 Method: POST
@@ -464,6 +692,8 @@ Method: POST
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -490,6 +720,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -500,7 +738,7 @@ Method: POST
 
         <tr>
             
-                <td class="name"><code>folderID</code></td>
+                <td class="name"><code>itemID</code></td>
             
 
             <td class="type">
@@ -513,10 +751,18 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Box ID of the folder to which the group should be invited</td>
+            <td class="description last">Box ID of the item to which the group should be invited</td>
         </tr>
 
     
@@ -536,10 +782,194 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">The role which the invited collaborator should have</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters for the collaboration
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemType">ItemType</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    folder
+                
+                </td>
+            
+
+            <td class="description last">Type of object to be collaborated</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notify</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Determines if the group will receive email notifications</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>can_view_path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Whether view path collaboration feature is enabled or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -558,6 +988,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -603,7 +1043,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line190">line 190</a>
+        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line241">line 241</a>
     </li></ul></dd>
     
 
@@ -629,6 +1069,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the created collaboration object
+</div>
+
 
 
 <dl>
@@ -637,7 +1081,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -647,19 +1091,23 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="createWithUserEmail"><span class="type-signature"></span>createWithUserEmail<span class="signature">(email, folderID, role, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="createWithUserEmail"><span class="type-signature"></span>createWithUserEmail<span class="signature">(email, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
 
 
 <div class="description">
-    Invite a user to collaborate on a folder via their user login email address.
+    Invite a user to collaborate on an item via their user login email address.
 
 API Endpoint: '/collaborations
 Method: POST
@@ -685,6 +1133,8 @@ Method: POST
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -711,6 +1161,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -721,7 +1179,7 @@ Method: POST
 
         <tr>
             
-                <td class="name"><code>folderID</code></td>
+                <td class="name"><code>itemID</code></td>
             
 
             <td class="type">
@@ -734,10 +1192,18 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Box ID of the folder to which the user should be invited</td>
+            <td class="description last">Box ID of the item to which the user should be invited</td>
         </tr>
 
     
@@ -757,10 +1223,194 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">The role which the invited collaborator should have</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters for the collaboration
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemType">ItemType</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    folder
+                
+                </td>
+            
+
+            <td class="description last">Type of object to be collaborated</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notify</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Determines if the user will receive email notifications</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>can_view_path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Whether view path collaboration feature is enabled or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -779,6 +1429,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -824,7 +1484,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line170">line 170</a>
+        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line211">line 211</a>
     </li></ul></dd>
     
 
@@ -850,6 +1510,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the created collaboration object
+</div>
+
 
 
 <dl>
@@ -858,7 +1522,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -868,19 +1532,23 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="createWithUserID"><span class="type-signature"></span>createWithUserID<span class="signature">(userID, folderID, role, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="createWithUserID"><span class="type-signature"></span>createWithUserID<span class="signature">(userID, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
 
 
 <div class="description">
-    Invite a user to collaborate on a folder via their user ID.
+    Invite a user to collaborate on an item via their user ID.
 
 API Endpoint: '/collaborations
 Method: POST
@@ -907,6 +1575,8 @@ Method: POST
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -932,6 +1602,14 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -942,7 +1620,7 @@ Method: POST
 
         <tr>
             
-                <td class="name"><code>folderID</code></td>
+                <td class="name"><code>itemID</code></td>
             
 
             <td class="type">
@@ -955,10 +1633,18 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Box ID of the folder to which the user should be invited</td>
+            <td class="description last">Box ID of the item to which the user should be invited</td>
         </tr>
 
     
@@ -978,10 +1664,194 @@ Method: POST
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">The role which the invited collaborator should have</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters for the collaboration
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemType">ItemType</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    folder
+                
+                </td>
+            
+
+            <td class="description last">Type of object to be collaborated</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notify</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Determines if the user will receive email notifications</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>can_view_path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Whether view path collaboration feature is enabled or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1000,6 +1870,16 @@ Method: POST
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1045,7 +1925,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line150">line 150</a>
+        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line181">line 181</a>
     </li></ul></dd>
     
 
@@ -1071,6 +1951,10 @@ Method: POST
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the created collaboration object
+</div>
+
 
 
 <dl>
@@ -1079,7 +1963,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1089,12 +1973,16 @@ Method: POST
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(collaborationID, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(collaborationID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
 
     
 
@@ -1128,6 +2016,8 @@ Method: DELETE
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1153,6 +2043,14 @@ Method: DELETE
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1175,6 +2073,16 @@ Method: DELETE
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1220,7 +2128,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line208">line 208</a>
+        <a href="managers_collaborations.js.html">managers/collaborations.js</a>, <a href="managers_collaborations.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -1246,6 +2154,10 @@ Method: DELETE
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
 
 
 <dl>
@@ -1254,7 +2166,7 @@ Method: DELETE
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1264,12 +2176,16 @@ Method: DELETE
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(collaborationID, qs<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(collaborationID, qs<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -1363,9 +2279,9 @@ Method: GET
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -1395,6 +2311,8 @@ Method: GET
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -1472,6 +2390,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the collaboration object
+</div>
+
 
 
 <dl>
@@ -1480,7 +2402,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1490,12 +2412,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="getPending"><span class="type-signature"></span>getPending<span class="signature">(callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="getPending"><span class="type-signature"></span>getPending<span class="signature">(callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -1529,6 +2455,8 @@ Method: GET
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1553,6 +2481,16 @@ Method: GET
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1624,6 +2562,10 @@ Method: GET
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the collection of pending collaborations
+</div>
+
 
 
 <dl>
@@ -1632,7 +2574,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1642,12 +2584,16 @@ Method: GET
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="respondToPending"><span class="type-signature"></span>respondToPending<span class="signature">(collaborationID, newStatus, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="respondToPending"><span class="type-signature"></span>respondToPending<span class="signature">(collaborationID, newStatus, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -1681,6 +2627,8 @@ Method: PUT
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1706,6 +2654,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1729,6 +2685,14 @@ Method: PUT
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1751,6 +2715,16 @@ Method: PUT
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1822,6 +2796,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the accepted collaboration object
+</div>
+
 
 
 <dl>
@@ -1830,7 +2808,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1840,12 +2818,16 @@ Method: PUT
 
 
 
+
+
         
             
 
     
 
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(collaborationID, options<span class="signature-attributes">nullable</span>, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(collaborationID, options, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
 
     
 
@@ -1941,8 +2923,6 @@ Method: PUT
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
@@ -1971,6 +2951,8 @@ Method: PUT
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -2048,6 +3030,10 @@ Method: PUT
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A promise resolving to the updated collaboration object
+</div>
+
 
 
 <dl>
@@ -2056,13 +3042,15 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
 </dl>
 
     
+
+
 
 
 
@@ -2082,13 +3070,13 @@ Method: PUT
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:26 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 14 2017 17:48:57 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

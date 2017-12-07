@@ -13,7 +13,8 @@ var sinon = require('sinon'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client'),
-	EventStream = require('../../../lib/event-stream');
+	EventStream = require('../../../lib/event-stream'),
+	EnterpriseEventStream = require('../../../lib/enterprise-event-stream');
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -24,6 +25,8 @@ var sandbox = sinon.sandbox.create(),
 	events,
 	EventStreamConstructorStub,
 	eventStreamFake,
+	EnterpriseEventStreamConstructorStub,
+	enterpriseEventStreamFake,
 	MODULE_FILE_PATH = '../../../lib/managers/events';
 
 // ------------------------------------------------------------------------------
@@ -41,11 +44,16 @@ describe('Events', function() {
 		eventStreamFake = leche.fake(EventStream.prototype);
 		EventStreamConstructorStub.returns(eventStreamFake);
 
+		EnterpriseEventStreamConstructorStub = sandbox.stub();
+		enterpriseEventStreamFake = leche.fake(EnterpriseEventStream.prototype);
+		EnterpriseEventStreamConstructorStub.returns(enterpriseEventStreamFake);
+
 		mockery.enable({
 			warnOnUnregistered: false,
 			useCleanCache: true
 		});
 		mockery.registerMock('../event-stream', EventStreamConstructorStub);
+		mockery.registerMock('../enterprise-event-stream', EnterpriseEventStreamConstructorStub);
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
 
 		Events = require(MODULE_FILE_PATH);
@@ -364,6 +372,23 @@ describe('Events', function() {
 			});
 		});
 
+		it('should return event stream from starting position with options when passed stream position and options', function(done) {
+
+			var streamPosition = '38746523';
+			var options = {
+				fetchInterval: 5000
+			};
+			sandbox.mock(events).expects('getCurrentStreamPosition').never();
+			events.getEventStream(streamPosition, options, function(err, stream) {
+
+				assert.ifError(err);
+				assert.ok(EventStreamConstructorStub.calledOnce, 'Should call EventStream constructor');
+				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, streamPosition, options), 'Should pass correct args to EventStream constructor');
+				assert.equal(stream, eventStreamFake);
+				done();
+			});
+		});
+
 		it('should make API call to get stream position when called without stream position', function() {
 
 			sandbox.mock(events).expects('getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
@@ -388,7 +413,7 @@ describe('Events', function() {
 			var apiError = new Error('There is no stream');
 			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.reject(apiError));
 
-			events.getEventStream()
+			return events.getEventStream()
 				.catch(err => {
 					assert.equal(err, apiError);
 				});
@@ -408,15 +433,78 @@ describe('Events', function() {
 			});
 		});
 
+		it('should call callback with a new event stream from the stream position and options when passed options and the API call succeeds', function(done) {
+
+			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
+
+			var options = {
+				fetchInterval: 5000
+			};
+
+			events.getEventStream(options, function(err, stream) {
+
+				assert.ifError(err);
+				assert.ok(EventStreamConstructorStub.calledWithNew(), 'Should call EventStream constructor');
+				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, TEST_STREAM_POSITION, options), 'Should pass correct args to EventStream constructor');
+				assert.equal(stream, eventStreamFake);
+				done();
+			});
+		});
+
 		it('should return a promise that resolves to a new event stream when the API call succeeds', function() {
 
 			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
 
-			events.getEventStream()
+			return events.getEventStream()
 				.then(stream => {
 					assert.ok(EventStreamConstructorStub.calledWithNew(), 'Should call EventStream constructor');
 					assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, TEST_STREAM_POSITION), 'Should pass correct args to EventStream constructor');
 					assert.equal(stream, eventStreamFake);
+				});
+		});
+
+		it('should return a promise that resolves to a new event stream with options when called with options and the API call succeeds', function() {
+
+			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
+
+			var options = {
+				fetchInterval: 5000
+			};
+
+			return events.getEventStream(options)
+				.then(stream => {
+					assert.ok(EventStreamConstructorStub.calledWithNew(), 'Should call EventStream constructor');
+					assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, TEST_STREAM_POSITION, options), 'Should pass correct args to EventStream constructor');
+					assert.equal(stream, eventStreamFake);
+				});
+		});
+	});
+
+	describe('getEnterpriseEventStream()', function() {
+
+		var options = {
+			streamPosition: TEST_STREAM_POSITION
+		};
+
+		it('should call callback with a new event stream from the stream position', function(done) {
+
+			events.getEnterpriseEventStream(options, function(err, stream) {
+
+				assert.ifError(err);
+				assert.ok(EnterpriseEventStreamConstructorStub.calledOnce, 'Should call EnterpriseEventStream constructor');
+				assert.ok(EnterpriseEventStreamConstructorStub.calledWith(boxClientFake, options), 'Should pass correct args to EnterpriseEventStream constructor');
+				assert.equal(stream, enterpriseEventStreamFake);
+				done();
+			});
+		});
+
+		it('should return a promise that resolves to a new event stream', function() {
+
+			events.getEnterpriseEventStream(options)
+				.then(stream => {
+					assert.ok(EnterpriseEventStreamConstructorStub.calledWithNew(), 'Should call EnterpriseEventStream constructor');
+					assert.ok(EnterpriseEventStreamConstructorStub.calledWith(boxClientFake, options), 'Should pass correct args to EnterpriseEventStream constructor');
+					assert.equal(stream, enterpriseEventStreamFake);
 				});
 		});
 	});

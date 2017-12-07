@@ -261,6 +261,20 @@ describe('Users', function() {
 			users.addEmailAlias('me', email);
 		});
 
+		it('should make POST request with additional parameters when options are passed', function() {
+
+			var expectedBody = {
+				email: email,
+				is_confirmed: true
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post').withArgs('/users/' + USER_ID + '/email_aliases', {
+				body: expectedBody
+			});
+			users.addEmailAlias(USER_ID, email, {is_confirmed: true});
+		});
+
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post');
@@ -274,6 +288,19 @@ describe('Users', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
 			users.addEmailAlias(USER_ID, email, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should pass results to callback when callback is present and options are passed', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
+			users.addEmailAlias(USER_ID, email, {}, function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, response);

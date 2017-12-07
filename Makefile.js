@@ -97,6 +97,11 @@ target.docs = function() {
 	nodeCLI.exec('jsdoc', '-r', '-d ./docs/jsdoc ', JS_DIR);
 };
 
+target.docsDev = function() {
+	echo('Generating dev documentation');
+	nodeCLI.exec('jsdoc', '-p', '-r', '-d ./docs/jsdoc-dev ', JS_DIR);
+};
+
 target.patch = function() {
 	release('patch');
 };

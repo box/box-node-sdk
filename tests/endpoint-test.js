@@ -28,20 +28,32 @@ describe('Endpoint', function() {
 	var sandbox = sinon.sandbox.create();
 
 	var TEST_API_ROOT = 'https://api.box.com',
+		TEST_UPLOAD_ROOT = 'https://upload.box.com/api',
 		TEST_CLIENT_ID = 'client_id',
 		TEST_CLIENT_SECRET = 'TOP SECRET',
 		TEST_ACCESS_TOKEN = 'at',
 		MODULE_FILE_PATH = '../lib/box-node-sdk';
 
 	var apiMock,
+		uploadMock,
 		BoxSDK,
 		sdk,
 		basicClient;
 
 	beforeEach(function() {
 		apiMock = nock(TEST_API_ROOT);
+		uploadMock = nock(TEST_UPLOAD_ROOT);
 
 		apiMock.defaultReplyHeaders({
+			Age: 0,
+			'Cache-Control': 'no-cache, no-store',
+			Connection: 'keep-alive',
+			Date: 'Thu, 17 Nov 2016 06:54:58 GMT',
+			Server: 'ATS',
+			'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
+		});
+
+		uploadMock.defaultReplyHeaders({
 			Age: 0,
 			'Cache-Control': 'no-cache, no-store',
 			Connection: 'keep-alive',
@@ -121,7 +133,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 404);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -206,7 +218,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 404);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -315,7 +327,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 400);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -397,7 +409,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 400);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -479,7 +491,7 @@ describe('Endpoint', function() {
 
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', 400);
-					assert.deepProperty(err, 'response.body');
+					assert.nestedProperty(err, 'response.body');
 					assert.deepEqual(err.response.body, JSON.parse(fixture));
 
 					done();
@@ -955,7 +967,7 @@ describe('Endpoint', function() {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, () => fileStream);
+					.reply(200, function() {return fileStream;});
 
 				basicClient.files.getReadStream(fileID, {}, function(err, data) {
 
@@ -1233,5 +1245,118 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('uploadFile()', function() {
+
+			it('should make correct request and correctly parse response when API call is successful', function(done) {
+
+				var folderID = '0',
+					filename = 'foo.txt',
+					fileContent = 'foo',
+					fixture = getFixture('files/post_files_content_200');
+
+				uploadMock.post('/2.0/files/content',
+					function(body) {
+
+						// Verify the multi-part form body
+						var lines = body.split(/\r?\n/);
+						assert.match(lines[0], /^-+\d+$/);
+						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
+						assert.equal(lines[2], '');
+
+						var attributes = JSON.parse(lines[3]);
+						assert.propertyVal(attributes, 'name', filename);
+						assert.nestedPropertyVal(attributes, 'parent.id', folderID);
+
+						assert.match(lines[4], /^-+\d+$/);
+						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
+						assert.equal(lines[6], '');
+						assert.equal(lines[7], fileContent);
+						assert.match(lines[8], /^-+\d+-+$/);
+						return true;
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				basicClient.files.uploadFile(folderID, filename, fileContent, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('setUserStatus()', function() {
+			it('should make a post request to create user status on terms of service, if conflict update', function() {
+				var termsOfServiceID = '1234',
+					termsOfServiceUserStatusID = '5678',
+					post_fixture = getFixture('terms-of-service/post_terms_of_service_user_statuses_409'),
+					get_fixture = getFixture('terms-of-service/get_terms_of_service_user_statuses_200'),
+					put_fixture = getFixture('terms-of-service/put_terms_of_service_user_statuses_200'),
+					user = {
+						id: '7777',
+						type: 'user'
+					},
+					expected_post_body = {
+						tos: {
+							id: termsOfServiceID,
+							type: 'terms_of_service'
+						},
+						user: user,
+						is_accepted: true
+					},
+					expected_put_body = {
+						is_accepted: true
+					};
+
+
+				apiMock.post('/2.0/terms_of_service_user_statuses', expected_post_body)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(409, post_fixture);
+
+				apiMock.get('/2.0/terms_of_service_user_statuses')
+					.query({tos_id: termsOfServiceID, user_id: user.id, fields: 'id'})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, get_fixture);
+
+				apiMock.put('/2.0/terms_of_service_user_statuses/' + termsOfServiceUserStatusID, expected_put_body)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, put_fixture);
+
+				return basicClient.termsOfService.setUserStatus(termsOfServiceID, true, {user_id: user.id})
+					.then(tosUserStatus => {
+						assert.deepEqual(tosUserStatus, JSON.parse(put_fixture));
+					});
+			});
+		});
 	});
 });

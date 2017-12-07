@@ -109,13 +109,13 @@ Enterprise.prototype.userRoles = Object.freeze({
  * API Endpoint: '/users'
  * Method: GET
  *
- * @param {?Object} options - Optional parameters, can be left null in most cases
+ * @param {Object} [options] - Optional parameters, can be left null in most cases
  * @param {string} [options.filter_term] - Filter the results to only users starting with the filter_term in either the name or the login
  * @param {int} [options.limit=100] - The number of records to return
  * @param {int} [options.offset=0] - The record at which to start
  * @param {EnterpriseUserType} [options.user_type=managed] - The type of user to search for
- * @param {Function} callback - Passed the list of users if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the list of users if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of users
  */
 Enterprise.prototype.getUsers = function(options, callback) {
 
@@ -124,7 +124,7 @@ Enterprise.prototype.getUsers = function(options, callback) {
 			qs: options
 		};
 
-	this.client.get(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
 };
 
 /**
@@ -135,8 +135,8 @@ Enterprise.prototype.getUsers = function(options, callback) {
  *
  * @param {string} enterpriseID - The ID of the enterprise to invite the user to
  * @param {string} email - The email address of the user to invite
- * @param {Function} callback - Passed the invite object if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the invite object if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the invite object
  */
 Enterprise.prototype.inviteUser = function(enterpriseID, email, callback) {
 
@@ -152,7 +152,7 @@ Enterprise.prototype.inviteUser = function(enterpriseID, email, callback) {
 			}
 		};
 
-	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
 };
 
 /**
@@ -163,7 +163,7 @@ Enterprise.prototype.inviteUser = function(enterpriseID, email, callback) {
  *
  * @param {string} login - The email address this user uses to login
  * @param {string} name - The name of this user
- * @param {?Object} options - Optional parameters, can be left null in most cases
+ * @param {Object} [options] - Optional parameters, can be left null in most cases
  * @param {EnterpriseRole} [options.role] - This user’s enterprise role
  * @param {string} [options.language] - The user's language
  * @param {bool} [options.is_sync_enabled] - Whether or not this user can use Box Sync
@@ -177,8 +177,8 @@ Enterprise.prototype.inviteUser = function(enterpriseID, email, callback) {
  * @param {string} [options.timezone] - The user's timezone
  * @param {bool} [options.is_exempt_from_device_limits] - Whether to exempt this user from Enterprise device limits
  * @param {bool} [options.is_exempt_from_login_verification] - Whether or not this user must use two-factor authentication
- * @param {Function} callback - Passed the list of users if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the created user if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the created user
  */
 Enterprise.prototype.addUser = function(login, name, options, callback) {
 
@@ -189,7 +189,39 @@ Enterprise.prototype.addUser = function(login, name, options, callback) {
 
 	Object.assign(params.body, options);
 
-	this.client.post(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
+};
+
+/**
+ * Create a new app user in the current enterprise
+ *
+ * API Endpoint: '/users'
+ * Method: POST
+ *
+ * @param {string} name - The name of this user
+ * @param {Object} [options] - Optional parameters, can be left null in most cases
+ * @param {string} [options.language] - The user's language
+ * @param {string} [options.job_title] - The user’s job title
+ * @param {string} [options.phone] - The user’s phone number
+ * @param {string} [options.address] - The user’s address
+ * @param {int} [options.space_amount] - The user’s total available storage space in bytes
+ * @param {string} [options.timezone] - The user's timezone
+ * @param {Function} [callback] - Passed the created user if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the created user
+ */
+Enterprise.prototype.addAppUser = function(name, options, callback) {
+
+	var apiPath = urlPath(USERS_PATH),
+		params = {
+			body: {
+				name,
+				is_platform_access_only: true
+			}
+		};
+
+	Object.assign(params.body, options);
+
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
 };
 
 /**
@@ -200,8 +232,8 @@ Enterprise.prototype.addUser = function(login, name, options, callback) {
  *
  * @param {string} sourceUserID - The ID of the user whose files will be transferred
  * @param {string} destUserID - The ID of the user to transfer the files to
- * @param {Function} callback - Passed the new folder which contains all the files if successful, error otherwise
- * @returns {void}
+ * @param {Function} [callback] - Passed the new folder which contains all the files if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the folder containing the transferred content
  */
 Enterprise.prototype.transferUserContent = function(sourceUserID, destUserID, callback) {
 
@@ -212,7 +244,7 @@ Enterprise.prototype.transferUserContent = function(sourceUserID, destUserID, ca
 			}
 		};
 
-	this.client.put(apiPath, params, this.client.defaultResponseHandler(callback));
+	return this.client.wrapWithDefaultHandler(this.client.put)(apiPath, params, callback);
 };
 
 module.exports = Enterprise;
@@ -226,13 +258,13 @@ module.exports = Enterprise;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 24 2017 16:31:25 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 14 2017 17:48:57 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

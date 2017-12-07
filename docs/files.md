@@ -12,6 +12,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Get a File's Download URL](#get-download-url)
 * [Upload a File](#upload-a-file)
 * [Upload Preflight Check](#upload-preflight-check)
+* [Chunked Upload](#chunked-upload)
 * [Copy a File](#copy-a-file)
 * [Delete a File](#delete-a-file)
 * [Delete Permanently](#delete-permanently)
@@ -36,6 +37,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Get Watermark](#get-watermark)
 * [Apply Watermark](#apply-watermark)
 * [Remove Watermark](#remove-watermark)
+* [Get Representation Info](#get-representation-info)
 
 Get a File's Information
 ------------------------
@@ -128,21 +130,236 @@ client.files.getDownloadURL('12345', null, function(error, downloadURL) {
 Upload a File
 -------------
 
-Files are uploaded to a folder by calling the
+The simplest way to upload a file to a folder is by calling the
 [`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/Files.html#uploadFile)
-method with a `stream.Readable` of the file to upload.
+method with a `stream.Readable` or `Buffer` of the file to upload.
 
+Stream:
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file');
 client.files.uploadFile('98768', 'New File', stream, callback);
 ```
 
-A file can also be uploaded from a `Buffer`:
-
+Buffer:
 ```js
 var buffer = new Buffer(50);
 client.files.uploadFile('98768', 'New File', buffer, callback);
+```
+
+Chunked Upload
+--------------
+
+For large files or in cases where the network connection is less reliable,
+you may want to upload the file in parts.  This allows a single part to fail
+without aborting the entire upload, and failed parts can then be retried.
+
+### Automatic Uploader
+
+The SDK provides a method of automatically handling a chunked upload; simply call
+[`files.getChunkedUploader(folderID, size, name, file, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getChunkedUploader)
+with the ID of the destination folder, the size and file name of the file to be
+uploaded, and a `Buffer` or `ReadableStream` of the file to be uploaded.
+
+```js
+// Upload a 2GB file "huge.pdf" into folder 12345
+var stream = fs.createReadStream('huge.pdf');
+client.files.getChunkedUploader(
+	'12345',
+	2147483648,
+	'huge.pdf',
+	stream,
+	null,
+	function(err, uploader) {
+
+		if (err) {
+			// handle error
+			return;
+		}
+
+		uploader.on('error', function(err) {
+			// handle unrecoverable upload error
+		});
+
+		uploader.on('uploadComplete', function(file) {
+			console.log('File upload complete!', file);
+		});
+
+		uploader.start();
+	}
+);
+```
+
+A new version of a file can be uploaded in the same way by calling
+[`files.getNewVersionChunkedUploader(fileID, size, file, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getNewVersionChunkedUploader)
+with the ID of the file to upload a new version of, along with the size of the new
+version and a `Buffer` or `ReadableStream` of the new version.
+
+```js
+// Upload a new 2GB version of file 98765
+var stream = fs.createReadStream('huge.pdf');
+client.files.getChunkedUploader(
+	'98765',
+	2147483648,
+	stream,
+	null,
+	function(err, uploader) {
+
+		if (err) {
+			// handle error
+			return;
+		}
+
+		uploader.on('error', function(err) {
+			// handle unrecoverable upload error
+		});
+
+		uploader.on('uploadComplete', function(file) {
+			console.log('Version upload complete!', file);
+		});
+
+		uploader.start();
+	}
+);
+```
+
+### Manual Process
+
+For more complicated upload scenarios, such as those being coordinated across
+multiple processes or when an unrecoverable error occurs with the automatic
+uploader, the endpoints for chunked upload operations are also exposed directly.
+
+For example, this is roughly how a chunked upload is done manually:
+```js
+// Upload a 2GB file "huge.pdf" into folder 12345
+var parts = [];
+var hash = crypto.createHash('sha1');
+client.files.createUploadSession(
+	'12345',
+	2147483648,
+	'huge.pdf',
+	function(err, session) {
+
+		if (err) {
+			// handle error
+			return;
+		}
+
+		var sessionID = session.upload_session_id;
+
+		// for each part in order, given `part` and `offset`...
+		hash.update(part);
+		client.files.uploadPart(
+			sessionID,
+			part,
+			offset,
+			2147483648,
+			null,
+			function(err, partData) {
+
+				if (err) {
+					// handle error
+					return;
+				}
+
+				parts.push(partData);
+			}
+		);
+
+		// once all parts have been uploaded...
+		client.files.commitUploadSession(sessionID, hash.digest('base64'), parts, null, callback);
+	}
+);
+```
+
+The individual endpoint methods are detailed below:
+
+#### Create Upload Session
+
+To start a chunked upload, create an upload session for the file by calling
+[`files.createUploadSession(folderID, size, name, callback)`](http://opensource.box.com/box-node-sdk/Files.html#createUploadSession)
+with the ID of the folder to upload into, as well as the size and file name of
+file being uploaded.  This will check the destination folder for conflicts before
+starting the upload and pass the information for the upload session back to the callback.
+
+```js
+// Create a session to upload a 2GB file "huge.pdf" into folder 12345
+client.files.createUploadSession('12345', 2147483648, 'huge.pdf', callback);
+```
+
+#### Upload Part
+
+Parts are then uploaded by calling
+[`files.uploadPart(sessionID, part, offset, totalSize, callback)`](http://opensource.box.com/box-node-sdk/Files.html#uploadPart)
+with the ID of the upload session that was created, a `Buffer` containing the part
+of the file starting at `offset`, and the total size of the file being uploaded.
+When the upload of a part succeeds, the callback will be called with a part record,
+which should be stored for later integrity checking.
+
+```js
+// Upload the part starting at byte offset 8388608 to upload session '93D9A837B45F' with part ID 'feedbeef'
+client.files.uploadPart('93D9A837B45F', part, 8388608, 2147483648, {part_id: 'feedbeef'}, callback);
+```
+
+#### Commit Upload Session
+
+Once all parts of the file have been uploaded, finalize the upload by calling
+[`files.commitUploadSession(sessionID, fileHash, parts, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#commitUploadSession)
+with the upload session ID, the base64-encoded SHA1 hash of the entire file, and the list of
+successfully-uploaded part records.  This will complete the upload and create the
+full file in the destination folder.
+
+Any valid file object attributes you want to assign to the newly-created file may
+be passed via the `options` parameter.  See the [File object documentation](https://docs.box.com/reference#file-object)
+for more details.
+
+If you stored a list of part records for each uploaded part, you can pass them via
+`options.parts` for additional integrity checking.  Otherwise, the API will assume that the list
+of parts is has received is the intended set.
+
+```js
+// Finalize upload session 93D9A837B45F
+client.files.commitUploadSession(
+	'93D9A837B45F',
+	fileHash.digest('base64'),
+	parts,
+	{description: 'A file I uploaded in chunks!'},
+	callback
+);
+```
+
+#### Abort Upload Session
+
+An in-progress upload session may be destroyed, along with all parts already uploaded,
+by calling
+[`files.abortUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#abortUploadSession).
+This operation cannot be undone.
+
+```js
+// Cancel upload session 93D9A837B45F
+client.files.abortUploadSession('93D9A837B45F', callback);
+```
+
+#### Get Upload Session Parts
+
+The list of parts successfully uploaded to an in-progress upload session can be
+retrieved by calling
+[`files.getUploadSessionParts(sessionID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getUploadSessionParts).
+The list is returned as a paged collection using the `limit` and `offset` options.
+
+```js
+// Get the list of parts already uploaded
+client.files.getUploadSessionParts('93D9A837B45F', {limit: 100}, callback);
+```
+
+#### Get Upload Session Status
+
+Information about an in-progress upload session can be retrieved by calling
+[`files.getUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getUploadSession).
+
+```js
+// Get info about upload session 93D9A837B45F
+client.files.getUploadSessionStatus('93D9A837B45F', callback);
 ```
 
 Upload Preflight Check
@@ -529,4 +746,26 @@ A file's watermark can be removed by calling
 
 ```js
 client.files.removeWatermark('67890', callback);
+```
+
+Get Representation Info
+-----------------------
+
+A file's representation info can be retrieved by calling
+[`files.getRepresentationInfo(fileID, representationTypes
+callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo).
+You will be able to fetch information regarding pdf representation, thumbnail representation, multi-page images
+representation, and extracted text representation.
+
+You can retrieve information regarding the generated representations by calling. This will retrieve information
+for a 2048x2048 jpg representation and a 2048x2048 png representation generated for your Box file.
+```js
+client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, callback);
+```
+
+Similarly you can form your own request by manually passing in the representation types you want to
+retrieve. For a full list of available x-rep-hints headers you can pass in please see: 
+https://developer.box.com/reference#section-x-rep-hints-header
+```js
+client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', callback);
 ```
