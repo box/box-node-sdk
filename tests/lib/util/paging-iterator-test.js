@@ -343,7 +343,9 @@ describe('PagingIterator', function() {
 				}
 			};
 
-			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
+			sandbox.mock(clientFake).expects('get')
+				.withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -415,7 +417,9 @@ describe('PagingIterator', function() {
 				}
 			};
 
-			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions).returns(Promise.resolve(response2));
+			sandbox.mock(clientFake).expects('get')
+				.withArgs(expectedURL, expectedOptions)
+				.returns(Promise.resolve(response2));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -509,8 +513,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -607,8 +613,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -760,8 +768,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -862,8 +872,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 

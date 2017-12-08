@@ -95,7 +95,8 @@ describe('EventStream', function() {
 
 			var longPollInfo = {url: 'https://realtime.box.com/blah'};
 			sandbox.stub(eventStream, 'doLongPoll');
-			sandbox.mock(boxClientFake.events).expects('getLongPollInfo').returns(Promise.resolve(longPollInfo));
+			sandbox.mock(boxClientFake.events).expects('getLongPollInfo')
+				.returns(Promise.resolve(longPollInfo));
 
 			return eventStream.getLongPollInfo()
 				.then(() => {
@@ -133,7 +134,8 @@ describe('EventStream', function() {
 			var apiError = new Error('API fail');
 			sandbox.stub(eventStream, 'doLongPoll');
 			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.reject(apiError));
-			sandbox.mock(eventStream).expects('emit').withArgs('error', apiError);
+			sandbox.mock(eventStream).expects('emit')
+				.withArgs('error', apiError);
 
 			return eventStream.getLongPollInfo();
 		});
@@ -163,7 +165,8 @@ describe('EventStream', function() {
 
 			return eventStream.getLongPollInfo()
 				.then(() => {
-					sandbox.mock(eventStream).expects('getLongPollInfo').never();
+					sandbox.mock(eventStream).expects('getLongPollInfo')
+						.never();
 					clock.tick(1000);
 				});
 		});
@@ -187,7 +190,8 @@ describe('EventStream', function() {
 		it('should get new long poll information when over the max number of retries', function() {
 
 			sandbox.mock(eventStream).expects('getLongPollInfo');
-			sandbox.mock(boxClientFake).expects('get').never();
+			sandbox.mock(boxClientFake).expects('get')
+				.never();
 
 			eventStream._longPollRetries = TEST_MAX_RETRIES + 1;
 
@@ -299,7 +303,8 @@ describe('EventStream', function() {
 
 			var apiError = new Error('Whoops');
 			sandbox.stub(boxClientFake.events, 'get').returns(Promise.reject(apiError));
-			sandbox.mock(eventStream).expects('emit').withArgs('error', apiError);
+			sandbox.mock(eventStream).expects('emit')
+				.withArgs('error', apiError);
 
 			eventStream.fetchEvents();
 		});
@@ -331,9 +336,7 @@ describe('EventStream', function() {
 
 			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
 				chunk_size: 1,
-				entries: [
-					{type: 'event'}
-				]
+				entries: [{type: 'event'}]
 			}));
 			sandbox.mock(eventStream).expects('doLongPoll');
 
@@ -344,9 +347,7 @@ describe('EventStream', function() {
 
 			var newStreamPosition = '5263748952387465';
 			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
-				entries: [
-					{type: 'event'}
-				],
+				entries: [{type: 'event'}],
 				next_stream_position: newStreamPosition
 			}));
 			sandbox.stub(eventStream, 'push');
@@ -367,7 +368,8 @@ describe('EventStream', function() {
 				next_stream_position: TEST_STREAM_POSITION
 			}));
 			sandbox.mock(eventStream).expects('pause');
-			sandbox.mock(eventStream).expects('push').withArgs(event);
+			sandbox.mock(eventStream).expects('push')
+				.withArgs(event);
 
 			return eventStream.fetchEvents();
 		});
@@ -382,7 +384,8 @@ describe('EventStream', function() {
 				entries: [event],
 				next_stream_position: TEST_STREAM_POSITION
 			}));
-			sandbox.mock(eventStream).expects('push').withArgs(event);
+			sandbox.mock(eventStream).expects('push')
+				.withArgs(event);
 			sandbox.mock(eventStream).expects('resume');
 
 			return eventStream.fetchEvents();
@@ -398,8 +401,10 @@ describe('EventStream', function() {
 				entries: [event],
 				next_stream_position: TEST_STREAM_POSITION
 			}));
-			sandbox.mock(eventStream).expects('push').withArgs(event);
-			sandbox.mock(eventStream).expects('resume').never();
+			sandbox.mock(eventStream).expects('push')
+				.withArgs(event);
+			sandbox.mock(eventStream).expects('resume')
+				.never();
 
 			eventStream.pause();
 			return eventStream.fetchEvents();
@@ -420,10 +425,15 @@ describe('EventStream', function() {
 			eventStream._dedupHash[duplicateEventID] = true;
 
 			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
-				entries: [duplicateEvent, newEvent],
+				entries: [
+					duplicateEvent,
+					newEvent
+				],
 				next_stream_position: TEST_STREAM_POSITION
 			}));
-			sandbox.mock(eventStream).expects('push').once().withArgs(newEvent);
+			sandbox.mock(eventStream).expects('push')
+				.once()
+				.withArgs(newEvent);
 
 			return eventStream.fetchEvents();
 		});
@@ -442,7 +452,8 @@ describe('EventStream', function() {
 				entries: [duplicateEvent],
 				next_stream_position: TEST_STREAM_POSITION
 			}));
-			sandbox.mock(eventStream).expects('push').never();
+			sandbox.mock(eventStream).expects('push')
+				.never();
 			sandbox.mock(eventStream).expects('doLongPoll');
 
 			return eventStream.fetchEvents();
@@ -464,7 +475,7 @@ describe('EventStream', function() {
 
 			return eventStream.fetchEvents()
 				.then(() => {
-					assert.nestedPropertyVal(eventStream, '_dedupHash.' + eventID, true);
+					assert.nestedPropertyVal(eventStream, `_dedupHash.${eventID}`, true);
 				});
 		});
 
@@ -486,7 +497,8 @@ describe('EventStream', function() {
 
 		it('should delay successive calls to be rate limited when called', function() {
 
-			sandbox.mock(boxClientFake.events).expects('get').once()
+			sandbox.mock(boxClientFake.events).expects('get')
+				.once()
 				.withArgs(sinon.match({
 					stream_position: TEST_STREAM_POSITION,
 					limit: 500
@@ -506,10 +518,12 @@ describe('EventStream', function() {
 			eventStream._dedupHash['123'] = true;
 			eventStream._dedupHash['456'] = true;
 
-			var latestEvents = [{
-				type: 'event',
-				event_id: '456'
-			}];
+			var latestEvents = [
+				{
+					type: 'event',
+					event_id: '456'
+				}
+			];
 
 			eventStream.cleanupDedupFilter(latestEvents);
 

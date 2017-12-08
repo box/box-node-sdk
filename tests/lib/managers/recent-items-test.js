@@ -58,19 +58,19 @@ describe('RecentItems', function() {
 
 		var testQS = { testQSKey: 'testQSValue' };
 
-		beforeEach(function() {
-		});
-
 		it('should make GET request to get all recent items when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/recent_items');
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/recent_items');
 			recentItems.get(testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get');
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			recentItems.get(testQS);
 		});
 

@@ -56,7 +56,8 @@ describe('TermsOfService', function() {
 		it('should make GET request to get terms of service info when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/terms_of_services/1234')
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/terms_of_services/1234')
 				.returns(Promise.resolve(response));
 			termsOfService.get(TERMS_OF_SERVICE_ID, null);
 		});
@@ -112,7 +113,8 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/terms_of_services/1234')
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/terms_of_services/1234')
 				.returns(Promise.resolve(response));
 			termsOfService.get(TERMS_OF_SERVICE_ID, options);
 		});
@@ -163,19 +165,22 @@ describe('TermsOfService', function() {
 		it('should make GET request to get terms of service info when called', function() {
 			var response = {
 				total_count: 2,
-				entries: [{
-					type: 'terms_of_service',
-					id: '1234',
-					status: 'enabled',
-					enterprise: {},
-					tos_type: 'external',
-					text: 'TEST',
-					created_at: '2017-10-21T20:09:59-07:00',
-					modified_at: '2017-10-21T20:09:59-07:00'
-				}]
+				entries: [
+					{
+						type: 'terms_of_service',
+						id: '1234',
+						status: 'enabled',
+						enterprise: {},
+						tos_type: 'external',
+						text: 'TEST',
+						created_at: '2017-10-21T20:09:59-07:00',
+						modified_at: '2017-10-21T20:09:59-07:00'
+					}
+				]
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/terms_of_services')
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/terms_of_services')
 				.returns(Promise.resolve(response));
 			termsOfService.getAll();
 		});
@@ -222,19 +227,22 @@ describe('TermsOfService', function() {
 		it('should make GET request to get terms of service info when called with optional param', function() {
 			var response = {
 				total_count: 2,
-				entries: [{
-					type: 'terms_of_service',
-					id: '1234',
-					status: 'enabled',
-					enterprise: {},
-					tos_type: 'external',
-					text: 'TEST',
-					created_at: '2017-10-21T20:09:59-07:00',
-					modified_at: '2017-10-21T20:09:59-07:00'
-				}]
+				entries: [
+					{
+						type: 'terms_of_service',
+						id: '1234',
+						status: 'enabled',
+						enterprise: {},
+						tos_type: 'external',
+						text: 'TEST',
+						created_at: '2017-10-21T20:09:59-07:00',
+						modified_at: '2017-10-21T20:09:59-07:00'
+					}
+				]
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/terms_of_services')
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/terms_of_services')
 				.returns(Promise.resolve(response));
 			termsOfService.getAll(options);
 		});
@@ -293,7 +301,8 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/terms_of_services', expectedTermsOfServiceParam)
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/terms_of_services', expectedTermsOfServiceParam)
 				.returns(Promise.resolve(response));
 			termsOfService.create('managed', 'enabled', 'Test Text');
 		});
@@ -354,7 +363,8 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/terms_of_services/1234', expectedTermsOfServiceParam)
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/terms_of_services/1234', expectedTermsOfServiceParam)
 				.returns(Promise.resolve(response));
 			termsOfService.update(TERMS_OF_SERVICE_ID, options);
 		});
@@ -406,24 +416,27 @@ describe('TermsOfService', function() {
 
 			var response = {
 				total_count: 2,
-				entries: [{
-					type: 'terms_of_service_user_status',
-					id: '1234',
-					tos: {
+				entries: [
+					{
+						type: 'terms_of_service_user_status',
 						id: '1234',
-						type: 'terms_of_service'
-					},
-					user: {
-						id: '5678',
-						type: 'user'
-					},
-					is_accepted: true,
-					created_at: '2017-10-21T20:09:59-07:00',
-					modified_at: '2017-10-21T20:09:59-07:00'
-				}]
+						tos: {
+							id: '1234',
+							type: 'terms_of_service'
+						},
+						user: {
+							id: '5678',
+							type: 'user'
+						},
+						is_accepted: true,
+						created_at: '2017-10-21T20:09:59-07:00',
+						modified_at: '2017-10-21T20:09:59-07:00'
+					}
+				]
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/terms_of_service_user_statuses', expectedParam)
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/terms_of_service_user_statuses', expectedParam)
 				.returns(Promise.resolve(response));
 			termsOfService.createUserStatus(TERMS_OF_SERVICE_ID, true, options);
 		});
@@ -431,21 +444,23 @@ describe('TermsOfService', function() {
 		it('should call callback with the created terms of service user status info when a 200 response is returned', function(done) {
 			var response = {
 				total_count: 2,
-				entries: [{
-					type: 'terms_of_service_user_status',
-					id: '1234',
-					tos: {
+				entries: [
+					{
+						type: 'terms_of_service_user_status',
 						id: '1234',
-						type: 'terms_of_service'
-					},
-					user: {
-						id: '5678',
-						type: 'user'
-					},
-					is_accepted: true,
-					created_at: '2017-10-21T20:09:59-07:00',
-					modified_at: '2017-10-21T20:09:59-07:00'
-				}]
+						tos: {
+							id: '1234',
+							type: 'terms_of_service'
+						},
+						user: {
+							id: '5678',
+							type: 'user'
+						},
+						is_accepted: true,
+						created_at: '2017-10-21T20:09:59-07:00',
+						modified_at: '2017-10-21T20:09:59-07:00'
+					}
+				]
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
@@ -459,21 +474,23 @@ describe('TermsOfService', function() {
 		it('should return a promise resolving to created terms of service user status object when a 200 response is returned', function() {
 			var response = {
 				total_count: 2,
-				entries: [{
-					type: 'terms_of_service_user_status',
-					id: '1234',
-					tos: {
+				entries: [
+					{
+						type: 'terms_of_service_user_status',
 						id: '1234',
-						type: 'terms_of_service'
-					},
-					user: {
-						id: '5678',
-						type: 'user'
-					},
-					is_accepted: true,
-					created_at: '2017-10-21T20:09:59-07:00',
-					modified_at: '2017-10-21T20:09:59-07:00'
-				}]
+						tos: {
+							id: '1234',
+							type: 'terms_of_service'
+						},
+						user: {
+							id: '5678',
+							type: 'user'
+						},
+						is_accepted: true,
+						created_at: '2017-10-21T20:09:59-07:00',
+						modified_at: '2017-10-21T20:09:59-07:00'
+					}
+				]
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
@@ -492,21 +509,24 @@ describe('TermsOfService', function() {
 				statusCode: 200,
 				body: {
 					total_count: 2,
-					entries: [{
-						type: 'terms_of_service_user_status',
-						id: '1234',
-						tos: {
+					entries: [
+						{
+							type: 'terms_of_service_user_status',
 							id: '1234',
-							type: 'terms_of_service'
-						},
-						user: {},
-						is_accepted: true,
-						created_at: '2017-10-21T20:09:59-07:00',
-						modified_at: '2017-10-21T20:09:59-07:00'
-					}]
+							tos: {
+								id: '1234',
+								type: 'terms_of_service'
+							},
+							user: {},
+							is_accepted: true,
+							created_at: '2017-10-21T20:09:59-07:00',
+							modified_at: '2017-10-21T20:09:59-07:00'
+						}
+					]
 				}
 			};
-			sandbox.mock(boxClientFake).expects('get').withArgs('/terms_of_service_user_statuses')
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/terms_of_service_user_statuses')
 				.returns(Promise.resolve(response));
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID);
 		});
@@ -516,18 +536,20 @@ describe('TermsOfService', function() {
 				statusCode: 200,
 				body: {
 					total_count: 2,
-					entries: [{
-						type: 'terms_of_service_user_status',
-						id: '1234',
-						tos: {
+					entries: [
+						{
+							type: 'terms_of_service_user_status',
 							id: '1234',
-							type: 'terms_of_service'
-						},
-						user: {},
-						is_accepted: true,
-						created_at: '2017-10-21T20:09:59-07:00',
-						modified_at: '2017-10-21T20:09:59-07:00'
-					}]
+							tos: {
+								id: '1234',
+								type: 'terms_of_service'
+							},
+							user: {},
+							is_accepted: true,
+							created_at: '2017-10-21T20:09:59-07:00',
+							modified_at: '2017-10-21T20:09:59-07:00'
+						}
+					]
 				}
 			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -556,18 +578,20 @@ describe('TermsOfService', function() {
 				statusCode: 200,
 				body: {
 					total_count: 2,
-					entries: [{
-						type: 'terms_of_service_user_status',
-						id: '1234',
-						tos: {
+					entries: [
+						{
+							type: 'terms_of_service_user_status',
 							id: '1234',
-							type: 'terms_of_service'
-						},
-						user: {},
-						is_accepted: true,
-						created_at: '2017-10-21T20:09:59-07:00',
-						modified_at: '2017-10-21T20:09:59-07:00'
-					}]
+							tos: {
+								id: '1234',
+								type: 'terms_of_service'
+							},
+							user: {},
+							is_accepted: true,
+							created_at: '2017-10-21T20:09:59-07:00',
+							modified_at: '2017-10-21T20:09:59-07:00'
+						}
+					]
 				}
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
@@ -596,21 +620,24 @@ describe('TermsOfService', function() {
 				statusCode: 200,
 				body: {
 					total_count: 2,
-					entries: [{
-						type: 'terms_of_service_user_status',
-						id: '1234',
-						tos: {
+					entries: [
+						{
+							type: 'terms_of_service_user_status',
 							id: '1234',
-							type: 'terms_of_service'
-						},
-						user: {},
-						is_accepted: true,
-						created_at: '2017-10-21T20:09:59-07:00',
-						modified_at: '2017-10-21T20:09:59-07:00'
-					}]
+							tos: {
+								id: '1234',
+								type: 'terms_of_service'
+							},
+							user: {},
+							is_accepted: true,
+							created_at: '2017-10-21T20:09:59-07:00',
+							modified_at: '2017-10-21T20:09:59-07:00'
+						}
+					]
 				}
 			};
-			sandbox.mock(boxClientFake).expects('get').withArgs('/terms_of_service_user_statuses')
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/terms_of_service_user_statuses')
 				.returns(Promise.resolve(response));
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, options);
 		});
@@ -620,18 +647,20 @@ describe('TermsOfService', function() {
 				statusCode: 200,
 				body: {
 					total_count: 2,
-					entries: [{
-						type: 'terms_of_service_user_status',
-						id: '1234',
-						tos: {
+					entries: [
+						{
+							type: 'terms_of_service_user_status',
 							id: '1234',
-							type: 'terms_of_service'
-						},
-						user: {},
-						is_accepted: true,
-						created_at: '2017-10-21T20:09:59-07:00',
-						modified_at: '2017-10-21T20:09:59-07:00'
-					}]
+							tos: {
+								id: '1234',
+								type: 'terms_of_service'
+							},
+							user: {},
+							is_accepted: true,
+							created_at: '2017-10-21T20:09:59-07:00',
+							modified_at: '2017-10-21T20:09:59-07:00'
+						}
+					]
 				}
 			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -647,18 +676,20 @@ describe('TermsOfService', function() {
 				statusCode: 200,
 				body: {
 					total_count: 2,
-					entries: [{
-						type: 'terms_of_service_user_status',
-						id: '1234',
-						tos: {
+					entries: [
+						{
+							type: 'terms_of_service_user_status',
 							id: '1234',
-							type: 'terms_of_service'
-						},
-						user: {},
-						is_accepted: true,
-						created_at: '2017-10-21T20:09:59-07:00',
-						modified_at: '2017-10-21T20:09:59-07:00'
-					}]
+							tos: {
+								id: '1234',
+								type: 'terms_of_service'
+							},
+							user: {},
+							is_accepted: true,
+							created_at: '2017-10-21T20:09:59-07:00',
+							modified_at: '2017-10-21T20:09:59-07:00'
+						}
+					]
 				}
 			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -682,7 +713,8 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/terms_of_service_user_statuses/7777', expectedParam)
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/terms_of_service_user_statuses/7777', expectedParam)
 				.returns(Promise.resolve(response));
 			termsOfService.updateUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true);
 		});
@@ -733,24 +765,27 @@ describe('TermsOfService', function() {
 			var response = {
 				statusCode: 200,
 				total_count: 2,
-				entries: [{
-					type: 'terms_of_service_user_status',
-					id: '1234',
-					tos: {
+				entries: [
+					{
+						type: 'terms_of_service_user_status',
 						id: '1234',
-						type: 'terms_of_service'
-					},
-					user: {
-						id: '5678',
-						type: 'user'
-					},
-					is_accepted: true,
-					created_at: '2017-10-21T20:09:59-07:00',
-					modified_at: '2017-10-21T20:09:59-07:00'
-				}]
+						tos: {
+							id: '1234',
+							type: 'terms_of_service'
+						},
+						user: {
+							id: '5678',
+							type: 'user'
+						},
+						is_accepted: true,
+						created_at: '2017-10-21T20:09:59-07:00',
+						modified_at: '2017-10-21T20:09:59-07:00'
+					}
+				]
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/terms_of_service_user_statuses', expectedParam)
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/terms_of_service_user_statuses', expectedParam)
 				.returns(Promise.resolve(response));
 			termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options);
 		});
@@ -794,9 +829,11 @@ describe('TermsOfService', function() {
 
 			sandbox.stub(boxClientFake, 'post')
 				.returns(Promise.resolve(response));
-			sandbox.mock(termsOfService).expects('getUserStatus').withArgs(TERMS_OF_SERVICE_ID, sinon.match(options))
+			sandbox.mock(termsOfService).expects('getUserStatus')
+				.withArgs(TERMS_OF_SERVICE_ID, sinon.match(options))
 				.returns(Promise.resolve({id: TERMS_OF_SERVICE_USER_STATUS_ID}));
-			sandbox.mock(termsOfService).expects('updateUserStatus').withArgs(TERMS_OF_SERVICE_USER_STATUS_ID, true);
+			sandbox.mock(termsOfService).expects('updateUserStatus')
+				.withArgs(TERMS_OF_SERVICE_USER_STATUS_ID, true);
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options);
 		});
 

@@ -63,7 +63,8 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/groups', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/groups', expectedParams);
 			groups.create(name, null);
 		});
 
@@ -82,14 +83,17 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/groups', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/groups', expectedParams);
 			groups.create(name, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			groups.create('test');
 		});
 
@@ -125,7 +129,8 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/groups/${GROUP_ID}`, expectedParams);
 			groups.get(GROUP_ID, null);
 		});
 
@@ -142,14 +147,17 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/groups/${GROUP_ID}`, expectedParams);
 			groups.get(GROUP_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			groups.get(GROUP_ID);
 		});
 
@@ -197,14 +205,17 @@ describe('Groups', function() {
 
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/groups/' + GROUP_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/groups/${GROUP_ID}`, expectedParams);
 			groups.update(GROUP_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			groups.update(GROUP_ID, options);
 		});
 
@@ -236,14 +247,17 @@ describe('Groups', function() {
 		it('should make DELETE request to delete the group when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/groups/' + GROUP_ID, null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/groups/${GROUP_ID}`, null);
 			groups.delete(GROUP_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			groups.delete(GROUP_ID);
 		});
 
@@ -288,7 +302,8 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/group_memberships', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/group_memberships', expectedParams);
 			groups.addUser(GROUP_ID, USER_ID);
 		});
 
@@ -311,14 +326,17 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/group_memberships', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/group_memberships', expectedParams);
 			groups.addUser(GROUP_ID, USER_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			groups.addUser(GROUP_ID, USER_ID);
 		});
 
@@ -356,7 +374,8 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/group_memberships/' + MEMBERSHIP_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/group_memberships/${MEMBERSHIP_ID}`, expectedParams);
 			groups.getMembership(MEMBERSHIP_ID, null);
 		});
 
@@ -373,14 +392,17 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/group_memberships/' + MEMBERSHIP_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/group_memberships/${MEMBERSHIP_ID}`, expectedParams);
 			groups.getMembership(MEMBERSHIP_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			groups.getMembership(MEMBERSHIP_ID);
 		});
 
@@ -428,14 +450,17 @@ describe('Groups', function() {
 		it('should make PUT request to update the membership when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/group_memberships/' + MEMBERSHIP_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/group_memberships/${MEMBERSHIP_ID}`, expectedParams);
 			groups.updateMembership(MEMBERSHIP_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			groups.updateMembership(MEMBERSHIP_ID, options);
 		});
 
@@ -469,14 +494,17 @@ describe('Groups', function() {
 		it('should make DELETE request to delete the membership when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/group_memberships/' + MEMBERSHIP_ID);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/group_memberships/${MEMBERSHIP_ID}`);
 			groups.removeMembership(MEMBERSHIP_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			groups.removeMembership(MEMBERSHIP_ID);
 		});
 
@@ -513,7 +541,8 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/memberships', expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/groups/${GROUP_ID}/memberships`, expectedParams);
 			groups.getMemberships(GROUP_ID, null);
 		});
 
@@ -528,14 +557,17 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/memberships', expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/groups/${GROUP_ID}/memberships`, expectedParams);
 			groups.getMemberships(GROUP_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			groups.getMemberships(GROUP_ID);
 		});
 
@@ -572,7 +604,8 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups', expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/groups', expectedParams);
 			groups.getAll(null);
 		});
 
@@ -587,14 +620,17 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups', expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/groups', expectedParams);
 			groups.getAll(options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			groups.getAll();
 		});
 
@@ -631,7 +667,8 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/collaborations', expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/groups/${GROUP_ID}/collaborations`, expectedParams);
 			groups.getCollaborations(GROUP_ID, null);
 		});
 
@@ -646,14 +683,17 @@ describe('Groups', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/groups/' + GROUP_ID + '/collaborations', expectedParams);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/groups/${GROUP_ID}/collaborations`, expectedParams);
 			groups.getCollaborations(GROUP_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			groups.getCollaborations(GROUP_ID, null);
 		});
 

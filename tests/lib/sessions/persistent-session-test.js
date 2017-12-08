@@ -51,7 +51,11 @@ describe('PersistentAPISession', function() {
 	beforeEach(function() {
 
 		tokenManagerFake = leche.fake(TokenManager.prototype);
-		tokenStore = leche.create(['read', 'write', 'clear']);
+		tokenStore = leche.create([
+			'read',
+			'write',
+			'clear'
+		]);
 		tokenStoreFake = leche.fake(tokenStore);
 
 		// Enable Mockery
@@ -97,10 +101,10 @@ describe('PersistentAPISession', function() {
 
 		it('should throw an exception when given an incomplete token store', function() {
 			var tokenStoreMissingGet = {
-				write: function() {}
+				write() { /**/ }
 			};
 			var tokenStoreMissingSet = {
-				read: function() {}
+				read() { /**/ }
 			};
 
 			assert.throws(function() {
@@ -129,7 +133,8 @@ describe('PersistentAPISession', function() {
 
 		it('should resolve to stored access token when access tokens are fresh', function() {
 
-			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').never();
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant')
+				.never();
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
 
 			return persistentAPISession.getAccessToken()
@@ -183,7 +188,10 @@ describe('PersistentAPISession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2]);
+			return Promise.all([
+				promise1,
+				promise2
+			]);
 		});
 
 		it('should allow a new request for tokens once in-progress call completes', function() {
@@ -203,7 +211,10 @@ describe('PersistentAPISession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2])
+			return Promise.all([
+				promise1,
+				promise2
+			])
 				.then(() => persistentAPISession.getAccessToken());
 		});
 
@@ -228,7 +239,8 @@ describe('PersistentAPISession', function() {
 
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
-			sandbox.mock(tokenStoreFake).expects('read').yieldsAsync(null, newTokenInfo);
+			sandbox.mock(tokenStoreFake).expects('read')
+				.yieldsAsync(null, newTokenInfo);
 			sandbox.stub(tokenStoreFake, 'write').yieldsAsync();
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
@@ -247,7 +259,8 @@ describe('PersistentAPISession', function() {
 
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
-			sandbox.mock(tokenStoreFake).expects('read').yieldsAsync(null, testTokenInfo);
+			sandbox.mock(tokenStoreFake).expects('read')
+				.yieldsAsync(null, testTokenInfo);
 			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync();
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
@@ -260,7 +273,9 @@ describe('PersistentAPISession', function() {
 
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.resolve(newTokenInfo));
-			sandbox.mock(tokenStoreFake).expects('write').withArgs(newTokenInfo).yieldsAsync();
+			sandbox.mock(tokenStoreFake).expects('write')
+				.withArgs(newTokenInfo)
+				.yieldsAsync();
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
 				.then(token => {
@@ -274,7 +289,9 @@ describe('PersistentAPISession', function() {
 
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.resolve(newTokenInfo));
-			sandbox.mock(tokenStoreFake).expects('write').withArgs(newTokenInfo).yieldsAsync(storeError);
+			sandbox.mock(tokenStoreFake).expects('write')
+				.withArgs(newTokenInfo)
+				.yieldsAsync(storeError);
 			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync();
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
@@ -303,7 +320,10 @@ describe('PersistentAPISession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2])
+			return Promise.all([
+				promise1,
+				promise2
+			])
 				.then(() => persistentAPISession.getAccessToken())
 				.then(accessToken => {
 					assert.equal(accessToken, newTokenInfo.accessToken);

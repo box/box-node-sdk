@@ -70,11 +70,13 @@ describe('Events', function() {
 
 		it('should make API call to get current stream position', function() {
 
-			sandbox.mock(boxClientFake).expects('get').withArgs('/events', sinon.match({
-				qs: sinon.match({
-					stream_position: 'now'
-				})
-			})).returns(Promise.resolve({statusCode: 200, body: {}}));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/events', sinon.match({
+					qs: sinon.match({
+						stream_position: 'now'
+					})
+				}))
+				.returns(Promise.resolve({statusCode: 200, body: {}}));
 
 			events.getCurrentStreamPosition();
 		});
@@ -177,7 +179,8 @@ describe('Events', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/events', sinon.match({qs: qs}));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/events', sinon.match({qs}));
 
 			events.get(qs);
 		});
@@ -185,7 +188,9 @@ describe('Events', function() {
 		it('should use default response handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get');
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 
 			events.get({});
 		});
@@ -223,7 +228,8 @@ describe('Events', function() {
 					entries: [{type: 'realtime_server'}]
 				}
 			};
-			sandbox.mock(boxClientFake).expects('options').withArgs('/events')
+			sandbox.mock(boxClientFake).expects('options')
+				.withArgs('/events')
 				.returns(Promise.resolve(response));
 
 			events.getLongPollInfo();
@@ -361,7 +367,8 @@ describe('Events', function() {
 		it('should return event stream from starting stream position when passed stream position', function(done) {
 
 			var streamPosition = '38746523';
-			sandbox.mock(events).expects('getCurrentStreamPosition').never();
+			sandbox.mock(events).expects('getCurrentStreamPosition')
+				.never();
 			events.getEventStream(streamPosition, function(err, stream) {
 
 				assert.ifError(err);
@@ -378,7 +385,8 @@ describe('Events', function() {
 			var options = {
 				fetchInterval: 5000
 			};
-			sandbox.mock(events).expects('getCurrentStreamPosition').never();
+			sandbox.mock(events).expects('getCurrentStreamPosition')
+				.never();
 			events.getEventStream(streamPosition, options, function(err, stream) {
 
 				assert.ifError(err);
@@ -391,7 +399,8 @@ describe('Events', function() {
 
 		it('should make API call to get stream position when called without stream position', function() {
 
-			sandbox.mock(events).expects('getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
+			sandbox.mock(events).expects('getCurrentStreamPosition')
+				.returns(Promise.resolve(TEST_STREAM_POSITION));
 
 			events.getEventStream();
 		});

@@ -17,12 +17,12 @@ var assert = require('chai').assert,
 	path = require('path');
 
 function getFixture(fixture) {
-	return fs.readFileSync(path.resolve(__dirname, 'fixtures/endpoints/' + fixture + '.json'));
+	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
 }
 
 describe('Endpoint', function() {
 
-  // ------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
 	var sandbox = sinon.sandbox.create();
@@ -93,9 +93,9 @@ describe('Endpoint', function() {
 				var collaborationID = '987654321',
 					fixture = getFixture('collaborations/get_collaborations_id_200');
 
-				apiMock.get('/2.0/collaborations/' + collaborationID)
+				apiMock.get(`/2.0/collaborations/${collaborationID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -118,9 +118,9 @@ describe('Endpoint', function() {
 				var collaborationID = '987654321',
 					fixture = getFixture('collaborations/get_collaborations_id_404');
 
-				apiMock.get('/2.0/collaborations/' + collaborationID)
+				apiMock.get(`/2.0/collaborations/${collaborationID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -149,7 +149,7 @@ describe('Endpoint', function() {
 
 				apiMock.get('/2.0/collaborations?status=pending')
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -177,9 +177,9 @@ describe('Endpoint', function() {
 					options = {role: basicClient.collaborationRoles.VIEWER_UPLOADER},
 					fixture = getFixture('collaborations/get_collaborations_pending_200');
 
-				apiMock.put('/2.0/collaborations/' + collaborationID, options)
+				apiMock.put(`/2.0/collaborations/${collaborationID}`, options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -203,9 +203,9 @@ describe('Endpoint', function() {
 					options = {role: basicClient.collaborationRoles.VIEWER_UPLOADER},
 					fixture = getFixture('collaborations/put_collaborations_id_404');
 
-				apiMock.put('/2.0/collaborations/' + collaborationID, options)
+				apiMock.put(`/2.0/collaborations/${collaborationID}`, options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -234,9 +234,9 @@ describe('Endpoint', function() {
 					options = {status: 'rejected'},
 					fixture = getFixture('collaborations/put_collaborations_id_pending_200');
 
-				apiMock.put('/2.0/collaborations/' + collaborationID, options)
+				apiMock.put(`/2.0/collaborations/${collaborationID}`, options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -277,7 +277,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/collaborations', options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -314,7 +314,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/collaborations', options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -358,7 +358,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/collaborations', options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -396,7 +396,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/collaborations', options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -440,7 +440,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/collaborations', options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -478,7 +478,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/collaborations', options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -522,7 +522,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/collaborations', options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -547,9 +547,9 @@ describe('Endpoint', function() {
 
 				var collaborationID = '123456789';
 
-				apiMock.delete('/2.0/collaborations/' + collaborationID)
+				apiMock.delete(`/2.0/collaborations/${collaborationID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -580,7 +580,7 @@ describe('Endpoint', function() {
 
 				apiMock.get('/2.0/collections')
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -606,9 +606,9 @@ describe('Endpoint', function() {
 				var collectionID = '123456789',
 					fixture = getFixture('collections/get_collections_id_items_200');
 
-				apiMock.get('/2.0/collections/' + collectionID + '/items')
+				apiMock.get(`/2.0/collections/${collectionID}/items`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -638,9 +638,9 @@ describe('Endpoint', function() {
 				var commentID = '123456789',
 					fixture = getFixture('comments/get_comments_id_200');
 
-				apiMock.get('/2.0/comments/' + commentID)
+				apiMock.get(`/2.0/comments/${commentID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -669,7 +669,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/comments')
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -698,7 +698,7 @@ describe('Endpoint', function() {
 
 				apiMock.post('/2.0/comments')
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -725,9 +725,9 @@ describe('Endpoint', function() {
 					options = {message: 'Looks great!'},
 					fixture = getFixture('comments/put_comments_id_200');
 
-				apiMock.put('/2.0/comments/' + commentID, options)
+				apiMock.put(`/2.0/comments/${commentID}`, options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -752,9 +752,9 @@ describe('Endpoint', function() {
 
 				var commentID = '123456789';
 
-				apiMock.delete('/2.0/comments/' + commentID)
+				apiMock.delete(`/2.0/comments/${commentID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -784,9 +784,9 @@ describe('Endpoint', function() {
 				var devicePinID = '123456789',
 					fixture = getFixture('device-pins/get_device_pinners_id_200');
 
-				apiMock.get('/2.0/device_pinners/' + devicePinID)
+				apiMock.get(`/2.0/device_pinners/${devicePinID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -811,9 +811,9 @@ describe('Endpoint', function() {
 
 				var devicePinID = '123456789';
 
-				apiMock.delete('/2.0/device_pinners/' + devicePinID)
+				apiMock.delete(`/2.0/device_pinners/${devicePinID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -841,7 +841,7 @@ describe('Endpoint', function() {
 
 				apiMock.get('/2.0/users/me?fields=enterprise')
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -852,7 +852,7 @@ describe('Endpoint', function() {
 
 				apiMock.get('/2.0/enterprises/123456789/device_pinners')
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -882,9 +882,9 @@ describe('Endpoint', function() {
 				var fileID = '1234567890',
 					fixture = getFixture('files/get_files_id_200');
 
-				apiMock.get('/2.0/files/' + fileID)
+				apiMock.get(`/2.0/files/${fileID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -910,9 +910,9 @@ describe('Endpoint', function() {
 				var fileID = '1234567890',
 					downloadURL = 'https://dl.boxcloud.com/d/1/6a6_YreMmOqtVm6_P47FD5JGqzg3kA_wSqcOKW9dfE2tEusFkihimxFwQw85Y3t--KvVyhz0GxobSsFyK6HmuYMNUedOtgV5n6vgplfdcVdpYP9SxSv9dbeRYIhsHC-05GMpleRd9xP4I4zudE4V5Tn5X9r8503TwjWpknZKhBfAH37ujxMUBhSYiPefH3wrtaOkMgFxtHpnyi4fS3XMloh74x8ppnc4fyeTloaLyOXvD2IBNeRqquTcubtBa-uVXY6KUg5nxkLPVzGkZl9Y5iBpmzfEv3PP6YjHvGl9LHjw0nagDfWfD1XkDQ5E-LRUmlK5q0qMux6wpS4CPo9O1shwo7btRiRdOYU3dgqMf3TqRP9URhDbpzli_6PBZquOvXp0POv8EQEr1GOGYi_Lo6s92B4Tj7gY5SfXA8YkyJ0qp2BVgu7k7UnC_W5MD7sPMWTnGLjoyaZ8aaqw0l2UYi6jVRgwpQNKe5YGFsmr5dcY1D-FYoK7SY4K5eZ6ZPe3kTODvNLLAJk1U-zHNZmtMPe2Wuae3hC_1738px7S1ZE0FP6h3BuoXLqGIxmt27_znKle7lI-2A_EgJBf69-bNjXEq-ipHoQ76RLvghlD8PT9R6C1mmbXzEv4JJc-GY1a1Hd0taBorx1qMz2UB6ift6VFcN87a2smg-gn2ZAw8_Deps4I8bhsa8fsNBkTWFCbnr2pkZ-sRflaf8_YrcRcs2MrBxtNe2mxnAtRoZakxR0M4EppP5cf7oy1N-4kOn2bpoGyXHZ-udy29uNdn1M0zIAz36_MUskL1usGwrrQMBYsF8dtvIlCTAvww2RYnBxgWUi12nrKwOIk37ZuTqJTtPL7zuDwzo31lp2fOqqKCJxm7xfgMZ51iXgVlkmiN59uJl7x7_2rzYX49-kCQPY9T0VXzlVox8hj09UCvJThJYS5NBAeA-OHn1tqQcdE7KBoK4N7MBabCuJERm1jo62MeQESnStMZc9wRsvPG5qC_VIiM8BIGvcGHARGRkGjEQb16wqiWND9UtEDnqyUaKnCUDiBKb_JvmwDIofZTX9WOaXR9KeRfhi1Ag../download';
 
-				apiMock.get('/2.0/files/' + fileID + '/content')
+				apiMock.get(`/2.0/files/${fileID}/content`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -945,9 +945,9 @@ describe('Endpoint', function() {
 					fileStream = fs.createReadStream(fixturePath),
 					dlMock = nock(fileDownloadRoot);
 
-				apiMock.get('/2.0/files/' + fileID + '/content')
+				apiMock.get(`/2.0/files/${fileID}/content`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -960,14 +960,14 @@ describe('Endpoint', function() {
 
 				dlMock.get(fileDownloadPath)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, function() {return fileStream;});
+					.reply(200, function() { return fileStream; });
 
 				basicClient.files.getReadStream(fileID, {}, function(err, data) {
 
@@ -995,9 +995,9 @@ describe('Endpoint', function() {
 				var fileID = '1234567890',
 					thumbnailURL = 'https://cdn01.boxcdn.net/_assets/thumbs/27x30/image/png-IDjzTN.gif';
 
-				apiMock.get('/2.0/files/' + fileID + '/thumbnail.png')
+				apiMock.get(`/2.0/files/${fileID}/thumbnail.png`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1028,9 +1028,9 @@ describe('Endpoint', function() {
 				var fileID = '1234567890',
 					fixture = getFixture('files/get_files_id_comments_200');
 
-				apiMock.get('/2.0/files/' + fileID + '/comments')
+				apiMock.get(`/2.0/files/${fileID}/comments`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1057,9 +1057,9 @@ describe('Endpoint', function() {
 					options = {name: 'Dog.png'},
 					fixture = getFixture('files/put_files_id_200');
 
-				apiMock.put('/2.0/files/' + fileID, options)
+				apiMock.put(`/2.0/files/${fileID}`, options)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1087,9 +1087,9 @@ describe('Endpoint', function() {
 					collectionsFixture = getFixture('files/get_files_id_fields_collections_empty_200'),
 					fileFixture = getFixture('files/put_files_id_200');
 
-				apiMock.get('/2.0/files/' + fileID + '?fields=collections')
+				apiMock.get(`/2.0/files/${fileID}?fields=collections`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1098,9 +1098,9 @@ describe('Endpoint', function() {
 					})
 					.reply(200, collectionsFixture);
 
-				apiMock.put('/2.0/files/' + fileID, {collections: [{id: collectionID}]})
+				apiMock.put(`/2.0/files/${fileID}`, {collections: [{id: collectionID}]})
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1128,9 +1128,9 @@ describe('Endpoint', function() {
 					collectionsFixture = getFixture('files/get_files_id_fields_collections_200'),
 					fileFixture = getFixture('files/put_files_id_200');
 
-				apiMock.get('/2.0/files/' + fileID + '?fields=collections')
+				apiMock.get(`/2.0/files/${fileID}?fields=collections`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1139,9 +1139,9 @@ describe('Endpoint', function() {
 					})
 					.reply(200, collectionsFixture);
 
-				apiMock.put('/2.0/files/' + fileID, {collections: []})
+				apiMock.put(`/2.0/files/${fileID}`, {collections: []})
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1168,9 +1168,9 @@ describe('Endpoint', function() {
 					newParentID = '987654321',
 					fixture = getFixture('files/put_files_id_200');
 
-				apiMock.put('/2.0/files/' + fileID, {parent: {id: newParentID}})
+				apiMock.put(`/2.0/files/${fileID}`, {parent: {id: newParentID}})
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1197,9 +1197,9 @@ describe('Endpoint', function() {
 					newParentID = '987654321',
 					fixture = getFixture('files/post_files_id_copy_200');
 
-				apiMock.post('/2.0/files/' + fileID + '/copy', {parent: {id: newParentID}})
+				apiMock.post(`/2.0/files/${fileID}/copy`, {parent: {id: newParentID}})
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1224,9 +1224,9 @@ describe('Endpoint', function() {
 
 				var fileID = '1234567890';
 
-				apiMock.delete('/2.0/files/' + fileID)
+				apiMock.delete(`/2.0/files/${fileID}`)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1275,7 +1275,7 @@ describe('Endpoint', function() {
 						return true;
 					})
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
@@ -1298,63 +1298,63 @@ describe('Endpoint', function() {
 			it('should make a post request to create user status on terms of service, if conflict update', function() {
 				var termsOfServiceID = '1234',
 					termsOfServiceUserStatusID = '5678',
-					post_fixture = getFixture('terms-of-service/post_terms_of_service_user_statuses_409'),
-					get_fixture = getFixture('terms-of-service/get_terms_of_service_user_statuses_200'),
-					put_fixture = getFixture('terms-of-service/put_terms_of_service_user_statuses_200'),
+					postResponse = getFixture('terms-of-service/post_terms_of_service_user_statuses_409'),
+					getResponse = getFixture('terms-of-service/get_terms_of_service_user_statuses_200'),
+					putResponse = getFixture('terms-of-service/put_terms_of_service_user_statuses_200'),
 					user = {
 						id: '7777',
 						type: 'user'
 					},
-					expected_post_body = {
+					expectedPostBody = {
 						tos: {
 							id: termsOfServiceID,
 							type: 'terms_of_service'
 						},
-						user: user,
+						user,
 						is_accepted: true
 					},
-					expected_put_body = {
+					expectedPutBody = {
 						is_accepted: true
 					};
 
 
-				apiMock.post('/2.0/terms_of_service_user_statuses', expected_post_body)
+				apiMock.post('/2.0/terms_of_service_user_statuses', expectedPostBody)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(409, post_fixture);
+					.reply(409, postResponse);
 
 				apiMock.get('/2.0/terms_of_service_user_statuses')
 					.query({tos_id: termsOfServiceID, user_id: user.id, fields: 'id'})
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, get_fixture);
+					.reply(200, getResponse);
 
-				apiMock.put('/2.0/terms_of_service_user_statuses/' + termsOfServiceUserStatusID, expected_put_body)
+				apiMock.put(`/2.0/terms_of_service_user_statuses/${termsOfServiceUserStatusID}`, expectedPutBody)
 					.matchHeader('Authorization', function(authHeader) {
-						assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
 					.matchHeader('User-Agent', function(uaHeader) {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, put_fixture);
+					.reply(200, putResponse);
 
 				return basicClient.termsOfService.setUserStatus(termsOfServiceID, true, {user_id: user.id})
 					.then(tosUserStatus => {
-						assert.deepEqual(tosUserStatus, JSON.parse(put_fixture));
+						assert.deepEqual(tosUserStatus, JSON.parse(putResponse));
 					});
 			});
 		});

@@ -65,14 +65,17 @@ describe('Files', function() {
 	describe('get()', function() {
 		it('should make GET request to get file info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234', testParamsWithQs);
 			files.get(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.get(FILE_ID, testQS);
 		});
 
@@ -108,7 +111,9 @@ describe('Files', function() {
 					location: 'box.com/somedownloadurl'
 				}
 			};
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/content', testParamsWithQs).returns(Promise.resolve(response));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/content', testParamsWithQs)
+				.returns(Promise.resolve(response));
 			files.getDownloadURL(FILE_ID, testQS);
 		});
 
@@ -200,7 +205,9 @@ describe('Files', function() {
 	describe('getReadStream()', function() {
 
 		it('should get file download URL when called', function() {
-			sandbox.mock(files).expects('getDownloadURL').withArgs(FILE_ID, testQS).returns(Promise.resolve('https://download.url'));
+			sandbox.mock(files).expects('getDownloadURL')
+				.withArgs(FILE_ID, testQS)
+				.returns(Promise.resolve('https://download.url'));
 			sandbox.stub(boxClientFake, 'get');
 			files.getReadStream(FILE_ID, testQS);
 		});
@@ -210,7 +217,8 @@ describe('Files', function() {
 			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
 
 			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
-			sandbox.mock(boxClientFake).expects('get').withArgs(downloadURL, {streaming: true});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(downloadURL, {streaming: true});
 			files.getReadStream(FILE_ID, testQS);
 		});
 
@@ -254,7 +262,8 @@ describe('Files', function() {
 			var response = {
 				statusCode: 200
 			};
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
 				.returns(Promise.resolve(response));
 			files.getThumbnail(FILE_ID, testQS);
 		});
@@ -396,14 +405,17 @@ describe('Files', function() {
 	describe('getComments()', function() {
 		it('should make GET request to get file info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/comments', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/comments', testParamsWithQs);
 			files.getComments(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getComments(FILE_ID, testQS);
 		});
 
@@ -433,14 +445,17 @@ describe('Files', function() {
 	describe('update()', function() {
 		it('should make PUT request to update file info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/1234', testParamsWithBody);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/files/1234', testParamsWithBody);
 			files.update(FILE_ID, testBody);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			files.update(FILE_ID, testBody);
 		});
 
@@ -479,8 +494,10 @@ describe('Files', function() {
 			};
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID}]}).returns(Promise.resolve(file));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID}]})
+				.returns(Promise.resolve(file));
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, done);
 		});
@@ -493,8 +510,13 @@ describe('Files', function() {
 			};
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'},{id: COLLECTION_ID}]}).returns(Promise.resolve(file));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [
+				{id: '111'},
+				{id: COLLECTION_ID}
+			]})
+				.returns(Promise.resolve(file));
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, done);
 		});
@@ -503,12 +525,20 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(Promise.resolve(file));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [
+				{id: COLLECTION_ID},
+				{id: '111'}
+			]})
+				.returns(Promise.resolve(file));
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, done);
 		});
@@ -517,7 +547,10 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			sandbox.stub(files, 'get').returns(Promise.resolve(file));
@@ -535,7 +568,10 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			sandbox.stub(files, 'get').returns(Promise.resolve(file));
@@ -553,7 +589,8 @@ describe('Files', function() {
 			var error = new Error('Failed get');
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.reject(error));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.reject(error));
 			filesMock.expects('update').never();
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, function(err) {
@@ -568,7 +605,8 @@ describe('Files', function() {
 			var error = new Error('Failed get');
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.reject(error));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.reject(error));
 			filesMock.expects('update').never();
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID)
@@ -581,14 +619,22 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var error = new Error('Failed update');
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(Promise.reject(error));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [
+				{id: COLLECTION_ID},
+				{id: '111'}
+			]})
+				.returns(Promise.reject(error));
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, function(err) {
 
@@ -601,14 +647,22 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var error = new Error('Failed update');
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(Promise.reject(error));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [
+				{id: COLLECTION_ID},
+				{id: '111'}
+			]})
+				.returns(Promise.reject(error));
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID)
 				.catch(err => {
@@ -629,8 +683,10 @@ describe('Files', function() {
 			};
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: []}).returns(Promise.resolve(file));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: []})
+				.returns(Promise.resolve(file));
 
 			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
 		});
@@ -643,8 +699,10 @@ describe('Files', function() {
 			};
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: []}).returns(Promise.resolve(file));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: []})
+				.returns(Promise.resolve(file));
 
 			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
 		});
@@ -653,12 +711,17 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]}).returns(Promise.resolve(file));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]})
+				.returns(Promise.resolve(file));
 
 			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
 		});
@@ -667,12 +730,20 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: '111'},{id: '222'}]
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
 			};
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'},{id: '222'}]}).returns(Promise.resolve(file));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [
+				{id: '111'},
+				{id: '222'}
+			]})
+				.returns(Promise.resolve(file));
 
 			files.removeFromCollection(FILE_ID, COLLECTION_ID, done);
 		});
@@ -681,7 +752,10 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: '111'},{id: '222'}]
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
 			};
 
 			sandbox.stub(files, 'get').returns(Promise.resolve(file));
@@ -699,7 +773,10 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: '111'},{id: '222'}]
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
 			};
 
 			sandbox.stub(files, 'get').returns(Promise.resolve(file));
@@ -716,7 +793,8 @@ describe('Files', function() {
 			var error = new Error('Failed get');
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.reject(error));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.reject(error));
 			filesMock.expects('update').never();
 
 			files.removeFromCollection(FILE_ID, COLLECTION_ID, function(err) {
@@ -730,14 +808,19 @@ describe('Files', function() {
 
 			var file = {
 				id: FILE_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var error = new Error('Failed update');
 
 			var filesMock = sandbox.mock(files);
-			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'}).returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]}).returns(Promise.resolve(error));
+			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
+				.returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]})
+				.returns(Promise.resolve(error));
 
 			return files.removeFromCollection(FILE_ID, COLLECTION_ID)
 				.catch(err => {
@@ -759,7 +842,8 @@ describe('Files', function() {
 
 		it('should make POST request to copy the folder when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/1234/copy', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/files/1234/copy', expectedParams);
 			files.copy(FILE_ID, NEW_PARENT_ID);
 		});
 
@@ -770,14 +854,17 @@ describe('Files', function() {
 			expectedParams.body.name = name;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/1234/copy', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/files/1234/copy', expectedParams);
 			files.copy(FILE_ID, NEW_PARENT_ID, {name});
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			files.copy(FILE_ID, NEW_PARENT_ID);
 		});
 
@@ -817,14 +904,17 @@ describe('Files', function() {
 
 		it('should make PUT request to update the file parent ID when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/1234', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/files/1234', expectedParams);
 			files.move(FILE_ID, NEW_PARENT_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			files.move(FILE_ID, NEW_PARENT_ID);
 		});
 
@@ -855,14 +945,17 @@ describe('Files', function() {
 	describe('delete()', function() {
 		it('should make DELETE request to update file info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/files/1234', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs('/files/1234', null);
 			files.delete(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			files.delete(FILE_ID);
 		});
 
@@ -915,14 +1008,17 @@ describe('Files', function() {
 
 		it('should make an OPTIONS request to prepare and validate a file uploads when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('options').withArgs('/files/content', expectedParams);
+			sandbox.mock(boxClientFake).expects('options')
+				.withArgs('/files/content', expectedParams);
 			files.preflightUploadFile(parentFolderID, fileData, uploadsQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.options).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.options)
+				.returnsArg(0);
 			files.preflightUploadFile(parentFolderID, fileData, uploadsQS);
 		});
 
@@ -968,14 +1064,17 @@ describe('Files', function() {
 
 		it('should make an OPTIONS request to prepare and validate a file new version uploads when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('options').withArgs('/files/2345/content', expectedParams);
+			sandbox.mock(boxClientFake).expects('options')
+				.withArgs('/files/2345/content', expectedParams);
 			files.preflightUploadNewFileVersion(fileID, fileData, uploadsQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.options).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.options)
+				.returnsArg(0);
 			files.preflightUploadNewFileVersion(fileID, fileData, uploadsQS);
 		});
 
@@ -1017,14 +1116,17 @@ describe('Files', function() {
 
 		it('should make POST request to promote older file version to top of the stack', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID + '/versions/current', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/files/${FILE_ID}/versions/current`, expectedParams);
 			files.promoteVersion(FILE_ID, FILE_VERSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			files.promoteVersion(FILE_ID, FILE_VERSION_ID);
 		});
 
@@ -1070,7 +1172,8 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/content', null, expectedFormData);
+			sandbox.mock(boxClientFake).expects('upload')
+				.withArgs('/files/content', null, expectedFormData);
 			files.uploadFile(PARENT_FOLDER_ID, FILENAME, CONTENT);
 		});
 
@@ -1094,14 +1197,17 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/content', null, expectedFormData);
+			sandbox.mock(boxClientFake).expects('upload')
+				.withArgs('/files/content', null, expectedFormData);
 			files.uploadFile(PARENT_FOLDER_ID, FILENAME, CONTENT, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.upload).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.upload)
+				.returnsArg(0);
 			files.uploadFile(PARENT_FOLDER_ID, FILENAME, CONTENT);
 		});
 
@@ -1141,7 +1247,8 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/1234/content', null, expectedFormData);
+			sandbox.mock(boxClientFake).expects('upload')
+				.withArgs('/files/1234/content', null, expectedFormData);
 			files.uploadNewFileVersion(FILE_ID, CONTENT);
 		});
 
@@ -1160,14 +1267,17 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('upload').withArgs('/files/1234/content', null, expectedFormData);
+			sandbox.mock(boxClientFake).expects('upload')
+				.withArgs('/files/1234/content', null, expectedFormData);
 			files.uploadNewFileVersion(FILE_ID, CONTENT, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.upload).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.upload)
+				.returnsArg(0);
 			files.uploadNewFileVersion(FILE_ID, CONTENT);
 		});
 
@@ -1199,14 +1309,17 @@ describe('Files', function() {
 		it('should make GET call to fetch metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/metadata', null);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/metadata', null);
 			files.getAllMetadata(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getAllMetadata(FILE_ID);
 		});
 
@@ -1238,14 +1351,17 @@ describe('Files', function() {
 		it('should make GET call to fetch metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/metadata/global/properties', null);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/metadata/global/properties', null);
 			files.getMetadata(FILE_ID, 'global', 'properties');
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getMetadata(FILE_ID, 'global', 'properties');
 		});
 
@@ -1291,14 +1407,17 @@ describe('Files', function() {
 		it('should make POST call to add metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/1234/metadata/global/properties', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/files/1234/metadata/global/properties', expectedParams);
 			files.addMetadata(FILE_ID, 'global', 'properties', metadata);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			files.addMetadata(FILE_ID, 'global', 'properties', metadata);
 		});
 
@@ -1332,11 +1451,13 @@ describe('Files', function() {
 
 		beforeEach(function() {
 
-			patch = [{
-				op: 'add',
-				path: '/foo',
-				value: 'bar'
-			}];
+			patch = [
+				{
+					op: 'add',
+					path: '/foo',
+					value: 'bar'
+				}
+			];
 
 			expectedParams = {
 				body: patch,
@@ -1349,14 +1470,17 @@ describe('Files', function() {
 		it('should make PUT call with JSON Patch to update metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/1234/metadata/global/properties', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/files/1234/metadata/global/properties', expectedParams);
 			files.updateMetadata(FILE_ID, 'global', 'properties', patch);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			files.updateMetadata(FILE_ID, 'global', 'properties', patch);
 		});
 
@@ -1388,14 +1512,17 @@ describe('Files', function() {
 		it('should make DELETE call to remove metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/files/1234/metadata/global/properties', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs('/files/1234/metadata/global/properties', null);
 			files.deleteMetadata(FILE_ID, 'global', 'properties');
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			files.deleteMetadata(FILE_ID, 'global', 'properties');
 		});
 
@@ -1427,14 +1554,17 @@ describe('Files', function() {
 		it('should make DELETE call to remove file permanently', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/files/' + FILE_ID + '/trash', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/files/${FILE_ID}/trash`, null);
 			files.deletePermanently(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			files.deletePermanently(FILE_ID);
 		});
 
@@ -1466,14 +1596,17 @@ describe('Files', function() {
 		it('should make GET request to retrieve all tasks for given file', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/tasks', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/files/${FILE_ID}/tasks`, testParamsWithQs);
 			files.getTasks(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getTasks(FILE_ID, testQS);
 		});
 
@@ -1505,14 +1638,17 @@ describe('Files', function() {
 		it('should make GET request to get trashed file when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/trash', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/files/${FILE_ID}/trash`, testParamsWithQs);
 			files.getTrashedFile(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getTrashedFile(FILE_ID, testQS);
 		});
 
@@ -1553,7 +1689,9 @@ describe('Files', function() {
 				response = {statusCode: 200, body: embedLink};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID, expectedParams).returns(Promise.resolve(response));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/files/${FILE_ID}`, expectedParams)
+				.returns(Promise.resolve(response));
 			files.getEmbedLink(FILE_ID);
 		});
 
@@ -1561,7 +1699,8 @@ describe('Files', function() {
 			var embedLink = { expiring_embed_link: {url: 'https://app.box.com/preview/expiring_embed/1234'}},
 				response = {statusCode: 200, body: embedLink};
 
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID).returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}`)
+				.returns(Promise.resolve(response));
 			files.getEmbedLink(FILE_ID, function(err, data) {
 				assert.ifError(err);
 				assert.equal(data, embedLink.expiring_embed_link.url);
@@ -1573,7 +1712,8 @@ describe('Files', function() {
 			var embedLink = { expiring_embed_link: {url: 'https://app.box.com/preview/expiring_embed/1234'}},
 				response = {statusCode: 200, body: embedLink};
 
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID).returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}`)
+				.returns(Promise.resolve(response));
 			return files.getEmbedLink(FILE_ID)
 				.then(data => {
 					assert.equal(data, embedLink.expiring_embed_link.url);
@@ -1665,7 +1805,8 @@ describe('Files', function() {
 			expectedParams.body.lock.expires_at = expiresAt;
 			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.lock(FILE_ID, options);
 		});
 
@@ -1677,7 +1818,8 @@ describe('Files', function() {
 
 			expectedParams.body.lock.expires_at = expiresAt;
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.lock(FILE_ID, options);
 		});
 
@@ -1689,21 +1831,25 @@ describe('Files', function() {
 
 			expectedParams.body.lock.is_download_prevented = isDownloadPrevented;
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.lock(FILE_ID, options);
 		});
 
 		it('should make PUT request with mandatory parameters to set the lock properties when neither optional parameter is passed', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.lock(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			files.lock(FILE_ID);
 		});
 
@@ -1747,14 +1893,17 @@ describe('Files', function() {
 		it('should make PUT request to clear the lock properties', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.unlock(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			files.unlock(FILE_ID);
 		});
 
@@ -1804,10 +1953,11 @@ describe('Files', function() {
 
 			expectedParams.body = {
 				name: NEW_NAME,
-				parent: parent
+				parent
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.restoreFromTrash(FILE_ID, options);
 		});
 
@@ -1819,7 +1969,8 @@ describe('Files', function() {
 
 			expectedParams.body.name = NEW_NAME;
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.restoreFromTrash(FILE_ID, options);
 		});
 
@@ -1831,21 +1982,25 @@ describe('Files', function() {
 
 			expectedParams.body.parent = parent;
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
 			files.restoreFromTrash(FILE_ID, options);
 		});
 
 		it('should make POST request with an empty body to restore a file when neither optional parameter is passed', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/files/' + FILE_ID, {body: {}});
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/files/${FILE_ID}`, {body: {}});
 			files.restoreFromTrash(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			files.restoreFromTrash(FILE_ID);
 		});
 
@@ -1877,14 +2032,17 @@ describe('Files', function() {
 		it('should make GET request to retrieve older file versions', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/versions', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/files/${FILE_ID}/versions`, testParamsWithQs);
 			files.getVersions(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getVersions(FILE_ID, testQS);
 		});
 
@@ -1915,7 +2073,8 @@ describe('Files', function() {
 
 		it('should make GET request to get file watermark info when called', function() {
 
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/' + FILE_ID + '/watermark', testParamsWithQs)
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/files/${FILE_ID}/watermark`, testParamsWithQs)
 				.returns(Promise.resolve({statusCode: 200, body: {}}));
 			files.getWatermark(FILE_ID, testQS);
 		});
@@ -1923,7 +2082,8 @@ describe('Files', function() {
 		it('should call callback with error when API call returns error', function(done) {
 
 			var apiError = new Error('failed');
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
+				.returns(Promise.reject(apiError));
 			files.getWatermark(FILE_ID, null, function(err) {
 
 				assert.equal(err, apiError);
@@ -1934,7 +2094,8 @@ describe('Files', function() {
 		it('should return promise that rejects when API call returns error', function() {
 
 			var apiError = new Error('failed');
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
+				.returns(Promise.reject(apiError));
 			return files.getWatermark(FILE_ID)
 				.catch(err => {
 					assert.equal(err, apiError);
@@ -1944,7 +2105,8 @@ describe('Files', function() {
 		it('should call callback with error when API call returns non-200 status code', function(done) {
 
 			var res = {statusCode: 404};
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			files.getWatermark(FILE_ID, null, function(err) {
 
 				assert.instanceOf(err, Error);
@@ -1955,7 +2117,8 @@ describe('Files', function() {
 		it('should return promise that rejects when API call returns non-200 status code', function() {
 
 			var res = {statusCode: 404};
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			return files.getWatermark(FILE_ID)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -1973,7 +2136,8 @@ describe('Files', function() {
 				statusCode: 200,
 				body: {watermark}
 			};
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			files.getWatermark(FILE_ID, null, function(err, data) {
 
 				assert.isNull(err, 'Error should be absent');
@@ -1993,7 +2157,8 @@ describe('Files', function() {
 				statusCode: 200,
 				body: {watermark}
 			};
-			sandbox.stub(boxClientFake, 'get').withArgs('/files/' + FILE_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			return files.getWatermark(FILE_ID)
 				.then(data => {
 					assert.equal(data, watermark);
@@ -2017,14 +2182,17 @@ describe('Files', function() {
 		it('should make PUT request to apply watermark on a file', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/files/' + FILE_ID + '/watermark', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/files/${FILE_ID}/watermark`, expectedParams);
 			files.applyWatermark(FILE_ID, null);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			files.applyWatermark(FILE_ID, null);
 		});
 
@@ -2056,14 +2224,17 @@ describe('Files', function() {
 		it('should make DELETE call to remove watermark', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/files/' + FILE_ID + '/watermark', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/files/${FILE_ID}/watermark`, null);
 			files.removeWatermark(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			files.removeWatermark(FILE_ID);
 		});
 
@@ -2095,14 +2266,17 @@ describe('Files', function() {
 		it('should make DELETE request to delete a file version to the trash', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/files/' + FILE_ID + '/versions/' + FILE_VERSION_ID, null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/files/${FILE_ID}/versions/${FILE_VERSION_ID}`, null);
 			files.deleteVersion(FILE_ID, FILE_VERSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			files.deleteVersion(FILE_ID, FILE_VERSION_ID);
 		});
 
@@ -2146,14 +2320,17 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('https://upload-base/2.1/files/upload_sessions', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('https://upload-base/2.1/files/upload_sessions', expectedParams);
 			files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME);
 		});
 
@@ -2194,14 +2371,17 @@ describe('Files', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/${FILE_ID}/upload_sessions`, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`https://upload-base/2.1/files/${FILE_ID}/upload_sessions`, expectedParams);
 			files.createNewVersionUploadSession(FILE_ID, TEST_SIZE);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			files.createNewVersionUploadSession(FILE_ID, TEST_SIZE);
 		});
 
@@ -2252,7 +2432,8 @@ describe('Files', function() {
 				body: TEST_PART
 			};
 
-			sandbox.mock(boxClientFake).expects('put').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, expectedParams)
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, expectedParams)
 				.returns(Promise.resolve(apiResponse));
 			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH);
 		});
@@ -2363,17 +2544,19 @@ describe('Files', function() {
 
 		var TEST_SESSION_ID = '872f3b4of2e5b',
 			TEST_FILE_HASH = 'oHNRqoPkTcXiX9y4eU54ccSsPQw=',
-			TEST_PARTS = [{
-				part_id: 'cafedad1',
-				size: 9,
-				offset: 0
-			}];
+			TEST_PARTS = [
+				{
+					part_id: 'cafedad1',
+					size: 9,
+					offset: 0
+				}
+			];
 
 		it('should make POST request to commit the upload session when called with list of parts', function() {
 
 			var expectedParams = {
 				headers: {
-					Digest: 'SHA=' + TEST_FILE_HASH
+					Digest: `SHA=${TEST_FILE_HASH}`
 				},
 				body: {
 					attributes: {},
@@ -2385,7 +2568,8 @@ describe('Files', function() {
 				statusCode: 201
 			};
 
-			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
 				.returns(Promise.resolve(response));
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS});
 		});
@@ -2399,7 +2583,7 @@ describe('Files', function() {
 
 			var expectedParams = {
 				headers: {
-					Digest: 'SHA=' + TEST_FILE_HASH
+					Digest: `SHA=${TEST_FILE_HASH}`
 				},
 				body: {
 					attributes: {
@@ -2413,7 +2597,8 @@ describe('Files', function() {
 				statusCode: 201
 			};
 
-			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
 				.returns(Promise.resolve(response));
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, options);
 		});
@@ -2551,7 +2736,7 @@ describe('Files', function() {
 
 			var expectedParams = {
 				headers: {
-					Digest: 'SHA=' + TEST_FILE_HASH
+					Digest: `SHA=${TEST_FILE_HASH}`
 				},
 				body: {
 					attributes: {},
@@ -2574,9 +2759,11 @@ describe('Files', function() {
 				statusCode: 201
 			};
 
-			sandbox.mock(files).expects('getUploadSessionParts').withArgs(TEST_SESSION_ID, sinon.match(expectedPagingOptions))
+			sandbox.mock(files).expects('getUploadSessionParts')
+				.withArgs(TEST_SESSION_ID, sinon.match(expectedPagingOptions))
 				.returns(Promise.resolve(partsResponse));
-			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
 				.returns(Promise.resolve(commitResponse));
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
 
@@ -2602,7 +2789,7 @@ describe('Files', function() {
 
 			var expectedParams = {
 				headers: {
-					Digest: 'SHA=' + TEST_FILE_HASH
+					Digest: `SHA=${TEST_FILE_HASH}`
 				},
 				body: {
 					attributes: {},
@@ -2629,7 +2816,8 @@ describe('Files', function() {
 					offset: 1,
 					total_count: 2
 				}));
-			sandbox.mock(boxClientFake).expects('post').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
 				.returns(Promise.resolve(commitResponse));
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
 
@@ -2643,7 +2831,8 @@ describe('Files', function() {
 			var partsError = new Error('Could not fetch parts');
 
 			sandbox.stub(files, 'getUploadSessionParts').returns(Promise.reject(partsError));
-			sandbox.mock(boxClientFake).expects('post').never();
+			sandbox.mock(boxClientFake).expects('post')
+				.never();
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, null, function(err) {
 
 				assert.equal(err, partsError);
@@ -2656,7 +2845,8 @@ describe('Files', function() {
 			var partsError = new Error('Could not fetch parts');
 
 			sandbox.stub(files, 'getUploadSessionParts').returns(Promise.reject(partsError));
-			sandbox.mock(boxClientFake).expects('post').never();
+			sandbox.mock(boxClientFake).expects('post')
+				.never();
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH)
 				.catch(err => {
 					assert.equal(err, partsError);
@@ -2671,14 +2861,17 @@ describe('Files', function() {
 		it('should make DELETE request to destroy the upload session when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, null);
 			files.abortUploadSession(TEST_SESSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			files.abortUploadSession(TEST_SESSION_ID);
 		});
 
@@ -2712,14 +2905,17 @@ describe('Files', function() {
 		it('should make GET request for the uploaded parts when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/parts`, testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/parts`, testParamsWithQs);
 			files.getUploadSessionParts(TEST_SESSION_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getUploadSessionParts(TEST_SESSION_ID, testQS);
 		});
 
@@ -2753,14 +2949,17 @@ describe('Files', function() {
 		it('should make GET request for the session info when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`);
 			files.getUploadSession(TEST_SESSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getUploadSession(TEST_SESSION_ID);
 		});
 
@@ -2799,7 +2998,8 @@ describe('Files', function() {
 				upload_session_id: '91d2yb48qu34o82y45'
 			};
 
-			sandbox.mock(files).expects('createUploadSession').withArgs(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME)
+			sandbox.mock(files).expects('createUploadSession')
+				.withArgs(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME)
 				.returns(Promise.resolve(session));
 			files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {});
 		});
@@ -2882,7 +3082,8 @@ describe('Files', function() {
 				upload_session_id: '91d2yb48qu34o82y45'
 			};
 
-			sandbox.mock(files).expects('createNewVersionUploadSession').withArgs(TEST_FILE_ID, TEST_SIZE)
+			sandbox.mock(files).expects('createNewVersionUploadSession')
+				.withArgs(TEST_FILE_ID, TEST_SIZE)
 				.returns(Promise.resolve(session));
 			files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {});
 		});
@@ -2960,14 +3161,17 @@ describe('Files', function() {
 		it('should make GET request to get file collaborations when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234/collaborations', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/collaborations', testParamsWithQs);
 			files.getCollaborations(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			files.getCollaborations(FILE_ID, testQS);
 		});
 
@@ -3005,15 +3209,18 @@ describe('Files', function() {
 				statusCode: 200,
 				body: {
 					representations: {
-						entries: [{
-							content: {
-								url_template: placeholderUrl
+						entries: [
+							{
+								content: {
+									url_template: placeholderUrl
+								}
 							}
-						}]
+						]
 					}
 				}
 			};
-			sandbox.mock(boxClientFake).expects('get').withArgs('/files/1234', expectedRepresentationParam)
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234', expectedRepresentationParam)
 				.returns(Promise.resolve(response));
 			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION);
 		});

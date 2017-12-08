@@ -97,11 +97,14 @@ describe('box-client', function() {
 	describe('_makeRequest()', function() {
 
 		it('should set the "Authentication" header to a new APISession token for all requests when called', function() {
-			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
-				headers: sinon.match({ Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN })
-			}).returns(Promise.resolve(fakeOKResponse));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs({
+					headers: sinon.match({ Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN })
+				})
+				.returns(Promise.resolve(fakeOKResponse));
 
 			return basicClient._makeRequest({});
 		});
@@ -111,7 +114,8 @@ describe('box-client', function() {
 				headersMatcher = sinon.match({ BoxApi: explicitBoxApiHeader });
 			basicClient.setSharedContext('box.com/donotsetthis', '123');
 
-			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs({ headers: headersMatcher })
 				.returns(Promise.resolve(fakeOKResponse));
@@ -120,10 +124,12 @@ describe('box-client', function() {
 		});
 
 		it('should call makeStreamingRequest for a streaming request', function() {
-			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			sandbox.mock(fakeResponseStream).expects('on')
 				.withArgs('response', sinon.match.func);
-			sandbox.mock(requestManagerFake).expects('makeStreamingRequest').returns(fakeResponseStream);
+			sandbox.mock(requestManagerFake).expects('makeStreamingRequest')
+				.returns(fakeResponseStream);
 
 			return basicClient._makeRequest({ streaming: true });
 		});
@@ -142,9 +148,11 @@ describe('box-client', function() {
 		});
 
 		it('should make a request and propagate the response when able to upkeep tokens', function() {
-			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').returns(Promise.resolve(fakeOKResponse));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.returns(Promise.resolve(fakeOKResponse));
 
 			return basicClient._makeRequest({})
 				.then(res => {
@@ -153,7 +161,10 @@ describe('box-client', function() {
 		});
 
 		it('should set the "X-Forwarded-For" header to a new APISession token for all requests when called', function() {
-			var ips = ['127.0.0.1', '192.168.1.1'];
+			var ips = [
+				'127.0.0.1',
+				'192.168.1.1'
+			];
 			var ipHeader = '127.0.0.1, 192.168.1.1';
 			var options = {};
 			options.ip = ipHeader;
@@ -162,12 +173,14 @@ describe('box-client', function() {
 				.withArgs(sinon.match(options))
 				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
-				headers: sinon.match({
-					Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN,
-					'X-Forwarded-For': ipHeader
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs({
+					headers: sinon.match({
+						Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN,
+						'X-Forwarded-For': ipHeader
+					})
 				})
-			}).returns(Promise.resolve(fakeOKResponse));
+				.returns(Promise.resolve(fakeOKResponse));
 
 			basicClient.setIPs(ips);
 			return basicClient._makeRequest({});
@@ -176,7 +189,8 @@ describe('box-client', function() {
 		it('should propagate error when unable to upkeep tokens', function() {
 			var upkeepErr = new Error();
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.reject(upkeepErr));
-			sandbox.mock(requestManagerFake).expects('makeRequest').never();
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.never();
 
 			return basicClient._makeRequest({})
 				.catch(err => {
@@ -187,10 +201,12 @@ describe('box-client', function() {
 		it('should call session expired auth handler when one is available to handle auth error', function() {
 
 			var error = new Error();
-			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error)).returns(Promise.reject(error));
+			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error))
+				.returns(Promise.reject(error));
 
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
-			sandbox.mock(requestManagerFake).expects('makeRequest').returns(Promise.resolve(fakeUnauthorizedResponse));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.returns(Promise.resolve(fakeUnauthorizedResponse));
 
 			return basicClient._makeRequest({})
 				.catch(err => {
@@ -261,19 +277,23 @@ describe('box-client', function() {
 	describe('get()', function() {
 
 		it('should make GET request with params encoded and return result via callback when given token, path, and fakeQs', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'GET',
-				url: (basicClient._baseURL + FAKE_PATH),
-				qs: fakeQs
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'GET',
+					url: (basicClient._baseURL + FAKE_PATH),
+					qs: fakeQs
+				}, done)
+				.yields();
 			basicClient.get(FAKE_PATH, fakeParamsWithQs, done);
 		});
 
 		it('should make GET request with only url and method params when called with no params', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'GET',
-				url: (basicClient._baseURL + FAKE_PATH)
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'GET',
+					url: (basicClient._baseURL + FAKE_PATH)
+				}, done)
+				.yields();
 			basicClient.get(FAKE_PATH, null, done);
 		});
 
@@ -283,11 +303,13 @@ describe('box-client', function() {
 				qs: {foo: 'bar'}
 			};
 
-			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
-				method: 'GET',
-				url: (basicClient._baseURL + FAKE_PATH),
-				qs: {foo: 'bar'}
-			}).yieldsAsync();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withArgs({
+					method: 'GET',
+					url: (basicClient._baseURL + FAKE_PATH),
+					qs: {foo: 'bar'}
+				})
+				.yieldsAsync();
 			basicClient.get(FAKE_PATH, reqParams, function() {
 
 				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -299,19 +321,24 @@ describe('box-client', function() {
 	describe('post()', function() {
 
 		it('should make POST request with params encoded and return result via callback when given token, path, and body', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').once().withExactArgs({
-				method: 'POST',
-				url: (basicClient._baseURL + FAKE_PATH),
-				body: fakeBody
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.once()
+				.withExactArgs({
+					method: 'POST',
+					url: (basicClient._baseURL + FAKE_PATH),
+					body: fakeBody
+				}, done)
+				.yields();
 			basicClient.post(FAKE_PATH, fakeParamsWithBody, done);
 		});
 
 		it('should make POST request with only url and method params when called with no params', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'POST',
-				url: (basicClient._baseURL + FAKE_PATH)
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'POST',
+					url: (basicClient._baseURL + FAKE_PATH)
+				}, done)
+				.yields();
 			basicClient.post(FAKE_PATH, null, done);
 		});
 
@@ -321,11 +348,13 @@ describe('box-client', function() {
 				body: {foo: 'bar'}
 			};
 
-			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
-				method: 'POST',
-				url: (basicClient._baseURL + FAKE_PATH),
-				body: {foo: 'bar'}
-			}).yieldsAsync();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withArgs({
+					method: 'POST',
+					url: (basicClient._baseURL + FAKE_PATH),
+					body: {foo: 'bar'}
+				})
+				.yieldsAsync();
 			basicClient.post(FAKE_PATH, reqParams, function() {
 
 				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -337,20 +366,25 @@ describe('box-client', function() {
 	describe('put()', function() {
 
 		it('should make PUT request with params encoded and return result via callback when given token, path, and body', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').once().withExactArgs({
-				method: 'PUT',
-				url: (basicClient._baseURL + FAKE_PATH),
-				body: fakeBody
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.once()
+				.withExactArgs({
+					method: 'PUT',
+					url: (basicClient._baseURL + FAKE_PATH),
+					body: fakeBody
+				}, done)
+				.yields();
 
 			basicClient.put(FAKE_PATH, fakeParamsWithBody, done);
 		});
 
 		it('should make PUT request with only url and method params when called with no params', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'PUT',
-				url: (basicClient._baseURL + FAKE_PATH)
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'PUT',
+					url: (basicClient._baseURL + FAKE_PATH)
+				}, done)
+				.yields();
 			basicClient.put(FAKE_PATH, null, done);
 		});
 
@@ -360,11 +394,13 @@ describe('box-client', function() {
 				body: {foo: 'bar'}
 			};
 
-			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
-				method: 'PUT',
-				url: (basicClient._baseURL + FAKE_PATH),
-				body: {foo: 'bar'}
-			}).yieldsAsync();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withArgs({
+					method: 'PUT',
+					url: (basicClient._baseURL + FAKE_PATH),
+					body: {foo: 'bar'}
+				})
+				.yieldsAsync();
 			basicClient.put(FAKE_PATH, reqParams, function() {
 
 				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -376,19 +412,23 @@ describe('box-client', function() {
 	describe('del()', function() {
 
 		it('should make DELETE request with params encoded and return result via callback when given token, path, and fakeQs', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'DELETE',
-				url: (basicClient._baseURL + FAKE_PATH),
-				qs: fakeQs
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'DELETE',
+					url: (basicClient._baseURL + FAKE_PATH),
+					qs: fakeQs
+				}, done)
+				.yields();
 			basicClient.del(FAKE_PATH, fakeParamsWithQs, done);
 		});
 
 		it('should make DELETE request with only url and method params when called with no params', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'DELETE',
-				url: (basicClient._baseURL + FAKE_PATH)
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'DELETE',
+					url: (basicClient._baseURL + FAKE_PATH)
+				}, done)
+				.yields();
 			basicClient.del(FAKE_PATH, null, done);
 		});
 
@@ -398,11 +438,13 @@ describe('box-client', function() {
 				qs: {foo: 'bar'}
 			};
 
-			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
-				method: 'DELETE',
-				url: (basicClient._baseURL + FAKE_PATH),
-				qs: {foo: 'bar'}
-			}).yieldsAsync();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withArgs({
+					method: 'DELETE',
+					url: (basicClient._baseURL + FAKE_PATH),
+					qs: {foo: 'bar'}
+				})
+				.yieldsAsync();
 			basicClient.del(FAKE_PATH, reqParams, function() {
 
 				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -414,19 +456,23 @@ describe('box-client', function() {
 	describe('options()', function() {
 
 		it('should make OPTIONS call with correct params', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'OPTIONS',
-				url: basicClient._baseURL + FAKE_PATH,
-				body: fakeBody
-			}, done).yieldsAsync();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'OPTIONS',
+					url: basicClient._baseURL + FAKE_PATH,
+					body: fakeBody
+				}, done)
+				.yieldsAsync();
 			basicClient.options(FAKE_PATH, fakeParamsWithBody, done);
 		});
 
 		it('should make OPTIONS request with only url and method params when called with no params', function(done) {
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'OPTIONS',
-				url: (basicClient._baseURL + FAKE_PATH)
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'OPTIONS',
+					url: (basicClient._baseURL + FAKE_PATH)
+				}, done)
+				.yields();
 			basicClient.options(FAKE_PATH, null, done);
 		});
 
@@ -436,11 +482,13 @@ describe('box-client', function() {
 				qs: {foo: 'bar'}
 			};
 
-			sandbox.mock(basicClient).expects('_makeRequest').withArgs({
-				method: 'OPTIONS',
-				url: (basicClient._baseURL + FAKE_PATH),
-				qs: {foo: 'bar'}
-			}).yieldsAsync();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withArgs({
+					method: 'OPTIONS',
+					url: (basicClient._baseURL + FAKE_PATH),
+					qs: {foo: 'bar'}
+				})
+				.yieldsAsync();
 			basicClient.options(FAKE_PATH, reqParams, function() {
 
 				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -485,7 +533,8 @@ describe('box-client', function() {
 	describe('upload()', function() {
 
 		it('should call the API session\'s getAccessToken() and use the returned token to make the request', function(done) {
-			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 
 			sandbox.mock(requestManagerFake)
 				.expects('makeRequest')
@@ -666,7 +715,10 @@ describe('box-client', function() {
 				assert.equal(err, error);
 			});
 
-			return Promise.all([promise, promise2]);
+			return Promise.all([
+				promise,
+				promise2
+			]);
 		});
 
 		it('should pass batch result to callback when batch call succeeds', function(done) {
@@ -719,7 +771,10 @@ describe('box-client', function() {
 				});
 			});
 
-			return Promise.all([promise, promise2]);
+			return Promise.all([
+				promise,
+				promise2
+			]);
 		});
 
 		it('should return a promise the rejects when called before a batch is started', function() {
@@ -741,7 +796,10 @@ describe('box-client', function() {
 
 	describe('setIPs()', function() {
 
-		var ips = ['123.90.6.1', '10.80.1.123'];
+		var ips = [
+			'123.90.6.1',
+			'10.80.1.123'
+		];
 		var xffTest = '123.90.6.1, 10.80.1.123';
 
 		it('should add an XFF custom header when a request is made', function() {
@@ -750,26 +808,66 @@ describe('box-client', function() {
 		});
 
 		it('should set the "X-Forwarded-For" header when the custom header has been set', function(done) {
-			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			basicClient.setIPs(ips);
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs(sinon.match({
-				headers: { 'X-Forwarded-For': xffTest }
-			})).returns(Promise.resolve(fakeOKResponse));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs(sinon.match({
+					headers: { 'X-Forwarded-For': xffTest }
+				}))
+				.returns(Promise.resolve(fakeOKResponse));
 
 			basicClient.get('/', {}, done);
 		});
 
 		leche.withData({
-			'valid IPv4 address': [['127.0.0.1'], '127.0.0.1'],
-			'full IPv6 address': [['2606:2800:220:1:248:1893:25c8:1946'], '2606:2800:220:1:248:1893:25c8:1946'],
-			'abbreviated IPv6 address': [['d:e:a:d::'], 'd:e:a:d::'],
-			'unspecified IPv6 address': [['::'], '::'],
-			'loopback IPv6 address': [['::1'], '::1'],
-			'mixed IPv6 and IPv4 addresses': [['1.2.3.4', '::b:e:e:f'], '1.2.3.4, ::b:e:e:f'],
-			'IPv4 address embedded in IPv6 address': [['::FFFF:5.6.7.8'], '::FFFF:5.6.7.8'],
-			'invalid character codes': [['1.2.3.4', 'X\x08\x19\x09'.repeat(4), '0.0.0.0'], '1.2.3.4, 0.0.0.0'],
-			'all invalid IPs': [['100.200.300.400', 'cafe::beef::1'], undefined]
+			'valid IPv4 address': [
+				['127.0.0.1'],
+				'127.0.0.1'
+			],
+			'full IPv6 address': [
+				['2606:2800:220:1:248:1893:25c8:1946'],
+				'2606:2800:220:1:248:1893:25c8:1946'
+			],
+			'abbreviated IPv6 address': [
+				['d:e:a:d::'],
+				'd:e:a:d::'
+			],
+			'unspecified IPv6 address': [
+				['::'],
+				'::'
+			],
+			'loopback IPv6 address': [
+				['::1'],
+				'::1'
+			],
+			'mixed IPv6 and IPv4 addresses': [
+				[
+					'1.2.3.4',
+					'::b:e:e:f'
+				],
+				'1.2.3.4, ::b:e:e:f'
+			],
+			'IPv4 address embedded in IPv6 address': [
+				['::FFFF:5.6.7.8'],
+				'::FFFF:5.6.7.8'
+			],
+			'invalid character codes': [
+				[
+					'1.2.3.4',
+					'X\x08\x19\x09'.repeat(4),
+					'0.0.0.0'
+				],
+				'1.2.3.4, 0.0.0.0'
+			],
+			'all invalid IPs': [
+				[
+					'100.200.300.400',
+					'cafe::beef::1'
+				],
+				undefined
+			]
 		}, function(input, expectedHeader) {
 
 			it('should only set valid IP addresses in XFF header when called', function() {
@@ -814,12 +912,15 @@ describe('box-client', function() {
 		});
 
 		it('should not set the "BoxAPI" header when the context has been revoked', function(done) {
-			sandbox.mock(apiSessionFake).expects('getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			basicClient.revokeSharedContext();
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs(sinon.match({
-				headers: { BoxApi: undefined }
-			})).returns(Promise.resolve(fakeOKResponse));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs(sinon.match({
+					headers: { BoxApi: undefined }
+				}))
+				.returns(Promise.resolve(fakeOKResponse));
 
 			basicClient.get('/', {}, done);
 		});
@@ -869,18 +970,24 @@ describe('box-client', function() {
 
 	describe('revokeTokens()', function() {
 		it('should call apiSession.revokeTokens when called', function(done) {
-			sandbox.mock(apiSessionFake).expects('revokeTokens').returns(Promise.resolve());
+			sandbox.mock(apiSessionFake).expects('revokeTokens')
+				.returns(Promise.resolve());
 			basicClient.revokeTokens(done);
 		});
 
 		it('should call apiSession.revokeTokens with options.ip parameter when called', function(done) {
-			var ips = ['127.0.0.1', '192.168.1.1'];
+			var ips = [
+				'127.0.0.1',
+				'192.168.1.1'
+			];
 			var ipHeader = '127.0.0.1, 192.168.1.1';
 			var options = {};
 			options.ip = ipHeader;
 			basicClient.setIPs(ips);
 
-			sandbox.mock(apiSessionFake).expects('revokeTokens').withArgs(sinon.match(options)).returns(Promise.resolve());
+			sandbox.mock(apiSessionFake).expects('revokeTokens')
+				.withArgs(sinon.match(options))
+				.returns(Promise.resolve());
 			basicClient.revokeTokens(done);
 		});
 
@@ -888,7 +995,8 @@ describe('box-client', function() {
 
 			var error = new Error('No can do');
 
-			sandbox.mock(apiSessionFake).expects('revokeTokens').returns(Promise.reject(error));
+			sandbox.mock(apiSessionFake).expects('revokeTokens')
+				.returns(Promise.reject(error));
 			basicClient.revokeTokens(function(err) {
 
 				assert.equal(err, error);
@@ -898,7 +1006,8 @@ describe('box-client', function() {
 
 		it('should return promise resolving when tokens are revoked', function() {
 
-			sandbox.mock(apiSessionFake).expects('revokeTokens').returns(Promise.resolve());
+			sandbox.mock(apiSessionFake).expects('revokeTokens')
+				.returns(Promise.resolve());
 			return basicClient.revokeTokens()
 				.then(data => {
 					assert.isUndefined(data);
@@ -909,7 +1018,8 @@ describe('box-client', function() {
 
 			var error = new Error('No can do');
 
-			sandbox.mock(apiSessionFake).expects('revokeTokens').returns(Promise.reject(error));
+			sandbox.mock(apiSessionFake).expects('revokeTokens')
+				.returns(Promise.reject(error));
 			return basicClient.revokeTokens()
 				.catch(err => {
 					assert.equal(err, error);
@@ -939,7 +1049,10 @@ describe('box-client', function() {
 		});
 
 		it('should call session to exchange token with options.ip parameter and pass exchanged token to callback when called', function(done) {
-			var ips = ['127.0.0.1', '192.168.1.1'];
+			var ips = [
+				'127.0.0.1',
+				'192.168.1.1'
+			];
 			var ipHeader = '127.0.0.1, 192.168.1.1';
 			var options = {};
 			options.ip = ipHeader;
@@ -1034,10 +1147,12 @@ describe('box-client', function() {
 				apiRoot: PLUGIN_API_ROOT
 			});
 
-			sandbox.mock(basicClient).expects('_makeRequest').withExactArgs({
-				method: 'GET',
-				url: PLUGIN_API_ROOT + TEST_PATH
-			}, done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withExactArgs({
+					method: 'GET',
+					url: PLUGIN_API_ROOT + TEST_PATH
+				}, done)
+				.yields();
 
 			basicClient.testplugin.get(done);
 		});
@@ -1047,11 +1162,13 @@ describe('box-client', function() {
 				uploadApiRoot: PLUGIN_UPLOAD_API_ROOT
 			});
 
-			sandbox.mock(basicClient).expects('_makeRequest').withArgs(sinon.match({
-				method: 'POST',
-				formData: fakeMultipartFormData,
-				url: PLUGIN_UPLOAD_API_ROOT + TEST_PATH
-			}), done).yields();
+			sandbox.mock(basicClient).expects('_makeRequest')
+				.withArgs(sinon.match({
+					method: 'POST',
+					formData: fakeMultipartFormData,
+					url: PLUGIN_UPLOAD_API_ROOT + TEST_PATH
+				}), done)
+				.yields();
 
 			basicClient.testplugin.upload(fakeMultipartFormData, done);
 		});

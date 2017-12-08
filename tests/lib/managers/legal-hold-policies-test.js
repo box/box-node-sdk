@@ -65,7 +65,8 @@ describe('LegalHoldPolicies', function() {
 		it('should make POST request to create a new policy when called without optional parameters', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/legal_hold_policies', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/legal_hold_policies', expectedParams);
 			legalHoldPolicies.create(POLICY_NAME);
 		});
 
@@ -75,14 +76,17 @@ describe('LegalHoldPolicies', function() {
 			expectedParams.body.description = description;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/legal_hold_policies', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/legal_hold_policies', expectedParams);
 			legalHoldPolicies.create(POLICY_NAME, {description});
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			legalHoldPolicies.create(POLICY_NAME);
 		});
 
@@ -116,14 +120,17 @@ describe('LegalHoldPolicies', function() {
 			var qs = {fields: 'policy_name,id'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/legal_hold_policies/' + POLICY_ID, {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/legal_hold_policies/${POLICY_ID}`, {qs});
 			legalHoldPolicies.get(POLICY_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			legalHoldPolicies.get(POLICY_ID);
 		});
 
@@ -164,14 +171,17 @@ describe('LegalHoldPolicies', function() {
 		it('should make PUT request to update policy info when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/legal_hold_policies/' + POLICY_ID, {body: options});
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/legal_hold_policies/${POLICY_ID}`, {body: options});
 			legalHoldPolicies.update(POLICY_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			legalHoldPolicies.update(POLICY_ID, options);
 		});
 
@@ -203,14 +213,17 @@ describe('LegalHoldPolicies', function() {
 		it('should make DELETE request to delete policy when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/legal_hold_policies/' + POLICY_ID);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/legal_hold_policies/${POLICY_ID}`);
 			legalHoldPolicies.delete(POLICY_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			legalHoldPolicies.delete(POLICY_ID);
 		});
 
@@ -244,14 +257,17 @@ describe('LegalHoldPolicies', function() {
 			var qs = {policy_name: 'Lawsuit'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/legal_hold_policies', {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/legal_hold_policies', {qs});
 			legalHoldPolicies.getAll(qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			legalHoldPolicies.getAll();
 		});
 
@@ -285,14 +301,17 @@ describe('LegalHoldPolicies', function() {
 			var qs = {assign_to_type: 'user'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/legal_hold_policies/' + POLICY_ID + '/assignments', {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/legal_hold_policies/${POLICY_ID}/assignments`, {qs});
 			legalHoldPolicies.getAssignments(POLICY_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			legalHoldPolicies.getAssignments(POLICY_ID);
 		});
 
@@ -341,14 +360,17 @@ describe('LegalHoldPolicies', function() {
 		it('should make POST request to assign policy when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/legal_hold_policy_assignments', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/legal_hold_policy_assignments', expectedParams);
 			legalHoldPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			legalHoldPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID);
 		});
 
@@ -384,14 +406,17 @@ describe('LegalHoldPolicies', function() {
 			var qs = {fields: 'type,id,legal_hold_policy'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/legal_hold_policy_assignments/' + ASSIGNMENT_ID, {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/legal_hold_policy_assignments/${ASSIGNMENT_ID}`, {qs});
 			legalHoldPolicies.getAssignment(ASSIGNMENT_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			legalHoldPolicies.getAssignment(ASSIGNMENT_ID);
 		});
 
@@ -425,14 +450,17 @@ describe('LegalHoldPolicies', function() {
 		it('should make DELETE request to delete assignment when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/legal_hold_policy_assignments/' + ASSIGNMENT_ID);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/legal_hold_policy_assignments/${ASSIGNMENT_ID}`);
 			legalHoldPolicies.deleteAssignment(ASSIGNMENT_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			legalHoldPolicies.deleteAssignment(ASSIGNMENT_ID);
 		});
 
@@ -468,14 +496,17 @@ describe('LegalHoldPolicies', function() {
 			var qs = {fields: 'type,id,file_version'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/file_version_legal_holds/' + LEGAL_HOLD_ID, {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/file_version_legal_holds/${LEGAL_HOLD_ID}`, {qs});
 			legalHoldPolicies.getFileVersionLegalHold(LEGAL_HOLD_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			legalHoldPolicies.getFileVersionLegalHold(LEGAL_HOLD_ID);
 		});
 
@@ -511,14 +542,17 @@ describe('LegalHoldPolicies', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/file_version_legal_holds', {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/file_version_legal_holds', {qs});
 			legalHoldPolicies.getAllFileVersionLegalHolds(POLICY_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			legalHoldPolicies.getAllFileVersionLegalHolds(POLICY_ID);
 		});
 

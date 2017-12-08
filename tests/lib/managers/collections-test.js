@@ -59,14 +59,17 @@ describe('Collections', function() {
 
 		it('should make GET request to get all collections info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/collections');
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/collections');
 			collections.getAll();
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get');
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			collections.getAll();
 		});
 
@@ -104,14 +107,17 @@ describe('Collections', function() {
 
 		it('should make GET request to get all items from a collection when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/collections/1234/items');
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/collections/1234/items');
 			collections.getItems(collectionID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get');
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			collections.getItems(collectionID, testQS);
 		});
 
