@@ -107,3 +107,13 @@ var options = {
 };
 client.collaborationWhitelists.getForAllUsers(options, callback);
 ```
+
+Remove a User from Collaboration Whitelist
+------------------------------------------
+
+To remove a user from collaboration whitelist you can use[`collaborationWhitelists.deleteForUser(userCollaborationWhitelistID, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#deleteForUsers).
+
+```js
+client.collaborationWhitelists.deleteForUser('12345678', callback);
+```

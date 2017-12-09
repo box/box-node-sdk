@@ -31,7 +31,7 @@ var sandbox = sinon.sandbox.create(),
 // Tests
 // ------------------------------------------------------------------------------
 
-describe.only('CollaborationWhitelists', function() {
+describe('CollaborationWhitelists', function() {
 
 	before(function() {
 		// Enable Mockery
