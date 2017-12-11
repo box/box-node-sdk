@@ -1294,5 +1294,61 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('create()', function() {
+			it('should make a post request to create a domain collaboration whitelisting', function() {
+				var post_fixture = getFixture('collaboration-whitelists/post_collaboration_whitelists_200'),
+					domain = 'test15.com',
+					direction = 'both',
+					expected_post_body = {
+						domain: 'test15.com',
+						direction: 'both'
+					};
+
+				apiMock.post('/2.0/collaboration_whitelist_entries', expected_post_body)
+				.matchHeader('Authorization', function(authHeader) {
+					assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+					return true;
+				})
+				.matchHeader('User-Agent', function(uaHeader) {
+					assert.include(uaHeader, 'Box Node.js SDK v');
+					return true;
+				})
+				.reply(200, post_fixture);
+
+				return basicClient.collaborationWhitelists.create(domain, direction)
+					.then(collabWhitelist => {
+						assert.deepEqual(collabWhitelist, JSON.parse(post_fixture));
+					});
+			});
+		});
+
+		describe('addUser()', function() {
+			it('should make a post request to create a user collaboration whitelisting', function() {
+				var post_fixture = getFixture('collaboration-whitelists/post_collaboration_exempt_targets_200'),
+					userID = '5678',
+					expected_post_body = {
+						user: {
+							id: userID,
+							type: 'user'
+						}
+					};
+
+				apiMock.post('/2.0/collaboration_whitelist_exempt_targets', expected_post_body)
+				.matchHeader('Authorization', function(authHeader) {
+					assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+					return true;
+				})
+				.matchHeader('User-Agent', function(uaHeader) {
+					assert.include(uaHeader, 'Box Node.js SDK v');
+					return true;
+				})
+				.reply(200, post_fixture);
+
+				return basicClient.collaborationWhitelists.addUser(userID)
+					.then(collabWhitelist => {
+						assert.deepEqual(collabWhitelist, JSON.parse(post_fixture));
+					});
+			});
+		});
 	});
 });
