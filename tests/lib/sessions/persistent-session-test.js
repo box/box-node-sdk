@@ -389,9 +389,13 @@ describe('PersistentAPISession', function() {
 		it('should reject when the token exchange fails', function() {
 
 			var error = new Error('Could not exchange token');
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 
 			sandbox.stub(persistentAPISession, 'getAccessToken').returns(Promise.resolve(testTokenInfo.accessToken));
-			sandbox.stub(tokenManagerFake, 'exchangeToken').returns(Promise.reject(error));
+			sandbox.stub(tokenManagerFake, 'exchangeToken').returns(p);
 
 			return persistentAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.catch(err => {

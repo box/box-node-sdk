@@ -405,7 +405,11 @@ describe('Folders', function() {
 			var error = new Error('Failed get');
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.reject(error));
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(p);
 			foldersMock.expects('update').never();
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
@@ -420,7 +424,11 @@ describe('Folders', function() {
 			var error = new Error('Failed get');
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.reject(error));
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(p);
 			foldersMock.expects('update').never();
 
 			return folders.addToCollection(FOLDER_ID, COLLECTION_ID)
@@ -438,9 +446,13 @@ describe('Folders', function() {
 
 			var error = new Error('Failed update');
 
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 			var foldersMock = sandbox.mock(folders);
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(Promise.reject(error));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(p);
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
 
@@ -457,10 +469,14 @@ describe('Folders', function() {
 			};
 
 			var error = new Error('Failed update');
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 
 			var foldersMock = sandbox.mock(folders);
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(Promise.reject(error));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(p);
 
 			return folders.addToCollection(FOLDER_ID, COLLECTION_ID)
 				.catch(err => {
@@ -568,7 +584,11 @@ describe('Folders', function() {
 			var error = new Error('Failed get');
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.reject(error));
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(p);
 			foldersMock.expects('update').never();
 
 			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, function(err) {
