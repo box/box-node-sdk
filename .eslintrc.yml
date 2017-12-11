@@ -9,7 +9,12 @@ globals:
     # Allow the Intl global but don't allow it to be overwritten
     Intl: false
 
-extends: 'eslint:recommended'
+plugins:
+    - promise
+
+extends:
+    - 'eslint:recommended'
+    - 'plugin:promise/recommended'
 
 rules:
 
@@ -308,3 +313,11 @@ rules:
     yield-star-spacing:
         - error
         - after
+### PROMISES
+    promise/no-nesting: off
+    # We use Bluebird promises only for consistency/interface
+    promise/no-native: error
+    promise/no-promise-in-callback: error
+    promise/no-callback-in-promise: error
+    promise/avoid-new: error
+    promise/no-return-in-finally: error

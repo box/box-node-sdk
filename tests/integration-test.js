@@ -16,6 +16,7 @@ var assert = require('chai').assert,
 	fs = require('fs'),
 	path = require('path'),
 	crypto = require('crypto'),
+	Promise = require('bluebird'),
 	jwt = require('jsonwebtoken');
 
 describe('Box Node SDK', function() {
@@ -1098,6 +1099,7 @@ describe('Box Node SDK', function() {
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
 
 		client.batch();
+		/* eslint-disable promise/avoid-new */
 		var folderPromise = new Promise(function(resolve) {
 
 			client.folders.get(folderID, {fields: 'name,id'}, function(err, folder) {
@@ -1123,6 +1125,7 @@ describe('Box Node SDK', function() {
 				resolve();
 			});
 		});
+		/* eslint-enable promise/avoid-new */
 		return Promise.all([
 			folderPromise,
 			filePromise,

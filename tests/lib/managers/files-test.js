@@ -2525,7 +2525,7 @@ describe('Files', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
 
-			files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
+			return files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
 				.then(data => {
 
 					assert.deepEqual(data, {

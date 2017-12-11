@@ -163,7 +163,7 @@ describe('Events', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
-			events.getCurrentStreamPosition()
+			return events.getCurrentStreamPosition()
 				.then(streamPosition => {
 					assert.equal(streamPosition, TEST_STREAM_POSITION);
 				});
@@ -355,7 +355,7 @@ describe('Events', function() {
 			};
 			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
 
-			events.getLongPollInfo()
+			return events.getLongPollInfo()
 				.then(data => {
 					assert.equal(data, realtimeInfo);
 				});
@@ -509,7 +509,7 @@ describe('Events', function() {
 
 		it('should return a promise that resolves to a new event stream', function() {
 
-			events.getEnterpriseEventStream(options)
+			return events.getEnterpriseEventStream(options)
 				.then(stream => {
 					assert.ok(EnterpriseEventStreamConstructorStub.calledWithNew(), 'Should call EnterpriseEventStream constructor');
 					assert.ok(EnterpriseEventStreamConstructorStub.calledWith(boxClientFake, options), 'Should pass correct args to EnterpriseEventStream constructor');

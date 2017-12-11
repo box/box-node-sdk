@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
+	Promise = require('bluebird'),
 	assert = require('chai').assert;
 
 var BoxClient = require('../../../lib/box-client');

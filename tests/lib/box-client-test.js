@@ -755,6 +755,7 @@ describe('box-client', function() {
 			var error = new Error('Nope');
 
 			basicClient.batch();
+			/* eslint-disable promise/avoid-new */
 			var promise = new Promise(function(resolve) {
 				basicClient.get('/foo', {}, function(err) {
 					assert.equal(err, error);
@@ -770,6 +771,7 @@ describe('box-client', function() {
 					resolve();
 				});
 			});
+			/* eslint-enable promise/avoid-new */
 
 			return Promise.all([
 				promise,

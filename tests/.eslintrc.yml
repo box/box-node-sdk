@@ -10,3 +10,5 @@ rules:
     global-require: off
     # Mocha doesn't like arrow functions
     prefer-arrow-callback: off
+    # Tests don't need to return from .then() with asserts
+    promise/always-return: off

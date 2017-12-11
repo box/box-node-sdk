@@ -34,6 +34,7 @@
   "devDependencies": {
     "chai": "^4.1.1",
     "eslint": "^4.12.1",
+    "eslint-plugin-promise": "^3.6.0",
     "istanbul": "^0.4.3",
     "jsdoc": "^3.4.0",
     "jsonlint": "~1.6.2",
