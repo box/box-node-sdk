@@ -858,7 +858,7 @@ describe('box-client', function() {
 			'invalid character codes': [
 				[
 					'1.2.3.4',
-					'X\x08\x19\x09'.repeat(4),
+					'X\u0008\u0019\u0009'.repeat(4),
 					'0.0.0.0'
 				],
 				'1.2.3.4, 0.0.0.0'

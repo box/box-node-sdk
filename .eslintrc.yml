@@ -5,16 +5,21 @@ env:
     node: true
     es6: true
 
+parserOptions:
+    sourceType: script
+
 globals:
     # Allow the Intl global but don't allow it to be overwritten
     Intl: false
 
 plugins:
     - promise
+    - unicorn
 
 extends:
     - 'eslint:recommended'
     - 'plugin:promise/recommended'
+    - 'plugin:unicorn/recommended'
 
 rules:
 
@@ -321,3 +326,8 @@ rules:
     promise/no-callback-in-promise: error
     promise/avoid-new: error
     promise/no-return-in-finally: error
+
+### UNICORN
+    # Need to disable until we no longer support Node 4
+    unicorn/no-new-buffer: off
+
