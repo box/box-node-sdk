@@ -1,0 +1,13 @@
+{
+    "type": "collaboration_whitelist_entry",
+    "id": "36401",
+    "domain": "test15.com",
+    "direction": "both",
+    "enterprise": {
+        "type": "enterprise",
+        "id": "603004",
+        "name": "Box"
+    },
+    "created_at": "2017-12-06T15:05:28-08:00",
+    "modified_at": "2017-12-06T15:05:28-08:00"
+}
