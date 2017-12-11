@@ -15,11 +15,13 @@ globals:
 plugins:
     - promise
     - unicorn
+    - node
 
 extends:
     - 'eslint:recommended'
     - 'plugin:promise/recommended'
     - 'plugin:unicorn/recommended'
+    - 'plugin:node/recommended'
 
 rules:
 
@@ -330,4 +332,14 @@ rules:
 ### UNICORN
     # Need to disable until we no longer support Node 4
     unicorn/no-new-buffer: off
+
+### NODE
+    node/no-deprecated-api:
+        - error
+        -
+            ignoreGlobalItems:
+                - new Buffer()
+    node/exports-style:
+        - error
+        - module.exports
 
