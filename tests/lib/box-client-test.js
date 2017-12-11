@@ -941,13 +941,16 @@ describe('box-client', function() {
 		it('should call session to exchange token with options.ip parameter and pass exchanged token to callback when called', function(done) {
 			var ips = ['127.0.0.1', '192.168.1.1'];
 			var ipHeader = '127.0.0.1, 192.168.1.1';
-			var options = {};
-			options.ip = ipHeader;
+			var expectedOptions = {
+				tokenRequestOptions: {
+					ip: ipHeader
+				}
+			};
 
 			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
 
 			sandbox.mock(apiSessionFake).expects('exchangeToken')
-				.withArgs(TEST_SCOPE, TEST_RESOURCE, options)
+				.withArgs(TEST_SCOPE, TEST_RESOURCE, expectedOptions)
 				.returns(Promise.resolve(exchangedTokenInfo));
 
 			basicClient.setIPs(ips);
@@ -957,6 +960,30 @@ describe('box-client', function() {
 				assert.equal(data, exchangedTokenInfo);
 				done();
 			});
+		});
+
+		it('should call session to exchange token with actor params when actor params are passed', function() {
+
+			var actor = {
+				id: 'foobar',
+				name: 'Human Being'
+			};
+
+			var expectedOptions = {
+				actor,
+				tokenRequestOptions: null
+			};
+
+			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
+
+			sandbox.mock(apiSessionFake).expects('exchangeToken')
+				.withArgs(TEST_SCOPE, TEST_RESOURCE, expectedOptions)
+				.returns(Promise.resolve(exchangedTokenInfo));
+
+			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, { actor })
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
 		});
 
 		it('should call callback with error when token exchange fails', function(done) {
