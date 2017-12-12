@@ -638,7 +638,7 @@ describe('token-manager', function() {
 				sub: actor.id,
 				aud: 'https://api.box.com/oauth2/token',
 				box_sub_type: 'external',
-				name: actor.name,
+				name: actor.name
 			};
 
 			var expectedOptions = {
@@ -682,6 +682,23 @@ describe('token-manager', function() {
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
 				.then(tokens => {
 					assert.equal(tokens, tokenInfo);
+				});
+		});
+
+		it('should return a promise that rejects when JWT creation fails', function() {
+
+			var jwtError = new Error('Oh no!');
+			var actor = {
+				id: 'foobar',
+				name: 'Random Person'
+			};
+
+			sandbox.stub(jwtFake, 'sign').throws(jwtError);
+			sandbox.mock(tokenManager).expects('getTokens').never();
+
+			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
+				.catch(err => {
+					assert.equal(err, jwtError);
 				});
 		});
 	});
