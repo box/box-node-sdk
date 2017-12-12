@@ -161,7 +161,7 @@ describe('CollaborationWhitelists', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborationWhitelists.get(COLLABORATION_WHITELIST_ID, testQS)
-					.then(data => assert.equal(data, response));
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -204,7 +204,7 @@ describe('CollaborationWhitelists', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborationWhitelists.getAll(options)
-					.then(data => assert.equal(data, response));
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -237,7 +237,7 @@ describe('CollaborationWhitelists', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborationWhitelists.getAll()
-					.then(data => assert.equal(data, response));
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -279,7 +279,7 @@ describe('CollaborationWhitelists', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
 			return collaborationWhitelists.addUser(USER_ID)
-					.then(data => assert.equal(data, response));
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -312,7 +312,7 @@ describe('CollaborationWhitelists', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborationWhitelists.getForUser(USER_COLLABORATION_WHITELIST_ID, testQS)
-					.then(data => assert.equal(data, response));
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -355,7 +355,7 @@ describe('CollaborationWhitelists', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborationWhitelists.getAllForUsers(options)
-					.then(data => assert.equal(data, response));
+				.then(data => assert.equal(data, response));
 		});
 	});
 
@@ -388,7 +388,7 @@ describe('CollaborationWhitelists', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborationWhitelists.getAllForUsers()
-					.then(data => assert.equal(data, response));
+				.then(data => assert.equal(data, response));
 		});
 	});
 
