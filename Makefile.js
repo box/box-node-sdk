@@ -11,6 +11,7 @@
 
 require('shelljs/make');
 var nodeCLI = require('shelljs-nodecli');
+var semver = require('semver');
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -85,7 +86,10 @@ target.lint = function() {
 
 target.test = function() {
 	var code = target.lint();
-	code += nodeCLI.exec('nsp', 'check').code;
+	if (semver.gte(process.version.substr(1), '6.0.0')) {
+		// nsp only works on Node 6 and above
+		code += nodeCLI.exec('nsp', 'check').code;
+	}
 	code += nodeCLI.exec('istanbul', 'cover', MOCHA_BINARY, '--', '-c', '-R spec', TEST_FILES).code;
 
 	if (code) {

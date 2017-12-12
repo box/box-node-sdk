@@ -42,6 +42,7 @@
     "mockery": "^1.4.1",
     "nock": "^9.0.13",
     "nsp": "^3.1.0",
+    "semver": "^5.4.1",
     "shelljs": "^0.3.0",
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^1.17.3"
