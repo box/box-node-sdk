@@ -85,6 +85,9 @@ target.lint = function() {
 
 target.test = function() {
 	var code = target.lint();
+	if (semver.gte(process.version.substr(1), '6.0.0')) {
+		code += nodeCLI.exec('nsp', 'check').code;
+	}
 	code += nodeCLI.exec('nyc', MOCHA_BINARY, '-c', '-R spec', '--exit', TEST_FILES).code;
 
 	if (code) {
