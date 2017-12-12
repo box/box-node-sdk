@@ -147,6 +147,17 @@ var buffer = new Buffer(50);
 client.files.uploadFile('98768', 'New File', buffer, callback);
 ```
 
+To preserve file timestamps, you may pass the created and modified times as optional parameters:
+```js
+var fs = require('fs');
+var stream = fs.createReadStream('/path/to/file');
+var options = {
+	content_created_at: '2015-05-12T17:38:14-0600',
+	content_modified_at: '2016-02-15T22:42:09-0600'
+};
+client.files.uploadFile('98768', 'New File', stream, options, callback);
+```
+
 Chunked Upload
 --------------
 
@@ -491,6 +502,18 @@ New versions of a file can be uploaded with the
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file');
 client.files.uploadFile('98768', stream, callback);
+```
+
+To rename the file on upload or manually specify a modification timestamp for the file, pass the corresponding optional
+parameter:
+```js
+var fs = require('fs');
+var stream = fs.createReadStream('/path/to/file');
+var options = {
+	name: 'New filename.docx',
+	content_modified_at: '2016-02-15T22:42:09-0600'
+};
+client.files.uploadFile('98768', stream, options, callback);
 ```
 
 Download a Previous Version of a File

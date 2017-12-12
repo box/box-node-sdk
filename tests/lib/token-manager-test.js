@@ -383,9 +383,7 @@ describe('token-manager', function() {
 				subject: TEST_ID,
 				issuer: config.clientID,
 				noTimestamp: false,
-				headers: {
-					kid: TEST_KEY_ID
-				}
+				keyid: TEST_KEY_ID
 			};
 			sandbox.stub(tokenManager, 'getTokens').returns(Promise.resolve());
 			sandbox.mock(jwtFake).expects('sign').withArgs(expectedClaims, keyParams, sinon.match(expectedOptions)).returns(TEST_WEB_TOKEN);

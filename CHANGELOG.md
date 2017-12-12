@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.10.1
+
+- Updated to jsonwebtoken@8.1.0 to fix an issue where some users were getting
+an error when using App Auth
+
+## 1.10.0
+
+- Added support for [Terms of Service](./docs/terms-of-service.md) endpoints
+- Fixed a bug where receiving a collection without paging parameters from the API
+would cause the SDK to throw an exception when using the `iterators` SDK option.
+Now, this will return an iterator over the items returned by the API.
+- Fixed a bug in Token Exchange where passing multiple scopes would result in an error
+- Added support for [getting Representations info on a file](./docs/files.md#get-representation-info)
+
 ## 1.9.0
 
 - Fixed token methods to return bluebird Promises instead of native Promises

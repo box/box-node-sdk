@@ -73,22 +73,34 @@ describe('PagingIterator', function() {
 			}, Error);
 		});
 
-		it('should throw an error when response paging strategy cannot be determined', function() {
+		it('should default to a finished collection when response paging strategy cannot be determined', function() {
 
+			var chunk = [{}];
 			var response = {
-				body: {
-					entries: []
-				},
 				request: {
+					href: 'https://api.box.com/2.0/items?limit=1',
+					uri: {
+						query: 'limit=1'
+					},
+					headers: {},
 					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 1
 				}
 			};
 
-			assert.throws(function() {
-				/* eslint-disable no-unused-vars*/
-				var iterator = new PagingIterator(response, clientFake);
-				/* eslint-enable no-unused-vars*/
-			}, Error);
+			var iterator = new PagingIterator(response, clientFake);
+
+			assert.propertyVal(iterator, 'limit', 1);
+			assert.propertyVal(iterator, 'done', true);
+			assert.propertyVal(iterator, 'buffer', chunk);
+			assert.propertyVal(iterator, 'nextField', 'marker');
+			assert.propertyVal(iterator, 'nextValue', null);
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.marker', null);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when response is limit/offset type', function() {
