@@ -212,31 +212,6 @@ describe('CollaborationWhitelist', function() {
 			sandbox.mock(boxClientFake).expects('get').withArgs('/collaboration_whitelist_entries').returns(Promise.resolve());
 			collaborationWhitelist.getAllWhitelistedDomains();
 		});
-
-		it('should wrap with default handler when called', function() {
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
-			collaborationWhitelist.getAllWhitelistedDomains();
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborationWhitelist.getAllWhitelistedDomains(null, function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
-		it('should return promise resolving to results when called', function() {
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return collaborationWhitelist.getAllWhitelistedDomains()
-				.then(data => assert.equal(data, response));
-		});
 	});
 
 	describe('addExemption()', function() {
@@ -360,31 +335,6 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get').withArgs('/collaboration_whitelist_exempt_targets').returns(Promise.resolve());
 			collaborationWhitelist.getAllExemptions();
-		});
-
-		it('should wrap with default handler when called', function() {
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
-			collaborationWhitelist.getAllExemptions();
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborationWhitelist.getAllExemptions(null, function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
-		it('should return promise resolving to results when called', function() {
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return collaborationWhitelist.getAllExemptions()
-				.then(data => assert.equal(data, response));
 		});
 	});
 

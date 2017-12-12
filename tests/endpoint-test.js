@@ -1299,10 +1299,10 @@ describe('Endpoint', function() {
 		describe('addDomain()', function() {
 			it('should make a post request to create a domain collaboration whitelisting', function() {
 				var postFixture = getFixture('collaboration-whitelists/post_collaboration_whitelists_200'),
-					domain = 'test15.com',
+					domain = 'test.com',
 					direction = 'both',
 					expectedPostBody = {
-						domain: 'test15.com',
+						domain: 'test.com',
 						direction: 'both'
 					};
 

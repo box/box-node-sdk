@@ -1,15 +1,15 @@
 {
     "type": "collaboration_whitelist_exempt_target",
-    "id": "625933",
+    "id": "1234",
     "user": {
         "type": "user",
-        "id": "273828457",
-        "name": "Cary10 Cheng",
-        "login": "AppUser_221486_2mMiVutQCS@boxdevedition.com"
+        "id": "5678",
+        "name": "example user",
+        "login": "test@example.com"
     }, 
     "enterprise": {
         "type": "enterprise",
-        "id": "603004",
+        "id": "12345678",
         "name": "Box"
     },
     "created_at": "2017-12-06T16:57:17-08:00",
