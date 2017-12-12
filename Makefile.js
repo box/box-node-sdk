@@ -85,6 +85,7 @@ target.lint = function() {
 
 target.test = function() {
 	var code = target.lint();
+	code += nodeCLI.exec('nsp', 'check').code;
 	code += nodeCLI.exec('istanbul', 'cover', MOCHA_BINARY, '--', '-c', '-R spec', TEST_FILES).code;
 
 	if (code) {
