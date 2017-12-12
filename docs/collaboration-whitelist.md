@@ -17,35 +17,35 @@ Add a Domain to Collaboration Whitelist
 ---------------------------------------
 
 You can whitelist only certain domains to collaboration with an enterprise with
-[`collaborationWhitelists.addDomain(domain, direction, callback)`]
-(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#addDomain).
+[`collaborationWhitelist.addDomain(domain, direction, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#addDomain).
 
 The `direction` parameter determines the level of restriction on which way the collaboration flows. Set to `inbound` will allow users outside of our enterprise to collaboration with content inside your enterprise. Set to `outbound` will allow users inside your enterprise to collaboration with content owned by someone outside your enterprise. Set to `both` will allow both `inbound` and `outbound`.
 
 ```js
-client.collaborationWhitelists.addDomain('test.com', client.collaborationWhitelistDirections.INBOUND, callback);
+client.collaborationWhitelist.addDomain('test.com', client.collaborationWhitelist.directions.INBOUND, callback);
 ```
 
 Get a Whitelisted Domain's Information
 --------------------------------------
 
 A collaboration whitelist's information can be retrieved by ID with
-[`collaborationWhitelists.getEntry(collaborationWhitelistID, qs, callback)`]
-(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#getEntry).
+[`collaborationWhitelist.getWhitelistedDomain(domainID, qs, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#getWhitelistedDomain).
 
 ```js
-client.collaborationWhitelists.getEntry('12345', qs, callback);
+client.collaborationWhitelist.getWhitelistedDomain('12345', qs, callback);
 ```
 
 Get Whitelisted Domains for an Enterprise
 -----------------------------------------
 
 You can retrieve all collaboration whitelists for an enterprise with
-[`collaborationWhitelists.getWhitelistedDomains(options, callback)`]
-(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#getWhitelistedDomains).
+[`collaborationWhitelist.getAllWhitelistedDomains(options, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#getAllWhitelistedDomains).
 
 ```js
-client.collaborationWhitelists.getWhitelistedDomains(callback);
+client.collaborationWhitelist.getAllWhitelistedDomains(callback);
 ```
 
 Alternatively you can limit the number of collaboration whitelists you wish to retrieve by setting a limit, the default is 100 entries and the maximum is 1000 entries.
@@ -54,46 +54,48 @@ Alternatively you can limit the number of collaboration whitelists you wish to r
 var options = {
     limit: 50;
 };
-client.collaborationWhitelists.getWhitelistedDomains(options, callback);
+client.collaborationWhitelist.getAllWhitelistedDomains(options, callback);
 ```
 
 Remove a Domain from Collaboration Whitelist
 --------------------------------------------
 
 You can remove a domain from collaboration whitelist with
-[`collaborationWhitelists.removeDomain(collaborationWhitelistID, callback)`]
-(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#removeDomain).
+[`collaborationWhitelist.removeDomain(domainID, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#removeDomain).
 
 ```js
-client.collaborationWhitelists.removeDomain('12345', callback);
+client.collaborationWhitelist.removeDomain('12345', callback);
 ```
 
 Exempt a User from the Collaboration Whitelist
 ----------------------------------------------
 
-Alternatively, you can added a specific Box User to a collaboration whitelist with[`collaborationWhitelists.exemptUser(userID, callback)`]
-(http://opensource.box.com/box-node-sdk/Collaborations.html#exemptUser.
+Alternatively, you can added a specific Box User to a collaboration whitelist with
+[`collaborationWhitelist.addExemption(userID, callback)`]
+(http://opensource.box.com/box-node-sdk/Collaborations.html#addExemption.
 
 ```js
-client.collaborationWhitelists.exemptUser('5678', callback);
+client.collaborationWhitelist.addExemption('5678', callback);
 ```
 
 Get an Exempt User's Information
 --------------------------------
 
-To retrieve a specific collaboration whitelist's information for a user you can use[`collaborationWhitelists.getExemption(userWhitelistID, qs, callback)`]
-(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#getExemption).
+To retrieve a specific collaboration whitelist's information for a user you can use
+[`collaborationWhitelist.getExemption(exemptionID, qs, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#getExemption).
 
 ```js
-client.collaborationWhitelists.getExemptedtion(`12345`, callback);
+client.collaborationWhitelist.getExemption(`12345`, callback);
 ```
 
 Get the User Collaboration Whitelists for an Enterprise
 -------------------------------------------------------
 
 To retrieve all user collaboration whitelist's informations for an enterprise use
-[`collaborationWhitelists.getAllExemptions(options, callback)`]
-(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#getAllExemptions).
+[`collaborationWhitelist.getAllExemptions(options, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#getAllExemptions).
 
 ```js
 client.colllaborationWhitelists.getAllExemptions(options, callback);
@@ -105,15 +107,16 @@ Alternatively you can limit the number of user collaboration whitelists you wish
 var options = {
     limit: 50;
 };
-client.collaborationWhitelists.getAllExemptions(options, callback);
+client.collaborationWhitelist.getAllExemptions(options, callback);
 ```
 
 Remove a User Exemption from the Collaboration Whitelist
 --------------------------------------------------------
 
-To remove a user from collaboration whitelist you can use[`collaborationWhitelists.removeExemption(userCollaborationWhitelistID, callback)`]
-(http://opensource.box.com/box-node-sdk/CollaborationWhitelists.html#removeExemption).
+To remove a user from collaboration whitelist you can use
+[`collaborationWhitelist.removeExemption(exemptionID, callback)`]
+(http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#removeExemption).
 
 ```js
-client.collaborationWhitelists.removeExemption('12345678', callback);
+client.collaborationWhitelist.removeExemption('12345678', callback);
 ```
