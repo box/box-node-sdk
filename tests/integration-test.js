@@ -20,7 +20,7 @@ var assert = require('chai').assert,
 
 describe('Box Node SDK', function() {
 
-  // ------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
 	var sandbox = sinon.sandbox.create();
@@ -618,9 +618,9 @@ describe('Box Node SDK', function() {
 			fileName = 'foo.txt',
 			uploadSessionID = '07C4B58DF2D79928A787CCB99A5FF37E',
 			fixturePath = path.resolve(__dirname, 'fixtures/file.txt'),
-            /* eslint-disable no-sync */
+			/* eslint-disable no-sync */
 			fileContents = fs.readFileSync(fixturePath),
-            /* eslint-enable no-sync */
+			/* eslint-enable no-sync */
 			fileStream = fs.createReadStream(fixturePath),
 			uploadMock = nock('https://upload.box.com');
 
@@ -772,8 +772,8 @@ describe('Box Node SDK', function() {
 			.reply(200, {
 				part: parts[2]
 			})
-            // @TODO: Add a failure to the test
-            // // 4th part has an error
+		// @TODO: Add a failure to the test
+		// // 4th part has an error
 			// .put('/api/2.0/files/upload_sessions/' + uploadSessionID,
 			// 	function(body) {
 			// 		return body.toString() === fileContents.slice(630, 840).toString();
