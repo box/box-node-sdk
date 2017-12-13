@@ -22,7 +22,7 @@ function getFixture(fixture) {
 
 describe('Endpoint', function() {
 
-  // ------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
 	var sandbox = sinon.sandbox.create();
@@ -1293,7 +1293,68 @@ describe('Endpoint', function() {
 				});
 			});
 		});
+	});
 
+	describe('Collaboration Whitelists', function() {
+		describe('addDomain()', function() {
+			it('should make a post request to create a domain collaboration whitelisting', function() {
+				var postFixture = getFixture('collaboration-whitelists/post_collaboration_whitelists_200'),
+					domain = 'test.com',
+					direction = 'both',
+					expectedPostBody = {
+						domain: 'test.com',
+						direction: 'both'
+					};
+
+				apiMock.post('/2.0/collaboration_whitelist_entries', expectedPostBody)
+				.matchHeader('Authorization', function(authHeader) {
+					assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+					return true;
+				})
+				.matchHeader('User-Agent', function(uaHeader) {
+					assert.include(uaHeader, 'Box Node.js SDK v');
+					return true;
+				})
+				.reply(200, postFixture);
+
+				return basicClient.collaborationWhitelist.addDomain(domain, direction)
+					.then(collabWhitelist => {
+						assert.deepEqual(collabWhitelist, JSON.parse(postFixture));
+					});
+			});
+		});
+
+		describe('addExemption()', function() {
+			it('should make a post request to add user to exempt target list', function() {
+				var postFixture = getFixture('collaboration-whitelists/post_collaboration_exempt_targets_200'),
+					userID = '5678',
+					expectedPostBody = {
+						user: {
+							id: userID,
+							type: 'user'
+						}
+					};
+
+				apiMock.post('/2.0/collaboration_whitelist_exempt_targets', expectedPostBody)
+				.matchHeader('Authorization', function(authHeader) {
+					assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+					return true;
+				})
+				.matchHeader('User-Agent', function(uaHeader) {
+					assert.include(uaHeader, 'Box Node.js SDK v');
+					return true;
+				})
+				.reply(200, postFixture);
+
+				return basicClient.collaborationWhitelist.addExemption(userID)
+					.then(collabWhitelist => {
+						assert.deepEqual(collabWhitelist, JSON.parse(postFixture));
+					});
+			});
+		});
+	});
+
+	describe('Terms of Service', function() {
 		describe('setUserStatus()', function() {
 			it('should make a post request to create user status on terms of service, if conflict update', function() {
 				var termsOfServiceID = '1234',
