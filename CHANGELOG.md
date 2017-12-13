@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.0
+
+- Added options to preserve file timestamps on [file upload](./docs/files.md#upload-a-file)
+and to rename a file or preserve modification timestamp on [new version upload](./docs/files.md#upload-a-new-version-of-a-file)
+- Added [Collaboration Whitelist](./docs/collaboration-whitelist.md) functionality to allow enterprise admins
+to control which external users can collaborate on their content
+- Added an option to Token Exchange to generate [annotator tokens](./docs/authentication.md#annotator-tokens) for use with Box View
+
 ## 1.10.1
 
 - Updated to jsonwebtoken@8.1.0 to fix an issue where some users were getting

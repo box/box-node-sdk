@@ -11,6 +11,7 @@ overview of authentication.
 * [App User Authentication](#app-user-authentication)
 * [As-User](#as-user)
 * [Token Exchange](#token-exchange)
+    * [Annotator Tokens](#annotator-tokens)
 * [Anonymous Authentication](#anonymous-authentication)
 
 Developer Tokens
@@ -163,6 +164,25 @@ which would be suitable for an less-trusted server-side process;
 client.exchangeToken(['item_upload', 'item_delete'])
 	.then(tokenInfo => {
 		// tokenInfo.accessToken contains the new downscoped access token
+	});
+```
+
+### Annotator Tokens
+
+To generate an annotator token for use with
+[Box View annotations](https://developer.box.com/docs/getting-started-with-new-box-view#section-annotations),
+pass the `actor` options to the token exchange method:
+
+```js
+var options = {
+	actor: {
+		id: 'EXTERNAL_IDENTIFIER',
+		name: 'Jane Doe'
+	}
+};
+client.exchangeToken('item_preview', 'https://api.box.com/2.0/files/123456', options)
+	.then(tokenInfo => {
+		// tokenInfo.accessToken contains the new annotator token
 	});
 ```
 
