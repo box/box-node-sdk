@@ -690,7 +690,7 @@ describe('box-client', function() {
 			};
 			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
 
-			return basicClient.batchExec(function(err, data) {
+			basicClient.batchExec(function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, response.body);
