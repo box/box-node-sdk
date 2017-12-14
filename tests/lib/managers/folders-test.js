@@ -101,6 +101,63 @@ describe('Folders', function() {
 		});
 	});
 
+	describe('getByPath()', function() {
+		it('should make GET request to get file info when called', function() {
+			var path = '/path/to/folder';
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders', {qs: { path }});
+			folders.getByPath(path);
+		});
+
+		it('should make GET request with optional params when called with options', function() {
+
+			var path = 'path/to/folder';
+			var options = {
+				fields: 'name,id',
+				parent_id: '12345'
+			};
+			var expectedParams = {
+				qs: {
+					path,
+					fields: options.fields,
+					parent_id: options.parent_id
+				}
+			};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders', expectedParams);
+			folders.getByPath(path, options);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			folders.getByPath('/path', testQS);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			folders.getByPath('/path', testQS, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return folders.getByPath('/path', testQS)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
 	describe('getItems()', function() {
 		it('should make GET request to get folder items when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
