@@ -6,6 +6,7 @@ file's contents, upload new versions, and perform other common file operations
 (move, copy, delete, etc.).
 
 * [Get a File's Information](#get-a-files-information)
+* [Get a File's Information By Path](#get-a-files-information-by-path)
 * [Update a File's Information](#update-a-files-information)
 * [Get a File's Tasks](#get-a-files-tasks)
 * [Download a File](#download-a-file)
@@ -57,6 +58,27 @@ request.
 ```js
 // Only get information about a few specific fields.
 client.files.get('75937', {fields: 'size,owned_by'}, callback);
+```
+
+Get a File's Information By Path
+--------------------------------
+
+To look up a file by its path, call
+[`files.getByPath(path, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getByPath)
+with the path to the file.
+
+You can use an absolute path (i.e. with a leading '/') to find a file relative to the root folder:
+
+```js
+client.files.getByPath('/MyStuff/Documents/essay.docx', null, callback);
+```
+
+
+You can also find a file relative to a given parent folder using a path without a leading '/' and the `parent_id`
+option:
+
+```js
+client.files.getByPath('Subfolder/preso.pptx', { parent_id: '1234' }, callback);
 ```
 
 Update a File's Information

@@ -6,6 +6,7 @@ iterate through a folder's contents, collaborate a folder with another user or
 group, and perform other common folder operations (move, copy, delete, etc.).
 
 * [Get a Folder's Information](#get-a-folders-information)
+* [Get a Folder's Information By Path](#get-a-folders-information-by-path)
 * [Get a Folder's Items](#get-a-folders-items)
 * [Update a Folder's Information](#update-a-folders-information)
 * [Create a Folder](#create-a-folder)
@@ -56,6 +57,26 @@ client.folders.get(
 );
 ```
 
+Get a Folder's Information By Path
+----------------------------------
+
+To look up a folder by its path, call
+[`folders.getByPath(path, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getByPath)
+with the path to the folder.
+
+You can use an absolute path (i.e. with a leading '/') to find a folder relative to the root folder:
+
+```js
+client.folders.getByPath('/MyStuff/Documents', null, callback);
+```
+
+
+You can also find a folder relative to a given parent folder using a path without a leading '/' and the `parent_id`
+option:
+
+```js
+client.folders.getByPath('Subfolder/EvenDeeperFolder', { parent_id: '1234' }, callback);
+```
 
 Get a Folder's Items
 --------------------
