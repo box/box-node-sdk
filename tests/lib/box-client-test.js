@@ -201,8 +201,12 @@ describe('box-client', function() {
 		it('should call session expired auth handler when one is available to handle auth error', function() {
 
 			var error = new Error();
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error))
-				.returns(Promise.reject(error));
+        .returns(p);
 
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			sandbox.mock(requestManagerFake).expects('makeRequest')
@@ -577,7 +581,11 @@ describe('box-client', function() {
 			retryableRequestError.response = emptyResponseInfo;
 
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
-			sandbox.stub(requestManagerFake, 'makeRequest').returns(Promise.reject(retryableRequestError));
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw retryableRequestError;
+			});
+			sandbox.stub(requestManagerFake, 'makeRequest').returns(p);
 
 			basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData, function(err) {
 				assert.strictEqual(err, retryableRequestError);
@@ -742,7 +750,7 @@ describe('box-client', function() {
 			};
 			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
 
-			return basicClient.batchExec(function(err, data) {
+			basicClient.batchExec(function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, response.body);
@@ -1056,13 +1064,16 @@ describe('box-client', function() {
 				'192.168.1.1'
 			];
 			var ipHeader = '127.0.0.1, 192.168.1.1';
-			var options = {};
-			options.ip = ipHeader;
+			var expectedOptions = {
+				tokenRequestOptions: {
+					ip: ipHeader
+				}
+			};
 
 			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
 
 			sandbox.mock(apiSessionFake).expects('exchangeToken')
-				.withArgs(TEST_SCOPE, TEST_RESOURCE, options)
+				.withArgs(TEST_SCOPE, TEST_RESOURCE, expectedOptions)
 				.returns(Promise.resolve(exchangedTokenInfo));
 
 			basicClient.setIPs(ips);
@@ -1072,6 +1083,30 @@ describe('box-client', function() {
 				assert.equal(data, exchangedTokenInfo);
 				done();
 			});
+		});
+
+		it('should call session to exchange token with actor params when actor params are passed', function() {
+
+			var actor = {
+				id: 'foobar',
+				name: 'Human Being'
+			};
+
+			var expectedOptions = {
+				actor,
+				tokenRequestOptions: null
+			};
+
+			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
+
+			sandbox.mock(apiSessionFake).expects('exchangeToken')
+				.withArgs(TEST_SCOPE, TEST_RESOURCE, expectedOptions)
+				.returns(Promise.resolve(exchangedTokenInfo));
+
+			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, { actor })
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
 		});
 
 		it('should call callback with error when token exchange fails', function(done) {

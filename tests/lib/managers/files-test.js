@@ -589,8 +589,14 @@ describe('Files', function() {
 			var error = new Error('Failed get');
 
 			var filesMock = sandbox.mock(files);
+
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.reject(error));
+        .returns(p);
+
 			filesMock.expects('update').never();
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, function(err) {
@@ -605,8 +611,14 @@ describe('Files', function() {
 			var error = new Error('Failed get');
 
 			var filesMock = sandbox.mock(files);
+
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.reject(error));
+        .returns(p);
+
 			filesMock.expects('update').never();
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID)
@@ -624,17 +636,26 @@ describe('Files', function() {
 					{id: '111'}
 				]
 			};
+      
+      var expectedBody = {
+        collections: [
+          { id: COLLECTION_ID },
+          { id: '111' }
+        ]
+      };
 
 			var error = new Error('Failed update');
 
 			var filesMock = sandbox.mock(files);
+
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [
-				{id: COLLECTION_ID},
-				{id: '111'}
-			]})
-				.returns(Promise.reject(error));
+        .returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, expectedBody)
+        .returns(p);
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, function(err) {
 
@@ -652,17 +673,25 @@ describe('Files', function() {
 					{id: '111'}
 				]
 			};
+      
+      var expectedBody = {
+        collections: [
+          { id: COLLECTION_ID },
+          { id: '111' }
+        ]
+      };
 
 			var error = new Error('Failed update');
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
-			filesMock.expects('update').withArgs(FILE_ID, {collections: [
-				{id: COLLECTION_ID},
-				{id: '111'}
-			]})
-				.returns(Promise.reject(error));
+        .returns(Promise.resolve(file));
+			filesMock.expects('update').withArgs(FILE_ID, expectedBody)
+        .returns(p);
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID)
 				.catch(err => {
@@ -2607,7 +2636,11 @@ describe('Files', function() {
 
 			var error = new Error('API connection had a problem');
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.reject(error));
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			sandbox.stub(boxClientFake, 'post').returns(p);
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS}, function(err) {
 
 				assert.equal(err, error);
@@ -2619,7 +2652,11 @@ describe('Files', function() {
 
 			var error = new Error('API connection had a problem');
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.reject(error));
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			sandbox.stub(boxClientFake, 'post').returns(p);
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS})
 				.catch(err => {
 					assert.equal(err, error);

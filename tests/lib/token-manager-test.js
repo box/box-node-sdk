@@ -600,8 +600,11 @@ describe('token-manager', function() {
 
 		it('should exchange access token for lower scope when only scope is passed with options.ip', function() {
 
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
+			var options = {
+				tokenRequestOptions: {
+					ip: '127.0.0.1, 192.168.10.10'
+				}
+			};
 
 			var expectedTokenParams = {
 				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
@@ -615,7 +618,7 @@ describe('token-manager', function() {
 			};
 
 			sandbox.mock(tokenManager).expects('getTokens')
-				.withArgs(expectedTokenParams, options)
+        .withArgs(expectedTokenParams, options.tokenRequestOptions)
 				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, options)
@@ -682,6 +685,82 @@ describe('token-manager', function() {
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, null)
 				.catch(err => {
 					assert.equal(err, exchangeError);
+				});
+		});
+
+		it('should create actor JWT when actor params are passed', function() {
+
+			var actor = {
+				id: 'foobar',
+				name: 'Random Person'
+			};
+
+			var expectedClaims = {
+				iss: config.clientID,
+				sub: actor.id,
+				aud: 'https://api.box.com/oauth2/token',
+				box_sub_type: 'external',
+				name: actor.name
+			};
+
+			var expectedOptions = {
+				algorithm: 'none',
+				expiresIn: '1m',
+				noTimestamp: true
+			};
+
+			sandbox.mock(jwtFake).expects('sign').withArgs(sinon.match(expectedClaims), sinon.match.string, sinon.match(expectedOptions));
+			sandbox.stub(tokenManager, 'getTokens');
+
+			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor });
+		});
+
+		it('should exchange access token for actor token when actor params are passed', function() {
+
+			var actorJWT = 'oisguiadnogqaeunaedrgpauegowrthiwr';
+			var actor = {
+				id: 'foobar',
+				name: 'Random Person'
+			};
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: TEST_SCOPE,
+				resource: TEST_RESOURCE,
+				actor_token: actorJWT,
+				actor_token_type: 'urn:ietf:params:oauth:token-type:id_token'
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+
+			sandbox.stub(jwtFake, 'sign').returns(actorJWT);
+			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, null).returns(Promise.resolve(tokenInfo));
+
+			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
+				.then(tokens => {
+					assert.equal(tokens, tokenInfo);
+				});
+		});
+
+		it('should return a promise that rejects when JWT creation fails', function() {
+
+			var jwtError = new Error('Oh no!');
+			var actor = {
+				id: 'foobar',
+				name: 'Random Person'
+			};
+
+			sandbox.stub(jwtFake, 'sign').throws(jwtError);
+			sandbox.mock(tokenManager).expects('getTokens').never();
+
+			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
+				.catch(err => {
+					assert.equal(err, jwtError);
 				});
 		});
 	});

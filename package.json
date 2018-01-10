@@ -1,7 +1,7 @@
 {
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "description": "Official Box SDK for Node.js",
   "license": "Apache-2.0",
   "repository": {
@@ -38,12 +38,15 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-unicorn": "^3.0.0",
     "istanbul": "^0.4.3",
-    "jsdoc": "^3.4.0",
+    "jsdoc": "^3.5.5",
     "jsonlint": "~1.6.2",
-    "leche": "^2.1.1",
-    "mocha": "^2.4.5",
+    "leche": "^2.2.2",
+    "mocha": "^4.0.1",
     "mockery": "^1.4.1",
     "nock": "^9.0.13",
+    "nsp": "^3.1.0",
+    "nyc": "^11.3.0",
+    "semver": "^5.4.1",
     "shelljs": "^0.3.0",
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^1.17.3"
