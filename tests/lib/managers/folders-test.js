@@ -104,8 +104,7 @@ describe('Folders', function() {
 	describe('getByPath()', function() {
 		it('should make GET request to get file info when called', function() {
 			var path = '/path/to/folder';
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders', {qs: { path }});
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders', {qs: { path }}).returns(Promise.resolve());
 			folders.getByPath(path);
 		});
 
@@ -123,38 +122,132 @@ describe('Folders', function() {
 					parent_id: options.parent_id
 				}
 			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders', expectedParams);
+			sandbox.mock(boxClientFake).expects('get').withArgs('/folders', expectedParams).returns(Promise.resolve());
 			folders.getByPath(path, options);
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should call callback with error when API call fails', function(done) {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
-			folders.getByPath('/path', testQS);
-		});
+			var error = new Error('API call failed');
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(error));
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			folders.getByPath('/path', testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
+			folders.getByPath('/path/to/file', null, function(err) {
+				assert.equal(err, error);
 				done();
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise that rejects when API call fails', function() {
 
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			var error = new Error('API call failed');
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(error));
+
+			return folders.getByPath('/path/to/file')
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+
+		it('should call callback with error when response has non-200 status code', function(done) {
+
+			var response = {
+				statusCode: 400
+			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return folders.getByPath('/path', testQS)
-				.then(data => assert.equal(data, response));
+
+			folders.getByPath('/path/to/file', null, function(err) {
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', 400);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when response has non-200 status code', function() {
+
+			var response = {
+				statusCode: 400
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			return folders.getByPath('/path/to/file')
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.propertyVal(err, 'statusCode', 400);
+				});
+		});
+
+		it('should call callback with error when response did not contain an item', function(done) {
+
+			var response = {
+				statusCode: 200,
+				body: {
+					entries: []
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			folders.getByPath('/path/to/file', null, function(err) {
+				assert.instanceOf(err, Error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when response did not contain an item', function() {
+
+			var response = {
+				statusCode: 200,
+				body: {
+					total_count: 0,
+					entries: []
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			return folders.getByPath('/path/to/file')
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should call callback with file object when response contained an item', function(done) {
+			var file = {
+				type: 'file',
+				id: '1234567'
+			};
+			var response = {
+				statusCode: 200,
+				body: {
+					total_count: 1,
+					entries: [file]
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			folders.getByPath('/path/to.file', null, function(err, data) {
+				assert.ifError(err);
+				assert.equal(data, file);
+				done();
+			});
+		});
+
+		it('should return promise that resolves to file object when response contained an item', function() {
+			var file = {
+				type: 'file',
+				id: '1234567'
+			};
+			var response = {
+				statusCode: 200,
+				body: {
+					total_count: 1,
+					entries: [file]
+				}
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+
+			return folders.getByPath('/path/to.file')
+				.then(data => {
+					assert.equal(data, file);
+				});
 		});
 	});
 
