@@ -24,6 +24,7 @@ in a flexible way, without pre-defined template structure.
 * [Create Metadata Template](#create-metadata-template)
 * [Get Metadata Template](#get-metadata-template)
 * [Update Metadata Template](#update-metadata-template)
+* [Delete Metadata Template](#delete-metadata-template)
 * [Get Enterprise Metadata Templates](#get-enterprise-metadata-templates)
 
 Create Metadata Template
@@ -112,4 +113,15 @@ method.
 
 ```js
 client.metadata.getTemplates('enterprise', callback);
+```
+
+Delete Metadate Template
+------------------------
+
+To delete a metadata template call the
+[`metadata.deleteTemplate(scope, template, callback)`](http://opensoure.box.com/box-node-sdk/Metadata.html#deleteTemplate)
+method with the template scope and template name.
+
+```js
+client.metadata.deleteMetadata('enterprise', 'testtemplate', callback);
 ```
