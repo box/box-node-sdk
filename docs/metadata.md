@@ -123,5 +123,5 @@ To delete a metadata template call the
 method with the template scope and template name.
 
 ```js
-client.metadata.deleteMetadata('enterprise', 'testtemplate', callback);
+client.metadata.deleteTemplate('enterprise', 'testtemplate', callback);
 ```

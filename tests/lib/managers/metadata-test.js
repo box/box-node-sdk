@@ -215,14 +215,8 @@ describe('Metadata', function() {
 	});
 
 	describe('deleteTemplate()', function() {
-		var scope,
-			template;
-
-		beforeEach(function() {
-
-			scope = 'enterprise';
+		var scope = 'enterprise',
 			template = 'testtemplate';
-		});
 
 		it('should make DELETE call to delete template when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
