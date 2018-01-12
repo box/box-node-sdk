@@ -115,7 +115,7 @@ method.
 client.metadata.getTemplates('enterprise', callback);
 ```
 
-Delete Metadate Template
+Delete Metadata Template
 ------------------------
 
 To delete a metadata template call the
