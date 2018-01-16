@@ -13,6 +13,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Upload a File](#upload-a-file)
 * [Upload Preflight Check](#upload-preflight-check)
 * [Chunked Upload](#chunked-upload)
+* [Move a File](#move-a-file)
 * [Copy a File](#copy-a-file)
 * [Delete a File](#delete-a-file)
 * [Delete Permanently](#delete-permanently)
@@ -413,6 +414,18 @@ method.
 ```js
 // Check if uploading a larger version of this file will succeed
 client.files.preflightUploadNewFileVersion('87646', {size: 300000000}, null, callback);
+```
+
+Move a File
+-----------
+
+To move a file from one folder to another, call
+[`files.move(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#move)
+with the ID of the file to move and the ID of the folder to move it to.
+
+```js
+// Move file 12345 to folder 9876
+client.files.move('12345', '9876', callback);
 ```
 
 Copy a File
