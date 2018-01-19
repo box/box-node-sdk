@@ -406,6 +406,21 @@ describe('box-node-sdk', function() {
 		});
 	});
 
+	describe('MemoryTokenStore', function() {
+
+		beforeEach(function() {
+			sdk = new BoxSDKNode(TEST_CONFIG);
+		});
+
+		it('should return an instance of the in-memory Token Store when called', function() {
+			var tokenStore = new BoxSDKNode.MemoryTokenStore('138475693475');
+			assert.isDefined(tokenStore);
+			assert.isDefined(tokenStore.read);
+			assert.isDefined(tokenStore.write);
+			assert.isDefined(tokenStore.clear);
+		});
+	});
+
 	describe('getAuthorizeURL', function() {
 
 		beforeEach(function() {
