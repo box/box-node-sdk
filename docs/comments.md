@@ -14,7 +14,7 @@ Get a Comment's Information
 ---------------------------
 
 Calling
-[`comments.get(commentID, qs, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#get)
+[`comments.get(commentID, options, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#get)
 on a comment returns a snapshot of the comment's info.
 
 ```js
@@ -25,7 +25,7 @@ Get the Comments on a File
 --------------------------
 
 You can get all of the comments on a file by calling the
-[`files.getComments(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getComments) method.
+[`files.getComments(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getComments) method.
 
 ```js
 client.files.getComments('98765', {fields: 'created_by,created_at,tagged_message'}, callback);
@@ -57,7 +57,7 @@ Change a Comment's Message
 --------------------------
 
 The message of a comment can be changed with the
-[`comments.update(commentID, options, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#update)
+[`comments.update(commentID, updates, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#update)
 method.
 
 ```js

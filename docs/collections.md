@@ -22,7 +22,7 @@ Get the Items in a Collection
 -----------------------------
 
 Get a list of the items in a collection by passing the ID of the collection to
-[`collections.getItems(collectionID, qs, callback)`](http://opensource.box.com/box-node-sdk/Collections.html#getItems).
+[`collections.getItems(collectionID, options, callback)`](http://opensource.box.com/box-node-sdk/Collections.html#getItems).
 
 ```js
 client.collections.getItems('81934', {fields: 'name'}, callback);

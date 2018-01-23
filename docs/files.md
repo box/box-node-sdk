@@ -44,16 +44,15 @@ Get a File's Information
 ------------------------
 
 Calling
-[`files.get(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#get)
+[`files.get(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#get)
 on a file returns a snapshot of the file's info.
 
 ```js
 client.files.get('75937', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -64,7 +63,7 @@ Update a File's Information
 ---------------------------
 
 Updating a file's information is done by calling
-[`files.update(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#update)
+[`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/Files.html#update)
 with the fields to be updated.
 
 ```js
@@ -74,15 +73,14 @@ client.files.update('75937', {name : 'New Name'}, callback);
 Get a File's Tasks
 ------------------
 Calling the
-[`files.getTasks(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTasks)
+[`files.getTasks(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTasks)
 method will retrieve all of the tasks for given file.
 
 ```js
 client.files.getTasks('75937', null, callback);
 ```
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -93,7 +91,7 @@ Download a File
 ---------------
 
 A file can be downloaded by calling
-[`files.getReadStream(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getReadStream),
+[`files.getReadStream(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getReadStream),
 which provides an instance of `stream.Readable` that will yield the file's contents.
 
 ```js
@@ -114,7 +112,7 @@ Get a File's Download URL
 -------------------------
 
 The download URL of a file an be retrieved by calling
-[`files.getDownloadURL(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getDownloadURL).
+[`files.getDownloadURL(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getDownloadURL).
 It returns the URL as a string.
 
 ```js
@@ -378,7 +376,7 @@ Upload Preflight Check
 ----------------------
 
 The Preflight Check in the
-[`files.preflightUploadFile(parentFolderID, fileData, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadFile)
+[`files.preflightUploadFile(parentFolderID, fileData, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadFile)
 method will verify that a file will be accepted by Box before
 you send all the bytes over the wire.  Preflight checks verify all permissions
 as if the file was actually uploaded including:
@@ -408,7 +406,7 @@ client.files.preflightUploadFile(
 ```
 
 For uploading a new version of a file, use the
-[`files.preflightUploadNewFileVersion(fileID, fileData, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadNewFileVersion)
+[`files.preflightUploadNewFileVersion(fileID, fileData, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadNewFileVersion)
 method.
 
 ```js
@@ -472,14 +470,13 @@ client.files.deletePermanently('12345', callback);
 Get a Trashed File
 ------------------
 
-Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTrashedFile) method.
+Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTrashedFile) method.
 ```js
-client.files.getTrashedFile('12345', qs, callback);
+client.files.getTrashedFile('12345', {}, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -490,15 +487,14 @@ Get File Versions
 -----------------
 
 Retrieve a list of previous versions of a file by calling the
-[`files.getVersions(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getVersions).
+[`files.getVersions(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getVersions).
 
 ```js
 client.files.getVersions('12345', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -534,8 +530,8 @@ Download a Previous Version of a File
 
 For users with premium accounts, previous versions of a file can be downloaded
 by calling
-[`files.getReadStream(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getReadStream)
-with a `version` query string parameter.
+[`files.getReadStream(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getReadStream)
+with `options.version` specified.
 
 ```js
 var fs = require('fs');
@@ -565,8 +561,10 @@ client.files.deleteVersion('12345', '98768', callback)
 Create a Shared Link
 --------------------
 
-A shared link for a file can be generated by passing shared link parameters to
-[`files.update(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#update).
+A shared link for a file can be generated by passing an object containing the desired
+shared link access level to
+[`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/Files.html#update)
+in the `updates` parameter.
 
 ```js
 client.files.update('93745', {shared_link: client.accessLevels.DEFAULT}, callback)
@@ -585,7 +583,7 @@ Get Thumbnail
 -------------
 
 A thumbnail for a file can be retrieved by calling
-[`files.getThumbnail(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getThumbnail).
+[`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getThumbnail).
 
 ```js
 client.files.getThumbnail('12345', null, function(error, response) {
@@ -747,16 +745,15 @@ client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metad
 Get Watermark
 -------------
 To get watermark information for a file call the
-[`files.getWatermark(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getWatermark)
+[`files.getWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getWatermark)
 method.
 
 ```js
 client.files.getWatermark('75937', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.

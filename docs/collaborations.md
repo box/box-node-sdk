@@ -58,7 +58,7 @@ client.collaborations.createWithGroupID('56473', '987654', client.collaborationR
 Edit a Collaboration
 --------------------
 
-A collaboration can be edited by calling [`collaborations.update(collaborationID, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#update)
+A collaboration can be edited by calling [`collaborations.update(collaborationID, updates, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#update)
 with the fields to be updated.  For example, to change the role of a collaboration:
 
 ```js
@@ -77,7 +77,7 @@ client.collaborations.delete('56473', callback);
 Get a Collaboration's Information
 ---------------------------------
 
-Calling [`collaborations.get(collaborationID, qs, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#get) on a
+Calling [`collaborations.get(collaborationID, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#get) on a
 collaboration returns a snapshot of the collaboration's info.
 
 ```js
@@ -88,7 +88,7 @@ Get the Collaborations on a Folder
 ----------------------------------
 
 You can get all of the collaborations on a folder by calling
-[`folders.getCollaborations(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getCollaborations)
+[`folders.getCollaborations(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getCollaborations)
 on the folder.
 
 ```js
