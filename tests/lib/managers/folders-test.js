@@ -67,14 +67,17 @@ describe('Folders', function() {
 	describe('get()', function() {
 		it('should make GET request to get folder info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/1234', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/folders/1234', testParamsWithQs);
 			folders.get(FOLDER_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			folders.get(FOLDER_ID, testQS);
 		});
 
@@ -104,14 +107,17 @@ describe('Folders', function() {
 	describe('getItems()', function() {
 		it('should make GET request to get folder items when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/1234/items', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/folders/1234/items', testParamsWithQs);
 			folders.getItems(FOLDER_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			folders.getItems(FOLDER_ID, testQS);
 		});
 
@@ -141,14 +147,17 @@ describe('Folders', function() {
 	describe('getCollaborations()', function() {
 		it('should make GET request to get folder collaborations when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/1234/collaborations', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/folders/1234/collaborations', testParamsWithQs);
 			folders.getCollaborations(FOLDER_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			folders.getCollaborations(FOLDER_ID, testQS);
 		});
 
@@ -189,7 +198,8 @@ describe('Folders', function() {
 			};
 
 		it('should make POST request to create a new folder when called', function() {
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/folders', expectedParams);
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			folders.create(PARENT_FOLDER_ID, NEW_FOLDER_NAME);
 		});
@@ -197,7 +207,9 @@ describe('Folders', function() {
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			folders.create(PARENT_FOLDER_ID, NEW_FOLDER_NAME);
 		});
 
@@ -237,7 +249,8 @@ describe('Folders', function() {
 
 		it('should make POST request to copy the folder when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234/copy', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/folders/1234/copy', expectedParams);
 			folders.copy(FOLDER_ID, NEW_PARENT_ID);
 		});
 
@@ -248,14 +261,17 @@ describe('Folders', function() {
 			expectedParams.body.name = name;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234/copy', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/folders/1234/copy', expectedParams);
 			folders.copy(FOLDER_ID, NEW_PARENT_ID, {name});
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			folders.copy(FOLDER_ID, NEW_PARENT_ID);
 		});
 
@@ -285,14 +301,17 @@ describe('Folders', function() {
 	describe('update()', function() {
 		it('should make PUT request to update folder info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/folders/1234', testParamsWithBody);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/folders/1234', testParamsWithBody);
 			folders.update(FOLDER_ID, testBody);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			folders.update(FOLDER_ID, testBody);
 		});
 
@@ -331,8 +350,10 @@ describe('Folders', function() {
 			};
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID}]}).returns(Promise.resolve(folder));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID}]})
+				.returns(Promise.resolve(folder));
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
 		});
@@ -345,8 +366,13 @@ describe('Folders', function() {
 			};
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'},{id: COLLECTION_ID}]}).returns(Promise.resolve(folder));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [
+				{id: '111'},
+				{id: COLLECTION_ID}
+			]})
+				.returns(Promise.resolve(folder));
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
 		});
@@ -355,12 +381,20 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(Promise.resolve(folder));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [
+				{id: COLLECTION_ID},
+				{id: '111'}
+			]})
+				.returns(Promise.resolve(folder));
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
 		});
@@ -369,7 +403,10 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			sandbox.stub(folders, 'get').returns(Promise.resolve(folder));
@@ -387,7 +424,10 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			sandbox.stub(folders, 'get').returns(Promise.resolve(folder));
@@ -405,11 +445,14 @@ describe('Folders', function() {
 			var error = new Error('Failed get');
 
 			var foldersMock = sandbox.mock(folders);
+
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
 			var p = Promise.delay(1).then(() => {
 				throw error;
 			});
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(p);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(p);
+
 			foldersMock.expects('update').never();
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
@@ -424,11 +467,14 @@ describe('Folders', function() {
 			var error = new Error('Failed get');
 
 			var foldersMock = sandbox.mock(folders);
+
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
 			var p = Promise.delay(1).then(() => {
 				throw error;
 			});
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(p);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(p);
+
 			foldersMock.expects('update').never();
 
 			return folders.addToCollection(FOLDER_ID, COLLECTION_ID)
@@ -441,7 +487,17 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
 			};
 
 			var error = new Error('Failed update');
@@ -451,8 +507,10 @@ describe('Folders', function() {
 				throw error;
 			});
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(p);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, expectedBody)
+				.returns(p);
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
 
@@ -465,7 +523,17 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
 			};
 
 			var error = new Error('Failed update');
@@ -475,8 +543,10 @@ describe('Folders', function() {
 			});
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID},{id: '111'}]}).returns(p);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, expectedBody)
+				.returns(p);
 
 			return folders.addToCollection(FOLDER_ID, COLLECTION_ID)
 				.catch(err => {
@@ -497,8 +567,10 @@ describe('Folders', function() {
 			};
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []}).returns(Promise.resolve(folder));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []})
+				.returns(Promise.resolve(folder));
 
 			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
 		});
@@ -511,8 +583,10 @@ describe('Folders', function() {
 			};
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []}).returns(Promise.resolve(folder));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []})
+				.returns(Promise.resolve(folder));
 
 			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
 		});
@@ -521,12 +595,17 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'}]}).returns(Promise.resolve(folder));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'}]})
+				.returns(Promise.resolve(folder));
 
 			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
 		});
@@ -535,12 +614,20 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: '111'},{id: '222'}]
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
 			};
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'},{id: '222'}]}).returns(Promise.resolve(folder));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [
+				{id: '111'},
+				{id: '222'}
+			]})
+				.returns(Promise.resolve(folder));
 
 			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
 		});
@@ -549,7 +636,10 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: '111'},{id: '222'}]
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
 			};
 
 			sandbox.stub(folders, 'get').returns(Promise.resolve(folder));
@@ -567,7 +657,10 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: '111'},{id: '222'}]
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
 			};
 
 			sandbox.stub(folders, 'get').returns(Promise.resolve(folder));
@@ -584,11 +677,13 @@ describe('Folders', function() {
 			var error = new Error('Failed get');
 
 			var foldersMock = sandbox.mock(folders);
+
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
 			var p = Promise.delay(1).then(() => {
 				throw error;
 			});
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(p);
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(p);
 			foldersMock.expects('update').never();
 
 			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, function(err) {
@@ -602,14 +697,19 @@ describe('Folders', function() {
 
 			var folder = {
 				id: FOLDER_ID,
-				collections: [{id: COLLECTION_ID},{id: '111'}]
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
 			};
 
 			var error = new Error('Failed update');
 
 			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'}).returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'}]}).returns(Promise.resolve(error));
+			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
+				.returns(Promise.resolve(folder));
+			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'}]})
+				.returns(Promise.resolve(error));
 
 			return folders.removeFromCollection(FOLDER_ID, COLLECTION_ID)
 				.catch(err => {
@@ -631,14 +731,17 @@ describe('Folders', function() {
 
 		it('should make PUT request to update the folder parent ID when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/folders/1234', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/folders/1234', expectedParams);
 			folders.move(FOLDER_ID, NEW_PARENT_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			folders.move(FOLDER_ID, NEW_PARENT_ID);
 		});
 
@@ -668,14 +771,17 @@ describe('Folders', function() {
 	describe('delete()', function() {
 		it('should make DELETE request to update folder info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/1234', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs('/folders/1234', testParamsWithQs);
 			folders.delete(FOLDER_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			folders.delete(FOLDER_ID, testQS);
 		});
 
@@ -707,14 +813,17 @@ describe('Folders', function() {
 		it('should make GET call to fetch metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/1234/metadata', null);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/folders/1234/metadata', null);
 			folders.getAllMetadata(FOLDER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			folders.getAllMetadata(FOLDER_ID);
 		});
 
@@ -746,14 +855,17 @@ describe('Folders', function() {
 		it('should make GET call to fetch metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/1234/metadata/global/properties', null);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/folders/1234/metadata/global/properties', null);
 			folders.getMetadata(FOLDER_ID, 'global', 'properties');
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			folders.getMetadata(FOLDER_ID, 'global', 'properties');
 		});
 
@@ -799,14 +911,17 @@ describe('Folders', function() {
 		it('should make POST call to add metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/1234/metadata/global/properties', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/folders/1234/metadata/global/properties', expectedParams);
 			folders.addMetadata(FOLDER_ID, 'global', 'properties', metadata);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			folders.addMetadata(FOLDER_ID, 'global', 'properties', metadata);
 		});
 
@@ -840,11 +955,13 @@ describe('Folders', function() {
 
 		beforeEach(function() {
 
-			patch = [{
-				op: 'add',
-				path: '/foo',
-				value: 'bar'
-			}];
+			patch = [
+				{
+					op: 'add',
+					path: '/foo',
+					value: 'bar'
+				}
+			];
 
 			expectedParams = {
 				body: patch,
@@ -857,14 +974,17 @@ describe('Folders', function() {
 		it('should make PUT call with JSON Patch to update metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/folders/1234/metadata/global/properties', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/folders/1234/metadata/global/properties', expectedParams);
 			folders.updateMetadata(FOLDER_ID, 'global', 'properties', patch);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			folders.updateMetadata(FOLDER_ID, 'global', 'properties', patch);
 		});
 
@@ -896,14 +1016,17 @@ describe('Folders', function() {
 		it('should make DELETE call to remove metadata', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/1234/metadata/global/properties', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs('/folders/1234/metadata/global/properties', null);
 			folders.deleteMetadata(FOLDER_ID, 'global', 'properties');
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			folders.deleteMetadata(FOLDER_ID, 'global', 'properties');
 		});
 
@@ -934,14 +1057,17 @@ describe('Folders', function() {
 		it('should make GET request to get trashed folder when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/' + FOLDER_ID + '/trash', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/folders/${FOLDER_ID}/trash`, testParamsWithQs);
 			folders.getTrashedFolder(FOLDER_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			folders.getTrashedFolder(FOLDER_ID, testQS);
 		});
 
@@ -992,10 +1118,11 @@ describe('Folders', function() {
 
 			expectedParams.body = {
 				name: NAME,
-				parent: parent
+				parent
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/folders/${FOLDER_ID}`, expectedParams);
 			folders.restoreFromTrash(FOLDER_ID, options);
 		});
 
@@ -1005,7 +1132,8 @@ describe('Folders', function() {
 
 			expectedParams.body.name = NAME;
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/folders/${FOLDER_ID}`, expectedParams);
 			folders.restoreFromTrash(FOLDER_ID, options);
 		});
 
@@ -1017,21 +1145,25 @@ describe('Folders', function() {
 
 			expectedParams.body.parent = parent;
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/folders/${FOLDER_ID}`, expectedParams);
 			folders.restoreFromTrash(FOLDER_ID, options);
 		});
 
 		it('should make POST request with an empty body to restore a folder when neither optional parameter is passed', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/folders/' + FOLDER_ID, {body: {}});
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(`/folders/${FOLDER_ID}`, {body: {}});
 			folders.restoreFromTrash(FOLDER_ID, null);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			folders.restoreFromTrash(FOLDER_ID);
 		});
 
@@ -1063,14 +1195,17 @@ describe('Folders', function() {
 		it('should make DELETE call to remove folder permanently', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/' + FOLDER_ID + '/trash', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/folders/${FOLDER_ID}/trash`, null);
 			folders.deletePermanently(FOLDER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			folders.deletePermanently(FOLDER_ID);
 		});
 
@@ -1101,7 +1236,8 @@ describe('Folders', function() {
 
 		it('should make GET request to get file watermark info when called', function() {
 
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/' + FOLDER_ID + '/watermark', testParamsWithQs)
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/folders/${FOLDER_ID}/watermark`, testParamsWithQs)
 				.returns(Promise.resolve({statusCode: 200, body: {}}));
 			folders.getWatermark(FOLDER_ID, testQS);
 		});
@@ -1109,7 +1245,8 @@ describe('Folders', function() {
 		it('should call callback with error when API call returns error', function(done) {
 
 			var apiError = new Error('failed');
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
+				.returns(Promise.reject(apiError));
 			folders.getWatermark(FOLDER_ID, null, function(err) {
 
 				assert.equal(err, apiError);
@@ -1120,7 +1257,8 @@ describe('Folders', function() {
 		it('should return promise that rejects when API call returns error', function() {
 
 			var apiError = new Error('failed');
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
+				.returns(Promise.reject(apiError));
 			return folders.getWatermark(FOLDER_ID)
 				.catch(err => {
 					assert.equal(err, apiError);
@@ -1130,7 +1268,8 @@ describe('Folders', function() {
 		it('should call callback with error when API call returns non-200 status code', function(done) {
 
 			var res = {statusCode: 404};
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			folders.getWatermark(FOLDER_ID, null, function(err) {
 
 				assert.instanceOf(err, Error);
@@ -1141,7 +1280,8 @@ describe('Folders', function() {
 		it('should return promise that rejects when API call returns non-200 status code', function() {
 
 			var res = {statusCode: 404};
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			return folders.getWatermark(FOLDER_ID)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -1159,7 +1299,8 @@ describe('Folders', function() {
 				statusCode: 200,
 				body: {watermark}
 			};
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			folders.getWatermark(FOLDER_ID, null, function(err, data) {
 
 				assert.isNull(err, 'Error should be absent');
@@ -1179,7 +1320,8 @@ describe('Folders', function() {
 				statusCode: 200,
 				body: {watermark}
 			};
-			sandbox.stub(boxClientFake, 'get').withArgs('/folders/' + FOLDER_ID + '/watermark').returns(Promise.resolve(res));
+			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
+				.returns(Promise.resolve(res));
 			return folders.getWatermark(FOLDER_ID)
 				.then(data => {
 					assert.equal(data, watermark);
@@ -1203,14 +1345,17 @@ describe('Folders', function() {
 		it('should make PUT request to apply watermark on a file', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/folders/' + FOLDER_ID + '/watermark', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/folders/${FOLDER_ID}/watermark`, expectedParams);
 			folders.applyWatermark(FOLDER_ID, null);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			folders.applyWatermark(FOLDER_ID, null);
 		});
 
@@ -1242,14 +1387,17 @@ describe('Folders', function() {
 		it('should make DELETE call to remove watermark', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/folders/' + FOLDER_ID + '/watermark', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/folders/${FOLDER_ID}/watermark`, null);
 			folders.removeWatermark(FOLDER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			folders.removeWatermark(FOLDER_ID);
 		});
 

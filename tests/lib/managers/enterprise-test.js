@@ -10,6 +10,7 @@ var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
 	assert = require('chai').assert,
+	Promise = require('bluebird'),
 	BoxClient = require('../../../lib/box-client');
 
 // ------------------------------------------------------------------------------
@@ -58,14 +59,17 @@ describe('Enterprise', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/users', {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/users', {qs});
 			enterprise.getUsers(qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			enterprise.getUsers();
 		});
 
@@ -106,14 +110,17 @@ describe('Enterprise', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/invites', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/invites', expectedParams);
 			enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN);
 		});
 
@@ -158,7 +165,8 @@ describe('Enterprise', function() {
 
 		it('should make POST request with mandatory parameters to create an user without optional parameters', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/users', expectedParams);
 			enterprise.addUser(LOGIN, NAME);
 		});
 
@@ -166,14 +174,17 @@ describe('Enterprise', function() {
 			expectedParams.body.role = ROLE;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/users', expectedParams);
 			enterprise.addUser(LOGIN, NAME, {role: ROLE});
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			enterprise.addUser(LOGIN, NAME, {role: ROLE});
 		});
 
@@ -217,7 +228,8 @@ describe('Enterprise', function() {
 
 		it('should make POST request with mandatory parameters to create an app user without optional parameters', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/users', expectedParams);
 			enterprise.addAppUser(NAME);
 		});
 
@@ -225,14 +237,17 @@ describe('Enterprise', function() {
 			expectedParams.body.job_title = JOB_TITLE;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/users', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/users', expectedParams);
 			enterprise.addAppUser(NAME, {job_title: JOB_TITLE});
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			enterprise.addAppUser(NAME, {job_title: JOB_TITLE});
 		});
 
@@ -273,14 +288,17 @@ describe('Enterprise', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/users/' + SRC_USER_ID + '/folders/0', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/users/${SRC_USER_ID}/folders/0`, expectedParams);
 			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID);
 		});
 

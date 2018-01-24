@@ -139,7 +139,8 @@ describe('APIRequestManager', function() {
 
 		it('should execute the request when called', function() {
 			var requestManager = new APIRequestManager(config, eventBusFake);
-			sandbox.mock(apiRequestFake).expects('execute').callsArg(0);
+			sandbox.mock(apiRequestFake).expects('execute')
+				.callsArg(0);
 			return requestManager.makeRequest({});
 		});
 
@@ -148,7 +149,8 @@ describe('APIRequestManager', function() {
 			var response = {statusCode: 200};
 
 			var requestManager = new APIRequestManager(config, eventBusFake);
-			sandbox.mock(apiRequestFake).expects('execute').yieldsAsync(null, response);
+			sandbox.mock(apiRequestFake).expects('execute')
+				.yieldsAsync(null, response);
 			return requestManager.makeRequest({})
 				.then(data => {
 					assert.equal(data, response);
@@ -160,7 +162,8 @@ describe('APIRequestManager', function() {
 			var apiError = new Error('Network failure');
 
 			var requestManager = new APIRequestManager(config, eventBusFake);
-			sandbox.mock(apiRequestFake).expects('execute').yieldsAsync(apiError);
+			sandbox.mock(apiRequestFake).expects('execute')
+				.yieldsAsync(apiError);
 			return requestManager.makeRequest({})
 				.catch(err => {
 					assert.equal(err, apiError);
@@ -211,7 +214,8 @@ describe('APIRequestManager', function() {
 			var requestManager = new APIRequestManager(config, eventBusFake);
 
 			sandbox.stub(apiRequestFake, 'getResponseStream');
-			sandbox.mock(apiRequestFake).expects('execute').withExactArgs();
+			sandbox.mock(apiRequestFake).expects('execute')
+				.withExactArgs();
 			requestManager.makeStreamingRequest({});
 		});
 
@@ -221,7 +225,9 @@ describe('APIRequestManager', function() {
 				response;
 
 			sandbox.stub(apiRequestFake, 'execute');
-			sandbox.mock(apiRequestFake).expects('getResponseStream').withExactArgs().returns(expectedResponse);
+			sandbox.mock(apiRequestFake).expects('getResponseStream')
+				.withExactArgs()
+				.returns(expectedResponse);
 			response = requestManager.makeStreamingRequest({});
 			assert.equal(response, expectedResponse);
 		});

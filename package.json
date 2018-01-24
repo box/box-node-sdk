@@ -33,7 +33,11 @@
   },
   "devDependencies": {
     "chai": "^4.1.1",
-    "eslint": "^2.8.0",
+    "eslint": "^4.13.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-unicorn": "^3.0.0",
+    "istanbul": "^0.4.3",
     "jsdoc": "^3.5.5",
     "jsonlint": "~1.6.2",
     "leche": "^2.2.2",

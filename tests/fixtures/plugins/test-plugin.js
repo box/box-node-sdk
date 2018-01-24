@@ -19,10 +19,10 @@ module.exports = function TestPlugin(client, options) {
 		uploadApiRoot = options.uploadApiRoot;
 
 	return {
-		get: function(callback) {
+		get(callback) {
 			client.get(apiRoot + TEST_PATH, null, callback);
 		},
-		upload: function(formData, callback) {
+		upload(formData, callback) {
 			client.upload(uploadApiRoot + TEST_PATH, null, formData, callback);
 		}
 	};

@@ -5,6 +5,10 @@ env:
 
 rules:
     # JSDoc is not required in test files, obviously
-    require-jsdoc: 0
+    require-jsdoc: off
     # We often require a file AFTER mocking its dependencies in tests
-    global-require: 0
+    global-require: off
+    # Mocha doesn't like arrow functions
+    prefer-arrow-callback: off
+    # Tests don't need to return from .then() with asserts
+    promise/always-return: off

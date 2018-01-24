@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -61,14 +62,17 @@ describe('Metadata', function() {
 
 			var expectedAPIPath = '/metadata_templates/enterprise/productSpec/schema';
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs(expectedAPIPath, null);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(expectedAPIPath, null);
 			metadata.getTemplateSchema('enterprise', 'productSpec');
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			metadata.getTemplateSchema('enterprise', 'productSpec');
 		});
 
@@ -100,14 +104,17 @@ describe('Metadata', function() {
 
 			var expectedAPIPath = '/metadata_templates/enterprise';
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs(expectedAPIPath, null);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(expectedAPIPath, null);
 			metadata.getTemplates('enterprise');
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			metadata.getTemplates('enterprise');
 		});
 
@@ -174,20 +181,23 @@ describe('Metadata', function() {
 				body: {
 					scope: 'enterprise',
 					displayName: name,
-					fields: fields,
+					fields,
 					hidden: true
 				}
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/metadata_templates/schema', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/metadata_templates/schema', expectedParams);
 			metadata.createTemplate(name, fields, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			metadata.createTemplate(name, fields, options);
 		});
 
@@ -220,14 +230,17 @@ describe('Metadata', function() {
 
 		it('should make DELETE call to delete template when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/metadata_templates/' + scope + '/' + template + '/schema');
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/metadata_templates/${scope}/${template}/schema`);
 			metadata.deleteTemplate(scope, template);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			metadata.deleteTemplate(scope, template);
 		});
 
@@ -283,14 +296,17 @@ describe('Metadata', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/metadata_templates/' + scope + '/' + template + '/schema', expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/metadata_templates/${scope}/${template}/schema`, expectedParams);
 			metadata.updateTemplate(scope, template, operations);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			metadata.updateTemplate(scope, template, operations);
 		});
 

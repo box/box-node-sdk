@@ -93,7 +93,8 @@ describe('AppAuthSession', function() {
 		it('should resolve to stored access token when access tokens are fresh', function() {
 
 			appAuthSession._tokenInfo = testTokenInfo;
-			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').never();
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.never();
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
 
 			return appAuthSession.getAccessToken()
@@ -150,7 +151,10 @@ describe('AppAuthSession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2]);
+			return Promise.all([
+				promise1,
+				promise2
+			]);
 		});
 
 		it('should allow a new request for tokens once in-progress call completes', function() {
@@ -171,7 +175,10 @@ describe('AppAuthSession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2])
+			return Promise.all([
+				promise1,
+				promise2
+			])
 				.then(() => appAuthSession.getAccessToken());
 		});
 
@@ -210,7 +217,10 @@ describe('AppAuthSession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2])
+			return Promise.all([
+				promise1,
+				promise2
+			])
 				.then(() => appAuthSession.getAccessToken())
 				.then(accessToken => {
 					assert.equal(accessToken, newTokenInfo.accessToken);

@@ -80,7 +80,9 @@ describe('SharedItems', function() {
 				response = {statusCode: 200, body: responseBody};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/shared_items', expectedParams).returns(Promise.resolve(response));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/shared_items', expectedParams)
+				.returns(Promise.resolve(response));
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS);
 		});
 

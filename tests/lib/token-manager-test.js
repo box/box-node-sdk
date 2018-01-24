@@ -103,9 +103,18 @@ describe('token-manager', function() {
 		});
 
 		leche.withData({
-			'auth code grant': [GRANT_TYPE_AUTHORIZATION_CODE, {access_token: 'at', refresh_token: 'rt', expires_in: 234234}],
-			'refresh token grant': [GRANT_TYPE_REFRESH_TOKEN, {access_token: 'at', refresh_token: 'rt', expires_in: 234234}],
-			'client credentials grant': [GRANT_TYPE_CLIENT_CREDENTIALS, {access_token: 'at', expires_in: 234234}]
+			'auth code grant': [
+				GRANT_TYPE_AUTHORIZATION_CODE,
+				{access_token: 'at', refresh_token: 'rt', expires_in: 234234}
+			],
+			'refresh token grant': [
+				GRANT_TYPE_REFRESH_TOKEN,
+				{access_token: 'at', refresh_token: 'rt', expires_in: 234234}
+			],
+			'client credentials grant': [
+				GRANT_TYPE_CLIENT_CREDENTIALS,
+				{access_token: 'at', expires_in: 234234}
+			]
 		}, function(grantType, successfulResponseBody) {
 
 			it('should properly parse the OAuth token response', function() {
@@ -147,7 +156,8 @@ describe('token-manager', function() {
 				responseInfo = {statusCode: 400, body: responseBody};
 			requestError.response = responseInfo;
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').returns(Promise.reject(requestError));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.returns(Promise.reject(requestError));
 
 			return tokenManager.getTokens({})
 				.catch(err => {
@@ -159,7 +169,8 @@ describe('token-manager', function() {
 			var responseBody = {error: 'invalid_grant'},
 				responseInfo = {statusCode: 403, body: responseBody};
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').returns(Promise.resolve(responseInfo));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.returns(Promise.resolve(responseInfo));
 
 			return tokenManager.getTokens({})
 				.catch(err => {
@@ -172,7 +183,8 @@ describe('token-manager', function() {
 			var responseBody = new Buffer(1),
 				responseInfo = {statusCode: 200, body: responseBody};
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').returns(Promise.resolve(responseInfo));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.returns(Promise.resolve(responseInfo));
 
 			return tokenManager.getTokens({})
 				.catch(err => {
@@ -181,17 +193,33 @@ describe('token-manager', function() {
 		});
 
 		leche.withData({
-			'missing access token': [GRANT_TYPE_CLIENT_CREDENTIALS, {expires_in: '1234567', refresh_token: 'rt'}],
-			'invalid access token': [GRANT_TYPE_AUTHORIZATION_CODE, {access_token: '', expires_in: '1234567', refresh_token: 'rt'}],
-			'invalid expiration': [GRANT_TYPE_AUTHORIZATION_CODE, {access_token: 'at', expires_in: 'abc', refresh_token: 'rt'}],
-			'missing refresh token': [GRANT_TYPE_REFRESH_TOKEN, {access_token: 'at', expires_in: '1234567'}],
-			'invalid refresh token': [GRANT_TYPE_REFRESH_TOKEN, {access_token: 'at', expires_in: '1234567', refresh_token: ''}]
+			'missing access token': [
+				GRANT_TYPE_CLIENT_CREDENTIALS,
+				{expires_in: '1234567', refresh_token: 'rt'}
+			],
+			'invalid access token': [
+				GRANT_TYPE_AUTHORIZATION_CODE,
+				{access_token: '', expires_in: '1234567', refresh_token: 'rt'}
+			],
+			'invalid expiration': [
+				GRANT_TYPE_AUTHORIZATION_CODE,
+				{access_token: 'at', expires_in: 'abc', refresh_token: 'rt'}
+			],
+			'missing refresh token': [
+				GRANT_TYPE_REFRESH_TOKEN,
+				{access_token: 'at', expires_in: '1234567'}
+			],
+			'invalid refresh token': [
+				GRANT_TYPE_REFRESH_TOKEN,
+				{access_token: 'at', expires_in: '1234567', refresh_token: ''}
+			]
 		}, function(grantType, responseBody) {
 
 			it('should propagate a response error', function() {
 				var responseInfo = {statusCode: 200, body: responseBody};
 
-				sandbox.mock(requestManagerFake).expects('makeRequest').returns(Promise.resolve(responseInfo));
+				sandbox.mock(requestManagerFake).expects('makeRequest')
+					.returns(Promise.resolve(responseInfo));
 
 				return tokenManager.getTokens({})
 					.catch(err => {
@@ -209,11 +237,13 @@ describe('token-manager', function() {
 				ip: '123.456.789.0'
 			};
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs(sinon.match({
-				headers: {
-					'X-Forwarded-For': '123.456.789.0'
-				}
-			})).returns(Promise.resolve(responseInfo));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs(sinon.match({
+					headers: {
+						'X-Forwarded-For': '123.456.789.0'
+					}
+				}))
+				.returns(Promise.resolve(responseInfo));
 
 			return tokenManager.getTokens({}, optionsIP);
 		});
@@ -224,10 +254,30 @@ describe('token-manager', function() {
 	describe('isAccessTokenValid()', function() {
 
 		leche.withData({
-			'current time greater than expired time without buffer': [300, 200, 0, false],
-			'current time less than than expired time without buffer': [100, 200, 0, true],
-			'current time less than expired time but within range of buffer': [175, 200, 50, false],
-			'an object that has no time properties': [300, null, null, false]
+			'current time greater than expired time without buffer': [
+				300,
+				200,
+				0,
+				false
+			],
+			'current time less than than expired time without buffer': [
+				100,
+				200,
+				0,
+				true
+			],
+			'current time less than expired time but within range of buffer': [
+				175,
+				200,
+				50,
+				false
+			],
+			'an object that has no time properties': [
+				300,
+				null,
+				null,
+				false
+			]
 		}, function(currentTime, expiredTime, bufferTime, expectedResult) {
 			it('should return true when access token is valid within given buffer', function() {
 				var tokenInfo = {
@@ -386,7 +436,9 @@ describe('token-manager', function() {
 				keyid: TEST_KEY_ID
 			};
 			sandbox.stub(tokenManager, 'getTokens').returns(Promise.resolve());
-			sandbox.mock(jwtFake).expects('sign').withArgs(expectedClaims, keyParams, sinon.match(expectedOptions)).returns(TEST_WEB_TOKEN);
+			sandbox.mock(jwtFake).expects('sign')
+				.withArgs(expectedClaims, keyParams, sinon.match(expectedOptions))
+				.returns(TEST_WEB_TOKEN);
 
 			return tokenManager.getTokensJWTGrant('user', TEST_ID);
 		});
@@ -536,7 +588,9 @@ describe('token-manager', function() {
 				accessToken: 'lsdjhgo87w3h4tbd87fg54'
 			};
 
-			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, null).returns(Promise.resolve(tokenInfo));
+			sandbox.mock(tokenManager).expects('getTokens')
+				.withArgs(expectedTokenParams, null)
+				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, null)
 				.then(tokens => {
@@ -563,7 +617,8 @@ describe('token-manager', function() {
 				accessToken: 'lsdjhgo87w3h4tbd87fg54'
 			};
 
-			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, options.tokenRequestOptions)
+			sandbox.mock(tokenManager).expects('getTokens')
+				.withArgs(expectedTokenParams, options.tokenRequestOptions)
 				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, options)
@@ -585,9 +640,14 @@ describe('token-manager', function() {
 				accessToken: 'lsdjhgo87w3h4tbd87fg54'
 			};
 
-			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, null).returns(Promise.resolve(tokenInfo));
+			sandbox.mock(tokenManager).expects('getTokens')
+				.withArgs(expectedTokenParams, null)
+				.returns(Promise.resolve(tokenInfo));
 
-			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, ['item_preview', 'item_read'], null, null)
+			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, [
+				'item_preview',
+				'item_read'
+			], null, null)
 				.then(tokens => {
 					assert.equal(tokens, tokenInfo);
 				});
@@ -607,7 +667,9 @@ describe('token-manager', function() {
 				accessToken: 'lsdjhgo87w3h4tbd87fg54'
 			};
 
-			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, null).returns(Promise.resolve(tokenInfo));
+			sandbox.mock(tokenManager).expects('getTokens')
+				.withArgs(expectedTokenParams, null)
+				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, null)
 				.then(tokens => {
@@ -647,7 +709,8 @@ describe('token-manager', function() {
 				noTimestamp: true
 			};
 
-			sandbox.mock(jwtFake).expects('sign').withArgs(sinon.match(expectedClaims), sinon.match.string, sinon.match(expectedOptions));
+			sandbox.mock(jwtFake).expects('sign')
+				.withArgs(sinon.match(expectedClaims), sinon.match.string, sinon.match(expectedOptions));
 			sandbox.stub(tokenManager, 'getTokens');
 
 			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor });
@@ -677,7 +740,9 @@ describe('token-manager', function() {
 
 
 			sandbox.stub(jwtFake, 'sign').returns(actorJWT);
-			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, null).returns(Promise.resolve(tokenInfo));
+			sandbox.mock(tokenManager).expects('getTokens')
+				.withArgs(expectedTokenParams, null)
+				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
 				.then(tokens => {
@@ -694,7 +759,8 @@ describe('token-manager', function() {
 			};
 
 			sandbox.stub(jwtFake, 'sign').throws(jwtError);
-			sandbox.mock(tokenManager).expects('getTokens').never();
+			sandbox.mock(tokenManager).expects('getTokens')
+				.never();
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
 				.catch(err => {
@@ -707,15 +773,17 @@ describe('token-manager', function() {
 		it('should make request to revoke tokens with expected revoke params when called', function() {
 			var refreshToken = 'rt';
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
-				method: 'POST',
-				url: 'api.box.com/oauth2/revoke',
-				form: {
-					token: refreshToken,
-					client_id: BOX_CLIENT_ID,
-					client_secret: BOX_CLIENT_SECRET
-				}
-			}).returns(Promise.resolve());
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs({
+					method: 'POST',
+					url: 'api.box.com/oauth2/revoke',
+					form: {
+						token: refreshToken,
+						client_id: BOX_CLIENT_ID,
+						client_secret: BOX_CLIENT_SECRET
+					}
+				})
+				.returns(Promise.resolve());
 
 			return tokenManager.revokeTokens(refreshToken, null);
 		});
@@ -725,18 +793,20 @@ describe('token-manager', function() {
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
-				method: 'POST',
-				url: 'api.box.com/oauth2/revoke',
-				form: {
-					token: refreshToken,
-					client_id: BOX_CLIENT_ID,
-					client_secret: BOX_CLIENT_SECRET
-				},
-				headers: {
-					'X-Forwarded-For': options.ip
-				}
-			}).returns(Promise.resolve());
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs({
+					method: 'POST',
+					url: 'api.box.com/oauth2/revoke',
+					form: {
+						token: refreshToken,
+						client_id: BOX_CLIENT_ID,
+						client_secret: BOX_CLIENT_SECRET
+					},
+					headers: {
+						'X-Forwarded-For': options.ip
+					}
+				})
+				.returns(Promise.resolve());
 
 			return tokenManager.revokeTokens(refreshToken, options);
 		});

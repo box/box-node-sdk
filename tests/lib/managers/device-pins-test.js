@@ -65,7 +65,8 @@ describe('DevicePins', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/device_pinners/' + PIN_ID, params);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/device_pinners/${PIN_ID}`, params);
 			devicePins.get(PIN_ID, null);
 		});
 
@@ -76,14 +77,17 @@ describe('DevicePins', function() {
 			var params = {qs};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/device_pinners/' + PIN_ID, params);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/device_pinners/${PIN_ID}`, params);
 			devicePins.get(PIN_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			devicePins.get(PIN_ID);
 		});
 
@@ -119,7 +123,8 @@ describe('DevicePins', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/device_pinners/' + PIN_ID, params);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/device_pinners/${PIN_ID}`, params);
 			devicePins.delete(PIN_ID, null);
 		});
 
@@ -130,14 +135,17 @@ describe('DevicePins', function() {
 			var params = {qs};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/device_pinners/' + PIN_ID, params);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/device_pinners/${PIN_ID}`, params);
 			devicePins.delete(PIN_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			devicePins.delete(PIN_ID);
 		});
 
@@ -186,8 +194,12 @@ describe('DevicePins', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake.users).expects('get').withArgs('me', {fields: 'enterprise'}).returns(Promise.resolve(user));
-			sandbox.mock(boxClientFake).expects('get').withArgs('/enterprises/' + ENTERPRISE_ID + '/device_pinners', params).returns(Promise.resolve({}));
+			sandbox.mock(boxClientFake.users).expects('get')
+				.withArgs('me', {fields: 'enterprise'})
+				.returns(Promise.resolve(user));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/enterprises/${ENTERPRISE_ID}/device_pinners`, params)
+				.returns(Promise.resolve({}));
 			devicePins.getAll(null, done);
 		});
 
@@ -198,8 +210,11 @@ describe('DevicePins', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake.users).expects('get').withArgs('me', {fields: 'enterprise'}).returns(Promise.resolve(user));
-			sandbox.mock(boxClientFake).expects('get').never();
+			sandbox.mock(boxClientFake.users).expects('get')
+				.withArgs('me', {fields: 'enterprise'})
+				.returns(Promise.resolve(user));
+			sandbox.mock(boxClientFake).expects('get')
+				.never();
 			devicePins.getAll(null, function(err) {
 
 				assert.instanceOf(err, Error);
@@ -211,7 +226,9 @@ describe('DevicePins', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
 			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			devicePins.getAll();
 		});
 

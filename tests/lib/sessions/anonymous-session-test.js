@@ -80,7 +80,8 @@ describe('AnonymousAPISession', function() {
 		it('should resolve to stored access token when access tokens are fresh', function() {
 
 			anonymousSession._tokenInfo = testTokenInfo;
-			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant').never();
+			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
+				.never();
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
 
 			return anonymousSession.getAccessToken()
@@ -136,7 +137,10 @@ describe('AnonymousAPISession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2]);
+			return Promise.all([
+				promise1,
+				promise2
+			]);
 		});
 
 		it('should allow a new request for tokens once in-progress call completes', function() {
@@ -157,7 +161,10 @@ describe('AnonymousAPISession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2])
+			return Promise.all([
+				promise1,
+				promise2
+			])
 				.then(() => anonymousSession.getAccessToken());
 		});
 
@@ -196,7 +203,10 @@ describe('AnonymousAPISession', function() {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			return Promise.all([promise1, promise2])
+			return Promise.all([
+				promise1,
+				promise2
+			])
 				.then(() => anonymousSession.getAccessToken())
 				.then(accessToken => {
 					assert.equal(accessToken, newTokenInfo.accessToken);
