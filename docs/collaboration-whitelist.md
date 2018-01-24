@@ -30,11 +30,11 @@ Get a Whitelisted Domain's Information
 --------------------------------------
 
 A collaboration whitelist's information can be retrieved by ID with
-[`collaborationWhitelist.getWhitelistedDomain(domainID, qs, callback)`]
+[`collaborationWhitelist.getWhitelistedDomain(domainID, options, callback)`]
 (http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#getWhitelistedDomain).
 
 ```js
-client.collaborationWhitelist.getWhitelistedDomain('12345', qs, callback);
+client.collaborationWhitelist.getWhitelistedDomain('12345', {}, callback);
 ```
 
 Get Whitelisted Domains for an Enterprise
@@ -83,7 +83,7 @@ Get an Exempt User's Information
 --------------------------------
 
 To retrieve a specific collaboration whitelist's information for a user you can use
-[`collaborationWhitelist.getExemption(exemptionID, qs, callback)`]
+[`collaborationWhitelist.getExemption(exemptionID, options, callback)`]
 (http://opensource.box.com/box-node-sdk/CollaborationWhitelist.html#getExemption).
 
 ```js

@@ -34,9 +34,8 @@ Get a Web Link's information
 client.weblinks.get('1234', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 client.weblinks.get('1234', {fields: 'item_status,path_collection'}, callback);
@@ -45,8 +44,8 @@ client.weblinks.get('1234', {fields: 'item_status,path_collection'}, callback);
 Update a Web Link
 -----------------
 
-To update a web link call the [`weblinks.update(weblinkID, options, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#update)
-method.
+To update a web link call the [`weblinks.update(weblinkID, updates, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#update)
+method with the fields to update and their new values.
 
 ```js
 client.weblinks.update(
