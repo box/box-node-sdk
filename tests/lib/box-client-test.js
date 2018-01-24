@@ -14,7 +14,8 @@ var assert = require('chai').assert,
 	leche = require('leche'),
 	Promise = require('bluebird'),
 	EventEmitter = require('events').EventEmitter,
-	httpStatusCodes = require('http-status');
+	httpStatusCodes = require('http-status'),
+	pkg = require('../../package.json');
 
 var APIRequestManager = require('../../lib/api-request-manager'),
 	BasicAPISession = require('../../lib/sessions/basic-session'),
@@ -105,6 +106,19 @@ describe('box-client', function() {
 					headers: sinon.match({ Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN })
 				})
 				.returns(Promise.resolve(fakeOKResponse));
+
+			return basicClient._makeRequest({});
+		});
+
+		it('should set the X-Box-UA header with correct values when called', function() {
+
+			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+
+			var expectedHeader = `agent=box-node-sdk/${pkg.version}; env=Node/`;
+
+			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
+				headers: sinon.match({ 'X-Box-UA': sinon.match(expectedHeader) })
+			}).returns(Promise.resolve(fakeOKResponse));
 
 			return basicClient._makeRequest({});
 		});
@@ -562,7 +576,7 @@ describe('box-client', function() {
 					url: util.format('%s/%s%s', params.uploadAPIRootURL, params.apiVersion, path),
 					body: fakeBody,
 					timeout: params.uploadRequestTimeoutMS,
-					headers: {Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN},
+					headers: sinon.match({ Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN }),
 					formData: fakeMultipartFormData
 				})
 				.returns(Promise.resolve(fakeOKResponse));

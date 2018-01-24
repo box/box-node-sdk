@@ -20,7 +20,7 @@ Create Group
 ------------
 
 To create a new group, call the
-[`groups.create(name, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#create)
+[`groups.create(name, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#create)
 method.
 
 ```js
@@ -31,16 +31,15 @@ Get Group
 ---------
 
 To retrieve the information for a group, call the
-[`groups.get(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#get)
+[`groups.get(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#get)
 method.
 
 ```js
 client.groups.get('78346', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 client.groups.get('12345', {fields: 'name,description'}, callback);
@@ -50,8 +49,8 @@ Update Group
 ------------
 
 To change the properties of a group object, call the
-[`groups.update(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#update)
-method with `options` being the set of properties to update.
+[`groups.update(groupID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#update)
+method with `updates` being the set of properties to update.
 
 ```js
 client.groups.update('873645', {name: 'New group name'}, callback);
@@ -61,7 +60,7 @@ Delete Group
 ------------
 
 To delete a group, call the
-[`groups.delete(groupID, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#delete)
+[`groups.delete(groupID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#delete)
 method.
 
 ```js
@@ -72,7 +71,7 @@ Add a User to a Group
 ---------------------
 
 To add a user to a group, call the
-[`groups.addUser(groupID, userID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#addUser)
+[`groups.addUser(groupID, userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#addUser)
 method.
 
 ```js
@@ -84,16 +83,15 @@ Get Membership
 
 To retrieve information about a specific membership record, which shows that a
 given user is in the group, call the
-[`groups.getMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#getMembership)
+[`groups.getMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getMembership)
 method.
 
 ```js
 client.groups.getMembership('38456', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Get a list of users in the group and when they were added
@@ -104,8 +102,8 @@ Update Membership
 -----------------
 
 To update a membership record, call the
-[`groups.updateMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#updateMembership)
-method with `options` being the properties to update.
+[`groups.updateMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#updateMembership)
+method with `updates` being the properties to update.
 
 ```js
 // Promote a user to group admin
@@ -116,7 +114,7 @@ Remove Membership
 -----------------
 
 To remove a specific membership record, which removes a user from the group, call the
-[`groups.removeMembership(membershipID, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#removeMembership)
+[`groups.removeMembership(membershipID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#removeMembership)
 method with the ID of the membership record to remove.
 
 ```js
@@ -127,7 +125,7 @@ Get Group Memberships
 ---------------------
 
 To get a list of all memberships to a group, call the
-[`groups.getMemberships(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#getMemberships)
+[`groups.getMemberships(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getMemberships)
 method with the ID of the group to get the list of memberships for.
 
 ```js
@@ -138,7 +136,7 @@ Get Enterprise Groups
 ---------------------
 
 To get a list of all groups in the calling user's enterprise, call the
-[`groups.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#getAll)
+[`groups.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getAll)
 method.  Note that this requires permission to view an enterprise's groups, which
 is reserved for enterprise administrators.
 
@@ -151,7 +149,7 @@ Get Group Collaborations
 
 To get a list of collaborations for a group, which show which items the group has
 access to, call the
-[`groups.getCollaborations(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#getCollaborations)
+[`groups.getCollaborations(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getCollaborations)
 method.
 
 ```js

@@ -13,6 +13,7 @@ file's contents, upload new versions, and perform other common file operations
 * [Upload a File](#upload-a-file)
 * [Upload Preflight Check](#upload-preflight-check)
 * [Chunked Upload](#chunked-upload)
+* [Move a File](#move-a-file)
 * [Copy a File](#copy-a-file)
 * [Delete a File](#delete-a-file)
 * [Delete Permanently](#delete-permanently)
@@ -43,16 +44,15 @@ Get a File's Information
 ------------------------
 
 Calling
-[`files.get(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#get)
+[`files.get(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#get)
 on a file returns a snapshot of the file's info.
 
 ```js
 client.files.get('75937', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -63,7 +63,7 @@ Update a File's Information
 ---------------------------
 
 Updating a file's information is done by calling
-[`files.update(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#update)
+[`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
 with the fields to be updated.
 
 ```js
@@ -73,15 +73,14 @@ client.files.update('75937', {name : 'New Name'}, callback);
 Get a File's Tasks
 ------------------
 Calling the
-[`files.getTasks(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTasks)
+[`files.getTasks(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTasks)
 method will retrieve all of the tasks for given file.
 
 ```js
 client.files.getTasks('75937', null, callback);
 ```
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -92,7 +91,7 @@ Download a File
 ---------------
 
 A file can be downloaded by calling
-[`files.getReadStream(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getReadStream),
+[`files.getReadStream(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getReadStream),
 which provides an instance of `stream.Readable` that will yield the file's contents.
 
 ```js
@@ -113,7 +112,7 @@ Get a File's Download URL
 -------------------------
 
 The download URL of a file an be retrieved by calling
-[`files.getDownloadURL(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getDownloadURL).
+[`files.getDownloadURL(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getDownloadURL).
 It returns the URL as a string.
 
 ```js
@@ -131,7 +130,7 @@ Upload a File
 -------------
 
 The simplest way to upload a file to a folder is by calling the
-[`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/Files.html#uploadFile)
+[`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
 method with a `stream.Readable` or `Buffer` of the file to upload.
 
 Stream:
@@ -168,7 +167,7 @@ without aborting the entire upload, and failed parts can then be retried.
 ### Automatic Uploader
 
 The SDK provides a method of automatically handling a chunked upload; simply call
-[`files.getChunkedUploader(folderID, size, name, file, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getChunkedUploader)
+[`files.getChunkedUploader(folderID, size, name, file, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getChunkedUploader)
 with the ID of the destination folder, the size and file name of the file to be
 uploaded, and a `Buffer` or `ReadableStream` of the file to be uploaded.
 
@@ -202,7 +201,7 @@ client.files.getChunkedUploader(
 ```
 
 A new version of a file can be uploaded in the same way by calling
-[`files.getNewVersionChunkedUploader(fileID, size, file, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getNewVersionChunkedUploader)
+[`files.getNewVersionChunkedUploader(fileID, size, file, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getNewVersionChunkedUploader)
 with the ID of the file to upload a new version of, along with the size of the new
 version and a `Buffer` or `ReadableStream` of the new version.
 
@@ -288,7 +287,7 @@ The individual endpoint methods are detailed below:
 #### Create Upload Session
 
 To start a chunked upload, create an upload session for the file by calling
-[`files.createUploadSession(folderID, size, name, callback)`](http://opensource.box.com/box-node-sdk/Files.html#createUploadSession)
+[`files.createUploadSession(folderID, size, name, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#createUploadSession)
 with the ID of the folder to upload into, as well as the size and file name of
 file being uploaded.  This will check the destination folder for conflicts before
 starting the upload and pass the information for the upload session back to the callback.
@@ -301,7 +300,7 @@ client.files.createUploadSession('12345', 2147483648, 'huge.pdf', callback);
 #### Upload Part
 
 Parts are then uploaded by calling
-[`files.uploadPart(sessionID, part, offset, totalSize, callback)`](http://opensource.box.com/box-node-sdk/Files.html#uploadPart)
+[`files.uploadPart(sessionID, part, offset, totalSize, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadPart)
 with the ID of the upload session that was created, a `Buffer` containing the part
 of the file starting at `offset`, and the total size of the file being uploaded.
 When the upload of a part succeeds, the callback will be called with a part record,
@@ -315,7 +314,7 @@ client.files.uploadPart('93D9A837B45F', part, 8388608, 2147483648, {part_id: 'fe
 #### Commit Upload Session
 
 Once all parts of the file have been uploaded, finalize the upload by calling
-[`files.commitUploadSession(sessionID, fileHash, parts, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#commitUploadSession)
+[`files.commitUploadSession(sessionID, fileHash, parts, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#commitUploadSession)
 with the upload session ID, the base64-encoded SHA1 hash of the entire file, and the list of
 successfully-uploaded part records.  This will complete the upload and create the
 full file in the destination folder.
@@ -343,7 +342,7 @@ client.files.commitUploadSession(
 
 An in-progress upload session may be destroyed, along with all parts already uploaded,
 by calling
-[`files.abortUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#abortUploadSession).
+[`files.abortUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#abortUploadSession).
 This operation cannot be undone.
 
 ```js
@@ -355,7 +354,7 @@ client.files.abortUploadSession('93D9A837B45F', callback);
 
 The list of parts successfully uploaded to an in-progress upload session can be
 retrieved by calling
-[`files.getUploadSessionParts(sessionID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getUploadSessionParts).
+[`files.getUploadSessionParts(sessionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getUploadSessionParts).
 The list is returned as a paged collection using the `limit` and `offset` options.
 
 ```js
@@ -366,7 +365,7 @@ client.files.getUploadSessionParts('93D9A837B45F', {limit: 100}, callback);
 #### Get Upload Session Status
 
 Information about an in-progress upload session can be retrieved by calling
-[`files.getUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getUploadSession).
+[`files.getUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getUploadSession).
 
 ```js
 // Get info about upload session 93D9A837B45F
@@ -377,7 +376,7 @@ Upload Preflight Check
 ----------------------
 
 The Preflight Check in the
-[`files.preflightUploadFile(parentFolderID, fileData, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadFile)
+[`files.preflightUploadFile(parentFolderID, fileData, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#preflightUploadFile)
 method will verify that a file will be accepted by Box before
 you send all the bytes over the wire.  Preflight checks verify all permissions
 as if the file was actually uploaded including:
@@ -407,7 +406,7 @@ client.files.preflightUploadFile(
 ```
 
 For uploading a new version of a file, use the
-[`files.preflightUploadNewFileVersion(fileID, fileData, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#preflightUploadNewFileVersion)
+[`files.preflightUploadNewFileVersion(fileID, fileData, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#preflightUploadNewFileVersion)
 method.
 
 ```js
@@ -415,11 +414,23 @@ method.
 client.files.preflightUploadNewFileVersion('87646', {size: 300000000}, null, callback);
 ```
 
+Move a File
+-----------
+
+To move a file from one folder to another, call
+[`files.move(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#move)
+with the ID of the file to move and the ID of the folder to move it to.
+
+```js
+// Move file 12345 to folder 9876
+client.files.move('12345', '9876', callback);
+```
+
 Copy a File
 -----------
 
 A file can be copied to a new folder with the
-[`files.copy(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#copy)
+[`files.copy(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#copy)
 method.
 
 ```js
@@ -438,7 +449,7 @@ Delete a File
 -------------
 
 Calling the
-[`files.delete(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#delete)
+[`files.delete(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#delete)
 method will move the file to the user's trash.
 
 ```js
@@ -449,7 +460,7 @@ Delete Permanently
 -------------
 
 Calling the
-[`files.deletePermanently(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#deletePermanently)
+[`files.deletePermanently(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deletePermanently)
 method will remove the file permanently from the user's trash.
 
 ```js
@@ -459,14 +470,13 @@ client.files.deletePermanently('12345', callback);
 Get a Trashed File
 ------------------
 
-Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getTrashedFile) method.
+Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTrashedFile) method.
 ```js
-client.files.getTrashedFile('12345', qs, callback);
+client.files.getTrashedFile('12345', {}, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -477,15 +487,14 @@ Get File Versions
 -----------------
 
 Retrieve a list of previous versions of a file by calling the
-[`files.getVersions(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getVersions).
+[`files.getVersions(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getVersions).
 
 ```js
 client.files.getVersions('12345', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -496,7 +505,7 @@ Upload a New Version of a File
 ------------------------------
 
 New versions of a file can be uploaded with the
-[`files.uploadNewFileVersion(fileID, content, callback)`](http://opensource.box.com/box-node-sdk/Files.html#uploadNewFileVersion) method.
+[`files.uploadNewFileVersion(fileID, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadNewFileVersion) method.
 
 ```js
 var fs = require('fs');
@@ -521,8 +530,8 @@ Download a Previous Version of a File
 
 For users with premium accounts, previous versions of a file can be downloaded
 by calling
-[`files.getReadStream(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getReadStream)
-with a `version` query string parameter.
+[`files.getReadStream(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getReadStream)
+with `options.version` specified.
 
 ```js
 var fs = require('fs');
@@ -542,7 +551,7 @@ Delete a Previous File Version
 ------------------------------
 
 An old version of a file can be moved to the trash by calling the
-[`files.deleteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#deleteVersion)
+[`files.deleteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteVersion)
 method.
 
 ```js
@@ -552,8 +561,10 @@ client.files.deleteVersion('12345', '98768', callback)
 Create a Shared Link
 --------------------
 
-A shared link for a file can be generated by passing shared link parameters to
-[`files.update(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#update).
+A shared link for a file can be generated by passing an object containing the desired
+shared link access level to
+[`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
+in the `updates` parameter.
 
 ```js
 client.files.update('93745', {shared_link: client.accessLevels.DEFAULT}, callback)
@@ -562,7 +573,7 @@ client.files.update('93745', {shared_link: client.accessLevels.DEFAULT}, callbac
 Promote Version
 ---------------
 
-Promote file version to the top of the stack by calling the [`files.promoteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#promoteVersion) method.
+Promote file version to the top of the stack by calling the [`files.promoteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#promoteVersion) method.
 
 ```js
 client.files.promoteVersion('12345', '98768', callback);
@@ -572,7 +583,7 @@ Get Thumbnail
 -------------
 
 A thumbnail for a file can be retrieved by calling
-[`files.getThumbnail(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getThumbnail).
+[`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail).
 
 ```js
 client.files.getThumbnail('12345', null, function(error, response) {
@@ -595,7 +606,7 @@ Get Embed Link
 --------------
 
 An embed link for a file can be generated by calling the
-[`files.getEmbedLink(fileID,callback)`](http://opensource.box.com/box-node-sdk/Files.html#getEmbedLink)
+[`files.getEmbedLink(fileID,callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getEmbedLink)
 method. Embed link is an expiring URL for embedding a Box file preview into a webpage,
 usually via an `<iframe>` element.
 
@@ -609,7 +620,7 @@ Add File to a Collection
 ------------------------
 
 To add a file to a collection, call the
-[`files.addToCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#addToCollection)
+[`files.addToCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addToCollection)
 method with the IDs of the file and collection.
 
 ```js
@@ -620,7 +631,7 @@ Remove File from a Collection
 -----------------------------
 
 To remove a file from a collection, call the
-[`files.removeFromCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#removeFromCollection)
+[`files.removeFromCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#removeFromCollection)
 method with the IDs of the file and collection.
 
 ```js
@@ -631,7 +642,7 @@ Lock a File
 -----------
 
 A file can be locked, which prevents other users from editing the file, by calling the
-[`files.lock(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#lock)
+[`files.lock(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#lock)
 method  You may optionally prevent other users from downloading the file, as well as set
 an expiration time for the lock.
 
@@ -650,7 +661,7 @@ Unlock a File
 -------------
 
 A file can be unlocked by calling the
-[`files.unlock(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#unlock)
+[`files.unlock(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#unlock)
 method.
 
 ```js
@@ -661,7 +672,7 @@ Restore a File From Trash
 -------------------------
 
 Calling the
-[`files.restoreFromTrash(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#restoreFromTrash)
+[`files.restoreFromTrash(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#restoreFromTrash)
 will restore an item from the user's trash.  Default behavior is to restore the item
 to the folder it was in before it was moved to the trash. Options are available
 to handle possible failure cases: if an item with the same name already exists in
@@ -684,7 +695,7 @@ Create Metadata
 ---------------
 
 Metadata can be created on a file by calling
-[`files.addMetadata(fileID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/Files.html#addMetadata)
+[`files.addMetadata(fileID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addMetadata)
 with a metadata template and an object of key/value pairs to add as metadata.
 
 ```js
@@ -696,9 +707,9 @@ Get Metadata
 ------------
 
 Retrieve a file's metadata by calling
-[`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getAllMetadata),
+[`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getAllMetadata),
 to retrieve all metadata, or
-[`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getMetadata)
+[`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getMetadata)
 to retrieve a single template.
 
 ```js
@@ -709,7 +720,7 @@ Update Metadata
 ---------------
 
 Update a file's metadata by calling
-[`files.updateMetadata(fileID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/Files.html#updateMetadata)
+[`files.updateMetadata(fileID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#updateMetadata)
 with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
 
 ```js
@@ -725,7 +736,7 @@ Delete Metadata
 ---------------
 
 A file's metadata can be removed by calling
-[`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/Files.html#deleteMetadata).
+[`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteMetadata).
 
 ```js
 client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
@@ -734,16 +745,15 @@ client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metad
 Get Watermark
 -------------
 To get watermark information for a file call the
-[`files.getWatermark(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getWatermark)
+[`files.getWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getWatermark)
 method.
 
 ```js
 client.files.getWatermark('75937', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
@@ -754,7 +764,7 @@ Apply Watermark
 ---------------
 
 To apply or update the watermark to a file call the
-[`files.applyWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#applyWatermark)
+[`files.applyWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#applyWatermark)
 method.
 
 ```js
@@ -765,7 +775,7 @@ Remove Watermark
 ----------------
 
 A file's watermark can be removed by calling
-[`files.removeWatermark(fileID, callback)`](http://opensource.box.com/box-node-sdk/Files.html#removeWatermark).
+[`files.removeWatermark(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#removeWatermark).
 
 ```js
 client.files.removeWatermark('67890', callback);

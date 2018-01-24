@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.0
+
+- Added support for [metadata template deletion](./docs/metadata.md#delete-metadata-template)
+
 ## 1.11.0
 
 - Added options to preserve file timestamps on [file upload](./docs/files.md#upload-a-file)

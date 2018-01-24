@@ -224,6 +224,46 @@ describe('Metadata', function() {
 		});
 	});
 
+	describe('deleteTemplate()', function() {
+		var scope = 'enterprise',
+			template = 'testtemplate';
+
+		it('should make DELETE call to delete template when called', function() {
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del').withArgs('/metadata_templates/' + scope + '/' + template + '/schema');
+			metadata.deleteTemplate(scope, template);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			metadata.deleteTemplate(scope, template);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			metadata.deleteTemplate(scope, template, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return metadata.deleteTemplate(scope, template)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
 	describe('updateTemplate()', function() {
 
 		var scope,

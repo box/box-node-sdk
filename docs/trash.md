@@ -12,7 +12,7 @@ Get Trashed Items
 -----------------
 
 To retrieve files and folders that have been moved to the Trash, call the
-[`trash.get(options, callback)`](http://opensource.box.com/box-node-sdk/Trash.html#get)
+[`trash.get(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Trash.html#get)
 method.
 
 ```js

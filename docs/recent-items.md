@@ -10,7 +10,7 @@ Get a User's Recent Items
 -------------------------
 
 Get a list of all recent items the user has by calling
-[`recentItems.get(options, callback)`](http://opensource.box.com/box-node-sdk/RecentItems.html#get).
+[`recentItems.get(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RecentItems.html#get).
 
 ```js
 client.recentItems.get({limit: 1000}, callback);

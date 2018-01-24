@@ -14,7 +14,7 @@ Get a Comment's Information
 ---------------------------
 
 Calling
-[`comments.get(commentID, qs, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#get)
+[`comments.get(commentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#get)
 on a comment returns a snapshot of the comment's info.
 
 ```js
@@ -25,7 +25,7 @@ Get the Comments on a File
 --------------------------
 
 You can get all of the comments on a file by calling the
-[`files.getComments(fileID, qs, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getComments) method.
+[`files.getComments(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getComments) method.
 
 ```js
 client.files.getComments('98765', {fields: 'created_by,created_at,tagged_message'}, callback);
@@ -34,7 +34,7 @@ client.files.getComments('98765', {fields: 'created_by,created_at,tagged_message
 Add a Comment to a File
 -----------------------
 
-A comment can be added to a file with the [`comments.create(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#create)
+A comment can be added to a file with the [`comments.create(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#create)
 method.
 
 ```js
@@ -46,7 +46,7 @@ A comment's message can also contain @mentions by using the string
 the ID and username of the person being mentioned. [See the documentation]
 (https://developers.box.com/docs/#comments-comment-object) on the
 `tagged_message` field for more information on @mentions.  To make a tagged comment,
-use the [`comments.createTaggedComment(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#createTaggedComment)
+use the [`comments.createTaggedComment(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#createTaggedComment)
 method.
 
 ```js
@@ -57,7 +57,7 @@ Change a Comment's Message
 --------------------------
 
 The message of a comment can be changed with the
-[`comments.update(commentID, options, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#update)
+[`comments.update(commentID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#update)
 method.
 
 ```js
@@ -68,7 +68,7 @@ Delete a Comment
 ----------------
 
 A comment can be deleted with the
-[`comments.delete(commentID, callback)`](http://opensource.box.com/box-node-sdk/Comments.html#delete)
+[`comments.delete(commentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#delete)
 method.
 
 ```js

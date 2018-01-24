@@ -40,7 +40,7 @@ as `response.body`.
 ### GET
 
 To make a GET call, call the
-[`client.get(url, params, callback)`](http://opensource.box.com/box-node-sdk/BoxClient.html#get)
+[`client.get(url, params, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/BoxClient.html#get)
 method with the URL of the endpoint and the request params.
 
 ```js
@@ -63,7 +63,7 @@ client.get('/files/1234', params, function(err, response) {
 ### POST
 
 To make a POST call, call the
-[`client.post(url, params, callback)`](http://opensource.box.com/box-node-sdk/BoxClient.html#post)
+[`client.post(url, params, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/BoxClient.html#post)
 method with the URL of the endpoint and the request params.
 
 ```js
@@ -89,7 +89,7 @@ client.post('/folders', params, function(err, response) {
 ### PUT
 
 To make a PUT call, call the
-[`client.put(url, params, callback)`](http://opensource.box.com/box-node-sdk/BoxClient.html#put)
+[`client.put(url, params, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/BoxClient.html#put)
 method with the URL of the endpoint and the request params.
 
 ```js
@@ -112,7 +112,7 @@ client.put('/folders/1234', params, function(err, response) {
 ### DELETE
 
 To make a DELETE call, call the
-[`client.del(url, params, callback)`](http://opensource.box.com/box-node-sdk/BoxClient.html#del)
+[`client.del(url, params, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/BoxClient.html#del)
 method with the URL of the endpoint and the request params.
 
 ```js
@@ -129,7 +129,7 @@ client.del('/folders/1234', null, function(err, response) {
 ### OPTIONS
 
 To make an OPTIONS call, call the
-[`client.options(url, params, callback)`](http://opensource.box.com/box-node-sdk/BoxClient.html#options)
+[`client.options(url, params, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/BoxClient.html#options)
 method with the URL of the endpoint and the request params.
 
 ```js

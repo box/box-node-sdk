@@ -13,7 +13,7 @@ and restore.
 Create a Web Link
 -----------------
 
-To create a web link call the [`weblinks.create(url, parentID, options, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#create)
+To create a web link call the [`weblinks.create(url, parentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Weblinks.html#create)
 method.
 
 ```js
@@ -34,9 +34,8 @@ Get a Web Link's information
 client.weblinks.get('1234', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 client.weblinks.get('1234', {fields: 'item_status,path_collection'}, callback);
@@ -45,8 +44,8 @@ client.weblinks.get('1234', {fields: 'item_status,path_collection'}, callback);
 Update a Web Link
 -----------------
 
-To update a web link call the [`weblinks.update(weblinkID, options, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#update)
-method.
+To update a web link call the [`weblinks.update(weblinkID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Weblinks.html#update)
+method with the fields to update and their new values.
 
 ```js
 client.weblinks.update(
@@ -61,7 +60,7 @@ client.weblinks.update(
 Delete a Web Link
 -----------------
 
-To move a web link to the trash call the [`weblinks.delete(weblinkID, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#delete)
+To move a web link to the trash call the [`weblinks.delete(weblinkID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Weblinks.html#delete)
 method.
 
 ```js

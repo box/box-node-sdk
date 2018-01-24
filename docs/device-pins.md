@@ -9,7 +9,7 @@ Get Device Pin
 --------------
 
 To get information about a specific device pin, call the
-[`devicePins.get(pinID, options, callback)`](http://opensource.box.com/box-node-sdk/DevicePins.html#get)
+[`devicePins.get(pinID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/DevicePins.html#get)
 method with the ID of the device pin.
 
 ```js
@@ -20,7 +20,7 @@ Delete Device Pin
 -----------------
 
 To remove a specific device pin, call the
-[`devicePins.delete(pinID, options, callback)`](http://opensource.box.com/box-node-sdk/DevicePins.html#delete)
+[`devicePins.delete(pinID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/DevicePins.html#delete)
 method with the ID of the device pin.
 
 ```js
@@ -31,7 +31,7 @@ Get All Device Pins
 -------------------
 
 Get all device pins records for the current enterprise by calling the
-[`devicePins.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/DevicePins.html#getAll)
+[`devicePins.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/DevicePins.html#getAll)
 method.
 
 ```js
