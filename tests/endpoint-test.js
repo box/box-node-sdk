@@ -1307,15 +1307,15 @@ describe('Endpoint', function() {
 					};
 
 				apiMock.post('/2.0/collaboration_whitelist_entries', expectedPostBody)
-				.matchHeader('Authorization', function(authHeader) {
-					assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
-					return true;
-				})
-				.matchHeader('User-Agent', function(uaHeader) {
-					assert.include(uaHeader, 'Box Node.js SDK v');
-					return true;
-				})
-				.reply(200, postFixture);
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, postFixture);
 
 				return basicClient.collaborationWhitelist.addDomain(domain, direction)
 					.then(collabWhitelist => {
@@ -1336,15 +1336,15 @@ describe('Endpoint', function() {
 					};
 
 				apiMock.post('/2.0/collaboration_whitelist_exempt_targets', expectedPostBody)
-				.matchHeader('Authorization', function(authHeader) {
-					assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
-					return true;
-				})
-				.matchHeader('User-Agent', function(uaHeader) {
-					assert.include(uaHeader, 'Box Node.js SDK v');
-					return true;
-				})
-				.reply(200, postFixture);
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, postFixture);
 
 				return basicClient.collaborationWhitelist.addExemption(userID)
 					.then(collabWhitelist => {

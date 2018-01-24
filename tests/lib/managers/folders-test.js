@@ -451,7 +451,7 @@ describe('Folders', function() {
 				throw error;
 			});
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-        .returns(p);
+				.returns(p);
 
 			foldersMock.expects('update').never();
 
@@ -473,7 +473,7 @@ describe('Folders', function() {
 				throw error;
 			});
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-        .returns(p);
+				.returns(p);
 
 			foldersMock.expects('update').never();
 
@@ -492,13 +492,13 @@ describe('Folders', function() {
 					{id: '111'}
 				]
 			};
-      
-      var expectedBody = {
-        collections: [
-          { id: COLLECTION_ID },
-          { id: '111' }
-        ]
-      };
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
+			};
 
 			var error = new Error('Failed update');
 
@@ -508,9 +508,9 @@ describe('Folders', function() {
 			});
 			var foldersMock = sandbox.mock(folders);
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-        .returns(Promise.resolve(folder));
+				.returns(Promise.resolve(folder));
 			foldersMock.expects('update').withArgs(FOLDER_ID, expectedBody)
-        .returns(p);
+				.returns(p);
 
 			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
 
@@ -528,13 +528,13 @@ describe('Folders', function() {
 					{id: '111'}
 				]
 			};
-      
-      var expectedBody = {
-        collections: [
-          { id: COLLECTION_ID },
-          { id: '111' }
-        ]
-      };
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
+			};
 
 			var error = new Error('Failed update');
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
@@ -544,9 +544,9 @@ describe('Folders', function() {
 
 			var foldersMock = sandbox.mock(folders);
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-        .returns(Promise.resolve(folder));
+				.returns(Promise.resolve(folder));
 			foldersMock.expects('update').withArgs(FOLDER_ID, expectedBody)
-        .returns(p);
+				.returns(p);
 
 			return folders.addToCollection(FOLDER_ID, COLLECTION_ID)
 				.catch(err => {
@@ -683,7 +683,7 @@ describe('Folders', function() {
 				throw error;
 			});
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-        .returns(p);
+				.returns(p);
 			foldersMock.expects('update').never();
 
 			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, function(err) {

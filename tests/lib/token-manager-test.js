@@ -618,7 +618,7 @@ describe('token-manager', function() {
 			};
 
 			sandbox.mock(tokenManager).expects('getTokens')
-        .withArgs(expectedTokenParams, options.tokenRequestOptions)
+				.withArgs(expectedTokenParams, options.tokenRequestOptions)
 				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, options)
@@ -709,7 +709,8 @@ describe('token-manager', function() {
 				noTimestamp: true
 			};
 
-			sandbox.mock(jwtFake).expects('sign').withArgs(sinon.match(expectedClaims), sinon.match.string, sinon.match(expectedOptions));
+			sandbox.mock(jwtFake).expects('sign')
+				.withArgs(sinon.match(expectedClaims), sinon.match.string, sinon.match(expectedOptions));
 			sandbox.stub(tokenManager, 'getTokens');
 
 			tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor });
@@ -739,7 +740,9 @@ describe('token-manager', function() {
 
 
 			sandbox.stub(jwtFake, 'sign').returns(actorJWT);
-			sandbox.mock(tokenManager).expects('getTokens').withArgs(expectedTokenParams, null).returns(Promise.resolve(tokenInfo));
+			sandbox.mock(tokenManager).expects('getTokens')
+				.withArgs(expectedTokenParams, null)
+				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
 				.then(tokens => {
@@ -756,7 +759,8 @@ describe('token-manager', function() {
 			};
 
 			sandbox.stub(jwtFake, 'sign').throws(jwtError);
-			sandbox.mock(tokenManager).expects('getTokens').never();
+			sandbox.mock(tokenManager).expects('getTokens')
+				.never();
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
 				.catch(err => {

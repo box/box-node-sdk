@@ -1138,6 +1138,7 @@ describe('Box Node SDK', function() {
 
 		// This test takes a while to run due to all the bytes being shuffled around,
 		// bumping up the timeout so we don't see flaky behavior if it runs long
+		// eslint-disable-next-line no-invalid-this
 		this.timeout(4000);
 
 		var filePath = path.resolve(__dirname, './fixtures/test.pdf');
@@ -1169,7 +1170,7 @@ describe('Box Node SDK', function() {
 
 		nock('https://upload.box.com').post('/api/2.0/files/upload_sessions')
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.reply(201, {
@@ -1188,27 +1189,28 @@ describe('Box Node SDK', function() {
 				type: 'upload_session',
 				num_parts_processed: 0
 			})
-			.put('/api/2.0/files/upload_sessions/' + uploadSessionID)
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`)
 			.times(numParts)
 			.reply((uri, requestBody) => {
 				// requestBody is a hex-encoded string, need to decode to get raw length
 				var rawRequestBody = new Buffer(requestBody, 'hex');
 				bytesUploaded += rawRequestBody.length;
-				var partID = '' + partCounter;
+				var partID = `${partCounter}`;
 				var response = {
 					part: {
-						part_id: '' + partCounter,
+						part_id: `${partCounter}`,
 						offset: partCounter * partSize,
 						size: rawRequestBody.length,
-						sha1: crypto.createHash('sha1').update(partID).digest('base64')
+						sha1: crypto.createHash('sha1').update(partID)
+							.digest('base64')
 					}
 				};
 				partCounter += 1;
 				return response;
 			})
-			.post('/api/2.0/files/upload_sessions/' + uploadSessionID + '/commit')
+			.post(`/api/2.0/files/upload_sessions/${uploadSessionID}/commit`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.reply(201, fileResponse);
@@ -1219,6 +1221,7 @@ describe('Box Node SDK', function() {
 		});
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
 
+		/* eslint-disable promise/no-callback-in-promise */
 		request.get('https://www.example.com/test-file.pdf').on('response', responseStream => {
 
 			client.files.getChunkedUploader('1234', fileSize, fileName, responseStream)
@@ -1234,7 +1237,11 @@ describe('Box Node SDK', function() {
 					uploader.on('chunkError', err => done(err));
 
 					uploader.start();
+				})
+				.catch(err => {
+					done(err);
 				});
 		});
+		/* eslint-enable promise/no-callback-in-promise */
 	});
 });

@@ -116,9 +116,11 @@ describe('box-client', function() {
 
 			var expectedHeader = `agent=box-node-sdk/${pkg.version}; env=Node/`;
 
-			sandbox.mock(requestManagerFake).expects('makeRequest').withArgs({
-				headers: sinon.match({ 'X-Box-UA': sinon.match(expectedHeader) })
-			}).returns(Promise.resolve(fakeOKResponse));
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs({
+					headers: sinon.match({ 'X-Box-UA': sinon.match(expectedHeader) })
+				})
+				.returns(Promise.resolve(fakeOKResponse));
 
 			return basicClient._makeRequest({});
 		});
@@ -220,7 +222,7 @@ describe('box-client', function() {
 				throw error;
 			});
 			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error))
-        .returns(p);
+				.returns(p);
 
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			sandbox.mock(requestManagerFake).expects('makeRequest')

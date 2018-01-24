@@ -595,7 +595,7 @@ describe('Files', function() {
 				throw error;
 			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-        .returns(p);
+				.returns(p);
 
 			filesMock.expects('update').never();
 
@@ -617,7 +617,7 @@ describe('Files', function() {
 				throw error;
 			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-        .returns(p);
+				.returns(p);
 
 			filesMock.expects('update').never();
 
@@ -636,13 +636,13 @@ describe('Files', function() {
 					{id: '111'}
 				]
 			};
-      
-      var expectedBody = {
-        collections: [
-          { id: COLLECTION_ID },
-          { id: '111' }
-        ]
-      };
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
+			};
 
 			var error = new Error('Failed update');
 
@@ -653,9 +653,9 @@ describe('Files', function() {
 				throw error;
 			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-        .returns(Promise.resolve(file));
+				.returns(Promise.resolve(file));
 			filesMock.expects('update').withArgs(FILE_ID, expectedBody)
-        .returns(p);
+				.returns(p);
 
 			files.addToCollection(FILE_ID, COLLECTION_ID, function(err) {
 
@@ -673,13 +673,13 @@ describe('Files', function() {
 					{id: '111'}
 				]
 			};
-      
-      var expectedBody = {
-        collections: [
-          { id: COLLECTION_ID },
-          { id: '111' }
-        ]
-      };
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
+			};
 
 			var error = new Error('Failed update');
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
@@ -689,9 +689,9 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-        .returns(Promise.resolve(file));
+				.returns(Promise.resolve(file));
 			filesMock.expects('update').withArgs(FILE_ID, expectedBody)
-        .returns(p);
+				.returns(p);
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID)
 				.catch(err => {
