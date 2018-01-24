@@ -32,8 +32,8 @@ Get a Folder's Information
 --------------------------
 
 Folder information can be retrieved by calling the
-[`folders.get(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get)
-method. Use the `queryString` parameter to specify the desired fields. Requesting
+[`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get)
+method. Use the `fields` option to specify the desired fields. Requesting
 information for only the fields you need can improve performance and reduce the
 size of the network request.
 
@@ -46,7 +46,8 @@ client.folders.get(
 ```
 
 The user's root folder can be accessed by calling the
-[`folders.get(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get) method with the `folderID` value of 0.
+[`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#get)
+method with the `folderID` value of 0.
 
 ```js
 client.folders.get(
@@ -60,7 +61,10 @@ client.folders.get(
 Get a Folder's Items
 --------------------
 
-Folder items can be retrieved by calling the [`folders.getItems(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getItems) method. Use the `queryString` parameter to specify the desired fields and control the result set paging. Requesting information for only the fields you need can improve performance and reduce the size of the network request.
+Folder items can be retrieved by calling the
+[`folders.getItems(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getItems)
+method. Use the `fields` option to specify the desired fields and control the result set paging.
+Requesting information for only the fields you need can improve performance and reduce the size of the network request.
 
 ```js
 client.folders.getItems(
@@ -78,7 +82,9 @@ client.folders.getItems(
 Update a Folder's Information
 -----------------------------
 
-Updating a folder's information is done by calling the [`folders.update(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#update) method. Use the `queryString` parameter to specify the fields to update, along with their new values.
+Updating a folder's information is done by calling the 
+[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#update)
+method. Use the `updates` parameter to specify the fields to update and their new values.
 
 ```js
 client.folders.update('12345', {sync_state: 'synced'}, callback);
@@ -125,7 +131,7 @@ client.folders.move('12345', '67890', callback);
 Rename a Folder
 ---------------
 
-Use the [`folders.update(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#update) method to rename a folder by passing a new name for the folder in the `queryString`.
+Use the [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#update) method to rename a folder by passing a new name for the folder in `updates.name`.
 
 ```js
 client.folders.update('12345', {name: 'New Name'}, callback);
@@ -135,7 +141,7 @@ client.folders.update('12345', {name: 'New Name'}, callback);
 Delete a Folder
 ---------------
 
-A folder can be deleted with the [`folders.delete(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#delete) method.
+A folder can be deleted with the [`folders.delete(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#delete) method.
 
 ```js
 client.folders.delete('12345', {recursive: true}, callback);
@@ -145,7 +151,7 @@ client.folders.delete('12345', {recursive: true}, callback);
 Get a Trashed Folder
 ---------------
 
-Information about a folder in the trash can be retrieved with the [`folders.getTrashedFolder(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getTrashedFolder) method.
+Information about a folder in the trash can be retrieved with the [`folders.getTrashedFolder(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getTrashedFolder) method.
 
 ```js
 client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,collections,sync_state'},
@@ -189,7 +195,7 @@ Create a Shared Link for a Folder
 ---------------------------------
 
 You can create a shared link for a folder by calling the
-[`folders.update(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#update) method, passing a new `shared_link` value in the `queryString` parameter.
+[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#update) method, passing a new `shared_link` value in the `updates` parameter.
 
 ```js
 client.folders.update(
@@ -210,7 +216,7 @@ A set of shared link access level constants are available through the SDK for co
 Get Collaborations for a Folder
 -----------------------------------
 
-The [`folders.getCollaborations(folderID, queryString, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getCollaborations) method will return a collection of collaboration objects for a folder. Use the `queryString` parameter to specify the desired collaboration fields and control the result set paging.
+The [`folders.getCollaborations(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getCollaborations) method will return a collection of collaboration objects for a folder. Use the `options` parameter to specify the desired collaboration fields and control the result set paging.
 
 ```js
 client.folders.getCollaborations(
@@ -224,7 +230,7 @@ client.folders.getCollaborations(
 );
 ```
 
-All collaborations can be returned by passing `null` for the `queryString` parameter.
+All collaborations can be returned by passing `null` for the `options` parameter.
 
 ```js
 client.folders.getCollaborations('12345', null, callback);
@@ -306,7 +312,7 @@ client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.met
 Get Watermark
 -------------
 To get watermark information for a folder call the
-[`folders.getWatermark(folderID, qs, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getWatermark)
+[`folders.getWatermark(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getWatermark)
 method.
 
 ```js

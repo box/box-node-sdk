@@ -42,15 +42,14 @@ method.
 client.termsOfService.get('1234', null, callback);
 ```
 
-Requesting information for only the fields you need with the `option` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 Update a Terms of Service for an Enterprise
 -------------------------------------------
 
-To update a terms of service call the [`termsOfService.update(termsOfServicesID, options, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#update)
-method.
+To update a terms of service call the [`termsOfService.update(termsOfServicesID, updates, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#update)
+method with the fields to update and their new values.
 
 ```js
 client.termsOfService.update('1234', 

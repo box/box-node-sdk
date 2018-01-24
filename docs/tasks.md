@@ -32,15 +32,14 @@ client.tasks.create(
 Get a Task's Information
 ------------------------
 
-To get a task information call the [`tasks.get(taskID, qs, callback)`](http://opensource.box.com/box-node-sdk/Tasks.html#get) method.
+To get a task information call the [`tasks.get(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/Tasks.html#get) method.
 
 ```js
 client.tasks.get('1234', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 client.tasks.get('1234', {fields: 'message,is_completed'}, callback);
@@ -50,8 +49,8 @@ Update a Task
 -------------
 
 To update a task call the
-[`tasks.update(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/Tasks.html#update)
-method.
+[`tasks.update(taskID, updates, callback)`](http://opensource.box.com/box-node-sdk/Tasks.html#update)
+method with the set of fields to update and their new values.
 
 ```js
 client.tasks.update(
@@ -87,9 +86,8 @@ method.
 client.tasks.getAssignments('83476', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 client.tasks.getAssignments('83476', {fields: 'assigned_to'}, callback);
@@ -106,9 +104,8 @@ method with the ID of the assignment to get.
 client.tasks.getAssignment('83476', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 client.tasks.getAssignment('83476', {fields: 'item,assigned_to'}, callback);

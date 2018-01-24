@@ -63,7 +63,7 @@ client.events.getCurrentStreamPosition(callback);
 ### Get Events
 
 To get the latest chunk of events, you can call
-[`events.get(qs, callback)`](http://opensource.box.com/box-node-sdk/Events.html#get).
+[`events.get(options, callback)`](http://opensource.box.com/box-node-sdk/Events.html#get).
 
 ```js
 client.events.get(null, callback);
