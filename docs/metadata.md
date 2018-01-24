@@ -31,7 +31,7 @@ Create Metadata Template
 ------------------------
 
 To create a new metadata template, call the
-[`metadata.createTemplate(templateName, fields, options, callback)`](http://opensource.box.com/box-node-sdk/Metadata.html#createTemplate)
+[`metadata.createTemplate(templateName, fields, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#createTemplate)
 method.
 
 ```js
@@ -72,7 +72,7 @@ Get Metadata Template
 ---------------------
 
 To retrieve a specific metadata template, call the
-[`metadata.getTemplateSchema(scope, template, callback)`](http://opensource.box.com/box-node-sdk/Metadata.html#getTemplateSchema)
+[`metadata.getTemplateSchema(scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplateSchema)
 method with the scope and template key.
 
 ```js
@@ -83,7 +83,7 @@ Update Metadata Template
 ------------------------
 
 To update a metadata template, call the
-[`metadata.updateTemplate(scope, template, operations, callback)`](http://opensource.box.com/box-node-sdk/Metadata.html#updateTemplate)
+[`metadata.updateTemplate(scope, template, operations, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#updateTemplate)
 method with the operations to perform on the template.  See the
 [API Documentation](https://docs.box.com/reference#update-metadata-schema)
 for more information on the operations available.
@@ -108,7 +108,7 @@ Get Enterprise Metadata Templates
 ---------------------------------
 
 Get all metadata templates for the current enterprise and scope by calling the
-[`metadata.getTemplates(scope, callback)`](http://opensource.box.com/box-node-sdk/Metadata.html#getTemplates)
+[`metadata.getTemplates(scope, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplates)
 method.
 
 ```js

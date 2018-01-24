@@ -17,7 +17,7 @@ Add a Collaboration
 -------------------
 
 A collaboration can be added for an existing user with
-[`collaborations.createWithUserID(userID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserID).
+[`collaborations.createWithUserID(userID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#createWithUserID).
 The `role` parameter determines what permissions the collaborator will have on the
 folder.  You can create a collaboration on a file by setting the `type` option to `'file'`.
 
@@ -40,7 +40,7 @@ client.collaborations.createWithUserID(
 ```
 
 You can also add a collaboration by providing an email address with
-[`collaborations.createWithUserEmail(email, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithUserEmail). If the recipient
+[`collaborations.createWithUserEmail(email, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#createWithUserEmail). If the recipient
 doesn't have a Box account, they will be asked create one.
 
 ```js
@@ -48,7 +48,7 @@ client.collaborations.createWithUserEmail('user@example.com', '987654', client.c
 ```
 
 Groups can also be added as collaborators by providing the group ID to
-[`collaborations.createWithGroupID(groupID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#createWithGroupID).
+[`collaborations.createWithGroupID(groupID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#createWithGroupID).
 All members of the group will receive the same role and permissions.
 
 ```js
@@ -58,7 +58,7 @@ client.collaborations.createWithGroupID('56473', '987654', client.collaborationR
 Edit a Collaboration
 --------------------
 
-A collaboration can be edited by calling [`collaborations.update(collaborationID, updates, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#update)
+A collaboration can be edited by calling [`collaborations.update(collaborationID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#update)
 with the fields to be updated.  For example, to change the role of a collaboration:
 
 ```js
@@ -68,7 +68,7 @@ client.collaborations.update('56473', {role: client.collaborationRoles.PREVIEWER
 Remove a Collaboration
 ----------------------
 
-A collaboration can be removed by calling [`collaborations.delete(collaborationID, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#delete).
+A collaboration can be removed by calling [`collaborations.delete(collaborationID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#delete).
 
 ```js
 client.collaborations.delete('56473', callback);
@@ -77,7 +77,7 @@ client.collaborations.delete('56473', callback);
 Get a Collaboration's Information
 ---------------------------------
 
-Calling [`collaborations.get(collaborationID, options, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#get) on a
+Calling [`collaborations.get(collaborationID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#get) on a
 collaboration returns a snapshot of the collaboration's info.
 
 ```js
@@ -88,7 +88,7 @@ Get the Collaborations on a Folder
 ----------------------------------
 
 You can get all of the collaborations on a folder by calling
-[`folders.getCollaborations(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/Folders.html#getCollaborations)
+[`folders.getCollaborations(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getCollaborations)
 on the folder.
 
 ```js
@@ -99,7 +99,7 @@ Get the Collaborations on a File
 --------------------------------
 
 You can get the collection of collaborations on a file by calling
-[`files.getCollaborations(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/Files.html#getCollaborations)
+[`files.getCollaborations(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getCollaborations)
 with the ID of the file.
 
 ```js
@@ -110,7 +110,7 @@ Get Pending Collaborations
 --------------------------
 
 A collection of all the user's pending collaborations can be retrieved with
-[`collaborations.getPending(callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#getPending).
+[`collaborations.getPending(callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#getPending).
 
 ```js
 client.collaborations.getPending(callback);
@@ -120,7 +120,7 @@ Respond to Pending Collaborations
 ---------------------------------
 
 You can accept or reject a pending collaboration by calling
-[`collaborations.respondToPending(collaborationID,newStatus, callback)`](http://opensource.box.com/box-node-sdk/Collaborations.html#respondToPending)
+[`collaborations.respondToPending(collaborationID,newStatus, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#respondToPending)
 with a status of `'accepted'` or `'rejected'`.
 
 ```js

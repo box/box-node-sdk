@@ -19,7 +19,7 @@ Box Platform.
 Get Terms of Service for an Enterprise
 --------------------------------------
 
-To get terms of service call the [`termsOfService.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#getAll)
+To get terms of service call the [`termsOfService.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#getAll)
 method.
 
 ```js
@@ -35,7 +35,7 @@ client.termsOfService.getAll({ tos_type: 'managed' }, callback);
 Get a Terms of Service By ID for an Enterprise
 ----------------------------------------------
 
-To get the terms of service with an ID call the [`termsOfService.get(termsOfServicesID, options, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#get)
+To get the terms of service with an ID call the [`termsOfService.get(termsOfServicesID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#get)
 method.
 
 ```js
@@ -48,7 +48,7 @@ can improve performance and reduce the size of the network request.
 Update a Terms of Service for an Enterprise
 -------------------------------------------
 
-To update a terms of service call the [`termsOfService.update(termsOfServicesID, updates, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#update)
+To update a terms of service call the [`termsOfService.update(termsOfServicesID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#update)
 method with the fields to update and their new values.
 
 ```js
@@ -65,7 +65,7 @@ The termsOfServicesStatus can be set to 'enabled' or 'disabled'. You can also sp
 Create a Terms of Service for an Enterprise
 -------------------------------------------
 
-To create a terms of service call the [`termsOfService.create(termsOfServicesType, termsOfServicesStatus, termsOfServicesText, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#create)
+To create a terms of service call the [`termsOfService.create(termsOfServicesType, termsOfServicesStatus, termsOfServicesText, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#create)
 method.
 
 ```js
@@ -81,7 +81,7 @@ It is important to note that only two terms of service can exist per enterprise.
 Get Terms of Service Status for User
 ------------------------------------
 
-To get user status on a terms of service call the [`termsOfService.getUserStatus(termsOfStatusID, options, callback)`](http://opensource.box.com/box-node-sdk/TermsOfServiceUserStatuses.html#getUserStatus)
+To get user status on a terms of service call the [`termsOfService.getUserStatus(termsOfStatusID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfServiceUserStatuses.html#getUserStatus)
 method.
 
 ```js
@@ -97,7 +97,7 @@ If no user is specified, this will default to current user.
 Create User Status on Terms of Service 
 --------------------------------------
 
-To accept or decline a terms of service for a user who has never accepted/decline this terms of service before call the [`termsOfService.createUserStatus(termsOfServicesID, isAccepted, options, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#createUserStatus)
+To accept or decline a terms of service for a user who has never accepted/decline this terms of service before call the [`termsOfService.createUserStatus(termsOfServicesID, isAccepted, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#createUserStatus)
 method.
 
 ```js
@@ -111,7 +111,7 @@ If no user is specified, this will default to current user.
 Update User Status on Terms of Service 
 --------------------------------------
 
-To update user status on a terms of service call the [`termsOfService.updateUserStatus(termsOfServiceUserStatusID, isAccepted, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#updateUserStatus)
+To update user status on a terms of service call the [`termsOfService.updateUserStatus(termsOfServiceUserStatusID, isAccepted, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#updateUserStatus)
 method.
 
 ```js
@@ -123,7 +123,7 @@ It is important to note that this will accept or decline a custom terms of servi
 Accept or Decline a Terms of Service
 ------------------------------------
 
-To create user/terms of service association and accept/decline call the [`termsOfService.setUserStatus(termsOfServicesID, isAccepted, options, callback)`](http://opensource.box.com/box-node-sdk/TermsOfService.html#setUserStatus))
+To create user/terms of service association and accept/decline call the [`termsOfService.setUserStatus(termsOfServicesID, isAccepted, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#setUserStatus))
 method.
 
 ```js

@@ -16,7 +16,7 @@ Create a Webhook
 ----------------
 
 To attach a webhook to an item, call the
-[`webhooks.create(fileID, targetType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#create)
+[`webhooks.create(fileID, targetType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#create)
 method with the type and ID of the item, a URL to send notifications to, and a list
 of triggers.
 
@@ -61,7 +61,7 @@ Get a Webhook's Information
 ---------------------------
 
 Retrieve information about a specific webhook by calling
-[`webhooks.get(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#get)
+[`webhooks.get(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#get)
 to retrieve a webhook by ID.
 
 ```js
@@ -72,7 +72,7 @@ Get all Webhooks Information
 -----------------------------
 
 Get a list of all webhooks for the requesting application and user by calling the
-[`webhooks.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#getAll)
+[`webhooks.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#getAll)
 method.  The maximum limit per page of results is 200, Box uses the default limit of 100.
 
 ```js
@@ -83,7 +83,7 @@ Update a Webhook
 ----------------
 
 Update a file or folder's webhook by calling
-[`webhooks.update(webhookID, updates, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#update)
+[`webhooks.update(webhookID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#update)
 with the field you want to update as `updates.address` or `updates.trigger`.
 
 ```js
@@ -94,7 +94,7 @@ Delete a Webhook
 ----------------
 
 A file or folder's webhook can be removed by calling
-[`webhooks.delete(webhookID, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#delete).
+[`webhooks.delete(webhookID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#delete).
 
 ```js
 client.webhooks.delete('678901', callback);
@@ -104,7 +104,7 @@ Validate a Webhook Message
 --------------------------
 
 When you receive a webhook message from Box, you should validate it by calling
-[`BoxSDK.validateWebhookMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`](http://opensource.box.com/box-node-sdk/Webhooks.html#validateMessage),
+[`BoxSDK.validateWebhookMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#validateMessage),
 also available as `webhooks.validateMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`.
 
 ```js

@@ -13,7 +13,7 @@ and restore.
 Create a Web Link
 -----------------
 
-To create a web link call the [`weblinks.create(url, parentID, options, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#create)
+To create a web link call the [`weblinks.create(url, parentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Weblinks.html#create)
 method.
 
 ```js
@@ -44,7 +44,7 @@ client.weblinks.get('1234', {fields: 'item_status,path_collection'}, callback);
 Update a Web Link
 -----------------
 
-To update a web link call the [`weblinks.update(weblinkID, updates, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#update)
+To update a web link call the [`weblinks.update(weblinkID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Weblinks.html#update)
 method with the fields to update and their new values.
 
 ```js
@@ -60,7 +60,7 @@ client.weblinks.update(
 Delete a Web Link
 -----------------
 
-To move a web link to the trash call the [`weblinks.delete(weblinkID, callback)`](http://opensource.box.com/box-node-sdk/Weblinks.html#delete)
+To move a web link to the trash call the [`weblinks.delete(weblinkID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Weblinks.html#delete)
 method.
 
 ```js

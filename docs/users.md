@@ -15,7 +15,7 @@ Users represent an individual's account on Box.
 Get User's Information
 ----------------------------------
 
-To get a user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#get) method.
+To get a user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#get) method.
 
 ```js
 client.users.get('123', null, callback);
@@ -33,7 +33,7 @@ client.users.get('123', {fields: 'name,login'}, callback);
 Get the Current User's Information
 ----------------------------------
 
-To get the current user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#get) method with the `CURRENT_USER_ID` constant.
+To get the current user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#get) method with the `CURRENT_USER_ID` constant.
 
 ```js
 client.users.get(client.CURRENT_USER_ID, null, callback);
@@ -44,7 +44,7 @@ Update User
 -----------
 
 To update a user call the
-[`users.update(userID, updates, callback)`](http://opensource.box.com/box-node-sdk/Users.html#update)
+[`users.update(userID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#update)
 method where `updates` contains the fields to update.
 
 ```js
@@ -63,7 +63,7 @@ Delete User
 -----------
 
 To delete a user call the
-[`users.delete(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#delete)
+[`users.delete(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#delete)
 method.  If the user still has files in their account and the `force` parameter
 is not sent, an error is returned.
 
@@ -80,7 +80,7 @@ client.users.delete('123', {force: true}, callback);
 Get Email Aliases
 -----------------
 
-To get a users email aliases call the [`users.getEmailAliases(userID, callback)`](http://opensource.box.com/box-node-sdk/Users.html#getEmailAliases) method.
+To get a users email aliases call the [`users.getEmailAliases(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getEmailAliases) method.
 
 ```js
 client.users.getEmailAliases('123', callback);
@@ -90,7 +90,7 @@ client.users.getEmailAliases('123', callback);
 Add Email Alias
 ---------------
 
-To add an email alias for a user call the [`users.addEmailAlias(userID, email, callback`](http://opensource.box.com/box-node-sdk/Users.html#addEmailAlias) method.
+To add an email alias for a user call the [`users.addEmailAlias(userID, email, callback`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#addEmailAlias) method.
 
 ```js
 client.users.addEmailAlias('123', 'user@example.com', callback);
@@ -105,7 +105,7 @@ client.users.addEmailAlias('123', 'userAlias@example.com', {is_confirmed: true},
 Delete Email Alias
 ------------------
 
-To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID, callback)`](http://opensource.box.com/box-node-sdk/Users.html#removeEmailAlias) method.
+To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#removeEmailAlias) method.
 
 ```js
 client.users.removeEmailAlias('123', '765', callback);
@@ -115,7 +115,7 @@ Get Group Memberships
 ---------------------
 
 To get a list of groups to which a user belongs, call the
-[`users.getGroupMemberships(userID, options, callback)`](http://opensource.box.com/box-node-sdk/Users.html#getGroupMemberships)
+[`users.getGroupMemberships(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getGroupMemberships)
 method.  Note that this method requires the calling user to have permission to
 view groups, which is restricted to enterprise administrators.
 

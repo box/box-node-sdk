@@ -10,7 +10,7 @@ Get Enterprise Users
 --------------------
 
 Get a list of users in the current enterprise by calling the
-[`enterprise.getUsers(options, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#getUsers)
+[`enterprise.getUsers(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#getUsers)
 method.
 
 ```js
@@ -21,7 +21,7 @@ Invite User to Enterprise
 -------------------------
 
 Invite a user to an enterprise by calling the
-[`enterprise.inviteUser(enterpriseID, email, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#inviteUser)
+[`enterprise.inviteUser(enterpriseID, email, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#inviteUser)
 method with the ID of the enterprise and the user's email address.
 
 ```js
@@ -32,7 +32,7 @@ Add New User
 ------------
 
 To provision a new user within the current enterprise, call the
-[`enterprise.addUser(login, name, options, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#addUser)
+[`enterprise.addUser(login, name, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#addUser)
 method with the email address the user will use to log in and the user's name.
 
 ```js
@@ -52,7 +52,7 @@ Add New App User
 ----------------
 
 To provision a new app user within the current enterprise, call the
-[`enterprise.addAppUser(name, options, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#addAppUser)
+[`enterprise.addAppUser(name, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#addAppUser)
 method with the user's name.
 
 ```js
@@ -69,7 +69,7 @@ Transfer User Content
 ---------------------
 
 To transfer one managed user's content to another user's account, call the
-[`enterprise.transferUserContent(sourceUserID, destUserID, callback)`](http://opensource.box.com/box-node-sdk/Enterprise.html#transferUserContent)
+[`enterprise.transferUserContent(sourceUserID, destUserID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#transferUserContent)
 method with the IDs of the source and destination users.
 
 ```js
