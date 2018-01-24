@@ -38,9 +38,8 @@ method.
 client.groups.get('78346', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 client.groups.get('12345', {fields: 'name,description'}, callback);
@@ -50,8 +49,8 @@ Update Group
 ------------
 
 To change the properties of a group object, call the
-[`groups.update(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#update)
-method with `options` being the set of properties to update.
+[`groups.update(groupID, updates, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#update)
+method with `updates` being the set of properties to update.
 
 ```js
 client.groups.update('873645', {name: 'New group name'}, callback);
@@ -91,9 +90,8 @@ method.
 client.groups.getMembership('38456', null, callback);
 ```
 
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
 
 ```js
 // Get a list of users in the group and when they were added
@@ -105,7 +103,7 @@ Update Membership
 
 To update a membership record, call the
 [`groups.updateMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/Groups.html#updateMembership)
-method with `options` being the properties to update.
+method with `updates` being the properties to update.
 
 ```js
 // Promote a user to group admin

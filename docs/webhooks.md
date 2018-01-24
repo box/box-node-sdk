@@ -61,7 +61,7 @@ Get a Webhook's Information
 ---------------------------
 
 Retrieve information about a specific webhook by calling
-[`webhooks.get(webhookID, qs, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#get)
+[`webhooks.get(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#get)
 to retrieve a webhook by ID.
 
 ```js
@@ -72,7 +72,7 @@ Get all Webhooks Information
 -----------------------------
 
 Get a list of all webhooks for the requesting application and user by calling the
-[`webhooks.getAll(qs, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#getAll)
+[`webhooks.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#getAll)
 method.  The maximum limit per page of results is 200, Box uses the default limit of 100.
 
 ```js
@@ -83,8 +83,8 @@ Update a Webhook
 ----------------
 
 Update a file or folder's webhook by calling
-[`webhooks.update(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#update)
-with the field you want to update as `options.address` or `options.trigger`.
+[`webhooks.update(webhookID, updates, callback)`](http://opensource.box.com/box-node-sdk/Webhooks.html#update)
+with the field you want to update as `updates.address` or `updates.trigger`.
 
 ```js
 client.webhooks.update('678901', {address: "https://NEWWEBSITE.com"}, callback);
