@@ -21,7 +21,7 @@
     "patch": "node Makefile.js patch",
     "minor": "node Makefile.js minor",
     "major": "node Makefile.js major",
-    "build_client": "npm run deps && webpack --config webpack.config.js"
+    "build_client": "npm run deps && webpack --config webpack.config.js --display-modules"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -63,6 +63,7 @@
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^1.17.3",
     "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.2",
     "webpack-strip-block": "^0.2.0",
     "yargs": "^11.0.0"
   }

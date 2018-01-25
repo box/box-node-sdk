@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env = require('yargs').argv.mode;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const libraryName = 'BoxSdk';
 
@@ -20,6 +21,7 @@ plugins.push(
   new webpack.IgnorePlugin(/persistent-session/),
   new webpack.IgnorePlugin(/anonymous-session/),
   new webpack.IgnorePlugin(/token-manager/),
+  new BundleAnalyzerPlugin()
 );
 
 let config = {
