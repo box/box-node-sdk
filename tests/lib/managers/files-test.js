@@ -2457,7 +2457,6 @@ describe('Files', function() {
 					Digest: 'SHA=oHNRqoPkTcXiX9y4eU54ccSsPQw=',
 					'Content-Range': 'bytes 27-35/345987'
 				},
-				json: false,
 				body: TEST_PART
 			};
 
@@ -2521,11 +2520,18 @@ describe('Files', function() {
 				});
 		});
 
-		it('should call callback with parsed body when API call is successful', function(done) {
+		it('should call callback with body when API call is successful', function(done) {
 
 			var apiResponse = {
 				statusCode: 200,
-				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
+				body: {
+					part: {
+						part_id: '00000000',
+						size: 10,
+						offset: 0,
+						sha1: '0987654321abcdef'
+					}
+				}
 			};
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
@@ -2545,11 +2551,18 @@ describe('Files', function() {
 			});
 		});
 
-		it('should return promise resolving to parsed body when API call is successful', function() {
+		it('should return promise resolving to body when API call is successful', function() {
 
 			var apiResponse = {
 				statusCode: 200,
-				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
+				body: {
+					part: {
+						part_id: '00000000',
+						size: 10,
+						offset: 0,
+						sha1: '0987654321abcdef'
+					}
+				}
 			};
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
