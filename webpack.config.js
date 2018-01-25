@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env = require('yargs').argv.mode;
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ShakePlugin = require('webpack-common-shake').Plugin;
 
 const libraryName = 'BoxSdk';
@@ -11,6 +10,16 @@ let plugins = [], outputFile;
 
 outputFile = libraryName + '.min.js';
 plugins.push(
+  // IGNORE UNUSED SDK CLASSES
+  new webpack.IgnorePlugin(/app-auth-session/),
+  new webpack.IgnorePlugin(/persistent-session/),
+  new webpack.IgnorePlugin(/anonymous-session/),
+  new webpack.IgnorePlugin(/token-manager/),
+
+  // SHAKE IT
+  new ShakePlugin(),
+
+  // MINIFY IT
   new UglifyJsPlugin({
     sourceMap: true,
     uglifyOptions: {
@@ -18,12 +27,6 @@ plugins.push(
       ecma: 5
     }
   }),
-  new webpack.IgnorePlugin(/app-auth-session/),
-  new webpack.IgnorePlugin(/persistent-session/),
-  new webpack.IgnorePlugin(/anonymous-session/),
-  new webpack.IgnorePlugin(/token-manager/),
-  new BundleAnalyzerPlugin(),
-  new ShakePlugin()
 );
 
 let config = {
