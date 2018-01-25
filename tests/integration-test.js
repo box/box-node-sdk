@@ -19,7 +19,7 @@ var assert = require('chai').assert,
 	Response = require('../lib/util/response'),
 	jwt = require('jsonwebtoken');
 
-describe.only('Box Node SDK', function() {
+describe('Box Node SDK', function() {
 
 	// ------------------------------------------------------------------------------
 	// Setup

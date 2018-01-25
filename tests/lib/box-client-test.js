@@ -517,7 +517,7 @@ describe('box-client', function() {
 		var HEADER_NAME = 'testheader123',
 			HEADER_VALUE = 'testheadervalue456';
 
-		it('should set a custom header that gets passed with each request when called', function(done) {
+		it('should set a custom header that gets passed with each request when called', function() {
 			var expectedParams = { headers: {} };
 			expectedParams.headers[HEADER_NAME] = HEADER_VALUE;
 
@@ -527,10 +527,10 @@ describe('box-client', function() {
 				.returns(Promise.resolve(fakeOKResponse));
 
 			basicClient.setCustomHeader(HEADER_NAME, HEADER_VALUE);
-			basicClient.get('/', {}, done);
+			return basicClient.get('/');
 		});
 
-		it('should remove an already set custom header when called with null', function(done) {
+		it('should remove an already set custom header when called with null', function() {
 			var expectedParams = { headers: {} };
 
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve());
@@ -540,7 +540,7 @@ describe('box-client', function() {
 
 			basicClient.setCustomHeader(HEADER_NAME, HEADER_VALUE);
 			basicClient.setCustomHeader(HEADER_NAME, null);
-			basicClient.get('/', {}, done);
+			return basicClient.get('/');
 		});
 
 	});
@@ -761,7 +761,7 @@ describe('box-client', function() {
 			assert.strictEqual(basicClient._customHeaders[HEADER_XFF], xffTest);
 		});
 
-		it('should set the "X-Forwarded-For" header when the custom header has been set', function(done) {
+		it('should set the "X-Forwarded-For" header when the custom header has been set', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
 				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			basicClient.setIPs(ips);
@@ -772,7 +772,7 @@ describe('box-client', function() {
 				}))
 				.returns(Promise.resolve(fakeOKResponse));
 
-			basicClient.get('/', {}, done);
+			return basicClient.get('/');
 		});
 
 		leche.withData({
@@ -839,7 +839,7 @@ describe('box-client', function() {
 			SHARED_CONTEXT_PASSWORD = 'password&123',
 			BOXAPI_WELLFORMED_HEADER = 'shared_link=http%3A%2F%2Fbox.com%2Ftestsharedlink&shared_link_password=password%26123';
 
-		it('should set a well-formed "BoxAPI" header to each request when the context has been set', function(done) {
+		it('should set a well-formed "BoxAPI" header to each request when the context has been set', function() {
 			var expectedParams = {
 				headers: {
 					BoxApi: BOXAPI_WELLFORMED_HEADER
@@ -852,7 +852,7 @@ describe('box-client', function() {
 				.returns(Promise.resolve(fakeOKResponse));
 
 			basicClient.setSharedContext(SHARED_CONTEXT_URL, SHARED_CONTEXT_PASSWORD);
-			basicClient.get('/', {}, done);
+			return basicClient.get('/');
 		});
 
 	});
@@ -865,7 +865,7 @@ describe('box-client', function() {
 			assert.strictEqual(typeof basicClient._customHeaders[HEADER_BOXAPI], 'undefined');
 		});
 
-		it('should not set the "BoxAPI" header when the context has been revoked', function(done) {
+		it('should not set the "BoxAPI" header when the context has been revoked', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
 				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			basicClient.revokeSharedContext();
@@ -876,7 +876,7 @@ describe('box-client', function() {
 				}))
 				.returns(Promise.resolve(fakeOKResponse));
 
-			basicClient.get('/', {}, done);
+			return basicClient.get('/');
 		});
 
 	});
@@ -885,7 +885,7 @@ describe('box-client', function() {
 
 		var USER_ID = '876345';
 
-		it('should set a well-formed "As-User" header to each request when the context has been set', function(done) {
+		it('should set a well-formed "As-User" header to each request when the context has been set', function() {
 			var expectedParams = {
 				headers: {
 					'As-User': USER_ID
@@ -898,7 +898,7 @@ describe('box-client', function() {
 				.returns(Promise.resolve(fakeOKResponse));
 
 			basicClient.asUser(USER_ID);
-			basicClient.get('/', {}, done);
+			return basicClient.get('/');
 		});
 	});
 
@@ -906,7 +906,7 @@ describe('box-client', function() {
 
 		var USER_ID = '876345';
 
-		it('should remove "As-User" header from each request when the context has been unset', function(done) {
+		it('should remove "As-User" header from each request when the context has been unset', function() {
 			var expectedParams = {
 				headers: {}
 			};
@@ -918,15 +918,15 @@ describe('box-client', function() {
 
 			basicClient.asUser(USER_ID);
 			basicClient.asSelf();
-			basicClient.get('/', {}, done);
+			return basicClient.get('/');
 		});
 	});
 
 	describe('revokeTokens()', function() {
-		it('should call apiSession.revokeTokens when called', function(done) {
+		it('should call apiSession.revokeTokens when called', function() {
 			sandbox.mock(apiSessionFake).expects('revokeTokens')
 				.returns(Promise.resolve());
-			basicClient.revokeTokens(done);
+			return basicClient.revokeTokens();
 		});
 
 		it('should call apiSession.revokeTokens with options.ip parameter when called', function() {
@@ -973,7 +973,7 @@ describe('box-client', function() {
 		var TEST_SCOPE = 'item_preview',
 			TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
 
-		it('should call session to exchange token and pass exchanged token to callback when called', function(done) {
+		it('should call session to exchange token and pass exchanged token to callback when called', function() {
 
 			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
 
@@ -981,15 +981,13 @@ describe('box-client', function() {
 				.withArgs(TEST_SCOPE, TEST_RESOURCE)
 				.returns(Promise.resolve(exchangedTokenInfo));
 
-			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, exchangedTokenInfo);
-				done();
-			});
+			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
 		});
 
-		it('should call session to exchange token with options.ip parameter and pass exchanged token to callback when called', function(done) {
+		it('should call session to exchange token with options.ip parameter resolve to exchanged token when called', function() {
 			var ips = [
 				'127.0.0.1',
 				'192.168.1.1'
@@ -1008,12 +1006,10 @@ describe('box-client', function() {
 				.returns(Promise.resolve(exchangedTokenInfo));
 
 			basicClient.setIPs(ips);
-			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, exchangedTokenInfo);
-				done();
-			});
+			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
 		});
 
 		it('should call session to exchange token with actor params when actor params are passed', function() {
@@ -1035,31 +1031,6 @@ describe('box-client', function() {
 				.returns(Promise.resolve(exchangedTokenInfo));
 
 			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, { actor })
-				.then(data => {
-					assert.equal(data, exchangedTokenInfo);
-				});
-		});
-
-		it('should call callback with error when token exchange fails', function(done) {
-
-			var error = new Error('Failure');
-
-			sandbox.stub(apiSessionFake, 'exchangeToken').returns(Promise.reject(error));
-
-			basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
-		});
-
-		it('should return promise that resolves to the exchanged token info when token exchage succeeds', function() {
-
-			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
-
-			sandbox.stub(apiSessionFake, 'exchangeToken').returns(Promise.resolve(exchangedTokenInfo));
-
-			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
 				.then(data => {
 					assert.equal(data, exchangedTokenInfo);
 				});
@@ -1110,7 +1081,7 @@ describe('box-client', function() {
 			assert.strictEqual(typeof basicClient.testplugin.get, 'function');
 		});
 
-		it('should use the plugin specified apiRoot when one is passed as a param', function(done) {
+		it('should use the plugin specified apiRoot when one is passed as a param', function() {
 			basicClient.plug('testplugin', testPlugin, {
 				apiRoot: PLUGIN_API_ROOT
 			});
@@ -1119,13 +1090,13 @@ describe('box-client', function() {
 				.withExactArgs({
 					method: 'GET',
 					url: PLUGIN_API_ROOT + TEST_PATH
-				}, done)
-				.yields();
+				})
+				.returns(Promise.resolve());
 
-			basicClient.testplugin.get(done);
+			return basicClient.testplugin.get();
 		});
 
-		it('should use the plugin specified apiRoot when one is passed as a param', function(done) {
+		it('should use the plugin specified apiRoot when one is passed as a param', function() {
 			basicClient.plug('testplugin', testPlugin, {
 				uploadApiRoot: PLUGIN_UPLOAD_API_ROOT
 			});
@@ -1135,60 +1106,10 @@ describe('box-client', function() {
 					method: 'POST',
 					formData: fakeMultipartFormData,
 					url: PLUGIN_UPLOAD_API_ROOT + TEST_PATH
-				}), done)
-				.yields();
+				}))
+				.returns(Promise.resolve());
 
-			basicClient.testplugin.upload(fakeMultipartFormData, done);
+			return basicClient.testplugin.upload(fakeMultipartFormData);
 		});
 	});
-
-	describe('defaultResponseHandler()', function() {
-
-		it('should pass error to callback when called with error', function(done) {
-
-			var error = new Error('API Error');
-
-			var wrappedCallback = basicClient.defaultResponseHandler(function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
-
-			wrappedCallback(error);
-		});
-
-		it('should pass response body to callback when called with 2xx response', function(done) {
-
-			var response = {
-				statusCode: 200,
-				body: 'It worked!'
-			};
-
-			var wrappedCallback = basicClient.defaultResponseHandler(function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, 'It worked!');
-				done();
-			});
-
-			wrappedCallback(null, response);
-		});
-
-		it('should pass unexpected response error to callback when called with unsuccessful response', function(done) {
-
-			var unexpectedResponse = {
-				statusCode: 403
-			};
-
-			var wrappedCallback = basicClient.defaultResponseHandler(function(err) {
-
-				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', unexpectedResponse.statusCode);
-				done();
-			});
-
-			wrappedCallback(null, unexpectedResponse);
-		});
-	});
-
 });
