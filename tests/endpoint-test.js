@@ -561,7 +561,7 @@ describe('Endpoint', function() {
 				basicClient.collaborations.delete(collaborationID, function(err, data) {
 
 					assert.isNull(err);
-					assert.isUndefined(data);
+					assert.isEmpty(data);
 
 					done();
 				});
@@ -766,7 +766,7 @@ describe('Endpoint', function() {
 				basicClient.comments.delete(commentID, function(err, data) {
 
 					assert.isNull(err);
-					assert.isUndefined(data);
+					assert.isEmpty(data);
 
 					done();
 				});
@@ -825,7 +825,7 @@ describe('Endpoint', function() {
 				basicClient.devicePins.delete(devicePinID, null, function(err, data) {
 
 					assert.isNull(err);
-					assert.isUndefined(data);
+					assert.isEmpty(data);
 
 					done();
 				});
@@ -933,7 +933,7 @@ describe('Endpoint', function() {
 			});
 		});
 
-		describe('getReadStream()', function() {
+		describe.skip('getReadStream()', function() {
 
 			it('should make correct request and correctly parse response when API call is successful', function(done) {
 
@@ -1238,7 +1238,7 @@ describe('Endpoint', function() {
 				basicClient.files.delete(fileID, function(err, data) {
 
 					assert.isNull(err);
-					assert.isUndefined(data);
+					assert.isEmpty(data);
 
 					done();
 				});
@@ -1286,7 +1286,7 @@ describe('Endpoint', function() {
 
 				basicClient.files.uploadFile(folderID, filename, fileContent, function(err, data) {
 
-					assert.isNull(err);
+					assert.ifError(err);
 					assert.deepEqual(data, JSON.parse(fixture));
 
 					done();
