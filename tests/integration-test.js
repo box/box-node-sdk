@@ -9,7 +9,6 @@
 
 var assert = require('chai').assert,
 	mockery = require('mockery'),
-	http = require('http'),
 	leche = require('leche'),
 	sinon = require('sinon'),
 	nock = require('nock'),
@@ -18,6 +17,7 @@ var assert = require('chai').assert,
 	crypto = require('crypto'),
 	Promise = require('bluebird'),
 	request = require('request'),
+	Response = require('../lib/util/response'),
 	jwt = require('jsonwebtoken');
 
 describe('Box Node SDK', function() {
@@ -164,7 +164,7 @@ describe('Box Node SDK', function() {
 		sdk.on('response', function(err, response) {
 
 			assert.ifError(err);
-			assert.instanceOf(response, http.IncomingMessage);
+			assert.instanceOf(response, Response);
 			done();
 		});
 

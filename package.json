@@ -24,6 +24,7 @@
     "build_client": "webpack --config webpack.config.js"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "bluebird": "^3.5.0",
     "http-status": "^0.2.2",
     "jsonwebtoken": "^8.1.0",
