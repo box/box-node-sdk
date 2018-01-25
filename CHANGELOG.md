@@ -1,4 +1,7 @@
 # Changelog
+## 1.12.1
+- Fixed an issue where chunked uploader would not work with response streams from the request library
+(0e7014561f9cd0f7f38f98536b3f0c3946231d2e)
 
 ## 1.12.0
 
