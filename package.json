@@ -20,7 +20,8 @@
     "deps": "npm prune && npm install",
     "patch": "node Makefile.js patch",
     "minor": "node Makefile.js minor",
-    "major": "node Makefile.js major"
+    "major": "node Makefile.js major",
+    "build_client": "webpack --config webpack.config.js"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
