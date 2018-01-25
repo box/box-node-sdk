@@ -21,7 +21,7 @@
     "patch": "node Makefile.js patch",
     "minor": "node Makefile.js minor",
     "major": "node Makefile.js major",
-    "build_client": "webpack --config webpack.config.js"
+    "build_client": "npm run deps && webpack --config webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.17.1",

@@ -27,6 +27,9 @@ let config = {
     umdNamedDefine: true,
     sourceMapFilename: libraryName + '.map'
   },
+  node: {
+    net: 'empty'
+  },
   module: {
     rules: [
       {
