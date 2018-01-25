@@ -9,7 +9,6 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
-	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -591,7 +590,7 @@ describe('Files', function() {
 			var filesMock = sandbox.mock(files);
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
@@ -613,7 +612,7 @@ describe('Files', function() {
 			var filesMock = sandbox.mock(files);
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
@@ -649,7 +648,7 @@ describe('Files', function() {
 			var filesMock = sandbox.mock(files);
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
@@ -683,7 +682,7 @@ describe('Files', function() {
 
 			var error = new Error('Failed update');
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 
@@ -2650,7 +2649,7 @@ describe('Files', function() {
 			var error = new Error('API connection had a problem');
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			sandbox.stub(boxClientFake, 'post').returns(p);
@@ -2666,7 +2665,7 @@ describe('Files', function() {
 			var error = new Error('API connection had a problem');
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			sandbox.stub(boxClientFake, 'post').returns(p);

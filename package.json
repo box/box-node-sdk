@@ -25,13 +25,14 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "bluebird": "^3.5.0",
     "form-data": "^2.3.1",
     "http-status": "^0.2.2",
     "jsonwebtoken": "^8.1.0",
     "merge-options": "0.0.64",
     "promise-queue": "^2.2.3",
+    "promise.prototype.finally": "^3.1.0",
     "request": "^2.74.0",
+    "util-promisifyall": "^1.0.3",
     "uuid": "^3.0.0"
   },
   "devDependencies": {

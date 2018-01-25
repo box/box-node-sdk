@@ -12,7 +12,6 @@ var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
-	Promise = require('bluebird'),
 	EventEmitter = require('events').EventEmitter,
 	httpStatusCodes = require('http-status'),
 	pkg = require('../../package.json');
@@ -218,7 +217,7 @@ describe('box-client', function() {
 
 			var error = new Error();
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error))
@@ -296,28 +295,29 @@ describe('box-client', function() {
 
 	describe('get()', function() {
 
-		it('should make GET request with params encoded and return result via callback when given token, path, and fakeQs', function(done) {
+		it('should make GET request with params encoded and return result when given token, path, and fakeQs', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'GET',
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: fakeQs
-				}, done)
-				.yields();
-			basicClient.get(FAKE_PATH, fakeParamsWithQs, done);
+				})
+				.returns(Promise.resolve());
+
+			return basicClient.get(FAKE_PATH, fakeParamsWithQs);
 		});
 
-		it('should make GET request with only url and method params when called with no params', function(done) {
+		it('should make GET request with only url and method params when called with no params', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'GET',
 					url: (basicClient._baseURL + FAKE_PATH)
-				}, done)
-				.yields();
-			basicClient.get(FAKE_PATH, null, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.get(FAKE_PATH);
 		});
 
-		it('should not mutate the passed-in params object when called', function(done) {
+		it('should not mutate the passed-in params object when called', function() {
 
 			var reqParams = {
 				qs: {foo: 'bar'}
@@ -329,40 +329,40 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: {foo: 'bar'}
 				})
-				.yieldsAsync();
-			basicClient.get(FAKE_PATH, reqParams, function() {
+				.returns(Promise.resolve());
 
-				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
-				done();
-			});
+			return basicClient.get(FAKE_PATH, reqParams)
+				.then(() => {
+					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				});
 		});
 	});
 
 	describe('post()', function() {
 
-		it('should make POST request with params encoded and return result via callback when given token, path, and body', function(done) {
+		it('should make POST request with params encoded and return result when given token, path, and body', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.once()
 				.withExactArgs({
 					method: 'POST',
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: fakeBody
-				}, done)
-				.yields();
-			basicClient.post(FAKE_PATH, fakeParamsWithBody, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.post(FAKE_PATH, fakeParamsWithBody);
 		});
 
-		it('should make POST request with only url and method params when called with no params', function(done) {
+		it('should make POST request with only url and method params when called with no params', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'POST',
 					url: (basicClient._baseURL + FAKE_PATH)
-				}, done)
-				.yields();
-			basicClient.post(FAKE_PATH, null, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.post(FAKE_PATH);
 		});
 
-		it('should not mutate the passed-in params object when called', function(done) {
+		it('should not mutate the passed-in params object when called', function() {
 
 			var reqParams = {
 				body: {foo: 'bar'}
@@ -374,41 +374,39 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: {foo: 'bar'}
 				})
-				.yieldsAsync();
-			basicClient.post(FAKE_PATH, reqParams, function() {
-
-				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
-				done();
-			});
+				.returns(Promise.resolve());
+			return basicClient.post(FAKE_PATH, reqParams)
+				.then(() => {
+					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				});
 		});
 	});
 
 	describe('put()', function() {
 
-		it('should make PUT request with params encoded and return result via callback when given token, path, and body', function(done) {
+		it('should make PUT request with params encoded and return result when given token, path, and body', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
-				.once()
 				.withExactArgs({
 					method: 'PUT',
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: fakeBody
-				}, done)
-				.yields();
+				})
+				.returns(Promise.resolve());
 
-			basicClient.put(FAKE_PATH, fakeParamsWithBody, done);
+			return basicClient.put(FAKE_PATH, fakeParamsWithBody);
 		});
 
-		it('should make PUT request with only url and method params when called with no params', function(done) {
+		it('should make PUT request with only url and method params when called with no params', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'PUT',
 					url: (basicClient._baseURL + FAKE_PATH)
-				}, done)
-				.yields();
-			basicClient.put(FAKE_PATH, null, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.put(FAKE_PATH);
 		});
 
-		it('should not mutate the passed-in params object when called', function(done) {
+		it('should not mutate the passed-in params object when called', function() {
 
 			var reqParams = {
 				body: {foo: 'bar'}
@@ -420,39 +418,38 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: {foo: 'bar'}
 				})
-				.yieldsAsync();
-			basicClient.put(FAKE_PATH, reqParams, function() {
-
-				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
-				done();
-			});
+				.returns(Promise.resolve());
+			return basicClient.put(FAKE_PATH, reqParams)
+				.then(() => {
+					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				});
 		});
 	});
 
 	describe('del()', function() {
 
-		it('should make DELETE request with params encoded and return result via callback when given token, path, and fakeQs', function(done) {
+		it('should make DELETE request with params encoded and return result via callback when given token, path, and fakeQs', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'DELETE',
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: fakeQs
-				}, done)
-				.yields();
-			basicClient.del(FAKE_PATH, fakeParamsWithQs, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.del(FAKE_PATH, fakeParamsWithQs);
 		});
 
-		it('should make DELETE request with only url and method params when called with no params', function(done) {
+		it('should make DELETE request with only url and method params when called with no params', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'DELETE',
 					url: (basicClient._baseURL + FAKE_PATH)
-				}, done)
-				.yields();
-			basicClient.del(FAKE_PATH, null, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.del(FAKE_PATH);
 		});
 
-		it('should not mutate the passed-in params object when called', function(done) {
+		it('should not mutate the passed-in params object when called', function() {
 
 			var reqParams = {
 				qs: {foo: 'bar'}
@@ -464,39 +461,38 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: {foo: 'bar'}
 				})
-				.yieldsAsync();
-			basicClient.del(FAKE_PATH, reqParams, function() {
-
-				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
-				done();
-			});
+				.returns(Promise.resolve());
+			return basicClient.del(FAKE_PATH, reqParams)
+				.then(() => {
+					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				});
 		});
 	});
 
 	describe('options()', function() {
 
-		it('should make OPTIONS call with correct params', function(done) {
+		it('should make OPTIONS call with correct params', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'OPTIONS',
 					url: basicClient._baseURL + FAKE_PATH,
 					body: fakeBody
-				}, done)
-				.yieldsAsync();
-			basicClient.options(FAKE_PATH, fakeParamsWithBody, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.options(FAKE_PATH, fakeParamsWithBody);
 		});
 
-		it('should make OPTIONS request with only url and method params when called with no params', function(done) {
+		it('should make OPTIONS request with only url and method params when called with no params', function() {
 			sandbox.mock(basicClient).expects('_makeRequest')
 				.withExactArgs({
 					method: 'OPTIONS',
 					url: (basicClient._baseURL + FAKE_PATH)
-				}, done)
-				.yields();
-			basicClient.options(FAKE_PATH, null, done);
+				})
+				.returns(Promise.resolve());
+			return basicClient.options(FAKE_PATH);
 		});
 
-		it('should not mutate the passed-in params object when called', function(done) {
+		it('should not mutate the passed-in params object when called', function() {
 
 			var reqParams = {
 				qs: {foo: 'bar'}
@@ -508,12 +504,11 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: {foo: 'bar'}
 				})
-				.yieldsAsync();
-			basicClient.options(FAKE_PATH, reqParams, function() {
-
-				assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
-				done();
-			});
+				.returns(Promise.resolve());
+			return basicClient.options(FAKE_PATH, reqParams)
+				.then(() => {
+					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
+				});
 		});
 	});
 
@@ -552,7 +547,7 @@ describe('box-client', function() {
 
 	describe('upload()', function() {
 
-		it('should call the API session\'s getAccessToken() and use the returned token to make the request', function(done) {
+		it('should call the API session\'s getAccessToken() and use the returned token to make the request', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
 				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 
@@ -563,10 +558,10 @@ describe('box-client', function() {
 				}))
 				.returns(Promise.resolve(fakeOKResponse));
 
-			basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData, done);
+			return basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData);
 		});
 
-		it('should make a request with the correct params and propagate the response info and body when the request succeeds', function(done) {
+		it('should make a request with the correct params and propagate the response info and body when the request succeeds', function() {
 			var path = '/files/content';
 
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
@@ -583,14 +578,13 @@ describe('box-client', function() {
 				})
 				.returns(Promise.resolve(fakeOKResponse));
 
-			basicClient.upload(path, fakeParamsWithBody, fakeMultipartFormData, function(err, response) {
-				assert.ifError(err);
-				assert.strictEqual(response, fakeOKResponse);
-				done();
-			});
+			return basicClient.upload(path, fakeParamsWithBody, fakeMultipartFormData)
+				.then(response => {
+					assert.strictEqual(response, fakeOKResponse);
+				});
 		});
 
-		it('should propagate a request error when one occurs', function(done) {
+		it('should propagate a request error when one occurs', function() {
 			var retryableRequestError = new Error('retryableRequest failed'),
 				emptyResponseBody = {},
 				emptyResponseInfo = { body: emptyResponseBody};
@@ -598,26 +592,26 @@ describe('box-client', function() {
 
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw retryableRequestError;
 			});
 			sandbox.stub(requestManagerFake, 'makeRequest').returns(p);
 
-			basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData, function(err) {
-				assert.strictEqual(err, retryableRequestError);
-				done();
-			});
+			return basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData)
+				.catch(err => {
+					assert.strictEqual(err, retryableRequestError);
+				});
 		});
 
-		it('should propagate a generic access token error when an empty body UNAUTHORIZED response is received', function(done) {
+		it('should propagate a generic access token error when an empty body UNAUTHORIZED response is received', function() {
 			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
 			sandbox.stub(requestManagerFake, 'makeRequest').returns(Promise.resolve(fakeUnauthorizedResponse));
 
-			basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData, function(err) {
-				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'authExpired', true);
-				done();
-			});
+			return basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+					assert.propertyVal(err, 'authExpired', true);
+				});
 		});
 	});
 
@@ -745,78 +739,12 @@ describe('box-client', function() {
 			]);
 		});
 
-		it('should pass batch result to callback when batch call succeeds', function(done) {
-
-			basicClient.batch();
-			basicClient.get('/foo');
-
-			var response = {
-				statusCode: 200,
-				body: {
-					responses: [
-						{
-							status: 200,
-							headers: {},
-							response: {
-								foo: 'bar'
-							}
-						}
-					]
-				}
-			};
-			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
-
-			basicClient.batchExec(function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response.body);
-				done();
-			});
-		});
-
-		it('should pass error to callbacks when batch call fails', function() {
-
-			var error = new Error('Nope');
-
-			basicClient.batch();
-			/* eslint-disable promise/avoid-new */
-			var promise = new Promise(function(resolve) {
-				basicClient.get('/foo', {}, function(err) {
-					assert.equal(err, error);
-					resolve();
-				});
-			});
-
-			sandbox.stub(basicClient, 'post').returns(Promise.reject(error));
-
-			var promise2 = new Promise(function(resolve) {
-				basicClient.batchExec(function(err) {
-					assert.equal(err, error);
-					resolve();
-				});
-			});
-			/* eslint-enable promise/avoid-new */
-
-			return Promise.all([
-				promise,
-				promise2
-			]);
-		});
-
 		it('should return a promise the rejects when called before a batch is started', function() {
 
 			return basicClient.batchExec()
 				.catch(err => {
 					assert.instanceOf(err, Error);
 				});
-		});
-
-		it('should call callback with an error when called before a batch is started', function(done) {
-
-			basicClient.batchExec(function(err) {
-				assert.instanceOf(err, Error);
-				done();
-			});
 		});
 	});
 
@@ -1001,7 +929,7 @@ describe('box-client', function() {
 			basicClient.revokeTokens(done);
 		});
 
-		it('should call apiSession.revokeTokens with options.ip parameter when called', function(done) {
+		it('should call apiSession.revokeTokens with options.ip parameter when called', function() {
 			var ips = [
 				'127.0.0.1',
 				'192.168.1.1'
@@ -1014,20 +942,7 @@ describe('box-client', function() {
 			sandbox.mock(apiSessionFake).expects('revokeTokens')
 				.withArgs(sinon.match(options))
 				.returns(Promise.resolve());
-			basicClient.revokeTokens(done);
-		});
-
-		it('should call callback with an error when token revocation fails', function(done) {
-
-			var error = new Error('No can do');
-
-			sandbox.mock(apiSessionFake).expects('revokeTokens')
-				.returns(Promise.reject(error));
-			basicClient.revokeTokens(function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
+			return basicClient.revokeTokens();
 		});
 
 		it('should return promise resolving when tokens are revoked', function() {

@@ -9,7 +9,6 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
-	Promise = require('bluebird'),
 	leche = require('leche');
 
 // Modules to Fake

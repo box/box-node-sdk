@@ -88,7 +88,7 @@ describe('Endpoint', function() {
 
 		describe('get()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var collaborationID = '987654321',
 					fixture = getFixture('collaborations/get_collaborations_id_200');
@@ -104,16 +104,13 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.get(collaborationID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.get(collaborationID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 
-			it('should make correct request and pass error when API call fails', function(done) {
+			it('should make correct request and pass error when API call fails', function() {
 
 				var collaborationID = '987654321',
 					fixture = getFixture('collaborations/get_collaborations_id_404');
@@ -129,21 +126,19 @@ describe('Endpoint', function() {
 					})
 					.reply(404, fixture);
 
-				basicClient.collaborations.get(collaborationID, null, function(err) {
-
-					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 404);
-					assert.nestedProperty(err, 'response.body');
-					assert.deepEqual(err.response.body, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.get(collaborationID)
+					.catch(err => {
+						assert.instanceOf(err, Error);
+						assert.propertyVal(err, 'statusCode', 404);
+						assert.nestedProperty(err, 'response.body');
+						assert.deepEqual(err.response.body, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('getPending()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fixture = getFixture('collaborations/get_collaborations_pending_200');
 
@@ -158,20 +153,17 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.getPending(function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.getPending()
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 
 		});
 
 		describe('update()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var collaborationID = '1234567898',
 					options = {role: basicClient.collaborationRoles.VIEWER_UPLOADER},
@@ -188,16 +180,13 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.update(collaborationID, options, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.update(collaborationID, options)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 
-			it('should make correct request and pass error when API call fails', function(done) {
+			it('should make correct request and pass error when API call fails', function() {
 
 				var collaborationID = '123456789',
 					options = {role: basicClient.collaborationRoles.VIEWER_UPLOADER},
@@ -214,21 +203,19 @@ describe('Endpoint', function() {
 					})
 					.reply(404, fixture);
 
-				basicClient.collaborations.update(collaborationID, options, function(err) {
-
-					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 404);
-					assert.nestedProperty(err, 'response.body');
-					assert.deepEqual(err.response.body, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.update(collaborationID, options)
+					.catch(err => {
+						assert.instanceOf(err, Error);
+						assert.propertyVal(err, 'statusCode', 404);
+						assert.nestedProperty(err, 'response.body');
+						assert.deepEqual(err.response.body, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('respondToPending()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var collaborationID = '123456789',
 					options = {status: 'rejected'},
@@ -245,20 +232,17 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.respondToPending(collaborationID, 'rejected', function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.respondToPending(collaborationID, 'rejected')
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 
 		});
 
 		describe('create()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var folderID = '123456789',
 					user = {
@@ -286,16 +270,13 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.create(user, folderID, basicClient.collaborationRoles.PREVIEWER, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.create(user, folderID, basicClient.collaborationRoles.PREVIEWER)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 
-			it('should make correct request and pass error when API call fails', function(done) {
+			it('should make correct request and pass error when API call fails', function() {
 
 				var folderID = '123456789',
 					user = {
@@ -323,22 +304,20 @@ describe('Endpoint', function() {
 					})
 					.reply(400, fixture);
 
-				basicClient.collaborations.create(user, folderID, basicClient.collaborationRoles.PREVIEWER, function(err) {
-
-					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 400);
-					assert.nestedProperty(err, 'response.body');
-					assert.deepEqual(err.response.body, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.create(user, folderID, basicClient.collaborationRoles.PREVIEWER)
+					.catch(err => {
+						assert.instanceOf(err, Error);
+						assert.propertyVal(err, 'statusCode', 400);
+						assert.nestedProperty(err, 'response.body');
+						assert.deepEqual(err.response.body, JSON.parse(fixture));
+					});
 			});
 
 		});
 
 		describe('createWithUserID()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var folderID = '123456789',
 					userID = '987654321',
@@ -367,16 +346,13 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.createWithUserID(userID, folderID, basicClient.collaborationRoles.PREVIEWER, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.createWithUserID(userID, folderID, basicClient.collaborationRoles.PREVIEWER)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 
-			it('should make correct request and pass error when API call fails', function(done) {
+			it('should make correct request and pass error when API call fails', function() {
 
 				var folderID = '123456789',
 					userID = '987654321',
@@ -405,22 +381,20 @@ describe('Endpoint', function() {
 					})
 					.reply(400, fixture);
 
-				basicClient.collaborations.createWithUserID(userID, folderID, basicClient.collaborationRoles.PREVIEWER, function(err) {
-
-					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 400);
-					assert.nestedProperty(err, 'response.body');
-					assert.deepEqual(err.response.body, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.createWithUserID(userID, folderID, basicClient.collaborationRoles.PREVIEWER)
+					.catch(err => {
+						assert.instanceOf(err, Error);
+						assert.propertyVal(err, 'statusCode', 400);
+						assert.nestedProperty(err, 'response.body');
+						assert.deepEqual(err.response.body, JSON.parse(fixture));
+					});
 			});
 
 		});
 
 		describe('createWithUserEmail()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var folderID = '123456789',
 					userEmail = 'newfriend@example.com',
@@ -449,16 +423,13 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.createWithUserEmail(userEmail, folderID, basicClient.collaborationRoles.PREVIEWER, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.createWithUserEmail(userEmail, folderID, basicClient.collaborationRoles.PREVIEWER)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 
-			it('should make correct request and pass error when API call fails', function(done) {
+			it('should make correct request and pass error when API call fails', function() {
 
 				var folderID = '123456789',
 					userEmail = 'newfriend@example.com',
@@ -487,22 +458,20 @@ describe('Endpoint', function() {
 					})
 					.reply(400, fixture);
 
-				basicClient.collaborations.createWithUserEmail(userEmail, folderID, basicClient.collaborationRoles.PREVIEWER, function(err) {
-
-					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 400);
-					assert.nestedProperty(err, 'response.body');
-					assert.deepEqual(err.response.body, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.createWithUserEmail(userEmail, folderID, basicClient.collaborationRoles.PREVIEWER)
+					.catch(err => {
+						assert.instanceOf(err, Error);
+						assert.propertyVal(err, 'statusCode', 400);
+						assert.nestedProperty(err, 'response.body');
+						assert.deepEqual(err.response.body, JSON.parse(fixture));
+					});
 			});
 
 		});
 
 		describe('createWithGroupID()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var folderID = '987654321',
 					groupID = '123456789',
@@ -531,19 +500,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collaborations.createWithGroupID(groupID, folderID, basicClient.collaborationRoles.EDITOR, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collaborations.createWithGroupID(groupID, folderID, basicClient.collaborationRoles.EDITOR)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('delete()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var collaborationID = '123456789';
 
@@ -558,13 +524,10 @@ describe('Endpoint', function() {
 					})
 					.reply(204);
 
-				basicClient.collaborations.delete(collaborationID, function(err, data) {
-
-					assert.isNull(err);
-					assert.isEmpty(data);
-
-					done();
-				});
+				return basicClient.collaborations.delete(collaborationID)
+					.then(data => {
+						assert.isEmpty(data);
+					});
 			});
 		});
 
@@ -574,7 +537,7 @@ describe('Endpoint', function() {
 
 		describe('getAll()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fixture = getFixture('collections/get_collections_200');
 
@@ -589,19 +552,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collections.getAll(function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collections.getAll()
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('getItems()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var collectionID = '123456789',
 					fixture = getFixture('collections/get_collections_id_items_200');
@@ -617,13 +577,10 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.collections.getItems(collectionID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.collections.getItems(collectionID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
@@ -633,7 +590,7 @@ describe('Endpoint', function() {
 
 		describe('get()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var commentID = '123456789',
 					fixture = getFixture('comments/get_comments_id_200');
@@ -649,19 +606,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.comments.get(commentID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.comments.get(commentID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('create()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '987654321',
 					message = 'Looks good!',
@@ -678,19 +632,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.comments.create(fileID, message, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.comments.create(fileID, message)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('createTaggedComment()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '987654321',
 					message = '@[1357908642:Other User] Looks good!',
@@ -707,19 +658,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.comments.createTaggedComment(fileID, message, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.comments.createTaggedComment(fileID, message)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('update()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var commentID = '123456789',
 					options = {message: 'Looks great!'},
@@ -736,19 +684,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.comments.update(commentID, options, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.comments.update(commentID, options)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('delete()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var commentID = '123456789';
 
@@ -763,13 +708,11 @@ describe('Endpoint', function() {
 					})
 					.reply(204);
 
-				basicClient.comments.delete(commentID, function(err, data) {
+				return basicClient.comments.delete(commentID)
+					.then(data => {
 
-					assert.isNull(err);
-					assert.isEmpty(data);
-
-					done();
-				});
+						assert.isEmpty(data);
+					});
 			});
 		});
 
@@ -779,7 +722,7 @@ describe('Endpoint', function() {
 
 		describe('get()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var devicePinID = '123456789',
 					fixture = getFixture('device-pins/get_device_pinners_id_200');
@@ -795,19 +738,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.devicePins.get(devicePinID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.devicePins.get(devicePinID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('delete()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var devicePinID = '123456789';
 
@@ -822,19 +762,16 @@ describe('Endpoint', function() {
 					})
 					.reply(204);
 
-				basicClient.devicePins.delete(devicePinID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.isEmpty(data);
-
-					done();
-				});
+				return basicClient.devicePins.delete(devicePinID)
+					.then(data => {
+						assert.isEmpty(data);
+					});
 			});
 		});
 
 		describe('getAll()', function() {
 
-			it('should make correct requests and correctly parse responses when API call is successful', function(done) {
+			it('should make correct requests and correctly parse responses when API call is successful', function() {
 
 				var userFixture = getFixture('users/get_users_me_fields_enterprise_200'),
 					devicePinsFixture = getFixture('enterprises/get_enterprises_id_device_pinners_200');
@@ -861,13 +798,10 @@ describe('Endpoint', function() {
 					})
 					.reply(200, devicePinsFixture);
 
-				basicClient.devicePins.getAll(null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(devicePinsFixture));
-
-					done();
-				});
+				return basicClient.devicePins.getAll()
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(devicePinsFixture));
+					});
 			});
 		});
 
@@ -877,7 +811,7 @@ describe('Endpoint', function() {
 
 		describe('get()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890',
 					fixture = getFixture('files/get_files_id_200');
@@ -893,19 +827,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.files.get(fileID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.files.get(fileID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('getDownloadURL()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890',
 					downloadURL = 'https://dl.boxcloud.com/d/1/6a6_YreMmOqtVm6_P47FD5JGqzg3kA_wSqcOKW9dfE2tEusFkihimxFwQw85Y3t--KvVyhz0GxobSsFyK6HmuYMNUedOtgV5n6vgplfdcVdpYP9SxSv9dbeRYIhsHC-05GMpleRd9xP4I4zudE4V5Tn5X9r8503TwjWpknZKhBfAH37ujxMUBhSYiPefH3wrtaOkMgFxtHpnyi4fS3XMloh74x8ppnc4fyeTloaLyOXvD2IBNeRqquTcubtBa-uVXY6KUg5nxkLPVzGkZl9Y5iBpmzfEv3PP6YjHvGl9LHjw0nagDfWfD1XkDQ5E-LRUmlK5q0qMux6wpS4CPo9O1shwo7btRiRdOYU3dgqMf3TqRP9URhDbpzli_6PBZquOvXp0POv8EQEr1GOGYi_Lo6s92B4Tj7gY5SfXA8YkyJ0qp2BVgu7k7UnC_W5MD7sPMWTnGLjoyaZ8aaqw0l2UYi6jVRgwpQNKe5YGFsmr5dcY1D-FYoK7SY4K5eZ6ZPe3kTODvNLLAJk1U-zHNZmtMPe2Wuae3hC_1738px7S1ZE0FP6h3BuoXLqGIxmt27_znKle7lI-2A_EgJBf69-bNjXEq-ipHoQ76RLvghlD8PT9R6C1mmbXzEv4JJc-GY1a1Hd0taBorx1qMz2UB6ift6VFcN87a2smg-gn2ZAw8_Deps4I8bhsa8fsNBkTWFCbnr2pkZ-sRflaf8_YrcRcs2MrBxtNe2mxnAtRoZakxR0M4EppP5cf7oy1N-4kOn2bpoGyXHZ-udy29uNdn1M0zIAz36_MUskL1usGwrrQMBYsF8dtvIlCTAvww2RYnBxgWUi12nrKwOIk37ZuTqJTtPL7zuDwzo31lp2fOqqKCJxm7xfgMZ51iXgVlkmiN59uJl7x7_2rzYX49-kCQPY9T0VXzlVox8hj09UCvJThJYS5NBAeA-OHn1tqQcdE7KBoK4N7MBabCuJERm1jo62MeQESnStMZc9wRsvPG5qC_VIiM8BIGvcGHARGRkGjEQb16wqiWND9UtEDnqyUaKnCUDiBKb_JvmwDIofZTX9WOaXR9KeRfhi1Ag../download';
@@ -923,13 +854,10 @@ describe('Endpoint', function() {
 						Location: downloadURL
 					});
 
-				basicClient.files.getDownloadURL(fileID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, downloadURL);
-
-					done();
-				});
+				return basicClient.files.getDownloadURL(fileID)
+					.then(data => {
+						assert.deepEqual(data, downloadURL);
+					});
 			});
 		});
 
@@ -969,28 +897,31 @@ describe('Endpoint', function() {
 					})
 					.reply(200, function() { return fileStream; });
 
-				basicClient.files.getReadStream(fileID, {}, function(err, data) {
+				basicClient.files.getReadStream(fileID)
+					.then(data => {
 
-					assert.ifError(err);
-					assert.property(data, 'on', 'getReadStream() should provide a stream');
+						assert.property(data, 'on', 'getReadStream() should provide a stream');
 
-					var contents = '';
+						var contents = '';
 
-					data.on('data', function(chunk) {
-						contents += chunk.toString('utf8');
-					});
+						data.on('data', function(chunk) {
+							contents += chunk.toString('utf8');
+						});
 
-					data.on('end', function() {
-						assert.equal(contents, fileContents, 'Output of the read stream should be the correct file');
-						done();
-					});
-				});
+						data.on('end', function() {
+							assert.equal(contents, fileContents, 'Output of the read stream should be the correct file');
+							// eslint-disable-next-line promise/no-callback-in-promise
+							done();
+						});
+					})
+					// eslint-disable-next-line promise/no-callback-in-promise
+					.catch(err => done(err));
 			});
 		});
 
 		describe('getThumbnail()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890',
 					thumbnailURL = 'https://cdn01.boxcdn.net/_assets/thumbs/27x30/image/png-IDjzTN.gif';
@@ -1008,22 +939,19 @@ describe('Endpoint', function() {
 						Location: thumbnailURL
 					});
 
-				basicClient.files.getThumbnail(fileID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, {
-						statusCode: 202,
-						location: thumbnailURL
+				return basicClient.files.getThumbnail(fileID)
+					.then(data => {
+						assert.deepEqual(data, {
+							statusCode: 202,
+							location: thumbnailURL
+						});
 					});
-
-					done();
-				});
 			});
 		});
 
 		describe('getComments()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890',
 					fixture = getFixture('files/get_files_id_comments_200');
@@ -1039,19 +967,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.files.getComments(fileID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.files.getComments(fileID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('update()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890',
 					options = {name: 'Dog.png'},
@@ -1068,19 +993,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.files.update(fileID, options, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.files.update(fileID, options)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('addToCollection()', function() {
 
-			it('should make correct requests and correctly parse responses when API call is successful', function(done) {
+			it('should make correct requests and correctly parse responses when API call is successful', function() {
 
 				var fileID = '1234567890',
 					collectionID = '987654321',
@@ -1109,19 +1031,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fileFixture);
 
-				basicClient.files.addToCollection(fileID, collectionID, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fileFixture));
-
-					done();
-				});
+				return basicClient.files.addToCollection(fileID, collectionID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fileFixture));
+					});
 			});
 		});
 
 		describe('removeFromCollection()', function() {
 
-			it('should make correct requests and correctly parse responses when API call is successful', function(done) {
+			it('should make correct requests and correctly parse responses when API call is successful', function() {
 
 				var fileID = '1234567890',
 					collectionID = '987654321',
@@ -1150,19 +1069,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fileFixture);
 
-				basicClient.files.removeFromCollection(fileID, collectionID, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fileFixture));
-
-					done();
-				});
+				return basicClient.files.removeFromCollection(fileID, collectionID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fileFixture));
+					});
 			});
 		});
 
 		describe('move()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890',
 					newParentID = '987654321',
@@ -1179,19 +1095,16 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.files.move(fileID, newParentID, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.files.move(fileID, newParentID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('copy()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890',
 					newParentID = '987654321',
@@ -1208,19 +1121,16 @@ describe('Endpoint', function() {
 					})
 					.reply(201, fixture);
 
-				basicClient.files.copy(fileID, newParentID, null, function(err, data) {
-
-					assert.isNull(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.files.copy(fileID, newParentID)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 
 		describe('delete()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var fileID = '1234567890';
 
@@ -1235,19 +1145,16 @@ describe('Endpoint', function() {
 					})
 					.reply(204);
 
-				basicClient.files.delete(fileID, function(err, data) {
-
-					assert.isNull(err);
-					assert.isEmpty(data);
-
-					done();
-				});
+				return basicClient.files.delete(fileID)
+					.then(data => {
+						assert.isEmpty(data);
+					});
 			});
 		});
 
 		describe('uploadFile()', function() {
 
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
+			it('should make correct request and correctly parse response when API call is successful', function() {
 
 				var folderID = '0',
 					filename = 'foo.txt',
@@ -1284,18 +1191,16 @@ describe('Endpoint', function() {
 					})
 					.reply(201, fixture);
 
-				basicClient.files.uploadFile(folderID, filename, fileContent, function(err, data) {
-
-					assert.ifError(err);
-					assert.deepEqual(data, JSON.parse(fixture));
-
-					done();
-				});
+				return basicClient.files.uploadFile(folderID, filename, fileContent)
+					.then(data => {
+						assert.deepEqual(data, JSON.parse(fixture));
+					});
 			});
 		});
 	});
 
 	describe('Collaboration Whitelists', function() {
+
 		describe('addDomain()', function() {
 			it('should make a post request to create a domain collaboration whitelisting', function() {
 				var postFixture = getFixture('collaboration-whitelists/post_collaboration_whitelists_200'),

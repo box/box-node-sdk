@@ -12,7 +12,6 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	leche = require('leche'),
-	Promise = require('bluebird'),
 	mockery = require('mockery');
 
 var TokenManager = require('../../../lib/token-manager'),

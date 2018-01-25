@@ -12,3 +12,5 @@ rules:
     prefer-arrow-callback: off
     # Tests don't need to return from .then() with asserts
     promise/always-return: off
+    # Some tests make promises manually
+    promise/avoid-new: off

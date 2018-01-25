@@ -11,7 +11,6 @@ var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
 	jwt = require('jsonwebtoken'),
-	Promise = require('bluebird'),
 	leche = require('leche');
 
 var APIRequestManager = require('../../lib/api-request-manager'),

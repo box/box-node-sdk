@@ -12,7 +12,6 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	leche = require('leche'),
-	Promise = require('bluebird'),
 	mockery = require('mockery');
 
 var TokenManager = require('../../../lib/token-manager');
@@ -410,7 +409,7 @@ describe('PersistentAPISession', function() {
 
 			var error = new Error('Could not exchange token');
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 

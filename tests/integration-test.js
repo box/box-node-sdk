@@ -15,12 +15,11 @@ var assert = require('chai').assert,
 	fs = require('fs'),
 	path = require('path'),
 	crypto = require('crypto'),
-	Promise = require('bluebird'),
 	request = require('request'),
 	Response = require('../lib/util/response'),
 	jwt = require('jsonwebtoken');
 
-describe('Box Node SDK', function() {
+describe.only('Box Node SDK', function() {
 
 	// ------------------------------------------------------------------------------
 	// Setup
@@ -55,7 +54,7 @@ describe('Box Node SDK', function() {
 		nock.cleanAll();
 	});
 
-	it('should issue correct request to the API when basic client manager function is called', function(done) {
+	it('should issue correct request to the API when basic client manager function is called', function() {
 
 		var folderID = '98740596456',
 			folderName = 'Test Folder';
@@ -90,13 +89,11 @@ describe('Box Node SDK', function() {
 
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
 
-		client.folders.get(folderID, {}, function(err, data) {
-
-			assert.ifError(err);
-			assert.propertyVal(data, 'id', folderID);
-			assert.propertyVal(data, 'name', folderName);
-			done();
-		});
+		return client.folders.get(folderID)
+			.then(data => {
+				assert.propertyVal(data, 'id', folderID);
+				assert.propertyVal(data, 'name', folderName);
+			});
 
 	});
 
@@ -136,9 +133,6 @@ describe('Box Node SDK', function() {
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
 
 		return client.folders.get(folderID)
-			.catch(err => {
-				assert.ifError(err);
-			})
 			.then(data => {
 				assert.propertyVal(data, 'id', folderID);
 				assert.propertyVal(data, 'name', folderName);
@@ -172,7 +166,7 @@ describe('Box Node SDK', function() {
 		client.folders.get('1234', {}, () => { /**/ });
 	});
 
-	it('should get anonymous tokens and make API call when anonymous client manager is used', function(done) {
+	it('should get anonymous tokens and make API call when anonymous client manager is used', function() {
 
 		var fileID = '98740596456',
 			fileName = 'Test Document.pdf',
@@ -210,17 +204,15 @@ describe('Box Node SDK', function() {
 		var client = sdk.getAnonymousClient();
 		client.setSharedContext(sharedLink);
 
-		client.files.get(fileID, {}, function(err, data) {
-
-			assert.ifError(err);
-			assert.propertyVal(data, 'id', fileID);
-			assert.propertyVal(data, 'name', fileName);
-			done();
-		});
+		return client.files.get(fileID)
+			.then(data => {
+				assert.propertyVal(data, 'id', fileID);
+				assert.propertyVal(data, 'name', fileName);
+			});
 
 	});
 
-	it('should correctly store tokens and make API call when persistent client manager is called', function(done) {
+	it('should correctly store tokens and make API call when persistent client manager is called', function() {
 
 		var fileID = '98740596456',
 			fileName = 'Test Document.pdf',
@@ -280,18 +272,16 @@ describe('Box Node SDK', function() {
 				accessToken: TEST_ACCESS_TOKEN,
 				refreshToken: 'new_rt'
 			}))
-			.yieldsAsync();
+			.returns(Promise.resolve());
 
-		client.files.get(fileID, {}, function(err, data) {
-
-			assert.ifError(err);
-			assert.propertyVal(data, 'id', fileID);
-			assert.propertyVal(data, 'name', fileName);
-			done();
-		});
+		return client.files.get(fileID)
+			.then(data => {
+				assert.propertyVal(data, 'id', fileID);
+				assert.propertyVal(data, 'name', fileName);
+			});
 	});
 
-	it('should make API call when persistent client manager is called and correctly match the IP headers for refresh token call', function(done) {
+	it('should make API call when persistent client manager is called and correctly match the IP headers for refresh token call', function() {
 
 		var fileID = '98740596456',
 			fileName = 'Test Document.pdf',
@@ -354,18 +344,16 @@ describe('Box Node SDK', function() {
 				accessToken: TEST_ACCESS_TOKEN,
 				refreshToken: 'new_rt'
 			}))
-			.yieldsAsync();
+			.returns(Promise.resolve());
 
-		client.files.get(fileID, {}, function(err, data) {
-
-			assert.ifError(err);
-			assert.propertyVal(data, 'id', fileID);
-			assert.propertyVal(data, 'name', fileName);
-			done();
-		});
+		return client.files.get(fileID)
+			.then(data => {
+				assert.propertyVal(data, 'id', fileID);
+				assert.propertyVal(data, 'name', fileName);
+			});
 	});
 
-	it('should correctly store tokens and make API call when app auth client manager is called', function(done) {
+	it('should correctly store tokens and make API call when app auth client manager is called', function() {
 
 		var userID = '34876458977987',
 			userName = 'Pnin',
@@ -426,16 +414,14 @@ describe('Box Node SDK', function() {
 
 		var client = sdk.getAppAuthClient('user', userID);
 
-		client.users.get(client.CURRENT_USER_ID, {}, function(err, data) {
-
-			assert.ifError(err);
-			assert.propertyVal(data, 'id', userID);
-			assert.propertyVal(data, 'name', userName);
-			done();
-		});
+		return client.users.get(client.CURRENT_USER_ID)
+			.then(data => {
+				assert.propertyVal(data, 'id', userID);
+				assert.propertyVal(data, 'name', userName);
+			});
 	});
 
-	it('should correctly exchange tokens when client token exchange is called', function(done) {
+	it('should correctly exchange tokens when client token exchange is called', function() {
 
 		var userID = '34876458977987',
 			algorithm = 'RS256',
@@ -520,15 +506,13 @@ describe('Box Node SDK', function() {
 
 		var client = sdk.getAppAuthClient('user', userID);
 
-		client.exchangeToken(scopes, resource, function(err, data) {
-
-			assert.ifError(err);
-			assert.propertyVal(data, 'accessToken', exchangedTokenInfo.access_token);
-			done();
-		});
+		return client.exchangeToken(scopes, resource)
+			.then(data => {
+				assert.propertyVal(data, 'accessToken', exchangedTokenInfo.access_token);
+			});
 	});
 
-	it('should retry API request when response is a temporary error', function(done) {
+	it('should retry API request when response is a temporary error', function() {
 
 		var folderID = '98740596456',
 			folderName = 'Test Folder';
@@ -571,13 +555,11 @@ describe('Box Node SDK', function() {
 
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
 
-		client.folders.get(folderID, {}, function(err, data) {
-
-			assert.ifError(err);
-			assert.propertyVal(data, 'id', folderID);
-			assert.propertyVal(data, 'name', folderName);
-			done();
-		});
+		return client.folders.get(folderID)
+			.then(data => {
+				assert.propertyVal(data, 'id', folderID);
+				assert.propertyVal(data, 'name', folderName);
+			});
 	});
 
 	it.skip('should return file stream when file read stream is requested', function(done) {
@@ -904,22 +886,24 @@ describe('Box Node SDK', function() {
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
 
 		var seenParts = [];
-		client.files.getChunkedUploader(folderID, fileSize, fileName, fileStream, null, function(err, uploader) {
+		client.files.getChunkedUploader(folderID, fileSize, fileName, fileStream)
+			.then(uploader => {
 
-			assert.ifError(err);
+				uploader.on('chunkUploaded', chunk => seenParts.push(chunk.part));
+				uploader.on('error', sandbox.mock().never());
+				uploader.on('chunkError', sandbox.mock().never());
+				uploader.on('uploadComplete', data => {
 
-			uploader.on('chunkUploaded', chunk => seenParts.push(chunk.part));
-			uploader.on('error', sandbox.mock().never());
-			uploader.on('chunkError', sandbox.mock().never());
-			uploader.on('uploadComplete', data => {
+					assert.deepEqual(data, file);
+					assert.sameDeepMembers(seenParts, parts);
+					// eslint-disable-next-line promise/no-callback-in-promise
+					done();
+				});
 
-				assert.deepEqual(data, file);
-				assert.sameDeepMembers(seenParts, parts);
-				done();
-			});
-
-			uploader.start();
-		});
+				uploader.start();
+			})
+			// eslint-disable-next-line promise/no-callback-in-promise
+			.catch(err => done(err));
 	});
 
 	it('should send batch request and pass results to individual calls when batch is executed', function() {
@@ -1018,118 +1002,6 @@ describe('Box Node SDK', function() {
 				assert.deepEqual(results, batchResponse);
 			});
 
-		return Promise.all([
-			folderPromise,
-			filePromise,
-			batchPromise
-		]);
-	});
-
-	it('should send batch request and pass results to individual calls when batch is executed with callbacks', function() {
-
-		var folderID = '1234',
-			fileID = '9876',
-			folderName = 'My Test Folder',
-			fileName = 'Batch API Test.docx',
-			batchResponse = {
-				responses: [
-					{
-						status: 200,
-						headers: {},
-						response: {
-							id: '1234',
-							name: folderName
-						}
-					},
-					{
-						status: 400,
-						headers: {},
-						response: {
-							type: 'error',
-							status: 400,
-							code: 'bad_request',
-							context_info: {
-								errors: [
-									{
-										reason: 'invalid_parameter',
-										name: 'entity-body',
-										message: 'Invalid value \'{\n    "name": "\\^&*@(*&^$&^%@()*"\n}\'. Entity body should be a correctly nested resource attribute name/value pair'
-									}
-								]
-							},
-							help_url: 'http://developers.box.com/docs/#errors',
-							message: 'Bad Request',
-							request_id: '273876906598a559f8b3f9'
-						}
-					}
-				]
-			};
-
-		apiMock.post('/2.0/batch',
-			function(body) {
-
-				assert.isArray(body.requests);
-				assert.sameDeepOrderedMembers(body.requests, [
-					{
-						method: 'GET',
-						relative_url: `/folders/${folderID}?fields=name%2Cid`
-					},
-					{
-						method: 'PUT',
-						relative_url: `/files/${fileID}`,
-						body: {
-							name: fileName
-						}
-					}
-				]);
-
-				return true;
-			})
-			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
-				return true;
-			})
-			.matchHeader('User-Agent', function(uaHeader) {
-				assert.include(uaHeader, 'Box Node.js SDK v');
-				return true;
-			})
-			.reply(200, batchResponse);
-
-		var sdk = new BoxSDK({
-			clientID: TEST_CLIENT_ID,
-			clientSecret: TEST_CLIENT_SECRET
-		});
-
-		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
-
-		client.batch();
-		/* eslint-disable promise/avoid-new */
-		var folderPromise = new Promise(function(resolve) {
-
-			client.folders.get(folderID, {fields: 'name,id'}, function(err, folder) {
-				assert.ifError(err);
-				assert.propertyVal(folder, 'id', folderID);
-				assert.propertyVal(folder, 'name', folderName);
-				resolve();
-			});
-		});
-		var filePromise = new Promise(function(resolve) {
-
-			client.files.update(fileID, {name: fileName}, function(err) {
-				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', 400);
-				resolve();
-			});
-		});
-		var batchPromise = new Promise(function(resolve) {
-
-			client.batchExec(function(err, results) {
-				assert.ifError(err);
-				assert.deepEqual(results, batchResponse);
-				resolve();
-			});
-		});
-		/* eslint-enable promise/avoid-new */
 		return Promise.all([
 			folderPromise,
 			filePromise,

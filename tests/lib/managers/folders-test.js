@@ -9,7 +9,6 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
-	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -447,7 +446,7 @@ describe('Folders', function() {
 			var foldersMock = sandbox.mock(folders);
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
@@ -469,7 +468,7 @@ describe('Folders', function() {
 			var foldersMock = sandbox.mock(folders);
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
@@ -503,7 +502,7 @@ describe('Folders', function() {
 			var error = new Error('Failed update');
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			var foldersMock = sandbox.mock(folders);
@@ -538,7 +537,7 @@ describe('Folders', function() {
 
 			var error = new Error('Failed update');
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 
@@ -679,7 +678,7 @@ describe('Folders', function() {
 			var foldersMock = sandbox.mock(folders);
 
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = Promise.delay(1).then(() => {
+			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw error;
 			});
 			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})

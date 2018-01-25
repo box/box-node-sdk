@@ -16,7 +16,6 @@ var assert = require('chai').assert,
 	Stream = require('stream'),
 	mockery = require('mockery'),
 	Config = require('../../lib/util/config'),
-	Promise = require('bluebird'),
 	EventEmitter = require('events').EventEmitter;
 
 var APIRequest = require('../../lib/api-request');
