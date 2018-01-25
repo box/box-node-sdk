@@ -37,6 +37,7 @@ describe.only('Box Node SDK', function() {
 		BoxSDK;
 
 	beforeEach(function() {
+		nock.disableNetConnect();
 		apiMock = nock(TEST_API_ROOT);
 
 		mockery.enable({
@@ -788,8 +789,9 @@ describe.only('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(420, 630))
-					.digest('base64')}`);
+				var hash = crypto.createHash('sha1').update(fileContents.slice(420, 630))
+					.digest('base64');
+				assert.equal(digestHeader, `SHA=${hash}`);
 				return true;
 			})
 			.matchHeader('Content-Range', function(rangeHeader) {
@@ -862,8 +864,9 @@ describe.only('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(840))
-					.digest('base64')}`);
+				var hash = crypto.createHash('sha1').update(fileContents.slice(840))
+					.digest('base64');
+				assert.equal(digestHeader, `SHA=${hash}`, 'Failed digest for last part');
 				return true;
 			})
 			.matchHeader('Content-Range', function(rangeHeader) {
@@ -888,7 +891,7 @@ describe.only('Box Node SDK', function() {
 			})
 			.matchHeader('Digest', function(digestHeader) {
 				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents)
-					.digest('base64')}`);
+					.digest('base64')}`, 'Failed digest for whole file');
 				return true;
 			})
 			.reply(201, file);
