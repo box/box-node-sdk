@@ -8,13 +8,19 @@ const libraryName = 'BoxSdk';
 let plugins = [], outputFile;
 
 outputFile = libraryName + '.min.js';
-plugins.push(new UglifyJsPlugin({
-  sourceMap: true,
-  uglifyOptions: {
-    compress: { warnings: false },
-    ecma: 5
-  }
-}));
+plugins.push(
+  new UglifyJsPlugin({
+    sourceMap: true,
+    uglifyOptions: {
+      compress: { warnings: false },
+      ecma: 5
+    }
+  }),
+  new webpack.IgnorePlugin(/app-auth-session/),
+  new webpack.IgnorePlugin(/persistent-session/),
+  new webpack.IgnorePlugin(/anonymous-session/),
+  new webpack.IgnorePlugin(/token-manager/),
+);
 
 let config = {
   entry: __dirname + '/lib/box-node-sdk.js',
@@ -45,6 +51,20 @@ let config = {
         use: {
           loader: "eslint-loader"
         }
+      },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        exclude: /(node_modules|bower_components|\.spec\.js)/,
+        use: [
+          {
+            loader: 'webpack-strip-block',
+            options: {
+              start: 'node:start',
+              end: 'node:end'
+            }
+          }
+        ]
       }
     ]
   },
