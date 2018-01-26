@@ -179,7 +179,7 @@ describe('token-manager', function() {
 		});
 
 		it('should propagate an "Unexpected Response" error when a request returns without JSON', function() {
-			var responseBody = new Buffer(1),
+			var responseBody = Buffer.alloc(1),
 				responseInfo = {statusCode: 200, body: responseBody};
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')

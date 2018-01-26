@@ -130,8 +130,7 @@ rules:
     handle-callback-err:
         - error
         - '^.*(e|E)rr'
-    # Buffer constructor is unsafe, enable when we don't support Node 4.x anymore
-    no-buffer-constructor: off
+    no-buffer-constructor: error
     no-mixed-requires: error
     no-new-require: error
     no-path-concat: error
@@ -329,8 +328,7 @@ rules:
     promise/no-return-in-finally: error
 
 ### UNICORN
-    # Need to disable until we no longer support Node 4
-    unicorn/no-new-buffer: off
+    unicorn/no-new-buffer: error
 
 ### NODE
     node/no-deprecated-api:

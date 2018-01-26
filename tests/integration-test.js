@@ -1068,7 +1068,7 @@ describe('Box Node SDK', function() {
 			.times(numParts)
 			.reply((uri, requestBody) => {
 				// requestBody is a hex-encoded string, need to decode to get raw length
-				var rawRequestBody = new Buffer(requestBody, 'hex');
+				var rawRequestBody = Buffer.from(requestBody, 'hex');
 				bytesUploaded += rawRequestBody.length;
 				var partID = `${partCounter}`;
 				var response = {

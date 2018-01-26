@@ -9,7 +9,7 @@
     "url": "https://github.com/box/box-node-sdk.git"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 8.0.0"
   },
   "main": "./lib/box-node-sdk.js",
   "scripts": {

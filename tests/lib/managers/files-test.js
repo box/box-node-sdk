@@ -830,7 +830,7 @@ describe('Files', function() {
 
 		var PARENT_FOLDER_ID = '123',
 			FILENAME = 'abc.txt',
-			CONTENT = new Buffer('someContent');
+			CONTENT = Buffer.from('someContent');
 
 		it('should call BoxClient.upload() with the correct params when called', function() {
 			var expectedFormData = {
@@ -897,7 +897,7 @@ describe('Files', function() {
 
 	describe('uploadNewFileVersion()', function() {
 
-		var CONTENT = new Buffer('someContent');
+		var CONTENT = Buffer.from('someContent');
 
 		it('should call BoxClient.upload() with the correct params when called', function() {
 			var expectedFormData = {
@@ -1784,7 +1784,7 @@ describe('Files', function() {
 
 			var apiResponse = {
 				statusCode: 200,
-				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
+				body: Buffer.from('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
 			};
 
 			var expectedParams = {

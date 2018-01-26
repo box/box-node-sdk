@@ -355,7 +355,7 @@ describe('box-node-sdk', function() {
 			clientSecret: 'secret',
 			appAuth: {
 				keyID: 'fh83745',
-				privateKey: new Buffer(50),
+				privateKey: Buffer.alloc(50),
 				passphrase: 'Such secrets, wow!'
 			}
 		};
