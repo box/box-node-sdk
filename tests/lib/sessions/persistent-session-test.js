@@ -239,8 +239,8 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 			sandbox.mock(tokenStoreFake).expects('read')
-				.yieldsAsync(null, newTokenInfo);
-			sandbox.stub(tokenStoreFake, 'write').yieldsAsync();
+				.returns(Promise.resolve(newTokenInfo));
+			sandbox.stub(tokenStoreFake, 'write').returns(Promise.resolve());
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
 				.then(token => {
@@ -259,8 +259,8 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 			sandbox.mock(tokenStoreFake).expects('read')
-				.yieldsAsync(null, testTokenInfo);
-			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync();
+				.returns(Promise.resolve(testTokenInfo));
+			sandbox.stub(tokenStoreFake, 'clear').returns(Promise.resolve());
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
 				.catch(err => {
@@ -274,7 +274,7 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.resolve(newTokenInfo));
 			sandbox.mock(tokenStoreFake).expects('write')
 				.withArgs(newTokenInfo)
-				.yieldsAsync();
+				.returns(Promise.resolve());
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
 				.then(token => {
@@ -290,8 +290,8 @@ describe('PersistentAPISession', function() {
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.resolve(newTokenInfo));
 			sandbox.mock(tokenStoreFake).expects('write')
 				.withArgs(newTokenInfo)
-				.yieldsAsync(storeError);
-			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync();
+				.returns(Promise.reject(storeError));
+			sandbox.stub(tokenStoreFake, 'clear').returns(Promise.resolve());
 
 			return persistentAPISessionWithTokenStore.getAccessToken()
 				.catch(err => {
@@ -437,16 +437,20 @@ describe('PersistentAPISession', function() {
 
 		it('should clear token store when one is available', function() {
 
-			sandbox.mock(tokenStoreFake).expects('clear');
+			var error = new Error('Something bad happened.');
 
-			persistentAPISessionWithTokenStore.handleExpiredTokensError();
+			sandbox.mock(tokenStoreFake).expects('clear')
+				.returns(Promise.resolve());
+
+			return persistentAPISessionWithTokenStore.handleExpiredTokensError(error)
+				.catch(() => { /**/ });
 		});
 
 		it('should return promise that rejects with passed-in error when token store clear succeeds', function() {
 
 			var error = new Error('Something bad happened.');
 
-			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync();
+			sandbox.stub(tokenStoreFake, 'clear').returns(Promise.resolve());
 
 			return persistentAPISessionWithTokenStore.handleExpiredTokensError(error)
 				.catch(err => {
@@ -459,7 +463,7 @@ describe('PersistentAPISession', function() {
 			var error = new Error('Something bad happened.'),
 				tokenStoreError = new Error('Token store is busted');
 
-			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync(tokenStoreError);
+			sandbox.stub(tokenStoreFake, 'clear').returns(Promise.reject(tokenStoreError));
 
 			return persistentAPISessionWithTokenStore.handleExpiredTokensError(error)
 				.catch(err => {

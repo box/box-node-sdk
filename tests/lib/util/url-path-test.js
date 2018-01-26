@@ -3,6 +3,7 @@
  */
 
 /* global describe, it, before, beforeEach, after, afterEach */
+/* eslint-disable mocha/no-synchronous-tests */
 
 'use strict';
 

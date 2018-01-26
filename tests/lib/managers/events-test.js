@@ -77,19 +77,7 @@ describe('Events', function() {
 				}))
 				.returns(Promise.resolve({statusCode: 200, body: {}}));
 
-			events.getCurrentStreamPosition();
-		});
-
-		it('should call callback with error when API call fails', function(done) {
-
-			var error = new Error('Failure');
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(error));
-
-			events.getCurrentStreamPosition(function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
+			return events.getCurrentStreamPosition();
 		});
 
 		it('should return promise that rejects when API call fails', function() {
@@ -97,24 +85,8 @@ describe('Events', function() {
 			var error = new Error('Failure');
 			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(error));
 
-			events.getCurrentStreamPosition()
+			return events.getCurrentStreamPosition()
 				.catch(err => assert.equal(err, error));
-		});
-
-		it('should call callback with a response error when API returns non-200 result', function(done) {
-
-			var response = {
-				statusCode: 404
-			};
-
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-
-			events.getCurrentStreamPosition(function(err) {
-
-				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', response.statusCode);
-				done();
-			});
 		});
 
 		it('should return a promise that rejects when API returns non-200 result', function() {
@@ -125,30 +97,11 @@ describe('Events', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
-			events.getCurrentStreamPosition()
+			return events.getCurrentStreamPosition()
 				.catch(err => {
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', response.statusCode);
 				});
-		});
-
-		it('should call callback with current stream position when API call succeeds', function(done) {
-
-			var response = {
-				statusCode: 200,
-				body: {
-					next_stream_position: TEST_STREAM_POSITION
-				}
-			};
-
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-
-			events.getCurrentStreamPosition(function(err, streamPosition) {
-
-				assert.ifError(err);
-				assert.equal(streamPosition, TEST_STREAM_POSITION);
-				done();
-			});
 		});
 
 		it('should return a promise resolving to current stream position when API call succeeds', function() {
@@ -194,19 +147,6 @@ describe('Events', function() {
 			events.get({});
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			events.get({}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -231,19 +171,7 @@ describe('Events', function() {
 				.withArgs('/events')
 				.returns(Promise.resolve(response));
 
-			events.getLongPollInfo();
-		});
-
-		it('should call callback with an error when the API call fails', function(done) {
-
-			var apiError = new Error('No connection');
-			sandbox.stub(boxClientFake, 'options').returns(Promise.reject(apiError));
-
-			events.getLongPollInfo(function(err) {
-
-				assert.equal(err, apiError);
-				done();
-			});
+			return events.getLongPollInfo();
 		});
 
 		it('should return a promise that rejects when the API call fails', function() {
@@ -251,24 +179,10 @@ describe('Events', function() {
 			var apiError = new Error('No connection');
 			sandbox.stub(boxClientFake, 'options').returns(Promise.reject(apiError));
 
-			events.getLongPollInfo()
+			return events.getLongPollInfo()
 				.catch(err => {
 					assert.equal(err, apiError);
 				});
-		});
-
-		it('should call callback with an error when API call returns non-200 status', function(done) {
-
-			var response = {
-				statusCode: 403
-			};
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
-
-			events.getLongPollInfo(function(err) {
-				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', response.statusCode);
-				done();
-			});
 		});
 
 		it('should return promise that rejects when API call returns non-200 status', function() {
@@ -278,28 +192,11 @@ describe('Events', function() {
 			};
 			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
 
-			events.getLongPollInfo()
+			return events.getLongPollInfo()
 				.catch(err => {
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', response.statusCode);
 				});
-		});
-
-		it('should call callback with an error when API does not return realtime server info', function(done) {
-
-			var response = {
-				statusCode: 200,
-				body: {
-					entries: []
-				}
-			};
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
-
-			events.getLongPollInfo(function(err) {
-
-				assert.instanceOf(err, Error);
-				done();
-			});
 		});
 
 		it('should return promise that rejects when API does not return realtime server info', function() {
@@ -312,32 +209,10 @@ describe('Events', function() {
 			};
 			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
 
-			events.getLongPollInfo()
+			return events.getLongPollInfo()
 				.catch(err => {
 					assert.instanceOf(err, Error);
 				});
-		});
-
-		it('should call callback with realtime server info when API call succeeds', function(done) {
-
-			var realtimeInfo = {
-				type: 'realtime_server',
-				url: 'https://realtime.box.com/foo'
-			};
-			var response = {
-				statusCode: 200,
-				body: {
-					entries: [realtimeInfo]
-				}
-			};
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
-
-			events.getLongPollInfo(function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, realtimeInfo);
-				done();
-			});
 		});
 
 		it('should return promise that resolves to long poll info when API call succeeds', function() {
@@ -363,22 +238,20 @@ describe('Events', function() {
 
 	describe('getEventStream()', function() {
 
-		it('should return event stream from starting stream position when passed stream position', function(done) {
+		it('should return event stream from starting stream position when passed stream position', function() {
 
 			var streamPosition = '38746523';
 			sandbox.mock(events).expects('getCurrentStreamPosition')
 				.never();
-			events.getEventStream(streamPosition, function(err, stream) {
-
-				assert.ifError(err);
-				assert.ok(EventStreamConstructorStub.calledOnce, 'Should call EventStream constructor');
-				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, streamPosition), 'Should pass correct args to EventStream constructor');
-				assert.equal(stream, eventStreamFake);
-				done();
-			});
+			return events.getEventStream(streamPosition)
+				.then(stream => {
+					assert.ok(EventStreamConstructorStub.calledOnce, 'Should call EventStream constructor');
+					assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, streamPosition), 'Should pass correct args to EventStream constructor');
+					assert.equal(stream, eventStreamFake);
+				});
 		});
 
-		it('should return event stream from starting position with options when passed stream position and options', function(done) {
+		it('should return event stream from starting position with options when passed stream position and options', function() {
 
 			var streamPosition = '38746523';
 			var options = {
@@ -386,14 +259,12 @@ describe('Events', function() {
 			};
 			sandbox.mock(events).expects('getCurrentStreamPosition')
 				.never();
-			events.getEventStream(streamPosition, options, function(err, stream) {
-
-				assert.ifError(err);
-				assert.ok(EventStreamConstructorStub.calledOnce, 'Should call EventStream constructor');
-				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, streamPosition, options), 'Should pass correct args to EventStream constructor');
-				assert.equal(stream, eventStreamFake);
-				done();
-			});
+			return events.getEventStream(streamPosition, options)
+				.then(stream => {
+					assert.ok(EventStreamConstructorStub.calledOnce, 'Should call EventStream constructor');
+					assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, streamPosition, options), 'Should pass correct args to EventStream constructor');
+					assert.equal(stream, eventStreamFake);
+				});
 		});
 
 		it('should make API call to get stream position when called without stream position', function() {
@@ -402,18 +273,6 @@ describe('Events', function() {
 				.returns(Promise.resolve(TEST_STREAM_POSITION));
 
 			events.getEventStream();
-		});
-
-		it('should call callback with an error when the API call fails', function(done) {
-
-			var apiError = new Error('There is no stream');
-			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.reject(apiError));
-
-			events.getEventStream(function(err) {
-
-				assert.equal(err, apiError);
-				done();
-			});
 		});
 
 		it('should return a promise that rejects when the API call fails', function() {
@@ -425,38 +284,6 @@ describe('Events', function() {
 				.catch(err => {
 					assert.equal(err, apiError);
 				});
-		});
-
-		it('should call callback with a new event stream from the stream position when the API call succeeds', function(done) {
-
-			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
-
-			events.getEventStream(function(err, stream) {
-
-				assert.ifError(err);
-				assert.ok(EventStreamConstructorStub.calledWithNew(), 'Should call EventStream constructor');
-				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, TEST_STREAM_POSITION), 'Should pass correct args to EventStream constructor');
-				assert.equal(stream, eventStreamFake);
-				done();
-			});
-		});
-
-		it('should call callback with a new event stream from the stream position and options when passed options and the API call succeeds', function(done) {
-
-			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
-
-			var options = {
-				fetchInterval: 5000
-			};
-
-			events.getEventStream(options, function(err, stream) {
-
-				assert.ifError(err);
-				assert.ok(EventStreamConstructorStub.calledWithNew(), 'Should call EventStream constructor');
-				assert.ok(EventStreamConstructorStub.calledWith(boxClientFake, TEST_STREAM_POSITION, options), 'Should pass correct args to EventStream constructor');
-				assert.equal(stream, eventStreamFake);
-				done();
-			});
 		});
 
 		it('should return a promise that resolves to a new event stream when the API call succeeds', function() {
@@ -493,18 +320,6 @@ describe('Events', function() {
 		var options = {
 			streamPosition: TEST_STREAM_POSITION
 		};
-
-		it('should call callback with a new event stream from the stream position', function(done) {
-
-			events.getEnterpriseEventStream(options, function(err, stream) {
-
-				assert.ifError(err);
-				assert.ok(EnterpriseEventStreamConstructorStub.calledOnce, 'Should call EnterpriseEventStream constructor');
-				assert.ok(EnterpriseEventStreamConstructorStub.calledWith(boxClientFake, options), 'Should pass correct args to EnterpriseEventStream constructor');
-				assert.equal(stream, enterpriseEventStreamFake);
-				done();
-			});
-		});
 
 		it('should return a promise that resolves to a new event stream', function() {
 

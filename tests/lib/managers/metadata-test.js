@@ -62,7 +62,7 @@ describe('Metadata', function() {
 			var expectedAPIPath = '/metadata_templates/enterprise/productSpec/schema';
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs(expectedAPIPath, null);
+				.withArgs(expectedAPIPath);
 			metadata.getTemplateSchema('enterprise', 'productSpec');
 		});
 
@@ -73,19 +73,6 @@ describe('Metadata', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			metadata.getTemplateSchema('enterprise', 'productSpec');
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			metadata.getTemplateSchema('enterprise', 'productSpec', function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -104,7 +91,7 @@ describe('Metadata', function() {
 			var expectedAPIPath = '/metadata_templates/enterprise';
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs(expectedAPIPath, null);
+				.withArgs(expectedAPIPath);
 			metadata.getTemplates('enterprise');
 		});
 
@@ -115,19 +102,6 @@ describe('Metadata', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			metadata.getTemplates('enterprise');
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			metadata.getTemplates('enterprise', function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -200,19 +174,6 @@ describe('Metadata', function() {
 			metadata.createTemplate(name, fields, options);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			metadata.createTemplate(name, fields, options, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -241,19 +202,6 @@ describe('Metadata', function() {
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
 			metadata.deleteTemplate(scope, template);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			metadata.deleteTemplate(scope, template, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -307,19 +255,6 @@ describe('Metadata', function() {
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
 			metadata.updateTemplate(scope, template, operations);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			metadata.updateTemplate(scope, template, operations, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

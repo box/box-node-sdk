@@ -197,7 +197,7 @@ describe('EventStream', function() {
 			return eventStream.doLongPoll();
 		});
 
-		it('should make long poll request with correct query params when called', function() {
+		it('should make long poll request with correct query params when called', function(done) {
 
 			eventStream._longPollInfo.url = 'https://realtime/poll?foo=bar';
 
@@ -207,14 +207,16 @@ describe('EventStream', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(eventStream, 'fetchEvents');
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('https://realtime/poll', sinon.match({
 					timeout: TEST_RETRY_TIMEOUT * 1000,
 					qs: sinon.match(expectedQS)
 				}))
-				.returns(Promise.resolve({}));
+				.returns(Promise.resolve({message: 'new_change'}));
 
-			return eventStream.doLongPoll();
+			eventStream.doLongPoll();
+			done();
 		});
 
 		it('should increment the number of long poll retries when called', function() {
@@ -497,7 +499,7 @@ describe('EventStream', function() {
 		it('should delay successive calls to be rate limited when called', function() {
 
 			sandbox.mock(boxClientFake.events).expects('get')
-				.once()
+				.twice()
 				.withArgs(sinon.match({
 					stream_position: TEST_STREAM_POSITION,
 					limit: 500

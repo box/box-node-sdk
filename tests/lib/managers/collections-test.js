@@ -73,19 +73,6 @@ describe('Collections', function() {
 			collections.getAll();
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collections.getAll(function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -119,19 +106,6 @@ describe('Collections', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			collections.getItems(collectionID, testQS);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collections.getItems(collectionID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

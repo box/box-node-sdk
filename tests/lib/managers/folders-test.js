@@ -80,19 +80,6 @@ describe('Folders', function() {
 			folders.get(FOLDER_ID, testQS);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			folders.get(FOLDER_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -120,19 +107,6 @@ describe('Folders', function() {
 			folders.getItems(FOLDER_ID, testQS);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			folders.getItems(FOLDER_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -158,19 +132,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			folders.getCollaborations(FOLDER_ID, testQS);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			folders.getCollaborations(FOLDER_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -210,19 +171,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
 			folders.create(PARENT_FOLDER_ID, NEW_FOLDER_NAME);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			folders.create(PARENT_FOLDER_ID, NEW_FOLDER_NAME, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -274,19 +222,6 @@ describe('Folders', function() {
 			folders.copy(FOLDER_ID, NEW_PARENT_ID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			folders.copy(FOLDER_ID, NEW_PARENT_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -314,19 +249,6 @@ describe('Folders', function() {
 			folders.update(FOLDER_ID, testBody);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			folders.update(FOLDER_ID, testBody, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -341,7 +263,7 @@ describe('Folders', function() {
 
 		var COLLECTION_ID = '9873473596';
 
-		it('should get current collections and add new collection when item has no collections', function(done) {
+		it('should get current collections and add new collection when item has no collections', function() {
 
 			var folder = {
 				id: FOLDER_ID,
@@ -354,10 +276,10 @@ describe('Folders', function() {
 			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: COLLECTION_ID}]})
 				.returns(Promise.resolve(folder));
 
-			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
+			return folders.addToCollection(FOLDER_ID, COLLECTION_ID);
 		});
 
-		it('should get current collections and add new collection when item has other collections', function(done) {
+		it('should get current collections and add new collection when item has other collections', function() {
 
 			var folder = {
 				id: FOLDER_ID,
@@ -373,10 +295,10 @@ describe('Folders', function() {
 			]})
 				.returns(Promise.resolve(folder));
 
-			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
+			return folders.addToCollection(FOLDER_ID, COLLECTION_ID);
 		});
 
-		it('should get current collections and pass same collections when item is already in the collection', function(done) {
+		it('should get current collections and pass same collections when item is already in the collection', function() {
 
 			var folder = {
 				id: FOLDER_ID,
@@ -395,28 +317,7 @@ describe('Folders', function() {
 			]})
 				.returns(Promise.resolve(folder));
 
-			folders.addToCollection(FOLDER_ID, COLLECTION_ID, done);
-		});
-
-		it('should call callback with updated folder when API calls succeed', function(done) {
-
-			var folder = {
-				id: FOLDER_ID,
-				collections: [
-					{id: COLLECTION_ID},
-					{id: '111'}
-				]
-			};
-
-			sandbox.stub(folders, 'get').returns(Promise.resolve(folder));
-			sandbox.stub(folders, 'update').returns(Promise.resolve(folder));
-
-			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, folder);
-				done();
-			});
+			return folders.addToCollection(FOLDER_ID, COLLECTION_ID);
 		});
 
 		it('should return promise resolving to the updated folder when API calls succeed', function() {
@@ -439,28 +340,6 @@ describe('Folders', function() {
 				});
 		});
 
-		it('should call callback with error when getting current collections fails', function(done) {
-
-			var error = new Error('Failed get');
-
-			var foldersMock = sandbox.mock(folders);
-
-			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
-				throw error;
-			});
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-				.returns(p);
-
-			foldersMock.expects('update').never();
-
-			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
-		});
-
 		it('should return promise that rejects when getting current collections fails', function() {
 
 			var error = new Error('Failed get');
@@ -480,42 +359,6 @@ describe('Folders', function() {
 				.catch(err => {
 					assert.equal(err, error);
 				});
-		});
-
-		it('should call callback with error when adding the collection fails', function(done) {
-
-			var folder = {
-				id: FOLDER_ID,
-				collections: [
-					{id: COLLECTION_ID},
-					{id: '111'}
-				]
-			};
-
-			var expectedBody = {
-				collections: [
-					{ id: COLLECTION_ID },
-					{ id: '111' }
-				]
-			};
-
-			var error = new Error('Failed update');
-
-			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
-				throw error;
-			});
-			var foldersMock = sandbox.mock(folders);
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-				.returns(Promise.resolve(folder));
-			foldersMock.expects('update').withArgs(FOLDER_ID, expectedBody)
-				.returns(p);
-
-			folders.addToCollection(FOLDER_ID, COLLECTION_ID, function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
 		});
 
 		it('should return promise that rejects when adding the collection fails', function() {
@@ -558,7 +401,7 @@ describe('Folders', function() {
 
 		var COLLECTION_ID = '98763';
 
-		it('should get current collections and pass empty array when item is not in any collections', function(done) {
+		it('should get current collections and pass empty array when item is not in any collections', function() {
 
 			var folder = {
 				id: FOLDER_ID,
@@ -571,10 +414,10 @@ describe('Folders', function() {
 			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []})
 				.returns(Promise.resolve(folder));
 
-			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
+			return folders.removeFromCollection(FOLDER_ID, COLLECTION_ID);
 		});
 
-		it('should get current collections and pass empty array when item is in the collection to be removed', function(done) {
+		it('should get current collections and pass empty array when item is in the collection to be removed', function() {
 
 			var folder = {
 				id: FOLDER_ID,
@@ -587,10 +430,10 @@ describe('Folders', function() {
 			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: []})
 				.returns(Promise.resolve(folder));
 
-			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
+			return folders.removeFromCollection(FOLDER_ID, COLLECTION_ID);
 		});
 
-		it('should get current collections and pass filtered array when item is in multiple collections', function(done) {
+		it('should get current collections and pass filtered array when item is in multiple collections', function() {
 
 			var folder = {
 				id: FOLDER_ID,
@@ -606,10 +449,10 @@ describe('Folders', function() {
 			foldersMock.expects('update').withArgs(FOLDER_ID, {collections: [{id: '111'}]})
 				.returns(Promise.resolve(folder));
 
-			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
+			return folders.removeFromCollection(FOLDER_ID, COLLECTION_ID);
 		});
 
-		it('should get current collections and pass same array when item is in only other collections', function(done) {
+		it('should get current collections and pass same array when item is in only other collections', function() {
 
 			var folder = {
 				id: FOLDER_ID,
@@ -628,28 +471,7 @@ describe('Folders', function() {
 			]})
 				.returns(Promise.resolve(folder));
 
-			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, done);
-		});
-
-		it('should call callback with the updated folder when API calls succeed', function(done) {
-
-			var folder = {
-				id: FOLDER_ID,
-				collections: [
-					{id: '111'},
-					{id: '222'}
-				]
-			};
-
-			sandbox.stub(folders, 'get').returns(Promise.resolve(folder));
-			sandbox.stub(folders, 'update').returns(Promise.resolve(folder));
-
-			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, folder);
-				done();
-			});
+			return folders.removeFromCollection(FOLDER_ID, COLLECTION_ID);
 		});
 
 		it('should return promise resolving to the updated folder when API calls succeed', function() {
@@ -669,27 +491,6 @@ describe('Folders', function() {
 				.then(data => {
 					assert.equal(data, folder);
 				});
-		});
-
-		it('should call callback with error when getting current collections fails', function(done) {
-
-			var error = new Error('Failed get');
-
-			var foldersMock = sandbox.mock(folders);
-
-			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
-			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
-				throw error;
-			});
-			foldersMock.expects('get').withArgs(FOLDER_ID, {fields: 'collections'})
-				.returns(p);
-			foldersMock.expects('update').never();
-
-			folders.removeFromCollection(FOLDER_ID, COLLECTION_ID, function(err) {
-
-				assert.equal(err, error);
-				done();
-			});
 		});
 
 		it('should return promise that rejects when adding the collection fails', function() {
@@ -744,19 +545,6 @@ describe('Folders', function() {
 			folders.move(FOLDER_ID, NEW_PARENT_ID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			folders.move(FOLDER_ID, NEW_PARENT_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -784,19 +572,6 @@ describe('Folders', function() {
 			folders.delete(FOLDER_ID, testQS);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			folders.delete(FOLDER_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -813,7 +588,7 @@ describe('Folders', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs('/folders/1234/metadata', null);
+				.withArgs('/folders/1234/metadata');
 			folders.getAllMetadata(FOLDER_ID);
 		});
 
@@ -824,19 +599,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			folders.getAllMetadata(FOLDER_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			folders.getAllMetadata(FOLDER_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -855,7 +617,7 @@ describe('Folders', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs('/folders/1234/metadata/global/properties', null);
+				.withArgs('/folders/1234/metadata/global/properties');
 			folders.getMetadata(FOLDER_ID, 'global', 'properties');
 		});
 
@@ -866,19 +628,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			folders.getMetadata(FOLDER_ID, 'global', 'properties');
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			folders.getMetadata(FOLDER_ID, 'global', 'properties', function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -922,19 +671,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
 			folders.addMetadata(FOLDER_ID, 'global', 'properties', metadata);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			folders.addMetadata(FOLDER_ID, 'global', 'properties', metadata, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -987,19 +723,6 @@ describe('Folders', function() {
 			folders.updateMetadata(FOLDER_ID, 'global', 'properties', patch);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			folders.updateMetadata(FOLDER_ID, 'global', 'properties', patch, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -1016,7 +739,7 @@ describe('Folders', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs('/folders/1234/metadata/global/properties', null);
+				.withArgs('/folders/1234/metadata/global/properties');
 			folders.deleteMetadata(FOLDER_ID, 'global', 'properties');
 		});
 
@@ -1027,19 +750,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
 			folders.deleteMetadata(FOLDER_ID, 'global', 'properties');
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			folders.deleteMetadata(FOLDER_ID, 'global', 'properties', function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -1068,19 +778,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			folders.getTrashedFolder(FOLDER_ID, testQS);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			folders.getTrashedFolder(FOLDER_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -1154,7 +851,7 @@ describe('Folders', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`/folders/${FOLDER_ID}`, {body: {}});
-			folders.restoreFromTrash(FOLDER_ID, null);
+			folders.restoreFromTrash(FOLDER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
@@ -1164,19 +861,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
 			folders.restoreFromTrash(FOLDER_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			folders.restoreFromTrash(FOLDER_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -1195,7 +879,7 @@ describe('Folders', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs(`/folders/${FOLDER_ID}/trash`, null);
+				.withArgs(`/folders/${FOLDER_ID}/trash`);
 			folders.deletePermanently(FOLDER_ID);
 		});
 
@@ -1206,19 +890,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
 			folders.deletePermanently(FOLDER_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			folders.deletePermanently(FOLDER_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -1241,18 +912,6 @@ describe('Folders', function() {
 			folders.getWatermark(FOLDER_ID, testQS);
 		});
 
-		it('should call callback with error when API call returns error', function(done) {
-
-			var apiError = new Error('failed');
-			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
-				.returns(Promise.reject(apiError));
-			folders.getWatermark(FOLDER_ID, null, function(err) {
-
-				assert.equal(err, apiError);
-				done();
-			});
-		});
-
 		it('should return promise that rejects when API call returns error', function() {
 
 			var apiError = new Error('failed');
@@ -1264,18 +923,6 @@ describe('Folders', function() {
 				});
 		});
 
-		it('should call callback with error when API call returns non-200 status code', function(done) {
-
-			var res = {statusCode: 404};
-			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
-				.returns(Promise.resolve(res));
-			folders.getWatermark(FOLDER_ID, null, function(err) {
-
-				assert.instanceOf(err, Error);
-				done();
-			});
-		});
-
 		it('should return promise that rejects when API call returns non-200 status code', function() {
 
 			var res = {statusCode: 404};
@@ -1285,27 +932,6 @@ describe('Folders', function() {
 				.catch(err => {
 					assert.instanceOf(err, Error);
 				});
-		});
-
-		it('should call callback with watermark data when API call succeeds', function(done) {
-
-			var watermark = {
-				created_at: '2016-01-01T12:55:34-08:00',
-				modified_at: '2016-01-01T12:55:34-08:00'
-			};
-
-			var res = {
-				statusCode: 200,
-				body: {watermark}
-			};
-			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
-				.returns(Promise.resolve(res));
-			folders.getWatermark(FOLDER_ID, null, function(err, data) {
-
-				assert.isNull(err, 'Error should be absent');
-				assert.equal(data, watermark);
-				done();
-			});
 		});
 
 		it('should return promise resolving to watermark data when API call succeeds', function() {
@@ -1346,7 +972,7 @@ describe('Folders', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`/folders/${FOLDER_ID}/watermark`, expectedParams);
-			folders.applyWatermark(FOLDER_ID, null);
+			folders.applyWatermark(FOLDER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
@@ -1355,20 +981,7 @@ describe('Folders', function() {
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
-			folders.applyWatermark(FOLDER_ID, null);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			folders.applyWatermark(FOLDER_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
+			folders.applyWatermark(FOLDER_ID);
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -1376,7 +989,7 @@ describe('Folders', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
-			return folders.applyWatermark(FOLDER_ID, null)
+			return folders.applyWatermark(FOLDER_ID)
 				.then(data => assert.equal(data, response));
 		});
 	});
@@ -1387,7 +1000,7 @@ describe('Folders', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs(`/folders/${FOLDER_ID}/watermark`, null);
+				.withArgs(`/folders/${FOLDER_ID}/watermark`);
 			folders.removeWatermark(FOLDER_ID);
 		});
 
@@ -1398,19 +1011,6 @@ describe('Folders', function() {
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
 			folders.removeWatermark(FOLDER_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			folders.removeWatermark(FOLDER_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

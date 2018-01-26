@@ -94,19 +94,6 @@ describe('RetentionPolicies', function() {
 			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30});
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -136,19 +123,6 @@ describe('RetentionPolicies', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			retentionPolicies.get(POLICY_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			retentionPolicies.get(POLICY_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -187,19 +161,6 @@ describe('RetentionPolicies', function() {
 			retentionPolicies.update(POLICY_ID, options);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			retentionPolicies.update(POLICY_ID, options, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -231,19 +192,6 @@ describe('RetentionPolicies', function() {
 			retentionPolicies.getAll();
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			retentionPolicies.getAll(null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -273,19 +221,6 @@ describe('RetentionPolicies', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			retentionPolicies.getAssignments(POLICY_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			retentionPolicies.getAssignments(POLICY_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -334,19 +269,6 @@ describe('RetentionPolicies', function() {
 			retentionPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			retentionPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -378,19 +300,6 @@ describe('RetentionPolicies', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			retentionPolicies.getAssignment(ASSIGNMENT_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			retentionPolicies.getAssignment(ASSIGNMENT_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -426,19 +335,6 @@ describe('RetentionPolicies', function() {
 			retentionPolicies.getFileVersionRetention(RETENTION_ID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			retentionPolicies.getFileVersionRetention(RETENTION_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -471,19 +367,6 @@ describe('RetentionPolicies', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			retentionPolicies.getAllFileVersionRetentions();
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			retentionPolicies.getAllFileVersionRetentions(null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

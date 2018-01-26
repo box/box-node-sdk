@@ -86,19 +86,6 @@ describe('Webhooks', function() {
 			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -125,19 +112,6 @@ describe('Webhooks', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			webhooks.get(WEBHOOKS_ID, testQS);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			webhooks.get(WEBHOOKS_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -167,19 +141,6 @@ describe('Webhooks', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			webhooks.getAll(testQS);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			webhooks.getAll(testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -222,19 +183,6 @@ describe('Webhooks', function() {
 			webhooks.update(WEBHOOKS_ID, param);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			webhooks.update(WEBHOOKS_ID, param, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -264,19 +212,6 @@ describe('Webhooks', function() {
 			webhooks.delete(WEBHOOKS_ID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			webhooks.delete(WEBHOOKS_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -303,15 +238,6 @@ describe('Webhooks', function() {
 
 			assert.equal(Webhooks.primarySignatureKey, PRIMARY_SIGNATURE_KEY);
 			assert.equal(null, Webhooks.secondarySignatureKey);
-		});
-
-		it('should return promise resolving to results when called', function() {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
-			return webhooks.delete(WEBHOOKS_ID)
-				.then(data => assert.equal(data, response));
 		});
 	});
 

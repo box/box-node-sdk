@@ -72,19 +72,6 @@ describe('Enterprise', function() {
 			enterprise.getUsers();
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			enterprise.getUsers(null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -121,19 +108,6 @@ describe('Enterprise', function() {
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
 			enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -187,19 +161,6 @@ describe('Enterprise', function() {
 			enterprise.addUser(LOGIN, NAME, {role: ROLE});
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			enterprise.addUser(LOGIN, NAME, {role: ROLE}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -250,19 +211,6 @@ describe('Enterprise', function() {
 			enterprise.addAppUser(NAME, {job_title: JOB_TITLE});
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			enterprise.addAppUser(NAME, {job_title: JOB_TITLE}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -299,19 +247,6 @@ describe('Enterprise', function() {
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
 			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

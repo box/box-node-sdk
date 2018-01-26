@@ -125,19 +125,6 @@ describe('WebLinks', function() {
 			weblinks.create(url, parentID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			weblinks.create(url, parentID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -164,19 +151,6 @@ describe('WebLinks', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			weblinks.get(WEB_LINK_ID, testQS);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			weblinks.get(WEB_LINK_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -239,19 +213,6 @@ describe('WebLinks', function() {
 			weblinks.update(WEB_LINK_ID, {description});
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			weblinks.update(WEB_LINK_ID, {name}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -267,7 +228,7 @@ describe('WebLinks', function() {
 		it('should make DELETE request to delete a web link when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs(`${BASE_PATH}/${WEB_LINK_ID}`, null);
+				.withArgs(`${BASE_PATH}/${WEB_LINK_ID}`);
 			weblinks.delete(WEB_LINK_ID);
 		});
 
@@ -278,19 +239,6 @@ describe('WebLinks', function() {
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
 			weblinks.delete(WEB_LINK_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			weblinks.delete(WEB_LINK_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

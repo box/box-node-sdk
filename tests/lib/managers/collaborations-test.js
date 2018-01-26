@@ -79,19 +79,6 @@ describe('Collaborations', function() {
 			collaborations.get(COLLABORATION_ID, testQS);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborations.get(COLLABORATION_ID, testQS, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -127,19 +114,6 @@ describe('Collaborations', function() {
 			collaborations.getPending();
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborations.getPending(function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -165,19 +139,6 @@ describe('Collaborations', function() {
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
 			collaborations.update(COLLABORATION_ID, testBody);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			collaborations.update(COLLABORATION_ID, testBody, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -217,19 +178,6 @@ describe('Collaborations', function() {
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
 			collaborations.respondToPending(COLLABORATION_ID, newStatus);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			collaborations.respondToPending(COLLABORATION_ID, newStatus, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -373,32 +321,6 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {type: 'file'}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -463,32 +385,6 @@ describe('Collaborations', function() {
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
 			collaborations.createWithUserID(userID, itemID, newCollabRole);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserID(userID, itemID, newCollabRole, {type: 'file'}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserID(userID, itemID, newCollabRole, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
@@ -709,32 +605,6 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {type: 'file'}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -799,32 +669,6 @@ describe('Collaborations', function() {
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {type: 'file'}, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithGroupID(groupID, itemID, newCollabRole, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -918,7 +762,7 @@ describe('Collaborations', function() {
 		it('should make DELETE request to update collaboration info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs('/collaborations/1234', null);
+				.withArgs('/collaborations/1234');
 			collaborations.delete(COLLABORATION_ID);
 		});
 
@@ -929,19 +773,6 @@ describe('Collaborations', function() {
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
 			collaborations.delete(COLLABORATION_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			collaborations.delete(COLLABORATION_ID, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

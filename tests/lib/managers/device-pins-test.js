@@ -90,19 +90,6 @@ describe('DevicePins', function() {
 			devicePins.get(PIN_ID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			devicePins.get(PIN_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
-		});
-
 		it('should return promise resolving to results when called', function() {
 
 			var response = {};
@@ -117,14 +104,10 @@ describe('DevicePins', function() {
 
 		it('should make DELETE request to remove device pin info when called without optional params', function() {
 
-			var params = {
-				qs: null
-			};
-
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs(`/device_pinners/${PIN_ID}`, params);
-			devicePins.delete(PIN_ID, null);
+				.withArgs(`/device_pinners/${PIN_ID}`);
+			devicePins.delete(PIN_ID);
 		});
 
 		it('should make DELETE request to remove device pin info when called with optional params', function() {
@@ -146,19 +129,6 @@ describe('DevicePins', function() {
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
 			devicePins.delete(PIN_ID);
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			devicePins.delete(PIN_ID, null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {
@@ -186,10 +156,10 @@ describe('DevicePins', function() {
 			};
 		});
 
-		it('should get current enterprise ID and make GET request to get device pin info when user is in enterprise', function(done) {
+		it('should get current enterprise ID and make GET request to get device pin info when user is in enterprise', function() {
 
 			var params = {
-				qs: null
+				qs: undefined
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
@@ -199,10 +169,10 @@ describe('DevicePins', function() {
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/enterprises/${ENTERPRISE_ID}/device_pinners`, params)
 				.returns(Promise.resolve({}));
-			devicePins.getAll(null, done);
+			return devicePins.getAll();
 		});
 
-		it('should get current enterprise ID and call callback with error when user is not in enterprise', function(done) {
+		it('should get current enterprise ID and call callback with error when user is not in enterprise', function() {
 
 			user = {
 				enterprise: null
@@ -214,11 +184,10 @@ describe('DevicePins', function() {
 				.returns(Promise.resolve(user));
 			sandbox.mock(boxClientFake).expects('get')
 				.never();
-			devicePins.getAll(null, function(err) {
-
-				assert.instanceOf(err, Error);
-				done();
-			});
+			return devicePins.getAll()
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
 		});
 
 		it('should wrap GET call with default handler when called', function() {
@@ -229,20 +198,6 @@ describe('DevicePins', function() {
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
 			devicePins.getAll();
-		});
-
-		it('should pass results to callback when callback is present', function(done) {
-
-			var response = {};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			devicePins.getAll(null, function(err, data) {
-
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
 		});
 
 		it('should return promise resolving to results when called', function() {

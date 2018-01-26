@@ -61,26 +61,6 @@ describe('TermsOfService', function() {
 			termsOfService.get(TERMS_OF_SERVICE_ID, null);
 		});
 
-		it('should call callback with the terms of service info response is returned', function(done) {
-			var response = {
-				type: 'terms_of_service',
-				id: '1234',
-				status: 'enabled',
-				enterprise: {},
-				tos_type: 'external',
-				text: 'TEST',
-				created_at: '2017-10-21T20:09:59-07:00',
-				modified_at: '2017-10-21T20:09:59-07:00'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			termsOfService.get(TERMS_OF_SERVICE_ID, null, function(err, termsOfServiceObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
-				done();
-			});
-		});
-
 		it('should return a promise resolving to a terms of service object when a 200 response is returned', function() {
 			var response = {
 				type: 'terms_of_service',
@@ -116,26 +96,6 @@ describe('TermsOfService', function() {
 				.withArgs('/terms_of_services/1234')
 				.returns(Promise.resolve(response));
 			termsOfService.get(TERMS_OF_SERVICE_ID, options);
-		});
-
-		it('should call callback with the terms of service info response is returned with optional param', function(done) {
-			var response = {
-				type: 'terms_of_service',
-				id: '1234',
-				status: 'enabled',
-				enterprise: {},
-				tos_type: 'external',
-				text: 'TEST',
-				created_at: '2017-10-21T20:09:59-07:00',
-				modified_at: '2017-10-21T20:09:59-07:00'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			termsOfService.get(TERMS_OF_SERVICE_ID, options, function(err, termsOfServiceObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
-				done();
-			});
 		});
 
 		it('should return a promise resolving to a terms of service object when a 200 response is returned with optional param', function() {
@@ -184,26 +144,6 @@ describe('TermsOfService', function() {
 			termsOfService.getAll();
 		});
 
-		it('should call callback with the terms of service info when a 200 response is returned', function(done) {
-			var response = {
-				type: 'terms_of_service',
-				id: '1234',
-				status: 'enabled',
-				enterprise: {},
-				tos_type: 'external',
-				text: 'TEST',
-				created_at: '2017-10-21T20:09:59-07:00',
-				modified_at: '2017-10-21T20:09:59-07:00'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			termsOfService.getAll(null, function(err, termsOfServiceObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
-				done();
-			});
-		});
-
 		it('should return a promise resolving to a terms of service object when a 200 response is returned', function() {
 			var response = {
 				type: 'terms_of_service',
@@ -246,26 +186,6 @@ describe('TermsOfService', function() {
 			termsOfService.getAll(options);
 		});
 
-		it('should call callback with the terms of service info when a 200 response is returned with optional param', function(done) {
-			var response = {
-				type: 'terms_of_service',
-				id: '1234',
-				status: 'enabled',
-				enterprise: {},
-				tos_type: 'external',
-				text: 'TEST',
-				created_at: '2017-10-21T20:09:59-07:00',
-				modified_at: '2017-10-21T20:09:59-07:00'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			termsOfService.getAll(options, function(err, termsOfServiceObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
-				done();
-			});
-		});
-
 		it('should return a promise resolving to a terms of service object when a 200 response is returned with optional param', function() {
 			var response = {
 				type: 'terms_of_service',
@@ -304,26 +224,6 @@ describe('TermsOfService', function() {
 				.withArgs('/terms_of_services', expectedTermsOfServiceParam)
 				.returns(Promise.resolve(response));
 			termsOfService.create('managed', 'enabled', 'Test Text');
-		});
-
-		it('should call callback with the created terms of service info when a 200 response is returned', function(done) {
-			var response = {
-				type: 'terms_of_service',
-				id: '1234',
-				status: 'enabled',
-				enterprise: {},
-				tos_type: 'external',
-				text: 'TEST',
-				created_at: '2017-10-21T20:09:59-07:00',
-				modified_at: '2017-10-21T20:09:59-07:00'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			termsOfService.create('managed', 'enabled', 'Test Text', function(err, termsOfServiceObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
-				done();
-			});
 		});
 
 		it('should return a promise resolving to created terms of service object when a 200 response is returned', function() {
@@ -366,26 +266,6 @@ describe('TermsOfService', function() {
 				.withArgs('/terms_of_services/1234', expectedTermsOfServiceParam)
 				.returns(Promise.resolve(response));
 			termsOfService.update(TERMS_OF_SERVICE_ID, options);
-		});
-
-		it('should call callback with the updated terms of service info when a 200 response is returned', function(done) {
-			var response = {
-				type: 'terms_of_service',
-				id: '1234',
-				status: 'enabled',
-				enterprise: {},
-				tos_type: 'external',
-				text: 'Test Text',
-				created_at: '2017-10-21T20:09:59-07:00',
-				modified_at: '2017-10-21T20:09:59-07:00'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			termsOfService.update(TERMS_OF_SERVICE_ID, options, function(err, termsOfServiceObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
-				done();
-			});
 		});
 
 		it('should return a promise resolving to updated terms of service object when a 200 response is returned', function() {
@@ -440,35 +320,6 @@ describe('TermsOfService', function() {
 			termsOfService.createUserStatus(TERMS_OF_SERVICE_ID, true, options);
 		});
 
-		it('should call callback with the created terms of service user status info when a 200 response is returned', function(done) {
-			var response = {
-				total_count: 2,
-				entries: [
-					{
-						type: 'terms_of_service_user_status',
-						id: '1234',
-						tos: {
-							id: '1234',
-							type: 'terms_of_service'
-						},
-						user: {
-							id: '5678',
-							type: 'user'
-						},
-						is_accepted: true,
-						created_at: '2017-10-21T20:09:59-07:00',
-						modified_at: '2017-10-21T20:09:59-07:00'
-					}
-				]
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			termsOfService.createUserStatus(TERMS_OF_SERVICE_ID, true, options, function(err, termsOfServiceUserStatusObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response, 'terms of service user object is returned');
-				done();
-			});
-		});
 
 		it('should return a promise resolving to created terms of service user status object when a 200 response is returned', function() {
 			var response = {
@@ -528,48 +379,6 @@ describe('TermsOfService', function() {
 				.withArgs('/terms_of_service_user_statuses')
 				.returns(Promise.resolve(response));
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID);
-		});
-
-		it('should call callback with requested terms of service user status info when a 200 response is returned', function(done) {
-			var response = {
-				statusCode: 200,
-				body: {
-					total_count: 2,
-					entries: [
-						{
-							type: 'terms_of_service_user_status',
-							id: '1234',
-							tos: {
-								id: '1234',
-								type: 'terms_of_service'
-							},
-							user: {},
-							is_accepted: true,
-							created_at: '2017-10-21T20:09:59-07:00',
-							modified_at: '2017-10-21T20:09:59-07:00'
-						}
-					]
-				}
-			};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, null, function(err, termsOfServiceUserStatusObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user object is returned');
-				done();
-			});
-		});
-
-		it('should call callback with error when a non 200 is received', function(done) {
-			var response = {
-				statusCode: 500,
-				body: {}
-			};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, null, function(err) {
-				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', 500);
-				done();
-			});
 		});
 
 		it('should return a promise resolving to requested terms of service user status object when a 200 response is returned', function() {
@@ -641,35 +450,6 @@ describe('TermsOfService', function() {
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, options);
 		});
 
-		it('should call callback with requested terms of service user status info when a 200 response is returned with optional param', function(done) {
-			var response = {
-				statusCode: 200,
-				body: {
-					total_count: 2,
-					entries: [
-						{
-							type: 'terms_of_service_user_status',
-							id: '1234',
-							tos: {
-								id: '1234',
-								type: 'terms_of_service'
-							},
-							user: {},
-							is_accepted: true,
-							created_at: '2017-10-21T20:09:59-07:00',
-							modified_at: '2017-10-21T20:09:59-07:00'
-						}
-					]
-				}
-			};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, options, function(err, termsOfServiceUserStatusObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user object is returned');
-				done();
-			});
-		});
-
 		it('should return a promise resolving to requested terms of service user status object when a 200 response is returned with optional param', function() {
 			var response = {
 				statusCode: 200,
@@ -716,25 +496,6 @@ describe('TermsOfService', function() {
 				.withArgs('/terms_of_service_user_statuses/7777', expectedParam)
 				.returns(Promise.resolve(response));
 			termsOfService.updateUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true);
-		});
-
-		it('should call callback with updated terms of service user status info when a 200 response is returned', function(done) {
-			var response = {
-				type: 'terms_of_service_user_status',
-				id: '7777',
-				tos: {},
-				user: {},
-				is_accepted: true,
-				created_at: '2017-10-21T20:09:59-07:00',
-				modified_at: '2017-10-21T20:09:59-07:00'
-			};
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			termsOfService.updateUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true, function(err, termsOfServiceUserStatusObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response, 'terms of service user object is returned');
-				done();
-			});
 		});
 
 		it('should return a promise resolving to updated terms of service user status object when a 200 response is returned', function() {
@@ -789,20 +550,6 @@ describe('TermsOfService', function() {
 			termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options);
 		});
 
-		it('should call callback with the created terms of service user status info when a 200 response is returned', function(done) {
-			var response = {
-				statusCode: 200,
-				body: {}
-			};
-
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
-			termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options, function(err, termsOfServiceUserStatusObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response.body, 'terms of service user object is returned');
-				done();
-			});
-		});
-
 		it('should return a promise resolving to created terms of service user status object when a 200 response is returned', function() {
 			var response = {
 				statusCode: 200,
@@ -834,49 +581,6 @@ describe('TermsOfService', function() {
 			sandbox.mock(termsOfService).expects('updateUserStatus')
 				.withArgs(TERMS_OF_SERVICE_USER_STATUS_ID, true);
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options);
-		});
-
-		it('should call callback with updated terms of service user status info when a 409 response is returned', function(done) {
-			var userStatus = {};
-
-			var response = {
-				statusCode: 409,
-				body: {
-					entries: [userStatus]
-				}
-			};
-
-
-			sandbox.stub(boxClientFake, 'post')
-				.returns(Promise.resolve(response));
-			sandbox.stub(termsOfService, 'getUserStatus')
-				.returns(Promise.resolve({id: TERMS_OF_SERVICE_USER_STATUS_ID}));
-			sandbox.stub(termsOfService, 'updateUserStatus')
-				.returns(Promise.resolve(userStatus));
-			termsOfService.setUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true, options, function(err, termsOfServiceUserStatusObject) {
-				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, userStatus, 'terms of service user object is returned');
-				done();
-			});
-		});
-
-		it('should call callback with error when a non 200 is received', function(done) {
-			var userStatus = {};
-
-			var response = {
-				statusCode: 500,
-				body: {
-					entries: [userStatus]
-				}
-			};
-
-			sandbox.stub(boxClientFake, 'post')
-				.returns(Promise.resolve(response));
-			termsOfService.setUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true, options, function(err) {
-				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', 500);
-				done();
-			});
 		});
 
 		it('should return a promise resolving to updated terms of service user status object when a 409 response is returned', function() {

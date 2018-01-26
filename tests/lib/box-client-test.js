@@ -233,7 +233,7 @@ describe('box-client', function() {
 				});
 		});
 
-		it('should store request params and promise fulfillment functions when called in batch mode', function() {
+		it('should store request params and promise fulfillment functions when called in batch mode', function(done) {
 
 			var requestParams = {
 				method: 'get',
@@ -250,6 +250,7 @@ describe('box-client', function() {
 			assert.propertyVal(batchObj, 'params', requestParams);
 			assert.isFunction(batchObj.resolve);
 			assert.isFunction(batchObj.reject);
+			done();
 		});
 
 		it('should return promise from batch mode that resolves when stored function is called with response', function() {
@@ -617,18 +618,20 @@ describe('box-client', function() {
 
 	describe('batch()', function() {
 
-		it('should initialize batch array on the client when called', function() {
+		it('should initialize batch array on the client when called', function(done) {
 
 			assert.propertyVal(basicClient, '_batch', null);
 			basicClient.batch();
 			assert.isArray(basicClient._batch);
 			assert.lengthOf(basicClient._batch, 0);
+			done();
 		});
 
-		it('should return the client object when called', function() {
+		it('should return the client object when called', function(done) {
 
 			var ret = basicClient.batch();
 			assert.equal(ret, basicClient);
+			done();
 		});
 	});
 
@@ -660,7 +663,7 @@ describe('box-client', function() {
 				.withArgs('/batch', sinon.match(expectedBatchParams))
 				.returns(Promise.resolve(response));
 
-			basicClient.batchExec();
+			return basicClient.batchExec();
 		});
 
 		it('should transform the response and pass it to individual call promises when batch call succeeds', function() {
@@ -756,9 +759,10 @@ describe('box-client', function() {
 		];
 		var xffTest = '123.90.6.1, 10.80.1.123';
 
-		it('should add an XFF custom header when a request is made', function() {
+		it('should add an XFF custom header when a request is made', function(done) {
 			basicClient.setIPs(ips);
 			assert.strictEqual(basicClient._customHeaders[HEADER_XFF], xffTest);
+			done();
 		});
 
 		it('should set the "X-Forwarded-For" header when the custom header has been set', function() {
@@ -824,10 +828,11 @@ describe('box-client', function() {
 			]
 		}, function(input, expectedHeader) {
 
-			it('should only set valid IP addresses in XFF header when called', function() {
+			it('should only set valid IP addresses in XFF header when called', function(done) {
 
 				basicClient.setIPs(input);
 				assert.strictEqual(basicClient._customHeaders[HEADER_XFF], expectedHeader);
+				done();
 			});
 		});
 
@@ -859,10 +864,11 @@ describe('box-client', function() {
 
 	describe('revokeSharedContext()', function() {
 
-		it('should remove the custom BoxAPI header when called', function() {
+		it('should remove the custom BoxAPI header when called', function(done) {
 			basicClient._customHeaders[HEADER_BOXAPI] = 'someheader';
 			basicClient.revokeSharedContext();
 			assert.strictEqual(typeof basicClient._customHeaders[HEADER_BOXAPI], 'undefined');
+			done();
 		});
 
 		it('should not set the "BoxAPI" header when the context has been revoked', function() {
@@ -1055,7 +1061,7 @@ describe('box-client', function() {
 			PLUGIN_UPLOAD_API_ROOT = 'http://www.foobar.com/uploadhere',
 			TEST_PATH = '/someweirdpath';
 
-		it('should create an instance of the plugin on the client with a specific name when called', function() {
+		it('should create an instance of the plugin on the client with a specific name when called', function(done) {
 			basicClient.plug('testplugin', testPlugin, {
 				apiRoot: PLUGIN_API_ROOT
 			});
@@ -1064,21 +1070,24 @@ describe('box-client', function() {
 			// Make sure the fixture methods are publicly accessible
 			assert.strictEqual(typeof basicClient.testplugin.get, 'function');
 			assert.strictEqual(typeof basicClient.testplugin.upload, 'function');
+			done();
 		});
 
-		it('should throw an error when a plugin name would overwrite an existing method on box-client', function() {
+		it('should throw an error when a plugin name would overwrite an existing method on box-client', function(done) {
 			assert.throws(function() {
 				basicClient.plug('plug', testPlugin); // plug can't be overwritten
 			}, Error, 'You cannot define a plugin that overrides an existing method on the client');
+			done();
 		});
 
-		it('should override a plugin when called with a plugin name that already exists', function() {
+		it('should override a plugin when called with a plugin name that already exists', function(done) {
 			basicClient.plug('testplugin', sandbox.stub().returns({}));
 			assert.strictEqual(typeof basicClient.testplugin.get, 'undefined');
 
 			// Override plugin
 			basicClient.plug('testplugin', testPlugin);
 			assert.strictEqual(typeof basicClient.testplugin.get, 'function');
+			done();
 		});
 
 		it('should use the plugin specified apiRoot when one is passed as a param', function() {
@@ -1096,7 +1105,7 @@ describe('box-client', function() {
 			return basicClient.testplugin.get();
 		});
 
-		it('should use the plugin specified apiRoot when one is passed as a param', function() {
+		it('should use the plugin specified uploadApiRoot when one is passed as a param', function() {
 			basicClient.plug('testplugin', testPlugin, {
 				uploadApiRoot: PLUGIN_UPLOAD_API_ROOT
 			});

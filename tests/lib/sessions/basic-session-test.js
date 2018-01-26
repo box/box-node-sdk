@@ -73,7 +73,7 @@ describe('BasicAPISession', function() {
 			return basicAPISession.revokeTokens(null);
 		});
 
-		it('should call tokenManager.revokeTokens() with the current access token and null options when called', function() {
+		it('should call tokenManager.revokeTokens() with the current access token and options when called with options', function() {
 			var options = {};
 			options.ip = '127.0.0.1, 192.168.10.10';
 

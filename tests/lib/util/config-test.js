@@ -2,7 +2,7 @@
  * @fileoverview Tests for Config
  */
 
-/* eslint no-new: 0 */
+/* eslint-disable mocha/no-synchronous-tests,no-new */
 /* global describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
