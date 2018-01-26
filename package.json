@@ -31,7 +31,6 @@
     "merge-options": "0.0.64",
     "promise-queue": "^2.2.3",
     "promise.prototype.finally": "^3.1.0",
-    "request": "^2.74.0",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
@@ -58,6 +57,7 @@
     "nock": "^9.0.13",
     "nsp": "^3.1.0",
     "nyc": "^11.3.0",
+    "request": "^2.83.0",
     "semver": "^5.4.1",
     "shelljs": "^0.3.0",
     "shelljs-nodecli": "^0.1.1",
