@@ -438,7 +438,7 @@ describe('box-node-sdk', function() {
 				fakeTokenInfo = {at: 'at'};
 			sandbox.mock(tokenManagerFake).expects('getTokensAuthorizationCodeGrant')
 				.withExactArgs(ac, options)
-				.returns(Promise.resolve(fakeTokenInfo));
+				.resolves(fakeTokenInfo);
 
 			return sdk.getTokensAuthorizationCodeGrant(ac, options)
 				.then(tokenInfo => {
@@ -457,7 +457,7 @@ describe('box-node-sdk', function() {
 			var refreshToken = 'rt';
 			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant')
 				.withArgs(refreshToken)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getTokensRefreshGrant(refreshToken);
 		});
@@ -466,7 +466,7 @@ describe('box-node-sdk', function() {
 			var refreshToken = 'rt';
 			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant')
 				.withArgs(refreshToken)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getTokensRefreshGrant(refreshToken);
 		});
@@ -478,7 +478,7 @@ describe('box-node-sdk', function() {
 
 			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant')
 				.withArgs(refreshToken, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getTokensRefreshGrant(refreshToken, options);
 		});
@@ -495,7 +495,7 @@ describe('box-node-sdk', function() {
 			var enterpriseID = '8273698724';
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs('enterprise', enterpriseID)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getEnterpriseAppAuthTokens(enterpriseID);
 		});
@@ -508,7 +508,7 @@ describe('box-node-sdk', function() {
 
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs('enterprise', enterpriseID, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getEnterpriseAppAuthTokens(enterpriseID, options);
 		});
@@ -517,7 +517,7 @@ describe('box-node-sdk', function() {
 			var enterpriseID = '8273698724';
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs('enterprise', enterpriseID)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getEnterpriseAppAuthTokens(enterpriseID);
 		});
@@ -537,7 +537,7 @@ describe('box-node-sdk', function() {
 
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs('enterprise', id)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getEnterpriseAppAuthTokens(id);
 		});
@@ -567,7 +567,7 @@ describe('box-node-sdk', function() {
 
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs('user', userID)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getAppUserTokens(userID);
 		});
@@ -579,7 +579,7 @@ describe('box-node-sdk', function() {
 
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs('user', userID, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.getAppUserTokens(userID, options);
 		});
@@ -597,7 +597,7 @@ describe('box-node-sdk', function() {
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withArgs(refreshToken)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.revokeTokens(refreshToken);
 		});
@@ -609,7 +609,7 @@ describe('box-node-sdk', function() {
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withArgs(refreshToken, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return sdk.revokeTokens(refreshToken, options);
 		});

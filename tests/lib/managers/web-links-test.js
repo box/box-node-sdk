@@ -118,7 +118,7 @@ describe('WebLinks', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -129,7 +129,7 @@ describe('WebLinks', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return weblinks.create(url, parentID)
 				.then(data => assert.equal(data, response));
 		});
@@ -146,7 +146,7 @@ describe('WebLinks', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -157,7 +157,7 @@ describe('WebLinks', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return weblinks.get(WEB_LINK_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -206,7 +206,7 @@ describe('WebLinks', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -217,7 +217,7 @@ describe('WebLinks', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return weblinks.update(WEB_LINK_ID, {description})
 				.then(data => assert.equal(data, response));
 		});
@@ -234,7 +234,7 @@ describe('WebLinks', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -245,7 +245,7 @@ describe('WebLinks', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return weblinks.delete(WEB_LINK_ID)
 				.then(data => assert.equal(data, response));
 		});

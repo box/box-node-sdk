@@ -159,16 +159,16 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
-					.returns(Promise.resolve({part: expectedChunks[2]}));
+					.resolves({part: expectedChunks[2]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)
-					.returns(Promise.resolve({part: expectedChunks[3]}));
+					.resolves({part: expectedChunks[3]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 				uploader.start();
 			});
@@ -223,16 +223,16 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
-					.returns(Promise.resolve({part: expectedChunks[2]}));
+					.resolves({part: expectedChunks[2]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)
-					.returns(Promise.resolve({part: expectedChunks[3]}));
+					.resolves({part: expectedChunks[3]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 				uploader.start();
 			});
@@ -280,16 +280,16 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
-					.returns(Promise.resolve({part: expectedChunks[2]}));
+					.resolves({part: expectedChunks[2]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)
-					.returns(Promise.resolve({part: expectedChunks[3]}));
+					.resolves({part: expectedChunks[3]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 				uploader.start();
 				uploader.start();
@@ -334,12 +334,12 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 16)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnop', 10, 16)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, hash, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 				uploader.start();
 			});
@@ -403,20 +403,20 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'part1 str.', 0, 59)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'part2 str.', 10, 59)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'part3 str.', 20, 59)
-					.returns(Promise.resolve({part: expectedChunks[2]}));
+					.resolves({part: expectedChunks[2]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'part4 str.', 30, 59)
-					.returns(Promise.resolve({part: expectedChunks[3]}));
+					.resolves({part: expectedChunks[3]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'part5 str.', 40, 59)
-					.returns(Promise.resolve({part: expectedChunks[4]}));
+					.resolves({part: expectedChunks[4]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'part6 str', 50, 59)
-					.returns(Promise.resolve({part: expectedChunks[5]}));
+					.resolves({part: expectedChunks[5]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, hash, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 				uploader.start();
 			});
@@ -455,10 +455,10 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, smallFile, 0, 10)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, hash, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 				uploader.start();
 			});
@@ -518,16 +518,16 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
-					.returns(Promise.resolve({part: expectedChunks[2]}));
+					.resolves({part: expectedChunks[2]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)
-					.returns(Promise.resolve({part: expectedChunks[3]}));
+					.resolves({part: expectedChunks[3]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 
 				uploader.start();
@@ -588,16 +588,16 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
-					.returns(Promise.resolve({part: expectedChunks[2]}));
+					.resolves({part: expectedChunks[2]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)
-					.returns(Promise.resolve({part: expectedChunks[3]}));
+					.resolves({part: expectedChunks[3]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 
 				uploader.start();
@@ -653,16 +653,16 @@ describe('ChunkedUploader', function() {
 
 				let filesClientMock = sandbox.mock(boxClientFake.files);
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-					.returns(Promise.resolve({part: expectedChunks[0]}));
+					.resolves({part: expectedChunks[0]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-					.returns(Promise.resolve({part: expectedChunks[1]}));
+					.resolves({part: expectedChunks[1]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
-					.returns(Promise.resolve({part: expectedChunks[2]}));
+					.resolves({part: expectedChunks[2]});
 				filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)
-					.returns(Promise.resolve({part: expectedChunks[3]}));
+					.resolves({part: expectedChunks[3]});
 
 				filesClientMock.expects('commitUploadSession').withArgs(TEST_SESSION_ID, TEST_HASH, {parts: sinon.match(expectedChunks)})
-					.returns(Promise.resolve(createdFile));
+					.resolves(createdFile);
 
 
 				uploader.start();
@@ -712,16 +712,16 @@ describe('ChunkedUploader', function() {
 
 			let filesClientMock = sandbox.mock(boxClientFake.files);
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-				.returns(Promise.resolve({part: expectedChunks[0]}));
+				.resolves({part: expectedChunks[0]});
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-				.returns(Promise.resolve({part: expectedChunks[1]}));
+				.resolves({part: expectedChunks[1]});
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
 				.returns(p1);
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)
 				.returns(p2);
 
 			filesClientMock.expects('abortUploadSession').withArgs(TEST_SESSION_ID)
-				.returns(Promise.resolve());
+				.resolves();
 
 			uploader.start();
 			uploader.abort();
@@ -770,9 +770,9 @@ describe('ChunkedUploader', function() {
 
 			let filesClientMock = sandbox.mock(boxClientFake.files);
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'abcdefghij', 0, 36)
-				.returns(Promise.resolve({part: expectedChunks[0]}));
+				.resolves({part: expectedChunks[0]});
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'klmnopqrst', 10, 36)
-				.returns(Promise.resolve({part: expectedChunks[1]}));
+				.resolves({part: expectedChunks[1]});
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, 'uvwxyz0123', 20, 36)
 				.returns(p1);
 			filesClientMock.expects('uploadPart').withArgs(TEST_SESSION_ID, '456789', 30, 36)

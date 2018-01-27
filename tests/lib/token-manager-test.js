@@ -95,7 +95,7 @@ describe('token-manager', function() {
 					url: 'api.box.com/oauth2/token',
 					form: formParams
 				}))
-				.returns(Promise.resolve(response));
+				.resolves(response);
 
 			// Test the response
 			return tokenManager.getTokens(formParams, null);
@@ -129,7 +129,7 @@ describe('token-manager', function() {
 					responseInfo = {statusCode: 200, body: successfulResponseBody};
 
 				// Stub out the API request
-				sandbox.stub(requestManagerFake, 'makeRequest').returns(Promise.resolve(responseInfo));
+				sandbox.stub(requestManagerFake, 'makeRequest').resolves(responseInfo);
 
 				// Test the response
 				return tokenManager.getTokens(formParams)
@@ -156,7 +156,7 @@ describe('token-manager', function() {
 			requestError.response = responseInfo;
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
-				.returns(Promise.reject(requestError));
+				.rejects(requestError);
 
 			return tokenManager.getTokens({})
 				.catch(err => {
@@ -169,7 +169,7 @@ describe('token-manager', function() {
 				responseInfo = {statusCode: 403, body: responseBody};
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
-				.returns(Promise.resolve(responseInfo));
+				.resolves(responseInfo);
 
 			return tokenManager.getTokens({})
 				.catch(err => {
@@ -183,7 +183,7 @@ describe('token-manager', function() {
 				responseInfo = {statusCode: 200, body: responseBody};
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
-				.returns(Promise.resolve(responseInfo));
+				.resolves(responseInfo);
 
 			return tokenManager.getTokens({})
 				.catch(err => {
@@ -218,7 +218,7 @@ describe('token-manager', function() {
 				var responseInfo = {statusCode: 200, body: responseBody};
 
 				sandbox.mock(requestManagerFake).expects('makeRequest')
-					.returns(Promise.resolve(responseInfo));
+					.resolves(responseInfo);
 
 				return tokenManager.getTokens({})
 					.catch(err => {
@@ -242,7 +242,7 @@ describe('token-manager', function() {
 						'X-Forwarded-For': '123.456.789.0'
 					}
 				}))
-				.returns(Promise.resolve(responseInfo));
+				.resolves(responseInfo);
 
 			return tokenManager.getTokens({}, optionsIP);
 		});
@@ -298,7 +298,7 @@ describe('token-manager', function() {
 					grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
 					code: authorizationCode
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return tokenManager.getTokensAuthorizationCodeGrant(authorizationCode);
 		});
@@ -328,7 +328,7 @@ describe('token-manager', function() {
 				.withArgs({
 					grant_type: GRANT_TYPE_CLIENT_CREDENTIALS
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return tokenManager.getTokensClientCredentialsGrant();
 		});
@@ -342,7 +342,7 @@ describe('token-manager', function() {
 				.withExactArgs({
 					grant_type: GRANT_TYPE_CLIENT_CREDENTIALS
 				}, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return tokenManager.getTokensClientCredentialsGrant(options);
 		});
@@ -356,7 +356,7 @@ describe('token-manager', function() {
 					grant_type: GRANT_TYPE_REFRESH_TOKEN,
 					refresh_token: refreshToken
 				}, null)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return tokenManager.getTokensRefreshGrant(refreshToken, null);
 		});
@@ -371,7 +371,7 @@ describe('token-manager', function() {
 					grant_type: GRANT_TYPE_REFRESH_TOKEN,
 					refresh_token: refreshToken
 				}, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return tokenManager.getTokensRefreshGrant(refreshToken, options);
 		});
@@ -434,7 +434,7 @@ describe('token-manager', function() {
 				noTimestamp: false,
 				keyid: TEST_KEY_ID
 			};
-			sandbox.stub(tokenManager, 'getTokens').returns(Promise.resolve());
+			sandbox.stub(tokenManager, 'getTokens').resolves();
 			sandbox.mock(jwtFake).expects('sign')
 				.withArgs(expectedClaims, keyParams, sinon.match(expectedOptions))
 				.returns(TEST_WEB_TOKEN);
@@ -468,7 +468,7 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(sinon.match(expectedTokenParams), null)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
 				.then(tokens => {
@@ -494,7 +494,7 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(sinon.match(expectedTokenParams), options)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.getTokensJWTGrant('user', TEST_ID, options)
 				.then(tokens => {
@@ -543,10 +543,10 @@ describe('token-manager', function() {
 			var getTokensMock = sandbox.mock(tokenManager);
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(firstTokenParams), null)
-				.returns(Promise.reject(serverError));
+				.rejects(serverError);
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(secondTokenParams), null)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
 				.then(tokens => {
@@ -559,7 +559,7 @@ describe('token-manager', function() {
 			var error = new Error('Could not get tokens');
 
 			sandbox.stub(jwtFake, 'sign').returns(TEST_WEB_TOKEN);
-			sandbox.stub(tokenManager, 'getTokens').returns(Promise.reject(error));
+			sandbox.stub(tokenManager, 'getTokens').rejects(error);
 
 			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
 				.catch(err => {
@@ -589,7 +589,7 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(expectedTokenParams, null)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, null)
 				.then(tokens => {
@@ -618,7 +618,7 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(expectedTokenParams, options.tokenRequestOptions)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, options)
 				.then(tokens => {
@@ -641,7 +641,7 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(expectedTokenParams, null)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, [
 				'item_preview',
@@ -668,7 +668,7 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(expectedTokenParams, null)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, null)
 				.then(tokens => {
@@ -679,7 +679,7 @@ describe('token-manager', function() {
 		it('should reject when call to exchange tokens fails', function() {
 
 			var exchangeError = new Error('Exchange failed');
-			sandbox.stub(tokenManager, 'getTokens').returns(Promise.reject(exchangeError));
+			sandbox.stub(tokenManager, 'getTokens').rejects(exchangeError);
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, null)
 				.catch(err => {
@@ -741,7 +741,7 @@ describe('token-manager', function() {
 			sandbox.stub(jwtFake, 'sign').returns(actorJWT);
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(expectedTokenParams, null)
-				.returns(Promise.resolve(tokenInfo));
+				.resolves(tokenInfo);
 
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
 				.then(tokens => {
@@ -782,7 +782,7 @@ describe('token-manager', function() {
 						client_secret: BOX_CLIENT_SECRET
 					}
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return tokenManager.revokeTokens(refreshToken, null);
 		});
@@ -805,7 +805,7 @@ describe('token-manager', function() {
 						'X-Forwarded-For': options.ip
 					}
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return tokenManager.revokeTokens(refreshToken, options);
 		});

@@ -83,7 +83,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -94,7 +94,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return legalHoldPolicies.create(POLICY_NAME)
 				.then(data => assert.equal(data, response));
 		});
@@ -114,7 +114,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -125,7 +125,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return legalHoldPolicies.get(POLICY_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -152,7 +152,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -163,7 +163,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return legalHoldPolicies.update(POLICY_ID, options)
 				.then(data => assert.equal(data, response));
 		});
@@ -181,7 +181,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -192,7 +192,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return legalHoldPolicies.delete(POLICY_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -212,7 +212,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -223,7 +223,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return legalHoldPolicies.getAll()
 				.then(data => assert.equal(data, response));
 		});
@@ -243,7 +243,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -254,7 +254,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return legalHoldPolicies.getAssignments(POLICY_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -289,7 +289,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -300,7 +300,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return legalHoldPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -322,7 +322,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -333,7 +333,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return legalHoldPolicies.getAssignment(ASSIGNMENT_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -353,7 +353,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -364,7 +364,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return legalHoldPolicies.deleteAssignment(ASSIGNMENT_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -386,7 +386,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -397,7 +397,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return legalHoldPolicies.getFileVersionLegalHold(LEGAL_HOLD_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -419,7 +419,7 @@ describe('LegalHoldPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -430,7 +430,7 @@ describe('LegalHoldPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return legalHoldPolicies.getAllFileVersionLegalHolds(POLICY_ID)
 				.then(data => assert.equal(data, response));
 		});

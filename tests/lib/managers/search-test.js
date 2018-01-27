@@ -80,7 +80,7 @@ describe('Search', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -91,7 +91,7 @@ describe('Search', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return search.query(searchQuery, fakeQs)
 				.then(data => assert.equal(data, response));
 		});

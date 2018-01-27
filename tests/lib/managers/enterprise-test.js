@@ -65,7 +65,7 @@ describe('Enterprise', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -76,7 +76,7 @@ describe('Enterprise', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return enterprise.getUsers()
 				.then(data => assert.equal(data, response));
 		});
@@ -103,7 +103,7 @@ describe('Enterprise', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -114,7 +114,7 @@ describe('Enterprise', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return enterprise.inviteUser(ENTERPRISE_ID, TEST_LOGIN)
 				.then(data => assert.equal(data, response));
 		});
@@ -154,7 +154,7 @@ describe('Enterprise', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -165,7 +165,7 @@ describe('Enterprise', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return enterprise.addUser(LOGIN, NAME, {role: ROLE})
 				.then(data => assert.equal(data, response));
 		});
@@ -204,7 +204,7 @@ describe('Enterprise', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -215,7 +215,7 @@ describe('Enterprise', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return enterprise.addAppUser(NAME, {job_title: JOB_TITLE})
 				.then(data => assert.equal(data, response));
 		});
@@ -242,7 +242,7 @@ describe('Enterprise', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -253,7 +253,7 @@ describe('Enterprise', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return enterprise.transferUserContent(SRC_USER_ID, DEST_USER_ID)
 				.then(data => assert.equal(data, response));
 		});

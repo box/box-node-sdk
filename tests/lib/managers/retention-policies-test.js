@@ -87,7 +87,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -98,7 +98,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30})
 				.then(data => assert.equal(data, response));
 		});
@@ -118,7 +118,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -129,7 +129,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return retentionPolicies.get(POLICY_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -154,7 +154,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -165,7 +165,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return retentionPolicies.update(POLICY_ID, options)
 				.then(data => assert.equal(data, response));
 		});
@@ -185,7 +185,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -196,7 +196,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return retentionPolicies.getAll()
 				.then(data => assert.equal(data, response));
 		});
@@ -216,7 +216,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -227,7 +227,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return retentionPolicies.getAssignments(POLICY_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -262,7 +262,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -273,7 +273,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return retentionPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -295,7 +295,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -306,7 +306,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return retentionPolicies.getAssignment(ASSIGNMENT_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -328,7 +328,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -339,7 +339,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return retentionPolicies.getFileVersionRetention(RETENTION_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -362,7 +362,7 @@ describe('RetentionPolicies', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -373,7 +373,7 @@ describe('RetentionPolicies', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return retentionPolicies.getAllFileVersionRetentions()
 				.then(data => assert.equal(data, response));
 		});

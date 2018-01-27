@@ -84,7 +84,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return collaborationWhitelist.addDomain(domainToWhitelist, 'both')
 				.then(data => assert.equal(data, response));
 		});
@@ -109,7 +109,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return collaborationWhitelist.removeDomain(COLLABORATION_WHITELIST_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -120,12 +120,12 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaboration_whitelist_entries/1234', testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			collaborationWhitelist.getWhitelistedDomain(COLLABORATION_WHITELIST_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -135,7 +135,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collaborationWhitelist.getWhitelistedDomain(COLLABORATION_WHITELIST_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -156,12 +156,12 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaboration_whitelist_entries', testWhitelistQS)
-				.returns(Promise.resolve());
+				.resolves();
 			collaborationWhitelist.getAllWhitelistedDomains(options);
 		});
 
 		it('should wrap with default handler when called', function() {
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -171,7 +171,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collaborationWhitelist.getAllWhitelistedDomains(options)
 				.then(data => assert.equal(data, response));
 		});
@@ -180,7 +180,7 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaboration_whitelist_entries')
-				.returns(Promise.resolve());
+				.resolves();
 			collaborationWhitelist.getAllWhitelistedDomains();
 		});
 	});
@@ -199,12 +199,12 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/collaboration_whitelist_exempt_targets', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			collaborationWhitelist.addExemption(USER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -214,7 +214,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return collaborationWhitelist.addExemption(USER_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -225,12 +225,12 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaboration_whitelist_exempt_targets/5678', testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			collaborationWhitelist.getExemption(USER_COLLABORATION_WHITELIST_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -240,7 +240,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collaborationWhitelist.getExemption(USER_COLLABORATION_WHITELIST_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -261,12 +261,12 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaboration_whitelist_exempt_targets', testWhitelistQS)
-				.returns(Promise.resolve());
+				.resolves();
 			collaborationWhitelist.getAllExemptions(options);
 		});
 
 		it('should wrap with default handler when called', function() {
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -276,7 +276,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collaborationWhitelist.getAllExemptions(options)
 				.then(data => assert.equal(data, response));
 		});
@@ -285,7 +285,7 @@ describe('CollaborationWhitelist', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaboration_whitelist_exempt_targets')
-				.returns(Promise.resolve());
+				.resolves();
 			collaborationWhitelist.getAllExemptions();
 		});
 	});
@@ -309,7 +309,7 @@ describe('CollaborationWhitelist', function() {
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return collaborationWhitelist.removeExemption(USER_COLLABORATION_WHITELIST_ID)
 				.then(data => assert.equal(data, response));
 		});

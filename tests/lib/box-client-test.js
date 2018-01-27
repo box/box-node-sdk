@@ -98,20 +98,20 @@ describe('box-client', function() {
 
 		it('should set the "Authentication" header to a new APISession token for all requests when called', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs({
 					headers: sinon.match({ Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN })
 				})
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient._makeRequest({});
 		});
 
 		it('should set the X-Box-UA header with correct values when called', function() {
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 
 			var expectedHeader = `agent=box-node-sdk/${pkg.version}; env=Node/`;
 
@@ -119,7 +119,7 @@ describe('box-client', function() {
 				.withArgs({
 					headers: sinon.match({ 'X-Box-UA': sinon.match(expectedHeader) })
 				})
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient._makeRequest({});
 		});
@@ -130,17 +130,17 @@ describe('box-client', function() {
 			basicClient.setSharedContext('box.com/donotsetthis', '123');
 
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs({ headers: headersMatcher })
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient._makeRequest({headers: { BoxApi: explicitBoxApiHeader }});
 		});
 
 		it('should call makeStreamingRequest for a streaming request', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 			sandbox.mock(fakeResponseStream).expects('on')
 				.withArgs('response', sinon.match.func);
 			sandbox.mock(requestManagerFake).expects('makeStreamingRequest')
@@ -153,7 +153,7 @@ describe('box-client', function() {
 
 			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error));
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 			sandbox.stub(requestManagerFake, 'makeStreamingRequest').returns(fakeResponseStream);
 
 			return basicClient._makeRequest({ streaming: true })
@@ -164,10 +164,10 @@ describe('box-client', function() {
 
 		it('should make a request and propagate the response when able to upkeep tokens', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient._makeRequest({})
 				.then(res => {
@@ -186,7 +186,7 @@ describe('box-client', function() {
 
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
 				.withArgs(sinon.match(options))
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs({
@@ -195,7 +195,7 @@ describe('box-client', function() {
 						'X-Forwarded-For': ipHeader
 					})
 				})
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			basicClient.setIPs(ips);
 			return basicClient._makeRequest({});
@@ -203,7 +203,7 @@ describe('box-client', function() {
 
 		it('should propagate error when unable to upkeep tokens', function() {
 			var upkeepErr = new Error();
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.reject(upkeepErr));
+			sandbox.stub(apiSessionFake, 'getAccessToken').rejects(upkeepErr);
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.never();
 
@@ -223,9 +223,9 @@ describe('box-client', function() {
 			apiSessionFake.handleExpiredTokensError = sandbox.mock().withArgs(sinon.match.instanceOf(Error))
 				.returns(p);
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 			sandbox.mock(requestManagerFake).expects('makeRequest')
-				.returns(Promise.resolve(fakeUnauthorizedResponse));
+				.resolves(fakeUnauthorizedResponse);
 
 			return basicClient._makeRequest({})
 				.catch(err => {
@@ -303,7 +303,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: fakeQs
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return basicClient.get(FAKE_PATH, fakeParamsWithQs);
 		});
@@ -314,7 +314,7 @@ describe('box-client', function() {
 					method: 'GET',
 					url: (basicClient._baseURL + FAKE_PATH)
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.get(FAKE_PATH);
 		});
 
@@ -330,7 +330,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: {foo: 'bar'}
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return basicClient.get(FAKE_PATH, reqParams)
 				.then(() => {
@@ -349,7 +349,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: fakeBody
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.post(FAKE_PATH, fakeParamsWithBody);
 		});
 
@@ -359,7 +359,7 @@ describe('box-client', function() {
 					method: 'POST',
 					url: (basicClient._baseURL + FAKE_PATH)
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.post(FAKE_PATH);
 		});
 
@@ -375,7 +375,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: {foo: 'bar'}
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.post(FAKE_PATH, reqParams)
 				.then(() => {
 					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -392,7 +392,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: fakeBody
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return basicClient.put(FAKE_PATH, fakeParamsWithBody);
 		});
@@ -403,7 +403,7 @@ describe('box-client', function() {
 					method: 'PUT',
 					url: (basicClient._baseURL + FAKE_PATH)
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.put(FAKE_PATH);
 		});
 
@@ -419,7 +419,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					body: {foo: 'bar'}
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.put(FAKE_PATH, reqParams)
 				.then(() => {
 					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -436,7 +436,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: fakeQs
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.del(FAKE_PATH, fakeParamsWithQs);
 		});
 
@@ -446,7 +446,7 @@ describe('box-client', function() {
 					method: 'DELETE',
 					url: (basicClient._baseURL + FAKE_PATH)
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.del(FAKE_PATH);
 		});
 
@@ -462,7 +462,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: {foo: 'bar'}
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.del(FAKE_PATH, reqParams)
 				.then(() => {
 					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -479,7 +479,7 @@ describe('box-client', function() {
 					url: basicClient._baseURL + FAKE_PATH,
 					body: fakeBody
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.options(FAKE_PATH, fakeParamsWithBody);
 		});
 
@@ -489,7 +489,7 @@ describe('box-client', function() {
 					method: 'OPTIONS',
 					url: (basicClient._baseURL + FAKE_PATH)
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.options(FAKE_PATH);
 		});
 
@@ -505,7 +505,7 @@ describe('box-client', function() {
 					url: (basicClient._baseURL + FAKE_PATH),
 					qs: {foo: 'bar'}
 				})
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.options(FAKE_PATH, reqParams)
 				.then(() => {
 					assert.notProperty(reqParams, 'url', 'Passed-in params object should not be mutated');
@@ -522,10 +522,10 @@ describe('box-client', function() {
 			var expectedParams = { headers: {} };
 			expectedParams.headers[HEADER_NAME] = HEADER_VALUE;
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve());
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves();
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs(sinon.match(expectedParams))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			basicClient.setCustomHeader(HEADER_NAME, HEADER_VALUE);
 			return basicClient.get('/');
@@ -534,10 +534,10 @@ describe('box-client', function() {
 		it('should remove an already set custom header when called with null', function() {
 			var expectedParams = { headers: {} };
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve());
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves();
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs(sinon.match(expectedParams))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			basicClient.setCustomHeader(HEADER_NAME, HEADER_VALUE);
 			basicClient.setCustomHeader(HEADER_NAME, null);
@@ -550,14 +550,14 @@ describe('box-client', function() {
 
 		it('should call the API session\'s getAccessToken() and use the returned token to make the request', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 
 			sandbox.mock(requestManagerFake)
 				.expects('makeRequest')
 				.withArgs(sinon.match({
 					headers: {Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN}
 				}))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData);
 		});
@@ -565,7 +565,7 @@ describe('box-client', function() {
 		it('should make a request with the correct params and propagate the response info and body when the request succeeds', function() {
 			var path = '/files/content';
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 
 			sandbox.mock(requestManagerFake)
 				.expects('makeRequest')
@@ -577,7 +577,7 @@ describe('box-client', function() {
 					headers: sinon.match({ Authorization: HEADER_AUTHORIZATION_PREFIX + FAKE_ACCESS_TOKEN }),
 					formData: fakeMultipartFormData
 				})
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient.upload(path, fakeParamsWithBody, fakeMultipartFormData)
 				.then(response => {
@@ -591,7 +591,7 @@ describe('box-client', function() {
 				emptyResponseInfo = { body: emptyResponseBody};
 			retryableRequestError.response = emptyResponseInfo;
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
 			var p = (new Promise(resolve => setTimeout(resolve, 1))).then(() => {
 				throw retryableRequestError;
@@ -605,8 +605,8 @@ describe('box-client', function() {
 		});
 
 		it('should propagate a generic access token error when an empty body UNAUTHORIZED response is received', function() {
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
-			sandbox.stub(requestManagerFake, 'makeRequest').returns(Promise.resolve(fakeUnauthorizedResponse));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
+			sandbox.stub(requestManagerFake, 'makeRequest').resolves(fakeUnauthorizedResponse);
 
 			return basicClient.upload('/files/content', fakeParamsWithBody, fakeMultipartFormData)
 				.catch(err => {
@@ -661,7 +661,7 @@ describe('box-client', function() {
 			};
 			sandbox.mock(basicClient).expects('post')
 				.withArgs('/batch', sinon.match(expectedBatchParams))
-				.returns(Promise.resolve(response));
+				.resolves(response);
 
 			return basicClient.batchExec();
 		});
@@ -685,7 +685,7 @@ describe('box-client', function() {
 					]
 				}
 			};
-			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
+			sandbox.stub(basicClient, 'post').resolves(response);
 
 			basicClient.batchExec();
 
@@ -714,7 +714,7 @@ describe('box-client', function() {
 					]
 				}
 			};
-			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
+			sandbox.stub(basicClient, 'post').resolves(response);
 
 			return basicClient.batchExec().then(data => {
 				assert.equal(data, response.body);
@@ -730,7 +730,7 @@ describe('box-client', function() {
 				assert.equal(err, error);
 			});
 
-			sandbox.stub(basicClient, 'post').returns(Promise.reject(error));
+			sandbox.stub(basicClient, 'post').rejects(error);
 
 			var promise2 = basicClient.batchExec().catch(err => {
 				assert.equal(err, error);
@@ -767,14 +767,14 @@ describe('box-client', function() {
 
 		it('should set the "X-Forwarded-For" header when the custom header has been set', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 			basicClient.setIPs(ips);
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs(sinon.match({
 					headers: { 'X-Forwarded-For': xffTest }
 				}))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient.get('/');
 		});
@@ -851,10 +851,10 @@ describe('box-client', function() {
 				}
 			};
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs(sinon.match(expectedParams))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			basicClient.setSharedContext(SHARED_CONTEXT_URL, SHARED_CONTEXT_PASSWORD);
 			return basicClient.get('/');
@@ -873,14 +873,14 @@ describe('box-client', function() {
 
 		it('should not set the "BoxAPI" header when the context has been revoked', function() {
 			sandbox.mock(apiSessionFake).expects('getAccessToken')
-				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+				.resolves(FAKE_ACCESS_TOKEN);
 			basicClient.revokeSharedContext();
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs(sinon.match({
 					headers: { BoxApi: undefined }
 				}))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			return basicClient.get('/');
 		});
@@ -898,10 +898,10 @@ describe('box-client', function() {
 				}
 			};
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs(sinon.match(expectedParams))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			basicClient.asUser(USER_ID);
 			return basicClient.get('/');
@@ -917,10 +917,10 @@ describe('box-client', function() {
 				headers: {}
 			};
 
-			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+			sandbox.stub(apiSessionFake, 'getAccessToken').resolves(FAKE_ACCESS_TOKEN);
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.withArgs(sinon.match(expectedParams))
-				.returns(Promise.resolve(fakeOKResponse));
+				.resolves(fakeOKResponse);
 
 			basicClient.asUser(USER_ID);
 			basicClient.asSelf();
@@ -931,7 +931,7 @@ describe('box-client', function() {
 	describe('revokeTokens()', function() {
 		it('should call apiSession.revokeTokens when called', function() {
 			sandbox.mock(apiSessionFake).expects('revokeTokens')
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.revokeTokens();
 		});
 
@@ -947,14 +947,14 @@ describe('box-client', function() {
 
 			sandbox.mock(apiSessionFake).expects('revokeTokens')
 				.withArgs(sinon.match(options))
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.revokeTokens();
 		});
 
 		it('should return promise resolving when tokens are revoked', function() {
 
 			sandbox.mock(apiSessionFake).expects('revokeTokens')
-				.returns(Promise.resolve());
+				.resolves();
 			return basicClient.revokeTokens()
 				.then(data => {
 					assert.isUndefined(data);
@@ -966,7 +966,7 @@ describe('box-client', function() {
 			var error = new Error('No can do');
 
 			sandbox.mock(apiSessionFake).expects('revokeTokens')
-				.returns(Promise.reject(error));
+				.rejects(error);
 			return basicClient.revokeTokens()
 				.catch(err => {
 					assert.equal(err, error);
@@ -985,7 +985,7 @@ describe('box-client', function() {
 
 			sandbox.mock(apiSessionFake).expects('exchangeToken')
 				.withArgs(TEST_SCOPE, TEST_RESOURCE)
-				.returns(Promise.resolve(exchangedTokenInfo));
+				.resolves(exchangedTokenInfo);
 
 			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
 				.then(data => {
@@ -1009,7 +1009,7 @@ describe('box-client', function() {
 
 			sandbox.mock(apiSessionFake).expects('exchangeToken')
 				.withArgs(TEST_SCOPE, TEST_RESOURCE, expectedOptions)
-				.returns(Promise.resolve(exchangedTokenInfo));
+				.resolves(exchangedTokenInfo);
 
 			basicClient.setIPs(ips);
 			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
@@ -1034,7 +1034,7 @@ describe('box-client', function() {
 
 			sandbox.mock(apiSessionFake).expects('exchangeToken')
 				.withArgs(TEST_SCOPE, TEST_RESOURCE, expectedOptions)
-				.returns(Promise.resolve(exchangedTokenInfo));
+				.resolves(exchangedTokenInfo);
 
 			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, { actor })
 				.then(data => {
@@ -1046,7 +1046,7 @@ describe('box-client', function() {
 
 			var error = new Error('Failure');
 
-			sandbox.stub(apiSessionFake, 'exchangeToken').returns(Promise.reject(error));
+			sandbox.stub(apiSessionFake, 'exchangeToken').rejects(error);
 
 			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE)
 				.catch(err => {
@@ -1100,7 +1100,7 @@ describe('box-client', function() {
 					method: 'GET',
 					url: PLUGIN_API_ROOT + TEST_PATH
 				})
-				.returns(Promise.resolve());
+				.resolves();
 
 			return basicClient.testplugin.get();
 		});
@@ -1116,7 +1116,7 @@ describe('box-client', function() {
 					formData: fakeMultipartFormData,
 					url: PLUGIN_UPLOAD_API_ROOT + TEST_PATH
 				}))
-				.returns(Promise.resolve());
+				.resolves();
 
 			return basicClient.testplugin.upload(fakeMultipartFormData);
 		});

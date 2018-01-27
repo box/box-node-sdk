@@ -78,7 +78,7 @@ describe('RecentItems', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return recentItems.get(testQS)
 				.then(data => assert.equal(data, response));
 		});

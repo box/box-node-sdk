@@ -92,7 +92,7 @@ describe('Users', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return users.get(USER_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -126,7 +126,7 @@ describe('Users', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return users.update(USER_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -154,7 +154,7 @@ describe('Users', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return users.delete(USER_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -188,7 +188,7 @@ describe('Users', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return users.getEmailAliases(USER_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -254,7 +254,7 @@ describe('Users', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return users.addEmailAlias(USER_ID, email)
 				.then(data => assert.equal(data, response));
 		});
@@ -293,7 +293,7 @@ describe('Users', function() {
 			var id = '1234';
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return users.removeEmailAlias(id, aliasID)
 				.then(data => assert.equal(data, response));
 		});
@@ -342,7 +342,7 @@ describe('Users', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return users.getGroupMemberships(USER_ID)
 				.then(data => assert.equal(data, response));
 		});

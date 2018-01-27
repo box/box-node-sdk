@@ -68,7 +68,7 @@ describe('BasicAPISession', function() {
 		it('should call tokenManager.revokeTokens() with the current access token and null options when called', function() {
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withArgs(ACCESS_TOKEN, null)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return basicAPISession.revokeTokens(null);
 		});
@@ -79,7 +79,7 @@ describe('BasicAPISession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withArgs(ACCESS_TOKEN, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return basicAPISession.revokeTokens(options);
 		});
@@ -96,7 +96,7 @@ describe('BasicAPISession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('exchangeToken')
 				.withArgs(ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, null)
-				.returns(Promise.resolve(exchangedTokenInfo));
+				.resolves(exchangedTokenInfo);
 
 			return basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.then(data => {
@@ -112,7 +112,7 @@ describe('BasicAPISession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('exchangeToken')
 				.withArgs(ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, options)
-				.returns(Promise.resolve(exchangedTokenInfo));
+				.resolves(exchangedTokenInfo);
 
 			return basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options)
 				.then(data => {
@@ -124,7 +124,7 @@ describe('BasicAPISession', function() {
 
 			var error = new Error('Nope!');
 
-			sandbox.stub(tokenManagerFake, 'exchangeToken').returns(Promise.reject(error));
+			sandbox.stub(tokenManagerFake, 'exchangeToken').rejects(error);
 
 			basicAPISession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.catch(err => {

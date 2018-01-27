@@ -95,7 +95,7 @@ describe('EventStream', function() {
 			var longPollInfo = {url: 'https://realtime.box.com/blah'};
 			sandbox.stub(eventStream, 'doLongPoll');
 			sandbox.mock(boxClientFake.events).expects('getLongPollInfo')
-				.returns(Promise.resolve(longPollInfo));
+				.resolves(longPollInfo);
 
 			return eventStream.getLongPollInfo()
 				.then(() => {
@@ -110,7 +110,7 @@ describe('EventStream', function() {
 			eventStream._longPollRetries = 2;
 
 			sandbox.stub(eventStream, 'doLongPoll');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.resolve(longPollInfo));
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').resolves(longPollInfo);
 
 			return eventStream.getLongPollInfo()
 				.then(() => {
@@ -122,7 +122,7 @@ describe('EventStream', function() {
 
 			var longPollInfo = {url: 'https://realtime.box.com/blah'};
 
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.resolve(longPollInfo));
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').resolves(longPollInfo);
 			sandbox.mock(eventStream).expects('doLongPoll');
 
 			return eventStream.getLongPollInfo();
@@ -132,7 +132,7 @@ describe('EventStream', function() {
 
 			var apiError = new Error('API fail');
 			sandbox.stub(eventStream, 'doLongPoll');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').rejects(apiError);
 			sandbox.mock(eventStream).expects('emit')
 				.withArgs('error', apiError);
 
@@ -144,7 +144,7 @@ describe('EventStream', function() {
 			var apiError = new Error('API fail');
 			sandbox.stub(eventStream, 'doLongPoll');
 			sandbox.stub(eventStream, 'emit');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').rejects(apiError);
 
 			return eventStream.getLongPollInfo()
 				.then(() => {
@@ -159,7 +159,7 @@ describe('EventStream', function() {
 			apiError.authExpired = true;
 			sandbox.stub(eventStream, 'doLongPoll');
 			sandbox.stub(eventStream, 'emit');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').rejects(apiError);
 
 
 			return eventStream.getLongPollInfo()
@@ -213,7 +213,7 @@ describe('EventStream', function() {
 					timeout: TEST_RETRY_TIMEOUT * 1000,
 					qs: sinon.match(expectedQS)
 				}))
-				.returns(Promise.resolve({message: 'new_change'}));
+				.resolves({message: 'new_change'});
 
 			eventStream.doLongPoll();
 			done();
@@ -223,7 +223,7 @@ describe('EventStream', function() {
 
 			eventStream._longPollRetries = 4;
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve({}));
+			sandbox.stub(boxClientFake, 'get').resolves({});
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 
 			eventStream.doLongPoll();
@@ -234,7 +234,7 @@ describe('EventStream', function() {
 
 			var apiError = new Error('Oops');
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').rejects(apiError);
 			sandbox.mock(eventStream).expects('getLongPollInfo');
 
 			return eventStream.doLongPoll().then(() => {
@@ -296,7 +296,7 @@ describe('EventStream', function() {
 					stream_position: TEST_STREAM_POSITION,
 					limit: 500
 				}))
-				.returns(Promise.resolve(fakeEvents));
+				.resolves(fakeEvents);
 
 			eventStream.fetchEvents();
 		});
@@ -304,7 +304,7 @@ describe('EventStream', function() {
 		it('should emit error event when the API call fails', function() {
 
 			var apiError = new Error('Whoops');
-			sandbox.stub(boxClientFake.events, 'get').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake.events, 'get').rejects(apiError);
 			sandbox.mock(eventStream).expects('emit')
 				.withArgs('error', apiError);
 
@@ -314,7 +314,7 @@ describe('EventStream', function() {
 		it('should reset long poll process after delay when the API call fails', function() {
 
 			var apiError = new Error('Whoops');
-			sandbox.stub(boxClientFake.events, 'get').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake.events, 'get').rejects(apiError);
 			sandbox.stub(eventStream, 'emit');
 
 			return eventStream.fetchEvents().then(() => {
@@ -511,9 +511,9 @@ describe('EventStream', function() {
 					limit: 500
 				}))
 				.onFirstCall()
-				.returns(Promise.resolve(fakeEvents))
+				.resolves(fakeEvents)
 				.onSecondCall()
-				.returns(Promise.resolve(secondFakeEvents));
+				.resolves(secondFakeEvents);
 
 			var called = {
 				first: false,

@@ -147,7 +147,7 @@ describe.skip('APIRequestManager', function() {
 
 			var requestManager = new APIRequestManager(config, eventBusFake);
 			sandbox.mock(apiRequestFake).expects('execute')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 
 			return requestManager.makeRequest({})
 				.then(data => {

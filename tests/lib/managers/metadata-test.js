@@ -68,7 +68,7 @@ describe('Metadata', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -79,7 +79,7 @@ describe('Metadata', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return metadata.getTemplateSchema('enterprise', 'productSpec')
 				.then(data => assert.equal(data, response));
 		});
@@ -97,7 +97,7 @@ describe('Metadata', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -108,7 +108,7 @@ describe('Metadata', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return metadata.getTemplates('enterprise')
 				.then(data => assert.equal(data, response));
 		});
@@ -167,7 +167,7 @@ describe('Metadata', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -178,7 +178,7 @@ describe('Metadata', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return metadata.createTemplate(name, fields, options)
 				.then(data => assert.equal(data, response));
 		});
@@ -197,7 +197,7 @@ describe('Metadata', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -208,7 +208,7 @@ describe('Metadata', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return metadata.deleteTemplate(scope, template)
 				.then(data => assert.equal(data, response));
 		});
@@ -250,7 +250,7 @@ describe('Metadata', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -261,7 +261,7 @@ describe('Metadata', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return metadata.updateTemplate(scope, template, operations)
 				.then(data => assert.equal(data, response));
 		});

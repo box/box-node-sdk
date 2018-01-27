@@ -57,7 +57,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/terms_of_services/1234')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.get(TERMS_OF_SERVICE_ID, null);
 		});
 
@@ -73,7 +73,7 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return termsOfService.get(TERMS_OF_SERVICE_ID)
 				.then(termsOfServiceObject => {
 					assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
@@ -94,7 +94,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/terms_of_services/1234')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.get(TERMS_OF_SERVICE_ID, options);
 		});
 
@@ -110,7 +110,7 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return termsOfService.get(TERMS_OF_SERVICE_ID, options)
 				.then(termsOfServiceObject => {
 					assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
@@ -140,7 +140,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/terms_of_services')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.getAll();
 		});
 
@@ -156,7 +156,7 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return termsOfService.getAll()
 				.then(termsOfServiceObject => {
 					assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
@@ -182,7 +182,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/terms_of_services')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.getAll(options);
 		});
 
@@ -198,7 +198,7 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return termsOfService.getAll(options)
 				.then(termsOfServiceObject => {
 					assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
@@ -222,7 +222,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/terms_of_services', expectedTermsOfServiceParam)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.create('managed', 'enabled', 'Test Text');
 		});
 
@@ -238,7 +238,7 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return termsOfService.create('managed', 'enabled', 'Test Text')
 				.then(termsOfServiceObject => {
 					assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
@@ -264,7 +264,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/terms_of_services/1234', expectedTermsOfServiceParam)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.update(TERMS_OF_SERVICE_ID, options);
 		});
 
@@ -280,7 +280,7 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return termsOfService.update(TERMS_OF_SERVICE_ID, 'enabled', 'Test Text')
 				.then(termsOfServiceObject => {
 					assert.strictEqual(termsOfServiceObject, response, 'terms of service object is returned');
@@ -316,7 +316,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/terms_of_service_user_statuses', expectedParam)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.createUserStatus(TERMS_OF_SERVICE_ID, true, options);
 		});
 
@@ -343,7 +343,7 @@ describe('TermsOfService', function() {
 				]
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return termsOfService.createUserStatus(TERMS_OF_SERVICE_ID, true, options)
 				.then(termsOfServiceUserStatusObject => {
 					assert.strictEqual(termsOfServiceUserStatusObject, response, 'terms of service user status object is returned');
@@ -377,7 +377,7 @@ describe('TermsOfService', function() {
 			};
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/terms_of_service_user_statuses')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID);
 		});
 
@@ -403,7 +403,7 @@ describe('TermsOfService', function() {
 				}
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return termsOfService.getUserStatus(TERMS_OF_SERVICE_ID)
 				.then(termsOfServiceUserStatusObject => {
 					assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user status object is returned');
@@ -415,7 +415,7 @@ describe('TermsOfService', function() {
 				statusCode: 500,
 				body: {}
 			};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return termsOfService.getUserStatus(TERMS_OF_SERVICE_ID)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -446,7 +446,7 @@ describe('TermsOfService', function() {
 			};
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/terms_of_service_user_statuses')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, options);
 		});
 
@@ -471,7 +471,7 @@ describe('TermsOfService', function() {
 					]
 				}
 			};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, options)
 				.then(termsOfServiceUserStatusObject => {
 					assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user status object is returned');
@@ -494,7 +494,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/terms_of_service_user_statuses/7777', expectedParam)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.updateUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true);
 		});
 
@@ -509,7 +509,7 @@ describe('TermsOfService', function() {
 				modified_at: '2017-10-21T20:09:59-07:00'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return termsOfService.updateUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true)
 				.then(termsOfServiceUserStatusObject => {
 					assert.strictEqual(termsOfServiceUserStatusObject, response, 'terms of service user status object is returned');
@@ -546,7 +546,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/terms_of_service_user_statuses', expectedParam)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options);
 		});
 
@@ -556,7 +556,7 @@ describe('TermsOfService', function() {
 				body: {}
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options)
 				.then(termsOfServiceUserStatusObject => {
 					assert.strictEqual(termsOfServiceUserStatusObject, response.body, 'terms of service user status object is returned');
@@ -574,10 +574,10 @@ describe('TermsOfService', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'post')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			sandbox.mock(termsOfService).expects('getUserStatus')
 				.withArgs(TERMS_OF_SERVICE_ID, sinon.match(options))
-				.returns(Promise.resolve({id: TERMS_OF_SERVICE_USER_STATUS_ID}));
+				.resolves({id: TERMS_OF_SERVICE_USER_STATUS_ID});
 			sandbox.mock(termsOfService).expects('updateUserStatus')
 				.withArgs(TERMS_OF_SERVICE_USER_STATUS_ID, true);
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options);
@@ -594,11 +594,11 @@ describe('TermsOfService', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'post')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			sandbox.stub(termsOfService, 'getUserStatus')
-				.returns(Promise.resolve({id: TERMS_OF_SERVICE_USER_STATUS_ID}));
+				.resolves({id: TERMS_OF_SERVICE_USER_STATUS_ID});
 			sandbox.stub(termsOfService, 'updateUserStatus')
-				.returns(Promise.resolve(userStatus));
+				.resolves(userStatus);
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true, options)
 				.then(termsOfServiceUserStatusObject => {
 					assert.strictEqual(termsOfServiceUserStatusObject, userStatus, 'terms of service user object is returned');
@@ -616,7 +616,7 @@ describe('TermsOfService', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'post')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true, options)
 				.catch(err => {
 					assert.instanceOf(err, Error);

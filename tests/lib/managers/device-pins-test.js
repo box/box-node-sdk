@@ -83,7 +83,7 @@ describe('DevicePins', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -94,7 +94,7 @@ describe('DevicePins', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return devicePins.get(PIN_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -124,7 +124,7 @@ describe('DevicePins', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -135,7 +135,7 @@ describe('DevicePins', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return devicePins.delete(PIN_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -165,10 +165,10 @@ describe('DevicePins', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake.users).expects('get')
 				.withArgs('me', {fields: 'enterprise'})
-				.returns(Promise.resolve(user));
+				.resolves(user);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/enterprises/${ENTERPRISE_ID}/device_pinners`, params)
-				.returns(Promise.resolve({}));
+				.resolves({});
 			return devicePins.getAll();
 		});
 
@@ -181,7 +181,7 @@ describe('DevicePins', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake.users).expects('get')
 				.withArgs('me', {fields: 'enterprise'})
-				.returns(Promise.resolve(user));
+				.resolves(user);
 			sandbox.mock(boxClientFake).expects('get')
 				.never();
 			return devicePins.getAll()
@@ -192,8 +192,8 @@ describe('DevicePins', function() {
 
 		it('should wrap GET call with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
+			sandbox.stub(boxClientFake, 'get').resolves();
+			sandbox.stub(boxClientFake.users, 'get').resolves(user);
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -204,8 +204,8 @@ describe('DevicePins', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake.users, 'get').resolves(user);
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return devicePins.getAll()
 				.then(data => assert.equal(data, response));
 		});

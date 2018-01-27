@@ -107,7 +107,7 @@ describe('AppAuthSession', function() {
 			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs(TEST_TYPE, TEST_ID)
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			return appAuthSession.getAccessToken()
@@ -123,7 +123,7 @@ describe('AppAuthSession', function() {
 			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.withArgs(TEST_TYPE, TEST_ID, options)
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			return appAuthSession.getAccessToken(options)
@@ -137,7 +137,7 @@ describe('AppAuthSession', function() {
 			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.once()
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			var promise1 = appAuthSession.getAccessToken()
@@ -161,7 +161,7 @@ describe('AppAuthSession', function() {
 			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.twice()
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			var promise1 = appAuthSession.getAccessToken()
@@ -187,7 +187,7 @@ describe('AppAuthSession', function() {
 
 			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
-				.returns(Promise.reject(tokensError));
+				.rejects(tokensError);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			return appAuthSession.getAccessToken()
@@ -201,7 +201,7 @@ describe('AppAuthSession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
 				.once()
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			var tokensValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
 			tokensValidStub.withArgs(testTokenInfo).returns(false);
 			tokensValidStub.withArgs(newTokenInfo).returns(true);
@@ -233,7 +233,7 @@ describe('AppAuthSession', function() {
 			appAuthSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, null)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return appAuthSession.revokeTokens(null);
 		});
@@ -245,7 +245,7 @@ describe('AppAuthSession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return appAuthSession.revokeTokens(options);
 		});
@@ -262,10 +262,10 @@ describe('AppAuthSession', function() {
 
 			sandbox.mock(appAuthSession).expects('getAccessToken')
 				.withArgs(null)
-				.returns(Promise.resolve(testTokenInfo.accessToken));
+				.resolves(testTokenInfo.accessToken);
 			sandbox.mock(tokenManagerFake).expects('exchangeToken')
 				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, null)
-				.returns(Promise.resolve(exchangedTokenInfo));
+				.resolves(exchangedTokenInfo);
 
 			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.then(data => {
@@ -281,10 +281,10 @@ describe('AppAuthSession', function() {
 
 			sandbox.mock(appAuthSession).expects('getAccessToken')
 				.withArgs(options)
-				.returns(Promise.resolve(testTokenInfo.accessToken));
+				.resolves(testTokenInfo.accessToken);
 			sandbox.mock(tokenManagerFake).expects('exchangeToken')
 				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, options)
-				.returns(Promise.resolve(exchangedTokenInfo));
+				.resolves(exchangedTokenInfo);
 
 			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options)
 				.then(data => {
@@ -296,7 +296,7 @@ describe('AppAuthSession', function() {
 
 			var error = new Error('Could not get access token');
 
-			sandbox.stub(appAuthSession, 'getAccessToken').returns(Promise.reject(error));
+			sandbox.stub(appAuthSession, 'getAccessToken').rejects(error);
 
 			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.catch(err => {
@@ -308,8 +308,8 @@ describe('AppAuthSession', function() {
 
 			var error = new Error('Could not exchange token');
 
-			sandbox.stub(appAuthSession, 'getAccessToken').returns(Promise.resolve(testTokenInfo.accessToken));
-			sandbox.stub(tokenManagerFake, 'exchangeToken').returns(Promise.reject(error));
+			sandbox.stub(appAuthSession, 'getAccessToken').resolves(testTokenInfo.accessToken);
+			sandbox.stub(tokenManagerFake, 'exchangeToken').rejects(error);
 
 			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.catch(err => {

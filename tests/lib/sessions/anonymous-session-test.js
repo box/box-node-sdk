@@ -93,7 +93,7 @@ describe('AnonymousAPISession', function() {
 
 			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			return anonymousSession.getAccessToken()
@@ -109,7 +109,7 @@ describe('AnonymousAPISession', function() {
 			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.withArgs(options)
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			return anonymousSession.getAccessToken(options)
@@ -123,7 +123,7 @@ describe('AnonymousAPISession', function() {
 			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.once()
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			var promise1 = anonymousSession.getAccessToken()
@@ -147,7 +147,7 @@ describe('AnonymousAPISession', function() {
 			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.twice()
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			var promise1 = anonymousSession.getAccessToken()
@@ -173,7 +173,7 @@ describe('AnonymousAPISession', function() {
 
 			anonymousSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
-				.returns(Promise.reject(tokensError));
+				.rejects(tokensError);
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
 			return anonymousSession.getAccessToken()
@@ -187,7 +187,7 @@ describe('AnonymousAPISession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.once()
-				.returns(Promise.resolve(newTokenInfo));
+				.resolves(newTokenInfo);
 			var tokensValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
 			tokensValidStub.withArgs(testTokenInfo).returns(false);
 			tokensValidStub.withArgs(newTokenInfo).returns(true);
@@ -222,7 +222,7 @@ describe('AnonymousAPISession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, options)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return anonymousSession.revokeTokens(options);
 		});
@@ -232,7 +232,7 @@ describe('AnonymousAPISession', function() {
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, null)
-				.returns(Promise.resolve());
+				.resolves();
 
 			return anonymousSession.revokeTokens(null);
 		});
@@ -251,7 +251,7 @@ describe('AnonymousAPISession', function() {
 
 			sandbox.mock(anonymousSession).expects('getAccessToken')
 				.withArgs(options)
-				.returns(Promise.resolve(tokenInfo.accessToken));
+				.resolves(tokenInfo.accessToken);
 
 			return anonymousSession.exchangeToken('item_preview', null, options)
 				.then(data => {
@@ -266,7 +266,7 @@ describe('AnonymousAPISession', function() {
 
 			sandbox.mock(anonymousSession).expects('getAccessToken')
 				.withArgs(null)
-				.returns(Promise.resolve(tokenInfo.accessToken));
+				.resolves(tokenInfo.accessToken);
 
 			return anonymousSession.exchangeToken('item_preview', null, null)
 				.then(data => {
@@ -280,7 +280,7 @@ describe('AnonymousAPISession', function() {
 
 			sandbox.mock(anonymousSession)
 				.expects('getAccessToken')
-				.returns(Promise.reject(error));
+				.rejects(error);
 
 			return anonymousSession.exchangeToken('item_preview', null)
 				.catch(err => {

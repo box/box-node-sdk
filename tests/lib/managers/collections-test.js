@@ -77,7 +77,7 @@ describe('Collections', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collections.getAll()
 				.then(data => assert.equal(data, response));
 		});
@@ -112,7 +112,7 @@ describe('Collections', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collections.getItems(collectionID, testQS)
 				.then(data => assert.equal(data, response));
 		});

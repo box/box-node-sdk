@@ -344,7 +344,7 @@ describe('PagingIterator', function() {
 
 			sandbox.mock(clientFake).expects('get')
 				.withArgs(expectedURL, expectedOptions1)
-				.returns(Promise.resolve(response2));
+				.resolves(response2);
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -418,7 +418,7 @@ describe('PagingIterator', function() {
 
 			sandbox.mock(clientFake).expects('get')
 				.withArgs(expectedURL, expectedOptions)
-				.returns(Promise.resolve(response2));
+				.resolves(response2);
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -513,9 +513,9 @@ describe('PagingIterator', function() {
 
 			var clientMock = sandbox.mock(clientFake);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
-				.returns(Promise.resolve(response2));
+				.resolves(response2);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
-				.returns(Promise.resolve(response3));
+				.resolves(response3);
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -613,9 +613,9 @@ describe('PagingIterator', function() {
 
 			var clientMock = sandbox.mock(clientFake);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
-				.returns(Promise.resolve(response2));
+				.resolves(response2);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
-				.returns(Promise.resolve(response3));
+				.resolves(response3);
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -654,7 +654,7 @@ describe('PagingIterator', function() {
 
 			var error = new Error('Could not connect to API');
 
-			sandbox.stub(clientFake, 'get').returns(Promise.reject(error));
+			sandbox.stub(clientFake, 'get').rejects(error);
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -685,7 +685,7 @@ describe('PagingIterator', function() {
 				statusCode: 400
 			};
 
-			sandbox.stub(clientFake, 'get').returns(Promise.resolve(errorResponse));
+			sandbox.stub(clientFake, 'get').resolves(errorResponse);
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -768,9 +768,9 @@ describe('PagingIterator', function() {
 
 			var clientMock = sandbox.mock(clientFake);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
-				.returns(Promise.resolve(response2));
+				.resolves(response2);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
-				.returns(Promise.resolve(response3));
+				.resolves(response3);
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -872,9 +872,9 @@ describe('PagingIterator', function() {
 
 			var clientMock = sandbox.mock(clientFake);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
-				.returns(Promise.resolve(response2));
+				.resolves(response2);
 			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
-				.returns(Promise.resolve(response3));
+				.resolves(response3);
 
 			var iterator = new PagingIterator(response1, clientFake);
 

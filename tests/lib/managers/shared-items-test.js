@@ -81,7 +81,7 @@ describe('SharedItems', function() {
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/shared_items', expectedParams)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS);
 		});
 
@@ -90,7 +90,7 @@ describe('SharedItems', function() {
 				response = {statusCode: 200, body: responseBody};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 
 			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
 				.then(data => {
@@ -102,7 +102,7 @@ describe('SharedItems', function() {
 			var response = {statusCode: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return sharedItems.get(testSharedItemURL, null, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -115,7 +115,7 @@ describe('SharedItems', function() {
 			var response = {statusCode: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -129,7 +129,7 @@ describe('SharedItems', function() {
 			var apiError = new Error('Something bad happened!');
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').rejects(apiError);
 			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
 				.catch(err => {
 					assert.equal(err, apiError);
@@ -143,7 +143,7 @@ describe('SharedItems', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);

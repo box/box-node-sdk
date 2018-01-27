@@ -272,7 +272,7 @@ describe('Box Node SDK', function() {
 				accessToken: TEST_ACCESS_TOKEN,
 				refreshToken: 'new_rt'
 			}))
-			.returns(Promise.resolve());
+			.resolves();
 
 		return client.files.get(fileID)
 			.then(data => {
@@ -344,7 +344,7 @@ describe('Box Node SDK', function() {
 				accessToken: TEST_ACCESS_TOKEN,
 				refreshToken: 'new_rt'
 			}))
-			.returns(Promise.resolve());
+			.resolves();
 
 		return client.files.get(fileID)
 			.then(data => {

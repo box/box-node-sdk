@@ -66,13 +66,13 @@ describe('Collaborations', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaborations/1234', testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			collaborations.get(COLLABORATION_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -83,7 +83,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collaborations.get(COLLABORATION_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -118,7 +118,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return collaborations.getPending()
 				.then(data => assert.equal(data, response));
 		});
@@ -145,7 +145,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return collaborations.update(COLLABORATION_ID, testBody)
 				.then(data => assert.equal(data, response));
 		});
@@ -184,7 +184,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return collaborations.respondToPending(COLLABORATION_ID, newStatus)
 				.then(data => assert.equal(data, response));
 		});
@@ -325,7 +325,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return collaborations.create(newCollabAccessibleBy, itemID, newCollabRole)
 				.then(data => assert.equal(data, response));
 		});
@@ -467,7 +467,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return collaborations.createWithUserID(userID, itemID, newCollabRole)
 				.then(data => assert.equal(data, response));
 		});
@@ -609,7 +609,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return collaborations.createWithUserEmail(userEmail, itemID, newCollabRole)
 				.then(data => assert.equal(data, response));
 		});
@@ -675,7 +675,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return collaborations.createWithGroupID(groupID, itemID, newCollabRole)
 				.then(data => assert.equal(data, response));
 		});
@@ -779,7 +779,7 @@ describe('Collaborations', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return collaborations.delete(COLLABORATION_ID)
 				.then(data => assert.equal(data, response));
 		});

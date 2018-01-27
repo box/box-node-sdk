@@ -66,13 +66,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234', testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.get(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -83,7 +83,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.get(FILE_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -100,7 +100,7 @@ describe('Files', function() {
 			};
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/content', testParamsWithQs)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return files.getDownloadURL(FILE_ID, testQS);
 		});
 
@@ -111,7 +111,7 @@ describe('Files', function() {
 					location: 'box.com/somedownloadurl'
 				}
 			};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getDownloadURL(FILE_ID, testQS)
 				.then(location => {
 					assert.strictEqual(location, response.headers.location, 'location header is returned');
@@ -121,7 +121,7 @@ describe('Files', function() {
 		it('should return a promise that rejects when a 202 ACCEPTED response is returned', function() {
 			var response = {statusCode: 202};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getDownloadURL(FILE_ID, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -132,7 +132,7 @@ describe('Files', function() {
 		it('should return a promise that rejects when the API call does not succeed', function() {
 
 			var apiError = new Error('ECONNRESET');
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').rejects(apiError);
 
 			return files.getDownloadURL(FILE_ID, testQS)
 				.catch(err => {
@@ -146,7 +146,7 @@ describe('Files', function() {
 		it('should get file download URL when called', function() {
 			sandbox.mock(files).expects('getDownloadURL')
 				.withArgs(FILE_ID, testQS)
-				.returns(Promise.resolve('https://download.url'));
+				.resolves('https://download.url');
 			sandbox.stub(boxClientFake, 'get');
 			return files.getReadStream(FILE_ID, testQS);
 		});
@@ -155,7 +155,7 @@ describe('Files', function() {
 
 			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
 
-			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
+			sandbox.stub(files, 'getDownloadURL').resolves(downloadURL);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(downloadURL, {streaming: true});
 			files.getReadStream(FILE_ID, testQS);
@@ -168,8 +168,8 @@ describe('Files', function() {
 
 			var stream = {};
 
-			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(stream));
+			sandbox.stub(files, 'getDownloadURL').resolves(downloadURL);
+			sandbox.stub(boxClientFake, 'get').resolves(stream);
 			return files.getReadStream(FILE_ID, testQS)
 				.then(data => {
 					assert.equal(data, stream);
@@ -188,7 +188,7 @@ describe('Files', function() {
 			};
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return files.getThumbnail(FILE_ID, testQS);
 		});
 
@@ -196,7 +196,7 @@ describe('Files', function() {
 			var fileData = 'thisistheimagefile! 0101010110111011',
 				response = {statusCode: 200, body: fileData};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 
 			return files.getThumbnail(FILE_ID, testQS)
 				.then(data => {
@@ -212,7 +212,7 @@ describe('Files', function() {
 						location: placeholderURL
 					}
 				};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getThumbnail(FILE_ID, testQS)
 				.then(data => {
 					assert.deepEqual(data, { statusCode: 202, location: placeholderURL});
@@ -227,7 +227,7 @@ describe('Files', function() {
 						location: placeholderURL
 					}
 				};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getThumbnail(FILE_ID, testQS)
 				.then(data => {
 					assert.deepEqual(data, { statusCode: 302, location: placeholderURL});
@@ -237,7 +237,7 @@ describe('Files', function() {
 		it('should return a promise that rejects when the API call fails', function() {
 
 			var apiError = new Error(':[');
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').rejects(apiError);
 			return files.getThumbnail(FILE_ID, testQS)
 				.catch(err => {
 					assert.equal(err, apiError);
@@ -248,7 +248,7 @@ describe('Files', function() {
 
 			var response = {statusCode: 403};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 
 			return files.getThumbnail(FILE_ID, testQS)
 				.catch(err => {
@@ -263,13 +263,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/comments', testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getComments(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -280,7 +280,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getComments(FILE_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -291,13 +291,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/files/1234', testParamsWithBody)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.update(FILE_ID, testBody);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -308,7 +308,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return files.update(FILE_ID, testBody)
 				.then(data => assert.equal(data, response));
 		});
@@ -327,9 +327,9 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: COLLECTION_ID}]})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID);
 		});
@@ -343,12 +343,12 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: [
 				{id: '111'},
 				{id: COLLECTION_ID}
 			]})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID);
 		});
@@ -365,12 +365,12 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: [
 				{id: COLLECTION_ID},
 				{id: '111'}
 			]})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID);
 		});
@@ -385,8 +385,8 @@ describe('Files', function() {
 				]
 			};
 
-			sandbox.stub(files, 'get').returns(Promise.resolve(file));
-			sandbox.stub(files, 'update').returns(Promise.resolve(file));
+			sandbox.stub(files, 'get').resolves(file);
+			sandbox.stub(files, 'update').resolves(file);
 
 			return files.addToCollection(FILE_ID, COLLECTION_ID)
 				.then(data => {
@@ -441,7 +441,7 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, expectedBody)
 				.returns(p);
 
@@ -465,9 +465,9 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: []})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 
 			return files.removeFromCollection(FILE_ID, COLLECTION_ID);
 		});
@@ -481,9 +481,9 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: []})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 
 			return files.removeFromCollection(FILE_ID, COLLECTION_ID);
 		});
@@ -500,9 +500,9 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 
 			return files.removeFromCollection(FILE_ID, COLLECTION_ID);
 		});
@@ -519,12 +519,12 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: [
 				{id: '111'},
 				{id: '222'}
 			]})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 
 			return files.removeFromCollection(FILE_ID, COLLECTION_ID);
 		});
@@ -539,8 +539,8 @@ describe('Files', function() {
 				]
 			};
 
-			sandbox.stub(files, 'get').returns(Promise.resolve(file));
-			sandbox.stub(files, 'update').returns(Promise.resolve(file));
+			sandbox.stub(files, 'get').resolves(file);
+			sandbox.stub(files, 'update').resolves(file);
 
 			return files.removeFromCollection(FILE_ID, COLLECTION_ID)
 				.then(data => {
@@ -562,9 +562,9 @@ describe('Files', function() {
 
 			var filesMock = sandbox.mock(files);
 			filesMock.expects('get').withArgs(FILE_ID, {fields: 'collections'})
-				.returns(Promise.resolve(file));
+				.resolves(file);
 			filesMock.expects('update').withArgs(FILE_ID, {collections: [{id: '111'}]})
-				.returns(Promise.resolve(error));
+				.resolves(error);
 
 			return files.removeFromCollection(FILE_ID, COLLECTION_ID)
 				.catch(err => {
@@ -588,7 +588,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/files/1234/copy', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.copy(FILE_ID, NEW_PARENT_ID);
 		});
 
@@ -601,13 +601,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/files/1234/copy', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.copy(FILE_ID, NEW_PARENT_ID, {name});
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -618,7 +618,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.copy(FILE_ID, NEW_PARENT_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -639,13 +639,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/files/1234', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.move(FILE_ID, NEW_PARENT_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -656,7 +656,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return files.move(FILE_ID, NEW_PARENT_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -668,13 +668,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
 				.withArgs('/files/1234')
-				.returns(Promise.resolve());
+				.resolves();
 			return files.delete(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -685,7 +685,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return files.delete(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -719,13 +719,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('options')
 				.withArgs('/files/content', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.preflightUploadFile(parentFolderID, fileData, uploadsQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'options').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.options)
 				.returnsArg(0);
@@ -736,7 +736,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'options').resolves(response);
 			return files.preflightUploadFile(parentFolderID, fileData, uploadsQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -763,13 +763,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('options')
 				.withArgs('/files/2345/content', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.preflightUploadNewFileVersion(fileID, fileData, uploadsQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'options').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.options)
 				.returnsArg(0);
@@ -780,7 +780,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'options').resolves(response);
 			return files.preflightUploadNewFileVersion(fileID, fileData, uploadsQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -803,13 +803,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`/files/${FILE_ID}/versions/current`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.promoteVersion(FILE_ID, FILE_VERSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -820,7 +820,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.promoteVersion(FILE_ID, FILE_VERSION_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -847,7 +847,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('upload')
 				.withArgs('/files/content', null, expectedFormData)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.uploadFile(PARENT_FOLDER_ID, FILENAME, CONTENT);
 		});
 
@@ -878,7 +878,7 @@ describe('Files', function() {
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'upload').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.upload)
 				.returnsArg(0);
@@ -889,7 +889,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'upload').resolves(response);
 			return files.uploadFile(PARENT_FOLDER_ID, FILENAME, CONTENT)
 				.then(data => assert.equal(data, response));
 		});
@@ -910,7 +910,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('upload')
 				.withArgs('/files/1234/content', null, expectedFormData)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.uploadNewFileVersion(FILE_ID, CONTENT);
 		});
 
@@ -931,13 +931,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('upload')
 				.withArgs('/files/1234/content', null, expectedFormData)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.uploadNewFileVersion(FILE_ID, CONTENT, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'upload').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.upload)
 				.returnsArg(0);
@@ -948,7 +948,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'upload').resolves(response);
 			return files.uploadNewFileVersion(FILE_ID, CONTENT)
 				.then(data => assert.equal(data, response));
 		});
@@ -961,13 +961,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/metadata')
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getAllMetadata(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -978,7 +978,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getAllMetadata(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -991,13 +991,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/metadata/global/properties')
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getMetadata(FILE_ID, 'global', 'properties');
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -1008,7 +1008,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getMetadata(FILE_ID, 'global', 'properties')
 				.then(data => assert.equal(data, response));
 		});
@@ -1035,13 +1035,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/files/1234/metadata/global/properties', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.addMetadata(FILE_ID, 'global', 'properties', metadata);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -1052,7 +1052,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.addMetadata(FILE_ID, 'global', 'properties', metadata)
 				.then(data => assert.equal(data, response));
 		});
@@ -1086,13 +1086,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/files/1234/metadata/global/properties', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.updateMetadata(FILE_ID, 'global', 'properties', patch);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -1103,7 +1103,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return files.updateMetadata(FILE_ID, 'global', 'properties', patch)
 				.then(data => assert.equal(data, response));
 		});
@@ -1116,13 +1116,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
 				.withArgs('/files/1234/metadata/global/properties')
-				.returns(Promise.resolve());
+				.resolves();
 			return files.deleteMetadata(FILE_ID, 'global', 'properties');
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -1133,7 +1133,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return files.deleteMetadata(FILE_ID, 'global', 'properties')
 				.then(data => assert.equal(data, response));
 		});
@@ -1146,13 +1146,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
 				.withArgs(`/files/${FILE_ID}/trash`)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.deletePermanently(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -1163,7 +1163,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return files.deletePermanently(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -1176,13 +1176,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/files/${FILE_ID}/tasks`, testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getTasks(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -1193,7 +1193,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getTasks(FILE_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -1206,13 +1206,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/files/${FILE_ID}/trash`, testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getTrashedFile(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -1223,7 +1223,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getTrashedFile(FILE_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -1245,7 +1245,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return files.getEmbedLink(FILE_ID);
 		});
 
@@ -1254,7 +1254,7 @@ describe('Files', function() {
 				response = {statusCode: 200, body: embedLink};
 
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}`)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return files.getEmbedLink(FILE_ID)
 				.then(data => {
 					assert.equal(data, embedLink.expiring_embed_link.url);
@@ -1267,7 +1267,7 @@ describe('Files', function() {
 				statusCode: 404
 			};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 
 			return files.getEmbedLink(FILE_ID)
 				.catch(err => {
@@ -1280,7 +1280,7 @@ describe('Files', function() {
 
 			var error = new Error('API Failure');
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(error));
+			sandbox.stub(boxClientFake, 'get').rejects(error);
 
 			return files.getEmbedLink(FILE_ID)
 				.catch(err => {
@@ -1319,7 +1319,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.lock(FILE_ID, options);
 		});
 
@@ -1333,7 +1333,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.lock(FILE_ID, options);
 		});
 
@@ -1347,7 +1347,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.lock(FILE_ID, options);
 		});
 
@@ -1356,13 +1356,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.lock(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -1373,7 +1373,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return files.lock(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -1398,13 +1398,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.unlock(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -1415,7 +1415,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return files.unlock(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -1449,7 +1449,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.restoreFromTrash(FILE_ID, options);
 		});
 
@@ -1463,7 +1463,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.restoreFromTrash(FILE_ID, options);
 		});
 
@@ -1477,7 +1477,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`/files/${FILE_ID}`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.restoreFromTrash(FILE_ID, options);
 		});
 
@@ -1486,13 +1486,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`/files/${FILE_ID}`, {body: {}})
-				.returns(Promise.resolve());
+				.resolves();
 			return files.restoreFromTrash(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -1503,7 +1503,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.restoreFromTrash(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -1516,13 +1516,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/files/${FILE_ID}/versions`, testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getVersions(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -1533,7 +1533,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getVersions(FILE_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -1545,7 +1545,7 @@ describe('Files', function() {
 
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/files/${FILE_ID}/watermark`, testParamsWithQs)
-				.returns(Promise.resolve({statusCode: 200, body: {}}));
+				.resolves({statusCode: 200, body: {}});
 			return files.getWatermark(FILE_ID, testQS);
 		});
 
@@ -1553,7 +1553,7 @@ describe('Files', function() {
 
 			var apiError = new Error('failed');
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
-				.returns(Promise.reject(apiError));
+				.rejects(apiError);
 			return files.getWatermark(FILE_ID)
 				.catch(err => {
 					assert.equal(err, apiError);
@@ -1564,7 +1564,7 @@ describe('Files', function() {
 
 			var res = {statusCode: 404};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
-				.returns(Promise.resolve(res));
+				.resolves(res);
 			return files.getWatermark(FILE_ID)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -1583,7 +1583,7 @@ describe('Files', function() {
 				body: {watermark}
 			};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
-				.returns(Promise.resolve(res));
+				.resolves(res);
 			return files.getWatermark(FILE_ID)
 				.then(data => {
 					assert.equal(data, watermark);
@@ -1609,13 +1609,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`/files/${FILE_ID}/watermark`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.applyWatermark(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'put').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.put)
 				.returnsArg(0);
@@ -1626,7 +1626,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'put').resolves(response);
 			return files.applyWatermark(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -1639,13 +1639,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
 				.withArgs(`/files/${FILE_ID}/watermark`)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.removeWatermark(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -1656,7 +1656,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return files.removeWatermark(FILE_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -1669,13 +1669,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
 				.withArgs(`/files/${FILE_ID}/versions/${FILE_VERSION_ID}`)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.deleteVersion(FILE_ID, FILE_VERSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -1686,7 +1686,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return files.deleteVersion(FILE_ID, FILE_VERSION_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -1711,13 +1711,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('https://upload-base/2.1/files/upload_sessions', expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -1728,7 +1728,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.createUploadSession(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME)
 				.then(data => assert.equal(data, response));
 		});
@@ -1750,13 +1750,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`https://upload-base/2.1/files/${FILE_ID}/upload_sessions`, expectedParams)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.createNewVersionUploadSession(FILE_ID, TEST_SIZE);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'post').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
@@ -1767,7 +1767,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.createNewVersionUploadSession(FILE_ID, TEST_SIZE)
 				.then(data => assert.equal(data, response));
 		});
@@ -1798,7 +1798,7 @@ describe('Files', function() {
 
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`, expectedParams)
-				.returns(Promise.resolve(apiResponse));
+				.resolves(apiResponse);
 			return files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH);
 		});
 
@@ -1806,7 +1806,7 @@ describe('Files', function() {
 
 			var error = new Error('Connection closed');
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.reject(error));
+			sandbox.stub(boxClientFake, 'put').rejects(error);
 
 			return files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
 				.catch(err => {
@@ -1820,7 +1820,7 @@ describe('Files', function() {
 				statusCode: 400
 			};
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
+			sandbox.stub(boxClientFake, 'put').resolves(apiResponse);
 
 			return files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
 				.catch(err => {
@@ -1842,7 +1842,7 @@ describe('Files', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
+			sandbox.stub(boxClientFake, 'put').resolves(apiResponse);
 
 			return files.uploadPart(TEST_SESSION_ID, TEST_PART, TEST_OFFSET, TEST_LENGTH)
 				.then(data => {
@@ -1889,7 +1889,7 @@ describe('Files', function() {
 
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS});
 		});
 
@@ -1918,7 +1918,7 @@ describe('Files', function() {
 
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, options);
 		});
 
@@ -1949,7 +1949,7 @@ describe('Files', function() {
 				body: responseBody
 			};
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS})
 				.then(data => {
 					assert.equal(data, responseBody);
@@ -1980,8 +1980,8 @@ describe('Files', function() {
 			};
 
 			var apiStub = sandbox.stub(boxClientFake, 'post');
-			apiStub.onFirstCall().returns(Promise.resolve(retryResponse));
-			apiStub.onSecondCall().returns(Promise.resolve(successResponse));
+			apiStub.onFirstCall().resolves(retryResponse);
+			apiStub.onSecondCall().resolves(successResponse);
 			files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS})
 				.then(data => {
 					assert.equal(data, responseBody);
@@ -2001,7 +2001,7 @@ describe('Files', function() {
 				statusCode: 303
 			};
 
-			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'post').resolves(response);
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH, {parts: TEST_PARTS})
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -2038,10 +2038,10 @@ describe('Files', function() {
 
 			sandbox.mock(files).expects('getUploadSessionParts')
 				.withArgs(TEST_SESSION_ID, sinon.match(expectedPagingOptions))
-				.returns(Promise.resolve(partsResponse));
+				.resolves(partsResponse);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
-				.returns(Promise.resolve(commitResponse));
+				.resolves(commitResponse);
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH);
 		});
 
@@ -2091,7 +2091,7 @@ describe('Files', function() {
 				}));
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/commit`, expectedParams)
-				.returns(Promise.resolve(commitResponse));
+				.resolves(commitResponse);
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH);
 		});
 
@@ -2099,7 +2099,7 @@ describe('Files', function() {
 
 			var partsError = new Error('Could not fetch parts');
 
-			sandbox.stub(files, 'getUploadSessionParts').returns(Promise.reject(partsError));
+			sandbox.stub(files, 'getUploadSessionParts').rejects(partsError);
 			sandbox.mock(boxClientFake).expects('post')
 				.never();
 			return files.commitUploadSession(TEST_SESSION_ID, TEST_FILE_HASH)
@@ -2118,13 +2118,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.abortUploadSession(TEST_SESSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'del').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
@@ -2135,7 +2135,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'del').resolves(response);
 			return files.abortUploadSession(TEST_SESSION_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -2150,13 +2150,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}/parts`, testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getUploadSessionParts(TEST_SESSION_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -2167,7 +2167,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getUploadSessionParts(TEST_SESSION_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -2182,13 +2182,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`https://upload-base/2.1/files/upload_sessions/${TEST_SESSION_ID}`)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getUploadSession(TEST_SESSION_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -2199,7 +2199,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getUploadSession(TEST_SESSION_ID)
 				.then(data => assert.equal(data, response));
 		});
@@ -2219,7 +2219,7 @@ describe('Files', function() {
 
 			sandbox.mock(files).expects('createUploadSession')
 				.withArgs(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME)
-				.returns(Promise.resolve(session));
+				.resolves(session);
 			return files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {});
 		});
 
@@ -2227,7 +2227,7 @@ describe('Files', function() {
 
 			var error = new Error('Cannot create upload session');
 
-			sandbox.stub(files, 'createUploadSession').returns(Promise.reject(error));
+			sandbox.stub(files, 'createUploadSession').rejects(error);
 			return files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', {})
 				.catch(err => {
 					assert.equal(err, error);
@@ -2245,7 +2245,7 @@ describe('Files', function() {
 			var uploader = {};
 			ChunkedUploaderStub.returns(uploader);
 
-			sandbox.stub(files, 'createUploadSession').returns(Promise.resolve(session));
+			sandbox.stub(files, 'createUploadSession').resolves(session);
 			return files.getChunkedUploader(TEST_FOLDER_ID, TEST_SIZE, TEST_NAME, 'test data', options)
 				.then(data => {
 
@@ -2269,7 +2269,7 @@ describe('Files', function() {
 
 			sandbox.mock(files).expects('createNewVersionUploadSession')
 				.withArgs(TEST_FILE_ID, TEST_SIZE)
-				.returns(Promise.resolve(session));
+				.resolves(session);
 			return files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {});
 		});
 
@@ -2277,7 +2277,7 @@ describe('Files', function() {
 
 			var error = new Error('Cannot create upload session');
 
-			sandbox.stub(files, 'createNewVersionUploadSession').returns(Promise.reject(error));
+			sandbox.stub(files, 'createNewVersionUploadSession').rejects(error);
 			return files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', {})
 				.catch(err => {
 
@@ -2296,7 +2296,7 @@ describe('Files', function() {
 			var uploader = {};
 			ChunkedUploaderStub.returns(uploader);
 
-			sandbox.stub(files, 'createNewVersionUploadSession').returns(Promise.resolve(session));
+			sandbox.stub(files, 'createNewVersionUploadSession').resolves(session);
 			return files.getNewVersionChunkedUploader(TEST_FILE_ID, TEST_SIZE, 'test data', options)
 				.then(data => {
 
@@ -2314,13 +2314,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/collaborations', testParamsWithQs)
-				.returns(Promise.resolve());
+				.resolves();
 			return files.getCollaborations(FILE_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.stub(boxClientFake, 'get').resolves();
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
@@ -2331,7 +2331,7 @@ describe('Files', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getCollaborations(FILE_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
@@ -2360,7 +2360,7 @@ describe('Files', function() {
 			};
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234', expectedRepresentationParam)
-				.returns(Promise.resolve(response));
+				.resolves(response);
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION);
 		});
 
@@ -2379,7 +2379,7 @@ describe('Files', function() {
 					}
 				}
 			};
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.then(representationObject => {
 					assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
@@ -2389,7 +2389,7 @@ describe('Files', function() {
 		it('should return a promise that rejects when a 202 ACCEPTED response is returned', function() {
 			var response = {statusCode: 202};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {
 					assert.instanceOf(err, Error);
@@ -2400,7 +2400,7 @@ describe('Files', function() {
 		it('should return a promise that rejects when the API call does not succeed', function() {
 
 			var apiError = new Error('ECONNRESET');
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'get').rejects(apiError);
 
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {
@@ -2412,7 +2412,7 @@ describe('Files', function() {
 
 			var response = {statusCode: 403};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {

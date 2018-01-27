@@ -75,7 +75,7 @@ describe('Events', function() {
 						stream_position: 'now'
 					})
 				}))
-				.returns(Promise.resolve({statusCode: 200, body: {}}));
+				.resolves({statusCode: 200, body: {}});
 
 			return events.getCurrentStreamPosition();
 		});
@@ -83,7 +83,7 @@ describe('Events', function() {
 		it('should return promise that rejects when API call fails', function() {
 
 			var error = new Error('Failure');
-			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(error));
+			sandbox.stub(boxClientFake, 'get').rejects(error);
 
 			return events.getCurrentStreamPosition()
 				.catch(err => assert.equal(err, error));
@@ -95,7 +95,7 @@ describe('Events', function() {
 				statusCode: 404
 			};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 
 			return events.getCurrentStreamPosition()
 				.catch(err => {
@@ -113,7 +113,7 @@ describe('Events', function() {
 				}
 			};
 
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 
 			return events.getCurrentStreamPosition()
 				.then(streamPosition => {
@@ -151,7 +151,7 @@ describe('Events', function() {
 
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'get').resolves(response);
 			return events.get()
 				.then(data => assert.equal(data, response));
 		});
@@ -169,7 +169,7 @@ describe('Events', function() {
 			};
 			sandbox.mock(boxClientFake).expects('options')
 				.withArgs('/events')
-				.returns(Promise.resolve(response));
+				.resolves(response);
 
 			return events.getLongPollInfo();
 		});
@@ -177,7 +177,7 @@ describe('Events', function() {
 		it('should return a promise that rejects when the API call fails', function() {
 
 			var apiError = new Error('No connection');
-			sandbox.stub(boxClientFake, 'options').returns(Promise.reject(apiError));
+			sandbox.stub(boxClientFake, 'options').rejects(apiError);
 
 			return events.getLongPollInfo()
 				.catch(err => {
@@ -190,7 +190,7 @@ describe('Events', function() {
 			var response = {
 				statusCode: 403
 			};
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'options').resolves(response);
 
 			return events.getLongPollInfo()
 				.catch(err => {
@@ -207,7 +207,7 @@ describe('Events', function() {
 					entries: []
 				}
 			};
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'options').resolves(response);
 
 			return events.getLongPollInfo()
 				.catch(err => {
@@ -227,7 +227,7 @@ describe('Events', function() {
 					entries: [realtimeInfo]
 				}
 			};
-			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
+			sandbox.stub(boxClientFake, 'options').resolves(response);
 
 			return events.getLongPollInfo()
 				.then(data => {
@@ -270,7 +270,7 @@ describe('Events', function() {
 		it('should make API call to get stream position when called without stream position', function() {
 
 			sandbox.mock(events).expects('getCurrentStreamPosition')
-				.returns(Promise.resolve(TEST_STREAM_POSITION));
+				.resolves(TEST_STREAM_POSITION);
 
 			events.getEventStream();
 		});
@@ -278,7 +278,7 @@ describe('Events', function() {
 		it('should return a promise that rejects when the API call fails', function() {
 
 			var apiError = new Error('There is no stream');
-			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.reject(apiError));
+			sandbox.stub(events, 'getCurrentStreamPosition').rejects(apiError);
 
 			return events.getEventStream()
 				.catch(err => {
@@ -288,7 +288,7 @@ describe('Events', function() {
 
 		it('should return a promise that resolves to a new event stream when the API call succeeds', function() {
 
-			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
+			sandbox.stub(events, 'getCurrentStreamPosition').resolves(TEST_STREAM_POSITION);
 
 			return events.getEventStream()
 				.then(stream => {
@@ -300,7 +300,7 @@ describe('Events', function() {
 
 		it('should return a promise that resolves to a new event stream with options when called with options and the API call succeeds', function() {
 
-			sandbox.stub(events, 'getCurrentStreamPosition').returns(Promise.resolve(TEST_STREAM_POSITION));
+			sandbox.stub(events, 'getCurrentStreamPosition').resolves(TEST_STREAM_POSITION);
 
 			var options = {
 				fetchInterval: 5000
