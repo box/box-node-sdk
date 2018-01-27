@@ -1,10 +1,9 @@
 const webpack = require('webpack');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-const path = require('path');
-const env = require('yargs').argv.mode;
 const ShakePlugin = require('webpack-common-shake').Plugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const libraryName = 'BoxSdk';
+const libraryName = 'BoxSDK';
 
 let plugins = [], outputFile;
 
@@ -27,6 +26,8 @@ plugins.push(
       ecma: 5
     }
   }),
+
+  new BundleAnalyzerPlugin()
 );
 
 let config = {
@@ -41,7 +42,8 @@ let config = {
     sourceMapFilename: libraryName + '.map'
   },
   node: {
-    net: 'empty'
+    net: 'empty',
+    crypto: 'empty'
   },
   module: {
     rules: [

@@ -31,6 +31,7 @@
     "merge-options": "0.0.64",
     "promise-queue": "^2.2.3",
     "promise.prototype.finally": "^3.1.0",
+    "rusha": "^0.8.12",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
@@ -63,6 +64,7 @@
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^1.17.7",
     "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.2",
     "webpack-common-shake": "^1.5.3",
     "webpack-strip-block": "^0.2.0",
     "yargs": "^11.0.0"
