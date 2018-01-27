@@ -284,7 +284,8 @@ describe('EventStream', function() {
 		beforeEach(function() {
 
 			fakeEvents = {
-				entries: []
+				entries: [{event_id: '123'}],
+				next_stream_position: 'foo'
 			};
 		});
 
@@ -498,16 +499,45 @@ describe('EventStream', function() {
 
 		it('should delay successive calls to be rate limited when called', function() {
 
+			var secondFakeEvents = {
+				entries: [{event_id: '456'}],
+				next_stream_position: 'bar'
+			};
+
 			sandbox.mock(boxClientFake.events).expects('get')
 				.twice()
 				.withArgs(sinon.match({
 					stream_position: TEST_STREAM_POSITION,
 					limit: 500
 				}))
-				.returns(Promise.resolve(fakeEvents));
+				.onFirstCall()
+				.returns(Promise.resolve(fakeEvents))
+				.onSecondCall()
+				.returns(Promise.resolve(secondFakeEvents));
 
-			eventStream.fetchEvents();
-			eventStream.fetchEvents();
+			var called = {
+				first: false,
+				second: false
+			};
+
+			var p1 = eventStream.fetchEvents()
+				.then(() => {
+					called.first = true;
+					assert.propertyVal(called, 'second', false);
+					// Don't return the same event
+					fakeEvents.entries = [{event_id: '345'}];
+					clock.tick(1000);
+				});
+			var p2 = eventStream.fetchEvents()
+				.then(() => {
+					called.second = true;
+					assert.propertyVal(called, 'first', true);
+				});
+
+			return Promise.all([
+				p1,
+				p2
+			]);
 		});
 
 	});
