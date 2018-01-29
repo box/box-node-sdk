@@ -87,6 +87,27 @@ client.retentionPolicies.assign('98726345', 'folder', '876334', callback);
 client.retentionPolicies.assign('98726345', 'enterprise', null, callback);
 ```
 
+You can also assign a retention policy to a metadata template, with optional field filters.
+This will attach the retention policy to any items that have the specified metadata template
+applied.  If the `filter_fields` option is provided, the retention policy will only apply to
+items with the specified value in the metadata field.
+
+> __Note:__ Currently, only one filter field can be specified.
+
+```js
+var policyID = '1234';
+var metadataTemplate = 'enterprise.myTemplate'; // use format SCOPE.TEMPLATE_KEY
+var options = {
+	filter_fields: [
+		{
+			field: 'customerName',
+			value: 'Dunder Mifflin'
+		}
+	]
+};
+client.retentionPolicies.assign(policyID, 'metadata_template', metadataTemplate, options, callback);
+```
+
 Get Retention Policy Assignment
 -------------------------------
 
