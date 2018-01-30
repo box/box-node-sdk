@@ -1,0 +1,7 @@
+// Please remove .template extension and populate below values to run end-to-end tests
+{
+    "clientID": "", 
+    "clientSecret": "", 
+    "accessToken": "", 
+    "refreshToken": ""
+}

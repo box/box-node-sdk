@@ -8,3 +8,4 @@ node_modules/
 *.iml
 docs/jsdoc-dev
 .nyc_output
+../tests/config/test-config.json
