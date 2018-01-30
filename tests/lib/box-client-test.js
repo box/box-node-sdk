@@ -1163,6 +1163,19 @@ describe('box-client', function() {
 		});
 	});
 
+	describe('getToken()', function() {
+
+		it('should return an access token for the current client session', function() {
+			sandbox.mock(apiSessionFake).expects('getAccessToken')
+				.returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+
+			return basicClient.getToken(null)
+				.then(data => {
+					assert.strictEqual(data, FAKE_ACCESS_TOKEN);
+				});
+		});
+	});
+
 	describe('plug()', function() {
 
 		var PLUGIN_API_ROOT = 'http://www.foobar.com',
