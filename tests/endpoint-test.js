@@ -14,7 +14,8 @@ var assert = require('chai').assert,
 	sinon = require('sinon'),
 	nock = require('nock'),
 	fs = require('fs'),
-	path = require('path');
+	path = require('path'),
+	testConfigVars = require('../tests/lib/util/test-helper.js');
 
 function getFixture(fixture) {
 	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
@@ -26,12 +27,13 @@ describe('Endpoint', function() {
 	// Setup
 	// ------------------------------------------------------------------------------
 	var sandbox = sinon.sandbox.create();
+	var testConfigObj = testConfigVars();
 
 	var TEST_API_ROOT = 'https://api.box.com',
 		TEST_UPLOAD_ROOT = 'https://upload.box.com/api',
-		TEST_CLIENT_ID = 'client_id',
-		TEST_CLIENT_SECRET = 'TOP SECRET',
-		TEST_ACCESS_TOKEN = 'at',
+		TEST_CLIENT_ID = testConfigObj.clientID,
+		TEST_CLIENT_SECRET = testConfigObj.clientSecret,
+		TEST_ACCESS_TOKEN = testConfigObj.accessToken,
 		MODULE_FILE_PATH = '../lib/box-node-sdk';
 
 	var apiMock,
@@ -70,6 +72,8 @@ describe('Endpoint', function() {
 		BoxSDK = require(MODULE_FILE_PATH);
 
 		sdk = new BoxSDK({
+			numMaxRetries: 3,
+			retryIntervalMS: 1,
 			clientID: TEST_CLIENT_ID,
 			clientSecret: TEST_CLIENT_SECRET
 		});
@@ -87,10 +91,8 @@ describe('Endpoint', function() {
 	describe('Collaborations', function() {
 
 		describe('get()', function() {
-
-			it('should make correct request and correctly parse response when API call is successful', function(done) {
-
-				var collaborationID = '987654321',
+			it.only('should make correct request and correctly parse response when API call is successful', function(done) {
+				var collaborationID = '11603720383',
 					fixture = getFixture('collaborations/get_collaborations_id_200');
 
 				apiMock.get(`/2.0/collaborations/${collaborationID}`)
