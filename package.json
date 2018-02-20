@@ -29,6 +29,7 @@
     "merge-options": "0.0.64",
     "promise-queue": "^2.2.3",
     "request": "^2.74.0",
+    "url-template": "^2.0.8",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
