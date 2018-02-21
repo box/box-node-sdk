@@ -40,7 +40,7 @@
     "eslint-plugin-unicorn": "^3.0.0",
     "istanbul": "^0.4.3",
     "jsdoc": "^3.5.5",
-    "jsonlint": "~1.6.2",
+    "jsonlint2": "^1.7.1",
     "leche": "^2.2.2",
     "mocha": "^4.0.1",
     "mockery": "^1.4.1",
