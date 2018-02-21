@@ -211,9 +211,9 @@ describe('EventStream', function() {
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('https://realtime/poll', sinon.match({
 					timeout: TEST_RETRY_TIMEOUT * 1000,
-					qs: sinon.match(expectedQS)
+					qs: expectedQS
 				}))
-				.returns(Promise.resolve({}));
+				.returns(Promise.resolve({message: 'new_change'}));
 
 			return eventStream.doLongPoll();
 		});
@@ -283,7 +283,8 @@ describe('EventStream', function() {
 		beforeEach(function() {
 
 			fakeEvents = {
-				entries: []
+				entries: [{event_id: '123'}],
+				next_stream_position: 'foo'
 			};
 		});
 
@@ -306,7 +307,11 @@ describe('EventStream', function() {
 			sandbox.mock(eventStream).expects('emit')
 				.withArgs('error', apiError);
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents()
+				.then(() => {
+					sandbox.stub(eventStream, 'getLongPollInfo');
+					clock.tick(1000);
+				});
 		});
 
 		it('should reset long poll process after delay when the API call fails', function() {
@@ -497,16 +502,48 @@ describe('EventStream', function() {
 
 		it('should delay successive calls to be rate limited when called', function() {
 
+			var secondFakeEvents = {
+				entries: [{event_id: '456'}],
+				next_stream_position: 'bar'
+			};
+
+			// _read() gets called and starts another cycle — stub it out
+			sandbox.stub(eventStream, 'getLongPollInfo');
+
 			sandbox.mock(boxClientFake.events).expects('get')
-				.once()
+				.twice()
 				.withArgs(sinon.match({
 					stream_position: TEST_STREAM_POSITION,
 					limit: 500
 				}))
-				.returns(Promise.resolve(fakeEvents));
+				.onFirstCall()
+				.resolves(fakeEvents)
+				.onSecondCall()
+				.resolves(secondFakeEvents);
 
-			eventStream.fetchEvents();
-			eventStream.fetchEvents();
+			var called = {
+				first: false,
+				second: false
+			};
+
+			var p1 = eventStream.fetchEvents()
+				.then(() => {
+					called.first = true;
+					assert.propertyVal(called, 'second', false);
+					// Don't return the same event
+					fakeEvents.entries = [{event_id: '345'}];
+					clock.tick(1000);
+				});
+			var p2 = eventStream.fetchEvents()
+				.then(() => {
+					called.second = true;
+					assert.propertyVal(called, 'first', true);
+				});
+
+			return Promise.all([
+				p1,
+				p2
+			]);
 		});
 
 	});
