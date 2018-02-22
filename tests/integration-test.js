@@ -171,6 +171,52 @@ describe('Box Node SDK', function() {
 		client.folders.get('1234', {}, () => { /**/ });
 	});
 
+	it('should use exponential backoff with randomization when API calls fail', function() {
+
+		apiMock.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(502)
+			.get('/2.0/users/me')
+			.reply(429)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(200, {
+				type: 'user',
+				id: 'me'
+			});
+
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 5,
+			retryIntervalMS: 10
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		var start = Date.now();
+		return client.users.get('me')
+			.then(() => {
+				var end = Date.now();
+				// verify that at least the minimum expected time has passed
+				// should be 5 retries:
+				// first after 5-15ms
+				// second after 10-30ms
+				// third after 20-60ms
+				// fourth after 40-120ms
+				// fifth after 80-240ms
+				// total should be 155-465ms
+				var timeElapsed = end - start;
+				assert.isAtLeast(timeElapsed, 155);
+				assert.isAtMost(timeElapsed, 465);
+			});
+	});
+
 	it('should get anonymous tokens and make API call when anonymous client manager is used', function(done) {
 
 		var fileID = '98740596456',
