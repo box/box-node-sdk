@@ -13,7 +13,7 @@ var assert = require('chai').assert,
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
-
+var Readable = require('stream').Readable;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -3370,6 +3370,109 @@ describe('Files', function() {
 				.catch(err => {
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'statusCode', response.statusCode);
+				});
+		});
+	});
+
+	describe('getRepresentationContent()', function() {
+
+		it('should reject with error when representation info is empty', function() {
+
+			var fileID = '1234',
+				representation = '[png?dimensions=1024x1024]';
+
+			var repsInfo = {
+				entries: []
+			};
+
+			sandbox.mock(files).expects('getRepresentationInfo')
+				.withArgs(fileID, representation)
+				.returns(Promise.resolve(repsInfo));
+
+			return files.getRepresentationContent(fileID, representation)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should reject with error when representation has error state', function() {
+
+			var fileID = '1234',
+				representation = '[png?dimensions=1024x1024]';
+
+			var repsInfo = {
+				entries: [
+					{
+						status: {
+							state: 'error'
+						}
+					}
+				]
+			};
+
+			sandbox.stub(files, 'getRepresentationInfo').returns(Promise.resolve(repsInfo));
+
+			return files.getRepresentationContent(fileID, representation)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should reject with error when representation has unknown state', function() {
+
+			var fileID = '1234',
+				representation = '[png?dimensions=1024x1024]';
+
+			var repsInfo = {
+				entries: [
+					{
+						status: {
+							state: 'wat'
+						}
+					}
+				]
+			};
+
+			sandbox.stub(files, 'getRepresentationInfo').returns(Promise.resolve(repsInfo));
+
+			return files.getRepresentationContent(fileID, representation)
+				.catch(err => {
+					assert.instanceOf(err, Error);
+				});
+		});
+
+		it('should make call to start asset download and resolve to download stream when representation has success state', function() {
+
+
+			var fileID = '1234',
+				representation = '[png?dimensions=1024x1024]',
+				urlTemplate = 'https://download.me/blah/{+asset_path}',
+				assetPath = '1.png',
+				downloadURL = urlTemplate.replace('{+asset_path}', assetPath);
+
+			var repsInfo = {
+				entries: [
+					{
+						status: {
+							state: 'success'
+						},
+						content: {
+							url_template: urlTemplate
+						}
+					}
+				]
+			};
+
+			var stream = new Readable();
+
+			sandbox.stub(files, 'getRepresentationInfo').returns(Promise.resolve(repsInfo));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(downloadURL, sinon.match({ streaming: true }))
+				.returns(Promise.resolve(stream));
+
+			return files.getRepresentationContent(fileID, representation, { assetPath })
+				.then(value => {
+					assert.equal(value, stream);
 				});
 		});
 	});

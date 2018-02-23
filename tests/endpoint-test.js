@@ -14,6 +14,8 @@ var assert = require('chai').assert,
 	sinon = require('sinon'),
 	nock = require('nock'),
 	fs = require('fs'),
+	url = require('url'),
+	crypto = require('crypto'),
 	path = require('path');
 
 function getFixture(fixture) {
@@ -41,6 +43,7 @@ describe('Endpoint', function() {
 		basicClient;
 
 	beforeEach(function() {
+		nock.disableNetConnect();
 		apiMock = nock(TEST_API_ROOT);
 		uploadMock = nock(TEST_UPLOAD_ROOT);
 
@@ -71,7 +74,9 @@ describe('Endpoint', function() {
 
 		sdk = new BoxSDK({
 			clientID: TEST_CLIENT_ID,
-			clientSecret: TEST_CLIENT_SECRET
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 0,
+			retryIntervalMS: 1
 		});
 
 		basicClient = sdk.getBasicClient(TEST_ACCESS_TOKEN);
@@ -1290,6 +1295,91 @@ describe('Endpoint', function() {
 					assert.deepEqual(data, JSON.parse(fixture));
 
 					done();
+				});
+			});
+		});
+
+		describe('getRepresentationContent()', function() {
+
+			it('should make correct request and poll info endpoint until representation is generated', function(done) {
+
+				// This test takes a while due to lots of bytes moving around
+				// eslint-disable-next-line no-invalid-this
+				this.timeout(5000);
+
+				var repsFixture = getFixture('files/get_files_id_representations_png_200'),
+					repsObj = JSON.parse(repsFixture),
+					repInfoURL = url.parse(repsObj.representations.entries[0].info.url).pathname,
+					repPendingFixture = getFixture('files/get_representation_info_pending_200'),
+					repSuccessFixture = getFixture('files/get_representation_info_success_200'),
+					repInfo = JSON.parse(repSuccessFixture),
+					contentURL = url.parse(repInfo.content.url_template),
+					contentDomain = `${contentURL.protocol}//${contentURL.host}`,
+					contentPath = decodeURIComponent(contentURL.pathname),
+					pngStream = fs.createReadStream(path.resolve(__dirname, './fixtures/1.png')),
+					pngContents = fs.readFileSync(path.resolve(__dirname, './fixtures/1.png')),
+					fileBuffer = new Buffer(pngContents.length);
+
+				var downloadMock = nock(contentDomain);
+
+				var fileID = '983745',
+					representation = '[png?dimensions=1024x1024]',
+					assetPath = 'page-1.png';
+
+				apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('X-Rep-Hints', function(repHintsHeader) {
+						assert.equal(repHintsHeader, representation);
+						return true;
+					})
+					.reply(200, repsFixture)
+					.get(repInfoURL)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, repPendingFixture)
+					.get(repInfoURL)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, repPendingFixture)
+					.get(repInfoURL)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, repSuccessFixture);
+
+				downloadMock.get(contentPath.replace('{+asset_path}', assetPath))
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, pngStream);
+
+				basicClient.files.getRepresentationContent(fileID, representation, { assetPath }, function(err, stream) {
+
+					assert.ifError(err);
+					var position = 0;
+					stream.on('data', function(chunk) {
+						chunk.copy(fileBuffer, position);
+						position += chunk.length;
+					});
+
+					stream.on('end', () => {
+						var expectedHash = crypto.createHash('sha1').update(pngContents)
+							.digest('base64');
+						var actualHash = crypto.createHash('sha1').update(fileBuffer)
+							.digest('base64');
+						// Compare hashes instead of raw bytes because assertion failure output is massive
+						assert.equal(actualHash, expectedHash, 'Representation content did not match expected');
+						done();
+					});
 				});
 			});
 		});
