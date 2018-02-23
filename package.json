@@ -29,6 +29,7 @@
     "merge-options": "1.0.0",
     "promise-queue": "^2.2.3",
     "request": "^2.74.0",
+    "url-template": "^2.0.8",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
@@ -45,7 +46,7 @@
     "mockery": "^2.1.0",
     "nock": "^9.0.13",
     "nsp": "^3.1.0",
-    "nyc": "^11.3.0",
+    "nyc": "^11.4.1",
     "semver": "^5.4.1",
     "shelljs": "^0.8.1",
     "shelljs-nodecli": "^0.1.1",
