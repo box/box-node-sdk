@@ -4,14 +4,20 @@ Collaboration Whitelists
 Collaboration Whitelists are used to determine specific domains or users that can collaborate 
 with a Box Enterprise. 
 
-* [Add a Domain to Collaboration Whitelist](#add-a-domain-to-collaboration-whitelist)
-* [Get a Whitelisted Domain's Information](#get-a-whitelisted-domains-information)
-* [Get Whitelisted Domains for an Enterprise](#get-whitelisted-domains-for-an-enterprise)
-* [Remove a Domain from Collaboration Whitelist](#remove-a-domain-from-collaboration-whitelist)
-* [Exempt a User from the Collaboration Whitelist](#exempt-a-user-from-the-collabration-whitelist)
-* [Get an Exempt User's Information](#get-an-exempt-users-information)
-* [Get all Exempt Users for an Enterprise](#get-all-exempt-users-for-an-enterprise)
-* [Remove a User Exemption from the Collaboration Whitelist](#remove-a-user-exemption-from-the-collaboration-whitelist)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Add a Domain to Collaboration Whitelist](#add-a-domain-to-collaboration-whitelist)
+- [Get a Whitelisted Domain's Information](#get-a-whitelisted-domains-information)
+- [Get Whitelisted Domains for an Enterprise](#get-whitelisted-domains-for-an-enterprise)
+- [Remove a Domain from Collaboration Whitelist](#remove-a-domain-from-collaboration-whitelist)
+- [Exempt a User from the Collaboration Whitelist](#exempt-a-user-from-the-collaboration-whitelist)
+- [Get an Exempt User's Information](#get-an-exempt-users-information)
+- [Get the User Collaboration Whitelists for an Enterprise](#get-the-user-collaboration-whitelists-for-an-enterprise)
+- [Remove a User Exemption from the Collaboration Whitelist](#remove-a-user-exemption-from-the-collaboration-whitelist)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Add a Domain to Collaboration Whitelist
 ---------------------------------------

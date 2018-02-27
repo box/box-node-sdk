@@ -27,6 +27,7 @@ the SDK are available by topic:
 * [Terms of Service](terms-of-service.md)
 * [Trash](trash.md)
 * [Users](users.md)
+* [Watermarking](watermarking.md)
 * [Web Links](web-links.md)
 * [Webhooks](webhooks.md)
 

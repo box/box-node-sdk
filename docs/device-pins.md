@@ -1,9 +1,15 @@
 Device Pins
 ===========
 
-* [Get Device Pin](#get-device-pin)
-* [Delete Device Pin](#delete-device-pin)
-* [Get All Device Pins](#get-all-device-pins)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Get Device Pin](#get-device-pin)
+- [Delete Device Pin](#delete-device-pin)
+- [Get All Device Pins](#get-all-device-pins)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Get Device Pin
 --------------

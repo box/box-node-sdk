@@ -3,7 +3,13 @@ Shared Items
 
 Shared Items represent files and folders on Box accessed via a shared link.
 
-* [Get a Shared Item](#get-a-shared-item)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Get a Shared Item](#get-a-shared-item)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Get a Shared Item
 -----------------
