@@ -5,17 +5,23 @@ A legal hold policy blocks permanent deletion of content during ongoing litigati
 Admins can create legal hold policies and then later assign them to specific folders,
 files, or users.
 
-* [Create Legal Hold Policy](#create-legal-hold-policy)
-* [Get Legal Hold Policy](#get-legal-hold-policy)
-* [Update Legal Hold Policy](#update-legal-hold-policy)
-* [Delete Legal Hold Policy](#delete-legal-hold-policy)
-* [Get Enterprise Legal Hold Policies](#get-enterprise-legal-hold-policies)
-* [Get Legal Hold Policy Assignments](#get-legal-hold-policy-assignments)
-* [Assign Legal Hold Policy](#assign-legal-hold-policy)
-* [Delete Legal Hold Policy Assignment](#delete-legal-hold-policy-assignment)
-* [Get Legal Hold Policy Assignment](#get-legal-hold-policy-assignment)
-* [Get File Version Legal Hold](#get-file-version-legal-hold)
-* [Get Enterprise File Version Legal Holds](#get-file-version-legal-holds)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Create Legal Hold Policy](#create-legal-hold-policy)
+- [Get Legal Hold Policy](#get-legal-hold-policy)
+- [Update Legal Hold Policy](#update-legal-hold-policy)
+- [Delete Legal Hold Policy](#delete-legal-hold-policy)
+- [Get Enterprise Legal Hold Policies](#get-enterprise-legal-hold-policies)
+- [Get Legal Hold Policy Assignments](#get-legal-hold-policy-assignments)
+- [Assign Legal Hold Policy](#assign-legal-hold-policy)
+- [Delete Legal Hold Policy Assignment](#delete-legal-hold-policy-assignment)
+- [Get Legal Hold Policy Assignment](#get-legal-hold-policy-assignment)
+- [Get File Version Legal Hold](#get-file-version-legal-hold)
+- [Get File Version Legal Holds](#get-file-version-legal-holds)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Create Legal Hold Policy
 -----------------------

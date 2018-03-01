@@ -6,15 +6,21 @@ Admins can create retention policies and then later assign them to specific fold
 their entire enterprise. To use this feature, you must have the manage retention
 policies scope enabled for your API key via your application management console.
 
-* [Create Retention Policy](#create-retention-policy)
-* [Get Retention Policy](#get-retention-policy)
-* [Update Retention Policy](#update-retention-policy)
-* [Get Enterprise Retention Policies](#get-enterprise-retention-policies)
-* [Get Retention Policy Assignments](#get-retention-policy-assignments)
-* [Assign Retention Policy](#assign-retention-policy)
-* [Get Retention Policy Assignment](#get-retention-policy-assignment)
-* [Get File Version Retention](#get-file-version-retention)
-* [Get Enterprise File Version Retentions](#get-file-version-retentions)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Create Retention Policy](#create-retention-policy)
+- [Get Retention Policy](#get-retention-policy)
+- [Update Retention Policy](#update-retention-policy)
+- [Get Enterprise Retention Policies](#get-enterprise-retention-policies)
+- [Get Retention Policy Assignments](#get-retention-policy-assignments)
+- [Assign Retention Policy](#assign-retention-policy)
+- [Get Retention Policy Assignment](#get-retention-policy-assignment)
+- [Get File Version Retention](#get-file-version-retention)
+- [Get File Version Retentions](#get-file-version-retentions)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Create Retention Policy
 -----------------------

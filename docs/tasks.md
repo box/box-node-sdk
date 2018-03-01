@@ -3,15 +3,22 @@ Tasks
 
 Tasks enable file-centric workflows in Box. User can create tasks on files and assign them to collaborators on Box.
 
-* [Create a Task](#create-a-task)
-* [Get a Task's Information](#get-a-tasks-information)
-* [Update a Task](#update-a-task)
-* [Delete a Task](#delete-a-task)
-* [Get Assignments for a Task](#get-assignments-for-a-task)
-* [Get Task Assignment](#get-task-assignment)
-* [Assign Task](#assign-task)
-* [Update Task Assignment](#update-task-assignment)
-* [Remove Task Assignment](#remove-task-assignment)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Create a Task](#create-a-task)
+- [Get a Task's Information](#get-a-tasks-information)
+- [Update a Task](#update-a-task)
+- [Delete a Task](#delete-a-task)
+- [Get Assignments for a Task](#get-assignments-for-a-task)
+- [Get Task Assignment](#get-task-assignment)
+- [Assign Task](#assign-task)
+- [Update Task Assignment](#update-task-assignment)
+- [Remove Task Assignment](#remove-task-assignment)
+- [Get Tasks on a File](#get-tasks-on-a-file)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Create a Task
 -------------
@@ -171,4 +178,22 @@ method with the ID of the assignment to remove.
 
 ```js
 client.tasks.deleteAssignment('98672334', callback);
+```
+
+Get Tasks on a File
+-------------------
+
+Calling the
+[`files.getTasks(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTasks)
+method will retrieve all of the tasks for given file.
+
+```js
+client.files.getTasks('75937', null, callback);
+```
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
+
+```js
+// Only get information about a few specific fields.
+client.files.getTasks('75937', {fields: 'type,item'}, callback);
 ```

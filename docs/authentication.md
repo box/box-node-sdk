@@ -6,13 +6,19 @@ The SDK makes it easier by providing classes that handle obtaining tokens and
 automatically refreshing them. See the [OAuth 2 overview](https://docs.box.com/reference#oauth-2-overview) for detailed
 overview of authentication.
 
-* [Developer Tokens](#developer-tokens)
-* [OAuth2 Authentication](#oauth2-authentication)
-* [App User Authentication](#app-user-authentication)
-* [As-User](#as-user)
-* [Token Exchange](#token-exchange)
-    * [Annotator Tokens](#annotator-tokens)
-* [Anonymous Authentication](#anonymous-authentication)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Developer Tokens](#developer-tokens)
+- [OAuth2 Authentication](#oauth2-authentication)
+- [App User Authentication](#app-user-authentication)
+- [As-User](#as-user)
+- [Token Exchange](#token-exchange)
+  - [Annotator Tokens](#annotator-tokens)
+- [Anonymous Authentication](#anonymous-authentication)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Developer Tokens
 ----------------
