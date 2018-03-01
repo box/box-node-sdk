@@ -96,8 +96,8 @@ To retrieve a specific collaboration whitelist's information for a user you can 
 client.collaborationWhitelist.getExemption(`12345`, callback);
 ```
 
-Get the User Collaboration Whitelists for an Enterprise
--------------------------------------------------------
+Get All Exempt Users for an Enterprise
+--------------------------------------
 
 To retrieve all user collaboration whitelist's informations for an enterprise use
 [`collaborationWhitelist.getAllExemptions(options, callback)`]
