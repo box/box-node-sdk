@@ -38,6 +38,7 @@ file's contents, upload new versions, and perform other common file operations
 - [Lock a File](#lock-a-file)
 - [Unlock a File](#unlock-a-file)
 - [Get Representation Info](#get-representation-info)
+- [Get Representation Content](#get-representation-content)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -608,8 +609,7 @@ Get Representation Info
 -----------------------
 
 A file's representation info can be retrieved by calling
-[`files.getRepresentationInfo(fileID, representationTypes
-callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo).
+[`files.getRepresentationInfo(fileID, representationTypes, callback)`][get-rep-info].
 You will be able to fetch information regarding pdf representation, thumbnail representation, multi-page images
 representation, and extracted text representation.
 
@@ -619,9 +619,49 @@ for a 2048x2048 jpg representation and a 2048x2048 png representation generated 
 client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, callback);
 ```
 
-Similarly you can form your own request by manually passing in the representation types you want to
-retrieve. For a full list of available x-rep-hints headers you can pass in please see: 
-https://developer.box.com/reference#section-x-rep-hints-header
+You can specify your own set of representations to get info for by manually constructing the
+[X-Rep-Hints value][x-rep-hints] and passing it as `representationTypes`.
+
 ```js
 client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', callback);
+```
+
+[get-rep-info]: https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo
+[x-rep-hints]: https://developer.box.com/reference#section-x-rep-hints-header
+
+Get Representation Content
+--------------------------
+
+To get a stream over the contents of a single file representation, call the
+[`files.getRepresentationContent(fileID, representationType, options, callback)`][get-rep-content]
+method with the ID of the file and an [X-Rep-Hints value][x-rep-hints] specifying the representation
+you want.
+
+> __Note:__ This method only supports getting the contents of a single representation; if your
+> X-Rep-Hints value specifies multiple representations, the stream will be for an arbitrary one
+> of them.
+
+```js
+client.files.getRepresentationContent('12345', client.files.representation.PDF)
+	.then(function(stream) {
+
+		stream.on('data', function(chunk) {
+			// read data from the stream
+		});
+	});
+```
+
+For representations with multiple files, e.g. multi-page images, you will need to pass an `assetPath` option
+to specify which file you want to fetch.
+
+```js
+// If file 12345 is a document, its PNG representation will consist of one image per page of the document
+// Get the image of the first page of the document
+client.files.getRepresentationContent('12345', '[png?dimensions=1024x1024]', { assetPath: '1.png' })
+	.then(function(stream) {
+
+		stream.on('data', function(chunk) {
+			// read data from the stream
+		});
+	});
 ```
