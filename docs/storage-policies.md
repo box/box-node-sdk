@@ -43,6 +43,9 @@ Assign a Storage Policy to a User
 To assign a storage policy to a user, call the [`storagePolicies.assign(storagePolicyID, userID, callback)`][assign]
 method with the ID of the storage policy to assign and the ID of the user to which it should be assigned.
 
+> __Note:__ This method will check if an assignment already exists for the user and take appropriate action.
+> It should work regardless of the current status of the user.
+
 ```js
 client.storagePolicies.assign('4', '5678', callback);
 ```
@@ -74,6 +77,23 @@ client.storagePolicies.getAssignmentForTarget('1234', callback);
 ```
 
 [getAssignmentForTarget]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#getAssignmentForTarget
+
+Create a Storage Policy Assignment
+----------------------------------
+
+To create a new storage policy assignment, call the
+[`storagePolicies.createAssignment(policyID, userID, callback)`][create-assignment] method
+with the ID of the storage policy to assign and the ID of the user to assign it to.
+
+> __Note:__ This method only works if the user does not already have an assignment.
+> If the current state of the user is not known, use the [`storagePolicies.assign()`](#assign-a-storage-policy-to-a-user)
+> method instead.
+
+```js
+client.storagePolicies.createAssignment('user_1234', '987654321', callback);
+```
+
+[create-assignment]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#createAssignment
 
 Update a Storage Policy Assignment
 ----------------------------------
