@@ -6,13 +6,19 @@ It automatically manages API access token upkeep when possible, and has a number
 options for altering the way calls are made.  The various ways of creating an authenticated
 client are described in the [Authentication documentation](authentication.md).
 
-* [Custom API Calls](#custom-api-calls)
-    * [GET](#get)
-    * [POST](#post)
-    * [PUT](#put)
-    * [DELETE](#delete)
-    * [OPTIONS](#options)
-* [Batch API](#batch-api)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Custom API Calls](#custom-api-calls)
+  - [GET](#get)
+  - [POST](#post)
+  - [PUT](#put)
+  - [DELETE](#delete)
+  - [OPTIONS](#options)
+- [Batch API](#batch-api)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Custom API Calls
 ----------------

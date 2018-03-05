@@ -3,7 +3,8 @@
         "lib/**/*.js"
     ],
     "reporter": [
-        "text-summary"
+        "text-summary",
+        "html"
     ],
     "check-coverage": true,
     "lines": 98,

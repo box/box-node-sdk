@@ -5,16 +5,20 @@ Terms of Service are custom objects that the admin of an enterprise can configur
 end user to accept/re-accept or decline the custom Terms of Service for custom applications built on
 Box Platform. 
 
-* [Get a Terms of Service for an Enterprise](#get-terms-of-service-for-an-enterprise)
-* [Get a Terms of Service for an Enterprise by ID](#get-a-terms-of-service-by-id-for-an-enterprise)
-* [Create a Terms of Service for an Enterprise](#create-a-terms-of-service-for-an-enterprise)
-* [Update a Terms of Service for an Enterprise](#update-a-terms-of-service-for-an-enterprise)
-* [Get Terms of Service Status for User](#get-terms-of-service-status-for-user)
-* [Create Terms of Service User Status](#create-user-status-on-terms-of-service)
-* [Update Terms of Service User Status](#update-user-status-on-terms-of-service)
-* [Accept of Decline a Terms of Service](#accept-or-decline-a-terms-of-service)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Get Terms of Service for an Enterprise](#get-terms-of-service-for-an-enterprise)
+- [Get a Terms of Service By ID for an Enterprise](#get-a-terms-of-service-by-id-for-an-enterprise)
+- [Update a Terms of Service for an Enterprise](#update-a-terms-of-service-for-an-enterprise)
+- [Create a Terms of Service for an Enterprise](#create-a-terms-of-service-for-an-enterprise)
+- [Get Terms of Service Status for User](#get-terms-of-service-status-for-user)
+- [Create User Status on Terms of Service](#create-user-status-on-terms-of-service)
+- [Update User Status on Terms of Service](#update-user-status-on-terms-of-service)
+- [Accept or Decline a Terms of Service](#accept-or-decline-a-terms-of-service)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Get Terms of Service for an Enterprise
 --------------------------------------

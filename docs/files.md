@@ -5,40 +5,42 @@ File objects represent individual files in Box. They can be used to download a
 file's contents, upload new versions, and perform other common file operations
 (move, copy, delete, etc.).
 
-* [Get a File's Information](#get-a-files-information)
-* [Update a File's Information](#update-a-files-information)
-* [Get a File's Tasks](#get-a-files-tasks)
-* [Download a File](#download-a-file)
-* [Get a File's Download URL](#get-download-url)
-* [Upload a File](#upload-a-file)
-* [Upload Preflight Check](#upload-preflight-check)
-* [Chunked Upload](#chunked-upload)
-* [Move a File](#move-a-file)
-* [Copy a File](#copy-a-file)
-* [Delete a File](#delete-a-file)
-* [Delete Permanently](#delete-permanently)
-* [Get a Trashed File](#get-a-trashed-file)
-* [Get File Versions](#get-file-versions)
-* [Upload a New Version of a File](#upload-a-new-version-of-a-file)
-* [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
-* [Delete a Previous File Version](#delete-a-previous-file-version)
-* [Create a Shared Link](#create-a-shared-link)
-* [Promote Version](#promote-version)
-* [Get Thumbnail](#get-thumbnail)
-* [Get Embed Link](#get-embed-link)
-* [Add File to a Collection](#add-file-to-a-collection)
-* [Remove File from a Collection](#remove-file-from-a-collection)
-* [Lock a File](#lock-a-file)
-* [Unlock a File](#unlock-a-file)
-* [Restore a File From Trash](#restore-a-file-from-trash)
-* [Create Metadata](#create-metadata)
-* [Get Metadata](#get-metadata)
-* [Update Metadata](#update-metadata)
-* [Delete Metadata](#delete-metadata)
-* [Get Watermark](#get-watermark)
-* [Apply Watermark](#apply-watermark)
-* [Remove Watermark](#remove-watermark)
-* [Get Representation Info](#get-representation-info)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Get a File's Information](#get-a-files-information)
+- [Update a File's Information](#update-a-files-information)
+- [Download a File](#download-a-file)
+- [Get a File's Download URL](#get-a-files-download-url)
+- [Upload a File](#upload-a-file)
+- [Chunked Upload](#chunked-upload)
+  - [Automatic Uploader](#automatic-uploader)
+  - [Manual Process](#manual-process)
+    - [Create Upload Session](#create-upload-session)
+    - [Upload Part](#upload-part)
+    - [Commit Upload Session](#commit-upload-session)
+    - [Abort Upload Session](#abort-upload-session)
+    - [Get Upload Session Parts](#get-upload-session-parts)
+    - [Get Upload Session Status](#get-upload-session-status)
+- [Upload Preflight Check](#upload-preflight-check)
+- [Move a File](#move-a-file)
+- [Copy a File](#copy-a-file)
+- [Delete a File](#delete-a-file)
+- [Get File Versions](#get-file-versions)
+- [Upload a New Version of a File](#upload-a-new-version-of-a-file)
+- [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
+- [Delete a Previous File Version](#delete-a-previous-file-version)
+- [Create a Shared Link](#create-a-shared-link)
+- [Promote Version](#promote-version)
+- [Get Thumbnail](#get-thumbnail)
+- [Get Embed Link](#get-embed-link)
+- [Lock a File](#lock-a-file)
+- [Unlock a File](#unlock-a-file)
+- [Get Representation Info](#get-representation-info)
+- [Get Representation Content](#get-representation-content)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Get a File's Information
 ------------------------
@@ -68,23 +70,6 @@ with the fields to be updated.
 
 ```js
 client.files.update('75937', {name : 'New Name'}, callback);
-```
-
-Get a File's Tasks
-------------------
-Calling the
-[`files.getTasks(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTasks)
-method will retrieve all of the tasks for given file.
-
-```js
-client.files.getTasks('75937', null, callback);
-```
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-// Only get information about a few specific fields.
-client.files.getTasks('75937', {fields: 'type,item'}, callback);
 ```
 
 Download a File
@@ -456,33 +441,6 @@ method will move the file to the user's trash.
 client.files.delete('12345', callback);
 ```
 
-Delete Permanently
--------------
-
-Calling the
-[`files.deletePermanently(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deletePermanently)
-method will remove the file permanently from the user's trash.
-
-```js
-client.files.deletePermanently('12345', callback);
-```
-
-Get a Trashed File
-------------------
-
-Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTrashedFile) method.
-```js
-client.files.getTrashedFile('12345', {}, callback);
-```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-// Only get information about a few specific fields.
-client.files.getTrashedFile('12345', {fields: 'size,owned_by'}, callback);
-```
-
 Get File Versions
 -----------------
 
@@ -616,27 +574,6 @@ For more information, see the [API documentation](https://docs.box.com/reference
 client.files.getEmbedLink('12345', callback);
 ```
 
-Add File to a Collection
-------------------------
-
-To add a file to a collection, call the
-[`files.addToCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addToCollection)
-method with the IDs of the file and collection.
-
-```js
-client.files.addToCollection('87263', '235747', callback);
-```
-
-Remove File from a Collection
------------------------------
-
-To remove a file from a collection, call the
-[`files.removeFromCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#removeFromCollection)
-method with the IDs of the file and collection.
-
-```js
-client.files.removeFromCollection('87263', '235747', callback);
-```
 
 Lock a File
 -----------
@@ -668,125 +605,11 @@ method.
 client.files.unlock('12345', callback);
 ```
 
-Restore a File From Trash
--------------------------
-
-Calling the
-[`files.restoreFromTrash(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#restoreFromTrash)
-will restore an item from the user's trash.  Default behavior is to restore the item
-to the folder it was in before it was moved to the trash. Options are available
-to handle possible failure cases: if an item with the same name already exists in
-folder's old location, the restored folder can be given an alternate name with
-the `name` option.  If the folder's old location no longer exists, it can be
-placed inside a new parent folder with the `parent_id` option.
-
-```js
-client.files.restoreFromTrash(
-		'12345',
-		{
-			name: 'New Name',
-			parent_id: 0
-		},
-		callback
-	);
-```
-
-Create Metadata
----------------
-
-Metadata can be created on a file by calling
-[`files.addMetadata(fileID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addMetadata)
-with a metadata template and an object of key/value pairs to add as metadata.
-
-```js
-var metadata = {foo: 'bar'};
-client.files.addMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, metadata, callback);
-```
-
-Get Metadata
-------------
-
-Retrieve a file's metadata by calling
-[`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getAllMetadata),
-to retrieve all metadata, or
-[`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getMetadata)
-to retrieve a single template.
-
-```js
-client.files.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec', callback);
-```
-
-Update Metadata
----------------
-
-Update a file's metadata by calling
-[`files.updateMetadata(fileID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#updateMetadata)
-with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
-
-```js
-var patch = [{
-	op: 'add',
-	path: '/baz',
-	value: 'quux'
-}];
-client.files.updateMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, patch, callback);
-```
-
-Delete Metadata
----------------
-
-A file's metadata can be removed by calling
-[`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteMetadata).
-
-```js
-client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
-```
-
-Get Watermark
--------------
-To get watermark information for a file call the
-[`files.getWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getWatermark)
-method.
-
-```js
-client.files.getWatermark('75937', null, callback);
-```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-// Only get information about a few specific fields.
-client.files.getWatermark('75937', {fields: 'created_at'}, callback);
-```
-
-Apply Watermark
----------------
-
-To apply or update the watermark to a file call the
-[`files.applyWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#applyWatermark)
-method.
-
-```js
-client.files.applyWatermark('67890', null, callback);
-```
-
-Remove Watermark
-----------------
-
-A file's watermark can be removed by calling
-[`files.removeWatermark(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#removeWatermark).
-
-```js
-client.files.removeWatermark('67890', callback);
-```
-
 Get Representation Info
 -----------------------
 
 A file's representation info can be retrieved by calling
-[`files.getRepresentationInfo(fileID, representationTypes
-callback)`](https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo).
+[`files.getRepresentationInfo(fileID, representationTypes, callback)`][get-rep-info].
 You will be able to fetch information regarding pdf representation, thumbnail representation, multi-page images
 representation, and extracted text representation.
 
@@ -796,9 +619,49 @@ for a 2048x2048 jpg representation and a 2048x2048 png representation generated 
 client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, callback);
 ```
 
-Similarly you can form your own request by manually passing in the representation types you want to
-retrieve. For a full list of available x-rep-hints headers you can pass in please see: 
-https://developer.box.com/reference#section-x-rep-hints-header
+You can specify your own set of representations to get info for by manually constructing the
+[X-Rep-Hints value][x-rep-hints] and passing it as `representationTypes`.
+
 ```js
 client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', callback);
+```
+
+[get-rep-info]: https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo
+[x-rep-hints]: https://developer.box.com/reference#section-x-rep-hints-header
+
+Get Representation Content
+--------------------------
+
+To get a stream over the contents of a single file representation, call the
+[`files.getRepresentationContent(fileID, representationType, options, callback)`][get-rep-content]
+method with the ID of the file and an [X-Rep-Hints value][x-rep-hints] specifying the representation
+you want.
+
+> __Note:__ This method only supports getting the contents of a single representation; if your
+> X-Rep-Hints value specifies multiple representations, the stream will be for an arbitrary one
+> of them.
+
+```js
+client.files.getRepresentationContent('12345', client.files.representation.PDF)
+	.then(function(stream) {
+
+		stream.on('data', function(chunk) {
+			// read data from the stream
+		});
+	});
+```
+
+For representations with multiple files, e.g. multi-page images, you will need to pass an `assetPath` option
+to specify which file you want to fetch.
+
+```js
+// If file 12345 is a document, its PNG representation will consist of one image per page of the document
+// Get the image of the first page of the document
+client.files.getRepresentationContent('12345', '[png?dimensions=1024x1024]', { assetPath: '1.png' })
+	.then(function(stream) {
+
+		stream.on('data', function(chunk) {
+			// read data from the stream
+		});
+	});
 ```

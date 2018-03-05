@@ -21,11 +21,25 @@ key:value string pairs, with no additional schema associated with it. Properties
 are ideal for scenarios where applications want to write metadata to file objects
 in a flexible way, without pre-defined template structure.
 
-* [Create Metadata Template](#create-metadata-template)
-* [Get Metadata Template](#get-metadata-template)
-* [Update Metadata Template](#update-metadata-template)
-* [Delete Metadata Template](#delete-metadata-template)
-* [Get Enterprise Metadata Templates](#get-enterprise-metadata-templates)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Create Metadata Template](#create-metadata-template)
+- [Get Metadata Template](#get-metadata-template)
+- [Update Metadata Template](#update-metadata-template)
+- [Get Enterprise Metadata Templates](#get-enterprise-metadata-templates)
+- [Delete Metadata Template](#delete-metadata-template)
+- [Add Metadata to a File](#add-metadata-to-a-file)
+- [Get Metadata on a File](#get-metadata-on-a-file)
+- [Update Metadata on a File](#update-metadata-on-a-file)
+- [Remove Metadata from a File](#remove-metadata-from-a-file)
+- [Add Metadata to a Folder](#add-metadata-to-a-folder)
+- [Get Metadata on a Folder](#get-metadata-on-a-folder)
+- [Update Metadata on a Folder](#update-metadata-on-a-folder)
+- [Remove Metadata from a Folder](#remove-metadata-from-a-folder)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Create Metadata Template
 ------------------------
@@ -124,4 +138,106 @@ method with the template scope and template name.
 
 ```js
 client.metadata.deleteTemplate('enterprise', 'testtemplate', callback);
+```
+
+Add Metadata to a File
+----------------------
+
+Metadata can be created on a file by calling
+[`files.addMetadata(fileID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addMetadata)
+with a metadata template and an object of key/value pairs to add as metadata.
+
+```js
+var metadata = {foo: 'bar'};
+client.files.addMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, metadata, callback);
+```
+
+Get Metadata on a File
+----------------------
+
+Retrieve a file's metadata by calling
+[`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getAllMetadata),
+to retrieve all metadata, or
+[`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getMetadata)
+to retrieve a single template.
+
+```js
+client.files.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec', callback);
+```
+
+Update Metadata on a File
+-------------------------
+
+Update a file's metadata by calling
+[`files.updateMetadata(fileID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#updateMetadata)
+with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
+
+```js
+var patch = [{
+	op: 'add',
+	path: '/baz',
+	value: 'quux'
+}];
+client.files.updateMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, patch, callback);
+```
+
+Remove Metadata from a File
+---------------------------
+
+A file's metadata can be removed by calling
+[`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteMetadata).
+
+```js
+client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+```
+
+Add Metadata to a Folder
+------------------------
+
+Metadata can be created on a folder by calling
+[`folders.addMetadata(folderID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#addMetadata)
+with a metadata template and an object of key/value pairs to add as metadata.
+
+```js
+var metadata = {foo: 'bar'};
+client.folders.addMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, metadata, callback);
+```
+
+Get Metadata on a Folder
+------------------------
+
+Retrieve a folder's metadata by calling
+[`folders.getAllMetadata(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getAllMetadata),
+to retrieve all metadata, or
+[`folders.getMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getMetadata)
+to retrieve a single template.
+
+```js
+client.folders.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec', callback);
+```
+
+Update Metadata on a Folder
+---------------------------
+
+Update a folder's metadata by calling
+[`folders.updateMetadata(folderID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#updateMetadata)
+with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
+
+```js
+var patch = [{
+	op: 'add',
+	path: '/baz',
+	value: 'quux'
+}];
+client.folders.updateMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, patch, callback);
+```
+
+Remove Metadata from a Folder
+-----------------------------
+
+A folder's metadata can be removed by calling
+[`folders.deleteMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deleteMetadata).
+
+```js
+client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
 ```

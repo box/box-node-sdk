@@ -1,7 +1,13 @@
 Search
 ======
 
-* [Search for Content](#search-for-content)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Search for Content](#search-for-content)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Search for Content
 ------------------

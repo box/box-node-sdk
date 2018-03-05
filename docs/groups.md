@@ -4,17 +4,24 @@ Groups
 Groups contain a set of users, and can be used in place of individual users in some
 operations, such as collaborations.
 
-* [Create Group](#create-group)
-* [Get Group](#get-group)
-* [Update Group](#update-group)
-* [Delete Group](#delete-group)
-* [Add a User to a Group](#add-a-user-to-a-group)
-* [Get Membership](#get-membership)
-* [Update Membership](#update-membership)
-* [Remove Membership](#remove-membership)
-* [Get Group Memberships](#get-group-memberships)
-* [Get Enterprise Groups](#get-enterprise-groups)
-* [Get Group Collaborations](#get-group-collaborations)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Create Group](#create-group)
+- [Get Group](#get-group)
+- [Update Group](#update-group)
+- [Delete Group](#delete-group)
+- [Add a User to a Group](#add-a-user-to-a-group)
+- [Get Membership](#get-membership)
+- [Get Group Memberships for a User](#get-group-memberships-for-a-user)
+- [Update Membership](#update-membership)
+- [Remove Membership](#remove-membership)
+- [Get Group Memberships](#get-group-memberships)
+- [Get Enterprise Groups](#get-enterprise-groups)
+- [Get Group Collaborations](#get-group-collaborations)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Create Group
 ------------
@@ -96,6 +103,18 @@ can improve performance and reduce the size of the network request.
 ```js
 // Get a list of users in the group and when they were added
 client.groups.getMembership('12345', {fields: 'user,created_at'}, callback);
+```
+
+Get Group Memberships for a User
+--------------------------------
+
+To get a list of groups to which a user belongs, call the
+[`users.getGroupMemberships(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getGroupMemberships)
+method.  Note that this method requires the calling user to have permission to
+view groups, which is restricted to enterprise administrators.
+
+```js
+client.users.getGroupMemberships('873645', null, callback);
 ```
 
 Update Membership
