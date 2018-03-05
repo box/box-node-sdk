@@ -1185,7 +1185,7 @@ describe('Box Node SDK', function() {
 		// This test takes a while to run due to all the bytes being shuffled around,
 		// bumping up the timeout so we don't see flaky behavior if it runs long
 		// eslint-disable-next-line no-invalid-this
-		this.timeout(4000);
+		this.timeout(8000);
 
 		var filePath = path.resolve(__dirname, './fixtures/test.pdf');
 		var uploadSessionID = 'o8qc3n58q73b95ywort2q3t';
