@@ -3,14 +3,19 @@ Users
 
 Users represent an individual's account on Box.
 
-* [Get User's Information](#get-users-information)
-* [Get the Current User's Information](#get-the-current-users-information)
-* [Update User](#update-user)
-* [Delete User](#delete-user)
-* [Get Email Aliases](#get-email-aliases)
-* [Add Email Alias](#add-email-alias)
-* [Delete Email Alias](#delete-email-alias)
-* [Get Group Memberships](#get-group-memberships)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Get User's Information](#get-users-information)
+- [Get the Current User's Information](#get-the-current-users-information)
+- [Update User](#update-user)
+- [Delete User](#delete-user)
+- [Get Email Aliases](#get-email-aliases)
+- [Add Email Alias](#add-email-alias)
+- [Delete Email Alias](#delete-email-alias)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Get User's Information
 ----------------------------------
@@ -29,7 +34,6 @@ can improve performance and reduce the size of the network request.
 client.users.get('123', {fields: 'name,login'}, callback);
 ```
 
-
 Get the Current User's Information
 ----------------------------------
 
@@ -38,7 +42,6 @@ To get the current user call the [`users.get(userID, options, callback)`](http:/
 ```js
 client.users.get(client.CURRENT_USER_ID, null, callback);
 ```
-
 
 Update User
 -----------
@@ -58,7 +61,6 @@ user.
 client.users.update('123', {login: 'newemail@example.com'}, callback);
 ```
 
-
 Delete User
 -----------
 
@@ -76,7 +78,6 @@ client.users.delete('123', null, callback);
 client.users.delete('123', {force: true}, callback);
 ```
 
-
 Get Email Aliases
 -----------------
 
@@ -85,7 +86,6 @@ To get a users email aliases call the [`users.getEmailAliases(userID, callback)`
 ```js
 client.users.getEmailAliases('123', callback);
 ```
-
 
 Add Email Alias
 ---------------
@@ -101,7 +101,6 @@ Enterprise admins can automatically confirm the email alias via the `is_confirme
 client.users.addEmailAlias('123', 'userAlias@example.com', {is_confirmed: true}, callback);
 ```
 
-
 Delete Email Alias
 ------------------
 
@@ -109,16 +108,4 @@ To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID,
 
 ```js
 client.users.removeEmailAlias('123', '765', callback);
-```
-
-Get Group Memberships
----------------------
-
-To get a list of groups to which a user belongs, call the
-[`users.getGroupMemberships(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getGroupMemberships)
-method.  Note that this method requires the calling user to have permission to
-view groups, which is restricted to enterprise administrators.
-
-```js
-client.users.getGroupMemberships('873645', null, callback);
 ```

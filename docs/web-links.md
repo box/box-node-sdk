@@ -5,10 +5,16 @@ Web links are objects that point to URLs. These objects are also known as bookma
 Web link objects are treated similarly to file objects, so they will also support shared links, copy, permanent delete,
 and restore.
 
-* [Create a Web Link](#create-a-web-link)
-* [Get a Web Link's Information](#get-a-web-links-information)
-* [Update a Web Link](#update-a-web-link)
-* [Delete a Web Link](#delete-a-web-link)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Create a Web Link](#create-a-web-link)
+- [Get a Web Link's information](#get-a-web-links-information)
+- [Update a Web Link](#update-a-web-link)
+- [Delete a Web Link](#delete-a-web-link)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Create a Web Link
 -----------------
