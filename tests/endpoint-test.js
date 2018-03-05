@@ -1554,7 +1554,7 @@ describe('Endpoint', function() {
 			});
 		});
 
-		describe('assign()', function() {
+		describe('createAssignment()', function() {
 
 			it('should make POST call to crate policy assignment and return correct response when API call succeeds', function() {
 
@@ -1578,7 +1578,7 @@ describe('Endpoint', function() {
 					})
 					.reply(201, fixture);
 
-				return basicClient.storagePolicies.assign(policyID, userID)
+				return basicClient.storagePolicies.createAssignment(policyID, userID)
 					.then(assignment => {
 						assert.deepEqual(assignment, JSON.parse(fixture));
 					});
@@ -1626,7 +1626,7 @@ describe('Endpoint', function() {
 
 				return basicClient.storagePolicies.getAssignmentForTarget(userID)
 					.then(assignment => {
-						assert.deepEqual(assignment, JSON.parse(fixture));
+						assert.deepEqual(assignment, JSON.parse(fixture).entries[0]);
 					});
 			});
 		});
@@ -1676,6 +1676,87 @@ describe('Endpoint', function() {
 				return basicClient.storagePolicies.removeAssignment(assignmentID)
 					.then(data => {
 						assert.isUndefined(data);
+					});
+			});
+		});
+
+		describe('assign()', function() {
+
+			it('should make PUT call to update assignment when assignment already exists', function() {
+
+				var storagePolicyID = '456',
+					userID = '987654321',
+					getAssignmentFixture = getFixture('storage-policies/get_storage_policy_assignments_resolved_for_200'),
+					putFixture = getFixture('storage-policies/put_storage_policy_assignments_id_200'),
+					assignmentID = JSON.parse(getAssignmentFixture).entries[0].id;
+
+				var update = {
+					storage_policy: {
+						type: 'storage_policy',
+						id: storagePolicyID
+					}
+				};
+
+				apiMock.get('/2.0/storage_policy_assignments')
+					.query({
+						resolved_for_type: 'user',
+						resolved_for_id: userID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, getAssignmentFixture)
+					.put(`/2.0/storage_policy_assignments/${assignmentID}`, update)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, putFixture);
+
+				return basicClient.storagePolicies.assign(storagePolicyID, userID)
+					.then(assignment => {
+						assert.deepEqual(assignment, JSON.parse(putFixture));
+					});
+			});
+
+			it('should make POST call to create assignment when one does not already exist', function() {
+
+				var storagePolicyID = '456',
+					userID = '987654321',
+					postFixture = getFixture('storage-policies/post_storage_policy_assignments_201');
+
+				var expectedBody = {
+					storage_policy: {
+						type: 'storage_policy',
+						id: storagePolicyID
+					},
+					assigned_to: {
+						type: 'user',
+						id: userID
+					}
+				};
+
+				apiMock.get('/2.0/storage_policy_assignments')
+					.query({
+						resolved_for_type: 'user',
+						resolved_for_id: userID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(404)
+					.post('/2.0/storage_policy_assignments', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, postFixture);
+
+				return basicClient.storagePolicies.assign(storagePolicyID, userID)
+					.then(assignment => {
+						assert.deepEqual(assignment, JSON.parse(postFixture));
 					});
 			});
 		});
