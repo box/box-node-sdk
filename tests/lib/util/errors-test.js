@@ -50,15 +50,27 @@ describe('Errors', function() {
 		mockery.disable();
 	});
 
-	describe('buildExpiredAuthError()', function() {
+	describe('buildAuthError()', function() {
 		it('should build an error object with the proper status code and message', function() {
 			var response = {
 				statusCode: 401
 			};
-			var errObject = errors.buildExpiredAuthError(response);
+			var errObject = errors.buildAuthError(response);
 			assert(errObject.authExpired);
 			assert.strictEqual(errObject.response, response);
 			assert.strictEqual(errObject.message, 'Expired Auth: Auth code or refresh token has expired.');
+		});
+
+		it('should use provided message when message argument is passed', function() {
+
+			var response = {
+				statusCode: 401
+			};
+			var message = 'test';
+			var errObject = errors.buildAuthError(response, message);
+			assert(errObject.authExpired);
+			assert.strictEqual(errObject.response, response);
+			assert.strictEqual(errObject.message, message);
 		});
 	});
 
