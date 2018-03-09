@@ -93,6 +93,20 @@ client.files.getReadStream('12345', null, function(error, stream) {
 });
 ```
 
+To download a previous version of the file, pass the `version` option:
+```js
+client.files.getReadStream('123456', { version: '98765' }, callback);
+```
+
+To download only a subset of the file's contents, pass a byte range as an array
+of the byte indices to start and stop at to the `byteRange` option.
+
+> __Note:__ Byte indices are inclusive; for example, `[0, 99]` would download the first 100 bytes of the file.
+
+```js
+client.files.getReadStream('12345', {byteRange: [0, 99] }, callback);
+```
+
 Get a File's Download URL
 -------------------------
 

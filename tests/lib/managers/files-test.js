@@ -218,8 +218,29 @@ describe('Files', function() {
 
 			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs(downloadURL, {streaming: true});
+				.withArgs(downloadURL, sinon.match({streaming: true}));
 			files.getReadStream(FILE_ID, testQS);
+		});
+
+		it('should pass range header to streaming request when byteRange option is passed', function() {
+
+			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
+
+			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(downloadURL, sinon.match({
+					streaming: true,
+					headers: sinon.match({
+						Range: 'bytes=15-100'
+					})
+				}));
+			files.getReadStream(FILE_ID,
+				{
+					byteRange: [
+						15,
+						100
+					]
+				});
 		});
 
 		it('should call callback with the read stream when callback is passed', function(done) {
