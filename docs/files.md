@@ -93,7 +93,7 @@ client.files.getReadStream('12345', null, function(error, stream) {
 });
 ```
 
-To download a previous version of the file, pass thew `version` option:
+To download a previous version of the file, pass the `version` option:
 ```js
 client.files.getReadStream('123456', { version: '98765' }, callback);
 ```
