@@ -27,6 +27,8 @@ in a flexible way, without pre-defined template structure.
 
 - [Create Metadata Template](#create-metadata-template)
 - [Get Metadata Template](#get-metadata-template)
+  - [Get by template scope and key](#get-by-template-scope-and-key)
+  - [Get by ID](#get-by-id)
 - [Update Metadata Template](#update-metadata-template)
 - [Get Enterprise Metadata Templates](#get-enterprise-metadata-templates)
 - [Delete Metadata Template](#delete-metadata-template)
@@ -85,12 +87,24 @@ client.metadata.createTemplate(
 Get Metadata Template
 ---------------------
 
-To retrieve a specific metadata template, call the
+### Get by template scope and key
+
+To retrieve a specific metadata template by its scope and template key, call the
 [`metadata.getTemplateSchema(scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplateSchema)
 method with the scope and template key.
 
 ```js
 client.metadata.getTemplateSchema('enterprise', 'vcontract', callback);
+```
+
+### Get by ID
+
+To get a specific metadata template by its ID, call the
+[`metadata.getTemplateByID(templateID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplateByID)
+method with the ID of the template.
+
+```js
+client.metadata.getTemplateByID('17f2d715-6acb-45f2-b96a-28b15efc9faa', callback);
 ```
 
 Update Metadata Template
