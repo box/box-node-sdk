@@ -1510,4 +1510,28 @@ describe('Endpoint', function() {
 			});
 		});
 	});
+
+	describe('Metadata', function() {
+
+		describe('getTemplateByID()', function() {
+
+			it('should make GET call for template information and return correct result when API call succeeds', function() {
+
+				var templateID = '3964ca73-cc23-4e92-96b8-744bdda81db0',
+					fixture = getFixture('metadata/get_metadata_templates_id_200');
+
+				apiMock.get(`/2.0/metadata_templates/${templateID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.metadata.getTemplateByID(templateID)
+					.then(template => {
+						assert.deepEqual(template, JSON.parse(fixture));
+					});
+			});
+		});
+	});
 });
