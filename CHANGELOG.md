@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.14.0
+
+- Added support for [getting a metadata template by ID](./docs/metadata.md#get-by-id)
+- Added a `byteRange` option to [file download](./docs/files.md#download-a-file) to support partial file download
+- Improved error messages when using promises and in authentication flows
+
 ## 1.13.0
 
 - Added support for getting a [stream of file representation contents](./docs/files.md#get-representation-content)
