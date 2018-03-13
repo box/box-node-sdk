@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.14.1
+
+- Fixed a bug when `files.getReadStream()` was called with null options
+
 ## 1.14.0
 
 - Added support for [getting a metadata template by ID](./docs/metadata.md#get-by-id)
