@@ -243,6 +243,20 @@ describe('Files', function() {
 				});
 		});
 
+		it('should work when no options are passed', function() {
+
+			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
+
+			var stream = {};
+
+			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(stream));
+			return files.getReadStream(FILE_ID, null)
+				.then(data => {
+					assert.equal(data, stream);
+				});
+		});
+
 		it('should call callback with the read stream when callback is passed', function(done) {
 
 			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
