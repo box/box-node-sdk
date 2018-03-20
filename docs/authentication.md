@@ -57,7 +57,7 @@ for a given enterprise.  By default, your application has a
 [Service Account](https://developer.box.com/v2.0/docs/service-account)
 that represents it and can perform API calls.  The Service Account is separate
 from the Box accounts of the application developer and the enterprise admin of
-any enterprise that has authorized the app — files stored in that acocunt are
+any enterprise that has authorized the app — files stored in that account are
 not accessible in any other account by default, and vice versa.
 
 If you generated your public and private keys automatically through the
@@ -238,7 +238,7 @@ their enterprise's users. This requires the API request to pass an
 [documentation on As-User](https://developer.box.com/v2.0/reference#as-user-1).
 
 The following examples assume that the `client` has been instantiated with an
-access token belonging to an admin-level user or Service Acocunt with appropriate
+access token belonging to an admin-level user or Service Account with appropriate
 privileges to make As-User calls.
 
 The `asUser(userID)` method sets up the client to impersonate a given user.
