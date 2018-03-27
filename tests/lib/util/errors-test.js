@@ -25,27 +25,16 @@ var sandbox = sinon.sandbox.create(),
 
 describe('Errors', function() {
 
-	before(function() {
-		// Enable Mockery
-		mockery.enable({ useCleanCache: true });
-		// Register Mocks
-		mockery.registerAllowable('http-status');
-		mockery.registerAllowable('util');
-		// Register Module Under Test
-		mockery.registerAllowable(MODULE_FILE_PATH);
-	});
-
 	beforeEach(function() {
-		// Setup File Under Test
+		mockery.enable({
+			warnOnUnregistered: false
+		});
+		mockery.registerAllowable(MODULE_FILE_PATH, true);
 		errors = require(MODULE_FILE_PATH);
 	});
 
 	afterEach(function() {
 		sandbox.verifyAndRestore();
-		mockery.resetCache();
-	});
-
-	after(function() {
 		mockery.deregisterAll();
 		mockery.disable();
 	});
@@ -58,7 +47,7 @@ describe('Errors', function() {
 			var errObject = errors.buildAuthError(response);
 			assert(errObject.authExpired);
 			assert.strictEqual(errObject.response, response);
-			assert.strictEqual(errObject.message, 'Expired Auth: Auth code or refresh token has expired.');
+			assert.strictEqual(errObject.message, 'Expired Auth: Auth code or refresh token has expired [401 Unauthorized]');
 		});
 
 		it('should use provided message when message argument is passed', function() {
@@ -70,7 +59,7 @@ describe('Errors', function() {
 			var errObject = errors.buildAuthError(response, message);
 			assert(errObject.authExpired);
 			assert.strictEqual(errObject.response, response);
-			assert.strictEqual(errObject.message, message);
+			assert.strictEqual(errObject.message, 'test [401 Unauthorized]');
 		});
 	});
 
@@ -82,7 +71,7 @@ describe('Errors', function() {
 			};
 			var errObject = errors.buildResponseError(response, 'testMessage');
 
-			assert.strictEqual(errObject.message, 'testMessage');
+			assert.strictEqual(errObject.message, 'testMessage [505 HTTP Version not Supported]');
 			assert.strictEqual(errObject.statusCode, 505);
 			assert.strictEqual(errObject.response, response);
 		});
@@ -111,7 +100,7 @@ describe('Errors', function() {
 			};
 
 			var errObject = errors.buildUnexpectedResponseError(response);
-			assert.strictEqual(errObject.message, 'Unexpected API Response [505 HTTP Version not Supported] (error_code: "Bad things happened")');
+			assert.strictEqual(errObject.message, 'Unexpected API Response [505 HTTP Version not Supported] error_code - Bad things happened');
 			assert.strictEqual(errObject.statusCode, 505);
 			assert.strictEqual(errObject.response, response);
 		});
