@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.15.0
+
+- Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md#validate-a-webhook-message)
+to accept the request body as an `Object`
+- Fixed `sdk.configure()` to correct reconfigure all options
+- Improved error messages for API errors and added the request object as `error.request` for easier debugging
+
 ## 1.14.1
 
 - Fixed a bug when `files.getReadStream()` was called with null options
