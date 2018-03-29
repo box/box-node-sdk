@@ -407,5 +407,12 @@ describe('Webhooks', function() {
 
 			assert.ok(Webhooks.validateMessage(BODY, HEADERS));
 		});
+
+		it('should validate JSON body parsed as Object', function() {
+
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
 	});
 });
