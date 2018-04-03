@@ -286,6 +286,10 @@ describe('EventStream', function() {
 				entries: [{event_id: '123'}],
 				next_stream_position: 'foo'
 			};
+
+			// Stub out _read to prevent the stream from automatically looping
+			// back around to get more events
+			sandbox.stub(eventStream, '_read');
 		});
 
 		it('should make API call to get events from current stream position when called', function() {
@@ -297,7 +301,7 @@ describe('EventStream', function() {
 				}))
 				.returns(Promise.resolve(fakeEvents));
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
 		});
 
 		it('should emit error event when the API call fails', function() {
@@ -566,6 +570,16 @@ describe('EventStream', function() {
 
 			assert.notNestedProperty(eventStream, '_dedupHash.123');
 			assert.nestedPropertyVal(eventStream, '_dedupHash.456', true);
+		});
+	});
+
+	describe('_read()', function() {
+
+		it('should start long poll process when called', function() {
+
+			sandbox.mock(eventStream).expects('getLongPollInfo');
+
+			eventStream.read(1);
 		});
 	});
 
