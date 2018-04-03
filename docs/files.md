@@ -482,7 +482,7 @@ New versions of a file can be uploaded with the
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file');
-client.files.uploadFile('98768', stream, callback);
+client.files.uploadNewFileVersion('98768', stream, callback);
 ```
 
 To rename the file on upload or manually specify a modification timestamp for the file, pass the corresponding optional
@@ -494,7 +494,7 @@ var options = {
 	name: 'New filename.docx',
 	content_modified_at: '2016-02-15T22:42:09-0600'
 };
-client.files.uploadFile('98768', stream, options, callback);
+client.files.uploadNewFileVersion('98768', stream, options, callback);
 ```
 
 Download a Previous Version of a File
