@@ -1724,6 +1724,7 @@ describe('Endpoint', function() {
 
 				var storagePolicyID = '456',
 					userID = '987654321',
+					getAssignmentFixture = getFixture('storage-policies/get_storage_policy_assignments_resolved_for_default_200'),
 					postFixture = getFixture('storage-policies/post_storage_policy_assignments_201');
 
 				var expectedBody = {
@@ -1746,7 +1747,7 @@ describe('Endpoint', function() {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
-					.reply(404)
+					.reply(200, getAssignmentFixture)
 					.post('/2.0/storage_policy_assignments', expectedBody)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
