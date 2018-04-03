@@ -1,6 +1,8 @@
 Box SDK for Node.js
 ===================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/box/box-node-sdk.svg)](https://greenkeeper.io/)
+
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 
 A JavaScript interface to the [Box Content API](https://developers.box.com/docs/).
