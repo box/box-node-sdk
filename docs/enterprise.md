@@ -1,10 +1,17 @@
 Enterprise
 ==========
 
-* [Get Enterprise Users](#get-enterprise-users)
-* [Invite User to Enterprise](#invite-user-to-enterprise)
-* [Add New User](#add-new-user)
-* [Transfer User Content](#transfer-user-content)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Get Enterprise Users](#get-enterprise-users)
+- [Invite User to Enterprise](#invite-user-to-enterprise)
+- [Add New User](#add-new-user)
+- [Add New App User](#add-new-app-user)
+- [Transfer User Content](#transfer-user-content)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Get Enterprise Users
 --------------------
