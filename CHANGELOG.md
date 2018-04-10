@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.16.0
+
+- Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md#assign-retention-policy)
+
 ## 1.15.0
 
 - Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md#validate-a-webhook-message)
