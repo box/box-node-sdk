@@ -326,6 +326,31 @@ describe('RetentionPolicies', function() {
 			retentionPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID);
 		});
 
+		it('should make POST request to assign policy with optional params when options are passed', function() {
+
+			var options = {
+				filter_fields: [
+					{
+						field: 'foo',
+						value: 'bar'
+					},
+					{
+						field: 'baz',
+						value: 42
+					}
+				]
+			};
+
+			expectedParams.body.filter_fields = options.filter_fields;
+			expectedParams.body.assign_to.type = 'metadata_template';
+			expectedParams.body.assign_to.id = 'enterprise.myTemplate';
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/retention_policy_assignments', expectedParams);
+			retentionPolicies.assign(POLICY_ID, 'metadata_template', 'enterprise.myTemplate', options);
+		});
+
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
@@ -358,7 +383,7 @@ describe('RetentionPolicies', function() {
 		});
 	});
 
-	describe('getAssignment', function() {
+	describe('getAssignment()', function() {
 
 		var ASSIGNMENT_ID = '876345';
 
