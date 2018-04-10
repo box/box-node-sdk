@@ -1,7 +1,7 @@
 {
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "description": "Official Box SDK for Node.js",
   "license": "Apache-2.0",
   "repository": {
