@@ -50,7 +50,66 @@ Calling
 on a file returns a snapshot of the file's info.
 
 ```js
-client.files.get('75937', null, callback);
+client.files.get('11111')
+	.then(file => {
+		/* file -> {
+			type: 'file',
+			id: '11111',
+			file_version: 
+			{ type: 'file_version',
+				id: '22222',
+				sha1: '97b3dbba6eab7ad0f058240744c8636b7c7bea93' },
+			sequence_id: '1',
+			etag: '1',
+			sha1: '97b3dbba6eab7ad0f058240744c8636b7c7bea93',
+			name: 'Puppy.png',
+			description: '',
+			size: 106833,
+			path_collection: 
+			{ total_count: 2,
+				entries: 
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' },
+					{ type: 'folder',
+					id: '33333',
+					sequence_id: '0',
+					etag: '0',
+					name: 'Collaborated Folder' } ] },
+			created_at: '2016-11-16T22:01:44-08:00',
+			modified_at: '2016-11-16T22:01:51-08:00',
+			trashed_at: null,
+			purged_at: null,
+			content_created_at: '2016-10-29T18:33:50-07:00',
+			content_modified_at: '2016-10-29T18:33:50-07:00',
+			created_by: 
+			{ type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com' },
+			modified_by: 
+			{ type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com' },
+			owned_by: 
+			{ type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com' },
+			shared_link: null,
+			parent: 
+			{ type: 'folder',
+				id: '33333',
+				sequence_id: '0',
+				etag: '0',
+				name: 'Collaborated Folder' },
+			item_status: 'active' }
+
+		*/
+	});
 ```
 
 Requesting information for only the fields you need with the `fields` option
@@ -58,7 +117,21 @@ can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
-client.files.get('75937', {fields: 'size,owned_by'}, callback);
+client.files.get('11111', { fields: 'size,owned_by' })
+	.then(file => {
+		/* file -> {
+			type: 'file',
+			id: '11111',
+			size: 106833,
+			owned_by: {
+				type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com'
+			}
+		}
+		*/
+	});
 ```
 
 Update a File's Information
@@ -69,7 +142,15 @@ Updating a file's information is done by calling
 with the fields to be updated.
 
 ```js
-client.files.update('75937', {name : 'New Name'}, callback);
+client.files.update('75937', { name : 'New name.pdf', fields: 'name' })
+	.then(updatedFile => {
+		/* updatedFile => {
+			type: 'file',
+			id: '11111',
+			name: 'New name.pdf'
+		}
+		*/
+	});
 ```
 
 Download a File
@@ -115,14 +196,10 @@ The download URL of a file an be retrieved by calling
 It returns the URL as a string.
 
 ```js
-client.files.getDownloadURL('12345', null, function(error, downloadURL) {
-	if (error) {
-		//handle error
-	}
-
-	//process the downloadURL
-}
-});
+client.files.getDownloadURL('12345')
+	.then(downloadURL => {
+		// downloadURL -> 'https://dl.boxcloud.com/...'
+	});
 ```
 
 Upload a File
@@ -132,17 +209,66 @@ The simplest way to upload a file to a folder is by calling the
 [`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
 method with a `stream.Readable` or `Buffer` of the file to upload.
 
-Stream:
 ```js
 var fs = require('fs');
-var stream = fs.createReadStream('/path/to/file');
-client.files.uploadFile('98768', 'New File', stream, callback);
-```
-
-Buffer:
-```js
-var buffer = new Buffer(50);
-client.files.uploadFile('98768', 'New File', buffer, callback);
+var stream = fs.createReadStream('/path/to/My File.pdf');
+var folderID = '0'
+client.files.uploadFile(folderID, 'My File.pdf', stream)
+	.then(file => {
+		/* file -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file',
+				id: '11111',
+				file_version: 
+					{ type: 'file_version',
+					id: '22222',
+					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+				name: 'My File.pdf',
+				description: '',
+				size: 68431,
+				path_collection: 
+					{ total_count: 1,
+					entries: 
+					[ { type: 'folder',
+						id: '0',
+						sequence_id: null,
+						etag: null,
+						name: 'All Files' } ] },
+				created_at: '2017-05-16T15:18:02-07:00',
+				modified_at: '2017-05-16T15:18:02-07:00',
+				trashed_at: null,
+				purged_at: null,
+				content_created_at: '2017-05-16T15:18:02-07:00',
+				content_modified_at: '2017-05-16T15:18:02-07:00',
+				created_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				modified_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				owned_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				shared_link: null,
+				parent: 
+					{ type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' }
+				item_status: 'active' } ] }
+		*/
+	});
 ```
 
 To preserve file timestamps, you may pass the created and modified times as optional parameters:
@@ -153,7 +279,10 @@ var options = {
 	content_created_at: '2015-05-12T17:38:14-0600',
 	content_modified_at: '2016-02-15T22:42:09-0600'
 };
-client.files.uploadFile('98768', 'New File', stream, options, callback);
+client.files.uploadFile('98768', 'New File', stream, options)
+	.then(file => {
+		// ...
+	});
 ```
 
 Chunked Upload
@@ -433,7 +562,67 @@ A file can be copied to a new folder with the
 method.
 
 ```js
-client.files.copy('12345', '0', callback);
+var fileID = '11111';
+var destinationFolderID = '22222';
+client.files.copy(fileID, destinationFolderID)
+	.then(fileCopy => {
+		/* fileCopy -> {
+			type: 'file',
+			id: '11112',
+			file_version: 
+				{ type: 'file_version',
+				id: '99999',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+			sequence_id: '0',
+			etag: '0',
+			sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+			name: 'My File.pdf',
+			description: '',
+			size: 68431,
+			path_collection: 
+				{ total_count: 1,
+				entries: 
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' },
+					{ type: 'folder',
+					id: '22222',
+					sequence_id: null,
+					etag: null,
+					name: 'Personal Files' } ] },
+			created_at: '2017-05-16T15:18:02-07:00',
+			modified_at: '2017-05-16T15:18:02-07:00',
+			trashed_at: null,
+			purged_at: null,
+			content_created_at: '2017-05-16T15:18:02-07:00',
+			content_modified_at: '2017-05-16T15:18:02-07:00',
+			created_by: 
+				{ type: 'user',
+				id: '33333',
+				name: 'Test User',
+				login: 'test@example.com' },
+			modified_by: 
+				{ type: 'user',
+				id: '33333',
+				name: 'Test User',
+				login: 'test@example.com' },
+			owned_by: 
+				{ type: 'user',
+				id: '33333',
+				name: 'Test User',
+				login: 'test@example.com' },
+			shared_link: null,
+			parent: 
+				{ type: 'folder',
+				id: '22222',
+				sequence_id: null,
+				etag: null,
+				name: 'Personal Files' }
+			item_status: 'active' }
+		*/
+	});
 ```
 
 An optional `name` parameter can also be passed to rename the file on copy.  This can be
@@ -452,7 +641,10 @@ Calling the
 method will move the file to the user's trash.
 
 ```js
-client.files.delete('12345', callback);
+client.files.delete('12345')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Get File Versions

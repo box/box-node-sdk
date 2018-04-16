@@ -25,7 +25,18 @@ A user always has a default collection called "Favorites" which they can add
 items to.
 
 ```js
-client.collections.getAll(callback);
+client.collections.getAll()
+	.then(collections => {
+		/* collections -> { total_count: 1,
+			entries: 
+			[ { type: 'collection',
+				id: '11111',
+				name: 'Favorites',
+				collection_type: 'favorites' } ],
+			limit: 100,
+			offset: 0 }
+		*/
+	});
 ```
 
 Get the Items in a Collection
@@ -35,7 +46,24 @@ Get a list of the items in a collection by passing the ID of the collection to
 [`collections.getItems(collectionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collections.html#getItems).
 
 ```js
-client.collections.getItems('81934', {fields: 'name'}, callback);
+client.collections.getItems('81934', {fields: 'name', limit: 2})
+	.then(items => {
+		/* items -> { total_count: 24,
+			entries: 
+			[ { type: 'folder',
+				id: '192429928',
+				sequence_id: '1',
+				etag: '1',
+				name: 'Stephen Curry Three Pointers' },
+				{ type: 'file',
+				id: '818853862',
+				sequence_id: '0',
+				etag: '0',
+				name: 'Warriors.jpg' } ],
+			offset: 0,
+			limit: 2 }
+		*/
+	});
 ```
 
 Add File to a Collection
