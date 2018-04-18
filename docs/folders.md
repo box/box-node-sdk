@@ -36,18 +36,73 @@ client.folders.get(
     {fields: 'name,shared_link,permissions,collections,sync_state'},
     callback
 );
+client.folders.get('11111')
+    .then(folder => {
+        /* folder -> {
+            type: 'folder',
+            id: '11111',
+            sequence_id: '1',
+            etag: '1',
+            name: 'Pictures',
+            created_at: '2012-12-12T10:53:43-08:00',
+            modified_at: '2012-12-12T11:15:04-08:00',
+            description: 'Some pictures I took',
+            size: 629644,
+            path_collection: 
+            { total_count: 1,
+                entries: 
+                [ { type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files' } ] },
+            created_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User'
+                login: 'user@example.com' },
+            modified_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            owned_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            shared_link: null,
+            parent: 
+            { type: 'folder',
+                id: '0',
+                sequence_id: null,
+                etag: null,
+                name: 'All Files' },
+            item_status: 'active',
+            item_collection: 
+            { total_count: 1,
+                entries: 
+                [ { type: 'file',
+                    id: '33333',
+                    sequence_id: '3',
+                    etag: '3',
+                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
+                    name: 'tigers.jpeg' } ],
+                offset: 0,
+                limit: 100 } }
+        */
+    });
 ```
 
 The user's root folder can be accessed by calling the
 [`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#get)
-method with the `folderID` value of 0.
+method with the `folderID` value of `'0'`.
 
 ```js
-client.folders.get(
-    '0',
-    {fields: 'name,shared_link,permissions,collections,sync_state'},
-    callback
-);
+client.folders.get('0')
+    .then(rootFolder => {
+        // ...
+    });
 ```
 
 Get a Folder's Items
@@ -55,19 +110,38 @@ Get a Folder's Items
 
 Folder items can be retrieved by calling the
 [`folders.getItems(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getItems)
-method. Use the `fields` option to specify the desired fields and control the result set paging.
+method. Use the `fields` option to specify the desired fields, and `limit` and `offset` to control result set paging.
 Requesting information for only the fields you need can improve performance and reduce the size of the network request.
 
 ```js
 client.folders.getItems(
     '12345',
     {
-        fields: 'name,modified_at,size,url,permissions,sync_state',
+        fields: 'name',
         offset: 0,
         limit: 25
-    },
-    callback
-);
+    })
+    .then(items => {
+        /* items -> {
+            total_count: 2,
+            entries: 
+            [ { type: 'folder',
+                id: '11111',
+                sequence_id: '1',
+                etag: '1',
+                name: 'Personal Documents' },
+                { type: 'file',
+                id: '22222',
+                sequence_id: '0',
+                etag: '0',
+                name: 'Q2 Strategy.pptx' } ],
+            offset: 0,
+            limit: 25,
+            order: 
+            [ { by: 'type', direction: 'ASC' },
+                { by: 'name', direction: 'ASC' } ] }
+        */
+    });
 ```
 
 Update a Folder's Information
@@ -78,9 +152,63 @@ Updating a folder's information is done by calling the
 method. Use the `updates` parameter to specify the fields to update and their new values.
 
 ```js
-client.folders.update('12345', {sync_state: 'synced'}, callback);
+client.folders.update('11111', {name: 'Pictures from 2017'})
+    .then(updatedFolder => {
+        /* updatedFolder -> {
+            type: 'folder',
+            id: '11111',
+            sequence_id: '1',
+            etag: '1',
+            name: 'Pictures from 2017',
+            created_at: '2012-12-12T10:53:43-08:00',
+            modified_at: '2012-12-12T11:15:04-08:00',
+            description: 'Some pictures I took',
+            size: 629644,
+            path_collection: 
+            { total_count: 1,
+                entries: 
+                [ { type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files' } ] },
+            created_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User'
+                login: 'user@example.com' },
+            modified_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            owned_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            shared_link: null,
+            parent: 
+            { type: 'folder',
+                id: '0',
+                sequence_id: null,
+                etag: null,
+                name: 'All Files' },
+            item_status: 'active',
+            item_collection: 
+            { total_count: 1,
+                entries: 
+                [ { type: 'file',
+                    id: '33333',
+                    sequence_id: '3',
+                    etag: '3',
+                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
+                    name: 'tigers.jpeg' } ],
+                offset: 0,
+                limit: 100 } }
+        */
+    });
 ```
-
 
 Create a Folder
 ---------------
@@ -88,17 +216,128 @@ Create a Folder
 Create a child folder by calling the [`folders.create(parentFolderID, newFolderName, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#create) method.
 
 ```js
-client.folders.create('12345', 'New Folder', callback);
+client.folders.create('0', 'New Folder')
+    .then(folder => {
+        /* folder -> {
+            type: 'folder',
+            id: '123456',
+            sequence_id: '0',
+            etag: '0',
+            name: 'New Folder',
+            created_at: '2012-12-12T10:53:43-08:00',
+            modified_at: '2012-12-12T11:15:04-08:00',
+            description: '',
+            size: 0,
+            path_collection: 
+            { total_count: 1,
+                entries: 
+                [ { type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files' } ] },
+            created_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User'
+                login: 'user@example.com' },
+            modified_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            owned_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            shared_link: null,
+            parent: 
+            { type: 'folder',
+                id: '0',
+                sequence_id: null,
+                etag: null,
+                name: 'All Files' },
+            item_status: 'active',
+            item_collection: 
+            { total_count: 0,
+                entries: [],
+                offset: 0,
+                limit: 100 } }
+        */
+    });
 ```
 
 
 Copy a Folder
 -------------
 
-Call the [`folders.copy(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#create) method to copy a folder to another folder.
+Call the
+[`folders.copy(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#copy)
+method to copy a folder into another folder.
 
 ```js
-client.folders.copy('12345', '67890', callback);
+client.folders.copy('11111', '22222')
+    .then(folderCopy => {
+       /* folderCopy -> {
+            type: 'folder',
+            id: '1234567',
+            sequence_id: '1',
+            etag: '1',
+            name: 'Pictures from 2017',
+            created_at: '2012-12-12T10:53:43-08:00',
+            modified_at: '2012-12-12T11:15:04-08:00',
+            description: 'Some pictures I took',
+            size: 629644,
+            path_collection: 
+            { total_count: 1,
+                entries: 
+                [ { type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files' },
+                  { type: 'folder',
+                    id: '22222',
+                    sequence_id: '3',
+                    etag: '3',
+                    name: 'Archives' } ] },
+            created_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User'
+                login: 'user@example.com' },
+            modified_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            owned_by: 
+            { type: 'user',
+                id: '22222',
+                name: 'Example User',
+                login: 'user@example.com' },
+            shared_link: null,
+            parent: 
+            { type: 'folder',
+                id: '22222',
+                sequence_id: '3',
+                etag: '3',
+                name: 'Archives' },
+            item_status: 'active',
+            item_collection: 
+            { total_count: 1,
+                entries: 
+                [ { type: 'file',
+                    id: '44444',
+                    sequence_id: '0',
+                    etag: '0',
+                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
+                    name: 'tigers.jpeg' } ],
+                offset: 0,
+                limit: 100 } }
+        */
+    });
 ```
 
 An optional `name` parameter can also be passed to rename the folder on copy.  This can be
@@ -106,7 +345,10 @@ used to avoid a name conflict when there is already an item with the same name i
 target folder.
 
 ```js
-client.folders.copy('12345', '0', {name: 'Renamed folder'}, callback);
+client.folders.copy('12345', '0', {name: 'Renamed folder'})
+    .then(folderCopy => {
+        // ...
+    });
 ```
 
 Move a Folder

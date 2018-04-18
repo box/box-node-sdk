@@ -162,21 +162,99 @@ Metadata can be created on a file by calling
 with a metadata template and an object of key/value pairs to add as metadata.
 
 ```js
-var metadata = {foo: 'bar'};
-client.files.addMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, metadata, callback);
+var metadataValues = {
+	audience: "internal",
+	documentType: "Q1 plans",
+	competitiveDocument: "no",
+	status: "active",
+	author: "Jones",
+	currentState: "proposal"
+};
+client.files.addMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", metadataValues)
+	.then(metadata => {
+		/* metadata -> {
+			audience1: 'internal',
+			documentType: 'Q1 plans',
+			competitiveDocument: 'no',
+			status: 'active',
+			author: 'Jones',
+			currentState: 'proposal',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'file_5010739061',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 0,
+			'$typeVersion': 0,
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
 ```
 
 Get Metadata on a File
 ----------------------
 
-Retrieve a file's metadata by calling
-[`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getAllMetadata),
-to retrieve all metadata, or
+Retrieve a specific metadata template on a file by calling
 [`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getMetadata)
-to retrieve a single template.
+with the ID of the file and which template to fetch.
 
 ```js
-client.files.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec', callback);
+client.files.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec')
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			competitiveDocument: 'no',
+			status: 'active',
+			author: 'Jones',
+			currentState: 'proposal',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'file_5010739061',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 0,
+			'$typeVersion': 0,
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
+```
+
+You can retrieve all metadata on a file by calling
+[`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getAllMetadata).
+
+```js
+client.files.getAllMetadata('11111')
+	.then(metadata => {
+		/* metadata -> {
+			entries: 
+			[ { currentDocumentStage: 'Init',
+				'$type': 'documentFlow-452b4c9d-c3ad-4ac7-b1ad-9d5192f2fc5f',
+				'$parent': 'file_5010739061',
+				'$id': '50ba0dba-0f89-4395-b867-3e057c1f6ed9',
+				'$version': 4,
+				'$typeVersion': 2,
+				needsApprovalFrom: 'Smith',
+				'$template': 'documentFlow',
+				'$scope': 'enterprise_12345' },
+				{ '$type': 'productInfo-9d7b6993-b09e-4e52-b197-e42f0ea995b9',
+				'$parent': 'file_5010739061',
+				'$id': '15d1014a-06c2-47ad-9916-014eab456194',
+				'$version': 2,
+				'$typeVersion': 1,
+				skuNumber: 45334223,
+				description: 'Watch',
+				'$template': 'productInfo',
+				'$scope': 'enterprise_12345' },
+				{ Popularity: '25',
+				'$type': 'properties',
+				'$parent': 'file_5010739061',
+				'$id': 'b6f36cbc-fc7a-4eda-8889-130f350cc057',
+				'$version': 0,
+				'$typeVersion': 2,
+				'$template': 'properties',
+				'$scope': 'global' } ],
+			limit: 100 }
+		*/
+	});
 ```
 
 Update Metadata on a File
@@ -187,22 +265,49 @@ Update a file's metadata by calling
 with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
 
 ```js
-var patch = [{
-	op: 'add',
-	path: '/baz',
-	value: 'quux'
-}];
-client.files.updateMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, patch, callback);
+var updates = [
+	{ op: 'test', path: '/competitiveDocument', value: 'no' },
+	{ op: 'remove', path: '/competitiveDocument' },
+	{ op: 'test', path: '/status', value: 'active' },
+	{ op: 'replace', path: '/status', value: 'inactive' },
+	{ op: 'test', path: '/author', value: 'Jones' },
+	{ op: 'copy', from: '/author', path: '/editor' },
+	{ op: 'test', path: '/currentState', value: 'proposal' },
+	{ op: 'move', from: '/currentState', path: '/previousState' },
+	{ op: 'add', path: '/currentState', value: 'reviewed' }
+];
+client.files.updateMetadata('67890', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			status: 'inactive',
+			author: 'Jones',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'file_5010739061',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 1,
+			'$typeVersion': 0,
+			editor: 'Jones',
+			previousState: 'proposal',
+			currentState: 'reviewed',
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
 ```
 
 Remove Metadata from a File
 ---------------------------
 
-A file's metadata can be removed by calling
+A metadata template can be removed from a file by calling
 [`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteMetadata).
 
 ```js
-client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES)
+	.then(() => {
+		// removal succeeded — no value returned
+	});;
 ```
 
 Add Metadata to a Folder
