@@ -173,14 +173,14 @@ var metadataValues = {
 client.files.addMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", metadataValues)
 	.then(metadata => {
 		/* metadata -> {
-			audience1: 'internal',
+			audience: 'internal',
 			documentType: 'Q1 plans',
 			competitiveDocument: 'no',
 			status: 'active',
 			author: 'Jones',
 			currentState: 'proposal',
 			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
-			'$parent': 'file_5010739061',
+			'$parent': 'file_11111',
 			'$id': '2094c584-68e1-475c-a581-534a4609594e',
 			'$version': 0,
 			'$typeVersion': 0,
@@ -198,7 +198,7 @@ Retrieve a specific metadata template on a file by calling
 with the ID of the file and which template to fetch.
 
 ```js
-client.files.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec')
+client.files.getMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketingCollateral')
 	.then(metadata => {
 		/* metadata -> {
 			audience: 'internal',
@@ -208,7 +208,7 @@ client.files.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpe
 			author: 'Jones',
 			currentState: 'proposal',
 			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
-			'$parent': 'file_5010739061',
+			'$parent': 'file_11111',
 			'$id': '2094c584-68e1-475c-a581-534a4609594e',
 			'$version': 0,
 			'$typeVersion': 0,
@@ -228,7 +228,7 @@ client.files.getAllMetadata('11111')
 			entries: 
 			[ { currentDocumentStage: 'Init',
 				'$type': 'documentFlow-452b4c9d-c3ad-4ac7-b1ad-9d5192f2fc5f',
-				'$parent': 'file_5010739061',
+				'$parent': 'file_11111',
 				'$id': '50ba0dba-0f89-4395-b867-3e057c1f6ed9',
 				'$version': 4,
 				'$typeVersion': 2,
@@ -236,7 +236,7 @@ client.files.getAllMetadata('11111')
 				'$template': 'documentFlow',
 				'$scope': 'enterprise_12345' },
 				{ '$type': 'productInfo-9d7b6993-b09e-4e52-b197-e42f0ea995b9',
-				'$parent': 'file_5010739061',
+				'$parent': 'file_11111',
 				'$id': '15d1014a-06c2-47ad-9916-014eab456194',
 				'$version': 2,
 				'$typeVersion': 1,
@@ -246,7 +246,7 @@ client.files.getAllMetadata('11111')
 				'$scope': 'enterprise_12345' },
 				{ Popularity: '25',
 				'$type': 'properties',
-				'$parent': 'file_5010739061',
+				'$parent': 'file_11111',
 				'$id': 'b6f36cbc-fc7a-4eda-8889-130f350cc057',
 				'$version': 0,
 				'$typeVersion': 2,
@@ -276,7 +276,7 @@ var updates = [
 	{ op: 'move', from: '/currentState', path: '/previousState' },
 	{ op: 'add', path: '/currentState', value: 'reviewed' }
 ];
-client.files.updateMetadata('67890', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
+client.files.updateMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
 	.then(metadata => {
 		/* metadata -> {
 			audience: 'internal',
@@ -284,7 +284,7 @@ client.files.updateMetadata('67890', client.metadata.scopes.ENTERPRISE, "marketi
 			status: 'inactive',
 			author: 'Jones',
 			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
-			'$parent': 'file_5010739061',
+			'$parent': 'file_11111',
 			'$id': '2094c584-68e1-475c-a581-534a4609594e',
 			'$version': 1,
 			'$typeVersion': 0,
@@ -318,21 +318,99 @@ Metadata can be created on a folder by calling
 with a metadata template and an object of key/value pairs to add as metadata.
 
 ```js
-var metadata = {foo: 'bar'};
-client.folders.addMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, metadata, callback);
+var metadataValues = {
+	audience: "internal",
+	documentType: "Q1 plans",
+	competitiveDocument: "no",
+	status: "active",
+	author: "Jones",
+	currentState: "proposal"
+};
+client.folders.addMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketingCollateral', metadataValues);
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			competitiveDocument: 'no',
+			status: 'active',
+			author: 'Jones',
+			currentState: 'proposal',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'folder_11111',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 0,
+			'$typeVersion': 0,
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
 ```
 
 Get Metadata on a Folder
 ------------------------
 
-Retrieve a folder's metadata by calling
-[`folders.getAllMetadata(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getAllMetadata),
-to retrieve all metadata, or
+Retrieve a specific metadata template on a folder by calling
 [`folders.getMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getMetadata)
-to retrieve a single template.
+with the ID of the folder and which template to fetch.
 
 ```js
-client.folders.getMetadata('67890', client.metadata.scopes.ENTERPRISE, 'productSpec', callback);
+client.folders.getMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketingCollateral')
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			competitiveDocument: 'no',
+			status: 'active',
+			author: 'Jones',
+			currentState: 'proposal',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'folder_11111',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 0,
+			'$typeVersion': 0,
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
+```
+
+You can retrieve all metadata on a folder by calling
+[`folders.getAllMetadata(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getAllMetadata).
+
+```js
+client.folders.getAllMetadata('11111')
+	.then(metadata => {
+		/* metadata -> {
+			entries: 
+			[ { currentDocumentStage: 'Init',
+				'$type': 'documentFlow-452b4c9d-c3ad-4ac7-b1ad-9d5192f2fc5f',
+				'$parent': 'folder_11111',
+				'$id': '50ba0dba-0f89-4395-b867-3e057c1f6ed9',
+				'$version': 4,
+				'$typeVersion': 2,
+				needsApprovalFrom: 'Smith',
+				'$template': 'documentFlow',
+				'$scope': 'enterprise_12345' },
+				{ '$type': 'productInfo-9d7b6993-b09e-4e52-b197-e42f0ea995b9',
+				'$parent': 'folder_11111',
+				'$id': '15d1014a-06c2-47ad-9916-014eab456194',
+				'$version': 2,
+				'$typeVersion': 1,
+				skuNumber: 45334223,
+				description: 'Watch',
+				'$template': 'productInfo',
+				'$scope': 'enterprise_12345' },
+				{ Popularity: '25',
+				'$type': 'properties',
+				'$parent': 'folder_11111',
+				'$id': 'b6f36cbc-fc7a-4eda-8889-130f350cc057',
+				'$version': 0,
+				'$typeVersion': 2,
+				'$template': 'properties',
+				'$scope': 'global' } ],
+			limit: 100 }
+		*/
+	});
 ```
 
 Update Metadata on a Folder
@@ -343,12 +421,36 @@ Update a folder's metadata by calling
 with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
 
 ```js
-var patch = [{
-	op: 'add',
-	path: '/baz',
-	value: 'quux'
-}];
-client.folders.updateMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, patch, callback);
+var updates = [
+	{ op: 'test', path: '/competitiveDocument', value: 'no' },
+	{ op: 'remove', path: '/competitiveDocument' },
+	{ op: 'test', path: '/status', value: 'active' },
+	{ op: 'replace', path: '/status', value: 'inactive' },
+	{ op: 'test', path: '/author', value: 'Jones' },
+	{ op: 'copy', from: '/author', path: '/editor' },
+	{ op: 'test', path: '/currentState', value: 'proposal' },
+	{ op: 'move', from: '/currentState', path: '/previousState' },
+	{ op: 'add', path: '/currentState', value: 'reviewed' }
+];
+client.folders.updateMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			status: 'inactive',
+			author: 'Jones',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'folder_11111',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 1,
+			'$typeVersion': 0,
+			editor: 'Jones',
+			previousState: 'proposal',
+			currentState: 'reviewed',
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
 ```
 
 Remove Metadata from a Folder
@@ -358,5 +460,8 @@ A folder's metadata can be removed by calling
 [`folders.deleteMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deleteMetadata).
 
 ```js
-client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES, callback);
+client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES)
+	.then(() => {
+		// removal succeeded — no value returned
+	});
 ```
