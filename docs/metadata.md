@@ -79,9 +79,34 @@ client.metadata.createTemplate(
 		{
 			hidden: true,
 			templateKey: 'vcontract'
-		},
-		callback
-	);
+		}
+	)
+	.then(template => {
+		/* template -> {
+			id: '17f2d715-6acb-45f2-b96a-28b15efc9faa',
+			templateKey: 'vcontract',
+			scope: 'enterprise_12345',
+			displayName: 'Vendor Contract',
+			hidden: true,
+			fields: 
+			[ { type: 'date',
+				key: 'signed',
+				displayName: 'Date Signed',
+				hidden: false },
+				{ type: 'string',
+				key: 'vendor',
+				displayName: 'Vendor',
+				hidden: false },
+				{ type: 'enum',
+				key: 'fy',
+				displayName: 'Fiscal Year',
+				options: 
+					[ { key: 'FY17' },
+					{ key: 'FY18' },
+					{ key: 'FY19' } ],
+				hidden: false } ] }
+		*/
+	});
 ```
 
 Get Metadata Template
@@ -94,7 +119,33 @@ To retrieve a specific metadata template by its scope and template key, call the
 method with the scope and template key.
 
 ```js
-client.metadata.getTemplateSchema('enterprise', 'vcontract', callback);
+client.metadata.getTemplateSchema('enterprise', 'vcontract')
+	.then(template => {
+		/* template -> {
+			id: '17f2d715-6acb-45f2-b96a-28b15efc9faa',
+			templateKey: 'vcontract',
+			scope: 'enterprise_12345',
+			displayName: 'Vendor Contract',
+			hidden: true,
+			fields: 
+			[ { type: 'date',
+				key: 'signed',
+				displayName: 'Date Signed',
+				hidden: false },
+				{ type: 'string',
+				key: 'vendor',
+				displayName: 'Vendor',
+				hidden: false },
+				{ type: 'enum',
+				key: 'fy',
+				displayName: 'Fiscal Year',
+				options: 
+					[ { key: 'FY17' },
+					{ key: 'FY18' },
+					{ key: 'FY19' } ],
+				hidden: false } ] }
+		*/
+	});
 ```
 
 ### Get by ID
@@ -104,7 +155,33 @@ To get a specific metadata template by its ID, call the
 method with the ID of the template.
 
 ```js
-client.metadata.getTemplateByID('17f2d715-6acb-45f2-b96a-28b15efc9faa', callback);
+client.metadata.getTemplateByID('17f2d715-6acb-45f2-b96a-28b15efc9faa')
+	.then(template => {
+		/* template -> {
+			id: '17f2d715-6acb-45f2-b96a-28b15efc9faa',
+			templateKey: 'vcontract',
+			scope: 'enterprise_12345',
+			displayName: 'Vendor Contract',
+			hidden: true,
+			fields: 
+			[ { type: 'date',
+				key: 'signed',
+				displayName: 'Date Signed',
+				hidden: false },
+				{ type: 'string',
+				key: 'vendor',
+				displayName: 'Vendor',
+				hidden: false },
+				{ type: 'enum',
+				key: 'fy',
+				displayName: 'Fiscal Year',
+				options: 
+					[ { key: 'FY17' },
+					{ key: 'FY18' },
+					{ key: 'FY19' } ],
+				hidden: false } ] }
+		*/
+	});
 ```
 
 Update Metadata Template
@@ -122,14 +199,40 @@ var operations = [
 	{
 		op: 'addEnumOption',
 		fieldKey: 'fy',
-		data: {key: 'FY20'}
+		data: { key: 'FY20' }
 	},
 	{
 		op: 'editTemplate',
-		data: {hidden: false}
+		data: { hidden: false }
 	}
 ];
-client.metadata.updateTemplate('enterprise', 'vcontract', operations, callback);
+client.metadata.updateTemplate('enterprise', 'vcontract', operations)
+	.then(template => {
+		/* template -> {
+			templateKey: 'vcontract',
+			scope: 'enterprise_12345',
+			displayName: 'Vendor Contract',
+			hidden: false,
+			fields: 
+			[ { type: 'date',
+				key: 'signed',
+				displayName: 'Date Signed',
+				hidden: false },
+				{ type: 'string',
+				key: 'vendor',
+				displayName: 'Vendor',
+				hidden: false },
+				{ type: 'enum',
+				key: 'fy',
+				displayName: 'Fiscal Year',
+				options: 
+					[ { key: 'FY17' },
+					{ key: 'FY18' },
+					{ key: 'FY19' },
+					{ key: 'FY20' } ],
+				hidden: false } ] }
+		*/
+	});
 ```
 
 Get Enterprise Metadata Templates
@@ -140,7 +243,74 @@ Get all metadata templates for the current enterprise and scope by calling the
 method.
 
 ```js
-client.metadata.getTemplates('enterprise', callback);
+client.metadata.getTemplates('enterprise')
+	.then(templates => {
+		/* templates -> {
+			limit: 100,
+			entries: 
+			[ { templateKey: 'documentFlow',
+				scope: 'enterprise_12345',
+				displayName: 'Document Flow',
+				hidden: false,
+				fields: 
+					[ { type: 'string',
+						key: 'currentDocumentStage',
+						displayName: 'Current Document Stage',
+						hidden: false }
+					{ type: 'string',
+						key: 'needsApprovalFrom',
+						displayName: 'Needs Approval From',
+						hidden: false },
+					{ type: 'string',
+						key: 'nextDocumentStage',
+						displayName: 'Next Document Stage',
+						hidden: false }
+					{ type: 'float',
+						key: 'maximumDaysAllowedInCurrentStage',
+						displayName: 'Maximum Days Allowed In Current Stage',
+						hidden: false }
+				{ templateKey: 'marketingCollateral',
+				scope: 'enterprise_12345',
+				displayName: 'Marketing Collateral',
+				hidden: false,
+				fields: 
+					[ { type: 'string',
+						key: 'audience1',
+						displayName: 'Audience',
+						hidden: false },
+					{ type: 'string',
+						key: 'previousState',
+						displayName: 'Previous State',
+						hidden: false } ] },
+				{ templateKey: 'productInfo',
+				scope: 'enterprise_12345',
+				displayName: 'Product Info',
+				hidden: false,
+				fields: 
+					[ { type: 'float',
+						key: 'skuNumber',
+						displayName: 'SKU Number',
+						hidden: false },
+					{ type: 'enum',
+						key: 'department',
+						displayName: 'Department',
+						hidden: false,
+						options: 
+						[ { key: 'Beauty' },
+						{ key: 'Shoes' },
+						{ key: 'Accessories' },
+						{ key: 'Clothing' },
+						{ key: 'Handbags' },
+						{ key: 'Bedding' },
+						{ key: 'Watches' } ] },
+					{ type: 'date',
+						key: 'displayDate',
+						displayName: 'Display Date',
+						hidden: false } ] } ],
+			next_marker: null,
+			prev_marker: null }
+		*/
+	});
 ```
 
 Delete Metadata Template
