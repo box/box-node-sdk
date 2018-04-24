@@ -1442,6 +1442,144 @@ describe('Endpoint', function() {
 					});
 			});
 		});
+
+		describe('getAllWhitelistedDomains()', function() {
+			it('should make GET request to get whitelisted domains', function() {
+				var fixture = getFixture('collaboration-whitelists/get_collaboration_whitelist_entries_200');
+
+				apiMock.get('/2.0/collaboration_whitelist_entries')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.collaborationWhitelist.getAllWhitelistedDomains()
+					.then(collabWhitelist => {
+						assert.deepEqual(collabWhitelist, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('getWhitelistedDomain()', function() {
+			it('should make GET request to fetch whitelisted domain', function() {
+				var fixture = getFixture('collaboration-whitelists/get_collaboration_whitelist_entries_id_200'),
+					whitelistEntryID = '11111';
+
+				apiMock.get(`/2.0/collaboration_whitelist_entries/${whitelistEntryID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.collaborationWhitelist.getWhitelistedDomain(whitelistEntryID)
+					.then(collabWhitelist => {
+						assert.deepEqual(collabWhitelist, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('removeDomain()', function() {
+			it('should make DELETE call to remove domain from whitelist', function() {
+
+				var whitelistEntryID = '11111';
+
+				apiMock.delete(`/2.0/collaboration_whitelist_entries/${whitelistEntryID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.collaborationWhitelist.removeDomain(whitelistEntryID)
+					.then(value => {
+						assert.isUndefined(value);
+					});
+			});
+		});
+
+		describe('getAllExemptions()', function() {
+			it('should make GET call to fetch whitelist exemptions', function() {
+
+				var fixture = getFixture('collaboration-whitelists/get_collaboration_whitelist_exempt_targets_200');
+
+				apiMock.get('/2.0/collaboration_whitelist_exempt_targets')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.collaborationWhitelist.getAllExemptions()
+					.then(exemptions => {
+						assert.deepEqual(exemptions, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('getExemption()', function() {
+			it('should make GET call to fetch whitelist exemptions', function() {
+
+				var fixture = getFixture('collaboration-whitelists/get_collaboration_whitelist_exempt_targets_200'),
+					exemptionID = '11111';
+
+				apiMock.get(`/2.0/collaboration_whitelist_exempt_targets/${exemptionID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.collaborationWhitelist.getExemption(exemptionID)
+					.then(exemption => {
+						assert.deepEqual(exemption, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('removeExemption()', function() {
+			it('should make DELETE call to remove domain from whitelist', function() {
+
+				var exemptionID = '11111';
+
+				apiMock.delete(`/2.0/collaboration_whitelist_exempt_targets/${exemptionID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.collaborationWhitelist.removeExemption(exemptionID)
+					.then(value => {
+						assert.isUndefined(value);
+					});
+			});
+		});
 	});
 
 	describe('Terms of Service', function() {
