@@ -22,7 +22,7 @@ function getFixture(fixture) {
 	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
 }
 
-describe('Endpoint', function() {
+describe.only('Endpoint', function() {
 
 	// ------------------------------------------------------------------------------
 	// Setup
@@ -1383,6 +1383,1310 @@ describe('Endpoint', function() {
 				});
 			});
 		});
+
+		describe('getVersions()', function() {
+			it('should make GET request to fetch previous file versions', function() {
+
+				var fileID = '12345',
+					fixture = getFixture('files/get_files_id_versions_200');
+
+				apiMock.get(`/2.0/files/${fileID}/versions`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.getVersions(fileID)
+					.then(versions => {
+						assert.deepEqual(versions, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('preflightUploadFile()', function() {
+			it('should make OPTIONS call for upload preflight check', function() {
+				var name = 'Foo Bar.txt',
+					parentID = '0',
+					size = 12345,
+					fixture = getFixture('files/options_files_content_200');
+
+				var expectedBody = {
+					name,
+					size,
+					parent: {
+						id: parentID
+					}
+				};
+
+				apiMock.options('/2.0/files/content', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.preflightUploadFile(parentID, { name, size })
+					.then(result => assert.deepEqual(result, JSON.parse(fixture)));
+			});
+		});
+
+		describe('preflightUploadNewFileVersion()', function() {
+			it('should make OPTIONS call for upload preflight check', function() {
+				var name = 'Foo Bar.txt',
+					fileID = '11111',
+					size = 12345,
+					fixture = getFixture('files/options_files_id_content_200');
+
+				var expectedBody = {
+					name,
+					size
+				};
+
+				apiMock.options(`/2.0/files/${fileID}/content`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.preflightUploadNewFileVersion(fileID, { name, size })
+					.then(result => assert.deepEqual(result, JSON.parse(fixture)));
+			});
+		});
+
+		describe('promoteVersion()', function() {
+			it('should make POST call to make version current', function() {
+
+				var fileID = '11111',
+					versionID = '22222',
+					fixture = getFixture('files/post_files_id_versions_current_201');
+
+				var expectedBody = {
+					type: 'file_version',
+					id: versionID
+				};
+
+				apiMock.post(`/2.0/files/${fileID}/versions/current`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.files.promoteVersion(fileID, versionID)
+					.then(currentVersion => assert.deepEqual(currentVersion, JSON.parse(fixture)));
+			});
+		});
+
+		describe('uploadNewFileVersion()', function() {
+			it('should make POST request to upload new file version content', function() {
+
+				var fileID = '11111',
+					name = 'New file name.txt',
+					fileContent = 'foo',
+					fixture = getFixture('files/post_files_content_200');
+
+				uploadMock.post(`/2.0/files/${fileID}/content`,
+					function(body) {
+
+						// Verify the multi-part form body
+						var lines = body.split(/\r?\n/);
+						assert.match(lines[0], /^-+\d+$/);
+						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
+						assert.equal(lines[2], '');
+
+						var attributes = JSON.parse(lines[3]);
+						assert.propertyVal(attributes, 'name', name);
+
+						assert.match(lines[4], /^-+\d+$/);
+						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
+						assert.equal(lines[6], '');
+						assert.equal(lines[7], fileContent);
+						assert.match(lines[8], /^-+\d+-+$/);
+						return true;
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.files.uploadNewFileVersion(fileID, fileContent, { name })
+					.then(data => assert.deepEqual(data, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAllMetadata()', function() {
+			it('should make GET call to retrieve all metadata', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/get_files_id_metadata_200');
+
+				apiMock.get(`/2.0/files/${fileID}/metadata`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.getAllMetadata(fileID)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getMetadata()', function() {
+			it('should make GET call to retrieve metadata', function() {
+
+				var fileID = '11111',
+					scope = 'enterprise',
+					template = 'testTemplate',
+					fixture = getFixture('files/get_files_id_metadata_scope_template_200');
+
+				apiMock.get(`/2.0/files/${fileID}/metadata/${scope}/${template}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.getMetadata(fileID, scope, template)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+		});
+
+		describe('deleteMetadata()', function() {
+			it('should make DELETE call to remove metadata instance', function() {
+
+				var fileID = '11111',
+					scope = 'enterprise',
+					template = 'testTemplate';
+
+				apiMock.delete(`/2.0/files/${fileID}/metadata/${scope}/${template}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.files.deleteMetadata(fileID, scope, template)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('addMetadata()', function() {
+			it('should make POST call to create metadata instance', function() {
+
+				var fileID = '11111',
+					scope = 'enterprise',
+					template = 'testTemplate',
+					fixture = getFixture('files/post_files_id_metadata_scope_template_201');
+
+				var metadataValues = {
+					testEnum: 'foo'
+				};
+
+				apiMock.post(`/2.0/files/${fileID}/metadata/${scope}/${template}`, metadataValues)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.files.addMetadata(fileID, scope, template, metadataValues)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getTrashedFile()', function() {
+			it('should make GET call to retrieve information about file in trash', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/get_files_id_trash_200');
+
+				apiMock.get(`/2.0/files/${fileID}/trash`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.getTrashedFile(fileID)
+					.then(file => assert.deepEqual(file, JSON.parse(fixture)));
+			});
+		});
+
+		describe('deletePermanently()', function() {
+			it('should make GET call to delete file in trash', function() {
+
+				var fileID = '11111';
+
+				apiMock.delete(`/2.0/files/${fileID}/trash`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.files.deletePermanently(fileID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('getTasks()', function() {
+			it('should make GET call to retrieve file tasks', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/get_files_id_tasks_200');
+
+				apiMock.get(`/2.0/files/${fileID}/tasks`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.getTasks(fileID)
+					.then(tasks => assert.deepEqual(tasks, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getEmbedLink()', function() {
+			it('should make GET call to retrieve file embed URL', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/get_files_id_expiring_embed_link_200');
+
+				apiMock.get(`/2.0/files/${fileID}`)
+					.query({
+						fields: 'expiring_embed_link'
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.getEmbedLink(fileID)
+					.then(embedURL => assert.equal(embedURL, JSON.parse(fixture).expiring_embed_link.url));
+			});
+		});
+
+		describe('lock()', function() {
+			it('should make PUT call to add lock to file', function() {
+
+				var fileID = '11111',
+					expireTime = '2020-02-20T20:02:20-02:00',
+					fixture = getFixture('files/put_files_id_lock_200');
+
+				var expectedBody = {
+					lock: {
+						type: 'lock',
+						expires_at: expireTime,
+						is_download_prevented: true
+					}
+				};
+
+				apiMock.put(`/2.0/files/${fileID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.lock(fileID, {expires_at: expireTime, is_download_prevented: true})
+					.then(file => assert.deepEqual(file, JSON.parse(fixture)));
+			});
+		});
+
+		describe('unlock()', function() {
+			it('should make PUT call to remove lock to file', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/put_files_id_lock_200');
+
+				var expectedBody = {
+					lock: null
+				};
+
+				apiMock.put(`/2.0/files/${fileID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.unlock(fileID)
+					.then(file => assert.deepEqual(file, JSON.parse(fixture)));
+			});
+		});
+
+		describe('restoreFromTrash()', function() {
+			it('should make POST call to restore file', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/post_files_id_201');
+
+				var expectedBody = {};
+
+				apiMock.post(`/2.0/files/${fileID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.files.restoreFromTrash(fileID)
+					.then(file => assert.deepEqual(file, JSON.parse(fixture)));
+			});
+		});
+
+		describe('applyWatermark()', function() {
+			it('should make PUT call to apply watermark', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/put_files_id_watermark_201');
+
+				var expectedBody = {
+					watermark: {
+						imprint: 'default'
+					}
+				};
+
+				apiMock.put(`/2.0/files/${fileID}/watermark`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.files.applyWatermark(fileID)
+					.then(watermark => assert.deepEqual(watermark, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getWatermark()', function() {
+			it('should make GET call to retrieve watermark', function() {
+
+				var fileID = '11111',
+					fixture = getFixture('files/get_files_id_watermark_200');
+
+				apiMock.get(`/2.0/files/${fileID}/watermark`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.getWatermark(fileID)
+					.then(watermark => assert.deepEqual(watermark, JSON.parse(fixture).watermark));
+			});
+		});
+
+		describe('removeWatermark()', function() {
+			it('should make DELETE call to remove watermark', function() {
+
+				var fileID = '11111';
+
+				apiMock.delete(`/2.0/files/${fileID}/watermark`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.files.removeWatermark(fileID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('deleteVersion()', function() {
+			it('should make DELETE call to remove watermark', function() {
+
+				var fileID = '11111',
+					fileVersionID = '22222';
+
+				apiMock.delete(`/2.0/files/${fileID}/versions/${fileVersionID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.files.deleteVersion(fileID, fileVersionID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+	});
+
+	describe('Folders', function() {
+
+		describe('get()', function() {
+			it('should make GET call to retrieve folder info', function() {
+				var folderID = '0',
+					fixture = getFixture('folders/get_folders_id_200');
+
+				apiMock.get(`/2.0/folders/${folderID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.get(folderID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getItems()', function() {
+			it('should make GET call to retrieve folder info', function() {
+				var folderID = '0',
+					fixture = getFixture('folders/get_folders_id_items_200');
+
+				apiMock.get(`/2.0/folders/${folderID}/items`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.getItems(folderID)
+					.then(items => assert.deepEqual(items, JSON.parse(fixture)));
+			});
+		});
+
+		describe('applyWatermark()', function() {
+			it('should make PUT call to apply watermark', function() {
+
+				var folderID = '11111',
+					fixture = getFixture('folders/put_folders_id_watermark_201');
+
+				var expectedBody = {
+					watermark: {
+						imprint: 'default'
+					}
+				};
+
+				apiMock.put(`/2.0/folders/${folderID}/watermark`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.folders.applyWatermark(folderID)
+					.then(watermark => assert.deepEqual(watermark, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getWatermark()', function() {
+			it('should make GET call to retrieve watermark', function() {
+
+				var folderID = '11111',
+					fixture = getFixture('folders/get_folders_id_watermark_200');
+
+				apiMock.get(`/2.0/folders/${folderID}/watermark`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.getWatermark(folderID)
+					.then(watermark => assert.deepEqual(watermark, JSON.parse(fixture).watermark));
+			});
+		});
+
+		describe('removeWatermark()', function() {
+			it('should make DELETE call to remove watermark', function() {
+
+				var folderID = '11111';
+
+				apiMock.delete(`/2.0/folders/${folderID}/watermark`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.folders.removeWatermark(folderID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('getAllMetadata()', function() {
+			it('should make GET call to retrieve all metadata', function() {
+
+				var folderID = '11111',
+					fixture = getFixture('folders/get_folders_id_metadata_200');
+
+				apiMock.get(`/2.0/folders/${folderID}/metadata`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.getAllMetadata(folderID)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getMetadata()', function() {
+			it('should make GET call to retrieve metadata', function() {
+
+				var folderID = '11111',
+					scope = 'enterprise',
+					template = 'testTemplate',
+					fixture = getFixture('folders/get_folders_id_metadata_scope_template_200');
+
+				apiMock.get(`/2.0/folders/${folderID}/metadata/${scope}/${template}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.getMetadata(folderID, scope, template)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+		});
+
+		describe('deleteMetadata()', function() {
+			it('should make DELETE call to remove metadata instance', function() {
+
+				var folderID = '11111',
+					scope = 'enterprise',
+					template = 'testTemplate';
+
+				apiMock.delete(`/2.0/folders/${folderID}/metadata/${scope}/${template}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.folders.deleteMetadata(folderID, scope, template)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('addMetadata()', function() {
+			it('should make POST call to create metadata instance', function() {
+
+				var folderID = '11111',
+					scope = 'enterprise',
+					template = 'testTemplate',
+					fixture = getFixture('folders/post_folders_id_metadata_scope_template_201');
+
+				var metadataValues = {
+					testEnum: 'foo'
+				};
+
+				apiMock.post(`/2.0/folders/${folderID}/metadata/${scope}/${template}`, metadataValues)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.folders.addMetadata(folderID, scope, template, metadataValues)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getCollaborations()', function() {
+			it('should make GET call to retrieve folder collaborations', function() {
+
+				var folderID = '11111',
+					fixture = getFixture('folders/get_folders_id_collaborations_200');
+
+				apiMock.get(`/2.0/folders/${folderID}/collaborations`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.getCollaborations(folderID)
+					.then(collabs => assert.deepEqual(collabs, JSON.parse(fixture)));
+			});
+		});
+
+		describe('create()', function() {
+			it('should make POST call to create folder', function() {
+
+				var parentFolderID = '0',
+					name = 'New Folder',
+					fixture = getFixture('folders/post_folders_201');
+
+				var expectedBody = {
+					name,
+					parent: {
+						id: parentFolderID
+					}
+				};
+
+				apiMock.post('/2.0/folders', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.folders.create(parentFolderID, name)
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+		});
+
+		describe('copy()', function() {
+			it('should make POST call to create folder copy', function() {
+
+				var folderID = '22222',
+					parentFolderID = '0',
+					name = 'New Folder (1)',
+					fixture = getFixture('folders/post_folders_id_copy_201');
+
+				var expectedBody = {
+					name,
+					parent: {
+						id: parentFolderID
+					}
+				};
+
+				apiMock.post(`/2.0/folders/${folderID}/copy`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.folders.copy(folderID, parentFolderID, { name })
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+		});
+
+		describe('update()', function() {
+			it('should make PUT call to update folder info', function() {
+
+				var folderID = '22222',
+					name = 'New Folder Name',
+					description = 'My new folder',
+					fixture = getFixture('folders/put_folders_id_200');
+
+				var expectedBody = {
+					name,
+					description
+				};
+
+				apiMock.put(`/2.0/folders/${folderID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.update(folderID, { name, description })
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+		});
+
+		describe('addToCollection()', function() {
+			it('should make PUT call to update folder collections', function() {
+
+				var folderID = '22222',
+					collectionID = '12345',
+					getCollectionsFixture = getFixture('folders/get_folders_id_collections_empty_200'),
+					putFixture = getFixture('folders/put_folders_id_collections_200');
+
+				var expectedBody = {
+					collections: [{ id: collectionID }]
+				};
+
+				apiMock.get(`/2.0/folders/${folderID}`)
+					.query({
+						fields: 'collections'
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, getCollectionsFixture)
+					.put(`/2.0/folders/${folderID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, putFixture);
+
+				return basicClient.folders.addToCollection(folderID, collectionID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(putFixture)));
+			});
+		});
+
+		describe('removeFromCollection()', function() {
+			it('should make PUT call to update folder collections', function() {
+
+				var folderID = '22222',
+					collectionID = '12345',
+					getCollectionsFixture = getFixture('folders/get_folders_id_collections_full_200'),
+					putFixture = getFixture('folders/put_folders_id_collections_200');
+
+				var expectedBody = {
+					collections: []
+				};
+
+				apiMock.get(`/2.0/folders/${folderID}`)
+					.query({
+						fields: 'collections'
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, getCollectionsFixture)
+					.put(`/2.0/folders/${folderID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, putFixture);
+
+				return basicClient.folders.removeFromCollection(folderID, collectionID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(putFixture)));
+			});
+		});
+
+		describe('move()', function() {
+			it('should make PUT call to change folder parent', function() {
+
+				var folderID = '22222',
+					newParentID = '11111',
+					fixture = getFixture('folders/put_folders_id_parent_200');
+
+				var expectedBody = {
+					parent: {
+						id: newParentID
+					}
+				};
+
+				apiMock.put(`/2.0/folders/${folderID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.move(folderID, newParentID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+		});
+
+		describe('delete()', function() {
+			it('should make DELETE call to delete folder', function() {
+
+				var folderID = '22222';
+
+				apiMock.delete(`/2.0/folders/${folderID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.folders.delete(folderID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('getTrashedFolder()', function() {
+			it('should make GET call to retrieve folder in trash', function() {
+
+				var folderID = '22222',
+					fixture = getFixture('folders/get_folders_id_trash_200');
+
+				apiMock.get(`/2.0/folders/${folderID}/trash`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.getTrashedFolder(folderID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+		});
+
+		describe('restoreFromTrash()', function() {
+			it('should make GET call to retrieve folder in trash', function() {
+
+				var folderID = '22222',
+					fixture = getFixture('folders/post_folders_id_201');
+
+				var expectedBody = {};
+
+				apiMock.post(`/2.0/folders/${folderID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.folders.restoreFromTrash(folderID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+		});
+
+		describe('deletePermanently()', function() {
+			it('should make GET call to retrieve folder in trash', function() {
+
+				var folderID = '22222';
+
+				apiMock.delete(`/2.0/folders/${folderID}/trash`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.folders.deletePermanently(folderID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+	});
+
+	describe('Groups', function() {
+
+		describe('create()', function() {
+			it('should make POST call to create the group', function() {
+
+				var name = 'Employees',
+					provenance = 'Okta',
+					fixture = getFixture('groups/post_groups_201');
+
+				var expectedBody = { name, provenance };
+
+				apiMock.post('/2.0/groups', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.groups.create(name, { provenance })
+					.then(group => assert.deepEqual(group, JSON.parse(fixture)));
+			});
+		});
+
+		describe('get()', function() {
+			it('should make GET call to retrieve the group', function() {
+
+				var groupID = '11111',
+					fixture = getFixture('groups/get_groups_id_200');
+
+				apiMock.get(`/2.0/groups/${groupID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.groups.get(groupID)
+					.then(group => assert.deepEqual(group, JSON.parse(fixture)));
+			});
+		});
+
+		describe('update()', function() {
+			it('should make PUT call to update the group', function() {
+
+				var groupID = '11111',
+					name = 'Remote Employees',
+					fixture = getFixture('groups/put_groups_id_200');
+
+				var expectedBody = { name };
+
+				apiMock.put(`/2.0/groups/${groupID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.groups.update(groupID, { name })
+					.then(group => assert.deepEqual(group, JSON.parse(fixture)));
+			});
+		});
+
+		describe('delete()', function() {
+			it('should make DELETE call to delete the group', function() {
+
+				var groupID = '11111';
+
+				apiMock.delete(`/2.0/groups/${groupID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.groups.delete(groupID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('addUser()', function() {
+			it('should make POST call to create group membership', function() {
+
+				var groupID = '11111',
+					userID = '44444',
+					role = 'admin',
+					fixture = getFixture('groups/post_group_memberships_201');
+
+				var expectedBody = {
+					role,
+					group: {
+						id: groupID
+					},
+					user: {
+						id: userID
+					}
+				};
+
+				apiMock.post('/2.0/group_memberships', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.groups.addUser(groupID, userID, { role })
+					.then(membership => assert.deepEqual(membership, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getMembership()', function() {
+			it('should make GET call to retrieve the group membership', function() {
+
+				var membershipID = '12345',
+					fixture = getFixture('groups/get_group_memberships_id_200');
+
+				apiMock.get(`/2.0/group_memberships/${membershipID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.groups.getMembership(membershipID)
+					.then(membership => assert.deepEqual(membership, JSON.parse(fixture)));
+			});
+		});
+
+		describe('updateMembership()', function() {
+			it('should make PUT call to update the group membership', function() {
+
+				var membershipID = '12345',
+					role = 'member',
+					fixture = getFixture('groups/get_group_memberships_id_200');
+
+				var expectedBody = { role };
+
+				apiMock.put(`/2.0/group_memberships/${membershipID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.groups.updateMembership(membershipID, { role })
+					.then(membership => assert.deepEqual(membership, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getMemberships()', function() {
+			it('should make GET call to retrieve the group memberships', function() {
+
+				var groupID = '11111',
+					fixture = getFixture('groups/get_groups_id_memberships_200');
+
+				apiMock.get(`/2.0/groups/${groupID}/memberships`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.groups.getMemberships(groupID)
+					.then(memberships => assert.deepEqual(memberships, JSON.parse(fixture)));
+			});
+		});
+
+		describe('removeMembership()', function() {
+			it('should make GET call to retrieve the group membership', function() {
+
+				var membershipID = '12345';
+
+				apiMock.delete(`/2.0/group_memberships/${membershipID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.groups.removeMembership(membershipID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('getAll()', function() {
+			it('should make GET call to retrieve the groups', function() {
+
+				var fixture = getFixture('groups/get_groups_200');
+
+				apiMock.get('/2.0/groups')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.groups.getAll()
+					.then(groups => assert.deepEqual(groups, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getCollaborations()', function() {
+			it('should make GET call to retrieve the group collaborations', function() {
+
+				var groupID = '11111',
+					fixture = getFixture('groups/get_groups_id_collaborations_200');
+
+				apiMock.get(`/2.0/groups/${groupID}/collaborations`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.groups.getCollaborations(groupID)
+					.then(collabs => assert.deepEqual(collabs, JSON.parse(fixture)));
+			});
+		});
+
 	});
 
 	describe('Collaboration Whitelists', function() {
