@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.16.1
+
+- Fixed a bug where metadata template deletion would not properly return results via callback
+
 ## 1.16.0
 
 - Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md#assign-retention-policy)
