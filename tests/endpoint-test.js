@@ -2689,6 +2689,273 @@ describe.only('Endpoint', function() {
 
 	});
 
+	describe('Legal Holds', function() {
+
+		describe('create()', function() {
+			it('should make POST call to create policy', function() {
+
+				var name = 'Trial Documents',
+					isOngoing = true,
+					fixture = getFixture('legal-hold-policies/post_legal_hold_policies_201');
+
+				var expectedBody = {
+					policy_name: name,
+					is_ongoing: isOngoing
+				};
+
+				apiMock.post('/2.0/legal_hold_policies', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.legalHoldPolicies.create(name, { is_ongoing: isOngoing })
+					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
+			});
+		});
+
+		describe('get()', function() {
+			it('should make GET call to retrieve policy', function() {
+
+				var policyID = '11111',
+					fixture = getFixture('legal-hold-policies/get_legal_hold_policies_id_200');
+
+				apiMock.get(`/2.0/legal_hold_policies/${policyID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.legalHoldPolicies.get(policyID)
+					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
+			});
+		});
+
+		describe('update()', function() {
+			it('should make PUT call to update policy', function() {
+
+				var policyID = '11111',
+					description = 'Documents related to our ongoing litigation',
+					fixture = getFixture('legal-hold-policies/put_legal_hold_policies_id_200');
+
+				var expectedBody = { description };
+
+				apiMock.put(`/2.0/legal_hold_policies/${policyID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.legalHoldPolicies.update(policyID, { description })
+					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAll()', function() {
+			it('should make GET call to retrieve policies', function() {
+
+				var fixture = getFixture('legal-hold-policies/get_legal_hold_policies_200');
+
+				apiMock.get('/2.0/legal_hold_policies')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.legalHoldPolicies.getAll()
+					.then(policies => assert.deepEqual(policies, JSON.parse(fixture)));
+			});
+		});
+
+		describe('delete()', function() {
+			it('should make DELETE call to delete policy', function() {
+
+				var policyID = '11111';
+
+				apiMock.delete(`/2.0/legal_hold_policies/${policyID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(202);
+
+				return basicClient.legalHoldPolicies.delete(policyID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('assign()', function() {
+			it('should make POST call to create assignment', function() {
+
+				var policyID = '11111',
+					folderID = '55555',
+					fixture = getFixture('legal-hold-policies/post_legal_hold_policy_assignments_201');
+
+				var expectedBody = {
+					policy_id: policyID,
+					assign_to: {
+						type: 'folder',
+						id: folderID
+					}
+				};
+
+				apiMock.post('/2.0/legal_hold_policy_assignments', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.legalHoldPolicies.assign(policyID, 'folder', folderID)
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAssignment()', function() {
+			it('should make GET call to retrieve assignment', function() {
+
+				var assignmentID = '12345',
+					fixture = getFixture('legal-hold-policies/get_legal_hold_policy_assignments_id_200');
+
+				apiMock.get(`/2.0/legal_hold_policy_assignments/${assignmentID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.legalHoldPolicies.getAssignment(assignmentID)
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAssignments()', function() {
+			it('should make GET call to retrieve assignments', function() {
+
+				var policyID = '11111',
+					fixture = getFixture('legal-hold-policies/get_legal_hold_policy_assignments_policy_id_200');
+
+				apiMock.get('/2.0/legal_hold_policy_assignments')
+					.query({
+						policy_id: policyID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.legalHoldPolicies.getAssignments(policyID)
+					.then(assignments => assert.deepEqual(assignments, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAllFileVersionLegalHolds()', function() {
+			it('should make GET call to retrieve legal holds', function() {
+
+				var policyID = '11111',
+					fixture = getFixture('legal-hold-policies/get_file_version_legal_holds_200');
+
+				apiMock.get('/2.0/file_version_legal_holds')
+					.query({
+						policy_id: policyID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.legalHoldPolicies.getAllFileVersionLegalHolds(policyID)
+					.then(holds => assert.deepEqual(holds, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getFileVersionLegalHold()', function() {
+			it('should make GET call to retrieve legal hold', function() {
+
+				var holdID = '99999',
+					fixture = getFixture('legal-hold-policies/get_file_version_legal_holds_200');
+
+				apiMock.get(`/2.0/file_version_legal_holds/${holdID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.legalHoldPolicies.getFileVersionLegalHold(holdID)
+					.then(hold => assert.deepEqual(hold, JSON.parse(fixture)));
+			});
+		});
+
+		describe('deleteAssignment()', function() {
+			it('should make DELETE call to delete assignment', function() {
+
+				var assignmentID = '12345';
+
+				apiMock.delete(`/2.0/legal_hold_policy_assignments/${assignmentID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.legalHoldPolicies.deleteAssignment(assignmentID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+	});
+
 	describe('Collaboration Whitelists', function() {
 		describe('addDomain()', function() {
 			it('should make a post request to create a domain collaboration whitelisting', function() {
@@ -2955,6 +3222,29 @@ describe.only('Endpoint', function() {
 
 	describe('Metadata', function() {
 
+		describe('getTemplateSchema()', function() {
+			it('should make GET call to retrieve template', function() {
+
+				var scope = 'enterprise',
+					templateKey = 'testTemplate',
+					fixture = getFixture('metadata/get_metadata_templates_scope_template_schema_200');
+
+				apiMock.get(`/2.0/metadata_templates/${scope}/${templateKey}/schema`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.metadata.getTemplateSchema(scope, templateKey)
+					.then(template => assert.deepEqual(template, JSON.parse(fixture)));
+			});
+		});
+
 		describe('getTemplateByID()', function() {
 
 			it('should make GET call for template information and return correct result when API call succeeds', function() {
@@ -2967,6 +3257,10 @@ describe.only('Endpoint', function() {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
 					.reply(200, fixture);
 
 				return basicClient.metadata.getTemplateByID(templateID)
@@ -2975,5 +3269,334 @@ describe.only('Endpoint', function() {
 					});
 			});
 		});
+
+		describe('getTemplates()', function() {
+
+			it('should make GET call for template information and return correct result when API call succeeds', function() {
+
+				var scope = 'enterprise',
+					fixture = getFixture('metadata/get_metadata_templates_scope_200');
+
+				apiMock.get(`/2.0/metadata_templates/${scope}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.metadata.getTemplates(scope)
+					.then(templates => {
+						assert.deepEqual(templates, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('createTemplate()', function() {
+			it('should make POST call to create template', function() {
+
+				var scope = 'enterprise',
+					displayName = 'New Metadata Template',
+					fixture = getFixture('metadata/post_metadata_templates_schema_201');
+
+				var expectedBody = {
+					scope,
+					displayName,
+					templateKey: 'newMetadata',
+					fields: [
+						{
+							type: 'string',
+							displayName: 'Name'
+						},
+						{
+							type: 'enum',
+							displayName: 'Location',
+							options: [
+								{ key: 'US' },
+								{ key: 'EU' }
+							]
+						},
+						{
+							type: 'date',
+							displayName: 'Date'
+						}
+					],
+					hidden: true
+				};
+
+				apiMock.post('/2.0/metadata_templates/schema')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				var options = {
+					hidden: true,
+					templateKey: 'newMetadata'
+				};
+				return basicClient.metadata.createTemplate(displayName, expectedBody.fields, options)
+					.then(template => assert.deepEqual(template, JSON.parse(fixture)));
+			});
+		});
+
+	});
+
+	describe('Recents Items', function() {
+
+		describe('get()', function() {
+			it('should make GET call to retrieve recent items', function() {
+
+				var fixture = getFixture('recent-items/get_recent_items_200');
+
+				apiMock.get('/2.0/recent_items')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.recentItems.get()
+					.then(recents => assert.deepEqual(recents, JSON.parse(fixture)));
+			});
+		});
+	});
+
+	describe('Retention Policies', function() {
+
+		describe('create()', function() {
+			it('should make POST call to create retention policy', function() {
+
+				var policyName = 'Financial Records',
+					policyType = 'finite',
+					retentionLength = 365,
+					dispositionAction = 'remove_retention',
+					fixture = getFixture('retention-policies/post_retention_policies_201');
+
+				var expectedBody = {
+					policy_name: policyName,
+					policy_type: policyType,
+					retention_length: retentionLength,
+					disposition_action: dispositionAction
+				};
+
+				apiMock.post('/2.0/retention_policies', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				var options = {
+					retention_length: retentionLength
+				};
+				return basicClient.retentionPolicies.create(policyName, policyType, dispositionAction, options)
+					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
+			});
+		});
+
+		describe('get()', function() {
+			it('should make GET call to retreieve policy', function() {
+
+				var policyID = '11111',
+					fixture = getFixture('retention-policies/get_retention_policies_id_200');
+
+				apiMock.get(`/2.0/retention_policies/${policyID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.get(policyID)
+					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
+			});
+		});
+
+		describe('update()', function() {
+			it('should make PUT call to update policy', function() {
+
+				var policyID = '11111',
+					name = 'Retained Financial Records',
+					fixture = getFixture('retention-policies/put_retention_policies_id_200');
+
+				var expectedBody = {
+					policy_name: name
+				};
+
+				apiMock.put(`/2.0/retention_policies/${policyID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.update(policyID, {policy_name: name})
+					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAll()', function() {
+			it('should make PUT call to retrieve policies', function() {
+
+				var fixture = getFixture('retention-policies/get_retention_policies_200');
+
+				apiMock.get('/2.0/retention_policies')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.getAll()
+					.then(policies => assert.deepEqual(policies, JSON.parse(fixture)));
+			});
+		});
+
+		describe('assign()', function() {
+			it('should make POST call to create assignment', function() {
+
+				var policyID = '11111',
+					folderID = '22222',
+					fixture = getFixture('retention-policies/post_retention_policy_assignments_201');
+
+				var expectedBody = {
+					policy_id: policyID,
+					assign_to: {
+						type: 'folder',
+						id: folderID
+					}
+				};
+
+				apiMock.post('/2.0/retention_policy_assignments', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.retentionPolicies.assign(policyID, 'folder', folderID)
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAssignment()', function() {
+			it('should make GET call to retrieve assignment', function() {
+
+				var assignmentID = '12345',
+					fixture = getFixture('retention-policies/get_retention_policy_assignments_id_200');
+
+				apiMock.get(`/2.0/retention_policy_assignments/${assignmentID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.getAssignment(assignmentID)
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAssignments()', function() {
+			it('should make GET call to retrieve assignments', function() {
+
+				var policyID = '11111',
+					fixture = getFixture('retention-policies/get_retention_policies_id_assignments_200');
+
+				apiMock.get(`/2.0/retention_policies/${policyID}/assignments`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.getAssignments(policyID)
+					.then(assignments => assert.deepEqual(assignments, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAllFileVersionRetentions()', function() {
+			it('should make GET call to retrieve assignments', function() {
+
+				var fixture = getFixture('retention-policies/get_file_version_retentions_200');
+
+				apiMock.get('/2.0/file_version_retentions')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.getAllFileVersionRetentions()
+					.then(retentions => assert.deepEqual(retentions, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getFileVersionRetention()', function() {
+			it('should make GET call to retrieve assignments', function() {
+
+				var retentionID = '444444',
+					fixture = getFixture('retention-policies/get_file_version_retentions_200');
+
+				apiMock.get(`/2.0/file_version_retentions/${retentionID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.getFileVersionRetention(retentionID)
+					.then(retentions => assert.deepEqual(retentions, JSON.parse(fixture)));
+			});
+		});
+
 	});
 });
