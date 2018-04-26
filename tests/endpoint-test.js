@@ -3556,7 +3556,7 @@ describe.only('Endpoint', function() {
 		});
 
 		describe('getAllFileVersionRetentions()', function() {
-			it('should make GET call to retrieve assignments', function() {
+			it('should make GET call to retrieve retentions', function() {
 
 				var fixture = getFixture('retention-policies/get_file_version_retentions_200');
 
@@ -3577,7 +3577,7 @@ describe.only('Endpoint', function() {
 		});
 
 		describe('getFileVersionRetention()', function() {
-			it('should make GET call to retrieve assignments', function() {
+			it('should make GET call to retrieve retention', function() {
 
 				var retentionID = '444444',
 					fixture = getFixture('retention-policies/get_file_version_retentions_200');
@@ -3598,5 +3598,90 @@ describe.only('Endpoint', function() {
 			});
 		});
 
+	});
+
+	describe('Search', function() {
+
+		describe('query()', function() {
+			it('should make GET call to retrieve search results', function() {
+
+				var query = 'Test',
+					fixture = getFixture('search/get_search_query_200');
+
+				apiMock.get('/2.0/search')
+					.query({ query })
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.search.query(query)
+					.then(results => assert.deepEqual(results, JSON.parse(fixture)));
+			});
+		});
+
+	});
+
+	describe('Shared Items', function() {
+
+		describe('get()', function() {
+			it('should make GET call to retrieve shared item', function() {
+
+				var link = 'https://app.box.com/s/qwertyuiopasdfghjklzxcvbnm123456',
+					fixture = getFixture('shared-items/get_shared_items_200');
+
+				apiMock.get('/2.0/shared_items')
+					.matchHeader('BoxApi', `shared_link=${encodeURIComponent(link)}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.sharedItems.get(link)
+					.then(sharedItem => assert.deepEqual(sharedItem, JSON.parse(fixture)));
+			});
+		});
+	});
+
+	describe('Tasks', function() {
+
+		describe('create()', function() {
+			it('should make POST call to create task', function() {
+
+				var type = 'file',
+					id = '22222',
+					message = 'Please review',
+					fixture = getFixture('tasks/post_tasks_201');
+
+				var expectedBody = {
+					message,
+					item: { type, id }
+				};
+
+				apiMock.post('/2.0/tasks', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.tasks.create(id, { message })
+					.then(task => assert.deepEqual(task, JSON.parse(fixture)));
+			});
+		});
 	});
 });
