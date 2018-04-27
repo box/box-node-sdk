@@ -1947,9 +1947,7 @@ describe('Files', function() {
 		beforeEach(function() {
 			expectedParams = {
 				body: {
-					lock: {
-						type: 'unlock'
-					}
+					lock: null
 				}
 			};
 		});
