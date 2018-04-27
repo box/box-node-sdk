@@ -22,7 +22,7 @@ function getFixture(fixture) {
 	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
 }
 
-describe.only('Endpoint', function() {
+describe('Endpoint', function() {
 
 	// ------------------------------------------------------------------------------
 	// Setup
@@ -3665,6 +3665,7 @@ describe.only('Endpoint', function() {
 
 				var expectedBody = {
 					message,
+					action: 'review',
 					item: { type, id }
 				};
 
@@ -3681,6 +3682,482 @@ describe.only('Endpoint', function() {
 
 				return basicClient.tasks.create(id, { message })
 					.then(task => assert.deepEqual(task, JSON.parse(fixture)));
+			});
+		});
+
+		describe('get()', function() {
+			it('should make GET call to retrieve task', function() {
+
+				var taskID = '11111',
+					fixture = getFixture('tasks/get_tasks_id_200');
+
+				apiMock.get(`/2.0/tasks/${taskID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.tasks.get(taskID)
+					.then(task => assert.deepEqual(task, JSON.parse(fixture)));
+			});
+		});
+
+		describe('update()', function() {
+			it('should make PUT call to update task', function() {
+
+				var taskID = '11111',
+					message = 'Could you please review this?',
+					fixture = getFixture('tasks/put_tasks_id_200');
+
+				var expectedBody = { message };
+
+				apiMock.put(`/2.0/tasks/${taskID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.tasks.update(taskID, { message })
+					.then(task => assert.deepEqual(task, JSON.parse(fixture)));
+			});
+		});
+
+		describe('delete()', function() {
+			it('should make PUT call to update task', function() {
+
+				var taskID = '11111';
+
+				apiMock.delete(`/2.0/tasks/${taskID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.tasks.delete(taskID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('assignByUserID()', function() {
+			it('should make POST call to assign task', function() {
+
+				var taskID = '11111',
+					userID = '33333',
+					fixture = getFixture('tasks/post_task_assignments_201');
+
+				var expectedBody = {
+					task: {
+						type: 'task',
+						id: taskID
+					},
+					assign_to: {
+						id: userID
+					}
+				};
+
+				apiMock.post('/2.0/task_assignments', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.tasks.assignByUserID(taskID, userID)
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('assignByEmail()', function() {
+			it('should make POST call to assign task', function() {
+
+				var taskID = '11111',
+					userEmail = 'testuser@example.com',
+					fixture = getFixture('tasks/post_task_assignments_201');
+
+				var expectedBody = {
+					task: {
+						type: 'task',
+						id: taskID
+					},
+					assign_to: {
+						login: userEmail
+					}
+				};
+
+				apiMock.post('/2.0/task_assignments', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.tasks.assignByEmail(taskID, userEmail)
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAssignment()', function() {
+			it('should make GET call to retrieve task assignment', function() {
+
+				var assignmentID = '12345',
+					fixture = getFixture('tasks/post_task_assignments_201');
+
+				apiMock.get(`/2.0/task_assignments/${assignmentID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.tasks.getAssignment(assignmentID)
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getAssignments()', function() {
+			it('should make GET call to retrieve task assignments', function() {
+
+				var taskID = '11111',
+					fixture = getFixture('tasks/get_tasks_id_assignments_200');
+
+				apiMock.get(`/2.0/tasks/${taskID}/assignments`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.tasks.getAssignments(taskID)
+					.then(assignments => assert.deepEqual(assignments, JSON.parse(fixture)));
+			});
+		});
+
+		describe('updateAssignment()', function() {
+			it('should make GET call to retrieve task assignments', function() {
+
+				var assignmentID = '12345',
+					message = 'Looks good to me!',
+					status = 'completed',
+					fixture = getFixture('tasks/put_task_assignments_id_200');
+
+				var expectedBody = {
+					message,
+					resolution_state: status
+				};
+
+				apiMock.put(`/2.0/task_assignments/${assignmentID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.tasks.updateAssignment(assignmentID, { message, resolution_state: status })
+					.then(assignment => assert.deepEqual(assignment, JSON.parse(fixture)));
+			});
+		});
+
+		describe('deleteAssignment()', function() {
+			it('should make GET call to retrieve task assignments', function() {
+
+				var assignmentID = '12345';
+
+				apiMock.delete(`/2.0/task_assignments/${assignmentID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.tasks.deleteAssignment(assignmentID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+	});
+
+	describe('Users', function() {
+
+		describe('get()', function() {
+			it('should make GET call to retrieve current user when passed current user constant', function() {
+
+				var fixture = getFixture('users/get_users_me_200');
+
+				apiMock.get('/2.0/users/me')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.users.get(basicClient.CURRENT_USER_ID)
+					.then(user => assert.deepEqual(user, JSON.parse(fixture)));
+			});
+		});
+
+		describe('update()', function() {
+			it('should make PUT call to update user', function() {
+
+				var userID = '33333',
+					phone = '(555) 555-5555',
+					title = 'CEO',
+					fixture = getFixture('users/put_users_id_200');
+
+				var expectedBody = {
+					phone,
+					job_title: title
+				};
+
+				apiMock.put(`/2.0/users/${userID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.users.update(userID, { phone, job_title: title })
+					.then(user => assert.deepEqual(user, JSON.parse(fixture)));
+			});
+		});
+
+		describe('delete()', function() {
+			it('should make DELETE call to delete user', function() {
+
+				var userID = '44444',
+					force = true;
+
+				apiMock.delete(`/2.0/users/${userID}`)
+					.query({ force })
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.users.delete(userID, { force })
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('getGroupMemberships()', function() {
+			it('should make GET call to retrieve memberships for user', function() {
+
+				var	userID = '44444',
+					fixture = getFixture('users/get_users_id_memberships_200');
+
+				apiMock.get(`/2.0/users/${userID}/memberships`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.users.getGroupMemberships(userID)
+					.then(memberships => assert.deepEqual(memberships, JSON.parse(fixture)));
+			});
+		});
+
+	});
+
+	describe('Enterprise', function() {
+
+		describe('getUsers()', function() {
+			it('should make GET call to retrieve enterprise users', function() {
+
+				var fixture = getFixture('users/get_users_200');
+
+				apiMock.get('/2.0/users')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.enterprise.getUsers()
+					.then(users => assert.deepEqual(users, JSON.parse(fixture)));
+			});
+
+			it('should make GET call to find app user by external ID when pass external app user ID', function() {
+
+				var externalAppUserID = 'user1234',
+					fixture = getFixture('users/get_users_external_app_user_id_200');
+
+				apiMock.get('/2.0/users')
+					.query({
+						external_app_user_id: externalAppUserID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.enterprise.getUsers({ external_app_user_id: externalAppUserID })
+					.then(users => assert.deepEqual(users, JSON.parse(fixture)));
+			});
+		});
+
+		describe('addUser()', function() {
+			it('should make POST call to create enterprise user', function() {
+
+				var name = 'Another Test User',
+					login = 'anothertestuser@example.com',
+					fixture = getFixture('users/post_users_201');
+
+				var expectedBody = { name, login };
+
+				apiMock.post('/2.0/users', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.enterprise.addUser(login, name)
+					.then(user => assert.deepEqual(user, JSON.parse(fixture)));
+			});
+		});
+
+		describe('addAppUser()', function() {
+			it('should make POST call to create app user', function() {
+
+				var name = 'Test App User',
+					fixture = getFixture('users/post_users_app_user_201');
+
+				var expectedBody = {
+					name,
+					is_platform_access_only: true
+				};
+
+				apiMock.post('/2.0/users', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.enterprise.addAppUser(name)
+					.then(user => assert.deepEqual(user, JSON.parse(fixture)));
+			});
+		});
+
+	});
+
+	describe('Webhooks', function() {
+
+		describe('delete()', function() {
+			it('should make DELETE call to delete webhook', function() {
+
+				var webhookID = '11111';
+
+				apiMock.delete(`/2.0/webhooks/${webhookID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.webhooks.delete(webhookID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+	});
+
+	describe('Weblinks', function() {
+
+		describe('delete()', function() {
+			it('should make DELETE call to delete weblink', function() {
+
+				var weblinkID = '11111';
+
+				apiMock.delete(`/2.0/web_links/${weblinkID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.weblinks.delete(weblinkID)
+					.then(result => assert.isUndefined(result));
 			});
 		});
 	});
