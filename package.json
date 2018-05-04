@@ -1,7 +1,7 @@
 {
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "description": "Official Box SDK for Node.js",
   "license": "Apache-2.0",
   "repository": {
@@ -50,6 +50,6 @@
     "semver": "^5.4.1",
     "shelljs": "^0.8.1",
     "shelljs-nodecli": "^0.1.1",
-    "sinon": "^4.3.0"
+    "sinon": "^5.0.1"
   }
 }

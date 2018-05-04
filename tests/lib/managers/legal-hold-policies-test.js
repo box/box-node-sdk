@@ -299,12 +299,15 @@ describe('LegalHoldPolicies', function() {
 
 		it('should make GET request to get assignments when called', function() {
 
-			var qs = {assign_to_type: 'user'};
+			var qs = {
+				assign_to_type: 'user',
+				policy_id: POLICY_ID
+			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs(`/legal_hold_policies/${POLICY_ID}/assignments`, {qs});
-			legalHoldPolicies.getAssignments(POLICY_ID, qs);
+				.withArgs('/legal_hold_policy_assignments', {qs});
+			legalHoldPolicies.getAssignments(POLICY_ID, { assign_to_type: 'user' });
 		});
 
 		it('should wrap with default handler when called', function() {
