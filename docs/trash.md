@@ -28,7 +28,27 @@ To retrieve files and folders that have been moved to the Trash, call the
 method.
 
 ```js
-client.trash.get({fields: 'name,id'}, callback);
+client.trash.get()
+	.then(trashedItems => {
+		/* trashedItems -> {
+			total_count: 2,
+			entries: 
+			[ { type: 'file',
+				id: '11111',
+				sequence_id: '1',
+				etag: '1',
+				sha1: '9d976863fc849f6061ecf9736710bd9c2bce488c',
+				name: 'file Tue Jul 24 145436 2012KWPX5S.csv' },
+				{ type: 'file',
+				id: '22222',
+				sequence_id: '1',
+				etag: '1',
+				sha1: '09b0e2e9760caf7448c702db34ea001f356f1197',
+				name: 'file Tue Jul 24 010055 20129Z6GS3.csv' } ],
+			offset: 0,
+			limit: 100 }
+		*/
+	});
 ```
 
 Restore a File From Trash
@@ -45,13 +65,62 @@ placed inside a new parent folder with the `parent_id` option.
 
 ```js
 client.files.restoreFromTrash(
-		'12345',
-		{
-			name: 'New Name',
-			parent_id: 0
-		},
-		callback
-	);
+	'11111',
+	{
+		// New name in case of conflict
+		name: 'New Name',
+		// File will be placed in this folder if original location no longer exists
+		parent_id: '0'
+	})
+	.then(restoredFile => {
+		/* trashedFile -> {
+			type: 'file',
+			id: '11111',
+			sequence_id: '2',
+			etag: '2',
+			sha1: '4bd9e98652799fc57cf9423e13629c151152ce6c',
+			name: 'Screenshot_1_30_13_6_37_PM.png',
+			description: '',
+			size: 163265,
+			path_collection: 
+			{ total_count: 1,
+				entries: 
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' } ] },
+			created_at: '2013-01-30T18:43:56-08:00',
+			modified_at: '2013-01-30T18:44:00-08:00',
+			trashed_at: null,
+			purged_at: null,
+			content_created_at: '2013-01-30T18:43:56-08:00',
+			content_modified_at: '2013-01-30T18:44:00-08:00',
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			modified_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			owned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			shared_link: null,
+			parent: 
+			{ type: 'folder',
+				id: '0',
+				sequence_id: null,
+				etag: null,
+				name: 'All Files' },
+			item_status: 'active' }
+		*/
+	});
 ```
 
 Delete a File from the Trash
@@ -62,7 +131,10 @@ Calling the
 method will remove the file permanently from the user's trash.
 
 ```js
-client.files.deletePermanently('12345', callback);
+client.files.deletePermanently('11111')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Get a Trashed File
@@ -70,7 +142,56 @@ Get a Trashed File
 
 Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTrashedFile) method.
 ```js
-client.files.getTrashedFile('12345', {}, callback);
+client.files.getTrashedFile('11111')
+	.then(trashedFile => {
+		/* trashedFile -> {
+			type: 'file',
+			id: '11111',
+			sequence_id: '2',
+			etag: '2',
+			sha1: '4bd9e98652799fc57cf9423e13629c151152ce6c',
+			name: 'Screenshot_1_30_13_6_37_PM.png',
+			description: '',
+			size: 163265,
+			path_collection: 
+			{ total_count: 1,
+				entries: 
+				[ { type: 'folder',
+					id: '1',
+					sequence_id: null,
+					etag: null,
+					name: 'Trash' } ] },
+			created_at: '2013-01-30T18:43:56-08:00',
+			modified_at: '2013-01-30T18:44:00-08:00',
+			trashed_at: '2013-02-07T10:49:34-08:00',
+			purged_at: '2013-03-09T10:49:34-08:00',
+			content_created_at: '2013-01-30T18:43:56-08:00',
+			content_modified_at: '2013-01-30T18:44:00-08:00',
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			modified_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			owned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			shared_link: null,
+			parent: 
+			{ type: 'folder',
+				id: '0',
+				sequence_id: null,
+				etag: null,
+				name: 'All Files' },
+			item_status: 'trashed' }
+		*/
+	});
 ```
 
 Requesting information for only the fields you need with the `fields` option
@@ -78,7 +199,21 @@ can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
-client.files.getTrashedFile('12345', {fields: 'size,owned_by'}, callback);
+client.files.getTrashedFile('11111', {fields: 'size,owned_by'})
+	.then(trashedFile => {
+		/* trashedFile -> { type: 'file',
+			id: '11111',
+			sequence_id: '2',
+			etag: '2',
+			sha1: '4bd9e98652799fc57cf9423e13629c151152ce6c',
+			size: 163265,
+			owned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' } }
+		*/
+	});
 ```
 
 Get a Trashed Folder
@@ -87,8 +222,73 @@ Get a Trashed Folder
 Information about a folder in the trash can be retrieved with the [`folders.getTrashedFolder(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getTrashedFolder) method.
 
 ```js
-client.folders.getTrashedFolder('12345', {fields: 'name,shared_link,permissions,collections,sync_state'},
-, callback);
+client.folders.getTrashedFolder('22222')
+	.then(trashedFolder => {
+		/* trashedFolder -> {
+			type: 'folder',
+			id: '22222',
+			sequence_id: '1',
+			etag: '1',
+			name: 'Old Files',
+			created_at: '2013-05-06T22:37:30-07:00',
+			modified_at: '2013-05-06T22:39:08-07:00',
+			description: '',
+			size: 18482,
+			path_collection: 
+			{ total_count: 1,
+				entries: 
+				[ { type: 'folder',
+					id: '1',
+					sequence_id: null,
+					etag: null,
+					name: 'Trash' } ] },
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			modified_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			trashed_at: '2013-05-29T09:37:13-07:00',
+			purged_at: null,
+			content_created_at: '2013-05-06T22:37:30-07:00',
+			content_modified_at: '2013-05-06T22:39:08-07:00',
+			owned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			shared_link: null,
+			folder_upload_email: null,
+			parent: 
+			{ type: 'folder',
+				id: '0',
+				sequence_id: null,
+				etag: null,
+				name: 'All Files' },
+			item_status: 'trashed' }
+		*/
+	});
+```
+
+Requesting information for only the fields you need with the `fields` option
+can improve performance and reduce the size of the network request.
+
+```js
+client.folders.getTrashedFolder('22222', {fields: 'name,trashed_at,purged_at'})
+	.then(trashedFolder => {
+		/* trashedFolder -> {
+			type: 'folder',
+			id: '22222',
+			sequence_id: '1',
+			etag: '1',
+			trashed_at: '2013-05-29T09:37:13-07:00',
+			purged_at: null }
+		*/
+	});
 ```
 
 Restore a Folder from Trash
@@ -105,13 +305,62 @@ folder with the `parent_id` option.
 
 ```js
 client.folders.restoreFromTrash(
-	'12345',
+	'22222',
 	{
+		// New name in case of conflict
 		name: 'New Name',
+		// Folder will be placed in this parent folder if the original parent no longer exists
 		parent_id: '0'
-	},
-	callback
-);
+	})
+	.then(restoredFolder => {
+		/* trashedFolder -> {
+			type: 'folder',
+			id: '22222',
+			sequence_id: '1',
+			etag: '1',
+			name: 'Old Files',
+			created_at: '2013-05-06T22:37:30-07:00',
+			modified_at: '2013-05-06T22:39:08-07:00',
+			description: '',
+			size: 18482,
+			path_collection: 
+			{ total_count: 1,
+				entries: 
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' } ] },
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			modified_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			trashed_at: null,
+			purged_at: null,
+			content_created_at: '2013-05-06T22:37:30-07:00',
+			content_modified_at: '2013-05-06T22:39:08-07:00',
+			owned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			shared_link: null,
+			folder_upload_email: null,
+			parent: 
+			{ type: 'folder',
+				id: '0',
+				sequence_id: null,
+				etag: null,
+				name: 'All Files' },
+			item_status: 'active' }
+		*/
+	});
 ```
 
 Delete a Folder from the Trash
@@ -120,5 +369,8 @@ A folder can be removed permanently from trash by calling
 [`folders.deletePermanently(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deletePermanently).
 
 ```js
-client.folders.deletePermanently('12345', callback);
+client.folders.deletePermanently('22222')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
