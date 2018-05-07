@@ -635,3 +635,143 @@ client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.met
 		// removal succeeded — no value returned
 	});
 ```
+
+Create Cascade Policy
+---------------------
+
+To set a metadata cascade policy, which applies metadata values on a folder to new items in the folder,
+call [`metadata.createCascadePolicy(scope, templateKey, folderID, callback)`][create-cascade-policy]
+with the scope and template key of the metadata template to be cascaded, and the ID of the folder to apply
+the policy to.
+
+```js
+var folderID = '22222';
+client.metadata.createCascadePolicy('enterprise', 'myTemplate', folderID)
+	.then(cascadePolicy => {
+		/* cascadePolicy -> {
+			id: '84113349-794d-445c-b93c-d8481b223434',
+			type: 'metadata_cascade_policy',
+			owner_enterprise: {
+				type: 'enterprise',
+				id: '11111'
+			},
+			parent: {
+				type: 'folder',
+				id: '22222'
+			},
+			scope: 'enterprise_11111',
+			templateKey: 'testTemplate'
+		}
+		*/
+	});
+```
+
+[create-cascade-policy]: http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#createCascadePolicy
+
+Get Cascade Policy
+------------------
+
+To retrieve information about a specific metadata cascade policy, call
+[`metadata.getCascadePolicy(policyID, callback)`][get-cascade-policy]
+with the ID of the cascade policy.
+
+```js
+var policyID = '84113349-794d-445c-b93c-d8481b223434';
+client.metadata.getCascadePolicy(policyID)
+	.then(cascadePolicy => {
+		/* cascadePolicy -> {
+			id: '84113349-794d-445c-b93c-d8481b223434',
+			type: 'metadata_cascade_policy',
+			owner_enterprise: {
+				type: 'enterprise',
+				id: '11111'
+			},
+			parent: {
+				type: 'folder',
+				id: '22222'
+			},
+			scope: 'enterprise_11111',
+			templateKey: 'testTemplate'
+		}
+		*/
+	});
+```
+
+[get-cascade-policy]: http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getCascadePolicy
+
+Get All Cascade Policies For a Folder
+-------------------------------------
+
+To get a list of all cascade policies for a folder, which show the metadata templates that
+are being applied to all items in that folder, call
+[`metadata.getCascadePolicies(folderID, options, callback)`][get-cascade-policies]
+with the ID of the folder.  You can set the `owner_enterprise_id` option to retrieve
+only cascade policies owned by a specific enterprise (defaults to the current enterprise).
+
+```js
+var folderID = '22222';
+client.metadata.getCascadePolicies(folderID)
+	.then(cascadePolicies => {
+		/* cascadePolicies -> {
+			limit: 100,
+			entries: [
+				{
+					id: '84113349-794d-445c-b93c-d8481b223434',
+					type: 'metadata_cascade_policy',
+					owner_enterprise: {
+						type: 'enterprise',
+						id: '11111'
+					},
+					parent: {
+						type: 'folder',
+						id: '22222'
+					},
+					scope: 'enterprise_11111',
+					templateKey: 'testTemplate'
+				}
+			],
+			next_marker: null,
+			prev_marker: null
+		}
+		*/
+	});
+```
+
+[get-cascade-policies]: http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getCascadePolicies
+
+Force Apply Cascade Policy
+--------------------------
+
+To force apply a metadata cascade policy and apply metadata values to all existing items in the affected
+folder, call [`metadata.forceApplyCascadePolicy(policyID, resolutionMethod, callback)`][force-apply-cascade]
+with the ID of the cascade policy to force apply and the conflict resolution method for dealing with items that
+already have a metadata value that conflicts with the folder.  Speicifying a resolution value of `'none'` will
+preserve the existing values on items, anmd specifying `'overwrite'` will overwrite values on the items in the
+folder with the metadata value from the folder.
+
+```js
+var policyID = '84113349-794d-445c-b93c-d8481b223434';
+client.metadata.forceApplyCascadePolicy(policyID, client.metadata.cascadeResolution.PRESERVE_EXISTING)
+	.then(() => {
+		// application started — no value returned
+	});
+```
+
+[force-apply-cascade]: http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#forceApplyCascadePolicy
+
+Delete Cascade Policy
+---------------------
+
+To remove a cascade policy and stop applying metadata from a folder to items in the folder,
+call [`metadata.deleteCascadePolicy(policyID, callback)`][delete-cascade-policy] with the ID
+of the cascade policy to delete.
+
+```js
+var policyID = '84113349-794d-445c-b93c-d8481b223434';
+client.metadata.deleteCascadePolicy(policyID)
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
+```
+
+[delete-cascade-policy]: http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#deleteCascadePolicy
