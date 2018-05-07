@@ -3347,6 +3347,163 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('deleteTemplate()', function() {
+
+			it('should make DELETE call to delete template', function() {
+
+				var scope = 'enterprise',
+					templateKey = 'testTemplate';
+
+				apiMock.delete(`/2.0/metadata_templates/${scope}/${templateKey}/schema`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.metadata.deleteTemplate(scope, templateKey)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('getCascadePolicies()', function() {
+
+			it('should make GET call for cascade policies for folder', function() {
+
+				var folderID = '22222',
+					fixture = getFixture('metadata/get_metadata_cascade_policies_folder_id_200');
+
+				apiMock.get('/2.0/metadata_cascade_policies')
+					.query({ folder_id: folderID })
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.metadata.getCascadePolicies(folderID)
+					.then(policies => {
+						assert.deepEqual(policies, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('getCascadePolicy()', function() {
+
+			it('should make GET call for policy information and return correct result when API call succeeds', function() {
+
+				var policyID = '84113349-794d-445c-b93c-d8481b223434',
+					fixture = getFixture('metadata/get_metadata_cascade_policies_id_200');
+
+				apiMock.get(`/2.0/metadata_cascade_policies/${policyID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.metadata.getCascadePolicy(policyID)
+					.then(policy => {
+						assert.deepEqual(policy, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('createCascadePolicy()', function() {
+
+			it('should make POST call to create cascade policy', function() {
+
+				var folderID = '22222',
+					scope = 'enterprise',
+					templateKey = 'testTemplate',
+					fixture = getFixture('metadata/post_metadata_cascade_policies_201');
+
+				var expectedBody = {
+					folder_id: folderID,
+					scope,
+					templateKey
+				};
+
+				apiMock.post('/2.0/metadata_cascade_policies', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.metadata.createCascadePolicy(scope, templateKey, folderID)
+					.then(policy => {
+						assert.deepEqual(policy, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('deleteCascadePolicy()', function() {
+
+			it('should make DELETE call to delete cascade policy', function() {
+
+				var policyID = '84113349-794d-445c-b93c-d8481b223434';
+
+				apiMock.delete(`/2.0/metadata_cascade_policies/${policyID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.metadata.deleteCascadePolicy(policyID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('forceApplyCascadePolicy()', function() {
+
+			it('should make POST call to apply cascade policy', function() {
+
+				var policyID = '84113349-794d-445c-b93c-d8481b223434',
+					resolutionMethod = basicClient.metadata.cascadeResolution.PRESERVE_EXISTING;
+
+				var expectedBody = {
+					conflict_resolution: 'none'
+				};
+
+				apiMock.post(`/2.0/metadata_cascade_policies/${policyID}/apply`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(202);
+
+
+				return basicClient.metadata.forceApplyCascadePolicy(policyID, resolutionMethod)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
 	});
 
 	describe('Recents Items', function() {
