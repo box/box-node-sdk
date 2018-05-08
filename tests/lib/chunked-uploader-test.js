@@ -20,7 +20,7 @@ const BoxClient = require('../../lib/box-client'),
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-let sandbox = sinon.sandbox.create(),
+let sandbox = sinon.createSandbox(),
 	boxClientFake,
 	ChunkedUploader,
 	uploader,

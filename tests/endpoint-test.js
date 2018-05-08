@@ -27,7 +27,7 @@ describe('Endpoint', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create();
+	var sandbox = sinon.createSandbox();
 
 	var TEST_API_ROOT = 'https://api.box.com',
 		TEST_UPLOAD_ROOT = 'https://upload.box.com/api',

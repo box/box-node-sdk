@@ -24,7 +24,7 @@ describe('box-node-sdk', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create(),
+	var sandbox = sinon.createSandbox(),
 		BoxSDKNode,
 		sdk,
 		TokenManagerConstructorStub,
