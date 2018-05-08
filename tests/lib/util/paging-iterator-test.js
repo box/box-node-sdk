@@ -18,7 +18,7 @@ var assert = require('chai').assert,
 // Helpers
 // ------------------------------------------------------------------------------
 
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	PagingIterator,
 	clientFake,
 	MODULE_FILE_PATH = '../../../lib/util/paging-iterator';
