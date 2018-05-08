@@ -746,7 +746,7 @@ To force apply a metadata cascade policy and apply metadata values to all existi
 folder, call [`metadata.forceApplyCascadePolicy(policyID, resolutionMethod, callback)`][force-apply-cascade]
 with the ID of the cascade policy to force apply and the conflict resolution method for dealing with items that
 already have a metadata value that conflicts with the folder.  Speicifying a resolution value of `'none'` will
-preserve the existing values on items, anmd specifying `'overwrite'` will overwrite values on the items in the
+preserve the existing values on items, and specifying `'overwrite'` will overwrite values on the items in the
 folder with the metadata value from the folder.
 
 ```js
