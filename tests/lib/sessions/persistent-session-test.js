@@ -20,7 +20,7 @@ var TokenManager = require('../../../lib/token-manager');
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	tokenManagerFake,
 	tokenStore,
 	tokenStoreFake,
