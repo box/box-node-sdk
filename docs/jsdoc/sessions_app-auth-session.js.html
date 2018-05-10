@@ -37,10 +37,24 @@
 // ------------------------------------------------------------------------------
 
 const Promise = require('bluebird');
+const assert = require('assert');
+const errors = require('../util/errors');
 
 // ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
+
+/**
+ * Validate that an object is a valid TokenStore object
+ *
+ * @param {Object} obj the object to validate
+ * @returns {boolean} returns true if the passed in object is a valid TokenStore object that
+ * has all the expected properties. false otherwise.
+ * @private
+ */
+function isObjectValidTokenStore(obj) {
+	return Boolean(obj &amp;&amp; obj.read &amp;&amp; obj.write &amp;&amp; obj.clear);
+}
 
 // ------------------------------------------------------------------------------
 // Public
@@ -62,13 +76,20 @@ const Promise = require('bluebird');
  * @param {string} id The Box ID of the entity to authenticate as
  * @param {Config} config The SDK configuration options
  * @param {TokenManager} tokenManager The TokenManager
+ * @param {TokenStore} [tokenStore] The token store instance to use for caching token info
  * @constructor
  */
-function AppAuthSession(type, id, config, tokenManager) {
+function AppAuthSession(type, id, config, tokenManager, tokenStore) {
 	this._type = type;
 	this._id = id;
 	this._config = config;
 	this._tokenManager = tokenManager;
+
+	// If tokenStore was provided, set the persistent data &amp; current store operations
+	if (tokenStore) {
+		assert(isObjectValidTokenStore(tokenStore), 'Token store provided is improperly formatted. Methods required: read(), write(), clear().');
+		this._tokenStore = Promise.promisifyAll(tokenStore);
+	}
 
 	// The TokenInfo object for this app auth session
 	this._tokenInfo = null;
@@ -94,6 +115,12 @@ AppAuthSession.prototype._refreshAppAuthAccessToken = function(options) {
 			.then(tokenInfo => {
 				// Set new token info and propagate the new access token
 				this._tokenInfo = tokenInfo;
+
+				if (this._tokenStore) {
+					return this._tokenStore.writeAsync(tokenInfo)
+						.then(() => tokenInfo.accessToken);
+				}
+
 				return tokenInfo.accessToken;
 			})
 			.finally(() => {
@@ -115,9 +142,26 @@ AppAuthSession.prototype._refreshAppAuthAccessToken = function(options) {
  * @returns {Promise&lt;string>} Promise resolving to the access token
  */
 AppAuthSession.prototype.getAccessToken = function(options) {
+
+	var expirationBuffer = Math.max(this._config.expiredBufferMS, this._config.staleBufferMS);
+
+	// If we're initializing the client and have a token store, try reading from it
+	if (!this._tokenInfo &amp;&amp; this._tokenStore) {
+
+		return this._tokenStore.readAsync()
+			.then(tokenInfo => {
+				if (!this._tokenManager.isAccessTokenValid(tokenInfo, expirationBuffer)) {
+					// Token store contains expired tokens, refresh
+					return this._refreshAppAuthAccessToken(options);
+				}
+
+				this._tokenInfo = tokenInfo;
+				return tokenInfo.accessToken;
+			});
+	}
+
 	// If the current token is not fresh, get a new token. All incoming
 	// requests will be held until a fresh token is retrieved.
-	var expirationBuffer = Math.max(this._config.expiredBufferMS, this._config.staleBufferMS);
 	if (!this._tokenInfo || !this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)) {
 		return this._refreshAppAuthAccessToken(options);
 	}
@@ -155,6 +199,31 @@ AppAuthSession.prototype.exchangeToken = function(scopes, resource, options) {
 };
 
 /**
+ * Handle an an "Expired Tokens" Error. If our tokens are expired, we need to clear the token
+ * store (if present) before continuing.
+ *
+ * @param {Errors~ExpiredTokensError} err An "expired tokens" error including information
+ *  about the request/response.
+ * @returns {Promise&lt;Error>} Promise resolving to an error.  This will
+ *  usually be the original response error, but could an error from trying to access the
+ *  token store as well.
+ */
+AppAuthSession.prototype.handleExpiredTokensError = function(err) {
+
+	if (!this._tokenStore) {
+		return Promise.resolve(err);
+	}
+
+	// If a token store is available, clear the store and throw either error
+	// eslint-disable-next-line promise/no-promise-in-callback
+	return this._tokenStore.clearAsync()
+		.catch(e => errors.unwrapAndThrow(e))
+		.then(() => {
+			throw err;
+		});
+};
+
+/**
  * @module box-node-sdk/lib/sessions/app-auth-session
  * @see {@Link AppAuthSession}
  */
@@ -169,13 +238,13 @@ module.exports = AppAuthSession;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-whitelists.html">box-node-sdk/lib/managers/collaboration-whitelists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationWhitelist.html">CollaborationWhitelist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-whitelists.html">box-node-sdk/lib/managers/collaboration-whitelists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationWhitelist.html">CollaborationWhitelist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 26 2018 13:43:23 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 10 2018 16:14:41 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
