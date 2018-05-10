@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BoxSDKNode</title>
+    <title>JSDoc: Class: StoragePolicies</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BoxSDKNode</h1>
+    <h1 class="page-title">Class: StoragePolicies</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>BoxSDKNode<span class="signature">(params)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>StoragePolicies<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="BoxSDKNode"><span class="type-signature"></span>new BoxSDKNode<span class="signature">(params)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="StoragePolicies"><span class="type-signature"></span>new StoragePolicies<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -49,14 +49,7 @@
 
 
 <div class="description">
-    A backend NodeJS SDK to interact with the Box V2 API.
-This is the single entry point for all SDK consumer interactions. This is the only file that a 3rd party app
-should require. All other components are private and reached out to via this component.
-1. Provides getters to spawn client instances for users to interact with the Box API.
-2. Provides manual capability to acquire tokens via token grant endpoints.
-   However, it is recommended to use clients to do this for you.
-3. Emits notification events about relevant request/response events. Useful for logging Box API interactions.
-   Notification events: request retries, exceeding max retries, permanent failures.
+    Simple manager for interacting with all Retention Policies endpoints and actions.
 </div>
 
 
@@ -92,13 +85,13 @@ should require. All other components are private and reached out to via this com
 
         <tr>
             
-                <td class="name"><code>params</code></td>
+                <td class="name"><code>client</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#UserConfigurationOptions">UserConfigurationOptions</a></span>
+<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
 
 
             
@@ -108,7 +101,7 @@ should require. All other components are private and reached out to via this com
 
             
 
-            <td class="description last">User settings used to initialize and customize the SDK</td>
+            <td class="description last">The Box API Client that is responsible for making calls to the API</td>
         </tr>
 
     
@@ -149,451 +142,7 @@ should require. All other components are private and reached out to via this com
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line78">line 78</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".validateWebhookMessage"><span class="type-signature">(static) </span>validateWebhookMessage<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Expose Webhooks.validateMessage() to the SDK as a whole. This allows
-the consumer to call BoxSDK.validateWebhookMessage() by just requiring the SDK,
-instead of needing to create a client (which is not needed to validate messages).
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line367">line 367</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="accessLevels"><span class="type-signature"></span>accessLevels<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Expose the BoxClient property enumerations to the SDK as a whole. This allows
-the consumer to access and use these values from anywhere in their application
-(like a helper) by requiring the SDK, instead of needing to pass the client.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line122">line 122</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".getPreconfiguredInstance"><span class="type-signature">(static) </span>getPreconfiguredInstance<span class="signature">(appConfig)</span><span class="type-signature"> &rarr; {<a href="BoxSDKNode.html">BoxSDKNode</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Gets the BoxSDKNode instance by passing boxAppSettings json downloaded from the developer console.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>appConfig</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">boxAppSettings object retrieved from Dev Console.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line135">line 135</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    an instance that has been preconfigured with the values from the Dev Console
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="BoxSDKNode.html">BoxSDKNode</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="configure"><span class="type-signature"></span>configure<span class="signature">(params)</span><span class="type-signature"> &rarr; {void}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Updates the SDK configuration with new parameters.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>params</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#UserConfigurationOptions">UserConfigurationOptions</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User settings</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line185">line 185</a>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -639,40 +188,8 @@ the consumer to access and use these values from anywhere in their application
 
 
 
-        
-            
-
     
-
-    
-    <h4 class="name" id="getAnonymousClient"><span class="type-signature"></span>getAnonymousClient<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="BoxClient.html">BoxClient</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns A Box Client with an Anonymous API Session. An Anonymous API Session has access to an anonymous
-client-credentials token, which isn't tied to any specific user. Because of this, the client will only
-have access to endpoints that allow client-credential tokens. All Anonymous API Sessions share the
-same tokens, which allows them to refresh them efficiently and reduce load on both the application and
-the API.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
+    </div>
 
     
 
@@ -689,67 +206,7 @@ the API.
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line230">line 230</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Returns a new Box Client paired to a AnonymousAPISession
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
+        <h3 class="subsection-title">Methods</h3>
 
         
             
@@ -757,7 +214,7 @@ the API.
     
 
     
-    <h4 class="name" id="getAppAuthClient"><span class="type-signature"></span>getAppAuthClient<span class="signature">(type, id, tokenStore<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="BoxClient.html">BoxClient</a>}</span></h4>
+    <h4 class="name" id="assign"><span class="type-signature"></span>assign<span class="signature">(storagePolicyID, userID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -765,9 +222,7 @@ the API.
 
 
 <div class="description">
-    Create a new client using App Auth for the given entity.  This allows either
-managing App Users (as the enterprise) or performing operations as the App
-Users themselves (as a user).
+    Assign a storage policy to a user
 </div>
 
 
@@ -805,7 +260,7 @@ Users themselves (as a user).
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>storagePolicyID</code></td>
             
 
             <td class="type">
@@ -829,209 +284,9 @@ Users themselves (as a user).
 
             
 
-            <td class="description last">The type of entity to operate as, "enterprise" or "user"</td>
+            <td class="description last">The ID of the storage policy to assign</td>
         </tr>
 
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The Box ID of the entity to operate as</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>tokenStore</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#TokenStore">TokenStore</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">(Optional) the token store to use for caching tokens</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line244">line 244</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    A new client authorized as the app user or enterprise
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getAppUserTokens"><span class="type-signature"></span>getAppUserTokens<span class="signature">(userID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;TokentInfo>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Gets tokens for App Users via a JWT grant
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
@@ -1060,40 +315,7 @@ Users themselves (as a user).
 
             
 
-            <td class="description last">The ID of the App User to generate a token for</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+            <td class="description last">The ID of the user to assign the storage policy to</td>
         </tr>
 
     
@@ -1126,7 +348,7 @@ Users themselves (as a user).
 
             
 
-            <td class="description last">Passed the tokens if successful</td>
+            <td class="description last">Passed the assignment object if successful</td>
         </tr>
 
     
@@ -1167,7 +389,7 @@ Users themselves (as a user).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line334">line 334</a>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -1194,7 +416,7 @@ Users themselves (as a user).
 
         
 <div class="param-desc">
-    Promise reolving to the token infp
+    Promise resolving to the assignment object
 </div>
 
 
@@ -1205,7 +427,7 @@ Users themselves (as a user).
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;TokentInfo></span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1223,7 +445,7 @@ Users themselves (as a user).
     
 
     
-    <h4 class="name" id="getAuthorizeURL"><span class="type-signature"></span>getAuthorizeURL<span class="signature">(params)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="createAssignment"><span class="type-signature"></span>createAssignment<span class="signature">(storagePolicyID, userID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -1231,8 +453,7 @@ Users themselves (as a user).
 
 
 <div class="description">
-    Generate the URL for the authorize page to send users to for the first leg of
-the OAuth2 flow.
+    Create a new storage policy assignment to a user
 </div>
 
 
@@ -1256,6 +477,8 @@ the OAuth2 flow.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1268,7 +491,269 @@ the OAuth2 flow.
 
         <tr>
             
-                <td class="name"><code>params</code></td>
+                <td class="name"><code>storagePolicyID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the storage policy to assign</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the user to assign the storage policy to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the assignment object if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line160">line 160</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving to the assignment object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(storagePolicyID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get information about a specific storage policy
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>storagePolicyID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the storage policy</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -1281,286 +766,22 @@ the OAuth2 flow.
             </td>
 
             
-
-            
-
-            <td class="description last">The OAuth2 parameters</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line264">line 264</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The authorize page URL
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getBasicClient"><span class="type-signature"></span>getBasicClient<span class="signature">(accessToken)</span><span class="type-signature"> &rarr; {<a href="BoxClient.html">BoxClient</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns a Box Client with a Basic API Session. The client is able to make requests on behalf of a user.
-A basic session has no access to a user's refresh token. Because of this, once the session's tokens
-expire the client cannot recover and a new session will need to be generated.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>accessToken</code></td>
-            
-
-            <td class="type">
-            
+                <td class="attributes">
                 
-<span class="param-type">string</span>
+                    &lt;optional><br>
+                
 
+                
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">A user's Box API access token</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line198">line 198</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Returns a new Box Client paired to a new BasicAPISession
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
+                
+                </td>
             
 
-    
+            
 
-    
-    <h4 class="name" id="getEnterpriseAppAuthTokens"><span class="type-signature"></span>getEnterpriseAppAuthTokens<span class="signature">(enterpriseID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Gets tokens for enterprise administration of app users
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
@@ -1586,44 +807,13 @@ expire the client cannot recover and a new session will need to be generated.
 
         <tr>
             
-                <td class="name"><code>enterpriseID</code></td>
+                <td class="name"><code>fields</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The ID of the enterprise to generate a token for</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
             
@@ -1643,7 +833,14 @@ expire the client cannot recover and a new session will need to be generated.
 
             
 
-            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+            <td class="description last">Comma-separated list of fields of the storage policy to retrieve</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1676,7 +873,7 @@ expire the client cannot recover and a new session will need to be generated.
 
             
 
-            <td class="description last">Passed the tokens if successful</td>
+            <td class="description last">Passed the storage policy object if successful</td>
         </tr>
 
     
@@ -1717,7 +914,7 @@ expire the client cannot recover and a new session will need to be generated.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line309">line 309</a>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -1744,7 +941,7 @@ expire the client cannot recover and a new session will need to be generated.
 
         
 <div class="param-desc">
-    Promise resolving to the token info
+    Promise resolving to the storage policy object
 </div>
 
 
@@ -1755,7 +952,7 @@ expire the client cannot recover and a new session will need to be generated.
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -1773,7 +970,7 @@ expire the client cannot recover and a new session will need to be generated.
     
 
     
-    <h4 class="name" id="getPersistentClient"><span class="type-signature"></span>getPersistentClient<span class="signature">(tokenInfo, tokenStore<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="BoxClient.html">BoxClient</a>}</span></h4>
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -1781,9 +978,7 @@ expire the client cannot recover and a new session will need to be generated.
 
 
 <div class="description">
-    Returns a Box Client with a persistent API session. A persistent API session helps manage the user's tokens,
-and can refresh them automatically if the access token expires. If a central data-store is given, the session
-can read & write tokens to it.
+    Get all available storage policies for the enterprise
 </div>
 
 
@@ -1821,44 +1016,13 @@ can read & write tokens to it.
 
         <tr>
             
-                <td class="name"><code>tokenInfo</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#TokenInfo">TokenInfo</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">A tokenInfo object to use for authentication</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>tokenStore</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#TokenStore">TokenStore</a></span>
+<span class="param-type">Object</span>
 
 
             
@@ -1878,124 +1042,9 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">An optional token store for reading/writing tokens to session</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line216">line 216</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Returns a new Box Client paired to a new PersistentAPISession
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getTokensAuthorizationCodeGrant"><span class="type-signature"></span>getTokensAuthorizationCodeGrant<span class="signature">(authorizationCode, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Acquires token info using an authorization code
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
@@ -2021,7 +1070,7 @@ can read & write tokens to it.
 
         <tr>
             
-                <td class="name"><code>authorizationCode</code></td>
+                <td class="name"><code>fields</code></td>
             
 
             <td class="type">
@@ -2036,37 +1085,6 @@ can read & write tokens to it.
             
                 <td class="attributes">
                 
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">authorization code issued by Box</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
                     &lt;optional><br>
                 
 
@@ -2078,7 +1096,14 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+            <td class="description last">Comma-separated list of fields of the storage policy to retrieve</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2111,7 +1136,7 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">passed a TokenInfo object if tokens were granted successfully</td>
+            <td class="description last">Passed a collection of storage policies if successful</td>
         </tr>
 
     
@@ -2152,7 +1177,7 @@ can read & write tokens to it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line279">line 279</a>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -2179,7 +1204,7 @@ can read & write tokens to it.
 
         
 <div class="param-desc">
-    Promise resolving to the token info
+    Promise resolving to the collection of storage policies
 </div>
 
 
@@ -2190,7 +1215,7 @@ can read & write tokens to it.
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2208,7 +1233,7 @@ can read & write tokens to it.
     
 
     
-    <h4 class="name" id="getTokensRefreshGrant"><span class="type-signature"></span>getTokensRefreshGrant<span class="signature">(refreshToken, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
+    <h4 class="name" id="getAssignment"><span class="type-signature"></span>getAssignment<span class="signature">(assignmentID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -2216,7 +1241,7 @@ can read & write tokens to it.
 
 
 <div class="description">
-    Refreshes the access and refresh tokens for a given refresh token.
+    Get information about a specific storage policy asisgnment by ID
 </div>
 
 
@@ -2254,7 +1279,7 @@ can read & write tokens to it.
 
         <tr>
             
-                <td class="name"><code>refreshToken</code></td>
+                <td class="name"><code>assignmentID</code></td>
             
 
             <td class="type">
@@ -2278,40 +1303,7 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">A valid OAuth refresh token</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+            <td class="description last">The ID of the assignment</td>
         </tr>
 
     
@@ -2344,7 +1336,7 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">passed a TokenInfo object if tokens were granted successfully</td>
+            <td class="description last">Passed the assignment object if successful</td>
         </tr>
 
     
@@ -2385,7 +1377,7 @@ can read & write tokens to it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line292">line 292</a>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -2412,7 +1404,7 @@ can read & write tokens to it.
 
         
 <div class="param-desc">
-    Promise resolving to the token info
+    Promise resolving to the assignment object
 </div>
 
 
@@ -2423,7 +1415,7 @@ can read & write tokens to it.
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
@@ -2441,7 +1433,7 @@ can read & write tokens to it.
     
 
     
-    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(token, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
+    <h4 class="name" id="getAssignmentForTarget"><span class="type-signature"></span>getAssignmentForTarget<span class="signature">(targetID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -2449,7 +1441,7 @@ can read & write tokens to it.
 
 
 <div class="description">
-    Revokes a token pair associated with a given access or refresh token.
+    Gets the storage policy assignment for a specific user
 </div>
 
 
@@ -2487,7 +1479,7 @@ can read & write tokens to it.
 
         <tr>
             
-                <td class="name"><code>token</code></td>
+                <td class="name"><code>targetID</code></td>
             
 
             <td class="type">
@@ -2511,7 +1503,7 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">A valid access or refresh token to revoke</td>
+            <td class="description last">The ID of the target</td>
         </tr>
 
     
@@ -2524,7 +1516,7 @@ can read & write tokens to it.
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+<span class="param-type">Object</span>
 
 
             
@@ -2544,7 +1536,76 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">Sets optional behavior for the token grant, null for default behavior</td>
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>targetType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    user
+                
+                </td>
+            
+
+            <td class="description last">The type of the assignment target to resolve for</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2577,7 +1638,7 @@ can read & write tokens to it.
 
             
 
-            <td class="description last">If err, revoke failed. Otherwise, revoke succeeded.</td>
+            <td class="description last">Passed the assignment object if successful</td>
         </tr>
 
     
@@ -2618,7 +1679,7 @@ can read & write tokens to it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line352">line 352</a>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -2645,7 +1706,7 @@ can read & write tokens to it.
 
         
 <div class="param-desc">
-    Promise resolving to the token info
+    Promise resolving to the assignment object
 </div>
 
 
@@ -2656,7 +1717,438 @@ can read & write tokens to it.
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeAssignment"><span class="type-signature"></span>removeAssignment<span class="signature">(assignmentID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Remove a storage policy assignment, returning the user to the default policy
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>assignmentID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the assignment to remove</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed nothing if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line202">line 202</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving if the removal succeeds
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateAssignment"><span class="type-signature"></span>updateAssignment<span class="signature">(assignmentID, updates, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Update a storage policy assignment
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>assignmentID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The ID of the storage policy assignment to update</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>updates</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The updates fields to apply</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the updated assignment object if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_storage-policies.js.html">managers/storage-policies.js</a>, <a href="managers_storage-policies.js.html#line186">line 186</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving to the updated assignment object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
 
 
     </dd>
