@@ -21,7 +21,7 @@ var APIRequestManager = require('../../lib/api-request-manager'),
 // Private
 // ------------------------------------------------------------------------------
 
-var sandbox = sinon.sandbox.create();
+var sandbox = sinon.createSandbox();
 
 var MODULE_FILE_PATH = '../../lib/token-manager',
 	API_ROOT_URL = 'api.box.com',

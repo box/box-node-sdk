@@ -18,7 +18,7 @@ var Readable = require('stream').Readable;
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake,
 	Files,
 	files,
@@ -1947,9 +1947,7 @@ describe('Files', function() {
 		beforeEach(function() {
 			expectedParams = {
 				body: {
-					lock: {
-						type: 'unlock'
-					}
+					lock: null
 				}
 			};
 		});

@@ -26,42 +26,67 @@ To attach a webhook to an item, call the
 method with the type and ID of the item, a URL to send notifications to, and a list
 of triggers.
 
-```js
-// Attach a webhook that sends a notification to https://YOURWEBSITE.com/ when
-//   file 759371 is uploaded or downloaded.
-client.webhooks.create(
-		'759371',
-		client.itemTypes.FILE,
-		'https://www.YOURWEBSITE.com/',
-		[
-			client.webhooks.triggerTypes.FILE.UPLOADED,
-			client.webhooks.triggerTypes.FILE.DOWNLOADED
-		],
-		callback
-	);
-```
-
-```js
-// Attach a webhook that sends a notification to https://YOURWEBSITE.com/ when
-//   folders are created or downloaded within folder 15937321.
-client.webhooks.create(
-		'15937321',
-		client.itemTypes.FOLDER,
-		'https://www.YOURWEBSITE.com.',
-		[
-			client.webhooks.triggerTypes.FOLDER.CREATED,
-			client.webhooks.triggerTypes.FOLDER.DOWNLOADED
-		],
-		callback
-	);
-```
-
 The notification URL must be a valid HTTPS URL that you specify when you create a
 webhook.
 
-The triggerTypes param is an array of strings. Available options are documented here
-(https://docs.box.com/reference#event-triggers)
+The triggerTypes param is an array of strings. Available options are documented here:
+<https://docs.box.com/reference#event-triggers>
 
+```js
+// Attach a webhook that sends a notification to https://example.com/webhook when
+//   file 11111 is renamed or downloaded.
+client.webhooks.create(
+	'11111',
+	client.itemTypes.FILE,
+	'https://example.com/webhook',
+	[
+		client.webhooks.triggerTypes.FILE.RENAMED,
+		client.webhooks.triggerTypes.FILE.DOWNLOADED
+	])
+	.then(webhook => {
+		/* webhook -> {
+			id: '12345',
+			type: 'webhook',
+			target: { id: '11111', type: 'file' },
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2016-05-09T17:41:27-07:00',
+			address: 'https://example.com/webhook',
+			triggers: [ 'FILE.RENAMED', 'FILE.UPLOADED' ] }
+		*/
+	});
+```
+
+```js
+// Attach a webhook that sends a notification to https://example.com/webhook when
+//   files are uploaded or downloaded within folder 22222.
+client.webhooks.create(
+	'22222',
+	client.itemTypes.FOLDER,
+	'https://example.com/webhook',
+	[
+		client.webhooks.triggerTypes.FILE.UPLOADED,
+		client.webhooks.triggerTypes.FILE.DOWNLOADED
+	])
+	.then(webhook => {
+		/* webhook -> {
+			id: '1234',
+			type: 'webhook',
+			target: { id: '22222', type: 'folder' },
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2016-05-09T17:41:27-07:00',
+			address: 'https://example.com/webhook',
+			triggers: [ 'FILE.DOWNLOADED', 'FILE.UPLOADED' ] }
+		*/
+	});
+```
 
 Get a Webhook's Information
 ---------------------------
@@ -71,7 +96,22 @@ Retrieve information about a specific webhook by calling
 to retrieve a webhook by ID.
 
 ```js
-client.webhooks.get('67890', null, callback);
+client.webhooks.get('1234')
+	.then(webhook => {
+		/* webhook -> {
+			id: '1234',
+			type: 'webhook',
+			target: { id: '22222', type: 'folder' },
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2016-05-09T17:41:27-07:00',
+			address: 'https://example.com/webhook',
+			triggers: [ 'FILE.DOWNLOADED', 'FILE.UPLOADED' ] }
+		*/
+	});
 ```
 
 Get all Webhooks Information
@@ -82,7 +122,20 @@ Get a list of all webhooks for the requesting application and user by calling th
 method.  The maximum limit per page of results is 200, Box uses the default limit of 100.
 
 ```js
-client.webhooks.getAll({limit: 100}, callback);
+client.webhooks.getAll()
+	.then(webhooks => {
+		/* webhooks -> {
+			next_marker: 'ZmlQZS0xLTE%3D',
+			entries: 
+			[ { id: '1234',
+				type: 'webhook',
+				target: { id: '22222', type: 'folder' } },
+				{ id: '5678',
+				type: 'webhook',
+				target: { id: '11111', type: 'file' } } ],
+			limit: 2 }
+		*/
+	});
 ```
 
 Update a Webhook
@@ -93,7 +146,22 @@ Update a file or folder's webhook by calling
 with the field you want to update as `updates.address` or `updates.trigger`.
 
 ```js
-client.webhooks.update('678901', {address: "https://NEWWEBSITE.com"}, callback);
+client.webhooks.update('678901', {address: "https://example.com/webhooks/fileActions"})
+	.then(webhook => {
+		/* webhook -> {
+			id: '1234',
+			type: 'webhook',
+			target: { id: '22222', type: 'folder' },
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2016-05-09T17:41:27-07:00',
+			address: 'https://example.com/webhooks/fileActions',
+			triggers: [ 'FILE.DOWNLOADED', 'FILE.UPLOADED' ] }
+		*/
+	});
 ```
 
 Delete a Webhook
@@ -103,14 +171,17 @@ A file or folder's webhook can be removed by calling
 [`webhooks.delete(webhookID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#delete).
 
 ```js
-client.webhooks.delete('678901', callback);
+client.webhooks.delete('1234')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Validate a Webhook Message
 --------------------------
 
 When you receive a webhook message from Box, you should validate it by calling
-[`BoxSDK.validateWebhookMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#validateMessage),
+[`BoxSDK.validateWebhookMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#.validateMessage),
 also available as `webhooks.validateMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`.
 
 ```js

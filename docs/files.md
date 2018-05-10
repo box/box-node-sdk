@@ -50,7 +50,66 @@ Calling
 on a file returns a snapshot of the file's info.
 
 ```js
-client.files.get('75937', null, callback);
+client.files.get('11111')
+	.then(file => {
+		/* file -> {
+			type: 'file',
+			id: '11111',
+			file_version: 
+			{ type: 'file_version',
+				id: '22222',
+				sha1: '97b3dbba6eab7ad0f058240744c8636b7c7bea93' },
+			sequence_id: '1',
+			etag: '1',
+			sha1: '97b3dbba6eab7ad0f058240744c8636b7c7bea93',
+			name: 'Puppy.png',
+			description: '',
+			size: 106833,
+			path_collection: 
+			{ total_count: 2,
+				entries: 
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' },
+					{ type: 'folder',
+					id: '33333',
+					sequence_id: '0',
+					etag: '0',
+					name: 'Collaborated Folder' } ] },
+			created_at: '2016-11-16T22:01:44-08:00',
+			modified_at: '2016-11-16T22:01:51-08:00',
+			trashed_at: null,
+			purged_at: null,
+			content_created_at: '2016-10-29T18:33:50-07:00',
+			content_modified_at: '2016-10-29T18:33:50-07:00',
+			created_by: 
+			{ type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com' },
+			modified_by: 
+			{ type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com' },
+			owned_by: 
+			{ type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com' },
+			shared_link: null,
+			parent: 
+			{ type: 'folder',
+				id: '33333',
+				sequence_id: '0',
+				etag: '0',
+				name: 'Collaborated Folder' },
+			item_status: 'active' }
+
+		*/
+	});
 ```
 
 Requesting information for only the fields you need with the `fields` option
@@ -58,7 +117,21 @@ can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
-client.files.get('75937', {fields: 'size,owned_by'}, callback);
+client.files.get('11111', { fields: 'size,owned_by' })
+	.then(file => {
+		/* file -> {
+			type: 'file',
+			id: '11111',
+			size: 106833,
+			owned_by: {
+				type: 'user',
+				id: '44444',
+				name: 'Owner',
+				login: 'owner@example.com'
+			}
+		}
+		*/
+	});
 ```
 
 Update a File's Information
@@ -69,7 +142,15 @@ Updating a file's information is done by calling
 with the fields to be updated.
 
 ```js
-client.files.update('75937', {name : 'New Name'}, callback);
+client.files.update('75937', { name : 'New name.pdf', fields: 'name' })
+	.then(updatedFile => {
+		/* updatedFile => {
+			type: 'file',
+			id: '11111',
+			name: 'New name.pdf'
+		}
+		*/
+	});
 ```
 
 Download a File
@@ -115,14 +196,10 @@ The download URL of a file an be retrieved by calling
 It returns the URL as a string.
 
 ```js
-client.files.getDownloadURL('12345', null, function(error, downloadURL) {
-	if (error) {
-		//handle error
-	}
-
-	//process the downloadURL
-}
-});
+client.files.getDownloadURL('12345')
+	.then(downloadURL => {
+		// downloadURL -> 'https://dl.boxcloud.com/...'
+	});
 ```
 
 Upload a File
@@ -132,17 +209,66 @@ The simplest way to upload a file to a folder is by calling the
 [`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
 method with a `stream.Readable` or `Buffer` of the file to upload.
 
-Stream:
 ```js
 var fs = require('fs');
-var stream = fs.createReadStream('/path/to/file');
-client.files.uploadFile('98768', 'New File', stream, callback);
-```
-
-Buffer:
-```js
-var buffer = new Buffer(50);
-client.files.uploadFile('98768', 'New File', buffer, callback);
+var stream = fs.createReadStream('/path/to/My File.pdf');
+var folderID = '0'
+client.files.uploadFile(folderID, 'My File.pdf', stream)
+	.then(file => {
+		/* file -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file',
+				id: '11111',
+				file_version: 
+					{ type: 'file_version',
+					id: '22222',
+					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+				name: 'My File.pdf',
+				description: '',
+				size: 68431,
+				path_collection: 
+					{ total_count: 1,
+					entries: 
+					[ { type: 'folder',
+						id: '0',
+						sequence_id: null,
+						etag: null,
+						name: 'All Files' } ] },
+				created_at: '2017-05-16T15:18:02-07:00',
+				modified_at: '2017-05-16T15:18:02-07:00',
+				trashed_at: null,
+				purged_at: null,
+				content_created_at: '2017-05-16T15:18:02-07:00',
+				content_modified_at: '2017-05-16T15:18:02-07:00',
+				created_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				modified_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				owned_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				shared_link: null,
+				parent: 
+					{ type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' }
+				item_status: 'active' } ] }
+		*/
+	});
 ```
 
 To preserve file timestamps, you may pass the created and modified times as optional parameters:
@@ -153,7 +279,10 @@ var options = {
 	content_created_at: '2015-05-12T17:38:14-0600',
 	content_modified_at: '2016-02-15T22:42:09-0600'
 };
-client.files.uploadFile('98768', 'New File', stream, options, callback);
+client.files.uploadFile('98768', 'New File', stream, options)
+	.then(file => {
+		// ...
+	});
 ```
 
 Chunked Upload
@@ -433,7 +562,67 @@ A file can be copied to a new folder with the
 method.
 
 ```js
-client.files.copy('12345', '0', callback);
+var fileID = '11111';
+var destinationFolderID = '22222';
+client.files.copy(fileID, destinationFolderID)
+	.then(fileCopy => {
+		/* fileCopy -> {
+			type: 'file',
+			id: '11112',
+			file_version: 
+				{ type: 'file_version',
+				id: '99999',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+			sequence_id: '0',
+			etag: '0',
+			sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+			name: 'My File.pdf',
+			description: '',
+			size: 68431,
+			path_collection: 
+				{ total_count: 1,
+				entries: 
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' },
+					{ type: 'folder',
+					id: '22222',
+					sequence_id: null,
+					etag: null,
+					name: 'Personal Files' } ] },
+			created_at: '2017-05-16T15:18:02-07:00',
+			modified_at: '2017-05-16T15:18:02-07:00',
+			trashed_at: null,
+			purged_at: null,
+			content_created_at: '2017-05-16T15:18:02-07:00',
+			content_modified_at: '2017-05-16T15:18:02-07:00',
+			created_by: 
+				{ type: 'user',
+				id: '33333',
+				name: 'Test User',
+				login: 'test@example.com' },
+			modified_by: 
+				{ type: 'user',
+				id: '33333',
+				name: 'Test User',
+				login: 'test@example.com' },
+			owned_by: 
+				{ type: 'user',
+				id: '33333',
+				name: 'Test User',
+				login: 'test@example.com' },
+			shared_link: null,
+			parent: 
+				{ type: 'folder',
+				id: '22222',
+				sequence_id: null,
+				etag: null,
+				name: 'Personal Files' }
+			item_status: 'active' }
+		*/
+	});
 ```
 
 An optional `name` parameter can also be passed to rename the file on copy.  This can be
@@ -452,7 +641,10 @@ Calling the
 method will move the file to the user's trash.
 
 ```js
-client.files.delete('12345', callback);
+client.files.delete('12345')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Get File Versions
@@ -462,7 +654,25 @@ Retrieve a list of previous versions of a file by calling the
 [`files.getVersions(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getVersions).
 
 ```js
-client.files.getVersions('12345', null, callback);
+client.files.getVersions('12345')
+	.then(versions => {
+		/* versions -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file_version',
+				id: '22222',
+				sha1: '359c6c1ed98081b9a69eb3513b9deced59c957f9',
+				name: 'script.js',
+				size: 92556,
+				created_at: '2012-08-20T10:20:30-07:00',
+				modified_at: '2012-11-28T13:14:58-08:00',
+				modified_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Example User',
+					login: 'user@example.com' } } ] }
+		*/
+	});
 ```
 
 Requesting information for only the fields you need with the `fields` option
@@ -470,7 +680,18 @@ can improve performance and reduce the size of the network request.
 
 ```js
 // Only get information about a few specific fields.
-client.files.getVersions('12345', {fields: 'name,size,sha1'}, callback);
+client.files.getVersions('12345', {fields: 'name,size,sha1'})
+	.then(versions => {
+		/* versions -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file_version',
+				id: '22222',
+				sha1: '359c6c1ed98081b9a69eb3513b9deced59c957f9',
+				name: 'script.js',
+				size: 92556 } ] }
+		*/
+	});
 ```
 
 Upload a New Version of a File
@@ -481,20 +702,128 @@ New versions of a file can be uploaded with the
 
 ```js
 var fs = require('fs');
-var stream = fs.createReadStream('/path/to/file');
-client.files.uploadNewFileVersion('98768', stream, callback);
+var stream = fs.createReadStream('/path/to/file.pdf');
+client.files.uploadNewFileVersion('11111', stream)
+	.then(file => {
+		/* file -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file',
+				id: '11111',
+				file_version: 
+					{ type: 'file_version',
+					id: '22222',
+					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+				name: 'My File.pdf',
+				description: '',
+				size: 68431,
+				path_collection: 
+					{ total_count: 1,
+					entries: 
+					[ { type: 'folder',
+						id: '0',
+						sequence_id: null,
+						etag: null,
+						name: 'All Files' } ] },
+				created_at: '2017-05-16T15:18:02-07:00',
+				modified_at: '2017-05-16T15:18:02-07:00',
+				trashed_at: null,
+				purged_at: null,
+				content_created_at: '2017-05-16T15:18:02-07:00',
+				content_modified_at: '2017-05-16T15:18:02-07:00',
+				created_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				modified_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				owned_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				shared_link: null,
+				parent: 
+					{ type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' }
+				item_status: 'active' } ] }
+		*/
 ```
 
 To rename the file on upload or manually specify a modification timestamp for the file, pass the corresponding optional
 parameter:
 ```js
 var fs = require('fs');
-var stream = fs.createReadStream('/path/to/file');
+var stream = fs.createReadStream('/path/to/file.pdf');
 var options = {
-	name: 'New filename.docx',
+	name: 'New filename.pdf',
 	content_modified_at: '2016-02-15T22:42:09-0600'
 };
-client.files.uploadNewFileVersion('98768', stream, options, callback);
+client.files.uploadNewFileVersion('11111', stream, options)
+	.then(file => {
+		/* file -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file',
+				id: '11111',
+				file_version: 
+					{ type: 'file_version',
+					id: '22222',
+					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+				name: 'New filename.pdf',
+				description: '',
+				size: 68431,
+				path_collection: 
+					{ total_count: 1,
+					entries: 
+					[ { type: 'folder',
+						id: '0',
+						sequence_id: null,
+						etag: null,
+						name: 'All Files' } ] },
+				created_at: '2017-05-16T15:18:02-07:00',
+				modified_at: '2017-05-16T15:18:02-07:00',
+				trashed_at: null,
+				purged_at: null,
+				content_created_at: '2017-05-16T15:18:02-07:00',
+				content_modified_at: '2016-02-15T22:42:09-0600',
+				created_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				modified_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				owned_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				shared_link: null,
+				parent: 
+					{ type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' }
+				item_status: 'active' } ] }
+		*/
 ```
 
 Download a Previous Version of a File
@@ -527,7 +856,12 @@ An old version of a file can be moved to the trash by calling the
 method.
 
 ```js
-client.files.deleteVersion('12345', '98768', callback)
+var fileID = '11111';
+var versionID = '22222';
+client.files.deleteVersion(fileID, versionID)
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Create a Shared Link
@@ -539,7 +873,11 @@ shared link access level to
 in the `updates` parameter.
 
 ```js
-client.files.update('93745', {shared_link: client.accessLevels.DEFAULT}, callback)
+client.files.update('93745', {shared_link: client.accessLevels.DEFAULT})
+	.then(file => {
+		var sharedLinkURL = file.shared_link.url;
+		// ...
+	});
 ```
 
 Promote Version
@@ -548,7 +886,25 @@ Promote Version
 Promote file version to the top of the stack by calling the [`files.promoteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#promoteVersion) method.
 
 ```js
-client.files.promoteVersion('12345', '98768', callback);
+var fileID = '11111';
+var versionID = '22222';
+client.files.promoteVersion(fileID, versionID)
+	.then(version => {
+		/* version -> {
+			type: 'file_version',
+			id: '33333',
+			sha1: '12039d6dd9a7e6eefc78846802e',
+			name: 'Stark Family Lineage.pptx',
+			size: 37934912,
+			created_at: '2013-11-20T13:20:50-08:00',
+			modified_at: '2013-11-20T13:26:48-08:00',
+			modified_by: 
+			{ type: 'user',
+				id: '44444',
+				name: 'Eddard Stark',
+				login: 'ned@winterfell.example.com' } }
+		*/
+	});
 ```
 
 Get Thumbnail
@@ -558,20 +914,16 @@ A thumbnail for a file can be retrieved by calling
 [`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail).
 
 ```js
-client.files.getThumbnail('12345', null, function(error, response) {
-
-	if (error) {
-		// handle error
-	}
-
-	if (response.location) {
-		// fetch thumbnail from URL
-	} else if (response.file) {
-		// use response.file contents as thumbnail
-	} else {
-		// no thumbnail available
-	}
-});
+client.files.getThumbnail('12345')
+	.then(thumbnailInfo => {
+		if (thumbnailInfo.location) {
+			// fetch thumbnail from location URL
+		} else if (thumbnailInfo.file) {
+			// use response.file Buffer contents as thumbnail
+		} else {
+			// no thumbnail available
+		}
+	});
 ```
 
 Get Embed Link
@@ -585,7 +937,10 @@ usually via an `<iframe>` element.
 For more information, see the [API documentation](https://docs.box.com/reference#get-embed-link).
 
 ```js
-client.files.getEmbedLink('12345', callback);
+client.files.getEmbedLink('12345')
+	.then(embedURL => {
+		// embedURL -> "https://app.box.com/preview/expiring_embed/..."
+	});
 ```
 
 
@@ -598,14 +953,29 @@ method  You may optionally prevent other users from downloading the file, as wel
 an expiration time for the lock.
 
 ```js
-client.files.lock(
-		'12345',
-		{
-			expires_at: '2018-12-12T10:55:30-08:00',
-			is_download_prevented: false
-		},
-		callback
-	);
+var options = {
+	expires_at: '2018-12-12T10:55:30-08:00',
+	is_download_prevented: false
+}
+client.files.lock('11111', options)
+	.then(file => {
+		/* file -> {
+			type: 'file',
+			id: '11111',
+			etag: '2',
+			lock: 
+			{ type: 'lock',
+				id: '22222',
+				created_by: 
+				{ type: 'user',
+					id: '33333',
+					name: 'Example User',
+					login: 'user@example.com' },
+				created_at: '2017-03-06T22:00:53-08:00',
+				expires_at: '2018-12-12T10:55:30-08:00',
+				is_download_prevented: false } }
+		*/
+	});
 ```
 
 Unlock a File
@@ -616,7 +986,15 @@ A file can be unlocked by calling the
 method.
 
 ```js
-client.files.unlock('12345', callback);
+client.files.unlock('11111')
+	.then(file => {
+		/* file -> {
+			type: 'file',
+			id: '11111',
+			etag: '2',
+			lock: null }
+		*/
+	});
 ```
 
 Get Representation Info
@@ -624,23 +1002,34 @@ Get Representation Info
 
 A file's representation info can be retrieved by calling
 [`files.getRepresentationInfo(fileID, representationTypes, callback)`][get-rep-info].
-You will be able to fetch information regarding pdf representation, thumbnail representation, multi-page images
+You will be able to fetch information regarding PDF representation, thumbnail representation, multi-page images
 representation, and extracted text representation.
 
-You can retrieve information regarding the generated representations by calling. This will retrieve information
-for a 2048x2048 jpg representation and a 2048x2048 png representation generated for your Box file.
 ```js
-client.files.getRepresentationInfo('67890', client.files.representation.IMAGE_LARGE, callback);
+client.files.getRepresentationInfo('67890', client.files.representation.THUMBNAIL)
+	.then(representations => {
+		/* representations -> {
+			entries: 
+			[ { content: { url_template: 'https://dl.boxcloud.com/.../{+asset_path}' },
+				info: { url: 'https://api.box.com/2.0/...' },
+				properties: { dimensions: '320x320', paged: 'false', thumb: 'true' },
+				representation: 'jpg',
+				status: { state: 'success' } } ] }
+		*/
+	});
 ```
 
 You can specify your own set of representations to get info for by manually constructing the
 [X-Rep-Hints value][x-rep-hints] and passing it as `representationTypes`.
 
 ```js
-client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', callback);
+client.files.getRepresentationInfo('67890', '[pdf][extracted_text]')
+	.then(representations => {
+		// ...
+	});
 ```
 
-[get-rep-info]: https://opensource.box.com/box-node-sdk/Files.html#getRepresentationInfo
+[get-rep-info]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getRepresentationInfo
 [x-rep-hints]: https://developer.box.com/reference#section-x-rep-hints-header
 
 Get Representation Content
@@ -679,3 +1068,5 @@ client.files.getRepresentationContent('12345', '[png?dimensions=1024x1024]', { a
 		});
 	});
 ```
+
+[get-rep-content]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getRepresentationContent

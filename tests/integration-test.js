@@ -25,7 +25,7 @@ describe('Box Node SDK', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create();
+	var sandbox = sinon.createSandbox();
 
 	var TEST_API_ROOT = 'https://api.box.com',
 		TEST_CLIENT_ID = 'client_id',
