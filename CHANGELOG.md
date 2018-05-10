@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.17.0
+
+- Updated dependencies: `request@2.85.0`, `jsonwebtoken@8.2.1`
+- Added support for [Storage Policies](./docs/storage-policies.md)
+- Added the option to use a Token Store for caching tokens with App Auth using JWT
+
 ## 1.16.1
 
 - Fixed a bug where metadata template deletion would not properly return results via callback
