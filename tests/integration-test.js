@@ -25,7 +25,7 @@ describe('Box Node SDK', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create();
+	var sandbox = sinon.createSandbox();
 
 	var TEST_API_ROOT = 'https://api.box.com',
 		TEST_CLIENT_ID = 'client_id',
@@ -37,6 +37,7 @@ describe('Box Node SDK', function() {
 		BoxSDK;
 
 	beforeEach(function() {
+		nock.disableNetConnect();
 		apiMock = nock(TEST_API_ROOT);
 
 		mockery.enable({
@@ -1289,5 +1290,72 @@ describe('Box Node SDK', function() {
 				});
 		});
 		/* eslint-enable promise/no-callback-in-promise */
+	});
+
+	it('should correctly reconfigure SDK instance', function() {
+
+		var folderID = '98740596456',
+			folderName = 'Test Folder',
+			tokenStoreFake = leche.create([
+				'read',
+				'write',
+				'clear'
+			]),
+			refreshToken = 'rt',
+			expiredTokenInfo = {
+				accessToken: 'expired_at',
+				refreshToken,
+				acquiredAtMS: Date.now() - 3600000,
+				accessTokenTTLMS: 60000
+			};
+
+		sandbox.mock(tokenStoreFake).expects('write')
+			.withArgs(sinon.match({
+				accessToken: TEST_ACCESS_TOKEN,
+				refreshToken: 'new_rt'
+			}))
+			.yieldsAsync();
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 0,
+			retryIntervalMS: 1,
+			apiRootURL: 'https://example.com'
+		});
+
+		sdk.configure({
+			apiRootURL: TEST_API_ROOT
+		});
+
+		apiMock
+			.post('/oauth2/token', {
+				grant_type: 'refresh_token',
+				refresh_token: refreshToken,
+				client_id: TEST_CLIENT_ID,
+				client_secret: TEST_CLIENT_SECRET
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				refresh_token: 'new_rt',
+				expires_in: 256
+			})
+			.get(`/2.0/folders/${folderID}`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(200, {
+				id: folderID,
+				name: folderName
+			});
+
+		var client = sdk.getPersistentClient(expiredTokenInfo, tokenStoreFake);
+
+		return client.folders.get(folderID)
+			.then(folder => {
+				assert.propertyVal(folder, 'id', folderID);
+				assert.propertyVal(folder, 'name', folderName);
+			});
 	});
 });

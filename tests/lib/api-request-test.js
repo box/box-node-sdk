@@ -27,7 +27,7 @@ var assert = require('chai').assert,
 var MODULE_UNDER_TEST_PATH = '../../lib/api-request';
 
 // then variables
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	config,
 	requestStub,
 	requestObjectStub,

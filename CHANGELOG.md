@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.16.1
+
+- Fixed a bug where metadata template deletion would not properly return results via callback
+
+## 1.16.0
+
+- Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md#assign-retention-policy)
+
+## 1.15.0
+
+- Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md#validate-a-webhook-message)
+to accept the request body as an `Object`
+- Fixed `sdk.configure()` to correct reconfigure all options
+- Improved error messages for API errors and added the request object as `error.request` for easier debugging
+
+## 1.14.1
+
+- Fixed a bug when `files.getReadStream()` was called with null options
+
+## 1.14.0
+
+- Added support for [getting a metadata template by ID](./docs/metadata.md#get-by-id)
+- Added a `byteRange` option to [file download](./docs/files.md#download-a-file) to support partial file download
+- Improved error messages when using promises and in authentication flows
+
 ## 1.13.0
 
 - Added support for getting a [stream of file representation contents](./docs/files.md#get-representation-content)

@@ -142,7 +142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line52">line 52</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -262,7 +262,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line83">line 83</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -335,7 +335,7 @@ be done when the retention period is over
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line73">line 73</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -408,7 +408,7 @@ remain in effect.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line62">line 62</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -436,7 +436,7 @@ remain in effect.
     
 
     
-    <h4 class="name" id="assign"><span class="type-signature"></span>assign<span class="signature">(policyID, assignType, assignID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="assign"><span class="type-signature"></span>assign<span class="signature">(policyID, assignType, assignID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -578,6 +578,100 @@ Method: POST
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters for the request
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filter_fields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#MetadataFilterField">MetadataFilterField</a>></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Metadata fields to filter against, if assigning to a metadata template</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -645,7 +739,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line217">line 217</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line227">line 227</a>
     </li></ul></dd>
     
 
@@ -1004,7 +1098,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line102">line 102</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line110">line 110</a>
     </li></ul></dd>
     
 
@@ -1240,7 +1334,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line128">line 128</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -1572,7 +1666,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line174">line 174</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line182">line 182</a>
     </li></ul></dd>
     
 
@@ -2071,7 +2165,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line297">line 297</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line315">line 315</a>
     </li></ul></dd>
     
 
@@ -2307,7 +2401,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line244">line 244</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -2604,7 +2698,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line195">line 195</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -2842,7 +2936,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line267">line 267</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line285">line 285</a>
     </li></ul></dd>
     
 
@@ -3203,7 +3297,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line151">line 151</a>
+        <a href="managers_retention-policies.js.html">managers/retention-policies.js</a>, <a href="managers_retention-policies.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -3275,7 +3369,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Mar 01 2018 12:34:03 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 26 2018 13:43:23 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

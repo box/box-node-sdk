@@ -34,7 +34,7 @@ var APIRequest = require('../../lib/api-request');
 var MODULE_UNDER_TEST_PATH = '../../lib/api-request-manager';
 
 // then variables
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	apiRequestFake,
 	APIRequestConstructorStub,
 	APIRequestManager,

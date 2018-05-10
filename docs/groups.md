@@ -23,6 +23,26 @@ operations, such as collaborations.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+Get All Groups
+--------------
+
+To get a list of all groups in the calling user's enterprise, call the
+[`groups.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getAll)
+method.  Note that this requires permission to view an enterprise's groups, which
+is reserved for enterprise administrators.
+
+```js
+client.groups.getAll()
+	.then(groups => {
+		/* groups -> {
+			total_count: 1,
+			entries: [ { type: 'group', id: '1786931', name: 'friends' } ],
+			limit: 100,
+			offset: 0 }
+		*/
+	});
+```
+
 Create Group
 ------------
 
@@ -31,7 +51,16 @@ To create a new group, call the
 method.
 
 ```js
-client.groups.create('My group', {description: 'An example group'}, callback);
+client.groups.create('My group', {description: 'An example group'})
+	.then(group => {
+		/* group -> {
+			type: 'group',
+			id: '119720',
+			name: 'Box Employees',
+			created_at: '2013-05-16T15:27:57-07:00',
+			modified_at: '2013-05-16T15:27:57-07:00' }
+		*/
+	});
 ```
 
 Get Group
@@ -42,14 +71,26 @@ To retrieve the information for a group, call the
 method.
 
 ```js
-client.groups.get('78346', null, callback);
+client.groups.get('11111')
+	.then(group => {
+		/* group -> {
+			type: 'group',
+			id: '11111',
+			name: 'Everyone',
+			created_at: '2014-09-15T13:15:35-07:00',
+			modified_at: '2014-09-15T13:15:35-07:00' }
+		*/
+	});
 ```
 
 Requesting information for only the fields you need with the `fields` option
 can improve performance and reduce the size of the network request.
 
 ```js
-client.groups.get('12345', {fields: 'name,description'}, callback);
+client.groups.get('12345', {fields: 'name,description'})
+	.then(group => {
+		// ...
+	});
 ```
 
 Update Group
@@ -60,7 +101,16 @@ To change the properties of a group object, call the
 method with `updates` being the set of properties to update.
 
 ```js
-client.groups.update('873645', {name: 'New group name'}, callback);
+client.groups.update('11111', {name: 'New group name'})
+	.then(group => {
+		/* group -> {
+			type: 'group',
+			id: '11111',
+			name: 'New group name',
+			created_at: '2014-09-15T13:15:35-07:00',
+			modified_at: '2014-09-16T13:15:35-07:00' }
+		*/	
+	});
 ```
 
 Delete Group
@@ -71,7 +121,10 @@ To delete a group, call the
 method.
 
 ```js
-client.groups.delete('238475', callback);
+client.groups.delete('11111')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Add a User to a Group
@@ -82,7 +135,27 @@ To add a user to a group, call the
 method.
 
 ```js
-client.groups.addUser('12345', '54321', {role: client.groups.userRoles.MEMBER}, callback);
+var groupID = '11111';
+var userID = '22222';
+client.groups.addUser(groupID, userID, {role: client.groups.userRoles.MEMBER})
+	.then(membership => {
+		/* membership -> {
+			type: 'group_membership',
+			id: '33333',
+			user: 
+			{ type: 'user',
+				id: '22222',
+				name: 'Alison Wonderland',
+				login: 'alice@example.com' },
+			group: { type: 'group', id: '11111', name: 'Employees' },
+			role: 'member',
+			configurable_permissions: 
+			{ can_run_reports: false,
+				can_instant_login: false,
+				can_create_accounts: false,
+				can_edit_accounts: false } }
+		*/
+	});
 ```
 
 Get Membership
@@ -94,15 +167,46 @@ given user is in the group, call the
 method.
 
 ```js
-client.groups.getMembership('38456', null, callback);
+client.groups.getMembership('33333')
+	.then(membership => {
+		/* membership -> {
+			type: 'group_membership',
+			id: '33333',
+			user: 
+			{ type: 'user',
+				id: '22222',
+				name: 'Alison Wonderland',
+				login: 'alice@example.com' },
+			group: { type: 'group', id: '11111', name: 'Employees' },
+			role: 'member',
+			configurable_permissions: 
+			{ can_run_reports: false,
+				can_instant_login: false,
+				can_create_accounts: false,
+				can_edit_accounts: false },
+			created_at: '2013-05-16T15:27:57-07:00',
+			modified_at: '2013-05-16T15:27:57-07:00' }
+		*/
+	});
 ```
 
 Requesting information for only the fields you need with the `fields` option
 can improve performance and reduce the size of the network request.
 
 ```js
-// Get a list of users in the group and when they were added
-client.groups.getMembership('12345', {fields: 'user,created_at'}, callback);
+client.groups.getMembership('33333', {fields: 'user,created_at'})
+	.then(membership => {
+		/* membership -> {
+			type: 'group_membership',
+			id: '33333',
+			user: 
+			{ type: 'user',
+				id: '22222',
+				name: 'Alison Wonderland',
+				login: 'alice@example.com' },
+			created_at: '2013-05-16T15:27:57-07:00'
+		*/
+	});
 ```
 
 Get Group Memberships for a User
@@ -114,7 +218,25 @@ method.  Note that this method requires the calling user to have permission to
 view groups, which is restricted to enterprise administrators.
 
 ```js
-client.users.getGroupMemberships('873645', null, callback);
+var userID = '22222';
+client.users.getGroupMemberships(userID)
+	.then(memberships => {
+		/* memberships -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'group_membership',
+				id: '12345',
+				user: 
+					{ type: 'user',
+					id: '22222',
+					name: 'Alison Wonderland',
+					login: 'alice@example.com' },
+				group: { type: 'group', id: '11111', name: 'Employees' },
+				role: 'member' } ],
+			limit: 100,
+			offset: 0 }
+		*/
+	});
 ```
 
 Update Membership
@@ -126,7 +248,27 @@ method with `updates` being the properties to update.
 
 ```js
 // Promote a user to group admin
-client.groups.updateMembership('12345', {role: client.groups.userRoles.ADMIN}, callback);
+client.groups.updateMembership('12345', {role: client.groups.userRoles.ADMIN})
+	.then(membership => {
+		/* membership -> {
+			type: 'group_membership',
+			id: '33333',
+			user: 
+			{ type: 'user',
+				id: '22222',
+				name: 'Alison Wonderland',
+				login: 'alice@example.com' },
+			group: { type: 'group', id: '11111', name: 'Employees' },
+			role: 'admin',
+			configurable_permissions: 
+			{ can_run_reports: false,
+				can_instant_login: false,
+				can_create_accounts: false,
+				can_edit_accounts: false },
+			created_at: '2013-05-16T15:27:57-07:00',
+			modified_at: '2013-05-16T15:27:57-07:00' }
+		*/
+	});
 ```
 
 Remove Membership
@@ -137,7 +279,10 @@ To remove a specific membership record, which removes a user from the group, cal
 method with the ID of the membership record to remove.
 
 ```js
-client.groups.removeMembership('12345', callback);
+client.groups.removeMembership('33333')
+	.then(() => {
+		// removal succeeded — no value returned
+	});
 ```
 
 Get Group Memberships
@@ -148,19 +293,34 @@ To get a list of all memberships to a group, call the
 method with the ID of the group to get the list of memberships for.
 
 ```js
-client.groups.getMemberships('12345', {limit: 100}, callback);
-```
+client.groups.getMemberships('11111')
+	.then(memberships => {
+		/* memberships -> {
+			total_count: 2,
+			entries: 
+			[ { type: 'group_membership',
+				id: '44444',
+				user: 
+					{ type: 'user',
+					id: '22222',
+					name: 'Alice',
+					login: 'alice@example.com' },
+				group: { type: 'group', id: '11111', name: 'Employees' },
+				role: 'member' },
+				{ type: 'group_membership',
+				id: '55555',
+				user: 
+					{ type: 'user',
+					id: '66666',
+					name: 'White Rabbit',
+					login: 'rabbit@example.com' },
+				group: { type: 'group', id: '11111', name: 'Employees' },
+				role: 'member' } ],
+			offset: 0,
+			limit: 100 }
 
-Get Enterprise Groups
----------------------
-
-To get a list of all groups in the calling user's enterprise, call the
-[`groups.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getAll)
-method.  Note that this requires permission to view an enterprise's groups, which
-is reserved for enterprise administrators.
-
-```js
-client.groups.getAll({limit: 100}, callback);
+		*/
+	});
 ```
 
 Get Group Collaborations
@@ -172,5 +332,36 @@ access to, call the
 method.
 
 ```js
-client.groups.getCollaborations('12345', {fields: 'item,role'}, callback);
+client.groups.getCollaborations('11111')
+	.then(collaborations => {
+		/* collaborations -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'collaboration',
+				id: '22222',
+				created_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Example User',
+					login: 'user@example.com' },
+				created_at: '2013-11-14T16:16:20-08:00',
+				modified_at: '2013-11-14T16:16:20-08:00',
+				expires_at: null,
+				status: 'accepted',
+				accessible_by: 
+					{ type: 'group',
+					id: '11111',
+					name: 'Remote Employees' },
+				role: 'viewer',
+				acknowledged_at: '2013-11-14T16:16:20-08:00',
+				item: 
+					{ type: 'folder',
+					id: '44444',
+					sequence_id: '0',
+					etag: '0',
+					name: 'Documents' } } ],
+			offset: 0,
+			limit: 100 }
+		*/
+	});
 ```
