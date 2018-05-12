@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/box/box-node-sdk.git"
+    "url": "git+https://github.com/box/box-node-sdk.git"
   },
   "engines": {
     "node": ">= 4.0.0"
@@ -51,5 +51,15 @@
     "shelljs": "^0.8.1",
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^5.0.1"
+  },
+  "bugs": {
+    "url": "https://github.com/box/box-node-sdk/issues"
+  },
+  "homepage": "https://github.com/box/box-node-sdk#readme",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "lib": "lib",
+    "test": "tests"
   }
 }
