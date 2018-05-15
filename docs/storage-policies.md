@@ -12,11 +12,17 @@ To get a list of the storage policies that are available for the current user's 
 call the [`storagePolicies.getAll(options, callback)`][getAll] method.
 
 ```js
-var options = {
-    fields: 'name'
-};
-
-client.storagePolicies.getAll(options, callback);
+client.storagePolicies.getAll()
+    .then(policies => {
+        /* policies -> {
+            next_marker: null,
+            limit: 1000,
+            entries: 
+            [ { type: 'storage_policy', id: '42', name: 'Montreal / Dublin' },
+                { type: 'storage_policy', id: '126', name: 'Frankfurt / Dublin' },
+                { type: 'storage_policy', id: '162', name: 'US' } ] }
+        */
+    });
 ```
 
 [getAll]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#getAll
@@ -29,10 +35,14 @@ the [`storagePolicies.get(storagePolicyID, options, callback)`][get] method with
 ID of the assignment object.
 
 ```js
-var options = {
-    fields: 'name'
-};
-client.storagePolicies.get('1', options, callback);
+client.storagePolicies.get('6')
+    .then(storagePolicy => {
+        /* storagePolicy -> {
+            type: 'storage_policy', 
+            id: '6',
+            name: 'Tokyo & Singapore' }
+        */
+    });
 ```
 
 [get]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#get
@@ -47,7 +57,17 @@ method with the ID of the storage policy to assign and the ID of the user to whi
 > It should work regardless of the current status of the user.
 
 ```js
-client.storagePolicies.assign('4', '5678', callback);
+var storagePolicyID = '7';
+var userID = '22222';
+client.storagePolicies.assign(storagePolicyID, userID)
+    .then(assignment => {
+        /* assignment -> {
+            type: 'storage_policy_assignment',
+            id: 'dXNlcl8yMjIyMg==',
+            storage_policy: 'storage_policy', id: '7' },
+            assigned_to: { type: 'user', id: '22222' } }
+        */
+    });
 ```
 
 [assign]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#assign
@@ -60,7 +80,15 @@ To get information about a specific storage policy assignment by ID, call the
 with the ID of the storage policy assignment.
 
 ```js
-client.storagePolicies.getAssignment('user_1234', callback);
+client.storagePolicies.getAssignment('dXNlcl8yMjIyMg==')
+    .then(assignment => {
+        /* assignment -> {
+            type: 'storage_policy_assignment',
+            id: 'dXNlcl8yMjIyMg==',
+            storage_policy: 'storage_policy', id: '7' },
+            assigned_to: { type: 'user', id: '22222' } }
+        */
+    });
 ```
 
 [getAssignment]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#getAssignment
@@ -73,7 +101,15 @@ To determine which storage policy is assigned to a user, call
 with the ID of the user.
 
 ```js
-client.storagePolicies.getAssignmentForTarget('1234', callback);
+client.storagePolicies.getAssignmentForTarget('22222')
+    .then(assignment => {
+        /* assignment -> {
+            type: 'storage_policy_assignment',
+            id: 'dXNlcl8yMjIyMg==',
+            storage_policy: 'storage_policy', id: '7' },
+            assigned_to: { type: 'user', id: '22222' } }
+        */
+    });
 ```
 
 [getAssignmentForTarget]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#getAssignmentForTarget
@@ -90,7 +126,15 @@ with the ID of the storage policy to assign and the ID of the user to assign it 
 > method instead.
 
 ```js
-client.storagePolicies.createAssignment('user_1234', '987654321', callback);
+client.storagePolicies.createAssignment('7', '22222')
+    .then(assignment => {
+        /* assignment -> {
+            type: 'storage_policy_assignment',
+            id: 'dXNlcl8yMjIyMg==',
+            storage_policy: 'storage_policy', id: '7' },
+            assigned_to: { type: 'user', id: '22222' } }
+        */
+    });
 ```
 
 [create-assignment]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#createAssignment
@@ -104,15 +148,24 @@ method with the ID of the assignment to update and an object containing key/valu
 to update on the assignment.
 
 ```js
-// Reassign user 1234 to storage policy 7
-var assignmentID = 'user_1234';
+// Reassign user 22222 to storage policy 10
+var assignmentID = 'dXNlcl8yMjIyMg==';
 var updates = {
     storage_policy: {
         type: 'storage_policy',
-        id: '7'
+        id: '10'
     }
 };
-client.storagePolicies.updateAssignment(assignmentID, updates, callback);
+
+client.storagePolicies.updateAssignment(assignmentID, updates)
+    .then(updatedAssignment => {
+        /* updatedAssignment -> {
+            type: 'storage_policy_assignment',
+            id: 'dXNlcl8yMjIyMg==',
+            storage_policy: 'storage_policy', id: '10' },
+            assigned_to: { type: 'user', id: '22222' } }
+        */
+    });
 ```
 
 [updateAssignment]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#updateAssignment
@@ -126,7 +179,10 @@ default storage policy for the enterprise, call
 the ID of the assignment to remove.
 
 ```js
-client.storagePolicies.removeAssignment(assignmentID, callback);
+client.storagePolicies.removeAssignment('dXNlcl8yMjIyMg==')
+    .then(() => {
+        // deletion succeeded — no value returned
+    });
 ```
 
 [removeAssignment]: http://opensource.box.com/box-node-sdk/jsdoc/StoragePolicies.html#removeAssignment
