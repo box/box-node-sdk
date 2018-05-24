@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.18.0
+
+- Updated dependencies to resolve potential security issues:
+    - `request@2.87.0`
+    - Transitive dependencies of `jsonwebtoken@8.2.1`
+- Added a static `BoxSDK.getBasicClient()` method to enable creating a client without needing
+to specify a client ID and secret (thanks to @cbetta)
+
 ## 1.17.0
 
 - Updated dependencies: `request@2.85.0`, `jsonwebtoken@8.2.1`
