@@ -123,7 +123,7 @@ Box supports four different types of client:
 Returns a Box Client with a Basic API Session. The client is able to make requests on behalf of a user. A basic session has no access to a user's refresh token. Because of this, once the session's tokens expire the client cannot recover and a new session will need to be generated.
 
 ```js
-var client = sdk.getBasicClient('ACCESS_TOKEN');
+var client = BoxSDK.getBasicClient('ACCESS_TOKEN');
 ```
 
 ### Persistent Client

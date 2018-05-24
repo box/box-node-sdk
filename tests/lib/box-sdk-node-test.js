@@ -310,6 +310,11 @@ describe('box-node-sdk', function() {
 			var basicClient = sdk.getBasicClient('abc');
 			assert.ok((basicClient instanceof BasicClient), 'Returned instance of Basic Client');
 		});
+
+		it('should return an instance of a Basic Client when called as a static method', function() {
+			var basicClient = BoxSDKNode.getBasicClient('abc');
+			assert.ok((basicClient instanceof BasicClient), 'Returned instance of Basic Client');
+		});
 	});
 
 	describe('getPersistentClient()', function() {
