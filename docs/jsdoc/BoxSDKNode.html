@@ -243,7 +243,7 @@ instead of needing to create a client (which is not needed to validate messages)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line367">line 367</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line382">line 382</a>
     </li></ul></dd>
     
 
@@ -328,6 +328,165 @@ the consumer to access and use these values from anywhere in their application
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".getBasicClient"><span class="type-signature">(static) </span>getBasicClient<span class="signature">(accessToken)</span><span class="type-signature"> &rarr; {<a href="BoxClient.html">BoxClient</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns a Box Client with a Basic API Session. The client is able to make requests on behalf of a user.
+A basic session has no access to a user's refresh token. Because of this, once the session's tokens
+expire the client cannot recover and a new session will need to be generated.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>accessToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A user's Box API access token</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line211">line 211</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns a new Box Client paired to a new BasicAPISession
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
 
         
             
@@ -701,7 +860,7 @@ the API.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line230">line 230</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line245">line 245</a>
     </li></ul></dd>
     
 
@@ -934,7 +1093,7 @@ Users themselves (as a user).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line244">line 244</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line259">line 259</a>
     </li></ul></dd>
     
 
@@ -1167,7 +1326,7 @@ Users themselves (as a user).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line334">line 334</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line349">line 349</a>
     </li></ul></dd>
     
 
@@ -1325,7 +1484,7 @@ the OAuth2 flow.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line264">line 264</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line279">line 279</a>
     </li></ul></dd>
     
 
@@ -1717,7 +1876,7 @@ expire the client cannot recover and a new session will need to be generated.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line309">line 309</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line324">line 324</a>
     </li></ul></dd>
     
 
@@ -1919,7 +2078,7 @@ can read & write tokens to it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line216">line 216</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line231">line 231</a>
     </li></ul></dd>
     
 
@@ -2152,7 +2311,7 @@ can read & write tokens to it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line279">line 279</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line294">line 294</a>
     </li></ul></dd>
     
 
@@ -2385,7 +2544,7 @@ can read & write tokens to it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line292">line 292</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line307">line 307</a>
     </li></ul></dd>
     
 
@@ -2618,7 +2777,7 @@ can read & write tokens to it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line352">line 352</a>
+        <a href="box-node-sdk.js.html">box-node-sdk.js</a>, <a href="box-node-sdk.js.html#line367">line 367</a>
     </li></ul></dd>
     
 
@@ -2690,7 +2849,7 @@ can read & write tokens to it.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 10 2018 16:14:41 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 24 2018 13:19:37 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
