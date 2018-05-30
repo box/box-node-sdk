@@ -1299,6 +1299,64 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('getRepresentationInfo()', function() {
+
+			it('should resolve all representation entries with success status when fullInfo option is passed',
+				function() {
+
+					var repsFixtureMultiple = getFixture('files/get_files_id_representations_multiple_200'),
+						repsObj = JSON.parse(repsFixtureMultiple),
+						//						repPNGURL = url.parse(repsObj.entries[0].info.url).pathname,
+						repPDFURL = url.parse(repsObj.representations.entries[1].info.url).pathname,
+						repTextURL = url.parse(repsObj.representations.entries[2].info.url).pathname,
+						repFixturePDFPending = getFixture('files/get_representation_info_pdf_pending_200'),
+						repFixturePDFSuccess = getFixture('files/get_representation_info_pdf_success_200'),
+						repFixtureTextSuccess = getFixture('files/get_representation_info_text_success_200');
+
+					var fileID = '11111',
+						representation = '[png][pdf][extracted_text]',
+						options = {fullInfo: true};
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.matchHeader('X-Rep-Hints', function(repHintsHeader) {
+							assert.equal(repHintsHeader, representation);
+							return true;
+						})
+						.reply(200, repsFixtureMultiple)
+						.get(repPDFURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixturePDFPending)
+						.get(repPDFURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixturePDFSuccess)
+						.get(repTextURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixtureTextSuccess);
+
+					return basicClient.files.getRepresentationInfo(fileID, representation, options)
+						.then(data => {
+							var entries = data.entries;
+							entries.forEach(function(entry) {
+								assert.nestedPropertyVal(entry, 'status.state', 'success');
+							});
+							assert.equal(entries.length, 3);
+						});
+				});
+		});
+
 		describe('getRepresentationContent()', function() {
 
 			it('should make correct request and poll info endpoint until representation is generated', function(done) {
