@@ -1301,12 +1301,11 @@ describe('Endpoint', function() {
 
 		describe('getRepresentationInfo()', function() {
 
-			it('should resolve all representation entries with success status when fullInfo option is passed',
+			it('should resolve all representation entries with success status when generateRepresenations option is passed',
 				function() {
 
 					var repsFixtureMultiple = getFixture('files/get_files_id_representations_multiple_200'),
 						repsObj = JSON.parse(repsFixtureMultiple),
-						//						repPNGURL = url.parse(repsObj.entries[0].info.url).pathname,
 						repPDFURL = url.parse(repsObj.representations.entries[1].info.url).pathname,
 						repTextURL = url.parse(repsObj.representations.entries[2].info.url).pathname,
 						repFixturePDFPending = getFixture('files/get_representation_info_pdf_pending_200'),
@@ -1315,7 +1314,7 @@ describe('Endpoint', function() {
 
 					var fileID = '11111',
 						representation = '[png][pdf][extracted_text]',
-						options = {fullInfo: true};
+						options = {generateRepresentations: true};
 
 					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
 						.matchHeader('Authorization', function(authHeader) {
@@ -1355,6 +1354,77 @@ describe('Endpoint', function() {
 							assert.equal(entries.length, 3);
 						});
 				});
+
+			it('should return representation entries when the options and representation parameters are not passed',
+				function() {
+
+					var repsFixtureMultiple = getFixture('files/get_files_id_representations_multiple_200');
+
+					var fileID = '11111';
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repsFixtureMultiple);
+
+					return basicClient.files.getRepresentationInfo(fileID)
+						.then(data => {
+							var entries = data.entries;
+							assert.equal(entries.length, 3);
+							assert.nestedPropertyVal(entries[0], 'status.state', 'success');
+							assert.nestedPropertyVal(entries[1], 'status.state', 'none');
+							assert.nestedPropertyVal(entries[2], 'status.state', 'pending');
+						});
+				});
+
+
+			it('should return representation entries with errors when generateRepresentations option is passed',
+				function() {
+
+					var repsFixture = getFixture('files/get_files_id_representations_png_200'),
+						repsObj = JSON.parse(repsFixture),
+						repInfoURL = url.parse(repsObj.representations.entries[0].info.url).pathname,
+						repPendingFixture = getFixture('files/get_representation_info_pending_200'),
+						repErrorFixture = getFixture('files/get_representation_info_error_200');
+
+					var fileID = '983745',
+						representation = '[png?dimensions=1024x1024]',
+						options = {generateRepresentations: true};
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.matchHeader('X-Rep-Hints', function(repHintsHeader) {
+							assert.equal(repHintsHeader, representation);
+							return true;
+						})
+						.reply(200, repsFixture)
+						.get(repInfoURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repPendingFixture)
+						.get(repInfoURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repErrorFixture);
+
+					return basicClient.files.getRepresentationInfo(fileID, representation, options)
+						.then(data => {
+							var entries = data.entries;
+							assert.equal(entries.length, 1);
+							assert.nestedPropertyVal(entries[0], 'status.state', 'error');
+						});
+				});
+
+
 		});
 
 		describe('getRepresentationContent()', function() {
