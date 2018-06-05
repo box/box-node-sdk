@@ -25,7 +25,7 @@ describe('Box Node SDK', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create();
+	var sandbox = sinon.createSandbox();
 
 	var TEST_API_ROOT = 'https://api.box.com',
 		TEST_CLIENT_ID = 'client_id',
@@ -37,6 +37,7 @@ describe('Box Node SDK', function() {
 		BoxSDK;
 
 	beforeEach(function() {
+		nock.disableNetConnect();
 		apiMock = nock(TEST_API_ROOT);
 
 		mockery.enable({
@@ -470,6 +471,94 @@ describe('Box Node SDK', function() {
 		});
 
 		var client = sdk.getAppAuthClient('user', userID);
+
+		client.users.get(client.CURRENT_USER_ID, {}, function(err, data) {
+
+			assert.ifError(err);
+			assert.propertyVal(data, 'id', userID);
+			assert.propertyVal(data, 'name', userName);
+			done();
+		});
+	});
+
+	it('should correctly cache tokens in app auth session when provided token store', function(done) {
+
+		var userID = '34876458977987',
+			userName = 'Pnin',
+			algorithm = 'RS256',
+			keyID = 'ltf64zjk',
+			passphrase = 'Test secret key',
+			tokenStoreFake = leche.create([
+				'read',
+				'write',
+				'clear'
+			]),
+			expiredTokenInfo = {
+				accessToken: 'expired_at',
+				refreshToken: null,
+				acquiredAtMS: Date.now() - 3600000,
+				accessTokenTTLMS: 60000
+			};
+
+		// @NOTE(mwiller) 2016-04-12: This is an actual generated RSA key, so the key
+		//   parameters are actually meaningful and will cause the test to fail if
+		//   they change!
+		/* eslint-disable no-sync */
+		var privateKey = fs.readFileSync(path.resolve(__dirname, 'fixtures/appusers_private_key.pem'));
+		/* eslint-enable no-sync */
+
+		apiMock
+			.post('/oauth2/token', function(body) {
+				assert.propertyVal(body, 'client_id', TEST_CLIENT_ID);
+				assert.propertyVal(body, 'client_secret', TEST_CLIENT_SECRET);
+				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
+
+				var assertion = jwt.decode(body.assertion, {complete: true});
+				assert.nestedPropertyVal(assertion, 'header.alg', algorithm);
+				assert.nestedPropertyVal(assertion, 'header.typ', 'JWT');
+				assert.nestedPropertyVal(assertion, 'header.kid', keyID);
+
+				assert.nestedPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
+				assert.nestedPropertyVal(assertion, 'payload.sub', userID);
+				assert.nestedPropertyVal(assertion, 'payload.box_sub_type', 'user');
+				assert.nestedPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.notProperty(assertion, 'payload.iat');
+
+				return true;
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				expires_in: 256
+			})
+			.get('/2.0/users/me')
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(200, {
+				id: userID,
+				name: userName
+			});
+
+		sandbox.mock(tokenStoreFake).expects('read')
+			.yieldsAsync(null, expiredTokenInfo);
+
+		sandbox.mock(tokenStoreFake).expects('write')
+			.withArgs(sinon.match({ accessToken: TEST_ACCESS_TOKEN }))
+			.yieldsAsync();
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			appAuth: {
+				algorithm,
+				keyID,
+				privateKey,
+				passphrase
+			}
+		});
+
+		var client = sdk.getAppAuthClient('user', userID, tokenStoreFake);
 
 		client.users.get(client.CURRENT_USER_ID, {}, function(err, data) {
 
@@ -1185,7 +1274,7 @@ describe('Box Node SDK', function() {
 		// This test takes a while to run due to all the bytes being shuffled around,
 		// bumping up the timeout so we don't see flaky behavior if it runs long
 		// eslint-disable-next-line no-invalid-this
-		this.timeout(4000);
+		this.timeout(8000);
 
 		var filePath = path.resolve(__dirname, './fixtures/test.pdf');
 		var uploadSessionID = 'o8qc3n58q73b95ywort2q3t';
@@ -1289,5 +1378,72 @@ describe('Box Node SDK', function() {
 				});
 		});
 		/* eslint-enable promise/no-callback-in-promise */
+	});
+
+	it('should correctly reconfigure SDK instance', function() {
+
+		var folderID = '98740596456',
+			folderName = 'Test Folder',
+			tokenStoreFake = leche.create([
+				'read',
+				'write',
+				'clear'
+			]),
+			refreshToken = 'rt',
+			expiredTokenInfo = {
+				accessToken: 'expired_at',
+				refreshToken,
+				acquiredAtMS: Date.now() - 3600000,
+				accessTokenTTLMS: 60000
+			};
+
+		sandbox.mock(tokenStoreFake).expects('write')
+			.withArgs(sinon.match({
+				accessToken: TEST_ACCESS_TOKEN,
+				refreshToken: 'new_rt'
+			}))
+			.yieldsAsync();
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 0,
+			retryIntervalMS: 1,
+			apiRootURL: 'https://example.com'
+		});
+
+		sdk.configure({
+			apiRootURL: TEST_API_ROOT
+		});
+
+		apiMock
+			.post('/oauth2/token', {
+				grant_type: 'refresh_token',
+				refresh_token: refreshToken,
+				client_id: TEST_CLIENT_ID,
+				client_secret: TEST_CLIENT_SECRET
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				refresh_token: 'new_rt',
+				expires_in: 256
+			})
+			.get(`/2.0/folders/${folderID}`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(200, {
+				id: folderID,
+				name: folderName
+			});
+
+		var client = sdk.getPersistentClient(expiredTokenInfo, tokenStoreFake);
+
+		return client.folders.get(folderID)
+			.then(folder => {
+				assert.propertyVal(folder, 'id', folderID);
+				assert.propertyVal(folder, 'name', folderName);
+			});
 	});
 });

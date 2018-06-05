@@ -18,7 +18,7 @@ var Readable = require('stream').Readable;
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake,
 	Files,
 	files,
@@ -218,8 +218,43 @@ describe('Files', function() {
 
 			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs(downloadURL, {streaming: true});
+				.withArgs(downloadURL, sinon.match({streaming: true}));
 			files.getReadStream(FILE_ID, testQS);
+		});
+
+		it('should pass range header to streaming request when byteRange option is passed', function() {
+
+			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
+
+			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(downloadURL, sinon.match({
+					streaming: true,
+					headers: sinon.match({
+						Range: 'bytes=15-100'
+					})
+				}));
+			files.getReadStream(FILE_ID,
+				{
+					byteRange: [
+						15,
+						100
+					]
+				});
+		});
+
+		it('should work when no options are passed', function() {
+
+			var downloadURL = 'https://dl.boxcloud.com/adjhgliwenrgiuwndfgjinsdf';
+
+			var stream = {};
+
+			sandbox.stub(files, 'getDownloadURL').returns(Promise.resolve(downloadURL));
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(stream));
+			return files.getReadStream(FILE_ID, null)
+				.then(data => {
+					assert.equal(data, stream);
+				});
 		});
 
 		it('should call callback with the read stream when callback is passed', function(done) {
@@ -1912,9 +1947,7 @@ describe('Files', function() {
 		beforeEach(function() {
 			expectedParams = {
 				body: {
-					lock: {
-						type: 'unlock'
-					}
+					lock: null
 				}
 			};
 		});

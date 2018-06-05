@@ -26,14 +26,35 @@ Create a Task
 To create a task call the [`tasks.create(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#create) method.
 
 ```js
-client.tasks.create(
-	'1234',
-	{
-		message: 'Optional Message',
-		due_at: '2014-04-03T11:09:43-07:00'
-	},
-	callback
-);
+var options = {
+	message: 'Please review for publication!',
+	due_at: '2014-04-03T11:09:43-07:00'
+};
+client.tasks.create('22222', options)
+	.then(task => {
+		/* task -> {
+			type: 'task',
+			id: '11111',
+			item: 
+			{ type: 'file',
+				id: '22222',
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
+				name: 'box-logo.png' },
+			due_at: '2014-04-03T11:09:43-07:00',
+			action: 'review',
+			message: 'Please review for publication!',
+			task_assignment_collection: { total_count: 0, entries: [] },
+			is_completed: false,
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2013-04-03T11:12:54-07:00' }
+		*/
+	});
 ```
 
 Get a Task's Information
@@ -42,14 +63,46 @@ Get a Task's Information
 To get a task information call the [`tasks.get(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#get) method.
 
 ```js
-client.tasks.get('1234', null, callback);
+client.tasks.get('11111')
+	.then(task => {
+		/* task -> {
+			type: 'task',
+			id: '11111',
+			item: 
+			{ type: 'file',
+				id: '22222',
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
+				name: 'box-logo.png' },
+			due_at: '2014-04-03T11:09:43-07:00',
+			action: 'review',
+			message: 'Please review for publication!',
+			task_assignment_collection: { total_count: 0, entries: [] },
+			is_completed: false,
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2013-04-03T11:12:54-07:00' }
+		*/
+	});
 ```
 
 Requesting information for only the fields you need with the `fields` option
 can improve performance and reduce the size of the network request.
 
 ```js
-client.tasks.get('1234', {fields: 'message,is_completed'}, callback);
+client.tasks.get('11111', {fields: 'message,is_completed'})
+	.then(task => {
+		/* task -> {
+			type: 'task',
+			id: '11111',
+			message: 'Please review for publication!',
+			is_completed: false }
+		*/
+	});
 ```
 
 Update a Task
@@ -60,14 +113,31 @@ To update a task call the
 method with the set of fields to update and their new values.
 
 ```js
-client.tasks.update(
-	'1234',
-	{
-		message: 'New Message',
-		due_at: '2020-01-01T00:00:00-00:00'
-	},
-	callback
-);
+client.tasks.update('11111', { message: 'Could you please review?' })
+	.then(task => {
+		/* task -> {
+			type: 'task',
+			id: '11111',
+			item: 
+			{ type: 'file',
+				id: '22222',
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
+				name: 'box-logo.png' },
+			due_at: '2014-04-03T11:09:43-07:00',
+			action: 'review',
+			message: 'Could you please review?',
+			task_assignment_collection: { total_count: 0, entries: [] },
+			is_completed: false,
+			created_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2013-04-03T11:12:54-07:00' }
+		*/
+	});
 ```
 
 Delete a Task
@@ -78,7 +148,10 @@ To delete a task, call the
 method with the ID of the task to be deleted.
 
 ```js
-client.tasks.delete('1234', callback);
+client.tasks.delete('11111')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Get Assignments for a Task
@@ -90,14 +163,27 @@ must complete it, call the
 method.
 
 ```js
-client.tasks.getAssignments('83476', null, callback);
-```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-client.tasks.getAssignments('83476', {fields: 'assigned_to'}, callback);
+client.tasks.getAssignments('11111')
+	.then(assignments => {
+		/* assignments -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'task_assignment',
+				id: '22222',
+				item: 
+					{ type: 'file',
+					id: '44444',
+					sequence_id: '0',
+					etag: '0',
+					sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
+					name: 'box-logo.png' },
+				assigned_to: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Example User',
+					login: 'user@example.com' } } ] }
+		*/
+	});
 ```
 
 Get Task Assignment
@@ -108,14 +194,35 @@ To retrieve information about a specific task assignment, call the
 method with the ID of the assignment to get.
 
 ```js
-client.tasks.getAssignment('83476', null, callback);
-```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-client.tasks.getAssignment('83476', {fields: 'item,assigned_to'}, callback);
+client.tasks.getAssignment('12345')
+	.then(assignment => {
+		/* assignment -> {
+			type: 'task_assignment',
+			id: '12345',
+			item: 
+			{ type: 'file',
+				id: '33333',
+				sequence_id: '0',
+				etag: '0',
+				sha1: '7840095ee096ee8297676a138d4e316eabb3ec96',
+				name: 'script.js' },
+			assigned_to: 
+			{ type: 'user',
+				id: '22222',
+				name: 'Sample Assignee',
+				login: 'assignee@exmaple.com' },
+			message: null,
+			completed_at: null,
+			assigned_at: '2013-05-10T11:43:41-07:00',
+			reminded_at: null,
+			resolution_state: 'incomplete',
+			assigned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' } }
+		*/
+	});
 ```
 
 Assign Task
@@ -129,13 +236,46 @@ with the ID of the task to assign and either the ID or login email address of th
 user to whom the task should be assigned.
 
 ```js
-// Assign task 12345 to user 98765
-client.tasks.assignByUserID('12345', '98765', callback);
+// Assign task 11111 to user 22222
+var taskID = '11111';
+var userID = '22222';
+client.tasks.assignByUserID(taskID, userID)
+	.then(assignment => {
+		/* assignment -> {
+			type: 'task_assignment',
+			id: '12345',
+			item: 
+			{ type: 'file',
+				id: '33333',
+				sequence_id: '0',
+				etag: '0',
+				sha1: '7840095ee096ee8297676a138d4e316eabb3ec96',
+				name: 'script.js' },
+			assigned_to: 
+			{ type: 'user',
+				id: '22222',
+				name: 'Sample Assignee',
+				login: 'assignee@exmaple.com' },
+			message: null,
+			completed_at: null,
+			assigned_at: '2013-05-10T11:43:41-07:00',
+			reminded_at: null,
+			resolution_state: 'incomplete',
+			assigned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' } }
+		*/
+	});
 ```
 
 ```js
-// Assign task 12345 to the user with email address jdoe@box.com
-client.tasks.assignByEmail('12345', 'jdoe@box.com', callback);
+// Assign task 11111 to the user with email address assignee@exmaple.com
+client.tasks.assignByEmail('11111', 'assignee@example.com')
+	.then(assignment => {
+		// ...
+	});
 ```
 
 Update Task Assignment
@@ -148,25 +288,52 @@ method.  This can be used to resolve or complete a task.
 ```js
 // Complete a task
 client.tasks.updateAssignment(
-		'12345',
-		{
+	'12345',
+	{
+		message: 'Done!',
+		resolution_state: client.tasks.resolutionStates.COMPLETE
+	})
+	.then(assignment => {
+		/* assignment -> {
+			type: 'task_assignment',
+			id: '12345',
+			item: 
+			{ type: 'file',
+				id: '33333',
+				sequence_id: '0',
+				etag: '0',
+				sha1: '7840095ee096ee8297676a138d4e316eabb3ec96',
+				name: 'script.js' },
+			assigned_to: 
+			{ type: 'user',
+				id: '22222',
+				name: 'Sample Assignee',
+				login: 'assignee@exmaple.com' },
 			message: 'Done!',
-			resolution_state: client.tasks.resolutionStates.COMPLETE
-		},
-		callback
-	);
+			completed_at: null,
+			assigned_at: '2013-05-10T11:43:41-07:00',
+			reminded_at: null,
+			resolution_state: 'complete',
+			assigned_by: 
+			{ type: 'user',
+				id: '33333',
+				name: 'Example User',
+				login: 'user@example.com' } }
+		*/
+	});
 ```
 
 ```js
 // Mark the task as "Rejected"
 client.tasks.updateAssignment(
-		'12345',
-		{
-			message: 'This needs some more changes',
-			resolution_state: client.tasks.resolutionStates.REJECTED
-		},
-		callback
-	);
+	'12345',
+	{
+		message: 'This needs some more changes',
+		resolution_state: client.tasks.resolutionStates.REJECTED
+	})
+	.then(assignment => {
+		// ...
+	});
 ```
 
 Remove Task Assignment
@@ -177,7 +344,10 @@ To delete a task assignment, effectively unassigning a user from the task, call 
 method with the ID of the assignment to remove.
 
 ```js
-client.tasks.deleteAssignment('98672334', callback);
+client.tasks.deleteAssignment('12345')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 Get Tasks on a File
@@ -188,12 +358,21 @@ Calling the
 method will retrieve all of the tasks for given file.
 
 ```js
-client.files.getTasks('75937', null, callback);
-```
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-// Only get information about a few specific fields.
-client.files.getTasks('75937', {fields: 'type,item'}, callback);
+client.files.getTasks('11111')
+	.then(tasks => {
+		/* tasks -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'task',
+				id: '22222',
+				item: 
+					{ type: 'file',
+					id: '11111',
+					sequence_id: '6',
+					etag: '6',
+					sha1: '81cc829fb8366fcfc108aa6c5a9bde01a6a10c16',
+					name: 'box-logo.png' },
+				due_at: null } ] }
+		*/
+	});
 ```

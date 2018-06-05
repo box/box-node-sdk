@@ -27,27 +27,67 @@ To get terms of service call the [`termsOfService.getAll(options, callback)`](ht
 method.
 
 ```js
-client.termsOfService.getAll(null, callback);
+client.termsOfService.getAll()
+	.then(termsOfService => {
+		/* termsOfService -> {
+			entries: [
+				total_count: 1,
+				{ type: 'terms_of_service',
+				id: '12345',
+				status: 'disabled',
+				enterprise: { type: 'enterprise', id: '55555' },
+				tos_type: 'managed',
+				text: 'By using this service, you agree to ...',
+				created_at: '2018-04-19T13:55:09-07:00',
+				modified_at: '2018-04-19T13:55:09-07:00' }
+			]
+		*/
+	});
 ```
 Alternatively, you can specify the Terms of Service type. You can either specify "managed" or "external". This
 field specifies the type of user the Terms of Service applies to. 
 
 ```js
-client.termsOfService.getAll({ tos_type: 'managed' }, callback);
+client.termsOfService.getAll({ tos_type: 'managed' })
+	.then(termsOfService => {
+		/* termsOfService -> {
+			entries: [
+				total_count: 1,
+				{ type: 'terms_of_service',
+				id: '12345',
+				status: 'disabled',
+				enterprise: { type: 'enterprise', id: '55555' },
+				tos_type: 'managed',
+				text: 'By using this service, you agree to ...',
+				created_at: '2018-04-19T13:55:09-07:00',
+				modified_at: '2018-04-19T13:55:09-07:00' }
+			]
+		*/
+	});
 ```
 
-Get a Terms of Service By ID for an Enterprise
-----------------------------------------------
+Get a Terms of Service By ID
+----------------------------
 
-To get the terms of service with an ID call the [`termsOfService.get(termsOfServicesID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#get)
+To get the terms of service with an ID call the
+[`termsOfService.get(termsOfServicesID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#get)
 method.
 
 ```js
-client.termsOfService.get('1234', null, callback);
+client.termsOfService.get('12345')
+	.then(tos => {
+		/* tos -> {
+			type: 'terms_of_service',
+			id: '12345',
+			status: 'disabled',
+			enterprise: { type: 'enterprise', id: '55555' },
+			tos_type: 'managed',
+			text: 'By using this service, you agree to ...',
+			created_at: '2018-04-19T13:55:09-07:00',
+			modified_at: '2018-04-19T13:55:09-07:00' }
+		*/
+	});
 ```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
 
 Update a Terms of Service for an Enterprise
 -------------------------------------------
@@ -56,12 +96,19 @@ To update a terms of service call the [`termsOfService.update(termsOfServicesID,
 method with the fields to update and their new values.
 
 ```js
-client.termsOfService.update('1234', 
-	{
-		status: 'enabled',
-		text: 'This is a test'
-	}, 
-	callback);
+client.termsOfService.update('12345', { status: 'disabled' })
+	.then(tos => {
+		/* tos -> {
+			type: 'terms_of_service',
+			id: '12345',
+			status: 'disabled',
+			enterprise: { type: 'enterprise', id: '55555' },
+			tos_type: 'managed',
+			text: 'By using this service, you agree to ...',
+			created_at: '2018-04-19T13:55:09-07:00',
+			modified_at: '2018-04-19T13:55:09-07:00' }
+		*/
+	});
 ```
 
 The termsOfServicesStatus can be set to 'enabled' or 'disabled'. You can also specify the conditions of the terms of service in the termsOfServicesText parameter. 
@@ -69,34 +116,69 @@ The termsOfServicesStatus can be set to 'enabled' or 'disabled'. You can also sp
 Create a Terms of Service for an Enterprise
 -------------------------------------------
 
-To create a terms of service call the [`termsOfService.create(termsOfServicesType, termsOfServicesStatus, termsOfServicesText, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#create)
+To create a terms of service call the
+[`termsOfService.create(termsOfServicesType, termsOfServicesStatus, termsOfServicesText, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#create)
 method.
 
+> __Note:__ Only two terms of service can exist per enterprise: one managed terms of service and one external terms of
+> service. If you wish to have a different terms of service, update one of the existing terms of service. 
+
 ```js
-client.termsOfService.create('managed', 'enabled', 'This is a new terms of service', callback);
+client.termsOfService.create('managed', 'enabled', 'By using this service, you agree to ...')
+	.then(tos => {
+		/* tos -> {
+			type: 'terms_of_service',
+			id: '12345',
+			status: 'enabled',
+			enterprise: { type: 'enterprise', id: '55555' },
+			tos_type: 'managed',
+			text: 'By using this service, you agree to ...',
+			created_at: '2018-04-19T13:55:09-07:00',
+			modified_at: '2018-04-19T13:55:09-07:00' }
+		*/
+	});
 ```
 
 ```js
-client.termsOfService.create('external', 'disabled', 'This is a new terms of service but disabled', callback);
+client.termsOfService.create('external', 'disabled', 'This is a new terms of service but disabled')
+	.then(tos => {
+		/* tos -> {
+			type: 'terms_of_service',
+			id: '12346',
+			status: 'disabled',
+			enterprise: { type: 'enterprise', id: '55555' },
+			tos_type: 'external',
+			text: 'This is a new terms of service but disabled',
+			created_at: '2018-04-19T13:55:09-07:00',
+			modified_at: '2018-04-19T13:55:09-07:00' }
+		*/
+	});
 ```
 
-It is important to note that only two terms of service can exist per enterprise. One managed terms of service and one external terms of service. If you wish to make another terms of service please use the PUT endpoint to update your current terms of service. 
 
 Get Terms of Service Status for User
 ------------------------------------
 
-To get user status on a terms of service call the [`termsOfService.getUserStatus(termsOfStatusID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfServiceUserStatuses.html#getUserStatus)
+To get user status on a terms of service call the [`termsOfService.getUserStatus(termsOfStatusID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#getUserStatus)
 method.
 
+If no `user_id` option is specified, this will default to current user.
+
 ```js
-client.termsOfService.getUserStatus('1234',
-	{
-		user_id: '5678'
-	},
-	callback);
+client.termsOfService.getUserStatus('11111', { user_id: '22222' })
+	.then(tosStatus => {
+		/* tosStatus -> {
+			type: 'terms_of_service_user_status',
+			id: '12345',
+			tos: { type: 'terms_of_service', id: '11111' },
+			user: { type: 'user', id: '22222' },
+			is_accepted: true,
+			created_at: '2018-04-11T15:33:49-07:00',
+			modified_at: '2018-04-11T15:33:49-07:00' }
+		*/
+	});
 ```
 
-If no user is specified, this will default to current user.
 
 Create User Status on Terms of Service 
 --------------------------------------
@@ -105,7 +187,18 @@ To accept or decline a terms of service for a user who has never accepted/declin
 method.
 
 ```js
-client.termsOfService.createUserStatus('1234', true, {user_id: "5678"}, callback);
+client.termsOfService.createUserStatus('11111', true, {user_id: '22222'})
+	.then(tosStatus => {
+		/* tosStatus -> {
+			type: 'terms_of_service_user_status',
+			id: '12345',
+			tos: { type: 'terms_of_service', id: '11111' },
+			user: { type: 'user', id: '22222' },
+			is_accepted: true,
+			created_at: '2018-04-11T15:33:49-07:00',
+			modified_at: '2018-04-11T15:33:49-07:00' }
+		*/
+	});
 ```
 It is important to note that this will accept or decline a custom terms of service for a user that has 
 never taken action on this terms of service before. For a user that has, this will return a 409 Conflict Error.
@@ -119,7 +212,18 @@ To update user status on a terms of service call the [`termsOfService.updateUser
 method.
 
 ```js
-client.termsOfService.updateUserStatus('5678', true, callback);
+client.termsOfService.updateUserStatus('5678', false)
+	.then(tosStatus => {
+		/* tosStatus -> {
+			type: 'terms_of_service_user_status',
+			id: '12345',
+			tos: { type: 'terms_of_service', id: '11111' },
+			user: { type: 'user', id: '22222' },
+			is_accepted: false,
+			created_at: '2018-04-11T15:33:49-07:00',
+			modified_at: '2018-04-11T15:33:49-07:00' }
+		*/
+	});
 ```
 
 It is important to note that this will accept or decline a custom terms of service for a user. For a user that has taken action in this terms of service, this will update their status. If the user has never taken action on this terms of service then this will return a 404 Not Found Error. 

@@ -18,7 +18,7 @@ var BoxClient = require('../../../lib/box-client');
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	SharedItems,
 	sharedItems,
@@ -113,14 +113,14 @@ describe('SharedItems', function() {
 				});
 		});
 
-		it('should call callback with a password_missing error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
+		it('should call callback with a password missing error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
 			var response = {statusCode: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			sharedItems.get(testSharedItemURL, null, testQS, function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'message', 'password_missing');
+				assert.propertyVal(err, 'message', 'Shared link password missing [403 Forbidden]');
 				assert.propertyVal(err, 'statusCode', response.statusCode);
 				done();
 			});
@@ -134,7 +134,7 @@ describe('SharedItems', function() {
 			return sharedItems.get(testSharedItemURL, null, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'message', 'password_missing');
+					assert.propertyVal(err, 'message', 'Shared link password missing [403 Forbidden]');
 					assert.propertyVal(err, 'statusCode', response.statusCode);
 				});
 		});
@@ -146,7 +146,7 @@ describe('SharedItems', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS, function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'message', 'password_incorrect');
+				assert.propertyVal(err, 'message', 'Incorrect shared link password [403 Forbidden]');
 				assert.propertyVal(err, 'statusCode', response.statusCode);
 				done();
 			});
@@ -160,7 +160,7 @@ describe('SharedItems', function() {
 			return sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'message', 'password_incorrect');
+					assert.propertyVal(err, 'message', 'Incorrect shared link password [403 Forbidden]');
 					assert.propertyVal(err, 'statusCode', response.statusCode);
 				});
 		});

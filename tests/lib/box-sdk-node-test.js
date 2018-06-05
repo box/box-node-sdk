@@ -24,7 +24,7 @@ describe('box-node-sdk', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create(),
+	var sandbox = sinon.createSandbox(),
 		BoxSDKNode,
 		sdk,
 		TokenManagerConstructorStub,
@@ -308,6 +308,11 @@ describe('box-node-sdk', function() {
 
 		it('should return an instance of a Basic Client when called', function() {
 			var basicClient = sdk.getBasicClient('abc');
+			assert.ok((basicClient instanceof BasicClient), 'Returned instance of Basic Client');
+		});
+
+		it('should return an instance of a Basic Client when called as a static method', function() {
+			var basicClient = BoxSDKNode.getBasicClient('abc');
 			assert.ok((basicClient instanceof BasicClient), 'Returned instance of Basic Client');
 		});
 	});

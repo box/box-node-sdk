@@ -24,15 +24,14 @@ To get watermark information for a file call the
 method.
 
 ```js
-client.files.getWatermark('75937', null, callback);
-```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-// Only get information about a few specific fields.
-client.files.getWatermark('75937', {fields: 'created_at'}, callback);
+client.files.getWatermark('11111')
+	.then(watermark => {
+		/* watermark -> {
+			watermark: 
+			{ created_at: '2016-10-31T15:33:33-07:00',
+				modified_at: '2016-10-31T15:33:33-07:00' } }
+		*/
+	});
 ```
 
 Apply Watermark to a File
@@ -43,7 +42,14 @@ To apply or update the watermark to a file call the
 method.
 
 ```js
-client.files.applyWatermark('67890', null, callback);
+client.files.applyWatermark('11111')
+	.then(watermark => {
+		/* watermark -> {
+			watermark: 
+			{ created_at: '2016-10-31T15:33:33-07:00',
+				modified_at: '2016-10-31T15:33:33-07:00' } }
+		*/
+	});
 ```
 
 Remove Watermark from a File
@@ -53,7 +59,10 @@ A file's watermark can be removed by calling
 [`files.removeWatermark(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#removeWatermark).
 
 ```js
-client.files.removeWatermark('67890', callback);
+client.files.removeWatermark('11111')
+	.then(() => {
+		// removal succeeded — no value returned
+	});
 ```
 
 Get Watermark on a Folder
@@ -63,16 +72,14 @@ To get watermark information for a folder call the
 method.
 
 ```js
-client.folders.getWatermark('75937', null, callback);
-```
-
-Requesting information for only the fields you need with the `fields` query
-string parameter can improve performance and reduce the size of the network
-request.
-
-```js
-// Only get information about a few specific fields.
-client.folders.getWatermark('75937', {fields: 'created_at'}, callback);
+client.folders.getWatermark('22222')
+	.then(watermark => {
+		/* watermark -> {
+			watermark: 
+			{ created_at: '2016-10-31T15:33:33-07:00',
+				modified_at: '2016-10-31T15:33:33-07:00' } }
+		*/
+	});
 ```
 
 Apply Watermark to a Folder
@@ -83,15 +90,25 @@ To apply or update the watermark for a folder call the
 method.
 
 ```js
-client.folders.applyWatermark('67890', null, callback);
+client.folders.applyWatermark('22222')
+	.then(watermark => {
+		/* watermark -> {
+			watermark: 
+			{ created_at: '2016-10-31T15:33:33-07:00',
+				modified_at: '2016-10-31T15:33:33-07:00' } }
+		*/
+	});
 ```
 
 Remove Watermark from a Folder
 ------------------------------
 
 A folder's watermark can be removed by calling
-[`folders.removeWatermark(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folder.html#removeWatermark).
+[`folders.removeWatermark(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#removeWatermark).
 
 ```js
-client.folders.removeWatermark('67890', callback);
+client.folders.removeWatermark('22222')
+	.then(() => {
+		// removal succeeded — no value returned
+	});
 ```

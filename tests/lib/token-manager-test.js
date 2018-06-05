@@ -21,7 +21,7 @@ var APIRequestManager = require('../../lib/api-request-manager'),
 // Private
 // ------------------------------------------------------------------------------
 
-var sandbox = sinon.sandbox.create();
+var sandbox = sinon.createSandbox();
 
 var MODULE_FILE_PATH = '../../lib/token-manager',
 	API_ROOT_URL = 'api.box.com',
@@ -175,7 +175,7 @@ describe('token-manager', function() {
 			return tokenManager.getTokens({})
 				.catch(err => {
 					assert.instanceOf(err, Error, 'An error is returned');
-					assert.strictEqual(err.message, 'Expired Auth: Auth code or refresh token has expired.');
+					assert.strictEqual(err.message, 'Expired Auth: Auth code or refresh token has expired [403 Forbidden]');
 				});
 		});
 
@@ -223,7 +223,7 @@ describe('token-manager', function() {
 
 				return tokenManager.getTokens({})
 					.catch(err => {
-						assert.strictEqual(err.message, 'Token format from response invalid');
+						assert.strictEqual(err.message, 'Token format from response invalid [200 OK]');
 					});
 			});
 
