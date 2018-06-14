@@ -1,0 +1,13 @@
+{
+    "representation": "pdf",
+    "properties": {},
+    "info": {
+        "url": "https://api.box.com/2.0/internal_files/11111/versions/22222/representations/pdf"
+    },
+    "status": {
+        "state": "pending"
+    },
+    "content": {
+        "url_template": "https://dl3.boxcloud.com/api/2.0/internal_files/11111/versions/22222/representations/pdf/content/{+asset_path}"
+    }
+}
