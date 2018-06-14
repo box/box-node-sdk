@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.19.0
+
+- Added `generateRepresentations` option to [`files.getRepresentationContent()`](./docs/files.md#get-representation-content)
+
 ## 1.18.0
 
 - Updated dependencies to resolve potential security issues:
