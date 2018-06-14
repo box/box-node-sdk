@@ -1029,6 +1029,18 @@ client.files.getRepresentationInfo('67890', '[pdf][extracted_text]')
 	});
 ```
 
+Setting the `generateRepresentations` option to `true` will automatically poll the status of
+all specified representations to generate them.
+
+```js
+client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', { generateRepresentations: true })
+	.then(representations => {
+		// All representations should be generated
+		// ...
+	});
+```
+
+
 [get-rep-info]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getRepresentationInfo
 [x-rep-hints]: https://developer.box.com/reference#section-x-rep-hints-header
 
