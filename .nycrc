@@ -4,6 +4,7 @@
     ],
     "reporter": [
         "text-summary",
+        "text-lcov",
         "html"
     ],
     "check-coverage": true,
