@@ -15,7 +15,6 @@
   "scripts": {
     "test": "node Makefile.js",
     "lint": "node Makefile.js lint",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "docs": "node Makefile.js docs",
     "docs-dev": "node Makefile.js docsDev",
     "deps": "npm prune && npm install",
