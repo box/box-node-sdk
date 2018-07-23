@@ -54,7 +54,7 @@ var client = sdk.getBasicClient('YOUR-DEVELOPER-TOKEN');
 
 Server auth allows your application to authenticate itself with the Box API
 for a given enterprise.  By default, your application has a
-[Service Account](https://developer.box.com/v2.0/docs/service-account)
+[Service Account](https://developer.box.com/docs/service-account)
 that represents it and can perform API calls.  The Service Account is separate
 from the Box accounts of the application developer and the enterprise admin of
 any enterprise that has authorized the app — files stored in that account are
@@ -92,7 +92,7 @@ var serviceAccountClient = sdk.getAppAuthClient('enterprise', 'YOUR-ENTERPRISE-I
 ```
 
 App auth applications also often have associated App Users, which are
-[created and managed directly by the application](https://developer.box.com/v2.0/docs/app-users)
+[created and managed directly by the application](https://developer.box.com/docs/app-users)
 — they do not have normal login credentials, and can only be accessed through
 the Box API by the application that created them.  You may authenticate as the
 Service Account to provision and manage users, or as an individual app user to
@@ -113,7 +113,7 @@ If your application needs to integrate with existing Box users who will provide
 their login credentials to grant your application access to their account, you
 will need to go through the standard OAuth2 login flow.  A detailed guide for
 this process is available in the
-[Authentication with OAuth API documentation](https://developer.box.com/v2.0/docs/oauth-20).
+[Authentication with OAuth API documentation](https://developer.box.com/docs/oauth-20).
 
 Using an auth code is the most common way of authenticating with the Box API for
 existing Box users, to integrate with their accounts.
@@ -194,7 +194,7 @@ TokenStore.prototype.clear = function(callback) {
 
 ### Box View Authentication with App Tokens
 
-[Box View](https://developer.box.com/v2.0/docs/getting-started-with-new-box-view)
+[Box View](https://developer.box.com/docs/getting-started-box-view)
 uses a long-lived access token that is generated from the
 [Box Developer Console][dev-console] to make API calls.  These access tokens
 cannot be automatically refreshed from the SDK, and must be manually changed in
@@ -234,8 +234,8 @@ As-User
 
 The As-User header is used by enterprise admins to make API calls on behalf of
 their enterprise's users. This requires the API request to pass an
-`As-User: USER-ID` header. For more details see the 
-[documentation on As-User](https://developer.box.com/v2.0/reference#as-user-1).
+`As-User: USER-ID` header. For more details see the
+[documentation on As-User](https://developer.box.com/reference#as-user-1).
 
 The following examples assume that the `client` has been instantiated with an
 access token belonging to an admin-level user or Service Account with appropriate
