@@ -646,7 +646,7 @@ the policy to.
 
 ```js
 var folderID = '22222';
-client.metadata.createCascadePolicy('enterprise', 'myTemplate', folderID)
+client.metadata.createCascadePolicy('enterprise', 'testTemplate', folderID)
 	.then(cascadePolicy => {
 		/* cascadePolicy -> {
 			id: '84113349-794d-445c-b93c-d8481b223434',
