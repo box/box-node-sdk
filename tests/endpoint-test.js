@@ -27,7 +27,7 @@ describe('Endpoint', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create();
+	var sandbox = sinon.createSandbox();
 
 	var TEST_API_ROOT = 'https://api.box.com',
 		TEST_UPLOAD_ROOT = 'https://upload.box.com/api',
@@ -1297,6 +1297,134 @@ describe('Endpoint', function() {
 					done();
 				});
 			});
+		});
+
+		describe('getRepresentationInfo()', function() {
+
+			it('should resolve all representation entries with success status when generateRepresenations option is passed',
+				function() {
+
+					var repsFixtureMultiple = getFixture('files/get_files_id_representations_multiple_200'),
+						repsObj = JSON.parse(repsFixtureMultiple),
+						repPDFURL = url.parse(repsObj.representations.entries[1].info.url).pathname,
+						repTextURL = url.parse(repsObj.representations.entries[2].info.url).pathname,
+						repFixturePDFPending = getFixture('files/get_representation_info_pdf_pending_200'),
+						repFixturePDFSuccess = getFixture('files/get_representation_info_pdf_success_200'),
+						repFixtureTextSuccess = getFixture('files/get_representation_info_text_success_200');
+
+					var fileID = '11111',
+						representation = '[png][pdf][extracted_text]',
+						options = {generateRepresentations: true};
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.matchHeader('X-Rep-Hints', function(repHintsHeader) {
+							assert.equal(repHintsHeader, representation);
+							return true;
+						})
+						.reply(200, repsFixtureMultiple)
+						.get(repPDFURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixturePDFPending)
+						.get(repPDFURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixturePDFSuccess)
+						.get(repTextURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixtureTextSuccess);
+
+					return basicClient.files.getRepresentationInfo(fileID, representation, options)
+						.then(data => {
+							var entries = data.entries;
+							entries.forEach(function(entry) {
+								assert.nestedPropertyVal(entry, 'status.state', 'success');
+							});
+							assert.equal(entries.length, 3);
+						});
+				});
+
+			it('should return representation entries when the options and representation parameters are not passed',
+				function() {
+
+					var repsFixtureMultiple = getFixture('files/get_files_id_representations_multiple_200');
+
+					var fileID = '11111';
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repsFixtureMultiple);
+
+					return basicClient.files.getRepresentationInfo(fileID)
+						.then(data => {
+							var entries = data.entries;
+							assert.equal(entries.length, 3);
+							assert.nestedPropertyVal(entries[0], 'status.state', 'success');
+							assert.nestedPropertyVal(entries[1], 'status.state', 'none');
+							assert.nestedPropertyVal(entries[2], 'status.state', 'pending');
+						});
+				});
+
+
+			it('should return representation entries with errors when generateRepresentations option is passed',
+				function() {
+
+					var repsFixture = getFixture('files/get_files_id_representations_png_200'),
+						repsObj = JSON.parse(repsFixture),
+						repInfoURL = url.parse(repsObj.representations.entries[0].info.url).pathname,
+						repPendingFixture = getFixture('files/get_representation_info_pending_200'),
+						repErrorFixture = getFixture('files/get_representation_info_error_200');
+
+					var fileID = '983745',
+						representation = '[png?dimensions=1024x1024]',
+						options = {generateRepresentations: true};
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.matchHeader('X-Rep-Hints', function(repHintsHeader) {
+							assert.equal(repHintsHeader, representation);
+							return true;
+						})
+						.reply(200, repsFixture)
+						.get(repInfoURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repPendingFixture)
+						.get(repInfoURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repErrorFixture);
+
+					return basicClient.files.getRepresentationInfo(fileID, representation, options)
+						.then(data => {
+							var entries = data.entries;
+							assert.equal(entries.length, 1);
+							assert.nestedPropertyVal(entries[0], 'status.state', 'error');
+						});
+				});
+
+
 		});
 
 		describe('getRepresentationContent()', function() {
@@ -4315,6 +4443,258 @@ describe('Endpoint', function() {
 
 				return basicClient.weblinks.delete(weblinkID)
 					.then(result => assert.isUndefined(result));
+			});
+		});
+	});
+
+	describe('Storage Policies', function() {
+
+		describe('get()', function() {
+
+			it('should make GET request for storage policy info and return correct response when API call succeeds', function() {
+
+				var storagePolicyID = '123',
+					fixture = getFixture('storage-policies/get_storage_policies_id_200');
+
+				apiMock.get('/2.0/storage_policies/123')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.storagePolicies.get(storagePolicyID)
+					.then(storagePolicy => {
+						assert.deepEqual(storagePolicy, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('getAll()', function() {
+
+			it('should make GET request for storage policies and return correct response when API call succeeds', function() {
+
+				var fixture = getFixture('storage-policies/get_storage_policies_200');
+
+				apiMock.get('/2.0/storage_policies')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.storagePolicies.getAll()
+					.then(policies => {
+						assert.deepEqual(policies, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('createAssignment()', function() {
+
+			it('should make POST call to crate policy assignment and return correct response when API call succeeds', function() {
+
+				var policyID = '123',
+					userID = '987654321',
+					fixture = getFixture('storage-policies/post_storage_policy_assignments_201');
+
+				apiMock.post('/2.0/storage_policy_assignments', {
+					storage_policy: {
+						type: 'storage_policy',
+						id: policyID
+					},
+					assigned_to: {
+						type: 'user',
+						id: userID
+					}
+				})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.storagePolicies.createAssignment(policyID, userID)
+					.then(assignment => {
+						assert.deepEqual(assignment, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('getAssignment()', function() {
+
+			it('should make GET call for assignment info and return correct response when API call succeeds', function() {
+
+				var assignmentID = 'user_987654321',
+					fixture = getFixture('storage-policies/get_storage_policy_assignments_id_200');
+
+				apiMock.get(`/2.0/storage_policy_assignments/${assignmentID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.storagePolicies.getAssignment(assignmentID)
+					.then(assignment => {
+						assert.deepEqual(assignment, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('getAssignmentForTarget()', function() {
+
+			it('should make GET call for assignment info and return correct response when API call succeeds', function() {
+
+				var userID = '987654321',
+					fixture = getFixture('storage-policies/get_storage_policy_assignments_resolved_for_200');
+
+				apiMock.get('/2.0/storage_policy_assignments')
+					.query({
+						resolved_for_type: 'user',
+						resolved_for_id: userID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.storagePolicies.getAssignmentForTarget(userID)
+					.then(assignment => {
+						assert.deepEqual(assignment, JSON.parse(fixture).entries[0]);
+					});
+			});
+		});
+
+		describe('updateAssignment', function() {
+
+			it('should make PUT call to update assignment and return correct response when API call succeeds', function() {
+
+				var assignmentID = 'user_987654321',
+					newPolicyID = '456',
+					fixture = getFixture('storage-policies/get_storage_policy_assignments_id_200');
+
+				var update = {
+					storage_policy: {
+						type: 'storage_policy',
+						id: newPolicyID
+					}
+				};
+
+				apiMock.put(`/2.0/storage_policy_assignments/${assignmentID}`, update)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.storagePolicies.updateAssignment(assignmentID, update)
+					.then(updatedAssignment => {
+						assert.deepEqual(updatedAssignment, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('removeAssignment()', function() {
+
+			it('should make DELETE call to remove assignment and return empty response when API call succeeds', function() {
+
+				var assignmentID = 'user_987654321';
+
+				apiMock.delete(`/2.0/storage_policy_assignments/${assignmentID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.storagePolicies.removeAssignment(assignmentID)
+					.then(data => {
+						assert.isUndefined(data);
+					});
+			});
+		});
+
+		describe('assign()', function() {
+
+			it('should make PUT call to update assignment when assignment already exists', function() {
+
+				var storagePolicyID = '456',
+					userID = '987654321',
+					getAssignmentFixture = getFixture('storage-policies/get_storage_policy_assignments_resolved_for_200'),
+					putFixture = getFixture('storage-policies/put_storage_policy_assignments_id_200'),
+					assignmentID = JSON.parse(getAssignmentFixture).entries[0].id;
+
+				var update = {
+					storage_policy: {
+						type: 'storage_policy',
+						id: storagePolicyID
+					}
+				};
+
+				apiMock.get('/2.0/storage_policy_assignments')
+					.query({
+						resolved_for_type: 'user',
+						resolved_for_id: userID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, getAssignmentFixture)
+					.put(`/2.0/storage_policy_assignments/${assignmentID}`, update)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, putFixture);
+
+				return basicClient.storagePolicies.assign(storagePolicyID, userID)
+					.then(assignment => {
+						assert.deepEqual(assignment, JSON.parse(putFixture));
+					});
+			});
+
+			it('should make POST call to create assignment when one does not already exist', function() {
+
+				var storagePolicyID = '456',
+					userID = '987654321',
+					getAssignmentFixture = getFixture('storage-policies/get_storage_policy_assignments_resolved_for_default_200'),
+					postFixture = getFixture('storage-policies/post_storage_policy_assignments_201');
+
+				var expectedBody = {
+					storage_policy: {
+						type: 'storage_policy',
+						id: storagePolicyID
+					},
+					assigned_to: {
+						type: 'user',
+						id: userID
+					}
+				};
+
+				apiMock.get('/2.0/storage_policy_assignments')
+					.query({
+						resolved_for_type: 'user',
+						resolved_for_id: userID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, getAssignmentFixture)
+					.post('/2.0/storage_policy_assignments', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, postFixture);
+
+				return basicClient.storagePolicies.assign(storagePolicyID, userID)
+					.then(assignment => {
+						assert.deepEqual(assignment, JSON.parse(postFixture));
+					});
 			});
 		});
 	});

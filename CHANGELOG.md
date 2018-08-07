@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.19.0
+
+- Added `generateRepresentations` option to [`files.getRepresentationContent()`](./docs/files.md#get-representation-content)
+
+## 1.18.0
+
+- Updated dependencies to resolve potential security issues:
+    - `request@2.87.0`
+    - Transitive dependencies of `jsonwebtoken@8.2.1`
+- Added a static `BoxSDK.getBasicClient()` method to enable creating a client without needing
+to specify a client ID and secret (thanks to @cbetta)
+
+## 1.17.0
+
+- Updated dependencies: `request@2.85.0`, `jsonwebtoken@8.2.1`
+- Added support for [Storage Policies](./docs/storage-policies.md)
+- Added the option to use a Token Store for caching tokens with App Auth using JWT
+
 ## 1.16.1
 
 - Fixed a bug where metadata template deletion would not properly return results via callback

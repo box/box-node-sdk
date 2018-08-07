@@ -14,7 +14,7 @@ var assert = require('assert'),
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	errors,
 	MODULE_FILE_PATH = '../../../lib/util/errors';
 

@@ -22,10 +22,12 @@ var TokenManager = require('../../../lib/token-manager'),
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	tokenManagerFake,
+	tokenStoreFake,
 	AppAuthSession,
 	appAuthSession,
+	appAuthSessionWithTokenStore,
 	config,
 	testTokenInfo = {
 		accessToken: 'at',
@@ -59,6 +61,12 @@ describe('AppAuthSession', function() {
 			}
 		});
 
+		tokenStoreFake = leche.create([
+			'read',
+			'write',
+			'clear'
+		]);
+
 		tokenManagerFake = leche.fake(TokenManager.prototype);
 
 		// Enable Mockery
@@ -69,6 +77,7 @@ describe('AppAuthSession', function() {
 		// Setup File Under Test
 		AppAuthSession = require(MODULE_FILE_PATH);
 		appAuthSession = new AppAuthSession(TEST_TYPE, TEST_ID, config, tokenManagerFake);
+		appAuthSessionWithTokenStore = new AppAuthSession(TEST_TYPE, TEST_ID, config, tokenManagerFake, tokenStoreFake);
 	});
 
 	afterEach(function() {
@@ -315,6 +324,51 @@ describe('AppAuthSession', function() {
 			return appAuthSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.catch(err => {
 					assert.equal(err, error);
+				});
+		});
+	});
+
+	describe('handleExpiredTokensError()', function() {
+
+		it('should return a promise that rejects with passed-in error when no token store is available', function() {
+
+			var error = new Error('Something bad happened.');
+
+			return appAuthSession.handleExpiredTokensError(error)
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+
+		it('should clear token store when one is available', function() {
+
+			sandbox.mock(tokenStoreFake).expects('clear');
+
+			appAuthSessionWithTokenStore.handleExpiredTokensError();
+		});
+
+		it('should return promise that rejects with passed-in error when token store clear succeeds', function() {
+
+			var error = new Error('Something bad happened.');
+
+			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync();
+
+			return appAuthSessionWithTokenStore.handleExpiredTokensError(error)
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+
+		it('should return promise that rejects with token store error when token store clear fails', function() {
+
+			var error = new Error('Something bad happened.'),
+				tokenStoreError = new Error('Token store is busted');
+
+			sandbox.stub(tokenStoreFake, 'clear').yieldsAsync(tokenStoreError);
+
+			return appAuthSessionWithTokenStore.handleExpiredTokensError(error)
+				.catch(err => {
+					assert.equal(err, tokenStoreError);
 				});
 		});
 	});

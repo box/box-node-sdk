@@ -1,7 +1,7 @@
 {
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
-  "version": "1.16.1",
+  "version": "1.19.0",
   "description": "Official Box SDK for Node.js",
   "license": "Apache-2.0",
   "repository": {
@@ -24,16 +24,17 @@
   },
   "dependencies": {
     "bluebird": "^3.5.0",
-    "http-status": "^1.0.1",
-    "jsonwebtoken": "^8.1.0",
-    "merge-options": "1.0.0",
+    "http-status": "^1.1.0",
+    "jsonwebtoken": "^8.2.1",
+    "merge-options": "^1.0.1",
     "promise-queue": "^2.2.3",
-    "request": "^2.74.0",
+    "request": "^2.87.0",
     "url-template": "^2.0.8",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.1",
+    "coveralls": "^3.0.2",
     "eslint": "^4.13.0",
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^3.6.0",
@@ -50,6 +51,10 @@
     "semver": "^5.4.1",
     "shelljs": "^0.8.1",
     "shelljs-nodecli": "^0.1.1",
-    "sinon": "^5.0.1"
-  }
+    "sinon": "^6.0.0"
+  },
+  "files": [
+    "config",
+    "lib"
+  ]
 }

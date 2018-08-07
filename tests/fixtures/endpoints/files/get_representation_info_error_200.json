@@ -1,0 +1,18 @@
+{
+    "representation": "png",
+    "properties": {
+        "dimensions": "1024x1024",
+        "paged": "true",
+        "thumb": "false"
+    },
+    "info": {
+        "url": "https://api.box.com/2.0/internal_files/123456789/versions/987654321/representations/png_paged_1024x1024"
+    },
+    "status": {
+        "state": "error",
+        "code": "error_unsupported_format"
+    },
+    "content": {
+        "url_template": "https://dl3.boxcloud.com/api/2.0/internal_files/123456789/versions/987654321/representations/png_paged_1024x1024/content/{+asset_path}"
+    }
+}
