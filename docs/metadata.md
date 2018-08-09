@@ -40,6 +40,11 @@ in a flexible way, without pre-defined template structure.
 - [Get Metadata on a Folder](#get-metadata-on-a-folder)
 - [Update Metadata on a Folder](#update-metadata-on-a-folder)
 - [Remove Metadata from a Folder](#remove-metadata-from-a-folder)
+- [Create Cascade Policy](#create-cascade-policy)
+- [Get Cascade Policy](#get-cascade-policy)
+- [Get All Cascade Policies For a Folder](#get-all-cascade-policies-for-a-folder)
+- [Force Apply Cascade Policy](#force-apply-cascade-policy)
+- [Delete Cascade Policy](#delete-cascade-policy)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
