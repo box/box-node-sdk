@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.20.0
+
+- Added missing values to the `client.webhooks.triggerTypes` enum (thanks @MathersMax!)
+- Added support for [Metadata Cascade Policies](./docs/metadata.md#create-cascade-policy)
+
 ## 1.19.0
 
 - Added `generateRepresentations` option to [`files.getRepresentationContent()`](./docs/files.md#get-representation-content)
