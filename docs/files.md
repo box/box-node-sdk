@@ -400,12 +400,12 @@ client.files.createUploadSession(
 					return;
 				}
 
-				parts.push(partData);
+				parts.push(partData.part);
 			}
 		);
 
 		// once all parts have been uploaded...
-		client.files.commitUploadSession(sessionID, hash.digest('base64'), parts, null, callback);
+		client.files.commitUploadSession(sessionID, hash.digest('base64'), {parts: parts}, callback);
 	}
 );
 ```
@@ -442,9 +442,8 @@ client.files.uploadPart('93D9A837B45F', part, 8388608, 2147483648, {part_id: 'fe
 #### Commit Upload Session
 
 Once all parts of the file have been uploaded, finalize the upload by calling
-[`files.commitUploadSession(sessionID, fileHash, parts, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#commitUploadSession)
-with the upload session ID, the base64-encoded SHA1 hash of the entire file, and the list of
-successfully-uploaded part records.  This will complete the upload and create the
+[`files.commitUploadSession(sessionID, fileHash, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#commitUploadSession)
+with the upload session ID and the base64-encoded SHA1 hash of the entire file.  This will complete the upload and create the
 full file in the destination folder.
 
 Any valid file object attributes you want to assign to the newly-created file may
@@ -460,7 +459,6 @@ of parts is has received is the intended set.
 client.files.commitUploadSession(
 	'93D9A837B45F',
 	fileHash.digest('base64'),
-	parts,
 	{description: 'A file I uploaded in chunks!'},
 	callback
 );
