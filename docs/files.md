@@ -400,12 +400,12 @@ client.files.createUploadSession(
 					return;
 				}
 
-				parts.push(partData);
+				parts.push(partData.part);
 			}
 		);
 
 		// once all parts have been uploaded...
-		client.files.commitUploadSession(sessionID, hash.digest('base64'), parts, null, callback);
+		client.files.commitUploadSession(sessionID, hash.digest('base64'), {parts: parts}, callback);
 	}
 );
 ```
