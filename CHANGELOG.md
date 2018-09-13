@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.21.0
+
+- Added the ability to close an Event Stream by calling `eventStream.destroy()` (thanks @boneskull!)
+- Improved error messages related to certain authentication failure cases
+
 ## 1.20.0
 
 - Added missing values to the `client.webhooks.triggerTypes` enum (thanks @MathersMax!)
