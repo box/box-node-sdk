@@ -1054,7 +1054,7 @@ describe('Box Node SDK', function() {
 		});
 	});
 
-	it('should upload file in chunks and return promise when chunked upload is requested and run', function() {
+	it('should upload with file attributes and return promise when chunked upload is executed', function() {
 
 		var folderID = '0',
 			fileSize = 1024,
@@ -1099,6 +1099,11 @@ describe('Box Node SDK', function() {
 				sha1: 'efa'
 			}
 		];
+
+		var fileAttributes = {
+			description: 'My chunked upload',
+			content_created_at: '1988-11-18T09:30:00-06:00'
+		};
 
 		var file = {
 			total_count: 1,
@@ -1298,6 +1303,8 @@ describe('Box Node SDK', function() {
 					assert.typeOf(body.parts, 'array');
 					assert.sameDeepMembers(body.parts, parts);
 
+					assert.deepPropertyVal(body, 'attributes', fileAttributes);
+
 					return true;
 				}
 			)
@@ -1319,7 +1326,7 @@ describe('Box Node SDK', function() {
 
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
 
-		return client.files.getChunkedUploader(folderID, fileSize, fileName, fileStream)
+		return client.files.getChunkedUploader(folderID, fileSize, fileName, fileStream, { fileAttributes })
 			.then(uploader => uploader.start())
 			.then(data => {
 				assert.deepEqual(data, file);
