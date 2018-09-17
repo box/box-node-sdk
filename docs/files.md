@@ -302,30 +302,63 @@ uploaded, and a `Buffer` or `ReadableStream` of the file to be uploaded.
 ```js
 // Upload a 2GB file "huge.pdf" into folder 12345
 var stream = fs.createReadStream('huge.pdf');
-client.files.getChunkedUploader(
-	'12345',
-	2147483648,
-	'huge.pdf',
-	stream,
-	null,
-	function(err, uploader) {
-
-		if (err) {
-			// handle error
-			return;
-		}
-
-		uploader.on('error', function(err) {
-			// handle unrecoverable upload error
-		});
-
-		uploader.on('uploadComplete', function(file) {
-			console.log('File upload complete!', file);
-		});
-
-		uploader.start();
-	}
-);
+client.files.getChunkedUploader('12345', 2147483648, 'huge.pdf', stream)
+	.then(uploader => uploader.start())
+	.then(file => {
+		/* file -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file',
+				id: '11111',
+				file_version: 
+					{ type: 'file_version',
+					id: '22222',
+					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+				name: 'huge.pdf',
+				description: '',
+				size: 2147483648,
+				path_collection: 
+					{ total_count: 1,
+					entries: 
+					[ { type: 'folder',
+						id: '12345',
+						sequence_id: null,
+						etag: null,
+						name: 'My Folder' } ] },
+				created_at: '2017-05-16T15:18:02-07:00',
+				modified_at: '2017-05-16T15:18:02-07:00',
+				trashed_at: null,
+				purged_at: null,
+				content_created_at: '2017-05-16T15:18:02-07:00',
+				content_modified_at: '2017-05-16T15:18:02-07:00',
+				created_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				modified_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				owned_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				shared_link: null,
+				parent: 
+					{ type: 'folder',
+					id: '12345',
+					sequence_id: null,
+					etag: null,
+					name: 'My Folder' }
+				item_status: 'active' } ] }
+		*/
+	});
 ```
 
 A new version of a file can be uploaded in the same way by calling
@@ -336,29 +369,80 @@ version and a `Buffer` or `ReadableStream` of the new version.
 ```js
 // Upload a new 2GB version of file 98765
 var stream = fs.createReadStream('huge.pdf');
-client.files.getChunkedUploader(
-	'98765',
-	2147483648,
-	stream,
-	null,
-	function(err, uploader) {
+client.files.getNewVersionChunkedUploader('11111', 2147483648, stream)
+	.then(uploader => uploader.start())
+	.then(file => {
+		/* file -> {
+			total_count: 1,
+			entries: 
+			[ { type: 'file',
+				id: '11111',
+				file_version: 
+					{ type: 'file_version',
+					id: '22222',
+					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+				sequence_id: '0',
+				etag: '0',
+				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+				name: 'huge.pdf',
+				description: '',
+				size: 2147483648,
+				path_collection: 
+					{ total_count: 1,
+					entries: 
+					[ { type: 'folder',
+						id: '12345',
+						sequence_id: null,
+						etag: null,
+						name: 'My Folder' } ] },
+				created_at: '2017-05-16T15:18:02-07:00',
+				modified_at: '2017-05-21T15:18:02-07:00',
+				trashed_at: null,
+				purged_at: null,
+				content_created_at: '2017-05-16T15:18:02-07:00',
+				content_modified_at: '2017-05-21:18:02-07:00',
+				created_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				modified_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				owned_by: 
+					{ type: 'user',
+					id: '33333',
+					name: 'Test User',
+					login: 'test@example.com' },
+				shared_link: null,
+				parent: 
+					{ type: 'folder',
+					id: '12345',
+					sequence_id: null,
+					etag: null,
+					name: 'My Folder' }
+				item_status: 'active' } ] }
+		*/
+	});
+```
 
-		if (err) {
-			// handle error
-			return;
-		}
+File attributes can be set on the newly uploaded file by passing the via the `options.fileAttributes` parameter:
 
-		uploader.on('error', function(err) {
-			// handle unrecoverable upload error
-		});
-
-		uploader.on('uploadComplete', function(file) {
-			console.log('Version upload complete!', file);
-		});
-
-		uploader.start();
+```js
+// Upload a new file and prepopulate the description field
+var stream = fs.createReadStream('huge.pdf');
+var options = {
+	fileAttributes: {
+		description: 'A very large PDF'
 	}
-);
+};
+client.files.getChunkedUploader('12345', 2147483648, 'huge.pdf', stream, options)
+	.then(uploader => uploader.start())
+	.then(file => {
+		// ...
+	});
 ```
 
 ### Manual Process
