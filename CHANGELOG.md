@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.22.0
+
+- Chunked Uploader methods now return promises for [simpler handling of chunked uploads](./docs/files.md#automatic-uploader)
+- File attributes to set on the newly-uploaded file can now be
+[passed via `options.fileAttributes`](./docs/files.md#automatic-uploader) when creating a Chunked Uploader
+
 ## 1.21.0
 
 - Added the ability to close an Event Stream by calling `eventStream.destroy()` (thanks @boneskull!)
