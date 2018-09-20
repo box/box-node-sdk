@@ -20,6 +20,8 @@ var assert = require('chai').assert,
 	request = require('request'),
 	jwt = require('jsonwebtoken');
 
+const NODE_GTE_v10_REGEX = /^\d{2}\./;
+
 describe('Box Node SDK', function() {
 
 	// ------------------------------------------------------------------------------
@@ -1725,4 +1727,5 @@ describe('Box Node SDK', function() {
 				assert.propertyVal(folder, 'name', folderName);
 			});
 	});
+
 });
