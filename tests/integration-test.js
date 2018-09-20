@@ -18,9 +18,10 @@ var assert = require('chai').assert,
 	crypto = require('crypto'),
 	Promise = require('bluebird'),
 	request = require('request'),
-	jwt = require('jsonwebtoken');
+	jwt = require('jsonwebtoken'),
+	PagingIterator = require('../lib/util/paging-iterator');
 
-const NODE_GTE_v10_REGEX = /^\d{2}\./;
+var NODE_GTE_v10_REGEX = /^\d{2}\./;
 
 describe('Box Node SDK', function() {
 
@@ -1728,4 +1729,219 @@ describe('Box Node SDK', function() {
 			});
 	});
 
+	it('should allow async iteration over iterators when Node version is v10.x or greater', function() {
+
+		if (!process.version.match(NODE_GTE_v10_REGEX)) {
+			this.skip();
+		}
+
+		var folderID = '22222',
+			expectedFileIDs = [
+				'44444',
+				'55555',
+			];
+
+		apiMock
+			.get(`/2.0/folders/${folderID}/items`)
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[0]
+					}
+				],
+				limit: 1,
+				offset: 0
+			})
+			.get(`/2.0/folders/${folderID}/items`)
+			.query({
+				limit: 1,
+				offset: 1
+			})
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[1]
+					}
+				],
+				limit: 1,
+				offset: 1
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			iterators: true,
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		return client.folders.getItems(folderID)
+			.then(iterator => {
+				assert.propertyVal(iterator, Symbol.asyncIterator, iterator);
+			});
+	});
+
+	it('should allow async iteration over collection responses when Node version is v10.x or greater', function() {
+
+		if (!process.version.match(NODE_GTE_v10_REGEX)) {
+			this.skip();
+		}
+
+		var folderID = '22222',
+			expectedFileIDs = [
+				'44444',
+				'55555',
+			];
+
+		apiMock
+			.get(`/2.0/folders/${folderID}/items`)
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[0]
+					}
+				],
+				limit: 1,
+				offset: 0
+			})
+			.get(`/2.0/folders/${folderID}/items`)
+			.query({
+				limit: 1,
+				offset: 1
+			})
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[1]
+					}
+				],
+				limit: 1,
+				offset: 1
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		return client.folders.getItems(folderID)
+			.then(items => {
+				assert.property(items, Symbol.asyncIterator);
+				var iterator = items[Symbol.asyncIterator]();
+				assert.instanceOf(iterator, PagingIterator);
+			});
+	});
+
+	it('should not attach undefined property to iterator', function() {
+
+		var folderID = '22222',
+			expectedFileIDs = [
+				'44444',
+				'55555',
+			];
+
+		apiMock
+			.get(`/2.0/folders/${folderID}/items`)
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[0]
+					}
+				],
+				limit: 1,
+				offset: 0
+			})
+			.get(`/2.0/folders/${folderID}/items`)
+			.query({
+				limit: 1,
+				offset: 1
+			})
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[1]
+					}
+				],
+				limit: 1,
+				offset: 1
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			iterators: true,
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		return client.folders.getItems(folderID)
+			.then(iterator => {
+				assert.notProperty(iterator, 'undefined');
+			});
+	});
+
+	it('should not attach undefined property to collection response', function() {
+
+		var folderID = '22222',
+			expectedFileIDs = [
+				'44444',
+				'55555',
+			];
+
+		apiMock
+			.get(`/2.0/folders/${folderID}/items`)
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[0]
+					}
+				],
+				limit: 1,
+				offset: 0
+			})
+			.get(`/2.0/folders/${folderID}/items`)
+			.query({
+				limit: 1,
+				offset: 1
+			})
+			.reply(200, {
+				total_count: 2,
+				entries: [
+					{
+						type: 'file',
+						id: expectedFileIDs[1]
+					}
+				],
+				limit: 1,
+				offset: 1
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		return client.folders.getItems(folderID)
+			.then(items => {
+				assert.notProperty(items, 'undefined');
+			});
+	});
 });

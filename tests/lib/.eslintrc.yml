@@ -1,6 +1,6 @@
 ---
 rules:
-    camelcase: 0
-    handle-callback-err: 0
+    camelcase: off
+    handle-callback-err: off
     # We do not want 'assert = require('chai').assert' to error
-    no-mixed-requires: 0
+    no-mixed-requires: off
