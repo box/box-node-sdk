@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
+	Promise = require('bluebird'),
 	assert = require('chai').assert;
 
 var BoxClient = require('../../../lib/box-client');
@@ -16,7 +17,7 @@ var BoxClient = require('../../../lib/box-client');
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake,
 	Webhooks,
 	webhooks,
@@ -54,7 +55,10 @@ describe('Webhooks', function() {
 		var	ID = '1234',
 			TYPE = 'file',
 			ADDRESS = 'https://www.test.com',
-			TRIGGERS = ['FILE.DOWNLOADED', 'FILE.PREVIEWED'],
+			TRIGGERS = [
+				'FILE.DOWNLOADED',
+				'FILE.PREVIEWED'
+			],
 			expectedParams = {
 				body: {
 					target: {
@@ -69,14 +73,17 @@ describe('Webhooks', function() {
 		it('should make POST call to create webhook', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/webhooks', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/webhooks', expectedParams);
 			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			webhooks.create(ID, TYPE, ADDRESS, TRIGGERS);
 		});
 
@@ -107,14 +114,17 @@ describe('Webhooks', function() {
 
 		it('should make GET request to get Webhook info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/webhooks/1234', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/webhooks/1234', testParamsWithQs);
 			webhooks.get(WEBHOOKS_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			webhooks.get(WEBHOOKS_ID, testQS);
 		});
 
@@ -146,14 +156,17 @@ describe('Webhooks', function() {
 		it('should make GET call to fetch all webhooks', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/webhooks', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/webhooks', testParamsWithQs);
 			webhooks.getAll(testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			webhooks.getAll(testQS);
 		});
 
@@ -188,19 +201,25 @@ describe('Webhooks', function() {
 				type: 'file'
 			},
 			address: 'https://www.test1.com',
-			triggers: ['FILE.DOWNLOADED', 'FILE.PREVIEWED']
+			triggers: [
+				'FILE.DOWNLOADED',
+				'FILE.PREVIEWED'
+			]
 		};
 		it('should make PUT call to update webhook', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/webhooks/1234');
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/webhooks/1234');
 			webhooks.update(WEBHOOKS_ID, param);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			webhooks.update(WEBHOOKS_ID, param);
 		});
 
@@ -232,14 +251,17 @@ describe('Webhooks', function() {
 		it('should make DELETE call to remove webhook', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/webhooks/1234');
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs('/webhooks/1234');
 			webhooks.delete(WEBHOOKS_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			webhooks.delete(WEBHOOKS_ID);
 		});
 
@@ -384,6 +406,13 @@ describe('Webhooks', function() {
 			Webhooks.setSignatureKeys(PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY);
 
 			assert.ok(Webhooks.validateMessage(BODY, HEADERS));
+		});
+
+		it('should validate JSON body parsed as Object', function() {
+
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
 		});
 	});
 });

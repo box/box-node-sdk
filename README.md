@@ -1,6 +1,8 @@
 Box SDK for Node.js
 ===================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/box/box-node-sdk.svg)](https://greenkeeper.io/)
+
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 
 A JavaScript interface to the [Box Content API](https://developers.box.com/docs/).
@@ -121,7 +123,7 @@ Box supports four different types of client:
 Returns a Box Client with a Basic API Session. The client is able to make requests on behalf of a user. A basic session has no access to a user's refresh token. Because of this, once the session's tokens expire the client cannot recover and a new session will need to be generated.
 
 ```js
-var client = sdk.getBasicClient('ACCESS_TOKEN');
+var client = BoxSDK.getBasicClient('ACCESS_TOKEN');
 ```
 
 ### Persistent Client
@@ -343,7 +345,7 @@ please be sure to mention the Node.js SDK in the subject.
 Copyright and License
 ---------------------
 
-Copyright 2017 Box, Inc. All rights reserved.
+Copyright 2018 Box, Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

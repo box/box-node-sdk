@@ -47,6 +47,13 @@
  */
 
 /**
+ * Parameters for creating an actor token via token exchange
+ * @typedef {Object} ActorParams
+ * @property {string} id The external identifier for the actor
+ * @property {string} name The display name of the actor
+ */
+
+/**
  * An object representing all token information for a single Box user.
  *
  * @typedef {Object} TokenInfo
@@ -67,7 +74,8 @@
 var errors = require('./util/errors'),
 	jwt = require('jsonwebtoken'),
 	uuid = require('uuid'),
-	httpStatusCodes = require('http-status');
+	httpStatusCodes = require('http-status'),
+	Promise = require('bluebird');
 
 // ------------------------------------------------------------------------------
 // Constants
@@ -83,7 +91,8 @@ var grantTypes = {
 	AUTHORIZATION_CODE: 'authorization_code',
 	REFRESH_TOKEN: 'refresh_token',
 	CLIENT_CREDENTIALS: 'client_credentials',
-	JWT: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+	JWT: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+	TOKEN_EXCHANGE: 'urn:ietf:params:oauth:grant-type:token-exchange'
 };
 
 /**
@@ -99,7 +108,11 @@ var tokenPaths = {
 };
 
 // The XFF header label - Used to give the API better information for uploads, rate-limiting, etc.
-var HEADER_XFF = 'X-Forwarded-For';
+const HEADER_XFF = 'X-Forwarded-For';
+const ACCESS_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:access_token';
+const ACTOR_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:id_token';
+const BOX_JWT_AUDIENCE = 'https://api.box.com/oauth2/token';
+
 
 // ------------------------------------------------------------------------------
 // Private
@@ -138,7 +151,7 @@ function isValidCodeOrToken(codeOrToken) {
  * Determines if a token grant response is valid
  *
  * @param {string} grantType the type of token grant
- * @param {object} responseBody the body of the response to check
+ * @param {Object} responseBody the body of the response to check
  * @returns {boolean} True if response body has expected fields, false if not.
  * @private
  */
@@ -157,7 +170,6 @@ function isValidTokenResponse(grantType, responseBody) {
 	}
 	return true;
 }
-
 
 // ------------------------------------------------------------------------------
 // Public
@@ -189,7 +201,7 @@ TokenManager.prototype = {
 	 * we'll call a token invalid.
 	 * @returns {boolean} True if token is valid outside of buffer, otherwise false
 	 */
-	isAccessTokenValid: function(tokenInfo, bufferMS) {
+	isAccessTokenValid(tokenInfo, bufferMS) {
 		if (typeof tokenInfo.acquiredAtMS === 'undefined' || typeof tokenInfo.accessTokenTTLMS === 'undefined') {
 			return false;
 		}
@@ -202,12 +214,11 @@ TokenManager.prototype = {
 	 * Acquires OAuth2 tokens using a grant type (authorization_code, password, refresh_token)
 	 *
 	 * @param {Object} formParams - should contain all params expected by Box OAuth2 token endpoint
-	 * @param {?TokenRequestOptions} options - Sets optional behavior for the token grant, null for default behavior
-	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
-	 * @returns {void}
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant, null for default behavior
+	 * @returns {Promise&lt;TokenInfo>} Promise resolving to the token info
 	 * @private
 	 */
-	getTokens: function(formParams, options, callback) {
+	getTokens(formParams, options) {
 		var params = {
 			method: 'POST',
 			url: this.oauthBaseURL + tokenPaths.GET,
@@ -224,129 +235,113 @@ TokenManager.prototype = {
 			params.headers[HEADER_XFF] = options.ip;
 		}
 
-		this.requestManager.makeRequest(params, function(err, response) {
+		return this.requestManager.makeRequest(params)
+			.then(response => {
 
-			// Serious Error: The Box client can't do anything else since this is a failed request.
-			if (err) {
-				callback(err);
-				return;
-			}
+				// Response Error: The API is telling us that we attempted an invalid token grant. This
+				// means that our refresh token or auth code has exipred, so propagate an "Expired Tokens"
+				// error.
+				if (response.body &amp;&amp; response.body.error &amp;&amp; response.body.error === 'invalid_grant') {
+					var errDescription = response.body.error_description;
+					var message = errDescription ? `Auth Error: ${errDescription}` : undefined;
+					throw errors.buildAuthError(response, message);
+				}
 
-			// Response Error: The API is telling us that we attempted an invalid token grant. This
-			// means that our refresh token or auth code has exipred, so propagate an "Expired Tokens"
-			// error.
-			if (response.body &amp;&amp; response.body.error &amp;&amp; response.body.error === 'invalid_grant') {
-				callback(errors.buildExpiredAuthError(response));
-				return;
-			}
+				// Unexpected Response: If the token request couldn't get a valid response, then we're
+				// out of options. Build an "Unexpected Response" error and propagate it out for the
+				// consumer to handle.
+				if (response.statusCode !== httpStatusCodes.OK || response.body instanceof Buffer) {
+					throw errors.buildUnexpectedResponseError(response);
+				}
 
-			// Unexpected Response: If the token request couldn't get a valid response, then we're
-			// out of options. Build an "Unexpected Response" error and propagate it out for the
-			// consumer to handle.
-			if (response.statusCode !== httpStatusCodes.OK || response.body instanceof Buffer) {
-				callback(errors.buildUnexpectedResponseError(response));
-				return;
-			}
+				// Check to see if token response is valid in case the API returns us a 200 with a malformed token
+				if (!isValidTokenResponse(formParams.grant_type, response.body)) {
+					throw errors.buildResponseError(response, 'Token format from response invalid');
+				}
 
-			// Check to see if token response is valid in case the API returns us a 200 with a malformed token
-			if (!isValidTokenResponse(formParams.grant_type, response.body)) {
-				callback(errors.buildResponseError(response, 'Token format from response invalid'));
-				return;
-			}
-
-			// Got valid token response. Parse out the TokenInfo and propagate it back.
-			var tokenInfo = getTokensFromGrantResponse(response.body);
-			callback(null, tokenInfo);
-		});
+				// Got valid token response. Parse out the TokenInfo and propagate it back.
+				return getTokensFromGrantResponse(response.body);
+			});
 	},
 
 	/**
 	 * Acquires token info using an authorization code
 	 *
 	 * @param {string} authorizationCode - authorization code issued by Box
-	 * @param {?TokenRequestOptions} options - Sets optional behavior for the token grant, null for default behavior
-	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
-	 * @returns {void}
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise&lt;TokenInfo>} Promise resolving to the token info
 	 */
-	getTokensAuthorizationCodeGrant: function(authorizationCode, options, callback) {
+	getTokensAuthorizationCodeGrant(authorizationCode, options) {
 		if (!isValidCodeOrToken(authorizationCode)) {
-			setImmediate(function() {
-				callback(new Error('Invalid authorization code.'));
-			});
-		} else {
-			this.getTokens({
-				grant_type: grantTypes.AUTHORIZATION_CODE,
-				code: authorizationCode
-			},
-			options,
-			callback);
+			return Promise.reject(new Error('Invalid authorization code.'));
 		}
+
+		var params = {
+			grant_type: grantTypes.AUTHORIZATION_CODE,
+			code: authorizationCode
+		};
+
+		return this.getTokens(params, options);
 	},
 
 	/**
 	 * Acquires token info using the client credentials grant.
 	 *
-	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
-	 * @returns {void}
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise&lt;TokenInfo>} Promise resolving to the token info
 	 */
-	getTokensClientCredentialsGrant: function(callback) {
-		this.getTokens({
+	getTokensClientCredentialsGrant(options) {
+
+		var params = {
 			grant_type: grantTypes.CLIENT_CREDENTIALS
-		},
-		null,
-		callback);
+		};
+		return this.getTokens(params, options);
 	},
 
 	/**
 	 * Refreshes the access and refresh tokens for a given refresh token.
 	 *
 	 * @param {string} refreshToken - A valid OAuth refresh token
-	 * @param {Function} callback - passed a TokenInfo object if tokens were granted successfully
-	 * @returns {void}
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise&lt;TokenInfo>} Promise resolving to the token info
 	 */
-	getTokensRefreshGrant: function(refreshToken, callback) {
+	getTokensRefreshGrant(refreshToken, options) {
 		if (!isValidCodeOrToken(refreshToken)) {
-			setImmediate(function() {
-				callback(new Error('Invalid refresh token.'));
-			});
-		} else {
-			this.getTokens({
-				grant_type: grantTypes.REFRESH_TOKEN,
-				refresh_token: refreshToken
-			},
-			null,
-			callback);
+			return Promise.reject(new Error('Invalid refresh token.'));
 		}
+
+		var params = {
+			grant_type: grantTypes.REFRESH_TOKEN,
+			refresh_token: refreshToken
+		};
+
+		return this.getTokens(params, options);
 	},
 
 	/**
 	 * Gets tokens for enterprise administration of app users
 	 * @param {string} type The type of token to create, "user" or "enterprise"
 	 * @param {string} id The ID of the enterprise to generate a token for
-	 * @param {Function} callback Passed the tokens if successful
-	 * @returns {void}
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise&lt;TokenInfo>} Promise resolving to the token info
 	 */
-	getTokensJWTGrant: function(type, id, callback) {
-
+	getTokensJWTGrant(type, id, options) {
 		if (!this.config.appAuth.keyID) {
-			callback(new Error('Must provide app auth configuration to use JWT Grant'));
-			return;
+			return Promise.reject(new Error('Must provide app auth configuration to use JWT Grant'));
 		}
 
 		var claims = {
 			exp: Math.floor(Date.now() / 1000) + this.config.appAuth.expirationTime,
 			box_sub_type: type
 		};
-		var options = {
+		var jwtOptions = {
 			algorithm: this.config.appAuth.algorithm,
-			audience: 'https://api.box.com/oauth2/token',
+			audience: BOX_JWT_AUDIENCE,
 			subject: id,
 			issuer: this.config.clientID,
 			jwtid: uuid.v4(),
 			noTimestamp: !this.config.appAuth.verifyTimestamp,
-			headers: {
-				kid: this.config.appAuth.keyID
-			}
+			keyid: this.config.appAuth.keyID
 		};
 		var keyParams = {
 			key: this.config.appAuth.privateKey,
@@ -355,68 +350,119 @@ TokenManager.prototype = {
 
 		var assertion;
 		try {
-			assertion = jwt.sign(claims, keyParams, options);
+			assertion = jwt.sign(claims, keyParams, jwtOptions);
 		} catch (jwtErr) {
-			callback(jwtErr);
-			return;
+
+			return Promise.reject(jwtErr);
 		}
 
-		var self = this;
-		this.getTokens({
+		var params = {
 			grant_type: grantTypes.JWT,
-			assertion: assertion
-		},
-		null,
-		function(err, tokenInfo) {
+			assertion
+		};
+		return this.getTokens(params, options)
+			.catch(err => {
 
-			// When a client's clock is out of sync with Box API servers, they'll get an error about the exp claim
-			// In these cases, we can attempt to retry the grant request with a new exp claim calculated frem the
-			// Date header sent by the server
-			if (err &amp;&amp; err.authExpired &amp;&amp; err.response.body.error_description.indexOf('exp') > -1 &amp;&amp; err.response.headers.date) {
+				// When a client's clock is out of sync with Box API servers, they'll get an error about the exp claim
+				// In these cases, we can attempt to retry the grant request with a new exp claim calculated frem the
+				// Date header sent by the server
+				if (err.authExpired &amp;&amp; err.response.body.error_description.indexOf('exp') > -1 &amp;&amp; err.response.headers.date) {
 
-				var serverTime = Math.floor(Date.parse(err.response.headers.date) / 1000);
-				claims.exp = serverTime + self.config.appAuth.expirationTime;
+					var serverTime = Math.floor(Date.parse(err.response.headers.date) / 1000);
+					claims.exp = serverTime + this.config.appAuth.expirationTime;
 
-				try {
-					assertion = jwt.sign(claims, keyParams, options);
-				} catch (jwtErr) {
-					callback(err);
-					return;
+					try {
+						params.assertion = jwt.sign(claims, keyParams, jwtOptions);
+					} catch (jwtErr) {
+						throw jwtErr;
+					}
+
+					return this.getTokens(params, options);
 				}
 
-				self.getTokens({
-					grant_type: grantTypes.JWT,
-					assertion: assertion
-				},
-				null,
-				callback);
-				return;
+				throw err;
+			});
+	},
+
+	/**
+	 * Exchange a valid access token for one with a lower scope, or delegated to
+	 * an external user identifier.
+	 *
+	 * @param {string} accessToken - The valid access token to exchange
+	 * @param {string|string[]} scopes - The scope(s) of the new access token
+	 * @param {string} [resource] - The absolute URL of an API resource to restrict the new token to
+	 * @param {Object} [options] - Optional parameters
+	 * @param {TokenRequestOptions} [options.tokenRequestOptions] - Sets optional behavior for the token grant
+	 * @param {ActorParams} [options.actor] - Optional actor parameters for creating annotator tokens
+	 * @returns {Promise&lt;TokenInfo>} Promise resolving to the new token info
+	 */
+	exchangeToken(accessToken, scopes, resource, options) {
+		var params = {
+			grant_type: grantTypes.TOKEN_EXCHANGE,
+			subject_token_type: ACCESS_TOKEN_TYPE,
+			subject_token: accessToken,
+			scope: (typeof scopes === 'string' ? scopes : scopes.join(' '))
+		};
+
+		if (resource) {
+			params.resource = resource;
+		}
+
+		if (options &amp;&amp; options.actor) {
+
+			var payload = {
+				iss: this.config.clientID,
+				sub: options.actor.id,
+				aud: BOX_JWT_AUDIENCE,
+				jti: uuid.v4(),
+				box_sub_type: 'external',
+				name: options.actor.name
+			};
+
+			var jwtOptions = {
+				algorithm: 'none',
+				expiresIn: '1m',
+				noTimestamp: true
+			};
+
+			var token;
+			try {
+				token = jwt.sign(payload, 'UNUSED', jwtOptions);
+			} catch (jwtError) {
+				return Promise.reject(jwtError);
 			}
 
-			// Pass through
-			callback(err, tokenInfo);
-		});
+			params.actor_token = token;
+			params.actor_token_type = ACTOR_TOKEN_TYPE;
+		}
+
+		return this.getTokens(params, options &amp;&amp; options.tokenRequestOptions ? options.tokenRequestOptions : null);
 	},
 
 	/**
 	 * Revokes a token pair associated with a given access or refresh token.
 	 *
 	 * @param {string} token - A valid access or refresh token to revoke
-	 * @param {Function} callback - If err, revoke failed. Otherwise, revoke succeeded.
-	 * @returns {void}
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise} Promise resolving if the revoke succeeds
 	 */
-	revokeTokens: function(token, callback) {
+	revokeTokens(token, options) {
 		var params = {
 			method: 'POST',
 			url: this.oauthBaseURL + tokenPaths.REVOKE,
 			form: {
-				token: token,
+				token,
 				client_id: this.config.clientID,
 				client_secret: this.config.clientSecret
 			}
 		};
 
-		this.requestManager.makeRequest(params, callback);
+		if (options &amp;&amp; options.ip) {
+			params.headers = {};
+			params.headers[HEADER_XFF] = options.ip;
+		}
+
+		return this.requestManager.makeRequest(params);
 	}
 };
 
@@ -436,13 +482,13 @@ module.exports = TokenManager;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-whitelists.html">box-node-sdk/lib/managers/collaboration-whitelists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationWhitelist.html">CollaborationWhitelist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 22 2017 13:18:52 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Sep 17 2018 13:29:23 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -4,8 +4,21 @@ Events
 The Box API supports two types of event streams -- one for the events specific to a particular user
  and one for all of the events in an enterprise.
 
-* [User Events](#user-events)
-* [Enterprise Events](#enterprise-events)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [User Events](#user-events)
+  - [Listening to the EventStream](#listening-to-the-eventstream)
+  - [Deduplicating Events](#deduplicating-events)
+  - [Get the Current Stream Position](#get-the-current-stream-position)
+  - [Get Events](#get-events)
+- [Enterprise Events](#enterprise-events)
+  - [Listening to the Enterprise Event Stream](#listening-to-the-enterprise-event-stream)
+  - [Handling errors](#handling-errors)
+  - [Persisting the Stream State](#persisting-the-stream-state)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 User Events
@@ -63,7 +76,7 @@ client.events.getCurrentStreamPosition(callback);
 ### Get Events
 
 To get the latest chunk of events, you can call
-[`events.get(qs, callback)`](http://opensource.box.com/box-node-sdk/Events.html#get).
+[`events.get(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Events.html#get).
 
 ```js
 client.events.get(null, callback);
@@ -75,6 +88,16 @@ point in time:
 ```js
 client.events.get({stream_position: '1408838928446360'}, callback);
 ```
+
+### Destroying the Stream
+
+If you ever need to *stop* long-polling, use:
+
+```js
+client.events.destroy();
+```
+
+This *will not* cancel in-process network requests. It *will* ensure no further long-polling nor event fetching takes place.
 
 Enterprise Events
 -----------------
@@ -133,7 +156,7 @@ client.events.getEnterpriseEventStream({
 	
     if (err) { // Handle error }
 
-    stream.on('end', function(event) {
+    stream.on('end', function() {
         // Reached the end of the stream.
     });
 });
@@ -170,7 +193,7 @@ If an API or network error occurs, the stream will ignore the error and continue
 the connection can be re-established.  You can respond to errors with an `'error'` event listener:
 
 ```js
-stream.on('error', function(event) {
+stream.on('error', function(err) {
     // Handle the error.
 });
 ```

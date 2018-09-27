@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -17,7 +18,7 @@ var BoxClient = require('../../../lib/box-client');
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake,
 	RetentionPolicies,
 	retentionPolicies,
@@ -69,7 +70,8 @@ describe('RetentionPolicies', function() {
 		it('should make POST request to create a new policy when called without optional parameters', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/retention_policies', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/retention_policies', expectedParams);
 			retentionPolicies.create(POLICY_NAME, POLICY_TYPE, DISPOSITION_ACTION);
 		});
 
@@ -79,14 +81,17 @@ describe('RetentionPolicies', function() {
 			expectedParams.body.policy_type = 'finite';
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/retention_policies', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/retention_policies', expectedParams);
 			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30});
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30});
 		});
 
@@ -120,14 +125,17 @@ describe('RetentionPolicies', function() {
 			var qs = {fields: 'policy_name,id'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/retention_policies/' + POLICY_ID, {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/retention_policies/${POLICY_ID}`, {qs});
 			retentionPolicies.get(POLICY_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			retentionPolicies.get(POLICY_ID);
 		});
 
@@ -166,14 +174,17 @@ describe('RetentionPolicies', function() {
 		it('should make PUT request to update policy info when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/retention_policies/' + POLICY_ID, {body: options});
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/retention_policies/${POLICY_ID}`, {body: options});
 			retentionPolicies.update(POLICY_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			retentionPolicies.update(POLICY_ID, options);
 		});
 
@@ -207,14 +218,17 @@ describe('RetentionPolicies', function() {
 			var qs = {policy_type: 'enterprise'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/retention_policies', {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/retention_policies', {qs});
 			retentionPolicies.getAll(qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			retentionPolicies.getAll();
 		});
 
@@ -248,14 +262,17 @@ describe('RetentionPolicies', function() {
 			var qs = {type: 'enterprise'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/retention_policies/' + POLICY_ID + '/assignments', {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/retention_policies/${POLICY_ID}/assignments`, {qs});
 			retentionPolicies.getAssignments(POLICY_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			retentionPolicies.getAssignments(POLICY_ID);
 		});
 
@@ -304,14 +321,42 @@ describe('RetentionPolicies', function() {
 		it('should make POST request to assign policy when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/retention_policy_assignments', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/retention_policy_assignments', expectedParams);
 			retentionPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID);
+		});
+
+		it('should make POST request to assign policy with optional params when options are passed', function() {
+
+			var options = {
+				filter_fields: [
+					{
+						field: 'foo',
+						value: 'bar'
+					},
+					{
+						field: 'baz',
+						value: 42
+					}
+				]
+			};
+
+			expectedParams.body.filter_fields = options.filter_fields;
+			expectedParams.body.assign_to.type = 'metadata_template';
+			expectedParams.body.assign_to.id = 'enterprise.myTemplate';
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/retention_policy_assignments', expectedParams);
+			retentionPolicies.assign(POLICY_ID, 'metadata_template', 'enterprise.myTemplate', options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			retentionPolicies.assign(POLICY_ID, ASSIGN_TYPE, ASSIGN_ID);
 		});
 
@@ -338,7 +383,7 @@ describe('RetentionPolicies', function() {
 		});
 	});
 
-	describe('getAssignment', function() {
+	describe('getAssignment()', function() {
 
 		var ASSIGNMENT_ID = '876345';
 
@@ -347,14 +392,17 @@ describe('RetentionPolicies', function() {
 			var qs = {fields: 'type,id,retention_policy'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/retention_policy_assignments/' + ASSIGNMENT_ID, {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/retention_policy_assignments/${ASSIGNMENT_ID}`, {qs});
 			retentionPolicies.getAssignment(ASSIGNMENT_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			retentionPolicies.getAssignment(ASSIGNMENT_ID);
 		});
 
@@ -390,14 +438,17 @@ describe('RetentionPolicies', function() {
 			var qs = {fields: 'type,id,disposition_at'};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/file_version_retentions/' + RETENTION_ID, {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/file_version_retentions/${RETENTION_ID}`, {qs});
 			retentionPolicies.getFileVersionRetention(RETENTION_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			retentionPolicies.getFileVersionRetention(RETENTION_ID);
 		});
 
@@ -434,14 +485,17 @@ describe('RetentionPolicies', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/file_version_retentions', {qs});
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/file_version_retentions', {qs});
 			retentionPolicies.getAllFileVersionRetentions(qs);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			retentionPolicies.getAllFileVersionRetentions();
 		});
 

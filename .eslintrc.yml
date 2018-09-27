@@ -1,130 +1,345 @@
 ---
 root: true
 
-parserOptions:
-    ecmaVersion: 6
-
 env:
     node: true
     es6: true
 
+parserOptions:
+    sourceType: script
+
 globals:
+    # Allow the Intl global but don't allow it to be overwritten
     Intl: false
 
-extends: 'eslint:recommended'
+plugins:
+    - promise
+    - unicorn
+    - node
+
+extends:
+    - 'eslint:recommended'
+    - 'plugin:promise/recommended'
+    - 'plugin:unicorn/recommended'
+    - 'plugin:node/recommended'
 
 rules:
-    # We allow unused args
-    no-unused-vars: [2, {"args": "after-used"}]
 
-    no-unexpected-multiline: 2
-    valid-jsdoc: [2, {"prefer": {"return": "returns", "arg": "param", "class": "constructor"}}]
+### POSSIBLE ERRORS
+    getter-return: error
+    no-await-in-loop: error
+    # This seems like a good idea, but questionable value?
+    no-prototype-builtins: off
+    no-template-curly-in-string: error
+    valid-jsdoc:
+        - error
+        - 
+            prefer:
+                return: returns
+                arg: param
+                class: constructor
+            preferType:
+                object: Object
+                bool: boolean
 
-    consistent-return: 2
-    curly: [2, "all"]
-    default-case: 2
-    dot-location: [2, "property"]
-    dot-notation: 2
-    eqeqeq: 2
-    guard-for-in: 2
-    no-alert: 2
-    no-caller: 2
-    no-else-return: 2
-    no-eval: 2
-    no-extra-bind: 2
-    no-implied-eval: 2
-    no-floating-decimal: 2
-    no-iterator: 2
-    no-labels: 2
-    no-lone-blocks: 2
-    no-loop-func: 2
-    no-multi-spaces: 2
-    no-multi-str: 2
-    no-native-reassign: 2
-    no-new-func: 2
-    no-new-wrappers: 2
-    no-new: 2
-    no-octal-escape: 2
-    no-proto: 2
-    no-return-assign: 2
-    no-script-url: 2
-    no-self-compare: 2
-    no-sequences: 2
-    no-throw-literal: 2
-    no-unused-expressions: 2
-    no-useless-call: 2
-    no-useless-concat: 2
-    no-void: 2
-    no-with: 2
-    radix: 2
-    wrap-iife: 2
-    yoda: [2, "never"]
+### BEST PRACTICES
+    accessor-pairs: error
+    array-callback-return: error
+    block-scoped-var: error
+    class-methods-use-this: warn
+    consistent-return: error
+    curly:
+        - error
+        - all
+    default-case: error
+    dot-location:
+        - error
+        - property
+    dot-notation: error
+    eqeqeq: error
+    guard-for-in: error
+    no-alert: error
+    no-caller: error
+    no-div-regex: warn
+    no-else-return: error
+    no-empty-function: warn
+    no-eval: error
+    no-extend-native: error
+    no-extra-bind: error
+    no-floating-decimal: error
+    no-global-assign: error
+    no-implicit-coercion: warn
+    no-implicit-globals: error
+    no-implied-eval: error
+    no-invalid-this: error
+    no-iterator: error
+    no-labels: error
+    no-lone-blocks: error
+    no-loop-func: error
+    no-multi-spaces: error
+    no-multi-str: error
+    no-new: error
+    no-new-func: error
+    no-new-wrappers: error
+    no-octal-escape: error
+    no-proto: error
+    no-return-assign: error
+    no-return-await: error
+    no-script-url: error
+    no-self-compare: error
+    no-sequences: error
+    no-throw-literal: error
+    no-unmodified-loop-condition: error
+    no-unused-expressions: error
+    no-useless-call: error
+    no-useless-concat: error
+    no-useless-return: error
+    no-void: error
+    no-with: error
+    prefer-promise-reject-errors: error
+    radix: error
+    require-await: warn
+    wrap-iife: error
+    yoda:
+        - error
+        - never
+    # no-restricted-properties
 
-    strict: [2, "global"]
+### STRICT MODE
+    strict:
+        - error
+        - safe
 
-    no-catch-shadow: 2
-    no-label-var: 2
-    no-shadow-restricted-names: 2
-    no-shadow: 2
-    no-use-before-define: 2
+### VARIABLES
+    no-catch-shadow: error
+    no-delete-var: error
+    no-shadow: error
+    no-shadow-restricted-names: error
+    # Turn on someday, just use null everywhere if we can
+    no-undefined: off
+    # We allow some unused args
+    no-unused-vars:
+        - error
+        -
+            args: after-used
+    no-use-before-define: error
 
-    callback-return: 2
-    global-require: 2
-    handle-callback-err: [2, "^(err|error)$"]
-    no-mixed-requires: 2
-    no-new-require: 2
-    no-path-concat: 2
-    no-process-exit: 2
-    no-sync: 2
+### NODE AND COMMONJS
+    callback-return: error
+    global-require: error
+    handle-callback-err:
+        - error
+        - '^.*(e|E)rr'
+    # Buffer constructor is unsafe, enable when we don't support Node 4.x anymore
+    no-buffer-constructor: off
+    no-mixed-requires: error
+    no-new-require: error
+    no-path-concat: error
+    no-process-exit: error
+    no-sync: error
 
-    brace-style: [2, "1tbs", {"allowSingleLine": true}]
-    comma-style: [2, "last"]
-    consistent-this: [2, "self"]
-    eol-last: 2
-    func-style: [2, "declaration", {"allowArrowFunctions": true}]
-    indent: [2, "tab"]
-    key-spacing: 2
-    keyword-spacing: [2, {"before": true, "after": true}]
-    linebreak-style: [2, "unix"]
-    new-cap: 2
-    new-parens: 2
-    no-array-constructor: 2
-    no-lonely-if: 2
-    no-multiple-empty-lines: 2
-    no-nested-ternary: 2
-    no-new-object: 2
-    no-spaced-func: 2
-    no-trailing-spaces: 2
-    no-unneeded-ternary: 2
-    quote-props: [2, "as-needed"]
-    quotes: [2, "single", "avoid-escape"]
-    require-jsdoc: [2, {"require": {"FunctionDeclaration": true, "MethodDefinition": true}}]
-    semi: [2, "always"]
-    space-before-blocks: 2
-    space-before-function-paren: [2, "never"]
-    space-infix-ops: 2
-    space-unary-ops: [2, {"words": true, "nonwords": false}]
-    spaced-comment: [2, "always"]
+### STYLISTIC ISSUES
+    array-bracket-newline: &arraySpacingOptions
+        - error
+        - 
+            multiline: true
+            minItems: 2
+    array-element-newline: *arraySpacingOptions
+    block-spacing: error
+    brace-style:
+        - error
+        - 1tbs
+        - 
+            allowSingleLine: true
+    camelcase:
+        - error
+        - 
+            properties: never
+    comma-dangle:
+        - error
+        - only-multiline
+    comma-spacing: error
+    comma-style:
+        - error
+        - last
+    consistent-this:
+        - error
+        - self
+    eol-last: error
+    func-call-spacing: error
+    func-name-matching: error
+    func-style:
+        - error
+        - declaration
+        - 
+            allowArrowFunctions: true
+    implicit-arrow-linebreak: error
+    # This rule can be customized for switch/case etc.
+    indent:
+        - error
+        - tab
+    key-spacing: error
+    keyword-spacing:
+        - error
+        - 
+            before: true
+            after: true
+    linebreak-style:
+        - error
+        - unix
+    lines-between-class-members: error
+    max-depth: error
+    # We should turn this on to enforce readable line lengths
+    max-len:
+        - off
+        - 120
+    max-params:
+        - error
+        - 6
+    max-statements-per-line:
+        - error
+        - 
+            max: 1
+    multiline-ternary:
+        - error
+        - never
+    new-cap: error
+    new-parens: error
+    newline-per-chained-call:
+        - error
+        - 
+            ignoreChainWithDepth: 2
+    no-array-constructor: error
+    no-bitwise: warn
+    no-continue: error
+    no-lonely-if: error
+    no-mixed-operators: error
+    no-multi-assign: error
+    no-multiple-empty-lines: error
+    no-negated-condition: error
+    no-nested-ternary: error
+    no-new-object: error
+    no-plusplus:
+        - error
+        - 
+            allowForLoopAfterthoughts: true
+    no-trailing-spaces: error
+    no-unneeded-ternary: error
+    no-whitespace-before-property: error
+    one-var-declaration-per-line: error
+    operator-assignment: error
+    quote-props:
+        - error
+        - as-needed
+    quotes:
+        - error
+        - single
+        - avoid-escape
+    require-jsdoc:
+        - error
+        - 
+            require:
+                FunctionDeclaration: true
+                MethodDefinition: true
+                ClassDeclaration: true
+    semi:
+        - error
+        - always
+    semi-spacing: error
+    semi-style:
+        - error
+        - last
+    space-before-blocks: error
+    space-before-function-paren:
+        - error
+        - never
+    space-infix-ops: error
+    space-unary-ops:
+        - error
+        - 
+            words: true
+            nonwords: false
+    spaced-comment:
+        - error
+        - always
+    switch-colon-spacing: error
+    template-tag-spacing:
+        - error
+        - never
+    unicode-bom: error
 
-    arrow-body-style: [2, "as-needed"]
-    arrow-parens: [2, "as-needed"]
-    arrow-spacing: 2
-    generator-star-spacing: [2, {"before": false, "after": true}]
-    no-confusing-arrow: [2, {"allowParens": true}]
-    no-const-assign: 2
-    require-yield: 2
+### ES6
+    arrow-body-style:
+        - error
+        - as-needed
+    arrow-parens:
+        - error
+        - as-needed
+    arrow-spacing: error
+    generator-star-spacing:
+        - error
+        - after
+    no-confusing-arrow:
+        - error
+        - 
+            allowParens: true
+    no-duplicate-imports:
+        - error
+        - 
+            includeExports: true
+    no-useless-computed-key: error
+    no-useless-constructor: error
+    no-useless-rename: error
+    # Turn this on when we support only newer Node versions
+    no-var: off
+    object-shorthand:
+        - warn
+        - always
+        - 
+            avoidQuotes: true
+            avoidExplicitReturnArrows: true
+    prefer-arrow-callback:
+        - error
+        - 
+            allowNamedFunctions: true
+    # Turn on when we don't support older Node.js versions
+    prefer-destructuring: off
+    prefer-numeric-literals: error
+    # Turn on when we don't support older Node.js versions
+    prefer-rest-params: off
+    # Turn on when we don't support older Node.js versions
+    prefer-spread: off
+    prefer-template: error
+    rest-spread-spacing:
+        - error
+        - never
+    symbol-description: error
+    template-curly-spacing:
+        - error
+        - never
+    yield-star-spacing:
+        - error
+        - after
+### PROMISES
+    promise/no-nesting: off
+    # We use Bluebird promises only for consistency/interface
+    promise/no-native: error
+    promise/no-promise-in-callback: error
+    promise/no-callback-in-promise: error
+    promise/avoid-new: error
+    promise/no-return-in-finally: error
 
-    array-callback-return: 2
-    no-implicit-globals: 2
-    no-new-symbol: 2
-    no-self-assign: 2
-    no-unmodified-loop-condition: 2
-    no-useless-constructor: 2
-    no-whitespace-before-property: 2
-    one-var-declaration-per-line: 2
-    # @TODO(mwiller) 2016-03-14: Turn this on when we're on a version of Node that supports rest params
-    #prefer-rest-params: 2
-    template-curly-spacing: 2
-    yield-star-spacing: [2, "after"]
-    no-useless-escape: 2
-    max-statements-per-line: [2, {"max": 1}]
+### UNICORN
+    # Need to disable until we no longer support Node 4
+    unicorn/no-new-buffer: off
+
+### NODE
+    node/no-deprecated-api:
+        - error
+        -
+            ignoreGlobalItems:
+                - new Buffer()
+    node/exports-style:
+        - error
+        - module.exports
+

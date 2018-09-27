@@ -27,7 +27,7 @@ var assert = require('chai').assert,
 var MODULE_UNDER_TEST_PATH = '../../lib/api-request';
 
 // then variables
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	config,
 	requestStub,
 	requestObjectStub,
@@ -54,7 +54,11 @@ describe('APIRequest', function() {
 				formData: true
 			}
 		});
-		requestObjectStub = leche.create(['form', 'on', 'emit']);
+		requestObjectStub = leche.create([
+			'form',
+			'on',
+			'emit'
+		]);
 		requestObjectFake = leche.fake(requestObjectStub);
 		requestStub = sandbox.stub();
 		requestStub.returns(requestObjectFake);
@@ -131,7 +135,8 @@ describe('APIRequest', function() {
 			var apiRequest = new APIRequest(config, eventBusFake);
 			var error = new Error('stream broken');
 
-			sandbox.mock(eventBusFake).expects('emit').withArgs('response', error);
+			sandbox.mock(eventBusFake).expects('emit')
+				.withArgs('response', error);
 
 			var requestOnStub = sandbox.stub(requestObjectFake, 'on');
 			requestOnStub.withArgs('error').yields(error);
@@ -145,7 +150,8 @@ describe('APIRequest', function() {
 			var apiRequest = new APIRequest(config, eventBusFake);
 			var response = {statusCode: 200};
 
-			sandbox.mock(eventBusFake).expects('emit').withArgs('response', null, response);
+			sandbox.mock(eventBusFake).expects('emit')
+				.withArgs('response', null, response);
 
 			var requestOnStub = sandbox.stub(requestObjectFake, 'on');
 			requestOnStub.withArgs('error');
@@ -365,7 +371,8 @@ describe('APIRequest', function() {
 			var requestError = new Error('ECONNREFUSED');
 
 			requestStub.yieldsAsync(requestError);
-			sandbox.mock(eventBusFake).expects('emit').withExactArgs('response', requestError);
+			sandbox.mock(eventBusFake).expects('emit')
+				.withExactArgs('response', requestError);
 
 			var apiRequest = new APIRequest(config, eventBusFake);
 			apiRequest.execute(function callback() {
@@ -383,7 +390,8 @@ describe('APIRequest', function() {
 			};
 
 			requestStub.yieldsAsync(null, responseInfo);
-			sandbox.mock(eventBusFake).expects('emit').withExactArgs('response', sinon.match(expectedError));
+			sandbox.mock(eventBusFake).expects('emit')
+				.withExactArgs('response', sinon.match(expectedError));
 
 			var apiRequest = new APIRequest(config, eventBusFake);
 			apiRequest.execute(function callback() {
@@ -401,7 +409,8 @@ describe('APIRequest', function() {
 			};
 
 			requestStub.yieldsAsync(null, responseInfo);
-			sandbox.mock(eventBusFake).expects('emit').withExactArgs('response', null, sinon.match(expectedResponse));
+			sandbox.mock(eventBusFake).expects('emit')
+				.withExactArgs('response', null, sinon.match(expectedResponse));
 
 			var apiRequest = new APIRequest(config, eventBusFake);
 			apiRequest.execute(function callback() {

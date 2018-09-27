@@ -1,0 +1,17 @@
+{
+    "id": "3964ca73-cc23-4e92-96b8-744bdda81db0",
+    "type": "metadata_template",
+    "templateKey": "box",
+    "scope": "enterprise_12345",
+    "displayName": "Box",
+    "hidden": false,
+    "fields": [
+        {
+            "id": "17f2d715-6acb-45f2-b96a-28b15efc9faa",
+            "type": "string",
+            "key": "boxField",
+            "displayName": "Box Field",
+            "hidden": false
+        }
+    ]
+}

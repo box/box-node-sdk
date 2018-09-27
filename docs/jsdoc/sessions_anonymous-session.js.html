@@ -35,7 +35,8 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var CallbackQueue = require('../util/lazy-async-queue');
+
+const Promise = require('bluebird');
 
 // ------------------------------------------------------------------------------
 // Private
@@ -62,105 +63,93 @@ var CallbackQueue = require('../util/lazy-async-queue');
  */
 function AnonymousSession(config, tokenManager) {
 	this._config = config;
-	this.tokenManager = tokenManager;
+	this._tokenManager = tokenManager;
 
 	// The TokenInfo object for this anonymous session
-	this.tokenInfo = null;
+	this._tokenInfo = null;
 
-	// Queue of all callbacks waiting for a fresh token
-	this._upkeepQueue = new CallbackQueue();
-
-	// Indicates if tokens are currently being refreshed
-	this._isRefreshingTokens = false;
+	this._refreshPromise = null;
 }
 
 /**
  * Initiate a refresh of the anonymous access tokens. New tokens should be passed to the
- * callback, and then cached for later use.
+ * caller, and then cached for later use.
  *
- * @param {UpdateTokensCallback} [callback] Called on completion with valid access token or error
- * @returns {void}
+ * @param {?TokenRequestOptions} [options] - Sets optional behavior for the token grant
+ * @returns {Promise&lt;string>} Promise resolving to the access token
  * @private
  */
-AnonymousSession.prototype._refreshAnonymousAccessToken = function(callback) {
+AnonymousSession.prototype._refreshAnonymousAccessToken = function(options) {
 
-	// If tokens are already being refreshed, push the callback into the queue
-	// to be called when refresh is complete.
-	if (this._isRefreshingTokens) {
-		if (callback) {
-			this._upkeepQueue.push(callback);
-		}
-		return;
+	// If tokens aren't already being refreshed, start the refresh
+	if (!this._refreshPromise) {
+		// Initiate a refresh
+		this._refreshPromise = this._tokenManager.getTokensClientCredentialsGrant(options)
+			.then(tokenInfo => {
+				// Set new token info and propagate the new access token
+				this._tokenInfo = tokenInfo;
+				return tokenInfo.accessToken;
+			})
+			.finally(() => {
+				// Refresh complete, clear promise
+				this._refreshPromise = null;
+			});
 	}
 
-	// Initiate a refresh
-	callback = callback || function() {};
-	this._isRefreshingTokens = true;
-	var self = this;
-	this.tokenManager.getTokensClientCredentialsGrant(function(err, tokenInfo) {
-
-		// Refresh complete, set status to false
-		self._isRefreshingTokens = false;
-
-		// Propagate an error
-		if (err) {
-			self._upkeepQueue.flush(err);
-			callback(err);
-			return;
-		}
-
-		// Set new token info and propagate the new access token
-		self.tokenInfo = tokenInfo;
-		self._upkeepQueue.flush(null, tokenInfo.accessToken);
-		callback(null, tokenInfo.accessToken);
-	});
+	return this._refreshPromise;
 };
 
 /**
- * Returns a valid, anonymous access token to the callback.
+ * Produces a valid, anonymous access token.
  * Performs a refresh before returning if the current token is expired. If the current
  * token is considered stale but still valid, return the current token but initiate a
  * new refresh in the background.
  *
- * @param {UpdateTokensCallback} callback Called on completion with valid access token or error
- * @returns {void}
+ * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+ * @returns {Promise&lt;string>} Promise resolving to the access token
  */
-AnonymousSession.prototype.getAccessToken = function(callback) {
-
-	// If the current token is expired, get a new token. All incoming
+AnonymousSession.prototype.getAccessToken = function(options) {
+	// If the current token is no longer fresh, get a new token. All incoming
 	// requests will be held until a fresh token is retrieved.
-	if (!this.tokenInfo || !this.tokenManager.isAccessTokenValid(this.tokenInfo, this._config.expiredBufferMS)) {
-		this._refreshAnonymousAccessToken(callback);
-		return;
-	}
-
-	// If the current token is getting stale, fire off a refresh in the background. We still return the
-	// current, valid access token below.
-	// A token object is considered stale before it expires, usually in the range of a few minutes.
-	// This gives the session a chance to optimistically refresh the session's tokens in the background without
-	// holding up the user request.
-	if (!this.tokenManager.isAccessTokenValid(this.tokenInfo, this._config.staleBufferMS)) {
-		this._refreshAnonymousAccessToken();
+	var expirationBuffer = Math.max(this._config.expiredBufferMS, this._config.staleBufferMS);
+	if (!this._tokenInfo || !this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)) {
+		return this._refreshAnonymousAccessToken(options);
 	}
 
 	// Your token is not currently stale! Return the current access token.
-	callback(null, this.tokenInfo.accessToken);
+	return Promise.resolve(this._tokenInfo.accessToken);
 };
 
 /**
  * Revokes the anonymous token used by this anonymous session, and clears the saved tokenInfo.
  *
- * @param {Function} callback Called after tokens have been revoked
- * @returns {void}
+ * @param {TokenRequestOptions} options] - Sets optional behavior for the token grant
+ * @returns {Promise} Promise resolving if the revoke succeeds
  */
-AnonymousSession.prototype.revokeTokens = function(callback) {
+AnonymousSession.prototype.revokeTokens = function(options) {
 	// The current anonymous token is revoked (but a new one will be created automatically as needed).
-	var tokenInfo = this.tokenInfo || {},
+	var tokenInfo = this._tokenInfo || {},
 		accessToken = tokenInfo.accessToken;
-	this.tokenInfo = null;
-	this.tokenManager.revokeTokens(accessToken, callback);
+	this._tokenInfo = null;
+	return this._tokenManager.revokeTokens(accessToken, options);
 };
 
+/**
+ * Return the anonymous session token, since there is no need to downscope a
+ * token that does not have any associated user credentials.
+ * @param {string|string[]} scopes The scope(s) requested for the new token
+ * @param {string} [resource] The absolute URL of an API resource to scope the new token to
+ * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+ * @returns {Promise&lt;TokenInfo>} Promise resolving to the new token info
+ */
+AnonymousSession.prototype.exchangeToken = function(scopes, resource, options) {
+
+	// We need to get the access token, in case it hasn't been generated yet
+	return this.getAccessToken(options)
+		// Pass back the entire token info object, not just the acces token,
+		// to maintain parity with the other session classes
+		.then(() => this._tokenInfo);
+};
 
 /**
  * @module box-node-sdk/lib/sessions/anonymous-session
@@ -177,13 +166,13 @@ module.exports = AnonymousSession;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-whitelists.html">box-node-sdk/lib/managers/collaboration-whitelists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationWhitelist.html">CollaborationWhitelist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 22 2017 13:18:52 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Sep 17 2018 13:29:23 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

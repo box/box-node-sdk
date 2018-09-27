@@ -1,0 +1,229 @@
+
+/* General */
+body {
+    font-family: Roboto, 'Helvetica Neue', 'Helvetica', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+h1 {
+    font-size: 2.5em;
+    font-weight: 300;
+    margin: 0 0 1.5em 0;
+}
+h2 {
+    font-size: 2em;
+    font-weight: 300;
+    margin: 0 0 1.5em 0;
+}
+a {
+    color: rgb(29, 176, 238);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+pre {
+    background-color: #fafafa;
+    border-radius: 7px;
+    border: solid 1px #d3d3d3;
+    font-family: Menlo, Consolas, monospace;
+    line-height: 1.5em;
+    max-width: 50em;
+    overflow: auto;
+    padding: 1em;
+    text-align: left;
+}
+pre.code .operator, pre.code .keyword {
+    color: #017c9d;
+}
+pre.code .string {
+    color: #15b8ae;
+}
+/* Header */
+.header {
+    background-color: rgb(27, 64, 118);
+    color: #fff;
+    margin: 0 0 5em 0;
+    padding: 1em;
+    text-align: left;
+}
+.header h1 {
+    display: inline-block;
+    font-size: 2em;
+    line-height: 2em;
+    margin: 0;
+}
+.header-buttons {
+    float: right;
+}
+/* Buttons */
+.button {
+    color: #fff;
+    display: inline-block;
+    padding: 1em;
+    text-decoration: none;
+    transition: background-color .1s ease;
+}
+.button:hover {
+    background-color: rgb(29, 176, 238);
+    text-decoration: none;
+}
+.button-icon {
+    display: inline-block;
+    fill: #fff;
+    height: 2em;
+    vertical-align: middle;
+    width: 2em;
+}
+.button-label {
+    margin-left: .5em;
+    vertical-align: middle;
+    width: 10em;
+}
+/* Install Instructions */
+#gradle-option {
+    border-color: rgb(132, 183, 43);
+}
+#maven-option {
+    border-color: rgb(253, 105, 34);
+}
+#jar-option {
+    border-color: rgb(90, 131, 158);
+}
+#install-container {
+    background-color: #fafafa;
+    border: solid 1px #d3d3d3;
+    border-radius: 7px;
+    font-size: 1.2em;
+    margin: 2em auto 4em auto;
+    overflow: auto;
+    padding: 1em;
+    position: relative;
+    transition: height .2s ease .2s, max-width .2s ease .2s;
+}
+#install-container pre {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+.install-option {
+    border-bottom: solid 3px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.5em;
+    font-weight: 300;
+    margin: 0 2px 0 2px;
+    padding: 0 1em .2em 1em;
+    transition: opacity .1s ease;
+    vertical-align: middle;
+    width: 3.5em;
+}
+.one-line {
+    height: 1.5em;
+    max-width: 25em;
+}
+.multiline {
+    height: 7.5em;
+    max-width: 30em;
+}
+.multiline-long {
+    height: 7.5em;
+    max-width: 45em;
+}
+.install-instructions {
+    position: absolute;
+    transition: opacity .2s ease .4s;
+}
+/* Sections */
+.section {
+    border-color: #ddd;
+    border-style: solid;
+    border-width: 1px 0 0 0;
+    padding: 2em 0 0 0;
+}
+.section p {
+    font-size: 1.2em;
+    font-weight: 300;
+    margin: 0 auto 2em auto;
+    max-width: 40em;
+}
+.section div {
+    margin: 0 auto 2em auto;
+    max-width: 50em;
+}
+.section pre {
+    margin: 0 auto 2.4em auto;
+}
+.doc-link {
+    color: rgb(27, 64, 118);
+    display: inline-block;
+    fill: rgb(27, 64, 118);
+    margin: 1em;
+    text-decoration: none;
+    transition: fill .1s, color .1s ease;
+    width: 7em;
+}
+.doc-link:hover {
+    color: rgb(29, 176, 238);
+    fill: rgb(29, 176, 238);
+    text-decoration: none;
+}
+.doc-link .icon {
+    display: block;
+    height: 4em;
+    margin: 1em auto 1em auto;
+    width: 4em;
+}
+/* Animation */
+.inactive {
+    opacity: .4;
+}
+.inactive:hover {
+    opacity: .6;
+}
+.hidden {
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+.removed {
+    display: none;
+}
+@media (max-width: 650px) {
+    .button-label {
+        display: none;
+    }
+    .icon {
+        height: 2.5em;
+        margin: .5em auto .5em auto;
+        width: 2.5em;
+    }
+    .doc {
+        margin: .5em;
+    }
+}
+@media (max-width: 420px) {
+    pre {
+        border-radius: 0;
+        border: none;
+    }
+    .header {
+        margin: 0 0 2em 0;
+    }
+    #install-container {
+        border-radius: 0;
+        border: none;
+        font-size: 1em;
+    }
+    #download-button {
+        display: none;
+    }
+    #install-container {
+        margin: 2em auto 2em auto;
+    }
+    .install-option {
+        font-size: 1.2em;
+        width: 3em;
+    }
+}

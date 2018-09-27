@@ -9,6 +9,7 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 // Modules to Fake
@@ -23,7 +24,7 @@ describe('box-node-sdk', function() {
 	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create(),
+	var sandbox = sinon.createSandbox(),
 		BoxSDKNode,
 		sdk,
 		TokenManagerConstructorStub,
@@ -236,7 +237,8 @@ describe('box-node-sdk', function() {
 
 			};
 
-			sandbox.mock(WebhooksFake).expects('setSignatureKeys').withArgs(primaryKey, secondaryKey);
+			sandbox.mock(WebhooksFake).expects('setSignatureKeys')
+				.withArgs(primaryKey, secondaryKey);
 
 			sdk = BoxSDKNode.getPreconfiguredInstance(settings);
 
@@ -291,10 +293,10 @@ describe('box-node-sdk', function() {
 			};
 
 			sdk.configure(additonalParams);
-			assert.deepPropertyVal(sdk, 'config.clientID', 'myId');
-			assert.deepPropertyVal(sdk, 'config.apiRootURL', 'myUrl');
-			assert.deepPropertyVal(sdk, 'config.retryIntervalMS', 11111);
-			assert.deepPropertyVal(sdk, 'config.numMaxRetries', 3);
+			assert.nestedPropertyVal(sdk, 'config.clientID', 'myId');
+			assert.nestedPropertyVal(sdk, 'config.apiRootURL', 'myUrl');
+			assert.nestedPropertyVal(sdk, 'config.retryIntervalMS', 11111);
+			assert.nestedPropertyVal(sdk, 'config.numMaxRetries', 3);
 		});
 	});
 
@@ -306,6 +308,11 @@ describe('box-node-sdk', function() {
 
 		it('should return an instance of a Basic Client when called', function() {
 			var basicClient = sdk.getBasicClient('abc');
+			assert.ok((basicClient instanceof BasicClient), 'Returned instance of Basic Client');
+		});
+
+		it('should return an instance of a Basic Client when called as a static method', function() {
+			var basicClient = BoxSDKNode.getBasicClient('abc');
 			assert.ok((basicClient instanceof BasicClient), 'Returned instance of Basic Client');
 		});
 	});
@@ -433,10 +440,17 @@ describe('box-node-sdk', function() {
 
 		it('should call to token manager getTokensAuthorizationCodeGrant() and propagate result when called', function(done) {
 			var ac = 'ac',
-				options = {some: 'options'};
-			sandbox.mock(tokenManagerFake).expects('getTokensAuthorizationCodeGrant').withExactArgs(ac, options, done).yields();
+				options = {some: 'options'},
+				fakeTokenInfo = {at: 'at'};
+			sandbox.mock(tokenManagerFake).expects('getTokensAuthorizationCodeGrant')
+				.withExactArgs(ac, options)
+				.returns(Promise.resolve(fakeTokenInfo));
 
-			sdk.getTokensAuthorizationCodeGrant(ac, options, done);
+			sdk.getTokensAuthorizationCodeGrant(ac, options, function(err, tokenInfo) {
+				assert.ifError(err);
+				assert.equal(tokenInfo, fakeTokenInfo);
+				done();
+			});
 		});
 	});
 
@@ -448,10 +462,34 @@ describe('box-node-sdk', function() {
 
 		it('should call to token manager getTokensRefreshGrant() and propagate result when called', function(done) {
 			var refreshToken = 'rt';
-			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant').withExactArgs(refreshToken, done).yields();
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant')
+				.withExactArgs(refreshToken, null)
+				.returns(Promise.resolve());
 
 			sdk.getTokensRefreshGrant(refreshToken, done);
 		});
+
+		it('should call to token manager getTokensRefreshGrant() with null options and propagate result when called', function(done) {
+			var refreshToken = 'rt';
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant')
+				.withExactArgs(refreshToken, null)
+				.returns(Promise.resolve());
+
+			sdk.getTokensRefreshGrant(refreshToken, null, done);
+		});
+
+		it('should call to token manager getTokensRefreshGrant() with options.ip and propagate result when called', function(done) {
+			var refreshToken = 'rt';
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('getTokensRefreshGrant')
+				.withExactArgs(refreshToken, options)
+				.returns(Promise.resolve());
+
+			sdk.getTokensRefreshGrant(refreshToken, options, done);
+		});
+
 	});
 
 	describe('getEnterpriseAppAuthTokens()', function() {
@@ -461,12 +499,34 @@ describe('box-node-sdk', function() {
 		});
 
 		it('should call to token manager getTokensJWTGrant() and propagate result when called', function(done) {
-
 			var enterpriseID = '8273698724';
-
-			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs('enterprise', enterpriseID, done).yieldsAsync();
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withArgs('enterprise', enterpriseID, null)
+				.returns(Promise.resolve());
 
 			sdk.getEnterpriseAppAuthTokens(enterpriseID, done);
+		});
+
+
+		it('should call to token manager getTokensJWTGrant() with options.ip and propagate result when called', function(done) {
+			var enterpriseID = '8273698724';
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withArgs('enterprise', enterpriseID, options)
+				.returns(Promise.resolve());
+
+			sdk.getEnterpriseAppAuthTokens(enterpriseID, options, done);
+		});
+
+		it('should call to token manager getTokensJWTGrant() without options.ip and propagate result when called', function(done) {
+			var enterpriseID = '8273698724';
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withArgs('enterprise', enterpriseID, null)
+				.returns(Promise.resolve());
+
+			sdk.getEnterpriseAppAuthTokens(enterpriseID, null, done);
 		});
 
 		it('should use enterprise ID from config when one is present and none is passed in', function(done) {
@@ -482,9 +542,11 @@ describe('box-node-sdk', function() {
 
 			sdk = BoxSDKNode.getPreconfiguredInstance(settings);
 
-			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs('enterprise', id, done).yieldsAsync();
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withArgs('enterprise', id, null)
+				.returns(Promise.resolve());
 
-			sdk.getEnterpriseAppAuthTokens(null, done);
+			sdk.getEnterpriseAppAuthTokens(id, done);
 		});
 
 		it('should throw when no enterprise ID is passed in or in config', function() {
@@ -495,7 +557,7 @@ describe('box-node-sdk', function() {
 			});
 
 			assert.throws(function() {
-				sdk.getEnterpriseAppAuthTokens(null, function() {});
+				sdk.getEnterpriseAppAuthTokens(null, () => { /**/ });
 			});
 		});
 	});
@@ -506,13 +568,38 @@ describe('box-node-sdk', function() {
 			sdk = new BoxSDKNode(TEST_CONFIG);
 		});
 
-		it('should call to token manager getTokensJWTGrant() and propagate result when called', function(done) {
+		it('should call to token manager getTokensJWTGrant() without options.ip and propagate result when called', function(done) {
 
 			var userID = '138475693475';
 
-			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant').withArgs('user', userID, done).yieldsAsync();
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withExactArgs('user', userID, null)
+				.returns(Promise.resolve());
 
 			sdk.getAppUserTokens(userID, done);
+		});
+
+		it('should call to token manager getTokensJWTGrant() with options.ip and propagate result when called', function(done) {
+			var userID = '138475693475';
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withExactArgs('user', userID, options)
+				.returns(Promise.resolve());
+
+			sdk.getAppUserTokens(userID, options, done);
+		});
+
+		it('should call to token manager getTokensJWTGrant() without options.ip and propagate result when called', function(done) {
+
+			var userID = '138475693475';
+
+			sandbox.mock(tokenManagerFake).expects('getTokensJWTGrant')
+				.withExactArgs('user', userID, null)
+				.returns(Promise.resolve());
+
+			sdk.getAppUserTokens(userID, null, done);
 		});
 	});
 
@@ -522,12 +609,36 @@ describe('box-node-sdk', function() {
 			sdk = new BoxSDKNode(TEST_CONFIG);
 		});
 
-		it('should call to token manager revokeTokens() and propagate result when called', function(done) {
+		it('should call to token manager revokeTokens() without options.ip and propagate result when called', function(done) {
 			var refreshToken = 'rt';
 
-			sandbox.mock(tokenManagerFake).expects('revokeTokens').withExactArgs(refreshToken, done).yields();
+			sandbox.mock(tokenManagerFake).expects('revokeTokens')
+				.withExactArgs(refreshToken, null)
+				.returns(Promise.resolve());
 
 			sdk.revokeTokens(refreshToken, done);
+		});
+
+		it('should call to token manager revokeTokens() with options.ip and propagate result when called', function(done) {
+			var refreshToken = 'rt';
+			var options = {};
+			options.ip = '127.0.0.1, 192.168.10.10';
+
+			sandbox.mock(tokenManagerFake).expects('revokeTokens')
+				.withExactArgs(refreshToken, options)
+				.returns(Promise.resolve());
+
+			sdk.revokeTokens(refreshToken, options, done);
+		});
+
+		it('should call to token manager revokeTokens() without options.ip and propagate result when called', function(done) {
+			var refreshToken = 'rt';
+
+			sandbox.mock(tokenManagerFake).expects('revokeTokens')
+				.withExactArgs(refreshToken, null)
+				.returns(Promise.resolve());
+
+			sdk.revokeTokens(refreshToken, null, done);
 		});
 	});
 });

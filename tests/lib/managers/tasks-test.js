@@ -10,12 +10,13 @@ var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
 	assert = require('chai').assert,
+	Promise = require('bluebird'),
 	BoxClient = require('../../../lib/box-client');
 
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	Tasks,
 	tasks,
@@ -86,36 +87,42 @@ describe('Tasks', function() {
 			expectedParams.body.due_at = dueAt;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
-			tasks.create(FILE_ID, {message: message, due_at: dueAt});
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(BASE_PATH, expectedParams);
+			tasks.create(FILE_ID, {message, due_at: dueAt});
 		});
 
 		it('should make POST request with message to create a task when just a message is passed', function() {
 			expectedParams.body.message = message;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
-			tasks.create(FILE_ID, {message: message});
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(BASE_PATH, expectedParams);
+			tasks.create(FILE_ID, {message});
 		});
 
 		it('should make POST request with due_at to create a task when just a dueAt is passed', function() {
 			expectedParams.body.due_at = dueAt;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(BASE_PATH, expectedParams);
 			tasks.create(FILE_ID, {due_at: dueAt});
 		});
 
 		it('should make POST request with mandatory parameters to create a task when neither optional parameter is passed', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs(BASE_PATH, expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs(BASE_PATH, expectedParams);
 			tasks.create(FILE_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			tasks.create(FILE_ID);
 		});
 
@@ -146,14 +153,17 @@ describe('Tasks', function() {
 
 		it('should make GET request to get task info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + TASK_ID, testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`${BASE_PATH}/${TASK_ID}`, testParamsWithQs);
 			tasks.get(TASK_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			tasks.get(TASK_ID, testQS);
 		});
 
@@ -197,21 +207,25 @@ describe('Tasks', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`${BASE_PATH}/${TASK_ID}`, expectedParams);
 			tasks.update(TASK_ID, options);
 		});
 
 		it('should make PUT request with mandatory parameters to update a task when no optional parameter is passed', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs(BASE_PATH + '/' + TASK_ID, {body: null});
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`${BASE_PATH}/${TASK_ID}`, {body: null});
 			tasks.update(TASK_ID, null);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			tasks.update(TASK_ID, null);
 		});
 
@@ -243,14 +257,17 @@ describe('Tasks', function() {
 		it('should make delete request to delete a task permanently when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs(BASE_PATH + '/' + TASK_ID);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`${BASE_PATH}/${TASK_ID}`);
 			tasks.delete(TASK_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			tasks.delete(TASK_ID);
 		});
 
@@ -282,14 +299,17 @@ describe('Tasks', function() {
 		it('should make GET request to get task assignments when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs(BASE_PATH + '/' + TASK_ID + '/assignments', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`${BASE_PATH}/${TASK_ID}/assignments`, testParamsWithQs);
 			tasks.getAssignments(TASK_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			tasks.getAssignments(TASK_ID, testQS);
 		});
 
@@ -321,14 +341,17 @@ describe('Tasks', function() {
 		it('should make GET request to get task assignment when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/task_assignments/' + ASSIGNMENT_ID, testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/task_assignments/${ASSIGNMENT_ID}`, testParamsWithQs);
 			tasks.getAssignment(ASSIGNMENT_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			tasks.getAssignment(ASSIGNMENT_ID, testQS);
 		});
 
@@ -374,14 +397,17 @@ describe('Tasks', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/task_assignments', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/task_assignments', expectedParams);
 			tasks.assignByUserID(TASK_ID, USER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			tasks.assignByUserID(TASK_ID, USER_ID);
 		});
 
@@ -427,14 +453,17 @@ describe('Tasks', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/task_assignments', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/task_assignments', expectedParams);
 			tasks.assignByEmail(TASK_ID, EMAIL);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			tasks.assignByEmail(TASK_ID, EMAIL);
 		});
 
@@ -482,14 +511,17 @@ describe('Tasks', function() {
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/task_assignments/' + ASSIGNMENT_ID, expectedParams);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/task_assignments/${ASSIGNMENT_ID}`, expectedParams);
 			tasks.updateAssignment(ASSIGNMENT_ID, options);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			tasks.updateAssignment(ASSIGNMENT_ID, options);
 		});
 
@@ -521,14 +553,17 @@ describe('Tasks', function() {
 		it('should make delete request to delete a task permanently when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/task_assignments/' + ASSIGNMENT_ID);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/task_assignments/${ASSIGNMENT_ID}`);
 			tasks.deleteAssignment(ASSIGNMENT_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			tasks.deleteAssignment(ASSIGNMENT_ID);
 		});
 

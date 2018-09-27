@@ -185,7 +185,8 @@ Webhooks.prototype.triggerTypes = {
 		COPIED: 'FILE.COPIED',
 		MOVED: 'FILE.MOVED',
 		LOCKED: 'FILE.LOCKED',
-		UNLOCKED: 'FILE.UNLOCKED'
+		UNLOCKED: 'FILE.UNLOCKED',
+		RENAMED: 'FILE.RENAMED'
 	},
 	COMMENT: {
 		CREATED: 'COMMENT.CREATED',
@@ -207,10 +208,24 @@ Webhooks.prototype.triggerTypes = {
 		RESTORED: 'FOLDER.RESTORED',
 		DELETED: 'FOLDER.DELETED',
 		COPIED: 'FOLDER.COPIED',
-		MOVED: 'FOLDER.MOVED'
+		MOVED: 'FOLDER.MOVED',
+		TRASHED: 'FOLDER.TRASHED',
+		RENAMED: 'FOLDER.RENAMED'
 	},
 	WEBHOOK: {
 		DELETED: 'WEBHOOK.DELETED'
+	},
+	COLLABORATION: {
+		CREATED: 'COLLABORATION.CREATED',
+		ACCEPTED: 'COLLABORATION.ACCEPTED',
+		REJECTED: 'COLLABORATION.REJECTED',
+		REMOVED: 'COLLABORATION.REMOVED',
+		UPDATED: 'COLLABORATION.UPDATED'
+	},
+	SHARED_LINK: {
+		DELETED: 'SHARED_LINK.DELETED',
+		CREATED: 'SHARED_LINK.CREATED',
+		UPDATED: 'SHARED_LINK.UPDATED'
 	}
 };
 
@@ -250,13 +265,13 @@ Webhooks.prototype.create = function(targetID, targetType, notificationURL, trig
  * Method: GET
  *
  * @param {string} webhookID - ID of the webhook to retrieve
- * @param {Object} [qs] - Additional options can be passed with the request via querystring. Can be left null in most cases.
+ * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
  * @param {Function} [callback] - Passed the webhook information if it was acquired successfully
  * @returns {Promise&lt;Object>} A promise resolving to the webhook object
  */
-Webhooks.prototype.get = function(webhookID, qs, callback) {
+Webhooks.prototype.get = function(webhookID, options, callback) {
 	var params = {
-		qs: qs
+		qs: options
 	};
 
 	var apiPath = urlPath(BASE_PATH, webhookID);
@@ -269,15 +284,15 @@ Webhooks.prototype.get = function(webhookID, qs, callback) {
  * API Endpoint: '/webhooks'
  * Method: GET
  *
- * @param {Object} [qs] - Additional options can be passed with the request via querystring. Can be left null in most cases.
- * @param {int} [qs.limit=100] - The number of webhooks to return
- * @param {string} [qs.marker] - Pagination marker
+ * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+ * @param {int} [options.limit=100] - The number of webhooks to return
+ * @param {string} [options.marker] - Pagination marker
  * @param {Function} [callback] - Passed the list of webhooks if successful, error otherwise
  * @returns {Promise&lt;Object>} A promise resolving to the collection of webhooks
  */
-Webhooks.prototype.getAll = function(qs, callback) {
+Webhooks.prototype.getAll = function(options, callback) {
 	var params = {
-		qs: qs
+		qs: options
 	};
 
 	var apiPath = urlPath(BASE_PATH);
@@ -291,16 +306,16 @@ Webhooks.prototype.getAll = function(qs, callback) {
  * Method: PUT
  *
  * @param {string} webhookID - The ID of the webhook to be updated
- * @param {Object} options - Webhook fields to update
- * @param {string} [options.address] - The new URL used by Box to send a notification when webhook is triggered
- * @param {WebhookTriggerType[]} [options.triggers] - The new events that triggers a notification
+ * @param {Object} updates - Webhook fields to update
+ * @param {string} [updates.address] - The new URL used by Box to send a notification when webhook is triggered
+ * @param {WebhookTriggerType[]} [updates.triggers] - The new events that triggers a notification
  * @param {Function} [callback] - Passed the updated webhook information if successful, error otherwise
  * @returns {Promise&lt;Object>} A promise resolving to the updated webhook object
  */
-Webhooks.prototype.update = function(webhookID, options, callback) {
+Webhooks.prototype.update = function(webhookID, updates, callback) {
 	var apiPath = urlPath(BASE_PATH, webhookID),
 		params = {
-			body: options
+			body: updates
 		};
 
 	return this.client.wrapWithDefaultHandler(this.client.put)(apiPath, params, callback);
@@ -339,7 +354,7 @@ Webhooks.setSignatureKeys = function(primaryKey, secondaryKey) {
 /**
  * Validate a webhook message by verifying the signature and the delivery timestamp
  *
- * @param {string} body - The request body of the webhook message
+ * @param {string|Object} body - The request body of the webhook message
  * @param {Object} headers - The request headers of the webhook message
  * @param {string} [primaryKey] - The primary signature to verify the message with. If it is sent as a parameter,
      it overrides the static variable primarySignatureKey
@@ -359,6 +374,12 @@ Webhooks.validateMessage = function(body, headers, primaryKey, secondaryKey, max
 
 	if (typeof maxMessageAge !== 'number') {
 		maxMessageAge = MAX_MESSAGE_AGE;
+	}
+
+	// For frameworks like Express that automatically parse JSON
+	// bodies into Objects, re-stringify for signature testing
+	if (typeof body === 'object') {
+		body = JSON.stringify(body);
 	}
 
 	if (!validateSignature(body, headers, primaryKey, secondaryKey)) {
@@ -389,13 +410,13 @@ module.exports = Webhooks;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-whitelists.html">box-node-sdk/lib/managers/collaboration-whitelists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationWhitelist.html">CollaborationWhitelist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 22 2017 13:18:52 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Sep 17 2018 13:29:23 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

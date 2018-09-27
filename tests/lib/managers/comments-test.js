@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -17,7 +18,7 @@ var BoxClient = require('../../../lib/box-client');
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	Comments,
 	comments,
@@ -66,14 +67,17 @@ describe('Comments', function() {
 	describe('get()', function() {
 		it('should make GET request to get comment info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/comments/1234', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/comments/1234', testParamsWithQs);
 			comments.get(COMMENT_ID, testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			comments.get(COMMENT_ID, testQS);
 		});
 
@@ -122,14 +126,17 @@ describe('Comments', function() {
 
 		it('should make POST request to create a new comment when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/comments', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/comments', expectedParams);
 			comments.create(fileID, commentText);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			comments.create(fileID, commentText);
 		});
 
@@ -178,14 +185,17 @@ describe('Comments', function() {
 
 		it('should make POST request to create a new tagged comment when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/comments', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/comments', expectedParams);
 			comments.createTaggedComment(fileID, taggedCommentText);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.post).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.post)
+				.returnsArg(0);
 			comments.create(fileID, taggedCommentText);
 		});
 
@@ -215,14 +225,17 @@ describe('Comments', function() {
 	describe('update()', function() {
 		it('should make PUT request to update comment info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('put').withArgs('/comments/1234', testParamsWithBody);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs('/comments/1234', testParamsWithBody);
 			comments.update(COMMENT_ID, testBody);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.put).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.put)
+				.returnsArg(0);
 			comments.update(COMMENT_ID, testBody);
 		});
 
@@ -252,14 +265,17 @@ describe('Comments', function() {
 	describe('delete()', function() {
 		it('should make DELETE request to delete the comment when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del').withArgs('/comments/1234', null);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs('/comments/1234', null);
 			comments.delete(COMMENT_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.del).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
 			comments.delete(COMMENT_ID);
 		});
 

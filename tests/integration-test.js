@@ -16,14 +16,16 @@ var assert = require('chai').assert,
 	fs = require('fs'),
 	path = require('path'),
 	crypto = require('crypto'),
+	Promise = require('bluebird'),
+	request = require('request'),
 	jwt = require('jsonwebtoken');
 
 describe('Box Node SDK', function() {
 
-  // ------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
 	// Setup
 	// ------------------------------------------------------------------------------
-	var sandbox = sinon.sandbox.create();
+	var sandbox = sinon.createSandbox();
 
 	var TEST_API_ROOT = 'https://api.box.com',
 		TEST_CLIENT_ID = 'client_id',
@@ -35,6 +37,7 @@ describe('Box Node SDK', function() {
 		BoxSDK;
 
 	beforeEach(function() {
+		nock.disableNetConnect();
 		apiMock = nock(TEST_API_ROOT);
 
 		mockery.enable({
@@ -57,9 +60,9 @@ describe('Box Node SDK', function() {
 		var folderID = '98740596456',
 			folderName = 'Test Folder';
 
-		apiMock.get('/2.0/folders/' + folderID)
+		apiMock.get(`/2.0/folders/${folderID}`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('User-Agent', function(uaHeader) {
@@ -102,9 +105,9 @@ describe('Box Node SDK', function() {
 		var folderID = '98740596456',
 			folderName = 'Test Folder';
 
-		apiMock.get('/2.0/folders/' + folderID)
+		apiMock.get(`/2.0/folders/${folderID}`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('User-Agent', function(uaHeader) {
@@ -166,7 +169,53 @@ describe('Box Node SDK', function() {
 			done();
 		});
 
-		client.folders.get('1234', {}, function() {});
+		client.folders.get('1234', {}, () => { /**/ });
+	});
+
+	it('should use exponential backoff with randomization when API calls fail', function() {
+
+		apiMock.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(502)
+			.get('/2.0/users/me')
+			.reply(429)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(200, {
+				type: 'user',
+				id: 'me'
+			});
+
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 5,
+			retryIntervalMS: 10
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		var start = Date.now();
+		return client.users.get('me')
+			.then(() => {
+				var end = Date.now();
+				// verify that at least the minimum expected time has passed
+				// should be 5 retries:
+				// first after 5-15ms
+				// second after 10-30ms
+				// third after 20-60ms
+				// fourth after 40-120ms
+				// fifth after 80-240ms
+				// total should be 155-465ms
+				var timeElapsed = end - start;
+				assert.isAtLeast(timeElapsed, 155);
+				assert.isAtMost(timeElapsed, 465);
+			});
 	});
 
 	it('should get anonymous tokens and make API call when anonymous client manager is used', function(done) {
@@ -185,13 +234,13 @@ describe('Box Node SDK', function() {
 				access_token: TEST_ACCESS_TOKEN,
 				expires_in: 256
 			})
-			.get('/2.0/files/' + fileID)
+			.get(`/2.0/files/${fileID}`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('BoxApi', function(boxHeader) {
-				assert.equal(boxHeader, 'shared_link=' + encodeURIComponent(sharedLink));
+				assert.equal(boxHeader, `shared_link=${encodeURIComponent(sharedLink)}`);
 				return true;
 			})
 			.reply(200, {
@@ -221,12 +270,19 @@ describe('Box Node SDK', function() {
 
 		var fileID = '98740596456',
 			fileName = 'Test Document.pdf',
-			tokenStoreFake = leche.create(['read', 'write', 'clear']),
+			tokenStoreFake = leche.create([
+				'read',
+				'write',
+				'clear'
+			]),
 			refreshToken = 'rt',
-			ips = ['127.0.0.1', '192.168.1.1'],
+			ips = [
+				'127.0.0.1',
+				'192.168.1.1'
+			],
 			expiredTokenInfo = {
 				accessToken: 'expired_at',
-				refreshToken: refreshToken,
+				refreshToken,
 				acquiredAtMS: Date.now() - 3600000,
 				accessTokenTTLMS: 60000
 			};
@@ -243,9 +299,9 @@ describe('Box Node SDK', function() {
 				refresh_token: 'new_rt',
 				expires_in: 256
 			})
-			.get('/2.0/files/' + fileID)
+			.get(`/2.0/files/${fileID}`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('X-Forwarded-For', function(xffHeader) {
@@ -265,10 +321,86 @@ describe('Box Node SDK', function() {
 		var client = sdk.getPersistentClient(expiredTokenInfo, tokenStoreFake);
 		client.setIPs(ips);
 
-		sandbox.mock(tokenStoreFake).expects('write').withArgs(sinon.match({
-			accessToken: TEST_ACCESS_TOKEN,
-			refreshToken: 'new_rt'
-		})).yieldsAsync();
+		sandbox.mock(tokenStoreFake).expects('write')
+			.withArgs(sinon.match({
+				accessToken: TEST_ACCESS_TOKEN,
+				refreshToken: 'new_rt'
+			}))
+			.yieldsAsync();
+
+		client.files.get(fileID, {}, function(err, data) {
+
+			assert.ifError(err);
+			assert.propertyVal(data, 'id', fileID);
+			assert.propertyVal(data, 'name', fileName);
+			done();
+		});
+	});
+
+	it('should make API call when persistent client manager is called and correctly match the IP headers for refresh token call', function(done) {
+
+		var fileID = '98740596456',
+			fileName = 'Test Document.pdf',
+			tokenStoreFake = leche.create([
+				'read',
+				'write',
+				'clear'
+			]),
+			refreshToken = 'rt',
+			ips = [
+				'127.0.0.1',
+				'192.168.1.1'
+			],
+			expiredTokenInfo = {
+				accessToken: 'expired_at',
+				refreshToken,
+				acquiredAtMS: Date.now() - 3600000,
+				accessTokenTTLMS: 60000
+			};
+
+		apiMock
+			.post('/oauth2/token', {
+				grant_type: 'refresh_token',
+				refresh_token: refreshToken,
+				client_id: TEST_CLIENT_ID,
+				client_secret: TEST_CLIENT_SECRET
+			}).matchHeader('X-Forwarded-For', function(xffHeader) {
+				assert.equal(xffHeader, '127.0.0.1, 192.168.1.1');
+				return true;
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				refresh_token: 'new_rt',
+				expires_in: 256
+			})
+			.get(`/2.0/files/${fileID}`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('X-Forwarded-For', function(xffHeader) {
+				assert.equal(xffHeader, '127.0.0.1, 192.168.1.1');
+				return true;
+			})
+			.reply(200, {
+				id: fileID,
+				name: fileName
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		var client = sdk.getPersistentClient(expiredTokenInfo, tokenStoreFake);
+		client.setIPs(ips);
+
+		sandbox.mock(tokenStoreFake).expects('write')
+			.withArgs(sinon.match({
+				accessToken: TEST_ACCESS_TOKEN,
+				refreshToken: 'new_rt'
+			}))
+			.yieldsAsync();
 
 		client.files.get(fileID, {}, function(err, data) {
 
@@ -301,14 +433,14 @@ describe('Box Node SDK', function() {
 				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
 
 				var assertion = jwt.decode(body.assertion, {complete: true});
-				assert.deepPropertyVal(assertion, 'header.alg', algorithm);
-				assert.deepPropertyVal(assertion, 'header.typ', 'JWT');
-				assert.deepPropertyVal(assertion, 'header.kid', keyID);
+				assert.nestedPropertyVal(assertion, 'header.alg', algorithm);
+				assert.nestedPropertyVal(assertion, 'header.typ', 'JWT');
+				assert.nestedPropertyVal(assertion, 'header.kid', keyID);
 
-				assert.deepPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
-				assert.deepPropertyVal(assertion, 'payload.sub', userID);
-				assert.deepPropertyVal(assertion, 'payload.box_sub_type', 'user');
-				assert.deepPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.nestedPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
+				assert.nestedPropertyVal(assertion, 'payload.sub', userID);
+				assert.nestedPropertyVal(assertion, 'payload.box_sub_type', 'user');
+				assert.nestedPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
 				assert.notProperty(assertion, 'payload.iat');
 
 				return true;
@@ -319,7 +451,7 @@ describe('Box Node SDK', function() {
 			})
 			.get('/2.0/users/me')
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.reply(200, {
@@ -331,14 +463,102 @@ describe('Box Node SDK', function() {
 			clientID: TEST_CLIENT_ID,
 			clientSecret: TEST_CLIENT_SECRET,
 			appAuth: {
-				algorithm: algorithm,
-				keyID: keyID,
-				privateKey: privateKey,
-				passphrase: passphrase
+				algorithm,
+				keyID,
+				privateKey,
+				passphrase
 			}
 		});
 
 		var client = sdk.getAppAuthClient('user', userID);
+
+		client.users.get(client.CURRENT_USER_ID, {}, function(err, data) {
+
+			assert.ifError(err);
+			assert.propertyVal(data, 'id', userID);
+			assert.propertyVal(data, 'name', userName);
+			done();
+		});
+	});
+
+	it('should correctly cache tokens in app auth session when provided token store', function(done) {
+
+		var userID = '34876458977987',
+			userName = 'Pnin',
+			algorithm = 'RS256',
+			keyID = 'ltf64zjk',
+			passphrase = 'Test secret key',
+			tokenStoreFake = leche.create([
+				'read',
+				'write',
+				'clear'
+			]),
+			expiredTokenInfo = {
+				accessToken: 'expired_at',
+				refreshToken: null,
+				acquiredAtMS: Date.now() - 3600000,
+				accessTokenTTLMS: 60000
+			};
+
+		// @NOTE(mwiller) 2016-04-12: This is an actual generated RSA key, so the key
+		//   parameters are actually meaningful and will cause the test to fail if
+		//   they change!
+		/* eslint-disable no-sync */
+		var privateKey = fs.readFileSync(path.resolve(__dirname, 'fixtures/appusers_private_key.pem'));
+		/* eslint-enable no-sync */
+
+		apiMock
+			.post('/oauth2/token', function(body) {
+				assert.propertyVal(body, 'client_id', TEST_CLIENT_ID);
+				assert.propertyVal(body, 'client_secret', TEST_CLIENT_SECRET);
+				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
+
+				var assertion = jwt.decode(body.assertion, {complete: true});
+				assert.nestedPropertyVal(assertion, 'header.alg', algorithm);
+				assert.nestedPropertyVal(assertion, 'header.typ', 'JWT');
+				assert.nestedPropertyVal(assertion, 'header.kid', keyID);
+
+				assert.nestedPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
+				assert.nestedPropertyVal(assertion, 'payload.sub', userID);
+				assert.nestedPropertyVal(assertion, 'payload.box_sub_type', 'user');
+				assert.nestedPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.notProperty(assertion, 'payload.iat');
+
+				return true;
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				expires_in: 256
+			})
+			.get('/2.0/users/me')
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(200, {
+				id: userID,
+				name: userName
+			});
+
+		sandbox.mock(tokenStoreFake).expects('read')
+			.yieldsAsync(null, expiredTokenInfo);
+
+		sandbox.mock(tokenStoreFake).expects('write')
+			.withArgs(sinon.match({ accessToken: TEST_ACCESS_TOKEN }))
+			.yieldsAsync();
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			appAuth: {
+				algorithm,
+				keyID,
+				privateKey,
+				passphrase
+			}
+		});
+
+		var client = sdk.getAppAuthClient('user', userID, tokenStoreFake);
 
 		client.users.get(client.CURRENT_USER_ID, {}, function(err, data) {
 
@@ -355,7 +575,10 @@ describe('Box Node SDK', function() {
 			algorithm = 'RS256',
 			keyID = 'ltf64zjk',
 			passphrase = 'Test secret key',
-			scopes = ['item_preview', 'item_read'],
+			scopes = [
+				'item_preview',
+				'item_read'
+			],
 			resource = 'https://api.box.com/2.0/folders/0';
 
 		var exchangedTokenInfo = {
@@ -391,14 +614,14 @@ describe('Box Node SDK', function() {
 				assert.propertyVal(body, 'grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
 
 				var assertion = jwt.decode(body.assertion, {complete: true});
-				assert.deepPropertyVal(assertion, 'header.alg', algorithm);
-				assert.deepPropertyVal(assertion, 'header.typ', 'JWT');
-				assert.deepPropertyVal(assertion, 'header.kid', keyID);
+				assert.nestedPropertyVal(assertion, 'header.alg', algorithm);
+				assert.nestedPropertyVal(assertion, 'header.typ', 'JWT');
+				assert.nestedPropertyVal(assertion, 'header.kid', keyID);
 
-				assert.deepPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
-				assert.deepPropertyVal(assertion, 'payload.sub', userID);
-				assert.deepPropertyVal(assertion, 'payload.box_sub_type', 'user');
-				assert.deepPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
+				assert.nestedPropertyVal(assertion, 'payload.iss', TEST_CLIENT_ID);
+				assert.nestedPropertyVal(assertion, 'payload.sub', userID);
+				assert.nestedPropertyVal(assertion, 'payload.box_sub_type', 'user');
+				assert.nestedPropertyVal(assertion, 'payload.aud', 'https://api.box.com/oauth2/token');
 				assert.notProperty(assertion, 'payload.iat');
 
 				return true;
@@ -412,7 +635,7 @@ describe('Box Node SDK', function() {
 				assert.propertyVal(body, 'subject_token_type', 'urn:ietf:params:oauth:token-type:access_token');
 				assert.propertyVal(body, 'subject_token', TEST_ACCESS_TOKEN);
 				assert.propertyVal(body, 'resource', resource);
-				assert.propertyVal(body, 'scope', scopes.join(','));
+				assert.propertyVal(body, 'scope', scopes.join(' '));
 
 				return true;
 			})
@@ -422,10 +645,10 @@ describe('Box Node SDK', function() {
 			clientID: TEST_CLIENT_ID,
 			clientSecret: TEST_CLIENT_SECRET,
 			appAuth: {
-				algorithm: algorithm,
-				keyID: keyID,
-				privateKey: privateKey,
-				passphrase: passphrase
+				algorithm,
+				keyID,
+				privateKey,
+				passphrase
 			}
 		});
 
@@ -444,9 +667,9 @@ describe('Box Node SDK', function() {
 		var folderID = '98740596456',
 			folderName = 'Test Folder';
 
-		apiMock.get('/2.0/folders/' + folderID)
+		apiMock.get(`/2.0/folders/${folderID}`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('User-Agent', function(uaHeader) {
@@ -454,9 +677,9 @@ describe('Box Node SDK', function() {
 				return true;
 			})
 			.reply(500) // first request is a temporary error
-			.get('/2.0/folders/' + folderID)
+			.get(`/2.0/folders/${folderID}`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('User-Agent', function(uaHeader) {
@@ -503,9 +726,9 @@ describe('Box Node SDK', function() {
 			fileStream = fs.createReadStream(fixturePath),
 			dlMock = nock(fileDownloadRoot);
 
-		apiMock.get('/2.0/files/' + fileID + '/content')
+		apiMock.get(`/2.0/files/${fileID}/content`)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.reply(function() {
@@ -554,9 +777,9 @@ describe('Box Node SDK', function() {
 			fileName = 'foo.txt',
 			uploadSessionID = '07C4B58DF2D79928A787CCB99A5FF37E',
 			fixturePath = path.resolve(__dirname, 'fixtures/file.txt'),
-            /* eslint-disable no-sync */
+			/* eslint-disable no-sync */
 			fileContents = fs.readFileSync(fixturePath),
-            /* eslint-enable no-sync */
+			/* eslint-enable no-sync */
 			fileStream = fs.createReadStream(fixturePath),
 			uploadMock = nock('https://upload.box.com');
 
@@ -617,7 +840,7 @@ describe('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.reply(201, {
@@ -636,13 +859,13 @@ describe('Box Node SDK', function() {
 				type: 'upload_session',
 				num_parts_processed: 0
 			})
-			.put('/api/2.0/files/upload_sessions/' + uploadSessionID,
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
 				function(body) {
 					return body.toString() === fileContents.slice(0, 210).toString();
 				}
 			)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('Content-Type', function(contentTypeHeader) {
@@ -650,8 +873,9 @@ describe('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				var expected = crypto.createHash('sha1').update(fileContents.slice(0, 210)).digest('base64');
-				return digestHeader === 'SHA=' + expected;
+				var expected = crypto.createHash('sha1').update(fileContents.slice(0, 210))
+					.digest('base64');
+				return digestHeader === `SHA=${expected}`;
 			})
 			.matchHeader('Content-Range', function(rangeHeader) {
 				assert.equal(rangeHeader, 'bytes 0-209/1024');
@@ -660,13 +884,13 @@ describe('Box Node SDK', function() {
 			.reply(200, {
 				part: parts[0]
 			})
-			.put('/api/2.0/files/upload_sessions/' + uploadSessionID,
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
 				function(body) {
 					return body.toString() === fileContents.slice(210, 420).toString();
 				}
 			)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('Content-Type', function(contentTypeHeader) {
@@ -674,7 +898,8 @@ describe('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				assert.equal(digestHeader, 'SHA=' + crypto.createHash('sha1').update(fileContents.slice(210, 420)).digest('base64'));
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(210, 420))
+					.digest('base64')}`);
 				return true;
 			})
 			.matchHeader('Content-Range', function(rangeHeader) {
@@ -684,13 +909,13 @@ describe('Box Node SDK', function() {
 			.reply(200, {
 				part: parts[1]
 			})
-			.put('/api/2.0/files/upload_sessions/' + uploadSessionID,
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
 				function(body) {
 					return body.toString() === fileContents.slice(420, 630).toString();
 				}
 			)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('Content-Type', function(contentTypeHeader) {
@@ -698,7 +923,8 @@ describe('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				assert.equal(digestHeader, 'SHA=' + crypto.createHash('sha1').update(fileContents.slice(420, 630)).digest('base64'));
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(420, 630))
+					.digest('base64')}`);
 				return true;
 			})
 			.matchHeader('Content-Range', function(rangeHeader) {
@@ -708,8 +934,8 @@ describe('Box Node SDK', function() {
 			.reply(200, {
 				part: parts[2]
 			})
-            // @TODO: Add a failure to the test
-            // // 4th part has an error
+		// @TODO: Add a failure to the test
+		// // 4th part has an error
 			// .put('/api/2.0/files/upload_sessions/' + uploadSessionID,
 			// 	function(body) {
 			// 		return body.toString() === fileContents.slice(630, 840).toString();
@@ -732,13 +958,13 @@ describe('Box Node SDK', function() {
 			// 	return true;
 			// })
 			// .reply(502, 'Server Hung Up')
-			.put('/api/2.0/files/upload_sessions/' + uploadSessionID,
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
 				function(body) {
 					return body.toString() === fileContents.slice(630, 840).toString();
 				}
 			)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('Content-Type', function(contentTypeHeader) {
@@ -746,7 +972,8 @@ describe('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				assert.equal(digestHeader, 'SHA=' + crypto.createHash('sha1').update(fileContents.slice(630, 840)).digest('base64'));
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(630, 840))
+					.digest('base64')}`);
 				return true;
 			})
 			.matchHeader('Content-Range', function(rangeHeader) {
@@ -756,13 +983,13 @@ describe('Box Node SDK', function() {
 			.reply(200, {
 				part: parts[3]
 			})
-			.put('/api/2.0/files/upload_sessions/' + uploadSessionID,
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
 				function(body) {
 					return body.toString() === fileContents.slice(840).toString();
 				}
 			)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('Content-Type', function(contentTypeHeader) {
@@ -770,7 +997,8 @@ describe('Box Node SDK', function() {
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				assert.equal(digestHeader, 'SHA=' + crypto.createHash('sha1').update(fileContents.slice(840)).digest('base64'));
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(840))
+					.digest('base64')}`);
 				return true;
 			})
 			.matchHeader('Content-Range', function(rangeHeader) {
@@ -780,7 +1008,7 @@ describe('Box Node SDK', function() {
 			.reply(200, {
 				part: parts[4]
 			})
-			.post('/api/2.0/files/upload_sessions/' + uploadSessionID + '/commit',
+			.post(`/api/2.0/files/upload_sessions/${uploadSessionID}/commit`,
 				function(body) {
 					assert.property(body, 'parts');
 					assert.typeOf(body.parts, 'array');
@@ -790,11 +1018,12 @@ describe('Box Node SDK', function() {
 				}
 			)
 			.matchHeader('Authorization', function(authHeader) {
-				assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 				return true;
 			})
 			.matchHeader('Digest', function(digestHeader) {
-				assert.equal(digestHeader, 'SHA=' + crypto.createHash('sha1').update(fileContents).digest('base64'));
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents)
+					.digest('base64')}`);
 				return true;
 			})
 			.reply(201, file);
@@ -823,5 +1052,677 @@ describe('Box Node SDK', function() {
 
 			uploader.start();
 		});
+	});
+
+	it('should upload with file attributes and return promise when chunked upload is executed', function() {
+
+		var folderID = '0',
+			fileSize = 1024,
+			fileName = 'foo.txt',
+			uploadSessionID = '07C4B58DF2D79928A787CCB99A5FF37E',
+			fixturePath = path.resolve(__dirname, 'fixtures/file.txt'),
+			/* eslint-disable no-sync */
+			fileContents = fs.readFileSync(fixturePath),
+			/* eslint-enable no-sync */
+			fileStream = fs.createReadStream(fixturePath),
+			uploadMock = nock('https://upload.box.com');
+
+		var parts = [
+			{
+				part_id: '00000001',
+				size: 210,
+				offset: 0,
+				sha1: 'abc'
+			},
+			{
+				part_id: '00000002',
+				size: 210,
+				offset: 210,
+				sha1: 'bcd'
+			},
+			{
+				part_id: '00000003',
+				size: 210,
+				offset: 420,
+				sha1: 'cde'
+			},
+			{
+				part_id: '00000004',
+				size: 210,
+				offset: 630,
+				sha1: 'def'
+			},
+			{
+				part_id: '00000005',
+				size: 210,
+				offset: 840,
+				sha1: 'efa'
+			}
+		];
+
+		var fileAttributes = {
+			description: 'My chunked upload',
+			content_created_at: '1988-11-18T09:30:00-06:00'
+		};
+
+		var file = {
+			total_count: 1,
+			entries: [
+				{
+					type: 'file',
+					id: '12348765',
+					name: fileName,
+					size: fileSize
+				}
+			]
+		};
+
+		uploadMock.post('/api/2.0/files/upload_sessions',
+			function(body) {
+
+				assert.deepEqual(body, {
+					folder_id: folderID,
+					file_size: fileSize,
+					file_name: fileName
+				});
+
+				return true;
+			})
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(201, {
+				total_parts: 5,
+				part_size: 210,
+				session_endpoints: {
+					list_parts: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/parts',
+					commit: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/commit',
+					log_event: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/log',
+					upload_part: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E',
+					status: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E',
+					abort: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E'
+				},
+				session_expires_at: '2017-04-25T05:30:23Z',
+				id: uploadSessionID,
+				type: 'upload_session',
+				num_parts_processed: 0
+			})
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
+				function(body) {
+					return body.toString() === fileContents.slice(0, 210).toString();
+				}
+			)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('Content-Type', function(contentTypeHeader) {
+				assert.equal(contentTypeHeader, 'application/octet-stream');
+				return true;
+			})
+			.matchHeader('Digest', function(digestHeader) {
+				var expected = crypto.createHash('sha1').update(fileContents.slice(0, 210))
+					.digest('base64');
+				return digestHeader === `SHA=${expected}`;
+			})
+			.matchHeader('Content-Range', function(rangeHeader) {
+				assert.equal(rangeHeader, 'bytes 0-209/1024');
+				return true;
+			})
+			.reply(200, {
+				part: parts[0]
+			})
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
+				function(body) {
+					return body.toString() === fileContents.slice(210, 420).toString();
+				}
+			)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('Content-Type', function(contentTypeHeader) {
+				assert.equal(contentTypeHeader, 'application/octet-stream');
+				return true;
+			})
+			.matchHeader('Digest', function(digestHeader) {
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(210, 420))
+					.digest('base64')}`);
+				return true;
+			})
+			.matchHeader('Content-Range', function(rangeHeader) {
+				assert.equal(rangeHeader, 'bytes 210-419/1024');
+				return true;
+			})
+			.reply(200, {
+				part: parts[1]
+			})
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
+				function(body) {
+					return body.toString() === fileContents.slice(420, 630).toString();
+				}
+			)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('Content-Type', function(contentTypeHeader) {
+				assert.equal(contentTypeHeader, 'application/octet-stream');
+				return true;
+			})
+			.matchHeader('Digest', function(digestHeader) {
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(420, 630))
+					.digest('base64')}`);
+				return true;
+			})
+			.matchHeader('Content-Range', function(rangeHeader) {
+				assert.equal(rangeHeader, 'bytes 420-629/1024');
+				return true;
+			})
+			.reply(200, {
+				part: parts[2]
+			})
+		// @TODO: Add a failure to the test
+		// // 4th part has an error
+			// .put('/api/2.0/files/upload_sessions/' + uploadSessionID,
+			// 	function(body) {
+			// 		return body.toString() === fileContents.slice(630, 840).toString();
+			// 	}
+			// )
+			// .matchHeader('Authorization', function(authHeader) {
+			// 	assert.equal(authHeader, 'Bearer ' + TEST_ACCESS_TOKEN);
+			// 	return true;
+			// })
+			// .matchHeader('Content-Type', function(contentTypeHeader) {
+			// 	assert.equal(contentTypeHeader, 'application/octet-stream');
+			// 	return true;
+			// })
+			// .matchHeader('Digest', function(digestHeader) {
+			// 	assert.equal(digestHeader, 'SHA=' + crypto.createHash('sha1').update(fileContents.slice(630, 840)).digest('base64'));
+			// 	return true;
+			// })
+			// .matchHeader('Content-Range', function(rangeHeader) {
+			// 	assert.equal(rangeHeader, 'bytes 630-839/1024');
+			// 	return true;
+			// })
+			// .reply(502, 'Server Hung Up')
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
+				function(body) {
+					return body.toString() === fileContents.slice(630, 840).toString();
+				}
+			)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('Content-Type', function(contentTypeHeader) {
+				assert.equal(contentTypeHeader, 'application/octet-stream');
+				return true;
+			})
+			.matchHeader('Digest', function(digestHeader) {
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(630, 840))
+					.digest('base64')}`);
+				return true;
+			})
+			.matchHeader('Content-Range', function(rangeHeader) {
+				assert.equal(rangeHeader, 'bytes 630-839/1024');
+				return true;
+			})
+			.reply(200, {
+				part: parts[3]
+			})
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`,
+				function(body) {
+					return body.toString() === fileContents.slice(840).toString();
+				}
+			)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('Content-Type', function(contentTypeHeader) {
+				assert.equal(contentTypeHeader, 'application/octet-stream');
+				return true;
+			})
+			.matchHeader('Digest', function(digestHeader) {
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents.slice(840))
+					.digest('base64')}`);
+				return true;
+			})
+			.matchHeader('Content-Range', function(rangeHeader) {
+				assert.equal(rangeHeader, 'bytes 840-1023/1024');
+				return true;
+			})
+			.reply(200, {
+				part: parts[4]
+			})
+			.post(`/api/2.0/files/upload_sessions/${uploadSessionID}/commit`,
+				function(body) {
+					assert.property(body, 'parts');
+					assert.typeOf(body.parts, 'array');
+					assert.sameDeepMembers(body.parts, parts);
+
+					assert.deepPropertyVal(body, 'attributes', fileAttributes);
+
+					return true;
+				}
+			)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('Digest', function(digestHeader) {
+				assert.equal(digestHeader, `SHA=${crypto.createHash('sha1').update(fileContents)
+					.digest('base64')}`);
+				return true;
+			})
+			.reply(201, file);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		return client.files.getChunkedUploader(folderID, fileSize, fileName, fileStream, { fileAttributes })
+			.then(uploader => uploader.start())
+			.then(data => {
+				assert.deepEqual(data, file);
+			});
+	});
+
+	it('should send batch request and pass results to individual calls when batch is executed', function() {
+
+		var folderID = '1234',
+			fileID = '9876',
+			folderName = 'My Test Folder',
+			fileName = 'Batch API Test.docx',
+			batchResponse = {
+				responses: [
+					{
+						status: 200,
+						headers: {},
+						response: {
+							id: '1234',
+							name: folderName
+						}
+					},
+					{
+						status: 400,
+						headers: {},
+						response: {
+							type: 'error',
+							status: 400,
+							code: 'bad_request',
+							context_info: {
+								errors: [
+									{
+										reason: 'invalid_parameter',
+										name: 'entity-body',
+										message: 'Invalid value \'{\n    "name": "\\^&*@(*&^$&^%@()*"\n}\'. Entity body should be a correctly nested resource attribute name/value pair'
+									}
+								]
+							},
+							help_url: 'http://developers.box.com/docs/#errors',
+							message: 'Bad Request',
+							request_id: '273876906598a559f8b3f9'
+						}
+					}
+				]
+			};
+
+		apiMock.post('/2.0/batch',
+			function(body) {
+
+				assert.isArray(body.requests);
+				assert.sameDeepOrderedMembers(body.requests, [
+					{
+						method: 'GET',
+						relative_url: `/folders/${folderID}?fields=name%2Cid`
+					},
+					{
+						method: 'PUT',
+						relative_url: `/files/${fileID}`,
+						body: {
+							name: fileName
+						}
+					}
+				]);
+
+				return true;
+			})
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('User-Agent', function(uaHeader) {
+				assert.include(uaHeader, 'Box Node.js SDK v');
+				return true;
+			})
+			.reply(200, batchResponse);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		client.batch();
+		var folderPromise = client.folders.get(folderID, {fields: 'name,id'})
+			.then(folder => {
+				assert.propertyVal(folder, 'id', folderID);
+				assert.propertyVal(folder, 'name', folderName);
+			});
+		var filePromise = client.files.update(fileID, {name: fileName})
+			.then(() => {
+				assert.fail('Client request promise should not resolve on batch subrequest failure');
+			})
+			.catch(err => {
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', 400);
+			});
+		var batchPromise = client.batchExec()
+			.then(results => {
+				assert.deepEqual(results, batchResponse);
+			});
+
+		return Promise.all([
+			folderPromise,
+			filePromise,
+			batchPromise
+		]);
+	});
+
+	it('should send batch request and pass results to individual calls when batch is executed with callbacks', function() {
+
+		var folderID = '1234',
+			fileID = '9876',
+			folderName = 'My Test Folder',
+			fileName = 'Batch API Test.docx',
+			batchResponse = {
+				responses: [
+					{
+						status: 200,
+						headers: {},
+						response: {
+							id: '1234',
+							name: folderName
+						}
+					},
+					{
+						status: 400,
+						headers: {},
+						response: {
+							type: 'error',
+							status: 400,
+							code: 'bad_request',
+							context_info: {
+								errors: [
+									{
+										reason: 'invalid_parameter',
+										name: 'entity-body',
+										message: 'Invalid value \'{\n    "name": "\\^&*@(*&^$&^%@()*"\n}\'. Entity body should be a correctly nested resource attribute name/value pair'
+									}
+								]
+							},
+							help_url: 'http://developers.box.com/docs/#errors',
+							message: 'Bad Request',
+							request_id: '273876906598a559f8b3f9'
+						}
+					}
+				]
+			};
+
+		apiMock.post('/2.0/batch',
+			function(body) {
+
+				assert.isArray(body.requests);
+				assert.sameDeepOrderedMembers(body.requests, [
+					{
+						method: 'GET',
+						relative_url: `/folders/${folderID}?fields=name%2Cid`
+					},
+					{
+						method: 'PUT',
+						relative_url: `/files/${fileID}`,
+						body: {
+							name: fileName
+						}
+					}
+				]);
+
+				return true;
+			})
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('User-Agent', function(uaHeader) {
+				assert.include(uaHeader, 'Box Node.js SDK v');
+				return true;
+			})
+			.reply(200, batchResponse);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		client.batch();
+		/* eslint-disable promise/avoid-new */
+		var folderPromise = new Promise(function(resolve) {
+
+			client.folders.get(folderID, {fields: 'name,id'}, function(err, folder) {
+				assert.ifError(err);
+				assert.propertyVal(folder, 'id', folderID);
+				assert.propertyVal(folder, 'name', folderName);
+				resolve();
+			});
+		});
+		var filePromise = new Promise(function(resolve) {
+
+			client.files.update(fileID, {name: fileName}, function(err) {
+				assert.instanceOf(err, Error);
+				assert.propertyVal(err, 'statusCode', 400);
+				resolve();
+			});
+		});
+		var batchPromise = new Promise(function(resolve) {
+
+			client.batchExec(function(err, results) {
+				assert.ifError(err);
+				assert.deepEqual(results, batchResponse);
+				resolve();
+			});
+		});
+		/* eslint-enable promise/avoid-new */
+		return Promise.all([
+			folderPromise,
+			filePromise,
+			batchPromise
+		]);
+	});
+
+	it('should correctly upload stream from request module when using chunked uploader', function(done) {
+
+		// This test takes a while to run due to all the bytes being shuffled around,
+		// bumping up the timeout so we don't see flaky behavior if it runs long
+		// eslint-disable-next-line no-invalid-this
+		this.timeout(8000);
+
+		var filePath = path.resolve(__dirname, './fixtures/test.pdf');
+		var uploadSessionID = 'o8qc3n58q73b95ywort2q3t';
+		var partCounter = 0;
+		var partSize = 8388608;
+		var bytesUploaded = 0;
+
+		// eslint-disable-next-line no-sync
+		var fileSize = fs.statSync(filePath).size;
+		var numParts = Math.ceil(fileSize / partSize);
+		var fileName = 'test.pdf';
+
+		var fileResponse = {
+			total_count: 1,
+			entries: [
+				{
+					type: 'file',
+					id: '12348765',
+					name: fileName,
+					size: fileSize
+				}
+			]
+		};
+
+		nock('https://www.example.com')
+			.get('/test-file.pdf')
+			.replyWithFile(200, filePath);
+
+		nock('https://upload.box.com').post('/api/2.0/files/upload_sessions')
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(201, {
+				total_parts: numParts,
+				part_size: partSize,
+				session_endpoints: {
+					list_parts: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/parts',
+					commit: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/commit',
+					log_event: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/log',
+					upload_part: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E',
+					status: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E',
+					abort: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E'
+				},
+				session_expires_at: '2017-04-25T05:30:23Z',
+				id: uploadSessionID,
+				type: 'upload_session',
+				num_parts_processed: 0
+			})
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`)
+			.times(numParts)
+			.reply((uri, requestBody) => {
+				// requestBody is a hex-encoded string, need to decode to get raw length
+				var rawRequestBody = new Buffer(requestBody, 'hex');
+				bytesUploaded += rawRequestBody.length;
+				var partID = `${partCounter}`;
+				var response = {
+					part: {
+						part_id: `${partCounter}`,
+						offset: partCounter * partSize,
+						size: rawRequestBody.length,
+						sha1: crypto.createHash('sha1').update(partID)
+							.digest('base64')
+					}
+				};
+				partCounter += 1;
+				return response;
+			})
+			.post(`/api/2.0/files/upload_sessions/${uploadSessionID}/commit`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(201, fileResponse);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		/* eslint-disable promise/no-callback-in-promise */
+		request.get('https://www.example.com/test-file.pdf').on('response', responseStream => {
+
+			client.files.getChunkedUploader('1234', fileSize, fileName, responseStream)
+				.then(uploader => {
+
+					uploader.on('uploadComplete', file => {
+						assert.deepEqual(file, fileResponse);
+						assert.equal(bytesUploaded, fileSize);
+						done();
+					});
+
+					uploader.on('error', err => done(err));
+					uploader.on('chunkError', err => done(err));
+
+					uploader.start();
+				})
+				.catch(err => {
+					done(err);
+				});
+		});
+		/* eslint-enable promise/no-callback-in-promise */
+	});
+
+	it('should correctly reconfigure SDK instance', function() {
+
+		var folderID = '98740596456',
+			folderName = 'Test Folder',
+			tokenStoreFake = leche.create([
+				'read',
+				'write',
+				'clear'
+			]),
+			refreshToken = 'rt',
+			expiredTokenInfo = {
+				accessToken: 'expired_at',
+				refreshToken,
+				acquiredAtMS: Date.now() - 3600000,
+				accessTokenTTLMS: 60000
+			};
+
+		sandbox.mock(tokenStoreFake).expects('write')
+			.withArgs(sinon.match({
+				accessToken: TEST_ACCESS_TOKEN,
+				refreshToken: 'new_rt'
+			}))
+			.yieldsAsync();
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 0,
+			retryIntervalMS: 1,
+			apiRootURL: 'https://example.com'
+		});
+
+		sdk.configure({
+			apiRootURL: TEST_API_ROOT
+		});
+
+		apiMock
+			.post('/oauth2/token', {
+				grant_type: 'refresh_token',
+				refresh_token: refreshToken,
+				client_id: TEST_CLIENT_ID,
+				client_secret: TEST_CLIENT_SECRET
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				refresh_token: 'new_rt',
+				expires_in: 256
+			})
+			.get(`/2.0/folders/${folderID}`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(200, {
+				id: folderID,
+				name: folderName
+			});
+
+		var client = sdk.getPersistentClient(expiredTokenInfo, tokenStoreFake);
+
+		return client.folders.get(folderID)
+			.then(folder => {
+				assert.propertyVal(folder, 'id', folderID);
+				assert.propertyVal(folder, 'name', folderName);
+			});
 	});
 });

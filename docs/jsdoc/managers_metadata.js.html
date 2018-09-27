@@ -65,7 +65,8 @@ var PROPERTIES_TEMPLATE = 'properties',
 	BASE_PATH = '/metadata_templates',
 	SCHEMA_SUBRESOURCE = 'schema',
 	ENTERPRISE_SCOPE = 'enterprise',
-	GLOBAL_SCOPE = 'global';
+	GLOBAL_SCOPE = 'global',
+	CASCADE_POLICIES_PATH = '/metadata_cascade_policies';
 
 // -----------------------------------------------------------------------------
 // Public
@@ -94,6 +95,11 @@ Metadata.prototype = {
 		GLOBAL: GLOBAL_SCOPE
 	},
 
+	cascadeResolution: Object.freeze({
+		PRESERVE_EXISTING: 'none',
+		OVERWRITE: 'overwrite'
+	}),
+
 	/**
 	 * Valid metadata field types
 	 * @readonly
@@ -103,7 +109,8 @@ Metadata.prototype = {
 		STRING: 'string',
 		ENUM: 'enum',
 		NUMBER: 'float',
-		DATE: 'date'
+		DATE: 'date',
+		MULTI_SELECT: 'multiSelect'
 	}),
 
 	/**
@@ -117,9 +124,25 @@ Metadata.prototype = {
 	 * @param {Function} [callback] - Called with the template schema if successful
 	 * @returns {Promise&lt;Object>} A promise resolving to the template schema
 	 */
-	getTemplateSchema: function(scope, template, callback) {
+	getTemplateSchema(scope, template, callback) {
 
 		var apiPath = urlPath(BASE_PATH, scope, template, SCHEMA_SUBRESOURCE);
+		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
+	},
+
+	/**
+	 * Retrieve the schema definition for a metadata template by ID
+	 *
+	 * API Endpoint: '/metadata_templates/:id'
+	 * Method: GET
+	 *
+	 * @param {string} templateID - The ID of the template to retrieve
+	 * @param {Function} [callback] - Called with the template schema if successful
+	 * @returns {Promise&lt;Object>} A promise resolving to the template schema
+	 */
+	getTemplateByID(templateID, callback) {
+
+		var apiPath = urlPath(BASE_PATH, templateID);
 		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
 	},
 
@@ -133,7 +156,7 @@ Metadata.prototype = {
 	 * @param {Function} [callback] - Called with an array of templates when successful
 	 * @returns {Promise&lt;Object>} A promise resolving to the collection of templates
 	 */
-	getTemplates: function(scope, callback) {
+	getTemplates(scope, callback) {
 
 		var apiPath = urlPath(BASE_PATH, scope);
 		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
@@ -149,19 +172,19 @@ Metadata.prototype = {
 	 * @param {MetadataTemplateField[]} fields - A list of fields for the template
 	 * @param {Object} [options] - Optional parameters, can be left null in many cases
 	 * @param {string} [options.templateKey] - The programmatic key for the template
-	 * @param {bool} [options.hidden] - Whether the template should be hidden in the UI
+	 * @param {boolean} [options.hidden] - Whether the template should be hidden in the UI
 	 * @param {string} [options.scope=enterprise] - The scope for the template, only 'enterprise' is supported for now
 	 * @param {Function} [callback] - Passed the template if successful, error otherwise
 	 * @returns {Promise&lt;Object>} A promise resolving to the created template
 	 */
-	createTemplate: function(templateName, fields, options, callback) {
+	createTemplate(templateName, fields, options, callback) {
 
 		var apiPath = urlPath(BASE_PATH, SCHEMA_SUBRESOURCE),
 			params = {
 				body: {
 					scope: ENTERPRISE_SCOPE,
 					displayName: templateName,
-					fields: fields
+					fields
 				}
 			};
 
@@ -185,7 +208,7 @@ Metadata.prototype = {
 	 * @returns {Promise&lt;Object>} A promise resolving to the updated template
 	 * @see {@link https://docs.box.com/reference#update-metadata-schema}
 	 */
-	updateTemplate: function(scope, template, operations, callback) {
+	updateTemplate(scope, template, operations, callback) {
 
 		var apiPath = urlPath(BASE_PATH, scope, template, SCHEMA_SUBRESOURCE),
 			params = {
@@ -193,6 +216,131 @@ Metadata.prototype = {
 			};
 
 		return this.client.wrapWithDefaultHandler(this.client.put)(apiPath, params, callback);
+	},
+
+	/**
+	 * Delete a metadata template from an enterprise.
+	 *
+	 * API Endpoint: '/metadata_templates/:scope/:template/schema'
+	 * Method: DELETE
+	 *
+	 * @param {string} scope - The scope of the template to delete
+	 * @param {string} template - The template to delete
+	 * @param {Function} [callback] - Passed empty response body if successful, err otherwise
+	 * @returns {Promise&lt;void>} A promise resolving to nothing
+	 * @see {@link https://docs.box.com/reference#delete-metadata-schema}
+	 */
+	deleteTemplate(scope, template, callback) {
+
+		var apiPath = urlPath(BASE_PATH, scope, template, SCHEMA_SUBRESOURCE);
+		return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
+	},
+
+	/**
+	 * Get the cascade policies associated with a given folder.
+	 *
+	 * API Endpoint: '/metadata_cascade_policies'
+	 * Method: GET
+	 *
+	 * @param {string} folderID The ID of the folder to get cascade policies for
+	 * @param {Object} [options] Optional parameters
+	 * @param {string} [options.owner_enterprise_id] ID of the enterprise to get policies for
+	 * @param {Function} [callback] Passed the collection of policies if successful
+	 * @returns {Promise&lt;Object>} Promise resolving to the collection of policies
+	 */
+	getCascadePolicies(folderID, options, callback) {
+
+		var apiPath = urlPath(CASCADE_POLICIES_PATH),
+			params = {
+				qs: Object.assign({ folder_id: folderID }, options)
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+	},
+
+	/**
+	 * Get a metadata cascade policy object by ID
+	 *
+	 * API Endpoint: '/metadata_cascade_policies/:policyID'
+	 * Method: GET
+	 *
+	 * @param {string} policyID The ID of the policy to retrieve
+	 * @param {Function} [callback] Passed the cascade policy if successful
+	 * @returns {Promise&lt;Object>} Promise resolving to the cascade policy
+	 */
+	getCascadePolicy(policyID, callback) {
+
+		var apiPath = urlPath(CASCADE_POLICIES_PATH, policyID);
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
+	},
+
+	/**
+	 * Add a new cascade policy to a folder/metadata template, causing the
+	 * metadata template to be applied to all items and subfolders inside the
+	 * folder.
+	 *
+	 * API Endpoint: '/metadata_cascade_policies'
+	 * Method: POST
+	 *
+	 * @param {string} scope Metadata template scope for the template to cascade
+	 * @param {string} templateKey Metadata template key for the template to cascade
+	 * @param {string} folderID The ID of the folder to cascade over
+	 * @param {Function} [callback] Passed the cascade policy if successful
+	 * @returns {Promise&lt;Object>} Promise resolving to the cascade policy
+	 */
+	createCascadePolicy(scope, templateKey, folderID, callback) {
+
+		var apiPath = urlPath(CASCADE_POLICIES_PATH),
+			params = {
+				body: {
+					folder_id: folderID,
+					scope,
+					templateKey
+				}
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
+	},
+
+	/**
+	 * Delete the metadata cascade policy with the given ID
+	 *
+	 * API Endpoint: '/metadata_cascade_policies/:policyID'
+	 * Method: DELETE
+	 *
+	 * @param {string} policyID The ID of the policy to delete
+	 * @param {Function} [callback] Passed nothing if successful
+	 * @returns {Promise&lt;void>} Promise resolving to nothing
+	 */
+	deleteCascadePolicy(policyID, callback) {
+
+		var apiPath = urlPath(CASCADE_POLICIES_PATH, policyID);
+		return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
+	},
+
+	/**
+	 * If a policy already exists on a folder, this will apply that policy to all existing files and
+	 * sub-folders within the target folder.
+	 *
+	 * API Endpoint: '/metadata_cascade_policies/:policyID/apply'
+	 * Method: POST
+	 *
+	 * @param {string} policyID The ID of the policy to delete
+	 * @param {string} resolutionMethod How to resolve conflicts, either "none" or "overwrite"
+	 * @param {Function} [callback] Passed nothing if successful
+	 * @returns {Promise&lt;void>} Promise resolving to nothing
+	 */
+	forceApplyCascadePolicy(policyID, resolutionMethod, callback) {
+
+		var apiPath = urlPath(CASCADE_POLICIES_PATH, policyID, 'apply'),
+			params = {
+				body: {
+					conflict_resolution: resolutionMethod
+				}
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
 	}
 };
 
@@ -207,13 +355,13 @@ module.exports = Metadata;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li><li><a href="module-lazy-async-queue.html">lazy-async-queue</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LazyAsyncQueue.html">LazyAsyncQueue</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#Max">Max</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-whitelists.html">box-node-sdk/lib/managers/collaboration-whitelists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationWhitelist.html">CollaborationWhitelist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 22 2017 13:18:52 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Sep 17 2018 13:29:23 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

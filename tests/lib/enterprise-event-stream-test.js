@@ -18,7 +18,7 @@ var BoxClient = require('../../lib/box-client'),
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake,
 	EnterpriseEventStream,
 	enterpriseEventStream,
@@ -45,7 +45,10 @@ describe('EnterpriseEventStream', function() {
 		type: 'event',
 		event_id: '783964999'
 	};
-	var TEST_FILTER = ['UPLOAD', 'DOWNLOAD'];
+	var TEST_FILTER = [
+		'UPLOAD',
+		'DOWNLOAD'
+	];
 	var TEST_STREAM_STATE = {
 		streamPosition: TEST_STREAM_POSITION,
 		startDate: TEST_DATE,
@@ -163,9 +166,10 @@ describe('EnterpriseEventStream', function() {
 
 		it('should make API call to get events from current stream position when called', function() {
 
-			sandbox.mock(boxClientFake.events).expects('get').withArgs(sinon.match({
-				stream_position: TEST_STREAM_POSITION
-			}));
+			sandbox.mock(boxClientFake.events).expects('get')
+				.withArgs(sinon.match({
+					stream_position: TEST_STREAM_POSITION
+				}));
 
 			enterpriseEventStream.fetchEvents();
 		});
@@ -182,13 +186,14 @@ describe('EnterpriseEventStream', function() {
 			};
 			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, options);
 
-			sandbox.mock(boxClientFake.events).expects('get').withArgs(sinon.match({
-				stream_position: 0,
-				created_after: TEST_DATE,
-				created_before: TEST_DATE2,
-				event_type: TEST_FILTER.join(','),
-				limit: 80
-			}));
+			sandbox.mock(boxClientFake.events).expects('get')
+				.withArgs(sinon.match({
+					stream_position: 0,
+					created_after: TEST_DATE,
+					created_before: TEST_DATE2,
+					event_type: TEST_FILTER.join(','),
+					limit: 80
+				}));
 
 			enterpriseEventStream2.fetchEvents();
 		});
@@ -198,8 +203,9 @@ describe('EnterpriseEventStream', function() {
 			var options = {};
 			const enterpriseEventStream2 = new EnterpriseEventStream(boxClientFake, options);
 
-			sandbox.mock(boxClientFake.events).expects('get').withArgs(sinon.match({
-			}));
+			sandbox.mock(boxClientFake.events).expects('get')
+				.withArgs(sinon.match({
+				}));
 
 			enterpriseEventStream2.fetchEvents();
 		});
@@ -235,9 +241,7 @@ describe('EnterpriseEventStream', function() {
 
 			var newStreamPosition = '5263748952387465';
 			sandbox.stub(boxClientFake.events, 'get').yields(null, {
-				entries: [
-					{type: 'event'}
-				],
+				entries: [{type: 'event'}],
 				next_stream_position: newStreamPosition
 			});
 			var spy = sandbox.stub(enterpriseEventStream, 'emit');
@@ -282,7 +286,10 @@ describe('EnterpriseEventStream', function() {
 
 		it('should push the events into the stream when fetchEvents() return events', function() {
 
-			sandbox.stub(enterpriseEventStream, 'fetchEvents').yields(null, [TEST_EVENT_1, TEST_EVENT_2]);
+			sandbox.stub(enterpriseEventStream, 'fetchEvents').yields(null, [
+				TEST_EVENT_1,
+				TEST_EVENT_2
+			]);
 			var spy = sandbox.stub(enterpriseEventStream, 'push');
 
 			enterpriseEventStream._read();
@@ -295,7 +302,8 @@ describe('EnterpriseEventStream', function() {
 		it('should close the stream when fetchEvents() returns no events', function() {
 
 			sandbox.stub(enterpriseEventStream, 'fetchEvents').yields(null, []);
-			sandbox.mock(enterpriseEventStream).expects('push').withArgs(null);
+			sandbox.mock(enterpriseEventStream).expects('push')
+				.withArgs(null);
 
 			enterpriseEventStream._read();
 		});
@@ -304,7 +312,8 @@ describe('EnterpriseEventStream', function() {
 
 			var apiError = new Error('Whoops');
 			sandbox.stub(enterpriseEventStream, 'fetchEvents').yields(apiError);
-			sandbox.mock(enterpriseEventStream).expects('push').withArgs(null);
+			sandbox.mock(enterpriseEventStream).expects('push')
+				.withArgs(null);
 
 			enterpriseEventStream._read();
 		});
@@ -313,12 +322,19 @@ describe('EnterpriseEventStream', function() {
 
 			// This test fails without the call to pause() in _read().
 			sandbox.stub(enterpriseEventStream, 'fetchEvents')
-				.onFirstCall().yieldsAsync(null, [TEST_EVENT_1, TEST_EVENT_2, TEST_EVENT_3])
-				.onSecondCall().yieldsAsync(null, [])
-				.onThirdCall().throws();
+				.onFirstCall()
+				.yieldsAsync(null, [
+					TEST_EVENT_1,
+					TEST_EVENT_2,
+					TEST_EVENT_3
+				])
+				.onSecondCall()
+				.yieldsAsync(null, [])
+				.onThirdCall()
+				.throws();
 			var spy = sandbox.spy(enterpriseEventStream, '_read');
 
-			enterpriseEventStream.on('data', function() {});
+			enterpriseEventStream.on('data', () => { /**/ });
 
 			enterpriseEventStream.on('end', function() {
 				assert(spy.calledTwice);

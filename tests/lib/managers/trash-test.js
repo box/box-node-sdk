@@ -9,6 +9,7 @@
 var sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../../lib/box-client');
@@ -17,7 +18,7 @@ var BoxClient = require('../../../lib/box-client');
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	Trash,
 	trash,
@@ -56,14 +57,17 @@ describe('Trash', function() {
 		it('should make GET request to get trashed items when called', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('/folders/trash/items', testParamsWithQs);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/folders/trash/items', testParamsWithQs);
 			trash.get(testQS);
 		});
 
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler').withArgs(boxClientFake.get).returnsArg(0);
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
 			trash.get();
 		});
 

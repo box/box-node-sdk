@@ -18,7 +18,7 @@ var assert = require('chai').assert,
 // Helpers
 // ------------------------------------------------------------------------------
 
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	PagingIterator,
 	clientFake,
 	MODULE_FILE_PATH = '../../../lib/util/paging-iterator';
@@ -73,22 +73,34 @@ describe('PagingIterator', function() {
 			}, Error);
 		});
 
-		it('should throw an error when response paging strategy cannot be determined', function() {
+		it('should default to a finished collection when response paging strategy cannot be determined', function() {
 
+			var chunk = [{}];
 			var response = {
-				body: {
-					entries: []
-				},
 				request: {
+					href: 'https://api.box.com/2.0/items?limit=1',
+					uri: {
+						query: 'limit=1'
+					},
+					headers: {},
 					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 1
 				}
 			};
 
-			assert.throws(function() {
-				/* eslint-disable no-unused-vars*/
-				var iterator = new PagingIterator(response, clientFake);
-				/* eslint-enable no-unused-vars*/
-			}, Error);
+			var iterator = new PagingIterator(response, clientFake);
+
+			assert.propertyVal(iterator, 'limit', 1);
+			assert.propertyVal(iterator, 'done', true);
+			assert.propertyVal(iterator, 'buffer', chunk);
+			assert.propertyVal(iterator, 'nextField', 'marker');
+			assert.propertyVal(iterator, 'nextValue', null);
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.marker', null);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when response is limit/offset type', function() {
@@ -118,9 +130,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'offset');
 			assert.propertyVal(iterator, 'nextValue', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.offset', 1);
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.offset', 1);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when limit/offset response fits in one page', function() {
@@ -150,9 +162,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'offset');
 			assert.propertyVal(iterator, 'nextValue', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.offset', 1);
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.offset', 1);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when response is marker type', function() {
@@ -181,9 +193,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'marker');
 			assert.propertyVal(iterator, 'nextValue', 'vwxyz');
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.marker', 'vwxyz');
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.marker', 'vwxyz');
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 
 		it('should correctly set up iterator when marker response fits on one page', function() {
@@ -212,9 +224,9 @@ describe('PagingIterator', function() {
 			assert.propertyVal(iterator, 'buffer', chunk);
 			assert.propertyVal(iterator, 'nextField', 'marker');
 			assert.propertyVal(iterator, 'nextValue', null);
-			assert.deepPropertyVal(iterator, 'options.qs.limit', 1);
-			assert.deepPropertyVal(iterator, 'options.qs.marker', null);
-			assert.notDeepProperty(iterator, 'options.headers.Authorization');
+			assert.nestedPropertyVal(iterator, 'options.qs.limit', 1);
+			assert.nestedPropertyVal(iterator, 'options.qs.marker', null);
+			assert.notNestedProperty(iterator, 'options.headers.Authorization');
 		});
 	});
 
@@ -331,7 +343,9 @@ describe('PagingIterator', function() {
 				}
 			};
 
-			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
+			sandbox.mock(clientFake).expects('get')
+				.withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -403,7 +417,9 @@ describe('PagingIterator', function() {
 				}
 			};
 
-			sandbox.mock(clientFake).expects('get').withArgs(expectedURL, expectedOptions).returns(Promise.resolve(response2));
+			sandbox.mock(clientFake).expects('get')
+				.withArgs(expectedURL, expectedOptions)
+				.returns(Promise.resolve(response2));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -497,8 +513,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -595,8 +613,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -748,8 +768,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 
@@ -850,8 +872,10 @@ describe('PagingIterator', function() {
 			};
 
 			var clientMock = sandbox.mock(clientFake);
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions1).returns(Promise.resolve(response2));
-			clientMock.expects('get').withArgs(expectedURL, expectedOptions2).returns(Promise.resolve(response3));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+			clientMock.expects('get').withArgs(expectedURL, expectedOptions2)
+				.returns(Promise.resolve(response3));
 
 			var iterator = new PagingIterator(response1, clientFake);
 

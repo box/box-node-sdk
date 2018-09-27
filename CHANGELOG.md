@@ -1,5 +1,134 @@
 # Changelog
 
+## 1.22.0
+
+- Chunked Uploader methods now return promises for [simpler handling of chunked uploads](./docs/files.md#automatic-uploader)
+- File attributes to set on the newly-uploaded file can now be
+[passed via `options.fileAttributes`](./docs/files.md#automatic-uploader) when creating a Chunked Uploader
+
+## 1.21.0
+
+- Added the ability to close an Event Stream by calling `eventStream.destroy()` (thanks @boneskull!)
+- Improved error messages related to certain authentication failure cases
+
+## 1.20.0
+
+- Added missing values to the `client.webhooks.triggerTypes` enum (thanks @MathersMax!)
+- Added support for [Metadata Cascade Policies](./docs/metadata.md#create-cascade-policy)
+
+## 1.19.0
+
+- Added `generateRepresentations` option to [`files.getRepresentationContent()`](./docs/files.md#get-representation-content)
+
+## 1.18.0
+
+- Updated dependencies to resolve potential security issues:
+    - `request@2.87.0`
+    - Transitive dependencies of `jsonwebtoken@8.2.1`
+- Added a static `BoxSDK.getBasicClient()` method to enable creating a client without needing
+to specify a client ID and secret (thanks to @cbetta)
+
+## 1.17.0
+
+- Updated dependencies: `request@2.85.0`, `jsonwebtoken@8.2.1`
+- Added support for [Storage Policies](./docs/storage-policies.md)
+- Added the option to use a Token Store for caching tokens with App Auth using JWT
+
+## 1.16.1
+
+- Fixed a bug where metadata template deletion would not properly return results via callback
+
+## 1.16.0
+
+- Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md#assign-retention-policy)
+
+## 1.15.0
+
+- Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md#validate-a-webhook-message)
+to accept the request body as an `Object`
+- Fixed `sdk.configure()` to correct reconfigure all options
+- Improved error messages for API errors and added the request object as `error.request` for easier debugging
+
+## 1.14.1
+
+- Fixed a bug when `files.getReadStream()` was called with null options
+
+## 1.14.0
+
+- Added support for [getting a metadata template by ID](./docs/metadata.md#get-by-id)
+- Added a `byteRange` option to [file download](./docs/files.md#download-a-file) to support partial file download
+- Improved error messages when using promises and in authentication flows
+
+## 1.13.0
+
+- Added support for getting a [stream of file representation contents](./docs/files.md#get-representation-content)
+- Switched to using exponential backoff for request retries
+
+## 1.12.1
+- Fixed an issue where chunked uploader would not work with response streams from the request library
+(0e7014561f9cd0f7f38f98536b3f0c3946231d2e)
+
+## 1.12.0
+
+- Added support for [metadata template deletion](./docs/metadata.md#delete-metadata-template)
+
+## 1.11.0
+
+- Added options to preserve file timestamps on [file upload](./docs/files.md#upload-a-file)
+and to rename a file or preserve modification timestamp on [new version upload](./docs/files.md#upload-a-new-version-of-a-file)
+- Added [Collaboration Whitelist](./docs/collaboration-whitelist.md) functionality to allow enterprise admins
+to control which external users can collaborate on their content
+- Added an option to Token Exchange to generate [annotator tokens](./docs/authentication.md#annotator-tokens) for use with Box View
+
+## 1.10.1
+
+- Updated to jsonwebtoken@8.1.0 to fix an issue where some users were getting
+an error when using App Auth
+
+## 1.10.0
+
+- Added support for [Terms of Service](./docs/terms-of-service.md) endpoints
+- Fixed a bug where receiving a collection without paging parameters from the API
+would cause the SDK to throw an exception when using the `iterators` SDK option.
+Now, this will return an iterator over the items returned by the API.
+- Fixed a bug in Token Exchange where passing multiple scopes would result in an error
+- Added support for [getting Representations info on a file](./docs/files.md#get-representation-info)
+
+## 1.9.0
+
+- Fixed token methods to return bluebird Promises instead of native Promises
+- Added support for the `notify` and `can_view_path` options on Collaborations
+
+## 1.8.0
+
+- Added support for [Batch API](./docs/client.md#batch-api)
+- Fixed a bug where the Event Stream would make more API calls than necessary,
+potentially hitting Box API rate limits
+- Added Promise support to methods on the SDK object
+- Added Node.js version to the User-Agent header that the SDK sends
+- Fixed a bug where using multiple Persistent Clients instances could cause some
+clients to end up with expired tokens
+
+## 1.7.0
+
+- Add support for passing IP to all token methods, and fixed a bug where a client's IP was not being correctly reported on token refreshes
+
+## 1.6.0
+
+- Added [Recent Items](./docs/recent-items.md) support
+- Updated app auth expiration time default value and validation
+
+## 1.5.1
+
+- Revert deep-freezing Config properties, since it was causing errors
+
+## 1.5.0
+
+- Added support for [Token Exchange](./docs/authentication.md#token-exchange),
+which allows a client to get downscoped tokens suitable for passing to a browser
+app or worker process.
+- Ensured deeply-nested Config properties are immutable
+
 ## 1.4.2
 
 - Fixed `BoxSDK.getPreconfiguredInstance()` to configure webhook keys

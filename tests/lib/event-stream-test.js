@@ -10,6 +10,7 @@ var sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
 	Readable = require('stream').Readable,
+	Promise = require('bluebird'),
 	leche = require('leche');
 
 var BoxClient = require('../../lib/box-client'),
@@ -18,7 +19,7 @@ var BoxClient = require('../../lib/box-client'),
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake,
 	EventStream,
 	eventStream,
@@ -69,6 +70,23 @@ describe('EventStream', function() {
 			assert.instanceOf(eventStream, Readable);
 		});
 
+		it('should use default options when no options are passed', function() {
+
+			assert.nestedPropertyVal(eventStream, '_options.fetchInterval', 1000);
+			assert.nestedPropertyVal(eventStream, '_options.retryDelay', 1000);
+		});
+
+		it('should set options when options are passed', function() {
+
+			var options = {
+				fetchInterval: 20000
+			};
+			var customEventStream = new EventStream(boxClientFake, TEST_STREAM_POSITION, options);
+
+			assert.nestedPropertyVal(customEventStream, '_options.fetchInterval', 20000);
+			assert.nestedPropertyVal(eventStream, '_options.retryDelay', 1000);
+		});
+
 	});
 
 	describe('getLongPollInfo()', function() {
@@ -77,12 +95,14 @@ describe('EventStream', function() {
 
 			var longPollInfo = {url: 'https://realtime.box.com/blah'};
 			sandbox.stub(eventStream, 'doLongPoll');
-			sandbox.mock(boxClientFake.events).expects('getLongPollInfo').yields(null, longPollInfo);
+			sandbox.mock(boxClientFake.events).expects('getLongPollInfo')
+				.returns(Promise.resolve(longPollInfo));
 
-			eventStream.getLongPollInfo();
-
-			assert.propertyVal(eventStream, '_longPollInfo', longPollInfo);
-			assert.propertyVal(eventStream, '_longPollRetries', 0);
+			return eventStream.getLongPollInfo()
+				.then(() => {
+					assert.propertyVal(eventStream, '_longPollInfo', longPollInfo);
+					assert.propertyVal(eventStream, '_longPollRetries', 0);
+				});
 		});
 
 		it('should reset the number of long poll retries when API call is successful', function() {
@@ -91,31 +111,33 @@ describe('EventStream', function() {
 			eventStream._longPollRetries = 2;
 
 			sandbox.stub(eventStream, 'doLongPoll');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').yields(null, longPollInfo);
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.resolve(longPollInfo));
 
-			eventStream.getLongPollInfo();
-
-			assert.propertyVal(eventStream, '_longPollRetries', 0);
+			return eventStream.getLongPollInfo()
+				.then(() => {
+					assert.propertyVal(eventStream, '_longPollRetries', 0);
+				});
 		});
 
 		it('should call doLongPoll() when the API call is successful', function() {
 
 			var longPollInfo = {url: 'https://realtime.box.com/blah'};
 
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').yields(null, longPollInfo);
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.resolve(longPollInfo));
 			sandbox.mock(eventStream).expects('doLongPoll');
 
-			eventStream.getLongPollInfo();
+			return eventStream.getLongPollInfo();
 		});
 
 		it('should emit error event when API call fails', function() {
 
 			var apiError = new Error('API fail');
 			sandbox.stub(eventStream, 'doLongPoll');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').yields(apiError);
-			sandbox.mock(eventStream).expects('emit').withArgs('error', apiError);
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.reject(apiError));
+			sandbox.mock(eventStream).expects('emit')
+				.withArgs('error', apiError);
 
-			eventStream.getLongPollInfo();
+			return eventStream.getLongPollInfo();
 		});
 
 		it('should retry getLongPollInfo() after delay when API call fails', function() {
@@ -123,12 +145,13 @@ describe('EventStream', function() {
 			var apiError = new Error('API fail');
 			sandbox.stub(eventStream, 'doLongPoll');
 			sandbox.stub(eventStream, 'emit');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').yields(apiError);
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.reject(apiError));
 
-			eventStream.getLongPollInfo();
-
-			sandbox.mock(eventStream).expects('getLongPollInfo');
-			clock.tick(1000);
+			return eventStream.getLongPollInfo()
+				.then(() => {
+					sandbox.mock(eventStream).expects('getLongPollInfo');
+					clock.tick(1000);
+				});
 		});
 
 		it('should not retry getLongPollInfo() when API call fails with auth error', function() {
@@ -137,12 +160,34 @@ describe('EventStream', function() {
 			apiError.authExpired = true;
 			sandbox.stub(eventStream, 'doLongPoll');
 			sandbox.stub(eventStream, 'emit');
-			sandbox.stub(boxClientFake.events, 'getLongPollInfo').yields(apiError);
+			sandbox.stub(boxClientFake.events, 'getLongPollInfo').returns(Promise.reject(apiError));
 
-			eventStream.getLongPollInfo();
 
-			sandbox.mock(eventStream).expects('getLongPollInfo').never();
-			clock.tick(1000);
+			return eventStream.getLongPollInfo()
+				.then(() => {
+					sandbox.mock(eventStream).expects('getLongPollInfo')
+						.never();
+					clock.tick(1000);
+				});
+		});
+
+		describe('when stream is destroyed', function() {
+
+			beforeEach(function() {
+				eventStream.destroy();
+			});
+
+			it('should do nothing and resolve `false`', function() {
+
+				sandbox.mock(eventStream._client.events)
+					.expects('getLongPollInfo')
+					.never();
+
+				return eventStream.getLongPollInfo()
+					.then(result => {
+						assert.strictEqual(result, false);
+					});
+			});
 		});
 	});
 
@@ -164,11 +209,12 @@ describe('EventStream', function() {
 		it('should get new long poll information when over the max number of retries', function() {
 
 			sandbox.mock(eventStream).expects('getLongPollInfo');
-			sandbox.mock(boxClientFake).expects('get').never();
+			sandbox.mock(boxClientFake).expects('get')
+				.never();
 
 			eventStream._longPollRetries = TEST_MAX_RETRIES + 1;
 
-			eventStream.doLongPoll();
+			return eventStream.doLongPoll();
 		});
 
 		it('should make long poll request with correct query params when called', function() {
@@ -180,158 +226,264 @@ describe('EventStream', function() {
 				stream_position: TEST_STREAM_POSITION
 			};
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get').withArgs('https://realtime/poll', sinon.match({
-				timeout: TEST_RETRY_TIMEOUT * 1000,
-				qs: sinon.match(expectedQS)
-			}));
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('https://realtime/poll', sinon.match({
+					timeout: TEST_RETRY_TIMEOUT * 1000,
+					qs: expectedQS
+				}))
+				.returns(Promise.resolve({message: 'new_change'}));
 
-			eventStream.doLongPoll();
+			return eventStream.doLongPoll();
 		});
 
 		it('should increment the number of long poll retries when called', function() {
 
 			eventStream._longPollRetries = 4;
 
-			sandbox.stub(boxClientFake, 'get');
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve({}));
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 
 			eventStream.doLongPoll();
-
 			assert.propertyVal(eventStream, '_longPollRetries', 5);
 		});
 
 		it('should reset long poll process after delay when API call returns error', function() {
 
 			var apiError = new Error('Oops');
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yields(apiError);
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.reject(apiError));
 			sandbox.mock(eventStream).expects('getLongPollInfo');
 
-			eventStream.doLongPoll();
-			clock.tick(1000);
+			return eventStream.doLongPoll().then(() => {
+				clock.tick(1000);
+			});
 		});
 
 		it('should reset long poll process immediately when API call returns reconnect message', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yields(null, {
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve({
 				message: 'reconnect'
-			});
+			}));
 			sandbox.mock(eventStream).expects('getLongPollInfo');
 
-			eventStream.doLongPoll();
+			return eventStream.doLongPoll();
 		});
 
 		it('should retry long poll when API call returns unknown message', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yields(null, {
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve({
 				message: 'what?'
-			});
+			}));
 			sandbox.mock(eventStream).expects('doLongPoll');
 
-			eventStream.doLongPoll();
+			return eventStream.doLongPoll();
 		});
 
 		it('should fetch new events when the API call returns new changes', function() {
 
-			sandbox.stub(boxClientFake, 'defaultResponseHandler').returnsArg(0);
-			sandbox.stub(boxClientFake, 'get').yields(null, {
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve({
 				message: 'new_change'
-			});
+			}));
 			sandbox.mock(eventStream).expects('fetchEvents');
 
-			eventStream.doLongPoll();
+			return eventStream.doLongPoll();
 		});
 
+		describe('when stream is destroyed', function() {
+
+			describe('before client fetch', function() {
+
+				beforeEach(function() {
+					eventStream.destroy();
+				});
+
+				it('should do nothing and resolve `false`', function() {
+
+					sandbox.mock(eventStream)
+						.expects('getLongPollInfo')
+						.never();
+					sandbox.mock(boxClientFake)
+						.expects('wrapWithDefaultHandler')
+						.never();
+
+					return eventStream.doLongPoll()
+						.then(result => {
+							assert.strictEqual(result, false);
+						});
+				});
+			});
+
+			describe('after client fetch', function() {
+
+				it('should resolve `false`', function() {
+
+					sandbox.mock(eventStream)
+						.expects('getLongPollInfo')
+						.never();
+					sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+						.returnsArg(0);
+					sandbox.mock(boxClientFake).expects('get')
+						.returns(Promise.resolve({
+							message: 'reconnect'
+						}));
+
+					const promise = eventStream.doLongPoll();
+
+					eventStream.destroy();
+
+					return promise.then(result => {
+						assert.strictEqual(result, false);
+					});
+				});
+			});
+		});
 	});
 
 	describe('fetchEvents()', function() {
 
+		var fakeEvents;
+
+		beforeEach(function() {
+
+			fakeEvents = {
+				entries: [{event_id: '123'}],
+				next_stream_position: 'foo'
+			};
+
+			// Stub out _read to prevent the stream from automatically looping
+			// back around to get more events
+			sandbox.stub(eventStream, '_read');
+		});
+
 		it('should make API call to get events from current stream position when called', function() {
 
-			sandbox.mock(boxClientFake.events).expects('get').withArgs(sinon.match({
-				stream_position: TEST_STREAM_POSITION
-			}));
+			sandbox.mock(boxClientFake.events).expects('get')
+				.withArgs(sinon.match({
+					stream_position: TEST_STREAM_POSITION,
+					limit: 500
+				}))
+				.returns(Promise.resolve(fakeEvents));
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
 		});
 
 		it('should emit error event when the API call fails', function() {
 
 			var apiError = new Error('Whoops');
-			sandbox.stub(boxClientFake.events, 'get').yields(apiError);
-			sandbox.mock(eventStream).expects('emit').withArgs('error', apiError);
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.reject(apiError));
+			sandbox.mock(eventStream).expects('emit')
+				.withArgs('error', apiError);
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents()
+				.then(() => {
+					sandbox.stub(eventStream, 'getLongPollInfo');
+					clock.tick(1000);
+				});
 		});
 
 		it('should reset long poll process after delay when the API call fails', function() {
 
 			var apiError = new Error('Whoops');
-			sandbox.stub(boxClientFake.events, 'get').yields(apiError);
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.reject(apiError));
 			sandbox.stub(eventStream, 'emit');
 
-			eventStream.fetchEvents();
-
-			sandbox.mock(eventStream).expects('getLongPollInfo');
-			clock.tick(1000);
+			return eventStream.fetchEvents().then(() => {
+				sandbox.mock(eventStream).expects('getLongPollInfo');
+				clock.tick(1000);
+			});
 		});
 
 		it('should re-poll when API call does not return any events', function() {
 
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
 				chunk_size: 0,
 				next_stream_position: TEST_STREAM_POSITION
-			});
+			}));
 			sandbox.mock(eventStream).expects('doLongPoll');
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
 		});
 
 		it('should re-poll when API call does not return next stream position', function() {
 
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
 				chunk_size: 1,
-				entries: [
-					{type: 'event'}
-				]
-			});
+				entries: [{type: 'event'}]
+			}));
 			sandbox.mock(eventStream).expects('doLongPoll');
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
 		});
 
 		it('should set next stream position when API call is successful', function() {
 
 			var newStreamPosition = '5263748952387465';
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
-				entries: [
-					{type: 'event'}
-				],
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
+				entries: [{type: 'event'}],
 				next_stream_position: newStreamPosition
-			});
+			}));
 			sandbox.stub(eventStream, 'push');
 
-			eventStream.fetchEvents();
-
-			assert.propertyVal(eventStream, '_streamPosition', newStreamPosition);
+			return eventStream.fetchEvents().then(() => {
+				assert.propertyVal(eventStream, '_streamPosition', newStreamPosition);
+			});
 		});
 
-		it('should push new events into the stream when API call is successful', function() {
+		it('should pause stream and push new events into the stream when API call is successful', function() {
 
 			var event = {
 				type: 'event',
 				event_id: '783964872'
 			};
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
 				entries: [event],
 				next_stream_position: TEST_STREAM_POSITION
-			});
-			sandbox.mock(eventStream).expects('push').withArgs(event);
+			}));
+			sandbox.mock(eventStream).expects('pause');
+			sandbox.mock(eventStream).expects('push')
+				.withArgs(event);
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
+		});
+
+		it('should resume stream after pushing new events when stream was flowing', function() {
+
+			var event = {
+				type: 'event',
+				event_id: '783964872'
+			};
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
+				entries: [event],
+				next_stream_position: TEST_STREAM_POSITION
+			}));
+			sandbox.mock(eventStream).expects('push')
+				.withArgs(event);
+			sandbox.mock(eventStream).expects('resume');
+
+			return eventStream.fetchEvents();
+		});
+
+		it('should not resume stream after pushing new events when stream was already paused', function() {
+
+			var event = {
+				type: 'event',
+				event_id: '783964872'
+			};
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
+				entries: [event],
+				next_stream_position: TEST_STREAM_POSITION
+			}));
+			sandbox.mock(eventStream).expects('push')
+				.withArgs(event);
+			sandbox.mock(eventStream).expects('resume')
+				.never();
+
+			eventStream.pause();
+			return eventStream.fetchEvents();
 		});
 
 		it('should deduplicate events when the API returns duplicate events', function() {
@@ -348,13 +500,18 @@ describe('EventStream', function() {
 
 			eventStream._dedupHash[duplicateEventID] = true;
 
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
-				entries: [duplicateEvent, newEvent],
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
+				entries: [
+					duplicateEvent,
+					newEvent
+				],
 				next_stream_position: TEST_STREAM_POSITION
-			});
-			sandbox.mock(eventStream).expects('push').once().withArgs(newEvent);
+			}));
+			sandbox.mock(eventStream).expects('push')
+				.once()
+				.withArgs(newEvent);
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
 		});
 
 		it('should re-poll when the API returns no non-duplicate events', function() {
@@ -367,14 +524,15 @@ describe('EventStream', function() {
 
 			eventStream._dedupHash[duplicateEventID] = true;
 
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
 				entries: [duplicateEvent],
 				next_stream_position: TEST_STREAM_POSITION
-			});
-			sandbox.mock(eventStream).expects('push').never();
+			}));
+			sandbox.mock(eventStream).expects('push')
+				.never();
 			sandbox.mock(eventStream).expects('doLongPoll');
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
 		});
 
 		it('should set event IDs for deduplication when API returns new events', function() {
@@ -385,15 +543,16 @@ describe('EventStream', function() {
 				event_id: eventID
 			};
 
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
 				entries: [event],
 				next_stream_position: TEST_STREAM_POSITION
-			});
+			}));
 			sandbox.stub(eventStream, 'push');
 
-			eventStream.fetchEvents();
-
-			assert.deepPropertyVal(eventStream, '_dedupHash.' + eventID, true);
+			return eventStream.fetchEvents()
+				.then(() => {
+					assert.nestedPropertyVal(eventStream, `_dedupHash.${eventID}`, true);
+				});
 		});
 
 		it('should clean up the deduplication filter when it reaches its maximum size', function() {
@@ -402,16 +561,81 @@ describe('EventStream', function() {
 				eventStream._dedupHash[i] = true;
 			}
 
-			sandbox.stub(boxClientFake.events, 'get').yields(null, {
+			sandbox.stub(boxClientFake.events, 'get').returns(Promise.resolve({
 				entries: [{type: 'event', event_id: '73469587263'}],
 				next_stream_position: TEST_STREAM_POSITION
-			});
+			}));
 			sandbox.stub(eventStream, 'push');
 			sandbox.mock(eventStream).expects('cleanupDedupFilter');
 
-			eventStream.fetchEvents();
+			return eventStream.fetchEvents();
 		});
 
+		it('should delay successive calls to be rate limited when called', function() {
+
+			var secondFakeEvents = {
+				entries: [{event_id: '456'}],
+				next_stream_position: 'bar'
+			};
+
+			// _read() gets called and starts another cycle — stub it out
+			sandbox.stub(eventStream, 'getLongPollInfo');
+
+			sandbox.mock(boxClientFake.events).expects('get')
+				.twice()
+				.withArgs(sinon.match({
+					stream_position: TEST_STREAM_POSITION,
+					limit: 500
+				}))
+				.onFirstCall()
+				.resolves(fakeEvents)
+				.onSecondCall()
+				.resolves(secondFakeEvents);
+
+			var called = {
+				first: false,
+				second: false
+			};
+
+			var p1 = eventStream.fetchEvents()
+				.then(() => {
+					called.first = true;
+					assert.propertyVal(called, 'second', false);
+					// Don't return the same event
+					fakeEvents.entries = [{event_id: '345'}];
+					clock.tick(1000);
+				});
+			var p2 = eventStream.fetchEvents()
+				.then(() => {
+					called.second = true;
+					assert.propertyVal(called, 'first', true);
+				});
+
+			return Promise.all([
+				p1,
+				p2
+			]);
+		});
+
+		describe('when stream is destroyed before fetch', function() {
+
+			beforeEach(function() {
+
+				eventStream.destroy();
+			});
+
+			it('should do nothing and resolve `false`', function() {
+
+				sandbox.mock(eventStream._rateLimiter)
+					.expects('then')
+					.never();
+
+				return eventStream.fetchEvents()
+					.then(result => {
+						assert.strictEqual(result, false);
+					});
+			});
+		});
 	});
 
 	describe('cleanupDedupFilter()', function() {
@@ -421,16 +645,78 @@ describe('EventStream', function() {
 			eventStream._dedupHash['123'] = true;
 			eventStream._dedupHash['456'] = true;
 
-			var latestEvents = [{
-				type: 'event',
-				event_id: '456'
-			}];
+			var latestEvents = [
+				{
+					type: 'event',
+					event_id: '456'
+				}
+			];
 
 			eventStream.cleanupDedupFilter(latestEvents);
 
-			assert.notDeepProperty(eventStream, '_dedupHash.123');
-			assert.deepPropertyVal(eventStream, '_dedupHash.456', true);
+			assert.notNestedProperty(eventStream, '_dedupHash.123');
+			assert.nestedPropertyVal(eventStream, '_dedupHash.456', true);
 		});
 	});
 
+	describe('_read()', function() {
+
+		it('should start long poll process when called', function() {
+
+			sandbox.mock(eventStream).expects('getLongPollInfo');
+
+			eventStream.read(1);
+		});
+	});
+
+	describe('destroy()', function() {
+
+		afterEach(function() {
+
+			eventStream.destroy();
+		});
+
+		it('should cancel any active polling retry timer', function() {
+
+			eventStream.retryPollInfo();
+			assert.property(eventStream, '_retryTimer');
+
+			eventStream.destroy();
+			assert.notProperty(eventStream, '_retryTimer');
+		});
+
+		it('should set `destroyed` prop if not already set', function() {
+
+			eventStream.destroy();
+			assert.propertyVal(eventStream, 'destroyed', true);
+		});
+	});
+
+	describe('retryPollInfo()', function() {
+
+		describe('when not destroyed', function() {
+
+			afterEach(function() {
+
+				eventStream.destroy();
+			});
+
+			it('should create a `_retryTimer` property', function() {
+
+				assert.notProperty(eventStream, '_retryTimer');
+				eventStream.retryPollInfo();
+				assert.property(eventStream, '_retryTimer');
+			});
+		});
+
+		describe('when destroyed', function() {
+
+			it('should not create a `_retryTimer` property', function() {
+
+				eventStream.destroy();
+				eventStream.retryPollInfo();
+				assert.notProperty(eventStream, '_retryTimer');
+			});
+		});
+	});
 });
