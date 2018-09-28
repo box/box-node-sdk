@@ -21,8 +21,6 @@ var assert = require('chai').assert,
 	jwt = require('jsonwebtoken'),
 	PagingIterator = require('../lib/util/paging-iterator');
 
-var NODE_GTE_v10_REGEX = /^\d{2}\./;
-
 describe('Box Node SDK', function() {
 
 	// ------------------------------------------------------------------------------
@@ -1731,15 +1729,10 @@ describe('Box Node SDK', function() {
 
 	it('should allow async iteration over iterators when Node version is v10.x or greater', function() {
 
-		if (!process.version.match(NODE_GTE_v10_REGEX)) {
-			this.skip();
-		}
+		var symbol = Symbol.asyncIterator || BoxSDK.ITERATOR;
 
 		var folderID = '22222',
-			expectedFileIDs = [
-				'44444',
-				'55555',
-			];
+			fileID = '44444';
 
 		apiMock
 			.get(`/2.0/folders/${folderID}/items`)
@@ -1748,27 +1741,11 @@ describe('Box Node SDK', function() {
 				entries: [
 					{
 						type: 'file',
-						id: expectedFileIDs[0]
+						id: fileID
 					}
 				],
 				limit: 1,
 				offset: 0
-			})
-			.get(`/2.0/folders/${folderID}/items`)
-			.query({
-				limit: 1,
-				offset: 1
-			})
-			.reply(200, {
-				total_count: 2,
-				entries: [
-					{
-						type: 'file',
-						id: expectedFileIDs[1]
-					}
-				],
-				limit: 1,
-				offset: 1
 			});
 
 		var sdk = new BoxSDK({
@@ -1781,21 +1758,23 @@ describe('Box Node SDK', function() {
 
 		return client.folders.getItems(folderID)
 			.then(iterator => {
-				assert.propertyVal(iterator, Symbol.asyncIterator, iterator);
+				var it = iterator[symbol]();
+				assert.equal(it, iterator);
+				return it.next();
+			})
+			.then(item => {
+				assert.nestedPropertyVal(item, 'value.type', 'file');
+				assert.nestedPropertyVal(item, 'value.id', fileID);
+				assert.propertyVal(item, 'done', false);
 			});
 	});
 
 	it('should allow async iteration over collection responses when Node version is v10.x or greater', function() {
 
-		if (!process.version.match(NODE_GTE_v10_REGEX)) {
-			this.skip();
-		}
+		var symbol = Symbol.asyncIterator || BoxSDK.ITERATOR;
 
 		var folderID = '22222',
-			expectedFileIDs = [
-				'44444',
-				'55555',
-			];
+			fileID = '44444';
 
 		apiMock
 			.get(`/2.0/folders/${folderID}/items`)
@@ -1804,27 +1783,11 @@ describe('Box Node SDK', function() {
 				entries: [
 					{
 						type: 'file',
-						id: expectedFileIDs[0]
+						id: fileID
 					}
 				],
 				limit: 1,
 				offset: 0
-			})
-			.get(`/2.0/folders/${folderID}/items`)
-			.query({
-				limit: 1,
-				offset: 1
-			})
-			.reply(200, {
-				total_count: 2,
-				entries: [
-					{
-						type: 'file',
-						id: expectedFileIDs[1]
-					}
-				],
-				limit: 1,
-				offset: 1
 			});
 
 		var sdk = new BoxSDK({
@@ -1836,19 +1799,21 @@ describe('Box Node SDK', function() {
 
 		return client.folders.getItems(folderID)
 			.then(items => {
-				assert.property(items, Symbol.asyncIterator);
-				var iterator = items[Symbol.asyncIterator]();
+				var iterator = items[symbol]();
 				assert.instanceOf(iterator, PagingIterator);
+				return iterator.next();
+			})
+			.then(item => {
+				assert.nestedPropertyVal(item, 'value.type', 'file');
+				assert.nestedPropertyVal(item, 'value.id', fileID);
+				assert.propertyVal(item, 'done', false);
 			});
 	});
 
-	it('should not attach undefined property to iterator', function() {
+	it('should expose iterator on collection response object via SDK-specific Symbol', function() {
 
 		var folderID = '22222',
-			expectedFileIDs = [
-				'44444',
-				'55555',
-			];
+			fileID = '44444';
 
 		apiMock
 			.get(`/2.0/folders/${folderID}/items`)
@@ -1857,27 +1822,80 @@ describe('Box Node SDK', function() {
 				entries: [
 					{
 						type: 'file',
-						id: expectedFileIDs[0]
+						id: fileID
 					}
 				],
 				limit: 1,
 				offset: 0
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		return client.folders.getItems(folderID)
+			.then(items => {
+				var iterator = items[client.ITERATOR]();
+				assert.instanceOf(iterator, PagingIterator);
+				return iterator.next();
 			})
+			.then(item => {
+				assert.nestedPropertyVal(item, 'value.type', 'file');
+				assert.nestedPropertyVal(item, 'value.id', fileID);
+				assert.propertyVal(item, 'done', false);
+			});
+	});
+
+	it('should expose iterator on collection response object via SDK Symbol when response is handled through callback', function(done) {
+
+		var folderID = '22222',
+			fileID = '44444';
+
+		apiMock
 			.get(`/2.0/folders/${folderID}/items`)
-			.query({
-				limit: 1,
-				offset: 1
-			})
 			.reply(200, {
 				total_count: 2,
 				entries: [
 					{
 						type: 'file',
-						id: expectedFileIDs[1]
+						id: fileID
 					}
 				],
 				limit: 1,
-				offset: 1
+				offset: 0
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		client.folders.getItems(folderID, null, function(err, items) {
+
+			assert.ifError(err);
+
+			var iterator = items[client.ITERATOR]();
+			assert.instanceOf(iterator, PagingIterator);
+			done();
+		});
+	});
+
+	it('should not attach undefined property to iterator', function() {
+
+		var folderID = '22222';
+
+		apiMock
+			.get(`/2.0/folders/${folderID}/items`)
+			.reply(200, {
+				total_count: 0,
+				entries: [],
+				limit: 100,
+				offset: 0
 			});
 
 		var sdk = new BoxSDK({
@@ -1896,40 +1914,15 @@ describe('Box Node SDK', function() {
 
 	it('should not attach undefined property to collection response', function() {
 
-		var folderID = '22222',
-			expectedFileIDs = [
-				'44444',
-				'55555',
-			];
+		var folderID = '22222';
 
 		apiMock
 			.get(`/2.0/folders/${folderID}/items`)
 			.reply(200, {
-				total_count: 2,
-				entries: [
-					{
-						type: 'file',
-						id: expectedFileIDs[0]
-					}
-				],
-				limit: 1,
+				total_count: 0,
+				entries: [],
+				limit: 100,
 				offset: 0
-			})
-			.get(`/2.0/folders/${folderID}/items`)
-			.query({
-				limit: 1,
-				offset: 1
-			})
-			.reply(200, {
-				total_count: 2,
-				entries: [
-					{
-						type: 'file',
-						id: expectedFileIDs[1]
-					}
-				],
-				limit: 1,
-				offset: 1
 			});
 
 		var sdk = new BoxSDK({

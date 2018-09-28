@@ -51,6 +51,80 @@ describe('PagingIterator', function() {
 		mockery.disable();
 	});
 
+	describe('static isIterable()', function() {
+
+		it('should return false when request object is not available', function() {
+
+			var response = {
+				statusCode: 200,
+				body: {
+					entries: []
+				}
+			};
+
+			var result = PagingIterator.isIterable(response);
+
+			assert.strictEqual(result, false);
+		});
+
+		leche.withData({
+			'POST request': ['POST'],
+			'PUT request': ['PUT'],
+			'OPTIONS request': ['OPTIONS'],
+			'DELETE request': ['DELETE'],
+			'HEAD request': ['HEAD']
+		}, function(method) {
+
+			it('should return false when request method was not GET', function() {
+
+				var response = {
+					statusCode: 200,
+					body: {
+						entries: []
+					},
+					request: { method }
+				};
+
+				var result = PagingIterator.isIterable(response);
+
+				assert.strictEqual(result, false);
+			});
+		});
+
+		it('should return false when the response body does not contain an entries array', function() {
+
+			var response = {
+				statusCode: 200,
+				body: {
+					foo: 'bar'
+				},
+				request: {
+					method: 'GET'
+				}
+			};
+
+			var result = PagingIterator.isIterable(response);
+
+			assert.strictEqual(result, false);
+		});
+
+		it('should return true when the response is iterable', function() {
+
+			var response = {
+				statusCode: 200,
+				body: {
+					entries: []
+				},
+				request: {
+					method: 'GET'
+				}
+			};
+
+			var result = PagingIterator.isIterable(response);
+
+			assert.strictEqual(result, true);
+		});
+	});
 
 	describe('constructor', function() {
 
