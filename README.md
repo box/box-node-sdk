@@ -229,39 +229,52 @@ client.del('/files/123', null, function(err, response) {});
 
 #### Iterators
 
-By default, the SDK returns [paged collections](https://developer.box.com/reference#pagination-1)
+The SDK returns [paged collections](https://developer.box.com/reference#pagination-1)
 as they are given by the API, and users can manually page through the collection using the given
-paging parameters.  Users may also optionally have these collections returned as
-[async iterators](https://github.com/tc39/proposal-async-iteration) by passing an SDK config flag:
+paging parameters from the API response body.  These collection objects also implements the __async iterable__ protocol,
+which allows them to be used with `for-await-of` syntax or with libraries like
+[iter-tools](https://github.com/sithmel/iter-tools) on Node.js v10.x or greater.  On older versions
+of Node.js, a few convenience methods have been implemented as methods directly on the iterator. To use these, the
+iterator can be accessed via an SDK-specific `Symbol` exposed as `BoxSDK.ITERATOR`, `sdk.ITERATOR`, and
+`client.ITERATOR`.
 
+__Node v10.x or greater__
 ```js
-var sdk = new BoxSDK({
-	clientID: clientID,
-	clientSecret: clientSecret,
-	iterators: true
-});
+const { asyncFind, asyncReduce } = require('iter-tools');
+let items = await client.folders.getItems(folderID);
 
-var client = sdk.getBasicClient(accessToken);
+// Print out all the items' ID and name
+for await (let item of items) {
+	console.log(item.id, item.name);
+}
 
-client.folders.getItems(folderID).then(it => {
+// Find one specific item by name
+let foundItem = await asyncFind(item => item.name === 'Important document.pdf);
 
-	// Output all items in the folder using a recursive promise chain which
-	// prints each item from the iterator until done
-	function printAllItems() {
+// Get the total size of all items in the folder
+let totalSize = await asyncReduce(0, (total, item) => total + item.size, items)
+```
 
-        // Get the next item from the iterator
-		return it.next().then(res => {
+__Node v8 or lower__
+```js
+client.folders.getItems(folderID).then(items => {
 
-			if (res.done) return;
+	let iterator = items[client.ITERATOR]();
 
-			console.log(res.value);
+	// Print out all the items' ID and name
+	iterator.forEach(item => console.log(item.id, item.name));
 
-			// Recurse to get the next item
-			return printAllItems();
-		})
-	}
+	// Find one specific item by name
+	iterator.find(item => item.name === 'Important document.pdf')
+		.then(foundItem => {
+			// ...
+		});
 
-	printAllItems();
+	// Get the total size of all items in the folder
+	iterator.reduce((total, item) => total + item.size, 0)
+		.then(totalSize => {
+			// ...
+		});
 });
 ```
 
