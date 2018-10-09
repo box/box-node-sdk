@@ -12,3 +12,6 @@ rules:
     prefer-arrow-callback: off
     # Tests don't need to return from .then() with asserts
     promise/always-return: off
+    camelcase: off
+    # Mocha uses `this` weirdly inside of test functions
+    no-invalid-this: off
