@@ -249,7 +249,7 @@ for await (let item of items) {
 }
 
 // Find one specific item by name
-let foundItem = await asyncFind(item => item.name === 'Important document.pdf);
+let foundItem = await asyncFind(item => item.name === 'Important document.pdf');
 
 // Get the total size of all items in the folder
 let totalSize = await asyncReduce(0, (total, item) => total + item.size, items)
