@@ -175,7 +175,7 @@ describe('token-manager', function() {
 			return tokenManager.getTokens({})
 				.catch(err => {
 					assert.instanceOf(err, Error, 'An error is returned');
-					assert.strictEqual(err.message, 'Expired Auth: Auth code or refresh token has expired [403 Forbidden]');
+					assert.strictEqual(err.message, 'Expired Auth: Auth code or refresh token has expired [403 Forbidden] invalid_grant');
 				});
 		});
 

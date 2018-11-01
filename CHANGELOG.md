@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.22.0
+
+- Chunked Uploader methods now return promises for [simpler handling of chunked uploads](./docs/files.md#automatic-uploader)
+- File attributes to set on the newly-uploaded file can now be
+[passed via `options.fileAttributes`](./docs/files.md#automatic-uploader) when creating a Chunked Uploader
+
+## 1.21.0
+
+- Added the ability to close an Event Stream by calling `eventStream.destroy()` (thanks @boneskull!)
+- Improved error messages related to certain authentication failure cases
+
+## 1.20.0
+
+- Added missing values to the `client.webhooks.triggerTypes` enum (thanks @MathersMax!)
+- Added support for [Metadata Cascade Policies](./docs/metadata.md#create-cascade-policy)
+
+## 1.19.0
+
+- Added `generateRepresentations` option to [`files.getRepresentationContent()`](./docs/files.md#get-representation-content)
+
 ## 1.18.0
 
 - Updated dependencies to resolve potential security issues:

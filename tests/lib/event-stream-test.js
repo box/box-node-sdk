@@ -170,6 +170,25 @@ describe('EventStream', function() {
 					clock.tick(1000);
 				});
 		});
+
+		describe('when stream is destroyed', function() {
+
+			beforeEach(function() {
+				eventStream.destroy();
+			});
+
+			it('should do nothing and resolve `false`', function() {
+
+				sandbox.mock(eventStream._client.events)
+					.expects('getLongPollInfo')
+					.never();
+
+				return eventStream.getLongPollInfo()
+					.then(result => {
+						assert.strictEqual(result, false);
+					});
+			});
+		});
 	});
 
 	describe('doLongPoll()', function() {
@@ -274,6 +293,54 @@ describe('EventStream', function() {
 			return eventStream.doLongPoll();
 		});
 
+		describe('when stream is destroyed', function() {
+
+			describe('before client fetch', function() {
+
+				beforeEach(function() {
+					eventStream.destroy();
+				});
+
+				it('should do nothing and resolve `false`', function() {
+
+					sandbox.mock(eventStream)
+						.expects('getLongPollInfo')
+						.never();
+					sandbox.mock(boxClientFake)
+						.expects('wrapWithDefaultHandler')
+						.never();
+
+					return eventStream.doLongPoll()
+						.then(result => {
+							assert.strictEqual(result, false);
+						});
+				});
+			});
+
+			describe('after client fetch', function() {
+
+				it('should resolve `false`', function() {
+
+					sandbox.mock(eventStream)
+						.expects('getLongPollInfo')
+						.never();
+					sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+						.returnsArg(0);
+					sandbox.mock(boxClientFake).expects('get')
+						.returns(Promise.resolve({
+							message: 'reconnect'
+						}));
+
+					const promise = eventStream.doLongPoll();
+
+					eventStream.destroy();
+
+					return promise.then(result => {
+						assert.strictEqual(result, false);
+					});
+				});
+			});
+		});
 	});
 
 	describe('fetchEvents()', function() {
@@ -550,6 +617,25 @@ describe('EventStream', function() {
 			]);
 		});
 
+		describe('when stream is destroyed before fetch', function() {
+
+			beforeEach(function() {
+
+				eventStream.destroy();
+			});
+
+			it('should do nothing and resolve `false`', function() {
+
+				sandbox.mock(eventStream._rateLimiter)
+					.expects('then')
+					.never();
+
+				return eventStream.fetchEvents()
+					.then(result => {
+						assert.strictEqual(result, false);
+					});
+			});
+		});
 	});
 
 	describe('cleanupDedupFilter()', function() {
@@ -583,4 +669,54 @@ describe('EventStream', function() {
 		});
 	});
 
+	describe('destroy()', function() {
+
+		afterEach(function() {
+
+			eventStream.destroy();
+		});
+
+		it('should cancel any active polling retry timer', function() {
+
+			eventStream.retryPollInfo();
+			assert.property(eventStream, '_retryTimer');
+
+			eventStream.destroy();
+			assert.notProperty(eventStream, '_retryTimer');
+		});
+
+		it('should set `destroyed` prop if not already set', function() {
+
+			eventStream.destroy();
+			assert.propertyVal(eventStream, 'destroyed', true);
+		});
+	});
+
+	describe('retryPollInfo()', function() {
+
+		describe('when not destroyed', function() {
+
+			afterEach(function() {
+
+				eventStream.destroy();
+			});
+
+			it('should create a `_retryTimer` property', function() {
+
+				assert.notProperty(eventStream, '_retryTimer');
+				eventStream.retryPollInfo();
+				assert.property(eventStream, '_retryTimer');
+			});
+		});
+
+		describe('when destroyed', function() {
+
+			it('should not create a `_retryTimer` property', function() {
+
+				eventStream.destroy();
+				eventStream.retryPollInfo();
+				assert.notProperty(eventStream, '_retryTimer');
+			});
+		});
+	});
 });

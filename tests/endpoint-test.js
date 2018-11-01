@@ -1299,6 +1299,134 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('getRepresentationInfo()', function() {
+
+			it('should resolve all representation entries with success status when generateRepresenations option is passed',
+				function() {
+
+					var repsFixtureMultiple = getFixture('files/get_files_id_representations_multiple_200'),
+						repsObj = JSON.parse(repsFixtureMultiple),
+						repPDFURL = url.parse(repsObj.representations.entries[1].info.url).pathname,
+						repTextURL = url.parse(repsObj.representations.entries[2].info.url).pathname,
+						repFixturePDFPending = getFixture('files/get_representation_info_pdf_pending_200'),
+						repFixturePDFSuccess = getFixture('files/get_representation_info_pdf_success_200'),
+						repFixtureTextSuccess = getFixture('files/get_representation_info_text_success_200');
+
+					var fileID = '11111',
+						representation = '[png][pdf][extracted_text]',
+						options = {generateRepresentations: true};
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.matchHeader('X-Rep-Hints', function(repHintsHeader) {
+							assert.equal(repHintsHeader, representation);
+							return true;
+						})
+						.reply(200, repsFixtureMultiple)
+						.get(repPDFURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixturePDFPending)
+						.get(repPDFURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixturePDFSuccess)
+						.get(repTextURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repFixtureTextSuccess);
+
+					return basicClient.files.getRepresentationInfo(fileID, representation, options)
+						.then(data => {
+							var entries = data.entries;
+							entries.forEach(function(entry) {
+								assert.nestedPropertyVal(entry, 'status.state', 'success');
+							});
+							assert.equal(entries.length, 3);
+						});
+				});
+
+			it('should return representation entries when the options and representation parameters are not passed',
+				function() {
+
+					var repsFixtureMultiple = getFixture('files/get_files_id_representations_multiple_200');
+
+					var fileID = '11111';
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repsFixtureMultiple);
+
+					return basicClient.files.getRepresentationInfo(fileID)
+						.then(data => {
+							var entries = data.entries;
+							assert.equal(entries.length, 3);
+							assert.nestedPropertyVal(entries[0], 'status.state', 'success');
+							assert.nestedPropertyVal(entries[1], 'status.state', 'none');
+							assert.nestedPropertyVal(entries[2], 'status.state', 'pending');
+						});
+				});
+
+
+			it('should return representation entries with errors when generateRepresentations option is passed',
+				function() {
+
+					var repsFixture = getFixture('files/get_files_id_representations_png_200'),
+						repsObj = JSON.parse(repsFixture),
+						repInfoURL = url.parse(repsObj.representations.entries[0].info.url).pathname,
+						repPendingFixture = getFixture('files/get_representation_info_pending_200'),
+						repErrorFixture = getFixture('files/get_representation_info_error_200');
+
+					var fileID = '983745',
+						representation = '[png?dimensions=1024x1024]',
+						options = {generateRepresentations: true};
+
+					apiMock.get(`/2.0/files/${fileID}?fields=representations`)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.matchHeader('X-Rep-Hints', function(repHintsHeader) {
+							assert.equal(repHintsHeader, representation);
+							return true;
+						})
+						.reply(200, repsFixture)
+						.get(repInfoURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repPendingFixture)
+						.get(repInfoURL)
+						.matchHeader('Authorization', function(authHeader) {
+							assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+							return true;
+						})
+						.reply(200, repErrorFixture);
+
+					return basicClient.files.getRepresentationInfo(fileID, representation, options)
+						.then(data => {
+							var entries = data.entries;
+							assert.equal(entries.length, 1);
+							assert.nestedPropertyVal(entries[0], 'status.state', 'error');
+						});
+				});
+
+
+		});
+
 		describe('getRepresentationContent()', function() {
 
 			it('should make correct request and poll info endpoint until representation is generated', function(done) {
@@ -3344,6 +3472,163 @@ describe('Endpoint', function() {
 				};
 				return basicClient.metadata.createTemplate(displayName, expectedBody.fields, options)
 					.then(template => assert.deepEqual(template, JSON.parse(fixture)));
+			});
+		});
+
+		describe('deleteTemplate()', function() {
+
+			it('should make DELETE call to delete template', function() {
+
+				var scope = 'enterprise',
+					templateKey = 'testTemplate';
+
+				apiMock.delete(`/2.0/metadata_templates/${scope}/${templateKey}/schema`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.metadata.deleteTemplate(scope, templateKey)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('getCascadePolicies()', function() {
+
+			it('should make GET call for cascade policies for folder', function() {
+
+				var folderID = '22222',
+					fixture = getFixture('metadata/get_metadata_cascade_policies_folder_id_200');
+
+				apiMock.get('/2.0/metadata_cascade_policies')
+					.query({ folder_id: folderID })
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.metadata.getCascadePolicies(folderID)
+					.then(policies => {
+						assert.deepEqual(policies, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('getCascadePolicy()', function() {
+
+			it('should make GET call for policy information and return correct result when API call succeeds', function() {
+
+				var policyID = '84113349-794d-445c-b93c-d8481b223434',
+					fixture = getFixture('metadata/get_metadata_cascade_policies_id_200');
+
+				apiMock.get(`/2.0/metadata_cascade_policies/${policyID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.metadata.getCascadePolicy(policyID)
+					.then(policy => {
+						assert.deepEqual(policy, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('createCascadePolicy()', function() {
+
+			it('should make POST call to create cascade policy', function() {
+
+				var folderID = '22222',
+					scope = 'enterprise',
+					templateKey = 'testTemplate',
+					fixture = getFixture('metadata/post_metadata_cascade_policies_201');
+
+				var expectedBody = {
+					folder_id: folderID,
+					scope,
+					templateKey
+				};
+
+				apiMock.post('/2.0/metadata_cascade_policies', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.metadata.createCascadePolicy(scope, templateKey, folderID)
+					.then(policy => {
+						assert.deepEqual(policy, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('deleteCascadePolicy()', function() {
+
+			it('should make DELETE call to delete cascade policy', function() {
+
+				var policyID = '84113349-794d-445c-b93c-d8481b223434';
+
+				apiMock.delete(`/2.0/metadata_cascade_policies/${policyID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+
+				return basicClient.metadata.deleteCascadePolicy(policyID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
+		describe('forceApplyCascadePolicy()', function() {
+
+			it('should make POST call to apply cascade policy', function() {
+
+				var policyID = '84113349-794d-445c-b93c-d8481b223434',
+					resolutionMethod = basicClient.metadata.cascadeResolution.PRESERVE_EXISTING;
+
+				var expectedBody = {
+					conflict_resolution: 'none'
+				};
+
+				apiMock.post(`/2.0/metadata_cascade_policies/${policyID}/apply`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(202);
+
+
+				return basicClient.metadata.forceApplyCascadePolicy(policyID, resolutionMethod)
+					.then(result => assert.isUndefined(result));
 			});
 		});
 
