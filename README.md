@@ -1,122 +1,76 @@
-Box SDK for Node.js
-===================
+Box Node.js SDK
+===============
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/box/box-node-sdk.svg)](https://greenkeeper.io/)
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 
-A JavaScript interface to the [Box Content API](https://developers.box.com/docs/).
-Includes:
+A Node.js interface to the [Box Content API](https://developers.box.com/docs/).
 
-- Token management and refreshing
-- Easy access to get/modify/delete your content on Box
-- File uploads and downloads
-- App Users
-- Events stream
-- A lot more...
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Creating API Clients](#creating-api-clients)
+  - [Basic Client](#basic-client)
+  - [Persistent Client](#persistent-client)
+  - [App Auth Client](#app-auth-client)
+- [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
+  - [Constructing API Calls Manually](#constructing-api-calls-manually)
+- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
+- [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
+- [Copyright and License](#copyright-and-license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+Installation
+------------
 
 ```
 npm install --save box-node-sdk
 ```
 
-[JSDocs](https://rawgit.com/box/box-node-sdk/master/docs/jsdoc/index.html)
+Getting Started
+---------------
 
-
-Basic Usage
------------
+To get started with the SDK, get a Developer Token from the Configuration page
+of your app in the [Box Developer Console][dev-console].
+You can use this token to make test calls for your own Box account.
 
 ```js
-// Initialize SDK
 var BoxSDK = require('box-node-sdk');
 
+// Initialize the SDK with your app credentials
 var sdk = new BoxSDK({
   clientID: 'CLIENT_ID',
   clientSecret: 'CLIENT_SECRET'
 });
 
-// Create a basic API client
-var client = sdk.getBasicClient('USER_ACCESS_TOKEN');
+// Create a basic API client, which does not automatically refresh the access token
+var client = sdk.getBasicClient('DEVELOPER_TOKEN');
 
-// Get some of that sweet, sweet data!
-client.users.get(client.CURRENT_USER_ID, null, function(err, currentUser) {
-  if(err) throw err;
-  console.log('Hello, ' + currentUser.name + '!');
-});
-
-// The SDK also supports Promises
+// Get your own user object from the Box API
+// All client methods return a promise that resolves to the results of the API call,
+// or rejects when an error occurs
 client.users.get(client.CURRENT_USER_ID)
 	.then(user => console.log('Hello', user.name, '!'))
 	.catch(err => console.log('Got an error!', err));
 ```
 
-
-Initializing the SDK
---------------------
-
-The first thing you'll need to do is initialize the SDK with your client credentials. Client ID and secret are required, and the SDK will throw if they're not provided.
-
-```js
-var BoxSDK = require('box-node-sdk');
-
-var sdk = new BoxSDK({
-  clientID: 'CLIENT_ID', // required
-  clientSecret: 'CLIENT_SECRET' // required
-});
-```
-
-In addition, the SDK constructor accepts options for configuring your instance of the SDK. Here is where you can set things like strictSSL, retry intervals, and more. See [config.js](https://github.com/box/box-node-sdk/blob/master/lib/util/config.js#L19) for a list of all supported properties.
-
-OAuth2
-------
-
-### Getting Tokens
-
-Acquires token info using an authorization code.
-
-```js
-sdk.getTokensAuthorizationCodeGrant(authCode, null, function(err, tokenInfo) {
-	// tokenInfo: {
-	//  accessToken: 'ACCESS_TOKEN',
-	//  refreshToken: 'REFRESH_TOKEN',
-	//  acquiredAtMS: 1464129218402,
-	//  accessTokenTTLMS: 3600000,
-	// }
-});
-```
-
-### Refreshing Tokens
-
-Refreshes the access and refresh tokens for a given refresh token.
-
-```js
-sdk.getTokensRefreshGrant('ACCESS_TOKEN_OR_REFRESH_TOKEN', function(err, tokenInfo) {
-	// ...
-});
-```
-
-### Revoking Tokens
-
-Revokes a token pair associated with a given access or refresh token.
-
-> Note: Revoking the access token revokes the refresh token as well, and vice versa.
-
-```js
-sdk.revokeTokens('ACCESS_TOKEN_OR_REFRESH_TOKEN', function(err) {
-	// ...
-});
-```
+[dev-console]: https://app.box.com/developers/console
 
 Creating API Clients
 --------------------
 
-Clients are used to communicate with the API on behalf of a user. All endpoints require some sort of authentication, which can be either as a user or an anonymous user via client credentials.
+Clients are used to communicate with the API on behalf of a user.
 
-Box supports four different types of client:
+Box supports three different types of client:
 
-- **Basic Client:** Simple, makes calls via the given access token
-- **Persistent Client:** More advanced, will refresh its tokens as needed and persist them via some token store
-- **Anonymous Client:** Uses shared client tokens, use for logged out users
-- **App Auth Client:** Uses the app auth JWT grant to act on behalf of app-managed users.
+- **Basic Client:** Simple, makes calls via the given access token until the access token expires
+- **Persistent Client:** For use with traditional OAuth2 apps, can refresh its tokens automatically and persist them via a token store
+- **App Auth Client:** Uses the app auth JWT grant to act on behalf of app-managed users and create new tokens automatically
 
 ### Basic Client
 
@@ -132,11 +86,19 @@ Returns a Box Client with a persistent API session. A persistent API session hel
 
 > NOTE: If tokenInfo or tokenStore are formatted incorrectly, this method will throw an error. If you haven't explicitly created either of these objects or are otherwise not completely confident in their validity, you should wrap your call to getPersistentClient in a try-catch to handle any potential errors.
 
+If you do not provide a token store object, the SDK will continue refreshing tokens locally as long
+as the Node.js process lives, but will not able to restore the user's authentication on process
+restart or share that authentication state between different processes.
 ```js
-var client = sdk.getPersistentClient(tokenInfo[, tokenStore]);
+var client = sdk.getPersistentClient(tokenInfo, null);
 ```
 
-#### Optional: Token Store
+Providing a token store will allow the SDK to persist the user's authentication state
+so that you can resume making API calls as a user if the Node.js process needs to restart,
+or share the authentication state between multiple different processes.
+```js
+var client = sdk.getPersistentClient(tokenInfo, tokenStore);
+```
 
 The token store is the interface used by persistent clients to interact with the consumer app's central storage layer. For a token store to be valid, it must have the following three methods:
 
@@ -146,21 +108,31 @@ store.write(tokenInfo, function(err, data) {}); // write TokenInfo to the app's 
 store.clear(function(err, data) {}); // delete TokenInfo from the app's central store.
 ```
 
-Notice that these methods don't pass in identifying information as arguments. You'll most likely need to create them on-demand for each client.
-
-### Anonymous Client
-
-Returns a Box Client with an Anonymous API Session. An Anonymous API Session has access to an anonymous client-credentials token, which isn't tied to any specific user. Because of this, the client will only have access to endpoints that allow client-credential tokens. All Anonymous API Sessions share the same tokens, which allows them to refresh them efficiently and reduce load on both the application and the API.
-
-```js
-var client = sdk.getAnonymousClient();
-```
+Note that these methods don't pass in identifying information as arguments. You'll most likely need to create them on-demand for each client.
 
 ### App Auth Client
 
 App Auth allows an app to fully manage the Box accounts of its users; they do not
 have direct login credentials to Box and all operations are performed through the API
 using a JWT grant.
+
+If you have a JSON configuration file from the [Box Developer Console][dev-console]
+that includes your private key information, you can import that directly to create an SDK instance:
+
+```js
+var sdkConfig = require('/path/to/config.json');
+var sdk = BoxSDK.getPreconfiguredInstance(sdkConfig);
+
+// Get the service account client, used to create and manage app user accounts
+// The enterprise ID is pre-populated by the JSON configuration,
+// so you don't need to specify it here
+var serviceAccountClient = sdk.getAppAuthClient('enterprise');
+
+// Get an app user client
+var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
+```
+
+Otherwise, you can manually pass the necessary configuration parameters to the SDK:
 
 ```js
 var sdk = new BoxSDK({
@@ -180,167 +152,88 @@ var serviceAccountClient = sdk.getAppAuthClient('enterprise', 'APP_ENTERPRISE_ID
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 
-Accessing Data on Box
----------------------
 
-### Resource Managers
+Using the Client to Make API Calls
+----------------------------------
 
+The different API endpoints you can call are represented as methods, grouped into
+managers by the type of object they interact with.
+
+For example:
 ```js
-client.users.get(client.CURRENT_USER_ID, null, function(err, currentUser) {});
-client.folders.update('123', { name: 'New Folder Name' }, function(err, folder) {});
-client.files.uploadFile('123', 'bicycle.png', fileData, function(err, file) {});
-client.comments.delete('456', function(err) {});
+// Get the user opject for the current user
+client.users.get(client.CURRENT_USER_ID)
+	.then(currentUser => { /* ... */ })
+	.catch(error => { /* handle any errors */ });
+
+// Update the name for folder with ID 123
+client.folders.update('123', { name: 'New Folder Name' })
+	.then(folderInfo => { /* ... */ })
+	.catch(error => { /* handle any errors */ });
+
+// Upload a new file to folder 123
+client.files.uploadFile('123', 'bicycle.png', fileContents)
+	.then(fileObject => { /* ... */ })
+	.catch(error => { /* handle any errors */ });
+
+// Delete the comment with ID 456
+client.comments.delete('456')
+	.then(() => { /* ... */ })
+	.catch(error => { /* handle any errors */ });
 ```
 
-The following resources are supported by the SDK:
+For complete documentation about the available operations, please see
+the [SDK documentation pages](./docs) and the auto-generated
+[JSDocs](https://rawgit.com/box/box-node-sdk/master/docs/jsdoc/index.html).
+These contain detailed information about which methods are available and
+how to use them.
 
-- [Authentication](https://github.com/box/box-node-sdk/blob/master/docs/authentication.md)
-- [Collaborations](https://github.com/box/box-node-sdk/blob/master/docs/collaborations.md)
-- [Collections](https://github.com/box/box-node-sdk/blob/master/docs/collections.md)
-- [Comments](https://github.com/box/box-node-sdk/blob/master/docs/comments.md)
-- [Device Pins](https://github.com/box/box-node-sdk/blob/master/docs/device-pins.md)
-- [Enterprise](https://github.com/box/box-node-sdk/blob/master/docs/enterprise.md)
-- [Events](https://github.com/box/box-node-sdk/blob/master/docs/events.md)
-- [Files](https://github.com/box/box-node-sdk/blob/master/docs/files.md)
-- [Folders](https://github.com/box/box-node-sdk/blob/master/docs/folders.md)
-- [Groups](https://github.com/box/box-node-sdk/blob/master/docs/groups.md)
-- [Legal Hold Policies](https://github.com/box/box-node-sdk/blob/master/docs/legal-hold-policies.md)
-- [Metadata](https://github.com/box/box-node-sdk/blob/master/docs/metadata.md)
-- [Retention Policies](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md)
-- [Search](https://github.com/box/box-node-sdk/blob/master/docs/search.md)
-- [Shared Items](https://github.com/box/box-node-sdk/blob/master/docs/shared-items.md)
-- [Tasks](https://github.com/box/box-node-sdk/blob/master/docs/tasks.md)
-- [Trash](https://github.com/box/box-node-sdk/blob/master/docs/trash.md)
-- [Users](https://github.com/box/box-node-sdk/blob/master/docs/users.md)
-- [Web Links](https://github.com/box/box-node-sdk/blob/master/docs/web-links.md)
-- [Webhooks](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md)
+### Constructing API Calls Manually
 
-### Helpers
+The SDK also exposes low-level request methods for constructing your own API calls.
+These can be useful for adding your own API calls that aren't yet explicitly supported by the SDK.
 
-#### Get/Post/Update/Delete
-
-Box exposes some bare request methods for constructing your own API calls. These can be useful for adding your own API calls that aren't yet explicitly supported by the SDK.
+The low-level methods always return a response object that contains the raw API response, and do not
+turn non-2xx status codes into errors like the normal client methods do.
 
 ```js
-client.get('/files/123', {qs: {fields: 'id,name'}}, function(err, response) {});
-client.put('/files/123', {body: {name: 'New File Name'}}, function(err, response) {});
-client.del('/files/123', null, function(err, response) {});
+// GET /files/123?fields=id,name
+client.get('/files/123', {qs: {fields: 'id,name'}})
+	.then(response => { /* ... */ })
+	.catch(error => { /* handle any errors */ });
+
+// PUT /files/123
+// {
+//     "name": "New File Name"
+// }
+client.put('/files/123', {body: {name: 'New File Name'}});
+	.then(response => { /* ... */ })
+	.catch(error => { /* handle any errors */ });
+
+// DELETE /files/123
+client.del('/files/123');
+	.then(response => { /* ... */ })
+	.catch(error => { /* handle any errors */ });
 ```
-
-#### Iterators
-
-By default, the SDK returns [paged collections](https://developer.box.com/reference#pagination-1)
-as they are given by the API, and users can manually page through the collection using the given
-paging parameters.  Users may also optionally have these collections returned as
-[async iterators](https://github.com/tc39/proposal-async-iteration) by passing an SDK config flag:
-
-```js
-var sdk = new BoxSDK({
-	clientID: clientID,
-	clientSecret: clientSecret,
-	iterators: true
-});
-
-var client = sdk.getBasicClient(accessToken);
-
-client.folders.getItems(folderID).then(it => {
-
-	// Output all items in the folder using a recursive promise chain which
-	// prints each item from the iterator until done
-	function printAllItems() {
-
-        // Get the next item from the iterator
-		return it.next().then(res => {
-
-			if (res.done) return;
-
-			console.log(res.value);
-
-			// Recurse to get the next item
-			return printAllItems();
-		})
-	}
-
-	printAllItems();
-});
-```
-
-#### Collaboration Roles
-
-All valid collaboration roles. These are helpful when creating & updating collaborators.
-
-```js
-BoxClient.prototype.collaborationRoles = {
-	EDITOR: 'editor',
-	VIEWER: 'viewer',
-	PREVIEWER: 'previewer',
-	UPLOADER: 'uploader',
-	PREVIEWER_UPLOADER: 'previewer uploader',
-	VIEWER_UPLOADER: 'viewer uploader',
-	CO_OWNER: 'co-owner'
-};
-```
-
-#### Shared Access Levels
-
-All valid values that the API accepts for setting shared access levels. To be used when creating and editing shared links, upload emails, etc.
-
-```js
-BoxClient.prototype.accessLevels = {
-	OPEN: {access: 'open'},
-	COLLABORATORS: {access: 'collaborators'},
-	COMPANY: {access: 'company'},
-	DEFAULT: {},
-	DISABLED: null
-};
-```
-
-#### Current User ID
-
-An easy reference when accessing/modifying the current user.
-
-```js
-BoxClient.prototype.CURRENT_USER_ID = 'me';
-```
-
-Events
-------
-
-The SDK currently emits the following events:
-
-### 'response'
-
-The response event is fired anytime the SDK receives a response from the API. This includes requests made for both resources and tokens. The event is fired with an `err` object (populated when there is a request/response error) and a `response` object (populated when there was a response), similar to our API request callbacks.
-
 
 Questions, Bugs, and Feature Requests?
 --------------------------------------
 
-[Browse the issues tickets](https://github.com/box/box-node-sdk/issues)! Or, if that doesn't work, [file a new one](https://github.com/box/box-node-sdk/issues/new) and someone will get back to you.
+[Browse the issues tickets](https://github.com/box/box-node-sdk/issues)! Or, if that doesn't work, [file a new one](https://github.com/box/box-node-sdk/issues/new) and someone will get back to you.   If you have general questions about the
+Box API, you can post to the [Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum).
 
 
-Developing Box SDK for Node.js
-------------------------------
+Contributing to the Box Node.js SDK
+-----------------------------------
 
 1. Clone this repo.
 1. Run `npm install`.
 1. Run `npm test` to ensure everything is working.
-1. Make some changes.
+1. Make the changes you want in the `lib/` directory.  Be sure to add corresponding tests
+in the `tests/` directory!
+1. Create a pull request with your changes — we'll review it and help you get it merged.
 
-The following commands are available:
-
-* `npm test` - runs linting and unit tests (plus code coverage)
-* `npm run lint` - runs just linting
-* `npm run docs` - creates JSDoc documentation
-* `npm run deps` - updates remote dependencies
-
-
-Support
--------
-
-Need to contact us directly? You can post to the
-[Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum);
-please be sure to mention the Node.js SDK in the subject.
+For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
 Copyright and License
 ---------------------
