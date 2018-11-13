@@ -11,6 +11,7 @@ var assert = require('chai').assert,
 	sinon = require('sinon'),
 	mockery = require('mockery'),
 	jwt = require('jsonwebtoken'),
+	uuid = require('uuid'),
 	Promise = require('bluebird'),
 	leche = require('leche');
 
@@ -38,6 +39,7 @@ describe('token-manager', function() {
 
 	var requestManagerFake,
 		jwtFake,
+		uuidFake,
 		config,
 		TokenManager,
 		tokenManager;
@@ -47,6 +49,7 @@ describe('token-manager', function() {
 		// Setup Dependencies
 		requestManagerFake = leche.fake(APIRequestManager.prototype);
 		jwtFake = leche.fake(jwt);
+		uuidFake = leche.fake(uuid);
 
 		config = new Config({
 			clientID: BOX_CLIENT_ID,
@@ -60,6 +63,7 @@ describe('token-manager', function() {
 			warnOnUnregistered: false
 		});
 		mockery.registerMock('jsonwebtoken', jwtFake);
+		mockery.registerMock('uuid', uuidFake);
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
 
 		// Setup File Under Test
@@ -399,6 +403,7 @@ describe('token-manager', function() {
 			TEST_PASSPHRASE = 'secret password',
 			TEST_ID = '873645827345',
 			TEST_KEY_ID = 'jhbxg87f4',
+			TEST_JTI = 'e1038baf-5ec8-4a16-b8da-cbe3602d272d',
 			TEST_WEB_TOKEN = 'laksduh5q3ufygqergtwehrg8w95tw9dhfgwr5';
 
 		beforeEach(function() {
@@ -419,6 +424,8 @@ describe('token-manager', function() {
 
 			sandbox.useFakeTimers(100000);
 
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
+
 			var expectedClaims = {
 				exp: 101,
 				box_sub_type: 'user'
@@ -433,7 +440,8 @@ describe('token-manager', function() {
 				subject: TEST_ID,
 				issuer: config.clientID,
 				noTimestamp: false,
-				keyid: TEST_KEY_ID
+				keyid: TEST_KEY_ID,
+				jwtid: TEST_JTI
 			};
 			sandbox.stub(tokenManager, 'getTokens').returns(Promise.resolve());
 			sandbox.mock(jwtFake).expects('sign')
@@ -446,6 +454,7 @@ describe('token-manager', function() {
 		it('should return error when JWT computation throws error', function() {
 
 			var error = new Error('Some crypto stuff failed!');
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
 			sandbox.stub(jwtFake, 'sign').throws(error);
 
 			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
@@ -466,6 +475,7 @@ describe('token-manager', function() {
 			};
 
 			sandbox.stub(jwtFake, 'sign').returns(TEST_WEB_TOKEN);
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(sinon.match(expectedTokenParams), null)
@@ -491,6 +501,7 @@ describe('token-manager', function() {
 				accessToken: 'lsdjhgo87w3h4tbd87fg54'
 			};
 
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
 			sandbox.stub(jwtFake, 'sign').returns(TEST_WEB_TOKEN);
 
 			sandbox.mock(tokenManager).expects('getTokens')
@@ -503,7 +514,7 @@ describe('token-manager', function() {
 				});
 		});
 
-		it('should retry with new JWT using server date when server rejects exp claim', function() {
+		it('should retry with new JWT using server date and new jti claim when server rejects exp claim', function() {
 
 			sandbox.useFakeTimers(100000);
 
@@ -538,9 +549,16 @@ describe('token-manager', function() {
 				}
 			};
 
+			var regeneratedJTI = '630aab1e-912e-468d-b052-fd53a41925ed';
+			var uuidStub = sandbox.stub(uuidFake, 'v4');
+			uuidStub.onCall(0).returns(TEST_JTI);
+			uuidStub.onCall(1).returns(regeneratedJTI);
+
 			var jwtStub = sandbox.stub(jwtFake, 'sign');
-			jwtStub.withArgs(sinon.match({exp: 101})).returns(TEST_WEB_TOKEN);
-			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1})).returns(newJWT);
+			jwtStub.withArgs(sinon.match({exp: 101}, sinon.match.any, sinon.match({jwtid: TEST_JTI})))
+				.returns(TEST_WEB_TOKEN);
+			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
+				.returns(newJWT);
 			var getTokensMock = sandbox.mock(tokenManager);
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(firstTokenParams), null)
@@ -559,6 +577,7 @@ describe('token-manager', function() {
 
 			var error = new Error('Could not get tokens');
 
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
 			sandbox.stub(jwtFake, 'sign').returns(TEST_WEB_TOKEN);
 			sandbox.stub(tokenManager, 'getTokens').returns(Promise.reject(error));
 
@@ -573,6 +592,7 @@ describe('token-manager', function() {
 
 		var TEST_ACCESS_TOKEN = 'poiudafjdbfjygsdfg',
 			TEST_SCOPE = 'item_preview',
+			TEST_JTI = '630aab1e-912e-468d-b052-fd53a41925ed',
 			TEST_RESOURCE = 'https://api.box.com/2.0/files/12345';
 
 		it('should exchange access token for lower scope when only scope is passed', function() {
@@ -706,9 +726,11 @@ describe('token-manager', function() {
 			var expectedOptions = {
 				algorithm: 'none',
 				expiresIn: '1m',
-				noTimestamp: true
+				noTimestamp: true,
+				jwtid: TEST_JTI
 			};
 
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
 			sandbox.mock(jwtFake).expects('sign')
 				.withArgs(sinon.match(expectedClaims), sinon.match.string, sinon.match(expectedOptions));
 			sandbox.stub(tokenManager, 'getTokens');
@@ -739,6 +761,7 @@ describe('token-manager', function() {
 			};
 
 
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
 			sandbox.stub(jwtFake, 'sign').returns(actorJWT);
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs(expectedTokenParams, null)
@@ -758,6 +781,7 @@ describe('token-manager', function() {
 				name: 'Random Person'
 			};
 
+			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
 			sandbox.stub(jwtFake, 'sign').throws(jwtError);
 			sandbox.mock(tokenManager).expects('getTokens')
 				.never();
