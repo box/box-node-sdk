@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.22.1
+
+- Fixed an issue where retrying JWT auth token requests would sometimes fail due to a non-unique `jti` claim
+
 ## 1.22.0
 
 - Chunked Uploader methods now return promises for [simpler handling of chunked uploads](./docs/files.md#automatic-uploader)
