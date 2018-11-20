@@ -137,6 +137,24 @@ client.files.deletePermanently('11111')
 	});
 ```
 
+If you want to ensure that your deletion does not overwrite any other updates (i.e. to prevent against possible race
+conditions), you can pass the last known value of the file's `etag` field via the `etag` option; this will generate
+an error if the file was modified between when you read that `etag` value and when the deletion is processed by the
+API.
+
+```js
+client.files.deletePermanently('11111', { etag: '5' })
+	.then(() => {
+		// File successfully deleted
+	})
+	.catch(err => {
+		if (err.statusCode === 412) {
+			// Precondition failed — the file was modified before the deletion was processed
+			// Read the file again to ensure it is safe to delete and then retry
+		}
+	});
+```
+
 Get a Trashed File
 ------------------
 
@@ -372,5 +390,23 @@ A folder can be removed permanently from trash by calling
 client.folders.deletePermanently('22222')
 	.then(() => {
 		// deletion succeeded — no value returned
+	});
+```
+
+If you want to ensure that your deletion does not overwrite any other updates (i.e. to prevent against possible race
+conditions), you can pass the last known value of the folder's `etag` field via the `etag` option; this will generate
+an error if the folder was modified between when you read that `etag` value and when the deletion is processed by the
+API.
+
+```js
+client.folders.deletePermanently('22222', { etag: '5' })
+	.then(() => {
+		// Folder successfully deleted
+	})
+	.catch(err => {
+		if (err.statusCode === 412) {
+			// Precondition failed — the folder was modified before the deletion was processed
+			// Read the folder again to ensure it is safe to delete and then retry
+		}
 	});
 ```
