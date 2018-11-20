@@ -306,6 +306,24 @@ describe('Folders', function() {
 			folders.update(FOLDER_ID, testBody);
 		});
 
+		it('should send If-Match header when etag option is passed', function() {
+
+			var etag = '5',
+				name = 'Renamed Folder';
+
+			var expectedParams = {
+				body: { name },
+				headers: {
+					'If-Match': etag
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/folders/${FOLDER_ID}`, expectedParams);
+			folders.update(FOLDER_ID, { name, etag });
+		});
+
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve());
@@ -776,6 +794,23 @@ describe('Folders', function() {
 			folders.delete(FOLDER_ID, testQS);
 		});
 
+		it('should send If-Match header when etag option is passed', function() {
+
+			var etag = '5';
+
+			var expectedParams = {
+				headers: {
+					'If-Match': etag
+				},
+				qs: {}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/folders/${FOLDER_ID}`, expectedParams);
+			folders.delete(FOLDER_ID, { etag });
+		});
+
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
@@ -1196,8 +1231,24 @@ describe('Folders', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs(`/folders/${FOLDER_ID}/trash`, null);
+				.withArgs(`/folders/${FOLDER_ID}/trash`, {});
 			folders.deletePermanently(FOLDER_ID);
+		});
+
+		it('should send If-Match header when etag option is passed', function() {
+
+			var etag = '5';
+
+			var expectedParams = {
+				headers: {
+					'If-Match': etag
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/folders/${FOLDER_ID}/trash`, expectedParams);
+			folders.deletePermanently(FOLDER_ID, { etag });
 		});
 
 		it('should wrap with default handler when called', function() {
