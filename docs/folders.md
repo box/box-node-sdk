@@ -216,7 +216,7 @@ an error if the folder was modified between when you read that `etag` value and 
 API.
 
 ```js
-client.folders.update('22222', { name: 'Renamed Folder', etag: '5', fields: 'name })
+client.folders.update('22222', { name: 'Renamed Folder', etag: '5', fields: 'name' })
 	.then(updatedFolder => {
         /* updatedFolder -> {
             type: 'folder',
