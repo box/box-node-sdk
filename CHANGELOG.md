@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.23.0 (Upcoming)
+
+- Added an `etag` option to common file and folder methods to allow handling race conditions 
+    - [`client.files.update()`](./docs/files.md#update-a-files-information)
+    - [`client.files.delete()`](./docs/files.md#delete-a-file)
+    - [`client.files.deletePermanently()`](./docs/trash.md#delete-a-file-from-the-trash)
+    - [`client.files.deleteVersion()`](./docs/files.md#delete-a-previous-file-version)
+    - [`client.folders.update()`](./docs/folders.md#update-a-folders-information)
+    - [`client.folders.delete()`](./docs/folders.md#delete-a-folder)
+    - [`client.folders.deletePermanently()`](./docs/trash.md#delete-a-folder-from-the-trash)
+
 ## 1.22.1
 
 - Fixed an issue where retrying JWT auth token requests would sometimes fail due to a non-unique `jti` claim

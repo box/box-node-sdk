@@ -153,6 +153,24 @@ client.files.update('75937', { name : 'New name.pdf', fields: 'name' })
 	});
 ```
 
+If you want to ensure that your updates do not overwrite any other updates (i.e. to prevent against possible race
+conditions), you can pass the last known value of the file's `etag` field via the `etag` option; this will generate
+an error if the file was modified between when you read that `etag` value and when your updates were processed by the
+API.
+
+```js
+client.files.update('11111', { name: 'New name.pdf', etag: '5', fields: 'name' })
+	.then(updatedFile => {
+		// ...
+	})
+	.catch(err => {
+		if (err.statusCode === 412) {
+			// Precondition failed — the file was modified before our updates were processed
+			// We should read the file again to ensure our updates are safe and retry
+		}
+	});
+```
+
 Download a File
 ---------------
 
@@ -729,6 +747,24 @@ client.files.delete('12345')
 	});
 ```
 
+If you want to ensure that your deletion does not overwrite any other updates (i.e. to prevent against possible race
+conditions), you can pass the last known value of the file's `etag` field via the `etag` option; this will generate
+an error if the file was modified between when you read that `etag` value and when the deletion is processed by the
+API.
+
+```js
+client.files.delete('11111', { etag: '5' })
+	.then(() => {
+		// File successfully deleted
+	})
+	.catch(err => {
+		if (err.statusCode === 412) {
+			// Precondition failed — the file was modified before the deletion was processed
+			// Read the file again to ensure it is safe to delete and then retry
+		}
+	});
+```
+
 Get File Versions
 -----------------
 
@@ -943,6 +979,26 @@ var versionID = '22222';
 client.files.deleteVersion(fileID, versionID)
 	.then(() => {
 		// deletion succeeded — no value returned
+	});
+```
+
+If you want to ensure that your deletion does not overwrite any other updates (i.e. to prevent against possible race
+conditions), you can pass the last known value of the file's `etag` field via the `etag` option; this will generate
+an error if the file was modified between when you read that `etag` value and when the deletion is processed by the
+API.
+
+```js
+var fileID = '11111';
+var versionID = '22222';
+client.files.deleteVersion(fileID, versionID, { etag: '5' })
+	.then(() => {
+		// File version successfully deleted
+	})
+	.catch(err => {
+		if (err.statusCode === 412) {
+			// Precondition failed — the file was modified before the deletion was processed
+			// Read the file again to ensure it is safe to delete and then retry
+		}
 	});
 ```
 

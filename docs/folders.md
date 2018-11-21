@@ -210,6 +210,30 @@ client.folders.update('11111', {name: 'Pictures from 2017'})
     });
 ```
 
+If you want to ensure that your update does not overwrite any other updates (i.e. to prevent against possible race
+conditions), you can pass the last known value of the folder's `etag` field via the `etag` option; this will generate
+an error if the folder was modified between when you read that `etag` value and when your updates are processed by the
+API.
+
+```js
+client.folders.update('22222', { name: 'Renamed Folder', etag: '5', fields: 'name' })
+	.then(updatedFolder => {
+        /* updatedFolder -> {
+            type: 'folder',
+            id: '22222',
+            sequence_id: '1',
+            etag: '6',
+            name: 'Renamed Folder' }
+        */
+	})
+	.catch(err => {
+		if (err.statusCode === 412) {
+			// Precondition failed — the folder was modified before the update was processed
+			// Read the folder again to ensure it is safe to update and then retry
+		}
+	});
+```
+
 Create a Folder
 ---------------
 
