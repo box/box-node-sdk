@@ -388,7 +388,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1353">line 1353</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1409">line 1409</a>
     </li></ul></dd>
     
 
@@ -563,7 +563,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1216">line 1216</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1272">line 1272</a>
     </li></ul></dd>
     
 
@@ -860,7 +860,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line685">line 685</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line710">line 710</a>
     </li></ul></dd>
     
 
@@ -1094,7 +1094,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line352">line 352</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line361">line 361</a>
     </li></ul></dd>
     
 
@@ -1330,7 +1330,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line980">line 980</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1020">line 1020</a>
     </li></ul></dd>
     
 
@@ -1658,7 +1658,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1138">line 1138</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1194">line 1194</a>
     </li></ul></dd>
     
 
@@ -1986,7 +1986,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line433">line 433</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line442">line 442</a>
     </li></ul></dd>
     
 
@@ -2222,7 +2222,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1072">line 1072</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1128">line 1128</a>
     </li></ul></dd>
     
 
@@ -2489,7 +2489,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1045">line 1045</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1101">line 1101</a>
     </li></ul></dd>
     
 
@@ -2545,7 +2545,7 @@ Method: POST
     
 
     
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(fileID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -2625,6 +2625,100 @@ Method: DELETE
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>etag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only delete the file if the etag value matches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -2692,7 +2786,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line465">line 465</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line476">line 476</a>
     </li></ul></dd>
     
 
@@ -2957,7 +3051,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line733">line 733</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line758">line 758</a>
     </li></ul></dd>
     
 
@@ -3013,7 +3107,7 @@ Method: DELETE
     
 
     
-    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(fileID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(fileID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -3093,6 +3187,100 @@ Method: DELETE
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>etag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only delete the file if the etag matches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -3160,7 +3348,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line749">line 749</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line776">line 776</a>
     </li></ul></dd>
     
 
@@ -3216,7 +3404,7 @@ Method: DELETE
     
 
     
-    <h4 class="name" id="deleteVersion"><span class="type-signature"></span>deleteVersion<span class="signature">(fileID, versionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="deleteVersion"><span class="type-signature"></span>deleteVersion<span class="signature">(fileID, versionID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -3328,6 +3516,100 @@ Method: DELETE
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>etag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only delete the version of the file etag matches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -3395,7 +3677,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1024">line 1024</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1066">line 1066</a>
     </li></ul></dd>
     
 
@@ -3834,7 +4116,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line647">line 647</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line672">line 672</a>
     </li></ul></dd>
     
 
@@ -4297,7 +4579,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1282">line 1282</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1338">line 1338</a>
     </li></ul></dd>
     
 
@@ -4660,7 +4942,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1339">line 1339</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1395">line 1395</a>
     </li></ul></dd>
     
 
@@ -5339,7 +5621,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line808">line 808</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line848">line 848</a>
     </li></ul></dd>
     
 
@@ -5604,7 +5886,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line665">line 665</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line690">line 690</a>
     </li></ul></dd>
     
 
@@ -6036,7 +6318,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1312">line 1312</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1368">line 1368</a>
     </li></ul></dd>
     
 
@@ -6697,7 +6979,7 @@ Method : GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1447">line 1447</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1503">line 1503</a>
     </li></ul></dd>
     
 
@@ -7034,7 +7316,7 @@ Method : GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1375">line 1375</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1431">line 1431</a>
     </li></ul></dd>
     
 
@@ -7270,7 +7552,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line787">line 787</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line827">line 827</a>
     </li></ul></dd>
     
 
@@ -7746,7 +8028,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line766">line 766</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line806">line 806</a>
     </li></ul></dd>
     
 
@@ -7950,7 +8232,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1257">line 1257</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1313">line 1313</a>
     </li></ul></dd>
     
 
@@ -8280,7 +8562,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1236">line 1236</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1292">line 1292</a>
     </li></ul></dd>
     
 
@@ -8517,7 +8799,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line929">line 929</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line969">line 969</a>
     </li></ul></dd>
     
 
@@ -8753,7 +9035,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line950">line 950</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line990">line 990</a>
     </li></ul></dd>
     
 
@@ -9085,7 +9367,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line842">line 842</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line882">line 882</a>
     </li></ul></dd>
     
 
@@ -9319,7 +9601,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line408">line 408</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line417">line 417</a>
     </li></ul></dd>
     
 
@@ -9595,7 +9877,7 @@ Method: OPTIONS
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line490">line 490</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line515">line 515</a>
     </li></ul></dd>
     
 
@@ -9871,7 +10153,7 @@ Method: OPTIONS
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line526">line 526</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line551">line 551</a>
     </li></ul></dd>
     
 
@@ -10108,7 +10390,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line553">line 553</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line578">line 578</a>
     </li></ul></dd>
     
 
@@ -10342,7 +10624,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line383">line 383</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line392">line 392</a>
     </li></ul></dd>
     
 
@@ -10545,7 +10827,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1005">line 1005</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1045">line 1045</a>
     </li></ul></dd>
     
 
@@ -10879,7 +11161,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line897">line 897</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line937">line 937</a>
     </li></ul></dd>
     
 
@@ -11082,7 +11364,7 @@ API Endpoint: '/files/:fileID'
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line868">line 868</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line908">line 908</a>
     </li></ul></dd>
     
 
@@ -11242,7 +11524,68 @@ Method: PUT
 
             
 
-            <td class="description last">File fields to update</td>
+            <td class="description last">File fields to update
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>etag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only apply the updates if the file etag matches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -11316,7 +11659,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line332">line 332</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line333">line 333</a>
     </li></ul></dd>
     
 
@@ -11612,7 +11955,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line708">line 708</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line733">line 733</a>
     </li></ul></dd>
     
 
@@ -12013,7 +12356,7 @@ upload failed</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line583">line 583</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line608">line 608</a>
     </li></ul></dd>
     
 
@@ -12383,7 +12726,7 @@ upload failed</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line617">line 617</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line642">line 642</a>
     </li></ul></dd>
     
 
@@ -12682,7 +13025,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1097">line 1097</a>
+        <a href="managers_files.js.html">managers/files.js</a>, <a href="managers_files.js.html#line1153">line 1153</a>
     </li></ul></dd>
     
 
@@ -12754,7 +13097,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Nov 15 2018 14:58:35 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Nov 21 2018 17:33:03 GMT-0800 (Pacific Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

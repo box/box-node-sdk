@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.23.0 (Upcoming)
+## 1.23.0
 
 - Added an `etag` option to common file and folder methods to allow handling race conditions 
     - [`client.files.update()`](./docs/files.md#update-a-files-information)

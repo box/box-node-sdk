@@ -455,7 +455,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line319">line 319</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line335">line 335</a>
     </li></ul></dd>
     
 
@@ -689,7 +689,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line182">line 182</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line190">line 190</a>
     </li></ul></dd>
     
 
@@ -925,7 +925,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line486">line 486</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line518">line 518</a>
     </li></ul></dd>
     
 
@@ -1649,7 +1649,68 @@ Method: DELETE
 
             
 
-            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+            <td class="description last">Additional options for the request. Can be left null in most cases.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>etag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only delete the folder if the ETag matches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1723,7 +1784,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line261">line 261</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line270">line 270</a>
     </li></ul></dd>
     
 
@@ -1988,7 +2049,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line367">line 367</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line383">line 383</a>
     </li></ul></dd>
     
 
@@ -2044,7 +2105,7 @@ Method: DELETE
     
 
     
-    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -2124,6 +2185,100 @@ Method: DELETE
 
         <tr>
             
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>etag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only delete the folder if the ETag matches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
@@ -2191,7 +2346,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line439">line 439</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line457">line 457</a>
     </li></ul></dd>
     
 
@@ -2630,7 +2785,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line281">line 281</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line297">line 297</a>
     </li></ul></dd>
     
 
@@ -3367,7 +3522,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line299">line 299</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line315">line 315</a>
     </li></ul></dd>
     
 
@@ -3603,7 +3758,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line384">line 384</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line400">line 400</a>
     </li></ul></dd>
     
 
@@ -3839,7 +3994,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line456">line 456</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line488">line 488</a>
     </li></ul></dd>
     
 
@@ -4073,7 +4228,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line238">line 238</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line246">line 246</a>
     </li></ul></dd>
     
 
@@ -4307,7 +4462,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line213">line 213</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line221">line 221</a>
     </li></ul></dd>
     
 
@@ -4510,7 +4665,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line511">line 511</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line543">line 543</a>
     </li></ul></dd>
     
 
@@ -4845,7 +5000,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line409">line 409</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line425">line 425</a>
     </li></ul></dd>
     
 
@@ -5005,7 +5160,68 @@ Method: PUT
 
             
 
-            <td class="description last">Folder fields to update</td>
+            <td class="description last">Folder fields to update
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>etag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only update the folder if the ETag matches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -5079,7 +5295,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line162">line 162</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line163">line 163</a>
     </li></ul></dd>
     
 
@@ -5375,7 +5591,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line342">line 342</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line358">line 358</a>
     </li></ul></dd>
     
 
@@ -5447,7 +5663,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Nov 15 2018 14:58:35 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Nov 21 2018 17:33:03 GMT-0800 (Pacific Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
