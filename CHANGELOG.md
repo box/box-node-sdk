@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.24.0
+
+- Added a configuration option for populating the first-party client analytics header information 
+
 ## 1.23.0
 
 - Added an `etag` option to common file and folder methods to allow handling race conditions 
