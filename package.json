@@ -8,14 +8,14 @@
     "type": "git",
     "url": "https://github.com/box/box-node-sdk.git"
   },
-	"keywords": [
+  "keywords": [
     "box",
     "platform",
     "api",
     "apis",
     "upload",
     "download",
-		"sdk"
+    "sdk"
   ],
   "engines": {
     "node": ">= 4.0.0"
