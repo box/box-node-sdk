@@ -714,6 +714,45 @@ describe('Box Node SDK', function() {
 		});
 	});
 
+	it('should fail request and call session handler when response is token expiration error', function() {
+
+		var folderID = '98740596456';
+
+		var fakeTokenStore = leche.create([
+			'read',
+			'write',
+			'clear'
+		]);
+
+		var fakeTokenInfo = {
+			accessToken: TEST_ACCESS_TOKEN,
+			acquiredAtMS: Date.now(),
+			accessTokenTTLMS: 1000 * 60 * 60,
+		};
+
+		apiMock.get(`/2.0/folders/${folderID}`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(401);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+
+		sandbox.mock(fakeTokenStore).expects('read')
+			.yieldsAsync(null, fakeTokenInfo);
+		sandbox.mock(fakeTokenStore).expects('clear')
+			.yieldsAsync();
+
+		var client = sdk.getAppAuthClient('user', '12345', fakeTokenStore);
+
+		return client.folders.get(folderID)
+			.catch(err => assert.isTrue(err.authExpired));
+	});
+
 	it('should return file stream when file read stream is requested', function(done) {
 
 		var fileID = '98740596456',
