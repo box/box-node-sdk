@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.24.1
+
+- Fixed an issue where token expiration was not being correctly handled
+
 ## 1.24.0
 
 - Added a configuration option for populating the first-party client analytics header information 
