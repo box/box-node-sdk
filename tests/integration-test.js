@@ -218,6 +218,49 @@ describe('Box Node SDK', function() {
 			});
 	});
 
+	it('should use retry strategy when it is provided and when API calls fail', function() {
+
+		apiMock.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(502)
+			.get('/2.0/users/me')
+			.reply(429)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(200, {
+				type: 'user',
+				id: 'me'
+			});
+
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 5,
+			retryIntervalMS: 10,
+			retryStrategy(options) {
+				return options.retryIntervalMS;
+			}
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		var start = Date.now();
+		return client.users.get('me')
+			.then(() => {
+				var end = Date.now();
+				var timeElapsed = end - start;
+				// Expected time should be at least 50ms (5 retries * 10ms retry interval)
+				assert.isAtLeast(timeElapsed, 50);
+				// But less than when exponential backoff is used
+				assert.isAtMost(timeElapsed, 155);
+			});
+	});
+
 	it('should get anonymous tokens and make API call when anonymous client manager is used', function(done) {
 
 		var fileID = '98740596456',
