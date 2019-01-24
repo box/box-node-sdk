@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.25.0
+
+- Added the `retryStrategy` config parameter to allow customizing how the SDK retries failing requests
+
 ## 1.24.1
 
 - Fixed an issue where token expiration was not being correctly handled
