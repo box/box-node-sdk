@@ -237,14 +237,16 @@ describe('Box Node SDK', function() {
 			});
 
 
+		var maxNumRetries = 5;
+		var retryIntervalMS = 10;
+		var retryStrategyStub = sinon.stub().returns(retryIntervalMS);
+
 		var sdk = new BoxSDK({
 			clientID: TEST_CLIENT_ID,
 			clientSecret: TEST_CLIENT_SECRET,
-			maxNumRetries: 5,
-			retryIntervalMS: 10,
-			retryStrategy(options) {
-				return options.retryIntervalMS;
-			}
+			maxNumRetries,
+			retryIntervalMS,
+			retryStrategy: retryStrategyStub
 		});
 
 		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
@@ -258,6 +260,19 @@ describe('Box Node SDK', function() {
 				assert.isAtLeast(timeElapsed, 50);
 				// But less than when exponential backoff is used
 				assert.isAtMost(timeElapsed, 155);
+
+				// Retry strategy should be called up to maxNumRetries times
+				sinon.assert.callCount(retryStrategyStub, maxNumRetries);
+				// Retry strategy function should be passed arg object with correct properties
+				var args = retryStrategyStub.getCall(0).args;
+				assert.lengthOf(args, 1);
+				assert.hasAllKeys(args[0], [
+					'error',
+					'numMaxRetries',
+					'numRetryAttempts',
+					'retryIntervalMS',
+					'totalElapsedTimeMS'
+				]);
 			});
 	});
 
