@@ -349,6 +349,94 @@ describe('APIRequest', function() {
 			clock.restore();
 		});
 
+		it('should use retry strategy to determine the retry interval when config.retryStrategy is set, returns a number, and a callback exists', function(done) {
+			var clock = sinon.useFakeTimers();
+			var responseInfo = {
+				statusCode: 500,
+				request: {}
+			};
+
+			config = config.extend({
+				request: {
+					formData: null
+				},
+				numMaxRetries: 1,
+				retryIntervalMS: 27,
+				retryStrategy(options) {
+					return options.numMaxRetries * options.retryIntervalMS;
+				}
+			});
+
+			requestStub.yieldsAsync(null, responseInfo);
+			sandbox.stub(eventBusFake, 'emit').withArgs('response');
+
+			var apiRequest = new APIRequest(config, eventBusFake);
+			apiRequest.execute(function callback() {
+				done();
+			});
+
+			// Tick clock 30ms, past the retry interval
+			clock.tick(30);
+			// Restore the clock here, so that mocha can still observe test timeouts
+			clock.restore();
+		});
+
+		it('should propagate the retry strategy error when the retry strategy returns an error and a callback exists', function(done) {
+			var responseInfo = {
+				statusCode: 500,
+				request: {}
+			};
+			var expectedError = new Error('500 - Internal Server Error');
+
+			config = config.extend({
+				request: {
+					formData: null
+				},
+				numMaxRetries: 1,
+				retryIntervalMS: 27,
+				retryStrategy() {
+					return expectedError;
+				}
+			});
+
+			requestStub.yieldsAsync(null, responseInfo);
+			sandbox.stub(eventBusFake, 'emit').withArgs('response');
+
+			var apiRequest = new APIRequest(config, eventBusFake);
+			apiRequest.execute(function callback(err) {
+				assert.equal(err, expectedError);
+				done();
+			});
+		});
+
+		it('should propagate the response error when the retry strategy does not return a number or error, and a callback exists', function(done) {
+			var responseInfo = {
+				statusCode: 500,
+				request: {}
+			};
+			var expectedError = new Error('500 - Internal Server Error');
+
+			config = config.extend({
+				request: {
+					formData: null
+				},
+				numMaxRetries: 1,
+				retryIntervalMS: 27,
+				retryStrategy() {
+					return 'this is not a number or error';
+				}
+			});
+
+			requestStub.yieldsAsync(expectedError, responseInfo);
+			sandbox.stub(eventBusFake, 'emit').withArgs('response');
+
+			var apiRequest = new APIRequest(config, eventBusFake);
+			apiRequest.execute(function callback(err) {
+				assert.equal(err, expectedError);
+				done();
+			});
+		});
+
 		it('should call the callback asynchronously when callback exists', function(done) {
 			var endOfTest = false,
 				responseInfo = {

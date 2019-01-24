@@ -218,6 +218,71 @@ describe('Box Node SDK', function() {
 			});
 	});
 
+	it('should use retry strategy when it is provided and when API calls fail', function() {
+
+		apiMock.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(502)
+			.get('/2.0/users/me')
+			.reply(429)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(500)
+			.get('/2.0/users/me')
+			.reply(200, {
+				type: 'user',
+				id: 'me'
+			});
+
+
+		var maxNumRetries = 5;
+		var retryIntervalMS = 10;
+		var retryStrategyStub = sinon.stub().returns(retryIntervalMS);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries,
+			retryIntervalMS,
+			retryStrategy: retryStrategyStub
+		});
+
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		var start = Date.now();
+		return client.users.get('me')
+			.then(() => {
+				var end = Date.now();
+				var timeElapsed = end - start;
+				// Expected time should be at least 50ms (5 retries * 10ms retry interval)
+				assert.isAtLeast(timeElapsed, 50);
+				// But less than when exponential backoff is used
+				assert.isAtMost(timeElapsed, 155);
+
+				// Retry strategy should be called up to maxNumRetries times
+				sinon.assert.callCount(retryStrategyStub, maxNumRetries);
+
+				var retryCall = retryStrategyStub.getCall(0);
+				var args = retryCall.args;
+				// Retry strategy should be passed one arg: the retry options object
+				assert.lengthOf(args, 1);
+				// The retry options object should contain the passed in numMaxRetries and retryIntervalMS from the
+				// SDK config as well as the correct retry attempt number.
+				sinon.assert.calledWith(retryCall, sinon.match({
+					numMaxRetries: maxNumRetries,
+					numRetryAttempts: 1,
+					retryIntervalMS
+				}));
+				// The retry options object should contain an Error with the correct status code
+				assert.instanceOf(args[0].error, Error);
+				assert.equal(args[0].error.statusCode, 500);
+				// The retry options object should contain the total elapsed time in MS as a number
+				assert.isNumber(args[0].totalElapsedTimeMS);
+			});
+	});
+
 	it('should get anonymous tokens and make API call when anonymous client manager is used', function(done) {
 
 		var fileID = '98740596456',
