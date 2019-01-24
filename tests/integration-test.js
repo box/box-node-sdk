@@ -263,16 +263,23 @@ describe('Box Node SDK', function() {
 
 				// Retry strategy should be called up to maxNumRetries times
 				sinon.assert.callCount(retryStrategyStub, maxNumRetries);
-				// Retry strategy function should be passed arg object with correct properties
-				var args = retryStrategyStub.getCall(0).args;
+
+				var retryCall = retryStrategyStub.getCall(0);
+				var args = retryCall.args;
+				// Retry strategy should be passed one arg: the retry options object
 				assert.lengthOf(args, 1);
-				assert.hasAllKeys(args[0], [
-					'error',
-					'numMaxRetries',
-					'numRetryAttempts',
-					'retryIntervalMS',
-					'totalElapsedTimeMS'
-				]);
+				// The retry options object should contain the passed in numMaxRetries and retryIntervalMS from the
+				// SDK config as well as the correct retry attempt number.
+				sinon.assert.calledWith(retryCall, sinon.match({
+					numMaxRetries: maxNumRetries,
+					numRetryAttempts: 1,
+					retryIntervalMS
+				}));
+				// The retry options object should contain an Error with the correct status code
+				assert.instanceOf(args[0].error, Error);
+				assert.equal(args[0].error.statusCode, 500);
+				// The retry options object should contain the total elapsed time in MS as a number
+				assert.isNumber(args[0].totalElapsedTimeMS);
 			});
 	});
 
