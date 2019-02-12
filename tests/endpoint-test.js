@@ -722,6 +722,62 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('reply()', () => {
+
+			it('should make correct request (reply to comment) and correctly parse response when API call is successful', done => {
+				var commentID = '195533222',
+					message = "I'm a regular reply to a comment!",
+					fixture = getFixture('comments/post_comments_reply_200');
+
+				apiMock.post('/2.0/comments')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.comments.reply(commentID, message, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
+		describe('createTaggedReply()', () => {
+
+			it('should make correct request (tagged reply to comment) and correctly parse response when API call is successful', done => {
+				var commentID = '195533222',
+					message = "I'm a tagged reply to a comment!",
+					fixture = getFixture('comments/post_comments_tagged_reply_200');
+
+				apiMock.post('/2.0/comments')
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				basicClient.comments.createTaggedReply(commentID, message, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
+		});
+
 		describe('update()', function() {
 
 			it('should make correct request and correctly parse response when API call is successful', function(done) {

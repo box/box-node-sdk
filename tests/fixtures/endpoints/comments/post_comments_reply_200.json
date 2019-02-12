@@ -1,0 +1,18 @@
+{
+  "type": "comment",
+  "id": "195533222",
+  "is_reply_comment": true,
+  "message": "I'm a regular reply to a comment!",
+  "created_by": {
+    "type": "user",
+    "id": "308127358",
+    "name": "Replying User",
+    "login": "replied@example.com"
+  },
+  "created_at": "2018-04-08T14:46:46-07:00",
+  "item": {
+    "id": "283075147632",
+    "type": "file"
+  },
+  "modified_at": "2018-04-08T14:46:46-07:00"
+}
