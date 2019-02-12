@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.26.1 [2019-02-12]
+
+- Fixed an error where some methods could throw an error when constructing an iterator
+
 ## 1.26.0 [2019-02-12]
 
 - Added support for [replying to a comment](./docs/comments.md#reply-to-a-comment) (thanks @jpan-box!)
