@@ -53,6 +53,62 @@ describe('PagingIterator', function() {
 
 	describe('isIterable', function() {
 
+		it('should return false when response body is empty', function() {
+
+			var response = {
+				request: {
+					method: 'GET'
+				}
+			};
+
+			assert.isFalse(PagingIterator.isIterable(response));
+		});
+
+		it('should return false when request method cannot be validated', function() {
+
+			var response = {
+				body: {
+					entries: []
+				}
+			};
+
+			assert.isFalse(PagingIterator.isIterable(response));
+		});
+
+		it('should return false when response body does not contain a collection', function() {
+
+			var response = {
+				body: {
+					type: 'file',
+					id: '12345'
+				},
+				request: {
+					method: 'GET'
+				}
+			};
+
+			assert.isFalse(PagingIterator.isIterable(response));
+		});
+
+		it('should return false when request method is not GET', function() {
+
+			var response = {
+				body: {
+					entries: [
+						{
+							type: 'file',
+							id: '12345'
+						}
+					]
+				},
+				request: {
+					method: 'POST'
+				}
+			};
+
+			assert.isFalse(PagingIterator.isIterable(response));
+		});
+
 		it('should return false when the collection is from the event stream', function() {
 			var response = {
 				body: {
@@ -71,6 +127,20 @@ describe('PagingIterator', function() {
 			};
 
 			assert.isFalse(PagingIterator.isIterable(response));
+		});
+
+		it('should return true when collection is valid', function() {
+
+			var response = {
+				body: {
+					entries: []
+				},
+				request: {
+					method: 'GET'
+				}
+			};
+
+			assert.isTrue(PagingIterator.isIterable(response));
 		});
 	});
 
