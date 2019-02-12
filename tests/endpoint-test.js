@@ -740,7 +740,7 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.comments.create(commentID, message, function(err, data) {
+				basicClient.comments.reply(commentID, message, function(err, data) {
 
 					assert.isNull(err);
 					assert.deepEqual(data, JSON.parse(fixture));
@@ -768,7 +768,7 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				basicClient.comments.create(commentID, message, function(err, data) {
+				basicClient.comments.createTaggedReply(commentID, message, function(err, data) {
 
 					assert.isNull(err);
 					assert.deepEqual(data, JSON.parse(fixture));
