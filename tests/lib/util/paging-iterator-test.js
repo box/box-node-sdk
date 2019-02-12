@@ -51,6 +51,28 @@ describe('PagingIterator', function() {
 		mockery.disable();
 	});
 
+	describe('isIterable', function() {
+
+		it('should return false when the collection is from the event stream', function() {
+			var response = {
+				body: {
+					next_stream_position: '123456',
+					chunk_size: 1,
+					entries: [
+						{
+							type: 'event',
+							event_id: '98765'
+						}
+					]
+				},
+				request: {
+					method: 'GET'
+				}
+			};
+
+			assert.isFalse(PagingIterator.isIterable(response));
+		});
+	});
 
 	describe('constructor', function() {
 
