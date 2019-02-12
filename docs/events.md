@@ -89,6 +89,16 @@ point in time:
 client.events.get({stream_position: '1408838928446360'}, callback);
 ```
 
+### Destroying the Stream
+
+If you ever need to *stop* long-polling, use:
+
+```js
+client.events.destroy();
+```
+
+This *will not* cancel in-process network requests. It *will* ensure no further long-polling nor event fetching takes place.
+
 Enterprise Events
 -----------------
 

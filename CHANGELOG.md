@@ -1,5 +1,74 @@
 # Changelog
 
+## 1.25.0
+
+- Added the `retryStrategy` config parameter to allow customizing how the SDK retries failing requests
+
+## 1.24.1
+
+- Fixed an issue where token expiration was not being correctly handled
+
+## 1.24.0
+
+- Added a configuration option for populating the first-party client analytics header information 
+
+## 1.23.0
+
+- Added an `etag` option to common file and folder methods to allow handling race conditions 
+    - [`client.files.update()`](./docs/files.md#update-a-files-information)
+    - [`client.files.delete()`](./docs/files.md#delete-a-file)
+    - [`client.files.deletePermanently()`](./docs/trash.md#delete-a-file-from-the-trash)
+    - [`client.files.deleteVersion()`](./docs/files.md#delete-a-previous-file-version)
+    - [`client.folders.update()`](./docs/folders.md#update-a-folders-information)
+    - [`client.folders.delete()`](./docs/folders.md#delete-a-folder)
+    - [`client.folders.deletePermanently()`](./docs/trash.md#delete-a-folder-from-the-trash)
+
+## 1.22.1
+
+- Fixed an issue where retrying JWT auth token requests would sometimes fail due to a non-unique `jti` claim
+
+## 1.22.0
+
+- Chunked Uploader methods now return promises for [simpler handling of chunked uploads](./docs/files.md#automatic-uploader)
+- File attributes to set on the newly-uploaded file can now be
+[passed via `options.fileAttributes`](./docs/files.md#automatic-uploader) when creating a Chunked Uploader
+
+## 1.21.0
+
+- Added the ability to close an Event Stream by calling `eventStream.destroy()` (thanks @boneskull!)
+- Improved error messages related to certain authentication failure cases
+
+## 1.20.0
+
+- Added missing values to the `client.webhooks.triggerTypes` enum (thanks @MathersMax!)
+- Added support for [Metadata Cascade Policies](./docs/metadata.md#create-cascade-policy)
+
+## 1.19.0
+
+- Added `generateRepresentations` option to [`files.getRepresentationContent()`](./docs/files.md#get-representation-content)
+
+## 1.18.0
+
+- Updated dependencies to resolve potential security issues:
+    - `request@2.87.0`
+    - Transitive dependencies of `jsonwebtoken@8.2.1`
+- Added a static `BoxSDK.getBasicClient()` method to enable creating a client without needing
+to specify a client ID and secret (thanks to @cbetta)
+
+## 1.17.0
+
+- Updated dependencies: `request@2.85.0`, `jsonwebtoken@8.2.1`
+- Added support for [Storage Policies](./docs/storage-policies.md)
+- Added the option to use a Token Store for caching tokens with App Auth using JWT
+
+## 1.16.1
+
+- Fixed a bug where metadata template deletion would not properly return results via callback
+
+## 1.16.0
+
+- Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md#assign-retention-policy)
+
 ## 1.15.0
 
 - Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md#validate-a-webhook-message)

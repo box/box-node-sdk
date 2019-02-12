@@ -23,6 +23,7 @@ the SDK are available by topic:
 * [Retention Policies](retention-policies.md)
 * [Search](search.md)
 * [Shared Items](shared-items.md)
+* [Storage Policies](storage-policies.md)
 * [Tasks](tasks.md)
 * [Terms of Service](terms-of-service.md)
 * [Trash](trash.md)

@@ -21,7 +21,7 @@ var TokenManager = require('../../../lib/token-manager');
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	BasicAPISession,
 	basicAPISession,
 	ACCESS_TOKEN = 'abc123imatoken',

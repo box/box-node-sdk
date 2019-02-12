@@ -153,7 +153,10 @@ Batch API
 ---------
 
 The client allows calls to be batched so that they will be sent over the network
-as a single request, processed by the API, and sent back as a single response containing the results of all batched calls.  The individual calls in a batch can still be handled normally, or you can operate on the entire batch response:
+as a single request, processed by the API, and sent back as a single response containing the results of all batched
+calls.  The individual calls in a batch can still be handled normally, or you can operate on the entire batch response:
+
+> __NOTE:__ Batch API does not support upload or download requests.
 
 ```js
 client.batch();

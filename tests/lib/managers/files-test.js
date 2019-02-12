@@ -18,7 +18,7 @@ var Readable = require('stream').Readable;
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	boxClientFake,
 	Files,
 	files,
@@ -483,6 +483,24 @@ describe('Files', function() {
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/files/1234', testParamsWithBody);
 			files.update(FILE_ID, testBody);
+		});
+
+		it('should send If-Match header when etag option is passed', function() {
+
+			var etag = '5',
+				name = 'foo.txt';
+
+			var expectedParams = {
+				body: { name },
+				headers: {
+					'If-Match': etag
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('put')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
+			files.update(FILE_ID, { name, etag });
 		});
 
 		it('should wrap with default handler when called', function() {
@@ -1010,8 +1028,24 @@ describe('Files', function() {
 		it('should make DELETE request to update file info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs('/files/1234', null);
+				.withArgs('/files/1234', {});
 			files.delete(FILE_ID);
+		});
+
+		it('should send If-Match header when etag option is passed', function() {
+
+			var etag = '5';
+
+			var expectedParams = {
+				headers: {
+					'If-Match': etag
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/files/${FILE_ID}`, expectedParams);
+			files.delete(FILE_ID, { etag });
 		});
 
 		it('should wrap with default handler when called', function() {
@@ -1619,8 +1653,24 @@ describe('Files', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs(`/files/${FILE_ID}/trash`, null);
+				.withArgs(`/files/${FILE_ID}/trash`, {});
 			files.deletePermanently(FILE_ID);
+		});
+
+		it('should send If-Match header when etag option is passed', function() {
+
+			var etag = '5';
+
+			var expectedParams = {
+				headers: {
+					'If-Match': etag
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/files/${FILE_ID}/trash`, expectedParams);
+			files.deletePermanently(FILE_ID, { etag });
 		});
 
 		it('should wrap with default handler when called', function() {
@@ -1947,9 +1997,7 @@ describe('Files', function() {
 		beforeEach(function() {
 			expectedParams = {
 				body: {
-					lock: {
-						type: 'unlock'
-					}
+					lock: null
 				}
 			};
 		});
@@ -2331,8 +2379,24 @@ describe('Files', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
-				.withArgs(`/files/${FILE_ID}/versions/${FILE_VERSION_ID}`, null);
+				.withArgs(`/files/${FILE_ID}/versions/${FILE_VERSION_ID}`, {});
 			files.deleteVersion(FILE_ID, FILE_VERSION_ID);
+		});
+
+		it('should send If-Match header when etag option is passed', function() {
+
+			var etag = '5';
+
+			var expectedParams = {
+				headers: {
+					'If-Match': etag
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/files/${FILE_ID}/versions/${FILE_VERSION_ID}`, expectedParams);
+			files.deleteVersion(FILE_ID, FILE_VERSION_ID, { etag });
 		});
 
 		it('should wrap with default handler when called', function() {

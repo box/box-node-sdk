@@ -26,7 +26,7 @@ var APIRequestManager = require('../../lib/api-request-manager'),
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.sandbox.create(),
+var sandbox = sinon.createSandbox(),
 	apiSessionFake,
 	requestManagerFake,
 	BasicClient,
@@ -123,6 +123,30 @@ describe('box-client', function() {
 				.returns(Promise.resolve(fakeOKResponse));
 
 			return basicClient._makeRequest({});
+		});
+
+		it('should attach client info in X-Box-UA header when configured', function() {
+
+			var newConfig = (new Config(params)).extend({
+				analyticsClient: {
+					name: 'my-client',
+					version: '2.0.0',
+				},
+			});
+			var client = new BasicClient(apiSessionFake, newConfig, requestManagerFake);
+
+			sandbox.stub(apiSessionFake, 'getAccessToken').returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+
+			var expectedHeader = `agent=box-node-sdk/${pkg.version}; env=Node/${process.version.slice(1)}; client=my-client/2.0.0`;
+
+			sandbox.mock(requestManagerFake).expects('makeRequest')
+				.withArgs({
+					headers: sinon.match({ 'X-Box-UA': sinon.match(expectedHeader) })
+				})
+				.returns(Promise.resolve(fakeOKResponse));
+
+			return client._makeRequest({});
+
 		});
 
 		it('should not overwrite the "BoxAPI" header when it already exists', function() {
