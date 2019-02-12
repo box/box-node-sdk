@@ -1,18 +1,26 @@
 # Changelog
 
-## 1.25.0
+## 1.26.0 [2019-02-12]
+
+- Added support for [replying to a comment](./docs/comments.md#reply-to-a-comment) (thanks @jpan-box!)
+- Fixed an issue where calling `client.events.get()` could return an iterator that would only iterate over
+  the first chunk of events.  This method will now always return the raw JSON data in order to enable manual
+  paging.  For automatic paging through events, `client.events.getEventStream()` or
+  `client.events.getEnterpriseEventStream()` should be used instead.
+
+## 1.25.0 [2019-01-24]
 
 - Added the `retryStrategy` config parameter to allow customizing how the SDK retries failing requests
 
-## 1.24.1
+## 1.24.1 [2019-01-11]
 
 - Fixed an issue where token expiration was not being correctly handled
 
-## 1.24.0
+## 1.24.0 [2018-12-10]
 
 - Added a configuration option for populating the first-party client analytics header information 
 
-## 1.23.0
+## 1.23.0 [2018-11-21]
 
 - Added an `etag` option to common file and folder methods to allow handling race conditions 
     - [`client.files.update()`](./docs/files.md#update-a-files-information)
@@ -23,31 +31,31 @@
     - [`client.folders.delete()`](./docs/folders.md#delete-a-folder)
     - [`client.folders.deletePermanently()`](./docs/trash.md#delete-a-folder-from-the-trash)
 
-## 1.22.1
+## 1.22.1 [2018-11-15]
 
 - Fixed an issue where retrying JWT auth token requests would sometimes fail due to a non-unique `jti` claim
 
-## 1.22.0
+## 1.22.0 [2018-09-17]
 
 - Chunked Uploader methods now return promises for [simpler handling of chunked uploads](./docs/files.md#automatic-uploader)
 - File attributes to set on the newly-uploaded file can now be
 [passed via `options.fileAttributes`](./docs/files.md#automatic-uploader) when creating a Chunked Uploader
 
-## 1.21.0
+## 1.21.0 [2018-09-13]
 
 - Added the ability to close an Event Stream by calling `eventStream.destroy()` (thanks @boneskull!)
 - Improved error messages related to certain authentication failure cases
 
-## 1.20.0
+## 1.20.0 [2018-08-09]
 
 - Added missing values to the `client.webhooks.triggerTypes` enum (thanks @MathersMax!)
 - Added support for [Metadata Cascade Policies](./docs/metadata.md#create-cascade-policy)
 
-## 1.19.0
+## 1.19.0 [2018-06-14]
 
 - Added `generateRepresentations` option to [`files.getRepresentationContent()`](./docs/files.md#get-representation-content)
 
-## 1.18.0
+## 1.18.0 [2018-05-24]
 
 - Updated dependencies to resolve potential security issues:
     - `request@2.87.0`
@@ -55,51 +63,52 @@
 - Added a static `BoxSDK.getBasicClient()` method to enable creating a client without needing
 to specify a client ID and secret (thanks to @cbetta)
 
-## 1.17.0
+## 1.17.0 [2018-05-10]
 
 - Updated dependencies: `request@2.85.0`, `jsonwebtoken@8.2.1`
 - Added support for [Storage Policies](./docs/storage-policies.md)
 - Added the option to use a Token Store for caching tokens with App Auth using JWT
 
-## 1.16.1
+## 1.16.1 [2018-04-26]
 
 - Fixed a bug where metadata template deletion would not properly return results via callback
 
-## 1.16.0
+## 1.16.0 [2018-04-10]
 
 - Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md#assign-retention-policy)
 
-## 1.15.0
+## 1.15.0 [2018-03-29]
 
 - Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md#validate-a-webhook-message)
 to accept the request body as an `Object`
 - Fixed `sdk.configure()` to correct reconfigure all options
 - Improved error messages for API errors and added the request object as `error.request` for easier debugging
 
-## 1.14.1
+## 1.14.1 [2018-03-13]
 
 - Fixed a bug when `files.getReadStream()` was called with null options
 
-## 1.14.0
+## 1.14.0 [2018-03-12]
 
 - Added support for [getting a metadata template by ID](./docs/metadata.md#get-by-id)
 - Added a `byteRange` option to [file download](./docs/files.md#download-a-file) to support partial file download
 - Improved error messages when using promises and in authentication flows
 
-## 1.13.0
+## 1.13.0 [2018-03-01]
 
 - Added support for getting a [stream of file representation contents](./docs/files.md#get-representation-content)
 - Switched to using exponential backoff for request retries
 
-## 1.12.1
+## 1.12.1 [2018-01-25]
+
 - Fixed an issue where chunked uploader would not work with response streams from the request library
 (0e7014561f9cd0f7f38f98536b3f0c3946231d2e)
 
-## 1.12.0
+## 1.12.0 [2018-01-11]
 
 - Added support for [metadata template deletion](./docs/metadata.md#delete-metadata-template)
 
-## 1.11.0
+## 1.11.0 [2017-12-12]
 
 - Added options to preserve file timestamps on [file upload](./docs/files.md#upload-a-file)
 and to rename a file or preserve modification timestamp on [new version upload](./docs/files.md#upload-a-new-version-of-a-file)
@@ -107,12 +116,12 @@ and to rename a file or preserve modification timestamp on [new version upload](
 to control which external users can collaborate on their content
 - Added an option to Token Exchange to generate [annotator tokens](./docs/authentication.md#annotator-tokens) for use with Box View
 
-## 1.10.1
+## 1.10.1 [2017-11-28]
 
 - Updated to jsonwebtoken@8.1.0 to fix an issue where some users were getting
 an error when using App Auth
 
-## 1.10.0
+## 1.10.0 [2017-01-14]
 
 - Added support for [Terms of Service](./docs/terms-of-service.md) endpoints
 - Fixed a bug where receiving a collection without paging parameters from the API
@@ -121,12 +130,12 @@ Now, this will return an iterator over the items returned by the API.
 - Fixed a bug in Token Exchange where passing multiple scopes would result in an error
 - Added support for [getting Representations info on a file](./docs/files.md#get-representation-info)
 
-## 1.9.0
+## 1.9.0 [2017-09-12]
 
 - Fixed token methods to return bluebird Promises instead of native Promises
 - Added support for the `notify` and `can_view_path` options on Collaborations
 
-## 1.8.0
+## 1.8.0 [2017-08-21]
 
 - Added support for [Batch API](./docs/client.md#batch-api)
 - Fixed a bug where the Event Stream would make more API calls than necessary,
@@ -136,35 +145,35 @@ potentially hitting Box API rate limits
 - Fixed a bug where using multiple Persistent Clients instances could cause some
 clients to end up with expired tokens
 
-## 1.7.0
+## 1.7.0 [2017-07-19]
 
 - Add support for passing IP to all token methods, and fixed a bug where a client's IP was not being correctly reported on token refreshes
 
-## 1.6.0
+## 1.6.0 [2017-06-23]
 
 - Added [Recent Items](./docs/recent-items.md) support
 - Updated app auth expiration time default value and validation
 
-## 1.5.1
+## 1.5.1 [2017-06-15]
 
 - Revert deep-freezing Config properties, since it was causing errors
 
-## 1.5.0
+## 1.5.0 [2017-06-15]
 
 - Added support for [Token Exchange](./docs/authentication.md#token-exchange),
 which allows a client to get downscoped tokens suitable for passing to a browser
 app or worker process.
 - Ensured deeply-nested Config properties are immutable
 
-## 1.4.2
+## 1.4.2 [2017-05-22]
 
 - Fixed `BoxSDK.getPreconfiguredInstance()` to configure webhook keys
 
-## 1.4.1
+## 1.4.1 [2017-05-22]
 
 - Fixed `BoxSDK.getPreconfiguredInstance()` when app auth setttings are not populated
 
-## 1.4.0
+## 1.4.0 [2017-05-19]
 
 - Added support for [file collaborations](./docs/collaborations.md#add-a-collaboration).
 Users can now invite others to collaborate on single files.
@@ -188,11 +197,11 @@ admins to auto-confirm the alias.
 page through the collection.  This conforms to the [proposed async iteration spec](https://github.com/tc39/proposal-async-iteration),
 which will eventually allow them to be used in ergonomic for-await-of loop syntax.
 
-## 1.3.0
+## 1.3.0 [2017-01-24]
 
 - Added `BoxSDK.validateWebhookMessage()` and `client.webhooks.validateMessage()` for validating webhook messages from Box
 
-## 1.2.0
+## 1.2.0 [2016-12-12]
 
 - Added methods for all API endpoints; we now have full API coverage :tada:
 - Added support for renaming a file or folder on copy
@@ -203,7 +212,7 @@ which will eventually allow them to be used in ergonomic for-await-of loop synta
 - Cloned options objects to prevent modification of passed-in objects by the SDK
 - Added better error messaging to the sample app
 
-## 1.1.0
+## 1.1.0 [2016-09-27]
 
 - Added endpoint to get a file's tasks
 - Fixed issues with stream uploads
@@ -212,6 +221,6 @@ which will eventually allow them to be used in ergonomic for-await-of loop synta
 - Added endpoint to get a trashed folder
 - Upgraded request dependency to fix ReDoS vulnerability
 
-## 1.0.0
+## 1.0.0 [2016-07-13]
 
 Initial release.
