@@ -11,6 +11,7 @@ directly to a file.
 - [Get a Comment's Information](#get-a-comments-information)
 - [Get the Comments on a File](#get-the-comments-on-a-file)
 - [Add a Comment to a File](#add-a-comment-to-a-file)
+- [Reply to a Comment](#reply-to-a-comment)
 - [Change a Comment's Message](#change-a-comments-message)
 - [Delete a Comment](#delete-a-comment)
 
@@ -122,6 +123,62 @@ client.comments.createTaggedComment('33333', '@[23560:Bob] Is this the latest ve
             created_at: '2012-12-12T11:25:01-08:00',
             item: { id: '33333', type: 'file' },
             modified_at: '2012-12-12T11:25:01-08:00' }
+        */
+    });
+```
+
+Reply to a Comment
+------------------
+
+To reply to a comment, call
+[`comments.reply(commentID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#reply)
+with the ID of the comment to reply to and the text of the reply comment.
+
+```js
+// Reply to the comment with ID 11111
+client.comments.reply('11111', 'Yes, this is the latest version.')
+    .then(comment => {
+        /* comment -> {
+            type: 'comment',
+            id: '44444',
+            is_reply_comment: true,
+            message: 'Yes, this is the latest version',
+            created_by: 
+            { type: 'user',
+                id: '55555',
+                name: 'Example User 2',
+                login: 'user2@example.com' },
+            created_at: '2012-12-13T07:19:08-08:00',
+            item: { id: '33333', type: 'file' },
+            modified_at: '2012-12-13T07:19:08-08:00' }
+        */
+    });
+```
+
+A comment's message can also contain at-mentions by using the string
+`@[userid:username]` anywhere within the message, where `userid` and `username` are
+the ID and username of the person being mentioned.
+[See the documentation](https://developers.box.com/docs/#comments-comment-object) on the
+`tagged_message` field for more information on at-mentions.  To make a tagged reply,
+use the [`comments.createTaggedReply(commentID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#createTaggedReply)
+method.
+
+```js
+client.comments.createTaggedReply('11111', '@[22222:Sam] Yes, this is the most recent version!')
+    .then(comment => {
+        /* comment -> {
+            type: 'comment',
+            id: '44444',
+            is_reply_comment: false,
+            tagged_message: '@[22222:Sam] Yes, this is the most recent version!',
+            created_by: 
+            { type: 'user',
+                id: '55555',
+                name: 'Example User 2',
+                login: 'user2@example.com' },
+            created_at: '2012-12-13T07:19:08-08:00',
+            item: { id: '33333', type: 'file' },
+            modified_at: '2012-12-13T07:19:08-08:00' }
         */
     });
 ```
