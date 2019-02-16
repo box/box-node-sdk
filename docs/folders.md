@@ -30,6 +30,7 @@ method. Use the `fields` option to specify the desired fields. Requesting
 information for only the fields you need can improve performance and reduce the
 size of the network request.
 
+<!-- sample get_folders_id -->
 ```js
 client.folders.get(
     '12345',
@@ -113,6 +114,7 @@ Folder items can be retrieved by calling the
 method. Use the `fields` option to specify the desired fields, and `limit` and `offset` to control result set paging.
 Requesting information for only the fields you need can improve performance and reduce the size of the network request.
 
+<!-- sample get_folders_id_items -->
 ```js
 client.folders.getItems(
     '12345',
@@ -151,6 +153,7 @@ Updating a folder's information is done by calling the
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
 method. Use the `updates` parameter to specify the fields to update and their new values.
 
+<!-- sample put_folders_id -->
 ```js
 client.folders.update('11111', {name: 'Pictures from 2017'})
     .then(updatedFolder => {
@@ -239,6 +242,7 @@ Create a Folder
 
 Create a child folder by calling the [`folders.create(parentFolderID, newFolderName, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#create) method.
 
+<!-- sample post_folders -->
 ```js
 client.folders.create('0', 'New Folder')
     .then(folder => {
@@ -300,6 +304,7 @@ Call the
 [`folders.copy(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#copy)
 method to copy a folder into another folder.
 
+<!-- sample post_folders_id_copy -->
 ```js
 client.folders.copy('11111', '22222')
     .then(folderCopy => {
@@ -380,6 +385,7 @@ Move a Folder
 
 Call the [`folders.move(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#move) method with the destination you want the folder moved to.
 
+<!-- sample put_folders_id move -->
 ```js
 var folderID = '11111';
 var destinationFolderID = '22222';
@@ -461,6 +467,7 @@ Delete a Folder
 
 A folder can be deleted with the [`folders.delete(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#delete) method.
 
+<!-- sample delete_folders_id -->
 ```js
 client.folders.delete('12345', {recursive: true})
     .then(() => {
@@ -475,6 +482,7 @@ You can create a shared link for a folder by calling the
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
 method, passing a new `shared_link` value in the `updates` parameter.
 
+<!-- sample put_folders_id create_shared_link -->
 ```js
 client.folders.update('12345', {shared_link: client.accessLevels.OPEN})
     .then(folder => {
