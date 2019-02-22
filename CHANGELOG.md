@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.26.2 [2019-02-22]
+
+- Fixed an error where under high request rates, code in the error handling logic could throw when handling a
+  malformed request
+
 ## 1.26.1 [2019-02-12]
 
 - Fixed an error where some methods could throw an error when constructing an iterator
