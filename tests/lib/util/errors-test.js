@@ -75,6 +75,81 @@ describe('Errors', function() {
 			assert.strictEqual(errObject.statusCode, 505);
 			assert.strictEqual(errObject.response, response);
 		});
+
+		it('should attach formatted request object when request context is present', function() {
+
+			var response = {
+				statusCode: 505,
+				body: {foo: 'bar'},
+				httpVersion: '1.1',
+				request: {
+					method: 'GET',
+					uri: {
+						protocol: 'https://',
+						host: 'api.box.com',
+						pathname: '/2.0/users/me',
+						query: 'fields=name',
+						hash: ''
+					},
+					headers: {
+						'as-user': '12345'
+					}
+				}
+			};
+			response.request.response = response;
+
+			var expectedRequest = {
+				method: 'GET',
+				url: {
+					protocol: 'https://',
+					host: 'api.box.com',
+					path: '/2.0/users/me',
+					query: {
+						fields: 'name'
+					},
+					fragment: '',
+				},
+				httpVersion: '1.1',
+				body: undefined,
+				headers: {
+					'as-user': '12345'
+				}
+			};
+
+			var errObject = errors.buildResponseError(response, 'testMessage');
+
+			assert.deepEqual(errObject.request, expectedRequest);
+		});
+
+		it('should not throw when request URI is undefined', function() {
+
+			var response = {
+				statusCode: 505,
+				body: {foo: 'bar'},
+				httpVersion: '1.1',
+				request: {
+					method: 'GET',
+					headers: {
+						'as-user': '12345'
+					}
+				}
+			};
+			response.request.response = response;
+
+			var expectedRequest = {
+				method: 'GET',
+				url: null,
+				httpVersion: '1.1',
+				body: undefined,
+				headers: {
+					'as-user': '12345'
+				}
+			};
+
+			var errObject = errors.buildResponseError(response, 'testMessage');
+
+			assert.deepEqual(errObject.request, expectedRequest);
+		});
 	});
 
 	describe('buildUnexpectedResponseError()', function() {
