@@ -4353,6 +4353,48 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('getAvatar()', function() {
+
+			it('should make GET request for user avatar and resolve to the image stream', function(done) {
+
+				var	userID = '44444',
+					testFilePath = path.resolve(__dirname, './fixtures/1.png'),
+					pngStream = fs.createReadStream(testFilePath),
+					/* eslint-disable no-sync */
+					pngContents = fs.readFileSync(testFilePath),
+					/* eslint-enable no-sync */
+					fileBuffer = new Buffer(pngContents.length);
+
+				apiMock.get(`/2.0/users/${userID}/avatar`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, pngStream);
+
+				basicClient.users.getAvatar(userID, function(error, stream) {
+
+					assert.ifError(error);
+
+					var position = 0;
+					stream.on('data', function(chunk) {
+						chunk.copy(fileBuffer, position);
+						position += chunk.length;
+					});
+
+					stream.on('end', () => {
+						var expectedHash = crypto.createHash('sha1').update(pngContents)
+							.digest('base64');
+						var actualHash = crypto.createHash('sha1').update(fileBuffer)
+							.digest('base64');
+						// Compare hashes instead of raw bytes because assertion failure output is massive
+						assert.equal(actualHash, expectedHash, 'Avatar content did not match expected');
+						done();
+					});
+				});
+			});
+		});
+
 	});
 
 	describe('Enterprise', function() {
