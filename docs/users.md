@@ -9,6 +9,7 @@ Users represent an individual's account on Box.
 
 - [Get User's Information](#get-users-information)
 - [Get the Current User's Information](#get-the-current-users-information)
+- [Get User Avatar](#get-user-avatar)
 - [Update User](#update-user)
 - [Delete User](#delete-user)
 - [Get Email Aliases](#get-email-aliases)
@@ -87,6 +88,22 @@ client.users.get(client.CURRENT_USER_ID)
             avatar_url: 'https://app.box.com/api/avatar/deprecated' }
         */
 	});
+```
+
+Get User Avatar
+---------------
+
+Calling [`users.getAvatar(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getAvatar) will
+yield a `Readable` stream over the bytes of the user's avatar image.
+
+```js
+client.users.getAvatar('22222')
+    .then(avatarImageStream => {
+
+        avatarImageStream.on('data', bytes => {
+            // read avatar image bytes
+        });
+    });
 ```
 
 Update User
