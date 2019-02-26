@@ -555,7 +555,7 @@ describe('token-manager', function() {
 			uuidStub.onCall(1).returns(regeneratedJTI);
 
 			var jwtStub = sandbox.stub(jwtFake, 'sign');
-			jwtStub.withArgs(sinon.match({exp: 101}, sinon.match.any, sinon.match({jwtid: TEST_JTI})))
+			jwtStub.withArgs(sinon.match({exp: 101}), sinon.match.any, sinon.match({jwtid: TEST_JTI}))
 				.returns(TEST_WEB_TOKEN);
 			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
 				.returns(newJWT);
