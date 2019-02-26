@@ -121,7 +121,7 @@ describe('Errors', function() {
 			assert.deepEqual(errObject.request, expectedRequest);
 		});
 
-		it('should not throw when request URI is undefined', function() {
+		it('should not throw when request URI and response pointer are undefined', function() {
 
 			var response = {
 				statusCode: 505,
@@ -134,12 +134,12 @@ describe('Errors', function() {
 					}
 				}
 			};
-			response.request.response = response;
+			response.request.response = null;
 
 			var expectedRequest = {
 				method: 'GET',
 				url: null,
-				httpVersion: '1.1',
+				httpVersion: null,
 				body: undefined,
 				headers: {
 					'as-user': '12345'
