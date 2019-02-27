@@ -76,6 +76,60 @@ describe('Errors', function() {
 			assert.strictEqual(errObject.response, response);
 		});
 
+		it('should add request ID to error message when present in body', function() {
+
+			var requestID = '98nq34otquhet';
+
+			var response = {
+				statusCode: 505,
+				body: {
+					foo: 'bar',
+					request_id: requestID
+				}
+			};
+			var errObject = errors.buildResponseError(response, 'testMessage');
+
+			assert.strictEqual(errObject.message, `testMessage [505 HTTP Version not Supported | ${requestID}]`);
+		});
+
+		it('should add trace ID to error message when present in headers', function() {
+
+			var traceID = 'KUHFIUYVIYTFIYTF*&^TI&YGIU';
+
+			var response = {
+				statusCode: 505,
+				body: {
+					foo: 'bar'
+				},
+				headers: {
+					'box-request-id': traceID
+				}
+			};
+			var errObject = errors.buildResponseError(response, 'testMessage');
+
+			assert.strictEqual(errObject.message, `testMessage [505 HTTP Version not Supported | .${traceID}]`);
+		});
+
+		it('should add request and trace IDs to error message when both are present in response', function() {
+
+			var requestID = '98nq34otquhet',
+				traceID = 'KUHFIUYVIYTFIYTF*&^TI&YGIU';
+
+			var response = {
+				statusCode: 404,
+				body: {
+					foo: 'bar',
+					request_id: requestID
+				},
+				headers: {
+					'box-request-id': traceID
+				}
+			};
+			var errObject = errors.buildResponseError(response, 'testMessage');
+
+			assert.strictEqual(errObject.message, `testMessage [404 Not Found | ${requestID}.${traceID}]`);
+		});
+
 		it('should attach formatted request object when request context is present', function() {
 
 			var response = {
