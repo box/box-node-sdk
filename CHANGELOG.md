@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.27.0 [2019-02-28]
+
+- Added the trace ID from API response headers to error messages for easier debugging
+- Added more safety checks in the error flow to protect against throwing when handling a malformed request
+- Added support for [retrieving a user's avatar image](./docs/users.md#get-user-avatar)
+
 ## 1.26.2 [2019-02-22]
 
 - Fixed an error where under high request rates, code in the error handling logic could throw when handling a
