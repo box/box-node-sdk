@@ -14,6 +14,8 @@ all be in the same folder.
 - [Remove File from a Collection](#remove-file-from-a-collection)
 - [Add Folder to a Collection](#add-folder-to-a-collection)
 - [Remove Folder from a Collection](#remove-folder-from-a-collection)
+- [Add Web Link to a Collection](#add-web-link-to-a-collection)
+- [Remove Web Link from a Collection](#remove-web-link-from-a-collection)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -108,4 +110,26 @@ method with the IDs of the folder and collection.
 
 ```js
 client.folders.removeFromCollection('87263', '235747', callback);
+```
+
+Add Web Link to a Collection
+----------------------------
+
+To add a web link to a collection, call the
+[`weblinks.addToCollection(webLinkID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#addToCollection)
+method with the IDs of the web link and collection.
+
+```js
+client.weblinks.addToCollection('87263', '235747', callback);
+```
+
+Remove Web Link from a Collection
+---------------------------------
+
+To remove a web link from a collection, call the
+[`weblinks.removeFromCollection(webLinkID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#removeFromCollection)
+method with the IDs of the web link and collection.
+
+```js
+client.weblinks.removeFromCollection('87263', '235747', callback);
 ```

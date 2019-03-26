@@ -13,6 +13,8 @@ and restore.
 - [Get a Web Link's information](#get-a-web-links-information)
 - [Update a Web Link](#update-a-web-link)
 - [Delete a Web Link](#delete-a-web-link)
+- [Copy a Web Link](#copy-a-web-link)
+- [Move a Web Link](#move-a-web-link)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -239,4 +241,129 @@ client.weblinks.delete('11111')
 	.then(() => {
 		// deletion succeeded — no value returned
 	});
+```
+
+Copy a Web Link
+---------------
+
+Call the
+[`weblinks.copy(webLinkID, destinationFolderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#copy)
+method to copy a web link into another folder.
+
+```js
+client.weblinks.copy('11111', '0')
+    .then(webLinkCopy => {
+       /* webLinkCopy -> {
+		    type: 'web_link',
+			id: '11112',
+			sequence_id: '0',
+			etag: '0',
+			name: 'Renamed web link copy',
+			url: 'http://example.com',
+			created_by:
+			{ type: 'user',
+				id: '22222',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2019-03-26T12:49:06-07:00',
+			modified_at: '2019-03-26T12:49:06-07:00',
+			parent:
+			{ type: 'folder',
+				id: '0',
+				sequence_id: null,
+				etag: null,
+				name: 'All Files' },
+			description: '',
+			item_status: 'active',
+			trashed_at: null,
+			purged_at: null,
+			shared_link: null,
+			path_collection:
+			{ total_count: 1,
+				entries:
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' } ] },
+			modified_by:
+			{ type: 'user',
+				id: '22222',
+				name: 'Example User',
+				login: 'user@example.com' },
+			owned_by:
+			{ type: 'user',
+				id: '22222',
+				name: 'Example User',
+				login: 'user@example.com' } }
+        */
+    });
+```
+
+An optional `name` parameter can also be passed to rename the folder on copy.  This can be
+used to avoid a name conflict when there is already an item with the same name in the
+target folder.
+
+```js
+client.weblinks.copy('12345', '0', {name: 'Renamed web link'})
+    .then(webLinkCopy => {
+        // ...
+    });
+```
+
+Move a Web Link
+---------------
+
+Call the [`weblinks.move(webLinkID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#move) method with the destination you want the folder moved to.
+
+```js
+var webLinkID = '88888';
+var destinationFolderID = '0';
+client.weblinks.move(webLinkID, destinationFolderID)
+    .then(webLink => {
+       /* webLink -> {
+		    type: 'web_link',
+			id: '88888',
+			sequence_id: '0',
+			etag: '0',
+			name: 'Example Web Link',
+			url: 'http://example.com',
+			created_by:
+			{ type: 'user',
+				id: '22222',
+				name: 'Example User',
+				login: 'user@example.com' },
+			created_at: '2019-03-26T12:49:06-07:00',
+			modified_at: '2019-03-26T12:49:06-07:00',
+			parent:
+			{ type: 'folder',
+				id: '0',
+				sequence_id: null,
+				etag: null,
+				name: 'All Files' },
+			description: '',
+			item_status: 'active',
+			trashed_at: null,
+			purged_at: null,
+			shared_link: null,
+			path_collection:
+			{ total_count: 1,
+				entries:
+				[ { type: 'folder',
+					id: '0',
+					sequence_id: null,
+					etag: null,
+					name: 'All Files' } ] },
+			modified_by:
+			{ type: 'user',
+				id: '22222',
+				name: 'Example User',
+				login: 'user@example.com' },
+			owned_by:
+			{ type: 'user',
+				id: '22222',
+				name: 'Example User',
+				login: 'user@example.com' } }
+        */
+    });
 ```
