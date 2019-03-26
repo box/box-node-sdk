@@ -4521,7 +4521,7 @@ describe('Endpoint', function() {
 		});
 	});
 
-	describe('Weblinks', function() {
+	describe.only('Weblinks', function() {
 
 		describe('delete()', function() {
 			it('should make DELETE call to delete weblink', function() {
@@ -4543,6 +4543,149 @@ describe('Endpoint', function() {
 					.then(result => assert.isUndefined(result));
 			});
 		});
+
+		describe('copy()', function() {
+			it('should make POST call to create web link copy', function() {
+
+				var webLinkID = '88888',
+					parentFolderID = '0',
+					name = 'New Bookmark (1)',
+					fixture = getFixture('web-links/post_web_links_id_copy_201');
+
+				var expectedBody = {
+					name,
+					parent: {
+						id: parentFolderID
+					}
+				};
+
+				apiMock.post(`/2.0/web_links/${webLinkID}/copy`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.weblinks.copy(webLinkID, parentFolderID, { name })
+					.then(webLink => assert.deepEqual(webLink, JSON.parse(fixture)));
+			});
+		});
+
+		describe('addToCollection()', function() {
+			it('should make PUT call to update web link collections', function() {
+
+				var webLinkID = '88888',
+					collectionID = '12345',
+					getCollectionsFixture = getFixture('web-links/get_web_links_id_collections_empty_200'),
+					putFixture = getFixture('web-links/put_web_links_id_collections_200');
+
+				var expectedBody = {
+					collections: [{ id: collectionID }]
+				};
+
+				apiMock.get(`/2.0/web_links/${webLinkID}`)
+					.query({
+						fields: 'collections'
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, getCollectionsFixture)
+					.put(`/2.0/web_links/${webLinkID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, putFixture);
+
+				return basicClient.weblinks.addToCollection(webLinkID, collectionID)
+					.then(webLink => assert.deepEqual(webLink, JSON.parse(putFixture)));
+			});
+		});
+
+		describe('removeFromCollection()', function() {
+			it('should make PUT call to update web link collections', function() {
+
+				var webLinkID = '88888',
+					collectionID = '12345',
+					getCollectionsFixture = getFixture('web-links/get_web_links_id_collections_full_200'),
+					putFixture = getFixture('web-links/put_web_links_id_collections_200');
+
+				var expectedBody = {
+					collections: []
+				};
+
+				apiMock.get(`/2.0/web_links/${webLinkID}`)
+					.query({
+						fields: 'collections'
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, getCollectionsFixture)
+					.put(`/2.0/web_links/${webLinkID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, putFixture);
+
+				return basicClient.weblinks.removeFromCollection(webLinkID, collectionID)
+					.then(webLink => assert.deepEqual(webLink, JSON.parse(putFixture)));
+			});
+		});
+
+		describe('move()', function() {
+			it('should make PUT call to change web link parent', function() {
+
+				var webLinkID = '88888',
+					newParentID = '0',
+					fixture = getFixture('web-links/put_web_links_id_parent_200');
+
+				var expectedBody = {
+					parent: {
+						id: newParentID
+					}
+				};
+
+				apiMock.put(`/2.0/web_links/${webLinkID}`, expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.weblinks.move(webLinkID, newParentID)
+					.then(webLink => assert.deepEqual(webLink, JSON.parse(fixture)));
+			});
+		});
+
 	});
 
 	describe('Storage Policies', function() {
