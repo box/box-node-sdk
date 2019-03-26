@@ -4521,7 +4521,7 @@ describe('Endpoint', function() {
 		});
 	});
 
-	describe.only('Weblinks', function() {
+	describe('Weblinks', function() {
 
 		describe('delete()', function() {
 			it('should make DELETE call to delete weblink', function() {
