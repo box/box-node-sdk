@@ -304,4 +304,384 @@ describe('WebLinks', function() {
 		});
 	});
 
+	describe('addToCollection()', function() {
+
+		var COLLECTION_ID = '9873473596';
+
+		it('should get current collections and add new collection when item has no collections', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: []
+			};
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: [{id: COLLECTION_ID}]})
+				.returns(Promise.resolve(webLink));
+
+			weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and add new collection when item has other collections', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [{id: '111'}]
+			};
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: [
+				{id: '111'},
+				{id: COLLECTION_ID}
+			]})
+				.returns(Promise.resolve(webLink));
+
+			weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass same collections when item is already in the collection', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: [
+				{id: COLLECTION_ID},
+				{id: '111'}
+			]})
+				.returns(Promise.resolve(webLink));
+
+			weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID, done);
+		});
+
+		it('should call callback with updated folder when API calls succeed', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			sandbox.stub(weblinks, 'get').returns(Promise.resolve(webLink));
+			sandbox.stub(weblinks, 'update').returns(Promise.resolve(webLink));
+
+			weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, webLink);
+				done();
+			});
+		});
+
+		it('should return promise resolving to the updated folder when API calls succeed', function() {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			sandbox.stub(weblinks, 'get').returns(Promise.resolve(webLink));
+			sandbox.stub(weblinks, 'update').returns(Promise.resolve(webLink));
+
+			return weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID)
+				.then(data => {
+
+					assert.equal(data, webLink);
+				});
+		});
+
+		it('should call callback with error when getting current collections fails', function(done) {
+
+			var error = new Error('Failed get');
+
+			var weblinksMock = sandbox.mock(weblinks);
+
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(p);
+
+			weblinksMock.expects('update').never();
+
+			weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when getting current collections fails', function() {
+
+			var error = new Error('Failed get');
+
+			var weblinksMock = sandbox.mock(weblinks);
+
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(p);
+
+			weblinksMock.expects('update').never();
+
+			return weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID)
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+
+		it('should call callback with error when adding the collection fails', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
+			};
+
+			var error = new Error('Failed update');
+
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, expectedBody)
+				.returns(p);
+
+			weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when adding the collection fails', function() {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			var expectedBody = {
+				collections: [
+					{ id: COLLECTION_ID },
+					{ id: '111' }
+				]
+			};
+
+			var error = new Error('Failed update');
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, expectedBody)
+				.returns(p);
+
+			return weblinks.addToCollection(WEB_LINK_ID, COLLECTION_ID)
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+	});
+
+	describe('removeFromCollection()', function() {
+
+		var COLLECTION_ID = '98763';
+
+		it('should get current collections and pass empty array when item is not in any collections', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: []
+			};
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: []})
+				.returns(Promise.resolve(webLink));
+
+			weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass empty array when item is in the collection to be removed', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [{id: COLLECTION_ID}]
+			};
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: []})
+				.returns(Promise.resolve(webLink));
+
+			weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass filtered array when item is in multiple collections', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: [{id: '111'}]})
+				.returns(Promise.resolve(webLink));
+
+			weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID, done);
+		});
+
+		it('should get current collections and pass same array when item is in only other collections', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
+			};
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: [
+				{id: '111'},
+				{id: '222'}
+			]})
+				.returns(Promise.resolve(webLink));
+
+			weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID, done);
+		});
+
+		it('should call callback with the updated folder when API calls succeed', function(done) {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
+			};
+
+			sandbox.stub(weblinks, 'get').returns(Promise.resolve(webLink));
+			sandbox.stub(weblinks, 'update').returns(Promise.resolve(webLink));
+
+			weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, webLink);
+				done();
+			});
+		});
+
+		it('should return promise resolving to the updated folder when API calls succeed', function() {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: '111'},
+					{id: '222'}
+				]
+			};
+
+			sandbox.stub(weblinks, 'get').returns(Promise.resolve(webLink));
+			sandbox.stub(weblinks, 'update').returns(Promise.resolve(webLink));
+
+			return weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID)
+				.then(data => {
+					assert.equal(data, webLink);
+				});
+		});
+
+		it('should call callback with error when getting current collections fails', function(done) {
+
+			var error = new Error('Failed get');
+
+			var weblinksMock = sandbox.mock(weblinks);
+
+			// Using Promise.reject() causes an unhandled rejection error, so make the promise reject asynchronously
+			var p = Promise.delay(1).then(() => {
+				throw error;
+			});
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(p);
+			weblinksMock.expects('update').never();
+
+			weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID, function(err) {
+
+				assert.equal(err, error);
+				done();
+			});
+		});
+
+		it('should return promise that rejects when adding the collection fails', function() {
+
+			var webLink = {
+				id: WEB_LINK_ID,
+				collections: [
+					{id: COLLECTION_ID},
+					{id: '111'}
+				]
+			};
+
+			var error = new Error('Failed update');
+
+			var weblinksMock = sandbox.mock(weblinks);
+			weblinksMock.expects('get').withArgs(WEB_LINK_ID, {fields: 'collections'})
+				.returns(Promise.resolve(webLink));
+			weblinksMock.expects('update').withArgs(WEB_LINK_ID, {collections: [{id: '111'}]})
+				.returns(Promise.resolve(error));
+
+			return weblinks.removeFromCollection(WEB_LINK_ID, COLLECTION_ID)
+				.catch(err => {
+					assert.equal(err, error);
+				});
+		});
+	});
+
 });

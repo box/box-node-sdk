@@ -1,0 +1,13 @@
+{
+    "type": "web_link",
+    "id": "88888",
+    "etag": "0",
+    "collections": [
+        {
+            "type": "collection",
+            "id": "12345",
+            "name": "Favorites",
+            "collection_type": "favorites"
+        }
+    ]
+}
