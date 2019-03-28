@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.28.0 [2019-03-28]
+
+- Added methods for [moving](./docs/web-links.md#move-a-web-link) and [copying](./docs/web-links.md#move-a-web-link)
+  weblinks, as well as [adding or removing from a collection](./docs/web-links.md#add-web-link-to-a-collection)
+
 ## 1.27.0 [2019-02-28]
 
 - Added the trace ID from API response headers to error messages for easier debugging
