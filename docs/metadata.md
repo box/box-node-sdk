@@ -32,13 +32,11 @@ in a flexible way, without pre-defined template structure.
 - [Update Metadata Template](#update-metadata-template)
 - [Get Enterprise Metadata Templates](#get-enterprise-metadata-templates)
 - [Delete Metadata Template](#delete-metadata-template)
-- [Add Metadata to a File](#add-metadata-to-a-file)
+- [Set Metadata on a File](#set-metadata-on-a-file)
 - [Get Metadata on a File](#get-metadata-on-a-file)
-- [Update Metadata on a File](#update-metadata-on-a-file)
 - [Remove Metadata from a File](#remove-metadata-from-a-file)
-- [Add Metadata to a Folder](#add-metadata-to-a-folder)
+- [Set Metadata on a Folder](#set-metadata-on-a-folder)
 - [Get Metadata on a Folder](#get-metadata-on-a-folder)
-- [Update Metadata on a Folder](#update-metadata-on-a-folder)
 - [Remove Metadata from a Folder](#remove-metadata-from-a-folder)
 - [Create Cascade Policy](#create-cascade-policy)
 - [Get Cascade Policy](#get-cascade-policy)
@@ -329,12 +327,51 @@ method with the template scope and template name.
 client.metadata.deleteTemplate('enterprise', 'testtemplate', callback);
 ```
 
-Add Metadata to a File
+Set Metadata on a File
 ----------------------
 
-Metadata can be created on a file by calling
-[`files.addMetadata(fileID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addMetadata)
+To set metadata on a file, call [`files.setMetadata(fileID, scope, template, metadata, callback)`][set-metadata]
+with the scope and template key of the metadata template, as well as an `Object` containing the metadata keys
+and values to set.
+
+> __Note:__ This method will unconditionally apply the provided metadata, overwriting existing metadata
+> for the keys provided.  To specifically create or update metadata, see the `addMetadata()` and `updateMetadata()`
+> methods below.
+
+```js
+var metadataValues = {
+	audience: "internal",
+	documentType: "Q1 plans",
+	competitiveDocument: "no",
+	status: "active",
+	author: "Jones",
+	currentState: "proposal"
+};
+client.files.setMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", metadataValues)
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			competitiveDocument: 'no',
+			status: 'active',
+			author: 'Jones',
+			currentState: 'proposal',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'file_11111',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 0,
+			'$typeVersion': 0,
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
+```
+
+To add new metadata to a file, call [`files.addMetadata(fileID, scope, template, metadata, callback)`][add-metadata]
 with a metadata template and an object of key/value pairs to add as metadata.
+
+> __Note:__: This method will only succeed if the provided metadata template is not current applied to the file,
+> otherwise it will fail with a Conflict error.
 
 ```js
 var metadataValues = {
@@ -364,6 +401,52 @@ client.files.addMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingC
 		*/
 	});
 ```
+
+Update a file's existing metadata by calling
+[`files.updateMetadata(fileID, scope, template, patch, callback)`][update-metadata]
+with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
+
+> __Note:__ This method will only succeed if the provided metadata template has already been applied to
+> the file; if the file does not have existing metadata, this method will fail with a Not Found error.
+> This is useful in cases where you know the file will already have metadata applied, since it will
+> save an API call compared to `setMetadata()`.
+
+```js
+var updates = [
+	{ op: 'test', path: '/competitiveDocument', value: 'no' },
+	{ op: 'remove', path: '/competitiveDocument' },
+	{ op: 'test', path: '/status', value: 'active' },
+	{ op: 'replace', path: '/status', value: 'inactive' },
+	{ op: 'test', path: '/author', value: 'Jones' },
+	{ op: 'copy', from: '/author', path: '/editor' },
+	{ op: 'test', path: '/currentState', value: 'proposal' },
+	{ op: 'move', from: '/currentState', path: '/previousState' },
+	{ op: 'add', path: '/currentState', value: 'reviewed' }
+];
+client.files.updateMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			status: 'inactive',
+			author: 'Jones',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'file_11111',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 1,
+			'$typeVersion': 0,
+			editor: 'Jones',
+			previousState: 'proposal',
+			currentState: 'reviewed',
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
+```
+
+[set-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#setMetadata
+[add-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addMetadata
+[update-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#updateMetadata
 
 Get Metadata on a File
 ----------------------
@@ -432,46 +515,6 @@ client.files.getAllMetadata('11111')
 	});
 ```
 
-Update Metadata on a File
--------------------------
-
-Update a file's metadata by calling
-[`files.updateMetadata(fileID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#updateMetadata)
-with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
-
-```js
-var updates = [
-	{ op: 'test', path: '/competitiveDocument', value: 'no' },
-	{ op: 'remove', path: '/competitiveDocument' },
-	{ op: 'test', path: '/status', value: 'active' },
-	{ op: 'replace', path: '/status', value: 'inactive' },
-	{ op: 'test', path: '/author', value: 'Jones' },
-	{ op: 'copy', from: '/author', path: '/editor' },
-	{ op: 'test', path: '/currentState', value: 'proposal' },
-	{ op: 'move', from: '/currentState', path: '/previousState' },
-	{ op: 'add', path: '/currentState', value: 'reviewed' }
-];
-client.files.updateMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
-	.then(metadata => {
-		/* metadata -> {
-			audience: 'internal',
-			documentType: 'Q1 plans',
-			status: 'inactive',
-			author: 'Jones',
-			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
-			'$parent': 'file_11111',
-			'$id': '2094c584-68e1-475c-a581-534a4609594e',
-			'$version': 1,
-			'$typeVersion': 0,
-			editor: 'Jones',
-			previousState: 'proposal',
-			currentState: 'reviewed',
-			'$template': 'marketingCollateral',
-			'$scope': 'enterprise_12345' }
-		*/
-	});
-```
-
 Remove Metadata from a File
 ---------------------------
 
@@ -485,12 +528,16 @@ client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metad
 	});;
 ```
 
-Add Metadata to a Folder
+Set Metadata on a Folder
 ------------------------
 
-Metadata can be created on a folder by calling
-[`folders.addMetadata(folderID, scope, template, metadata, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#addMetadata)
-with a metadata template and an object of key/value pairs to add as metadata.
+To set metadata on a folder, call [`folders.setMetadata(folderID, scope, template, metadata, callback)`][set-metadata]
+with the scope and template key of the metadata template, as well as an `Object` containing the metadata keys
+and values to set.
+
+> __Note:__ This method will unconditionally apply the provided metadata, overwriting existing metadata
+> for the keys provided.  To specifically create or update metadata, see the `addMetadata()` and `updateMetadata()`
+> methods below.
 
 ```js
 var metadataValues = {
@@ -501,7 +548,7 @@ var metadataValues = {
 	author: "Jones",
 	currentState: "proposal"
 };
-client.folders.addMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketingCollateral', metadataValues);
+client.folders.setMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", metadataValues)
 	.then(metadata => {
 		/* metadata -> {
 			audience: 'internal',
@@ -520,6 +567,88 @@ client.folders.addMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketin
 		*/
 	});
 ```
+
+To add new metadata to a folder, call
+[`folders.addMetadata(folderID, scope, template, metadata, callback)`][add-metadata]
+with a metadata template and an object of key/value pairs to add as metadata.
+
+> __Note:__: This method will only succeed if the provided metadata template is not current applied to the folder,
+> otherwise it will fail with a Conflict error.
+
+```js
+var metadataValues = {
+	audience: "internal",
+	documentType: "Q1 plans",
+	competitiveDocument: "no",
+	status: "active",
+	author: "Jones",
+	currentState: "proposal"
+};
+client.folders.addMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", metadataValues)
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			competitiveDocument: 'no',
+			status: 'active',
+			author: 'Jones',
+			currentState: 'proposal',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'folder_11111',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 0,
+			'$typeVersion': 0,
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
+```
+
+Update a folder's existing metadata by calling
+[`folders.updateMetadata(fileID, scope, template, patch, callback)`][update-metadata]
+with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
+
+> __Note:__ This method will only succeed if the provided metadata template has already been applied to
+> the folder; if the folder does not have existing metadata, this method will fail with a Not Found error.
+> This is useful in cases where you know the folder will already have metadata applied, since it will
+> save an API call compared to `setMetadata()`.
+
+```js
+var updates = [
+	{ op: 'test', path: '/competitiveDocument', value: 'no' },
+	{ op: 'remove', path: '/competitiveDocument' },
+	{ op: 'test', path: '/status', value: 'active' },
+	{ op: 'replace', path: '/status', value: 'inactive' },
+	{ op: 'test', path: '/author', value: 'Jones' },
+	{ op: 'copy', from: '/author', path: '/editor' },
+	{ op: 'test', path: '/currentState', value: 'proposal' },
+	{ op: 'move', from: '/currentState', path: '/previousState' },
+	{ op: 'add', path: '/currentState', value: 'reviewed' }
+];
+client.folders.updateMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
+	.then(metadata => {
+		/* metadata -> {
+			audience: 'internal',
+			documentType: 'Q1 plans',
+			status: 'inactive',
+			author: 'Jones',
+			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
+			'$parent': 'folder_11111',
+			'$id': '2094c584-68e1-475c-a581-534a4609594e',
+			'$version': 1,
+			'$typeVersion': 0,
+			editor: 'Jones',
+			previousState: 'proposal',
+			currentState: 'reviewed',
+			'$template': 'marketingCollateral',
+			'$scope': 'enterprise_12345' }
+		*/
+	});
+```
+
+[set-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#setMetadata
+[add-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#addMetadata
+[update-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#updateMetadata
 
 Get Metadata on a Folder
 ------------------------
@@ -584,46 +713,6 @@ client.folders.getAllMetadata('11111')
 				'$template': 'properties',
 				'$scope': 'global' } ],
 			limit: 100 }
-		*/
-	});
-```
-
-Update Metadata on a Folder
----------------------------
-
-Update a folder's metadata by calling
-[`folders.updateMetadata(folderID, scope, template, patch, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#updateMetadata)
-with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
-
-```js
-var updates = [
-	{ op: 'test', path: '/competitiveDocument', value: 'no' },
-	{ op: 'remove', path: '/competitiveDocument' },
-	{ op: 'test', path: '/status', value: 'active' },
-	{ op: 'replace', path: '/status', value: 'inactive' },
-	{ op: 'test', path: '/author', value: 'Jones' },
-	{ op: 'copy', from: '/author', path: '/editor' },
-	{ op: 'test', path: '/currentState', value: 'proposal' },
-	{ op: 'move', from: '/currentState', path: '/previousState' },
-	{ op: 'add', path: '/currentState', value: 'reviewed' }
-];
-client.folders.updateMetadata('11111', client.metadata.scopes.ENTERPRISE, "marketingCollateral", updates)
-	.then(metadata => {
-		/* metadata -> {
-			audience: 'internal',
-			documentType: 'Q1 plans',
-			status: 'inactive',
-			author: 'Jones',
-			'$type': 'marketingCollateral-d086c908-2498-4d3e-8a1f-01e82bfc2abe',
-			'$parent': 'folder_11111',
-			'$id': '2094c584-68e1-475c-a581-534a4609594e',
-			'$version': 1,
-			'$typeVersion': 0,
-			editor: 'Jones',
-			previousState: 'proposal',
-			currentState: 'reviewed',
-			'$template': 'marketingCollateral',
-			'$scope': 'enterprise_12345' }
 		*/
 	});
 ```
