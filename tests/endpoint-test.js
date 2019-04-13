@@ -1818,6 +1818,80 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('setMetadata()', function() {
+
+			var fileID = '11111',
+				scope = 'enterprise',
+				template = 'testTemplate',
+				fixture = getFixture('files/post_files_id_metadata_scope_template_201');
+
+			var metadataValues = {
+				testEnum: 'foo'
+			};
+
+			var metadataUpdate = [
+				{
+					op: 'add',
+					path: '/testEnum',
+					value: 'foo',
+				}
+			];
+
+			it('should try POST call to create metadata instance', function() {
+
+				apiMock.post(`/2.0/files/${fileID}/metadata/${scope}/${template}`, metadataValues)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.files.setMetadata(fileID, scope, template, metadataValues)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+
+			it('should make PUT call to update metadata instance when instance exists', function() {
+
+				apiMock.post(`/2.0/files/${fileID}/metadata/${scope}/${template}`, metadataValues)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(409)
+					.put(`/2.0/files/${fileID}/metadata/${scope}/${template}`, metadataUpdate)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.files.setMetadata(fileID, scope, template, metadataValues)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+
+			it('should produce error when creation operation fails with non-conflict error', function() {
+
+				apiMock.post(`/2.0/files/${fileID}/metadata/${scope}/${template}`, metadataValues)
+					.reply(400);
+
+				return basicClient.files.setMetadata(fileID, scope, template, metadataValues)
+					.then(() => assert.fail('Expected method to fail'))
+					.catch(err => assert.propertyVal(err, 'statusCode', 400));
+			});
+		});
+
 		describe('getTrashedFile()', function() {
 			it('should make GET call to retrieve information about file in trash', function() {
 
@@ -2293,6 +2367,80 @@ describe('Endpoint', function() {
 
 				return basicClient.folders.addMetadata(folderID, scope, template, metadataValues)
 					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+		});
+
+		describe('setMetadata()', function() {
+
+			var folderID = '11111',
+				scope = 'enterprise',
+				template = 'testTemplate',
+				fixture = getFixture('folders/post_folders_id_metadata_scope_template_201');
+
+			var metadataValues = {
+				testEnum: 'foo'
+			};
+
+			var metadataUpdate = [
+				{
+					op: 'add',
+					path: '/testEnum',
+					value: 'foo',
+				}
+			];
+
+			it('should try POST call to create metadata instance', function() {
+
+				apiMock.post(`/2.0/folders/${folderID}/metadata/${scope}/${template}`, metadataValues)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return basicClient.folders.setMetadata(folderID, scope, template, metadataValues)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+
+			it('should make PUT call to update metadata instance when instance exists', function() {
+
+				apiMock.post(`/2.0/folders/${folderID}/metadata/${scope}/${template}`, metadataValues)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(409)
+					.put(`/2.0/folders/${folderID}/metadata/${scope}/${template}`, metadataUpdate)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.setMetadata(folderID, scope, template, metadataValues)
+					.then(metadata => assert.deepEqual(metadata, JSON.parse(fixture)));
+			});
+
+			it('should produce error when creation operation fails with non-conflict error', function() {
+
+				apiMock.post(`/2.0/folders/${folderID}/metadata/${scope}/${template}`, metadataValues)
+					.reply(400);
+
+				return basicClient.folders.setMetadata(folderID, scope, template, metadataValues)
+					.then(() => assert.fail('Expected method to fail'))
+					.catch(err => assert.propertyVal(err, 'statusCode', 400));
 			});
 		});
 
