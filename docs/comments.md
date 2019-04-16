@@ -50,6 +50,7 @@ Get the Comments on a File
 You can get all of the comments on a file by calling the
 [`files.getComments(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getComments) method.
 
+<!-- sample get_files_id_comments -->
 ```js
 var fileID = '12345';
 client.files.getComments(fileID)

@@ -120,21 +120,29 @@ existing Box users, to integrate with their accounts.
 Your application must provide a way for the user to login to Box (usually with a
 browser or web view) in order to obtain an auth code.
 
+<!-- sample get_authorize -->
+```js
+var BoxSDK = require('box-node-sdk');
+var sdk = new BoxSDK({
+	clientID: 'YOUR-CLIENT-ID',
+	clientSecret: 'YOUR-CLIENT_SECRET'
+});
+
+// the URL to redirect the user to
+var authorize_url = BoxSDK.getAuthorizeURL({
+	response_type: 'code'
+});
+```
+
 After a user logs in and grants your application access to their Box account,
 they will be redirected to your application's `redirect_uri` which will contain
 an auth code. This auth code can then be used along with your client ID and
 client secret to establish an API connection.  A `PersistentClient` will
 automatically refresh the access token as needed.
 
+<!-- sample post_oauth2_token --->
 ```js
-var BoxSDK = require('box-node-sdk');
-var TokenStore = require('TOKEN-STORE-IMPLEMENTATION');
-var sdk = new BoxSDK({
-	clientID: 'YOUR-CLIENT-ID',
-	clientSecret: 'YOUR-CLIENT_SECRET'
-});
-
-sdk.getTokensAuthorizationCodeGrant('YOUR-AUTH-CODE', null, function(err, tokenInfo) {
+sdk.getTokensAuthorizationCodeGrant('<CODE>', null, function(err, tokenInfo) {
 
 	if (err) {
 		// handle error
@@ -311,3 +319,16 @@ client.exchangeToken('item_preview', 'https://api.box.com/2.0/files/123456', opt
 
 This will attach an external user name and ID to annotations made with the token,
 in order to attribute them to someone who does not have a Box account.
+
+### Revoking tokens
+
+The access tokens for a client can be revoked when needed.
+
+<!-- sample post_oauth2_revoke -->
+```js
+client.revokeTokens()
+	.then(() => {
+		// the access token has been revoked
+	});
+```
+

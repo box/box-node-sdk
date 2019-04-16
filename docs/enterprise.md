@@ -20,6 +20,7 @@ Get a list of users in the current enterprise by calling the
 [`enterprise.getUsers(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#getUsers)
 method.
 
+<!-- sample get_users -->
 ```js
 client.enterprise.getUsers()
 	.then(users => {
@@ -52,6 +53,7 @@ Invite a user to an enterprise by calling the
 [`enterprise.inviteUser(enterpriseID, email, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#inviteUser)
 method with the ID of the enterprise and the user's email address.
 
+<!-- sample post_invites -->
 ```js
 client.enterprise.inviteUser('1345', 'jsmith@box.com', callback);
 ```
@@ -63,6 +65,7 @@ To provision a new managed user within the current enterprise, call the
 [`enterprise.addUser(login, name, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#addUser)
 method with the email address the user will use to log in and the user's name.
 
+<!-- sample post_users -->
 ```js
 client.enterprise.addUser(
 	'eddard@winterfell.example.com',
@@ -133,6 +136,7 @@ To transfer one managed user's content to another user's account, call the
 [`enterprise.transferUserContent(sourceUserID, destUserID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#transferUserContent)
 method with the IDs of the source and destination users.
 
+<!-- sample put_users_id_folders_id -->
 ```js
 var sourceUserID = '33333';
 var destinationUserID = '44444';

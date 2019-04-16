@@ -25,6 +25,7 @@ Create a Task
 
 To create a task call the [`tasks.create(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#create) method.
 
+<!-- sample post_tasks-->
 ```js
 var options = {
 	message: 'Please review for publication!',
@@ -62,6 +63,7 @@ Get a Task's Information
 
 To get a task information call the [`tasks.get(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#get) method.
 
+<!-- sample get_tasks_id -->
 ```js
 client.tasks.get('11111')
 	.then(task => {
@@ -112,6 +114,7 @@ To update a task call the
 [`tasks.update(taskID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#update)
 method with the set of fields to update and their new values.
 
+<!-- sample put_tasks_id -->
 ```js
 client.tasks.update('11111', { message: 'Could you please review?' })
 	.then(task => {
@@ -147,6 +150,7 @@ To delete a task, call the
 [`tasks.delete(taskID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#delete)
 method with the ID of the task to be deleted.
 
+<!-- sample delete_tasks_id -->
 ```js
 client.tasks.delete('11111')
 	.then(() => {
@@ -162,6 +166,7 @@ must complete it, call the
 [`tasks.getAssignments(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#getAssignments)
 method.
 
+<!-- sample get_tasks_id_assignments -->
 ```js
 client.tasks.getAssignments('11111')
 	.then(assignments => {
@@ -193,6 +198,7 @@ To retrieve information about a specific task assignment, call the
 [`tasks.getAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#getAssignment)
 method with the ID of the assignment to get.
 
+<!-- sample get_task_assignments_id -->
 ```js
 client.tasks.getAssignment('12345')
 	.then(assignment => {
@@ -235,6 +241,7 @@ or
 with the ID of the task to assign and either the ID or login email address of the
 user to whom the task should be assigned.
 
+<!-- sample post_task_assignments -->
 ```js
 // Assign task 11111 to user 22222
 var taskID = '11111';
@@ -285,6 +292,7 @@ To update a task assignment, call the
 [`tasks.updateAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#updateAssignment)
 method.  This can be used to resolve or complete a task.
 
+<!-- sample put_task_assignments_id -->
 ```js
 // Complete a task
 client.tasks.updateAssignment(
@@ -343,6 +351,7 @@ To delete a task assignment, effectively unassigning a user from the task, call 
 [`tasks.deleteAssignment(assignmentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#deleteAssignment)
 method with the ID of the assignment to remove.
 
+<!-- sample delete_task_assignments_id -->
 ```js
 client.tasks.deleteAssignment('12345')
 	.then(() => {
@@ -357,6 +366,7 @@ Calling the
 [`files.getTasks(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTasks)
 method will retrieve all of the tasks for given file.
 
+<!-- sample get_files_id_tasks-->
 ```js
 client.files.getTasks('11111')
 	.then(tasks => {

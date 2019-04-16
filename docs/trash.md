@@ -27,6 +27,7 @@ To retrieve files and folders that have been moved to the Trash, call the
 [`trash.get(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Trash.html#get)
 method.
 
+<!-- sample get_folders_trash_items -->
 ```js
 client.trash.get()
 	.then(trashedItems => {
@@ -63,6 +64,8 @@ folder's old location, the restored folder can be given an alternate name with
 the `name` option.  If the folder's old location no longer exists, it can be
 placed inside a new parent folder with the `parent_id` option.
 
+
+<!-- sample post_files_id -->
 ```js
 client.files.restoreFromTrash(
 	'11111',
@@ -130,6 +133,7 @@ Calling the
 [`files.deletePermanently(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deletePermanently)
 method will remove the file permanently from the user's trash.
 
+<!-- sample delete_files_id_trash -->
 ```js
 client.files.deletePermanently('11111')
 	.then(() => {
@@ -159,6 +163,8 @@ Get a Trashed File
 ------------------
 
 Information about a file in the trash can be retrieved with the [`files.getTrashedFile(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTrashedFile) method.
+
+<!-- sample get_files_id_trash -->
 ```js
 client.files.getTrashedFile('11111')
 	.then(trashedFile => {
@@ -239,6 +245,7 @@ Get a Trashed Folder
 
 Information about a folder in the trash can be retrieved with the [`folders.getTrashedFolder(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getTrashedFolder) method.
 
+<!-- sample get_folder_id_trash -->
 ```js
 client.folders.getTrashedFolder('22222')
 	.then(trashedFolder => {
@@ -321,6 +328,7 @@ restored folder can be given an alternate name with the `name` option.  If the
 folder's old location no longer exists, it can be placed inside a new parent
 folder with the `parent_id` option.
 
+<!-- sample post_folders_id -->
 ```js
 client.folders.restoreFromTrash(
 	'22222',
@@ -386,6 +394,7 @@ Delete a Folder from the Trash
 A folder can be removed permanently from trash by calling
 [`folders.deletePermanently(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deletePermanently).
 
+<!-- sample delete_folders_id_trash -->
 ```js
 client.folders.deletePermanently('22222')
 	.then(() => {

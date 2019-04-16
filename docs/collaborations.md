@@ -259,6 +259,7 @@ You can get all of the collaborations on a folder by calling
 [`folders.getCollaborations(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getCollaborations)
 on the folder.
 
+<!-- sample get_folders_id_collaborations -->
 ```js
 var folderID = '12345';
 client.folders.getCollaborations(folderID)
@@ -302,6 +303,7 @@ You can get the collection of collaborations on a file by calling
 [`files.getCollaborations(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getCollaborations)
 with the ID of the file.
 
+<!-- sample get_files_id_collaborations -->
 ```js
 var fileID = '98765';
 client.files.getCollaborations(fileID)

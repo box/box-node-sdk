@@ -24,6 +24,7 @@ Create a Web Link
 To create a web link call the [`weblinks.create(url, parentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#create)
 method.
 
+<!-- sample post_web_links -->
 ```js
 client.weblinks.create(
 	'https://www.box.com',
@@ -91,6 +92,7 @@ Get a Web Link's information
 You can request a web link object by ID by calling
 [`weblinks.get(weblinkID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#get).
 
+<!-- sample get_web_links_id -->
 ```js
 client.weblinks.get('11111')
 	.then(weblink => {
@@ -170,6 +172,7 @@ Update a Web Link
 To update a web link call the [`weblinks.update(weblinkID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#update)
 method with the fields to update and their new values.
 
+<!-- sample put_web_links_id -->
 ```js
 client.weblinks.update(
 	'11111',
@@ -236,6 +239,7 @@ Delete a Web Link
 To move a web link to the trash call the [`weblinks.delete(weblinkID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#delete)
 method.
 
+<!-- sample delete_web_links_id -->
 ```js
 client.weblinks.delete('11111')
 	.then(() => {

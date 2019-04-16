@@ -11,6 +11,7 @@ Get Available Storage Policies for an Enterprise
 To get a list of the storage policies that are available for the current user's enterprise,
 call the [`storagePolicies.getAll(options, callback)`][getAll] method.
 
+<!-- sample get_storage_policies -->
 ```js
 client.storagePolicies.getAll()
     .then(policies => {
@@ -34,6 +35,7 @@ Information about a specific storage policy (by its ID) can be retrieved by call
 the [`storagePolicies.get(storagePolicyID, options, callback)`][get] method with the
 ID of the assignment object.
 
+<!-- sample get_storage_policies_id -->
 ```js
 client.storagePolicies.get('6')
     .then(storagePolicy => {
@@ -56,6 +58,7 @@ method with the ID of the storage policy to assign and the ID of the user to whi
 > __Note:__ This method will check if an assignment already exists for the user and take appropriate action.
 > It should work regardless of the current status of the user.
 
+<!-- sample post_storage_policy_assignments -->
 ```js
 var storagePolicyID = '7';
 var userID = '22222';
@@ -79,6 +82,7 @@ To get information about a specific storage policy assignment by ID, call the
 [`storagePolicies.getAssignment(asisgnmentID, callback)`][getAssignment] method
 with the ID of the storage policy assignment.
 
+<!-- sample get_storage_policy_assignments_id -->
 ```js
 client.storagePolicies.getAssignment('dXNlcl8yMjIyMg==')
     .then(assignment => {
@@ -100,6 +104,7 @@ To determine which storage policy is assigned to a user, call
 [`storagePolicies.getAssignmentForTarget(userID, callback)`][getAssignmentForTarget]
 with the ID of the user.
 
+<!-- sample get_storage_policy_assignments -->
 ```js
 client.storagePolicies.getAssignmentForTarget('22222')
     .then(assignment => {
@@ -125,6 +130,7 @@ with the ID of the storage policy to assign and the ID of the user to assign it 
 > If the current state of the user is not known, use the [`storagePolicies.assign()`](#assign-a-storage-policy-to-a-user)
 > method instead.
 
+<!-- sample post_storage_policy_assignments -->
 ```js
 client.storagePolicies.createAssignment('7', '22222')
     .then(assignment => {
@@ -147,6 +153,7 @@ asisgned to a user, call the [`storagePolicies.updateAssignment(assignmentID, up
 method with the ID of the assignment to update and an object containing key/value mapping of fields
 to update on the assignment.
 
+<!-- sample put_storage_policy_assignments_id -->
 ```js
 // Reassign user 22222 to storage policy 10
 var assignmentID = 'dXNlcl8yMjIyMg==';
@@ -178,6 +185,7 @@ default storage policy for the enterprise, call
 [`storagePolicies.removeAssignment(assignmentID, callback)`][removeAssignment] with
 the ID of the assignment to remove.
 
+<!-- sample delete_storage_policy_assignments_id -->
 ```js
 client.storagePolicies.removeAssignment('dXNlcl8yMjIyMg==')
     .then(() => {

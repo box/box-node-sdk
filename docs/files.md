@@ -49,6 +49,7 @@ Calling
 [`files.get(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#get)
 on a file returns a snapshot of the file's info.
 
+<!-- sample get_files_id -->
 ```js
 client.files.get('11111')
 	.then(file => {
@@ -141,6 +142,7 @@ Updating a file's information is done by calling
 [`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
 with the fields to be updated.
 
+<!-- sample put_files_id -->
 ```js
 client.files.update('75937', { name : 'New name.pdf', fields: 'name' })
 	.then(updatedFile => {
@@ -178,6 +180,7 @@ A file can be downloaded by calling
 [`files.getReadStream(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getReadStream),
 which provides an instance of `stream.Readable` that will yield the file's contents.
 
+<!-- sample get_files_id_content -->
 ```js
 var fs = require('fs');
 client.files.getReadStream('12345', null, function(error, stream) {
@@ -620,6 +623,7 @@ it has been shown to reduce failed uploads by more than 99%. Highly active folde
 common filenames, and accounts near their quota limits may get a success for the preflight,
 and then have a real conflict during the actual upload.
 
+<!-- sample options_files_content -->
 ```js
 // Verify that uploading a 200MB file named "Preso.ppt" to folder 12345 would succeed
 client.files.preflightUploadFile(
@@ -661,6 +665,7 @@ A file can be copied to a new folder with the
 [`files.copy(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#copy)
 method.
 
+<!-- sample post_files_id_copy -->
 ```js
 var fileID = '11111';
 var destinationFolderID = '22222';
@@ -752,6 +757,7 @@ conditions), you can pass the last known value of the file's `etag` field via th
 an error if the file was modified between when you read that `etag` value and when the deletion is processed by the
 API.
 
+<!-- sample delete_files_id -->
 ```js
 client.files.delete('11111', { etag: '5' })
 	.then(() => {
@@ -771,6 +777,7 @@ Get File Versions
 Retrieve a list of previous versions of a file by calling the
 [`files.getVersions(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getVersions).
 
+<!-- sample get_files_id_versions -->
 ```js
 client.files.getVersions('12345')
 	.then(versions => {
@@ -973,6 +980,7 @@ An old version of a file can be moved to the trash by calling the
 [`files.deleteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteVersion)
 method.
 
+<!-- sample delete_files_id_versions_id -->
 ```js
 var fileID = '11111';
 var versionID = '22222';
@@ -1023,6 +1031,7 @@ Promote Version
 
 Promote file version to the top of the stack by calling the [`files.promoteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#promoteVersion) method.
 
+<!-- sample post_files_id_versions_current -->
 ```js
 var fileID = '11111';
 var versionID = '22222';
@@ -1051,6 +1060,7 @@ Get Thumbnail
 A thumbnail for a file can be retrieved by calling
 [`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail).
 
+<!-- sample get_files_id_thumbnail_id -->
 ```js
 client.files.getThumbnail('12345')
 	.then(thumbnailInfo => {

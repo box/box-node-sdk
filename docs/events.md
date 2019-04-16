@@ -38,6 +38,7 @@ handles long-polling and deduplicating events.
 When the `EventStream` is started, it will begin long-polling asynchronously.
 Events received from the API are then forwarded to any listeners.
 
+<!-- sample options_events -->
 ```js
 client.events.getEventStream(function(err, stream) {
 
@@ -85,6 +86,7 @@ client.events.get(null, callback);
 You can also pass in a `stream_position` parameter to get events from a specific
 point in time:
 
+<!-- sample get_events -->
 ```js
 client.events.get({stream_position: '1408838928446360'}, callback);
 ```

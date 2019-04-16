@@ -17,6 +17,7 @@ To get a list of items matching a search query, call the
 method.  There are many possible options for advanced search filtering, which are
 documented in the [Search API Reference](https://docs.box.com/reference#searching-for-content).
 
+<!-- sample get_search -->
 ```js
 // Search for PDF or Word documents matching "Mobile"
 client.search.query(

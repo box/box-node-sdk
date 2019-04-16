@@ -26,6 +26,7 @@ Get Terms of Service for an Enterprise
 To get terms of service call the [`termsOfService.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#getAll)
 method.
 
+<!-- sample get_terms_of_services -->
 ```js
 client.termsOfService.getAll()
 	.then(termsOfService => {
@@ -73,6 +74,7 @@ To get the terms of service with an ID call the
 [`termsOfService.get(termsOfServicesID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#get)
 method.
 
+<!-- sample get_terms_of_services_id -->
 ```js
 client.termsOfService.get('12345')
 	.then(tos => {
@@ -95,6 +97,7 @@ Update a Terms of Service for an Enterprise
 To update a terms of service call the [`termsOfService.update(termsOfServicesID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#update)
 method with the fields to update and their new values.
 
+<!-- sample put_terms_of_services_id -->
 ```js
 client.termsOfService.update('12345', { status: 'disabled' })
 	.then(tos => {
@@ -123,6 +126,7 @@ method.
 > __Note:__ Only two terms of service can exist per enterprise: one managed terms of service and one external terms of
 > service. If you wish to have a different terms of service, update one of the existing terms of service. 
 
+<!-- sample post_terms_of_services -->
 ```js
 client.termsOfService.create('managed', 'enabled', 'By using this service, you agree to ...')
 	.then(tos => {
@@ -164,6 +168,7 @@ method.
 
 If no `user_id` option is specified, this will default to current user.
 
+<!-- sample get_terms_of_service_user_statuses -->
 ```js
 client.termsOfService.getUserStatus('11111', { user_id: '22222' })
 	.then(tosStatus => {
@@ -186,6 +191,7 @@ Create User Status on Terms of Service
 To accept or decline a terms of service for a user who has never accepted/decline this terms of service before call the [`termsOfService.createUserStatus(termsOfServicesID, isAccepted, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#createUserStatus)
 method.
 
+<!-- sample post_terms_of_service_user_statuses -->
 ```js
 client.termsOfService.createUserStatus('11111', true, {user_id: '22222'})
 	.then(tosStatus => {
@@ -211,6 +217,7 @@ Update User Status on Terms of Service
 To update user status on a terms of service call the [`termsOfService.updateUserStatus(termsOfServiceUserStatusID, isAccepted, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/TermsOfService.html#updateUserStatus)
 method.
 
+<!-- sample put_terms_of_service_user_statuses_id -->
 ```js
 client.termsOfService.updateUserStatus('5678', false)
 	.then(tosStatus => {

@@ -32,6 +32,7 @@ webhook.
 The triggerTypes param is an array of strings. Available options are documented here:
 <https://docs.box.com/reference#event-triggers>
 
+<!-- sample post_webhooks -->
 ```js
 // Attach a webhook that sends a notification to https://example.com/webhook when
 //   file 11111 is renamed or downloaded.
@@ -95,6 +96,7 @@ Retrieve information about a specific webhook by calling
 [`webhooks.get(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#get)
 to retrieve a webhook by ID.
 
+<!-- sample get_webhooks_id -->
 ```js
 client.webhooks.get('1234')
 	.then(webhook => {
@@ -121,6 +123,7 @@ Get a list of all webhooks for the requesting application and user by calling th
 [`webhooks.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#getAll)
 method.  The maximum limit per page of results is 200, Box uses the default limit of 100.
 
+<!-- sample get_webhooks -->
 ```js
 client.webhooks.getAll()
 	.then(webhooks => {
@@ -145,6 +148,7 @@ Update a file or folder's webhook by calling
 [`webhooks.update(webhookID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#update)
 with the field you want to update as `updates.address` or `updates.trigger`.
 
+<!-- sample put_webhooks_id -->
 ```js
 client.webhooks.update('678901', {address: "https://example.com/webhooks/fileActions"})
 	.then(webhook => {
@@ -170,6 +174,7 @@ Delete a Webhook
 A file or folder's webhook can be removed by calling
 [`webhooks.delete(webhookID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#delete).
 
+<!-- sample delete_webhooks_id -->
 ```js
 client.webhooks.delete('1234')
 	.then(() => {

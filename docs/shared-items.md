@@ -16,6 +16,7 @@ Get a Shared Item
 
 To get the file or folder information for a shared link, call the [`sharedItems.get(url, password, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SharedItems.html#get) method. The `password` parameter should be passed as a `null` value if none is required.
 
+<!-- sample get_shared_items -->
 ```js
 client.sharedItems.get(
     'https://app.box.com/s/1a2b3c4d5e',

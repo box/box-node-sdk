@@ -26,6 +26,7 @@ Get a list of all collections the user has defined by calling [`collections.getA
 A user always has a default collection called "Favorites" which they can add
 items to.
 
+<!-- sample get_collections -->
 ```js
 client.collections.getAll()
 	.then(collections => {
@@ -47,6 +48,7 @@ Get the Items in a Collection
 Get a list of the items in a collection by passing the ID of the collection to
 [`collections.getItems(collectionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collections.html#getItems).
 
+<!-- sample get_collections_id_items -->
 ```js
 client.collections.getItems('81934', {fields: 'name', limit: 2})
 	.then(items => {
