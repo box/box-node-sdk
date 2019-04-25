@@ -230,6 +230,7 @@ The simplest way to upload a file to a folder is by calling the
 [`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
 method with a `stream.Readable` or `Buffer` of the file to upload.
 
+<!-- sample post_files_content -->
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/My File.pdf');
@@ -525,6 +526,7 @@ with the ID of the folder to upload into, as well as the size and file name of
 file being uploaded.  This will check the destination folder for conflicts before
 starting the upload and pass the information for the upload session back to the callback.
 
+<!-- sample post_files_upload_sessions -->
 ```js
 // Create a session to upload a 2GB file "huge.pdf" into folder 12345
 client.files.createUploadSession('12345', 2147483648, 'huge.pdf', callback);
@@ -539,6 +541,7 @@ of the file starting at `offset`, and the total size of the file being uploaded.
 When the upload of a part succeeds, the callback will be called with a part record,
 which should be stored for later integrity checking.
 
+<!-- sample put_files_upload_sessions_id -->
 ```js
 // Upload the part starting at byte offset 8388608 to upload session '93D9A837B45F' with part ID 'feedbeef'
 client.files.uploadPart('93D9A837B45F', part, 8388608, 2147483648, {part_id: 'feedbeef'}, callback);
@@ -559,6 +562,7 @@ If you stored a list of part records for each uploaded part, you can pass them v
 `options.parts` for additional integrity checking.  Otherwise, the API will assume that the list
 of parts is has received is the intended set.
 
+<!-- sample post_files_upload_sessions_id_commit -->
 ```js
 // Finalize upload session 93D9A837B45F
 client.files.commitUploadSession(
@@ -576,6 +580,7 @@ by calling
 [`files.abortUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#abortUploadSession).
 This operation cannot be undone.
 
+<!-- sample delete_files_upload_sessions_id -->
 ```js
 // Cancel upload session 93D9A837B45F
 client.files.abortUploadSession('93D9A837B45F', callback);
@@ -588,6 +593,7 @@ retrieved by calling
 [`files.getUploadSessionParts(sessionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getUploadSessionParts).
 The list is returned as a paged collection using the `limit` and `offset` options.
 
+<!-- sample get_files_upload_sessions_id_parts -->
 ```js
 // Get the list of parts already uploaded
 client.files.getUploadSessionParts('93D9A837B45F', {limit: 100}, callback);
@@ -598,6 +604,7 @@ client.files.getUploadSessionParts('93D9A837B45F', {limit: 100}, callback);
 Information about an in-progress upload session can be retrieved by calling
 [`files.getUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getUploadSession).
 
+<!-- sample get_files_upload_sessions_id -->
 ```js
 // Get info about upload session 93D9A837B45F
 client.files.getUploadSessionStatus('93D9A837B45F', callback);
@@ -641,6 +648,7 @@ For uploading a new version of a file, use the
 [`files.preflightUploadNewFileVersion(fileID, fileData, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#preflightUploadNewFileVersion)
 method.
 
+<!-- sample options_files_id_content -->
 ```js
 // Check if uploading a larger version of this file will succeed
 client.files.preflightUploadNewFileVersion('87646', {size: 300000000}, null, callback);
@@ -825,6 +833,7 @@ Upload a New Version of a File
 New versions of a file can be uploaded with the
 [`files.uploadNewFileVersion(fileID, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadNewFileVersion) method.
 
+<!-- sample post_files_id_content -->
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file.pdf');
