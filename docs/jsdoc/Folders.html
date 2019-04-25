@@ -925,7 +925,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line518">line 518</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line549">line 549</a>
     </li></ul></dd>
     
 
@@ -2049,7 +2049,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line383">line 383</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line414">line 414</a>
     </li></ul></dd>
     
 
@@ -2346,7 +2346,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line457">line 457</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line488">line 488</a>
     </li></ul></dd>
     
 
@@ -3758,7 +3758,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line400">line 400</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line431">line 431</a>
     </li></ul></dd>
     
 
@@ -3994,7 +3994,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line488">line 488</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line519">line 519</a>
     </li></ul></dd>
     
 
@@ -4665,7 +4665,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line543">line 543</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line574">line 574</a>
     </li></ul></dd>
     
 
@@ -5000,7 +5000,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line425">line 425</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line456">line 456</a>
     </li></ul></dd>
     
 
@@ -5028,6 +5028,299 @@ Method: POST
         
 <div class="param-desc">
     A promise resolving to the restored folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setMetadata"><span class="type-signature"></span>setMetadata<span class="signature">(folderID, scope, template, metadata, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Sets metadata on a folder, overwriting any metadata that exists for the provided keys.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folderID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The folder to set metadata on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scope</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The scope of the metadata template</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>template</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The key of the metadata template</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>metadata</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The metadata to set</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called with updated metadata if successful</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line381">line 381</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to the updated metadata
 </div>
 
 
@@ -5663,7 +5956,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Mar 28 2019 14:49:53 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 15:26:51 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
