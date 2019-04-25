@@ -245,7 +245,7 @@ Get a Trashed Folder
 
 Information about a folder in the trash can be retrieved with the [`folders.getTrashedFolder(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getTrashedFolder) method.
 
-<!-- sample get_folder_id_trash -->
+<!-- sample get_folders_id_trash -->
 ```js
 client.folders.getTrashedFolder('22222')
 	.then(trashedFolder => {

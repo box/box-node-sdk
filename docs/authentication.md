@@ -21,6 +21,7 @@ overview of how the Box API handles authentication.
 - [As-User](#as-user)
 - [Token Exchange](#token-exchange)
     - [Annotator Tokens](#annotator-tokens)
+- [Revoking Tokens](#revoking-tokens)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -320,15 +321,16 @@ client.exchangeToken('item_preview', 'https://api.box.com/2.0/files/123456', opt
 This will attach an external user name and ID to annotations made with the token,
 in order to attribute them to someone who does not have a Box account.
 
-### Revoking tokens
+## Revoking tokens
 
-The access tokens for a client can be revoked when needed.
+Access tokens for a client can be revoked when needed. As this removes the client's way of authenticating this client can no
+longer be used after this call.
 
 <!-- sample post_oauth2_revoke -->
 ```js
 client.revokeTokens()
 	.then(() => {
-		// the access token has been revoked
+		// the client's access token have been revoked
 	});
 ```
 

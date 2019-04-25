@@ -253,7 +253,7 @@ Delete Email Alias
 
 To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#removeEmailAlias) method.
 
-<!-- sample delete_users_id_email_aliases -->
+<!-- sample delete_users_id_email_aliases_id -->
 ```js
 var userID = '33333';
 var aliasID = '12345';
