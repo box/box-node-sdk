@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.29.0 [2019-04-25]
+
+- Added convenience methods for setting metadata on [files](./docs/metadata.md#set-metadata-on-a-file)
+  and [folders](./docs/metadata.md#set-metadata-on-a-folder) ([#376](https://github.com/box/box-node-sdk/pull/376))
+
 ## 1.28.0 [2019-03-28]
 
 - Added methods for [moving](./docs/web-links.md#move-a-web-link) and [copying](./docs/web-links.md#move-a-web-link)
