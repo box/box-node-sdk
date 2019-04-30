@@ -328,7 +328,7 @@ longer be used after this call.
 
 <!-- sample post_oauth2_revoke -->
 ```js
-client.revokeTokens()
+client.revokeTokens("<TOKEN>")
 	.then(() => {
 		// the client's access token have been revoked
 	});
