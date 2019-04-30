@@ -31,6 +31,7 @@ To get a list of all groups in the calling user's enterprise, call the
 method.  Note that this requires permission to view an enterprise's groups, which
 is reserved for enterprise administrators.
 
+<!-- sample get_groups -->
 ```js
 client.groups.getAll()
 	.then(groups => {
@@ -50,6 +51,7 @@ To create a new group, call the
 [`groups.create(name, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#create)
 method.
 
+<!-- sample post_groups -->
 ```js
 client.groups.create('My group', {description: 'An example group'})
 	.then(group => {
@@ -70,6 +72,7 @@ To retrieve the information for a group, call the
 [`groups.get(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#get)
 method.
 
+<!-- sample get_groups_id -->
 ```js
 client.groups.get('11111')
 	.then(group => {
@@ -100,6 +103,7 @@ To change the properties of a group object, call the
 [`groups.update(groupID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#update)
 method with `updates` being the set of properties to update.
 
+<!-- sample put_groups_id -->
 ```js
 client.groups.update('11111', {name: 'New group name'})
 	.then(group => {
@@ -120,6 +124,7 @@ To delete a group, call the
 [`groups.delete(groupID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#delete)
 method.
 
+<!-- sample delete_groups_id -->
 ```js
 client.groups.delete('11111')
 	.then(() => {
@@ -134,6 +139,7 @@ To add a user to a group, call the
 [`groups.addUser(groupID, userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#addUser)
 method.
 
+<!-- sample post_group_memberships -->
 ```js
 var groupID = '11111';
 var userID = '22222';
@@ -166,6 +172,7 @@ given user is in the group, call the
 [`groups.getMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getMembership)
 method.
 
+<!-- sample get_group_memberships_id -->
 ```js
 client.groups.getMembership('33333')
 	.then(membership => {
@@ -217,6 +224,8 @@ To get a list of groups to which a user belongs, call the
 method.  Note that this method requires the calling user to have permission to
 view groups, which is restricted to enterprise administrators.
 
+
+<!-- sample get_users_id_memberships -->
 ```js
 var userID = '22222';
 client.users.getGroupMemberships(userID)
@@ -246,6 +255,8 @@ To update a membership record, call the
 [`groups.updateMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#updateMembership)
 method with `updates` being the properties to update.
 
+
+<!-- sample put_group_memberships_id -->
 ```js
 // Promote a user to group admin
 client.groups.updateMembership('12345', {role: client.groups.userRoles.ADMIN})
@@ -278,6 +289,7 @@ To remove a specific membership record, which removes a user from the group, cal
 [`groups.removeMembership(membershipID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#removeMembership)
 method with the ID of the membership record to remove.
 
+<!-- sample delete_group_memberships_id -->
 ```js
 client.groups.removeMembership('33333')
 	.then(() => {
@@ -292,6 +304,7 @@ To get a list of all memberships to a group, call the
 [`groups.getMemberships(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getMemberships)
 method with the ID of the group to get the list of memberships for.
 
+<!-- sample get_groups_id_memberships -->
 ```js
 client.groups.getMemberships('11111')
 	.then(memberships => {
@@ -331,6 +344,7 @@ access to, call the
 [`groups.getCollaborations(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getCollaborations)
 method.
 
+<!-- sample get_groups_id_collaborations -->
 ```js
 client.groups.getCollaborations('11111')
 	.then(collaborations => {

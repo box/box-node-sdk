@@ -23,6 +23,7 @@ Get User's Information
 
 To get a user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#get) method.
 
+<!-- sample get_users_id -->
 ```js
 client.users.get('33333')
     .then(user => {
@@ -67,6 +68,7 @@ Get the Current User's Information
 
 To get the current user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#get) method with the `CURRENT_USER_ID` constant.
 
+<!-- sample get_users_me -->
 ```js
 client.users.get(client.CURRENT_USER_ID)
 	.then(currentUser => {
@@ -96,6 +98,7 @@ Get User Avatar
 Calling [`users.getAvatar(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getAvatar) will
 yield a `Readable` stream over the bytes of the user's avatar image.
 
+<!-- sample get_users_id_avatar -->
 ```js
 client.users.getAvatar('22222')
     .then(avatarImageStream => {
@@ -113,6 +116,7 @@ To update a user call the
 [`users.update(userID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#update)
 method where `updates` contains the fields to update.
 
+<!-- sample put_users_id -->
 ```js
 client.users.update('33333', {name: 'New Name', job_title: 'New Title', phone: '555-1111'})
     .then(user => {
@@ -139,6 +143,7 @@ client.users.update('33333', {name: 'New Name', job_title: 'New Title', phone: '
 To change a user's login email, update the `login` parameter on the user.  Note
 that the new email address must already be added as a verified email alias for the
 user.
+
 ```js
 client.users.update('33333', { login: 'newemail@example.com' })
     .then(user => {
@@ -177,6 +182,7 @@ client.users.delete('33333')
     });
 ```
 
+<!-- sample delete_users_id -->
 ```js
 // Delete the user even if they still have files in their account
 client.users.delete('123', {force: true})
@@ -190,6 +196,7 @@ Get Email Aliases
 
 To get a users email aliases call the [`users.getEmailAliases(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getEmailAliases) method.
 
+<!-- sample get_users_id_email_aliases -->
 ```js
 client.users.getEmailAliases('33333')
     .then(emailAliases => {
@@ -215,6 +222,7 @@ To add an email alias for a user call the
 [`users.addEmailAlias(userID, email, callback`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#addEmailAlias)
 method.
 
+<!-- sample post_users_id_email_aliases -->
 ```js
 client.users.addEmailAlias('33333', 'user+baz@example.com')
     .then(alias => {
@@ -245,6 +253,7 @@ Delete Email Alias
 
 To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#removeEmailAlias) method.
 
+<!-- sample delete_users_id_email_aliases_id -->
 ```js
 var userID = '33333';
 var aliasID = '12345';

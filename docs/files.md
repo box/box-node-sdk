@@ -49,6 +49,7 @@ Calling
 [`files.get(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#get)
 on a file returns a snapshot of the file's info.
 
+<!-- sample get_files_id -->
 ```js
 client.files.get('11111')
 	.then(file => {
@@ -141,6 +142,7 @@ Updating a file's information is done by calling
 [`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
 with the fields to be updated.
 
+<!-- sample put_files_id -->
 ```js
 client.files.update('75937', { name : 'New name.pdf', fields: 'name' })
 	.then(updatedFile => {
@@ -178,6 +180,7 @@ A file can be downloaded by calling
 [`files.getReadStream(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getReadStream),
 which provides an instance of `stream.Readable` that will yield the file's contents.
 
+<!-- sample get_files_id_content -->
 ```js
 var fs = require('fs');
 client.files.getReadStream('12345', null, function(error, stream) {
@@ -227,6 +230,7 @@ The simplest way to upload a file to a folder is by calling the
 [`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
 method with a `stream.Readable` or `Buffer` of the file to upload.
 
+<!-- sample post_files_content -->
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/My File.pdf');
@@ -522,6 +526,7 @@ with the ID of the folder to upload into, as well as the size and file name of
 file being uploaded.  This will check the destination folder for conflicts before
 starting the upload and pass the information for the upload session back to the callback.
 
+<!-- sample post_files_upload_sessions -->
 ```js
 // Create a session to upload a 2GB file "huge.pdf" into folder 12345
 client.files.createUploadSession('12345', 2147483648, 'huge.pdf', callback);
@@ -536,6 +541,7 @@ of the file starting at `offset`, and the total size of the file being uploaded.
 When the upload of a part succeeds, the callback will be called with a part record,
 which should be stored for later integrity checking.
 
+<!-- sample put_files_upload_sessions_id -->
 ```js
 // Upload the part starting at byte offset 8388608 to upload session '93D9A837B45F' with part ID 'feedbeef'
 client.files.uploadPart('93D9A837B45F', part, 8388608, 2147483648, {part_id: 'feedbeef'}, callback);
@@ -556,6 +562,7 @@ If you stored a list of part records for each uploaded part, you can pass them v
 `options.parts` for additional integrity checking.  Otherwise, the API will assume that the list
 of parts is has received is the intended set.
 
+<!-- sample post_files_upload_sessions_id_commit -->
 ```js
 // Finalize upload session 93D9A837B45F
 client.files.commitUploadSession(
@@ -573,6 +580,7 @@ by calling
 [`files.abortUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#abortUploadSession).
 This operation cannot be undone.
 
+<!-- sample delete_files_upload_sessions_id -->
 ```js
 // Cancel upload session 93D9A837B45F
 client.files.abortUploadSession('93D9A837B45F', callback);
@@ -585,6 +593,7 @@ retrieved by calling
 [`files.getUploadSessionParts(sessionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getUploadSessionParts).
 The list is returned as a paged collection using the `limit` and `offset` options.
 
+<!-- sample get_files_upload_sessions_id_parts -->
 ```js
 // Get the list of parts already uploaded
 client.files.getUploadSessionParts('93D9A837B45F', {limit: 100}, callback);
@@ -595,6 +604,7 @@ client.files.getUploadSessionParts('93D9A837B45F', {limit: 100}, callback);
 Information about an in-progress upload session can be retrieved by calling
 [`files.getUploadSession(sessionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getUploadSession).
 
+<!-- sample get_files_upload_sessions_id -->
 ```js
 // Get info about upload session 93D9A837B45F
 client.files.getUploadSessionStatus('93D9A837B45F', callback);
@@ -620,6 +630,7 @@ it has been shown to reduce failed uploads by more than 99%. Highly active folde
 common filenames, and accounts near their quota limits may get a success for the preflight,
 and then have a real conflict during the actual upload.
 
+<!-- sample options_files_content -->
 ```js
 // Verify that uploading a 200MB file named "Preso.ppt" to folder 12345 would succeed
 client.files.preflightUploadFile(
@@ -637,6 +648,7 @@ For uploading a new version of a file, use the
 [`files.preflightUploadNewFileVersion(fileID, fileData, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#preflightUploadNewFileVersion)
 method.
 
+<!-- sample options_files_id_content -->
 ```js
 // Check if uploading a larger version of this file will succeed
 client.files.preflightUploadNewFileVersion('87646', {size: 300000000}, null, callback);
@@ -661,6 +673,7 @@ A file can be copied to a new folder with the
 [`files.copy(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#copy)
 method.
 
+<!-- sample post_files_id_copy -->
 ```js
 var fileID = '11111';
 var destinationFolderID = '22222';
@@ -752,6 +765,7 @@ conditions), you can pass the last known value of the file's `etag` field via th
 an error if the file was modified between when you read that `etag` value and when the deletion is processed by the
 API.
 
+<!-- sample delete_files_id -->
 ```js
 client.files.delete('11111', { etag: '5' })
 	.then(() => {
@@ -771,6 +785,7 @@ Get File Versions
 Retrieve a list of previous versions of a file by calling the
 [`files.getVersions(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getVersions).
 
+<!-- sample get_files_id_versions -->
 ```js
 client.files.getVersions('12345')
 	.then(versions => {
@@ -818,6 +833,7 @@ Upload a New Version of a File
 New versions of a file can be uploaded with the
 [`files.uploadNewFileVersion(fileID, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadNewFileVersion) method.
 
+<!-- sample post_files_id_content -->
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file.pdf');
@@ -973,6 +989,7 @@ An old version of a file can be moved to the trash by calling the
 [`files.deleteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteVersion)
 method.
 
+<!-- sample delete_files_id_versions_id -->
 ```js
 var fileID = '11111';
 var versionID = '22222';
@@ -1023,6 +1040,7 @@ Promote Version
 
 Promote file version to the top of the stack by calling the [`files.promoteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#promoteVersion) method.
 
+<!-- sample post_files_id_versions_current -->
 ```js
 var fileID = '11111';
 var versionID = '22222';
@@ -1051,6 +1069,7 @@ Get Thumbnail
 A thumbnail for a file can be retrieved by calling
 [`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail).
 
+<!-- sample get_files_id_thumbnail_id -->
 ```js
 client.files.getThumbnail('12345')
 	.then(thumbnailInfo => {

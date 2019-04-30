@@ -53,6 +53,7 @@ To create a new metadata template, call the
 [`metadata.createTemplate(templateName, fields, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#createTemplate)
 method.
 
+<!-- sample post_metadata_templates_schema -->
 ```js
 // Create a new template, but hide it for now until it's ready for use
 client.metadata.createTemplate(
@@ -121,6 +122,7 @@ To retrieve a specific metadata template by its scope and template key, call the
 [`metadata.getTemplateSchema(scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplateSchema)
 method with the scope and template key.
 
+<!-- sample get_metadata_templates_id_id_schema -->
 ```js
 client.metadata.getTemplateSchema('enterprise', 'vcontract')
 	.then(template => {
@@ -157,6 +159,7 @@ To get a specific metadata template by its ID, call the
 [`metadata.getTemplateByID(templateID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplateByID)
 method with the ID of the template.
 
+<!-- sample get_metadata_templates_id -->
 ```js
 client.metadata.getTemplateByID('17f2d715-6acb-45f2-b96a-28b15efc9faa')
 	.then(template => {
@@ -196,6 +199,7 @@ method with the operations to perform on the template.  See the
 [API Documentation](https://docs.box.com/reference#update-metadata-schema)
 for more information on the operations available.
 
+<!-- sample put_metadata_templates_id_id_schema -->
 ```js
 // Add a new option to the Fiscal Year field, and un-hide the template
 var operations = [
@@ -245,6 +249,7 @@ Get all metadata templates for the current enterprise and scope by calling the
 [`metadata.getTemplates(scope, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplates)
 method.
 
+<!-- sample get_metadata_templates_enterprise -->
 ```js
 client.metadata.getTemplates('enterprise')
 	.then(templates => {
@@ -323,6 +328,7 @@ To delete a metadata template call the
 [`metadata.deleteTemplate(scope, template, callback)`](http://opensoure.box.com/box-node-sdk/Metadata.html#deleteTemplate)
 method with the template scope and template name.
 
+<!-- sample delete_metadata_templates_id_id_schema -->
 ```js
 client.metadata.deleteTemplate('enterprise', 'testtemplate', callback);
 ```
@@ -373,6 +379,7 @@ with a metadata template and an object of key/value pairs to add as metadata.
 > __Note:__: This method will only succeed if the provided metadata template is not current applied to the file,
 > otherwise it will fail with a Conflict error.
 
+<!-- sample post_files_id_metadata_id_id -->
 ```js
 var metadataValues = {
 	audience: "internal",
@@ -411,6 +418,7 @@ with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
 > This is useful in cases where you know the file will already have metadata applied, since it will
 > save an API call compared to `setMetadata()`.
 
+<!-- sample put_files_id_metadata_id_id -->
 ```js
 var updates = [
 	{ op: 'test', path: '/competitiveDocument', value: 'no' },
@@ -455,6 +463,7 @@ Retrieve a specific metadata template on a file by calling
 [`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getMetadata)
 with the ID of the file and which template to fetch.
 
+<!-- sample get_files_id_metadata_id_id -->
 ```js
 client.files.getMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketingCollateral')
 	.then(metadata => {
@@ -479,6 +488,7 @@ client.files.getMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketingC
 You can retrieve all metadata on a file by calling
 [`files.getAllMetadata(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getAllMetadata).
 
+<!-- sample get_files_id_metadata -->
 ```js
 client.files.getAllMetadata('11111')
 	.then(metadata => {
@@ -521,6 +531,7 @@ Remove Metadata from a File
 A metadata template can be removed from a file by calling
 [`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteMetadata).
 
+<!-- sample delete_files_id_metadata_id_id -->
 ```js
 client.files.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES)
 	.then(() => {
@@ -575,6 +586,7 @@ with a metadata template and an object of key/value pairs to add as metadata.
 > __Note:__: This method will only succeed if the provided metadata template is not current applied to the folder,
 > otherwise it will fail with a Conflict error.
 
+<!-- sample post_folders_id_metadata_id_id -->
 ```js
 var metadataValues = {
 	audience: "internal",
@@ -613,6 +625,7 @@ with an array of [JSON Patch](http://jsonpatch.com/) formatted operations.
 > This is useful in cases where you know the folder will already have metadata applied, since it will
 > save an API call compared to `setMetadata()`.
 
+<!-- sample put_folders_id_metadata_id_id -->
 ```js
 var updates = [
 	{ op: 'test', path: '/competitiveDocument', value: 'no' },
@@ -657,6 +670,7 @@ Retrieve a specific metadata template on a folder by calling
 [`folders.getMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getMetadata)
 with the ID of the folder and which template to fetch.
 
+<!-- sample get_folders_id_metadata_id_id -->
 ```js
 client.folders.getMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketingCollateral')
 	.then(metadata => {
@@ -681,6 +695,7 @@ client.folders.getMetadata('11111', client.metadata.scopes.ENTERPRISE, 'marketin
 You can retrieve all metadata on a folder by calling
 [`folders.getAllMetadata(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getAllMetadata).
 
+<!-- sample get_folders_id_metadata -->
 ```js
 client.folders.getAllMetadata('11111')
 	.then(metadata => {
@@ -723,6 +738,7 @@ Remove Metadata from a Folder
 A folder's metadata can be removed by calling
 [`folders.deleteMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deleteMetadata).
 
+<!-- sample delete_folders_id_metadata_id_id -->
 ```js
 client.folders.deleteMetadata('67890', client.metadata.scopes.GLOBAL, client.metadata.templates.PROPERTIES)
 	.then(() => {
@@ -738,6 +754,7 @@ call [`metadata.createCascadePolicy(scope, templateKey, folderID, callback)`][cr
 with the scope and template key of the metadata template to be cascaded, and the ID of the folder to apply
 the policy to.
 
+<!-- sample post_metadata_cascade_policies -->
 ```js
 var folderID = '22222';
 client.metadata.createCascadePolicy('enterprise', 'testTemplate', folderID)
@@ -769,6 +786,7 @@ To retrieve information about a specific metadata cascade policy, call
 [`metadata.getCascadePolicy(policyID, callback)`][get-cascade-policy]
 with the ID of the cascade policy.
 
+<!-- sample get_metadata_cascade_policies_id -->
 ```js
 var policyID = '84113349-794d-445c-b93c-d8481b223434';
 client.metadata.getCascadePolicy(policyID)
@@ -802,6 +820,7 @@ are being applied to all items in that folder, call
 with the ID of the folder.  You can set the `owner_enterprise_id` option to retrieve
 only cascade policies owned by a specific enterprise (defaults to the current enterprise).
 
+<!-- sample get_metadata_cascade_policies -->
 ```js
 var folderID = '22222';
 client.metadata.getCascadePolicies(folderID)
@@ -843,6 +862,7 @@ already have a metadata value that conflicts with the folder.  Specifying a reso
 preserve the existing values on items, and specifying `'overwrite'` will overwrite values on the items in the
 folder with the metadata value from the folder.
 
+<!-- sample post_metadata_cascade_policies_id_apply -->
 ```js
 var policyID = '84113349-794d-445c-b93c-d8481b223434';
 client.metadata.forceApplyCascadePolicy(policyID, client.metadata.cascadeResolution.PRESERVE_EXISTING)
@@ -860,6 +880,7 @@ To remove a cascade policy and stop applying metadata from a folder to items in 
 call [`metadata.deleteCascadePolicy(policyID, callback)`][delete-cascade-policy] with the ID
 of the cascade policy to delete.
 
+<!-- sample delete_metadata_cascade_policies_id -->
 ```js
 var policyID = '84113349-794d-445c-b93c-d8481b223434';
 client.metadata.deleteCascadePolicy(policyID)

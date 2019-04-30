@@ -29,6 +29,7 @@ To create a new retention policy, call the
 [`retentionPolicies.create(name, type, action, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#create)
 method.
 
+<!-- sample post_retention_policies -->
 ```js
 client.retentionPolicies.create(
 	'Tax Documents',
@@ -65,6 +66,7 @@ To retrieve information about a specific retention policy, call the
 [`retentionPolicies.get(policyID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#get)
 method.
 
+<!-- sample get_retention_policies_id -->
 ```js
 client.retentionPolicies.get('123456789')
 	.then(policy => {
@@ -97,6 +99,7 @@ Update Retention Policy
 To update or modify an existing retention policy, call the [`retentionPolicies.update(policyID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#update)
 method where `updates` is the set of key-value pairs to be updated on the policy object.
 
+<!-- sample put_retention_policies_id -->
 ```js
 client.retentionPolicies.update('123456789', {status: 'retired'})
 	.then(policy => {
@@ -128,6 +131,7 @@ Get Enterprise Retention Policies
 
 To retrieve all of the retention policies for the given enterprise, call the [`retentionPolicies.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAll) method.
 
+<!-- sample get_retention_policies -->
 ```js
 client.retentionPolicies.getAll({ policy_name: 'Tax' })
 	.then(policies => {
@@ -149,6 +153,7 @@ To get a list of all retention policy assignments associated with a specified re
 call the [`retentionPolicies.getAssignments(policyID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAssignments)
 method.
 
+<!-- sample get_retention_policies_id_assignments -->
 ```js
 client.retentionPolicies.getAssignments('123456789', {type: 'folder'})
 	.then(assignments => {
@@ -166,6 +171,7 @@ Assign Retention Policy
 To assign a retention policy, call the [`retentionPolicies.assign(policyID, assignType, assignID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#assign)
 method.  If assigning to an `enterprise`, no `assignID` should be provided.
 
+<!-- sample post_retention_policy_assignments -->
 ```js
 client.retentionPolicies.assign('11111', 'folder', '22222')
 	.then(assignment => {
@@ -242,6 +248,7 @@ To retrieve information about a retention policy assignment, call the
 [`retentionPolicies.getAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAssignment)
 method.
 
+<!-- sample get_retention_policy_assignments_id -->
 ```js
 client.retentionPolicies.getAssignment('12345')
 	.then(assignment => {
@@ -271,6 +278,7 @@ for a specific file version retention record, call the
 [`retentionPolicies.getFileVersionRetention(retentionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFileVersionRetention)
 method.
 
+<!-- sample get_file_version_retentions_id -->
 ```js
 client.retentionPolicies.getFileVersionRetention('55555')
 	.then(retention => {
@@ -300,6 +308,7 @@ some category of file version retention records, call the
 [`retentionPolicies.getAllFileVersionRetentions(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAllFileVersionRetentions)
 method.  Optional filters are passed via the `options` parameter.
 
+<!-- sample get_file_version_retentions -->
 ```js
 // Get only the retention records set to delete items before a certain date
 var options = {

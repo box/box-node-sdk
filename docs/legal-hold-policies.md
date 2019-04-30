@@ -30,6 +30,7 @@ To create a new legal hold policy, call the
 [`legalHoldPolicies.create(name, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#create)
 method.
 
+<!-- sample post_legal_hold_policies -->
 ```js
 client.legalHoldPolicies.create('IRS Audit')
 	.then(policy => {
@@ -62,6 +63,7 @@ To retrieve information about a specific legal hold policy, call the
 [`legalHoldPolicies.get(policyID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#get)
 method.
 
+<!-- sample get_legal_hold_policies_id -->
 ```js
 client.legalHoldPolicies.get('11111')
 	.then(policy => {
@@ -100,6 +102,7 @@ To update or modify an existing legal hold policy, call the
 [`legalHoldPolicies.update(policyID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#update)
 method where `updates` is the set of key-value pairs to be updated on the policy object.
 
+<!-- sample put_legal_hold_policies_id -->
 ```js
 client.legalHoldPolicies.update('11111', {description: 'Documents related to IRS audit'})
 	.then(policy => {
@@ -132,6 +135,7 @@ To delete a legal hold policy, call the
 Note that this is an asynchronous process - the policy will not be fully deleted
 yet when the response comes back.
 
+<!-- sample delete_legal_hold_policies_id -->
 ```js
 client.legalHoldPolicies.delete('11111')
 	.then(() => {
@@ -145,6 +149,8 @@ Get Enterprise Legal Hold Policies
 To retrieve all of the legal hold policies for the given enterprise, call the
 [`legalHoldPolicies.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#getAll) method.
 
+
+<!-- sample get_legal_hold_policies -->
 ```js
 client.legalHoldPolicies.getAll({policy_name: 'Important'})
 	.then(policies => {
@@ -169,6 +175,7 @@ To get a list of all legal hold policy assignments associated with a specified l
 call the [`legalHoldPolicies.getAssignments(policyID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#getAssignments)
 method.
 
+<!-- sample get_legal_hold_policy_assignments -->
 ```js
 client.legalHoldPolicies.getAssignments('8763245', {assign_to_type: 'folder'})
 	.then(assignments => {
@@ -187,6 +194,7 @@ To assign a legal hold policy, call the
 [`legalHoldPolicies.assign(policyID, assignType, assignID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#assign)
 method.
 
+<!-- sample post_legal_hold_policy_assignments -->
 ```js
 client.legalHoldPolicies.assign('11111', 'folder', '12345')
 	.then(assignment => {
@@ -217,6 +225,7 @@ To delete a legal hold assignment and remove a legal hold policy from an item, c
 method.  Note that this is an asynchronous process - the assignment will not be fully deleted
 yet when the response comes back.
 
+<!-- sample delete_legal_hold_policy_assignments_id -->
 ```js
 client.legalHoldPolicies.deleteAssignment('22222')
 	.then(() => {
@@ -231,6 +240,7 @@ To retrieve information about a legal hold policy assignment, call the
 [`legalHoldPolicies.getAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#getAssignment)
 method.
 
+<!-- sample get_legal_hold_policy_assignments_id -->
 ```js
 client.legalHoldPolicies.getAssignment('22222')
 	.then(assignment => {
@@ -280,6 +290,7 @@ for a specific file version legal hold record, call the
 [`legalHoldPolicies.getFileVersionLegalHold(legalHoldID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#getFileVersionLegalHold)
 method.
 
+<!-- sample get_file_version_legal_holds_id -->
 ```js
 client.legalHoldPolicies.getFileVersionLegalHold('55555')
 	.then(fileVersionHold => {
@@ -317,6 +328,7 @@ To retrieve a list of all file version legal holds for a given policy, call the
 [`legalHoldPolicies.getAllFileVersionLegalHolds(policyID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/LegalHoldPolicies.html#getAllFileVersionLegalHolds)
 method.
 
+<!-- sample get_file_version_legal_holds -->
 ```js
 client.legalHoldPolicies.getAllFileVersionLegalHolds('11111')
 	.then(holds => {

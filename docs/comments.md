@@ -24,6 +24,7 @@ Calling
 [`comments.get(commentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#get)
 on a comment returns a snapshot of the comment's info.
 
+<!-- sample get_comments_id -->
 ```js
 client.comments.get('11111')
     .then(comment => {
@@ -50,6 +51,7 @@ Get the Comments on a File
 You can get all of the comments on a file by calling the
 [`files.getComments(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getComments) method.
 
+<!-- sample get_files_id_comments -->
 ```js
 var fileID = '12345';
 client.files.getComments(fileID)
@@ -79,6 +81,7 @@ Add a Comment to a File
 A comment can be added to a file with the [`comments.create(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#create)
 method.
 
+<!-- sample post_comments -->
 ```js
 client.comments.create('33333', 'Is this the latest version?')
     .then(comment => {
@@ -190,6 +193,7 @@ The message of a comment can be changed with the
 [`comments.update(commentID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#update)
 method.
 
+<!-- sample put_comments_id -->
 ```js
 client.comments.update('11111', {message: 'New message'})
     .then(comment => {
@@ -217,6 +221,7 @@ A comment can be deleted with the
 [`comments.delete(commentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#delete)
 method.
 
+<!-- sample delete_comments_id -->
 ```js
 client.comments.delete('11111')
     .then(() => {

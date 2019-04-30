@@ -23,6 +23,7 @@ To get watermark information for a file call the
 [`files.getWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getWatermark)
 method.
 
+<!-- sample get_files_id_watermark -->
 ```js
 client.files.getWatermark('11111')
 	.then(watermark => {
@@ -41,6 +42,7 @@ To apply or update the watermark to a file call the
 [`files.applyWatermark(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#applyWatermark)
 method.
 
+<!-- sample put_files_id_watermark -->
 ```js
 client.files.applyWatermark('11111')
 	.then(watermark => {
@@ -58,6 +60,7 @@ Remove Watermark from a File
 A file's watermark can be removed by calling
 [`files.removeWatermark(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#removeWatermark).
 
+<!-- sample delete_files_id_watermark -->
 ```js
 client.files.removeWatermark('11111')
 	.then(() => {
@@ -71,6 +74,7 @@ To get watermark information for a folder call the
 [`folders.getWatermark(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getWatermark)
 method.
 
+<!-- sample get_folders_id_watermark -->
 ```js
 client.folders.getWatermark('22222')
 	.then(watermark => {
@@ -89,6 +93,7 @@ To apply or update the watermark for a folder call the
 [`folders.applyWatermark(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#applyWatermark)
 method.
 
+<!-- sample put_folders_id_watermark -->
 ```js
 client.folders.applyWatermark('22222')
 	.then(watermark => {
@@ -106,6 +111,7 @@ Remove Watermark from a Folder
 A folder's watermark can be removed by calling
 [`folders.removeWatermark(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#removeWatermark).
 
+<!-- sample delete_folders_id_watermark -->
 ```js
 client.folders.removeWatermark('22222')
 	.then(() => {
