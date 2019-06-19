@@ -26,17 +26,10 @@ Get a Folder's Information
 
 Folder information can be retrieved by calling the
 [`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#get)
-method. Use the `fields` option to specify the desired fields. Requesting
-information for only the fields you need can improve performance and reduce the
-size of the network request.
+method. Use the `fields` option to specify the desired fields. 
 
 <!-- sample get_folders_id -->
 ```js
-client.folders.get(
-    '12345',
-    {fields: 'name,shared_link,permissions,collections,sync_state'},
-    callback
-);
 client.folders.get('11111')
     .then(folder => {
         /* folder -> {
@@ -93,6 +86,19 @@ client.folders.get('11111')
                 limit: 100 } }
         */
     });
+```
+
+Requesting
+information for only the fields you need can improve performance and reduce the
+size of the network request.
+
+```js
+client.folders.get(
+    '12345',
+    { fields: 'name,shared_link,permissions,collections,sync_state' }
+).then(folder => {
+    // ...
+});
 ```
 
 The user's root folder can be accessed by calling the
