@@ -1149,6 +1149,29 @@ describe('box-client', function() {
 				});
 		});
 
+		it('should call session to exchange token with shared link params when shared link params are passed', function() {
+
+			var sharedLink = {
+				url: 'https://app.box.com/s/xyz'
+			};
+
+			var expectedOptions = {
+				sharedLink,
+				tokenRequestOptions: null
+			};
+
+			var exchangedTokenInfo = {accessToken: 'qqwjnfldkjfhksedrg'};
+
+			sandbox.mock(apiSessionFake).expects('exchangeToken')
+				.withArgs(TEST_SCOPE, TEST_RESOURCE, expectedOptions)
+				.returns(Promise.resolve(exchangedTokenInfo));
+
+			return basicClient.exchangeToken(TEST_SCOPE, TEST_RESOURCE, { sharedLink })
+				.then(data => {
+					assert.equal(data, exchangedTokenInfo);
+				});
+		});
+
 		it('should call callback with error when token exchange fails', function(done) {
 
 			var error = new Error('Failure');
