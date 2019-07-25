@@ -47,7 +47,7 @@
     "eslint": "^4.13.0",
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-unicorn": "^4.0.2",
+    "eslint-plugin-unicorn": "^10.0.0",
     "istanbul": "^0.4.3",
     "jsdoc": "^3.5.5",
     "jsonlint2": "^1.7.1",
