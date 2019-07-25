@@ -92,6 +92,7 @@ Requesting
 information for only the fields you need can improve performance and reduce the
 size of the network request.
 
+<!-- sample get_folders_id with_fields -->
 ```js
 client.folders.get(
     '12345',
@@ -105,6 +106,7 @@ The user's root folder can be accessed by calling the
 [`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#get)
 method with the `folderID` value of `'0'`.
 
+<!-- sample get_folders_id for_root_folder -->
 ```js
 client.folders.get('0')
     .then(rootFolder => {
@@ -224,6 +226,7 @@ conditions), you can pass the last known value of the folder's `etag` field via 
 an error if the folder was modified between when you read that `etag` value and when your updates are processed by the
 API.
 
+<!-- sample put_folders_id with_etag -->
 ```js
 client.folders.update('22222', { name: 'Renamed Folder', etag: '5', fields: 'name' })
 	.then(updatedFolder => {
@@ -379,6 +382,7 @@ An optional `name` parameter can also be passed to rename the folder on copy.  T
 used to avoid a name conflict when there is already an item with the same name in the
 target folder.
 
+<!-- sample post_folders_id_copy with_name -->
 ```js
 client.folders.copy('12345', '0', {name: 'Renamed folder'})
     .then(folderCopy => {
@@ -463,6 +467,7 @@ Rename a Folder
 
 Use the [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update) method to rename a folder by passing a new name for the folder in `updates.name`.
 
+<!-- sample put_folders_id rename -->
 ```js
 client.folders.update('12345', {name: 'New Name'}, callback);
 ```
