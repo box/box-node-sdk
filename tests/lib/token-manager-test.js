@@ -573,6 +573,65 @@ describe('token-manager', function() {
 				});
 		});
 
+		it('should retry with new JWT using server date and new jti claim when server rejects jti claim', function() {
+
+			sandbox.useFakeTimers(100000);
+
+			var firstTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: TEST_WEB_TOKEN
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			var serverDate = 'Sat, 01 Apr 2017 16:56:53 GMT'; // 1491065813
+			var newJWT = 'jhdhioeiu4yo34875twudgshdgr';
+
+			var secondTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: newJWT
+			};
+
+			var serverError = {
+				statusCode: 400,
+				authExpired: true,
+				response: {
+					body: {
+						error: 'invalid_grant',
+						error_description: 'Please check the \'jti\' claim.'
+					},
+					headers: {
+						date: serverDate
+					}
+				}
+			};
+
+			var regeneratedJTI = '630aab1e-912e-468d-b052-fd53a41925ed';
+			var uuidStub = sandbox.stub(uuidFake, 'v4');
+			uuidStub.onCall(0).returns(TEST_JTI);
+			uuidStub.onCall(1).returns(regeneratedJTI);
+
+			var jwtStub = sandbox.stub(jwtFake, 'sign');
+			jwtStub.withArgs(sinon.match({exp: 101}), sinon.match.any, sinon.match({jwtid: TEST_JTI}))
+				.returns(TEST_WEB_TOKEN);
+			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
+				.returns(newJWT);
+			var getTokensMock = sandbox.mock(tokenManager);
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(firstTokenParams), null)
+				.returns(Promise.reject(serverError));
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(secondTokenParams), null)
+				.returns(Promise.resolve(tokenInfo));
+
+			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
+				.then(tokens => {
+					assert.equal(tokens, tokenInfo);
+				});
+		});
+
 		it('should reject when the API returns any other error', function() {
 
 			var error = new Error('Could not get tokens');
