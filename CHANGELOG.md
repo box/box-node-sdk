@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.29.1 [2019-08-22]
+
+- Fixed an issue where JWT authentication requests could fail after being rate limited
+
 ## 1.29.0 [2019-04-25]
 
 - Added convenience methods for setting metadata on [files](./docs/metadata.md#set-metadata-on-a-file)
@@ -43,11 +47,11 @@
 
 ## 1.24.0 [2018-12-10]
 
-- Added a configuration option for populating the first-party client analytics header information 
+- Added a configuration option for populating the first-party client analytics header information
 
 ## 1.23.0 [2018-11-21]
 
-- Added an `etag` option to common file and folder methods to allow handling race conditions 
+- Added an `etag` option to common file and folder methods to allow handling race conditions
     - [`client.files.update()`](./docs/files.md#update-a-files-information)
     - [`client.files.delete()`](./docs/files.md#delete-a-file)
     - [`client.files.deletePermanently()`](./docs/trash.md#delete-a-file-from-the-trash)
@@ -217,7 +221,7 @@ retried in isolation.
 - Added an `is_confirmed` option to [email alias creation](./docs/users.md#add-email-alias) for
 admins to auto-confirm the alias.
 - Added support for the [Enterprise Events stream](./docs/events.md#enterprise-events).
-- Added an option to have collections methods (e.g. `folders.getItems()`, 
+- Added an option to have collections methods (e.g. `folders.getItems()`,
 `enterprise.getUsers()`, etc) return [async iterators](./README.md#iterators) that will automatically
 page through the collection.  This conforms to the [proposed async iteration spec](https://github.com/tc39/proposal-async-iteration),
 which will eventually allow them to be used in ergonomic for-await-of loop syntax.
