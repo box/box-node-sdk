@@ -652,7 +652,8 @@ describe('token-manager', function() {
 		var TEST_ACCESS_TOKEN = 'poiudafjdbfjygsdfg',
 			TEST_SCOPE = 'item_preview',
 			TEST_JTI = '630aab1e-912e-468d-b052-fd53a41925ed',
-			TEST_RESOURCE = 'https://api.box.com/2.0/files/12345';
+			TEST_RESOURCE = 'https://api.box.com/2.0/files/12345',
+			TEST_SHARED_LINK_URL = 'https://app.box.com/s/xyz';
 
 		it('should exchange access token for lower scope when only scope is passed', function() {
 
@@ -848,6 +849,33 @@ describe('token-manager', function() {
 			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, TEST_RESOURCE, { actor })
 				.catch(err => {
 					assert.equal(err, jwtError);
+				});
+		});
+
+		it('should exchange token when shared link params are passed', function() {
+			var sharedLink = {
+				url: TEST_SHARED_LINK_URL
+			};
+
+			var expectedTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+				subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+				subject_token: TEST_ACCESS_TOKEN,
+				scope: TEST_SCOPE,
+				box_shared_link: TEST_SHARED_LINK_URL
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			sandbox.mock(tokenManager).expects('getTokens')
+				.withArgs(expectedTokenParams, null)
+				.returns(Promise.resolve(tokenInfo));
+
+			return tokenManager.exchangeToken(TEST_ACCESS_TOKEN, TEST_SCOPE, null, { sharedLink })
+				.then(tokens => {
+					assert.equal(tokens, tokenInfo);
 				});
 		});
 	});
