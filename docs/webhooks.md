@@ -190,6 +190,7 @@ When you receive a webhook message from Box, you should validate it by calling
 [`BoxSDK.validateWebhookMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#.validateMessage),
 also available as `webhooks.validateMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`.
 
+<!-- sample x_webhooks validate_signatures -->
 ```js
 const BoxSDK = require('box-node-sdk');
 let body = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt"}}',
