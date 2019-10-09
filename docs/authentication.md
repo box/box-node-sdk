@@ -39,6 +39,7 @@ token from your application's
 
 The following example creates an API client with a developer token:
 
+<!-- sample x_auth init_with_dev_token -->
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
@@ -66,6 +67,7 @@ If you generated your public and private keys automatically through the
 to configure your SDK instance and create a client to make calls as the
 Service Account:
 
+<!-- sample x_auth init_with_jwt_enterprise -->
 ```js
 var BoxSDK = require('box-node-sdk');
 var jsonConfig = require('/path/to/config.json');
@@ -77,6 +79,7 @@ var serviceAccountClient = sdk.getAppAuthClient('enterprise');
 Otherwise, you'll need to provide the necessary configuration fields directly
 to the SDK constructor:
 
+<!-- sample x_auth init_with_jwt_enterprise_with_config -->
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
@@ -104,6 +107,7 @@ for detailed instructions on how to use app auth.
 Clients for making calls as an App User can be created with the same SDK
 instance as in the above examples, similarly to creating a Service Account client:
 
+<!-- sample x_auth init_with_jwt_with_user_id -->
 ```js
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
@@ -212,6 +216,7 @@ your application code.
 To use the primary or secondary access token generated in the Developer Console,
 simply create a basic client with that token:
 
+<!-- sample x_auth init_with_app_token -->
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
@@ -228,6 +233,7 @@ Additionally, you may authenticate as a client without an attached user,
 which can be used to make API calls that do not require a logged-in user (e.g.
 open shared links).  This functionality is only available to approved applications.
 
+<!-- sample x_auth init_with_anonymous_user -->
 ```js
 var BoxSDK = require('box-node-sdk');
 var sdk = new BoxSDK({
@@ -254,6 +260,7 @@ The `asUser(userID)` method sets up the client to impersonate a given user.
 All calls made with this instance of client will be made in context of the
 impersonated user.
 
+<!-- sample x_auth init_with_as_user_header -->
 ```js
 client.asUser('USER-ID');
 client.folders.getItems('0')
@@ -283,6 +290,7 @@ To exchange the token held by a client for a new token with only `item_preview`
 scope, restricted to a single file, suitable for the
 [Content Preview UI Kit](https://developer.box.com/docs/box-content-preview):
 
+<!-- sample post_oauth2_token downscope_token -->
 ```js
 client.exchangeToken('item_preview', 'https://api.box.com/2.0/files/123456789')
 	.then(tokenInfo => {
@@ -305,6 +313,7 @@ To generate an annotator token for use with
 [Box View annotations](https://developer.box.com/docs/getting-started-with-new-box-view#section-annotations),
 pass the `actor` options to the token exchange method:
 
+<!-- sample post_oauth2_token annotater_token -->
 ```js
 var options = {
 	actor: {
