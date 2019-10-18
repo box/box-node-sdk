@@ -1027,6 +1027,7 @@ shared link access level to
 [`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
 in the `updates` parameter.
 
+<!-- sample put_files_id_shared_link_create -->
 ```js
 client.files.update('93745', {shared_link: client.accessLevels.DEFAULT})
 	.then(file => {
