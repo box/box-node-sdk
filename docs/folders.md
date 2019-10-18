@@ -493,7 +493,7 @@ You can create a shared link for a folder by calling the
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
 method, passing a new `shared_link` value in the `updates` parameter.
 
-<!-- sample put_folders_id create_shared_link -->
+<!-- sample put_folders_id_shared_link_create -->
 ```js
 client.folders.update('12345', {shared_link: client.accessLevels.OPEN})
     .then(folder => {
