@@ -321,6 +321,7 @@ The SDK provides a method of automatically handling a chunked upload; simply cal
 with the ID of the destination folder, the size and file name of the file to be
 uploaded, and a `Buffer` or `ReadableStream` of the file to be uploaded.
 
+<!-- samples x_chunked_uploads automatic -->
 ```js
 // Upload a 2GB file "huge.pdf" into folder 12345
 var stream = fs.createReadStream('huge.pdf');
@@ -388,6 +389,7 @@ A new version of a file can be uploaded in the same way by calling
 with the ID of the file to upload a new version of, along with the size of the new
 version and a `Buffer` or `ReadableStream` of the new version.
 
+<!-- samples x_chunked_uploads automatic_new_version -->
 ```js
 // Upload a new 2GB version of file 98765
 var stream = fs.createReadStream('huge.pdf');
