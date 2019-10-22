@@ -77,6 +77,7 @@ To add a file to a collection, call the
 [`files.addToCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#addToCollection)
 method with the IDs of the file and collection.
 
+<!-- sample put_files_id add_to_collection -->
 ```js
 client.files.addToCollection('87263', '235747', callback);
 ```
@@ -88,6 +89,7 @@ To remove a file from a collection, call the
 [`files.removeFromCollection(fileID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#removeFromCollection)
 method with the IDs of the file and collection.
 
+<!-- sample put_files_id remove_from_collection -->
 ```js
 client.files.removeFromCollection('87263', '235747', callback);
 ```
@@ -99,6 +101,7 @@ To add a folder to a collection, call the
 [`folders.addToCollection(folderID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#addToCollection)
 method with the IDs of the folder and collection.
 
+<!-- sample put_folders_id add_to_collection -->
 ```js
 client.folders.addToCollection('87263', '235747', callback);
 ```
@@ -110,6 +113,7 @@ To remove a folder from a collection, call the
 [`folders.removeFromCollection(folderID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#removeFromCollection)
 method with the IDs of the folder and collection.
 
+<!-- sample put_folders_id remove_from_collection -->
 ```js
 client.folders.removeFromCollection('87263', '235747', callback);
 ```
@@ -121,6 +125,7 @@ To add a web link to a collection, call the
 [`weblinks.addToCollection(webLinkID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#addToCollection)
 method with the IDs of the web link and collection.
 
+<!-- sample put_web_links_id add_to_collection -->
 ```js
 client.weblinks.addToCollection('87263', '235747', callback);
 ```
@@ -132,6 +137,7 @@ To remove a web link from a collection, call the
 [`weblinks.removeFromCollection(webLinkID, collectionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#removeFromCollection)
 method with the IDs of the web link and collection.
 
+<!-- sample put_web_links_id remove_from_collection -->
 ```js
 client.weblinks.removeFromCollection('87263', '235747', callback);
 ```

@@ -95,6 +95,7 @@ client.events.get({stream_position: '1408838928446360'}, callback);
 
 If you ever need to *stop* long-polling, use:
 
+<!-- sample options_events destroy -->
 ```js
 client.events.destroy();
 ```
@@ -118,6 +119,7 @@ handles polling for events and delivering them to the application.
 When you attach a `'data'` event listener to an `EnterpriseEventStream`, it will begin fetching events from Box.
 Events received from the API are then forwarded to the listener.
 
+<!-- sample options_events enterprise -->
 ```js
 client.events.getEnterpriseEventStream(function(err, stream) {
 	
