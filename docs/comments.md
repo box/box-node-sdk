@@ -110,6 +110,7 @@ the ID and username of the person being mentioned.
 use the [`comments.createTaggedComment(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#createTaggedComment)
 method.
 
+<!-- sample post_comments tag_user  -->
 ```js
 client.comments.createTaggedComment('33333', '@[23560:Bob] Is this the latest version?')
     .then(comment => {
@@ -137,6 +138,7 @@ To reply to a comment, call
 [`comments.reply(commentID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#reply)
 with the ID of the comment to reply to and the text of the reply comment.
 
+<!-- sample post_comments as_reply  -->
 ```js
 // Reply to the comment with ID 11111
 client.comments.reply('11111', 'Yes, this is the latest version.')
@@ -166,6 +168,7 @@ the ID and username of the person being mentioned.
 use the [`comments.createTaggedReply(commentID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#createTaggedReply)
 method.
 
+<!-- sample post_comments as_reply_tag_user  -->
 ```js
 client.comments.createTaggedReply('11111', '@[22222:Sam] Yes, this is the most recent version!')
     .then(comment => {
