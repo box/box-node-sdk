@@ -134,7 +134,7 @@ var sdk = new BoxSDK({
 });
 
 // the URL to redirect the user to
-var authorize_url = BoxSDK.getAuthorizeURL({
+var authorize_url = sdk.getAuthorizeURL({
 	response_type: 'code'
 });
 ```
