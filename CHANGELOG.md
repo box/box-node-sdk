@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.30.0 [2019-11-21]
+
+- Deprecated Batch API methods
+- Added support for [token exchange](./lib/box-client.js#L495) using shared links
+
 ## 1.29.1 [2019-08-22]
 
 - Fixed an issue where JWT authentication requests could fail after being rate limited
