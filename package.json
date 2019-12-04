@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "bluebird": "^3.7.1",
-    "http-status": "^1.4.1",
+    "http-status": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
     "merge-options": "^1.0.1",
     "npm-upgrade": "^2.0.2",
