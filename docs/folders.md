@@ -119,14 +119,14 @@ Get a Folder's Items
 
 Folder items can be retrieved by calling the
 [`folders.getItems(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getItems)
-method. Use the `fields` option to specify the desired fields, and `limit` and `offset` to control result set paging.
-Requesting information for only the fields you need can improve performance and reduce the size of the network request.
+method. This method supports offset-based pagination and marker-based pagination. To use offset-based pagination, do not pass in the `usemarker` parameter or set it to `false`. To use marker-based pagination, pass in the `usemarker` parameter as `true`. Use the `fields` option to specify the desired fields, and `limit` and (`offset` or `marker`) to control result set paging. Requesting information for only the fields you need can improve performance and reduce the size of the network request.
 
 <!-- sample get_folders_id_items -->
 ```js
 client.folders.getItems(
     '12345',
     {
+        usemarker: 'false',
         fields: 'name',
         offset: 0,
         limit: 25
