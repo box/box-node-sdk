@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming Release
+
+- Added a getter method (getNextMarker()) for the next marker to PagingIterator
+
 ## 1.30.0 [2019-11-21]
 
 - Deprecated Batch API methods
