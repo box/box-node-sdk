@@ -989,4 +989,32 @@ describe('PagingIterator', function() {
 			]);
 		});
 	});
+
+	describe('getNextMarker()', function() {
+
+		it('should return the next marker', function() {
+
+			var item = {foo: 'bar'},
+				chunk = [item];
+			var response = {
+				request: {
+					href: 'https://api.box.com/2.0/items?marker=abcdef&limit=1',
+					uri: {
+						query: 'marker=abcdef&limit=1'
+					},
+					headers: {},
+					method: 'GET'
+				},
+				body: {
+					entries: chunk,
+					limit: 1,
+					next_marker: 'vwxyz'
+				}
+			};
+
+			var iterator = new PagingIterator(response, clientFake);
+			var nextMarker = iterator.getNextMarker();
+			return assert.equal(nextMarker, 'vwxyz');
+		});
+	});
 });
