@@ -333,6 +333,7 @@ describe('Webhooks', function() {
 			INCORRECT_SIGNATURE_KEY = 'IncorrectKey',
 			DATE_IN_PAST = Date.parse('2010-01-01T00:00:00-07:00'),			// 10 years in the past
 			DATE_IN_FUTURE = Date.parse('2020-01-01T00:15:00-07:00'),		// 15 min in future
+			DATE_IN_5 = Date.parse('2020-01-01T00:05:00-07:00'), // 5 min in future
 			HEADERS_WITH_WRONG_SIGNATURE_VERSION = Object.assign({}, HEADERS, {'box-signature-version': '2'}),
 			HEADERS_WITH_WRONG_SIGNATURE_ALGORITHM = Object.assign({}, HEADERS, {'box-signature-algorithm': 'XXX'});
 
@@ -404,8 +405,9 @@ describe('Webhooks', function() {
 		it('should validate using statically set keys when ones are not passed in', function() {
 
 			Webhooks.setSignatureKeys(PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY);
-
+			const clock = sinon.useFakeTimers(DATE_IN_5);
 			assert.ok(Webhooks.validateMessage(BODY, HEADERS));
+			clock.restore();
 		});
 
 		it('should validate JSON body parsed as Object', function() {
