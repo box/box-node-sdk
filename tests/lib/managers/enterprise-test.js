@@ -50,11 +50,26 @@ describe('Enterprise', function() {
 
 	describe('getUsers()', function() {
 
-		it('should make GET request to get enterprise users when called', function() {
+		it('should make GET request to get enterprise users using offset-based pagination when called', function() {
 
 			var qs = {
 				limit: 150,
 				offset: 150,
+				filter_term: 'Brad'
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/users', {qs});
+			enterprise.getUsers(qs);
+		});
+
+		it('should make GET request to get enterprise users using marker-based pagination when called', function() {
+
+			var qs = {
+				limit: 150,
+				usemarker: true,
+				marker: 'FJURNVYShfyefnFHF12',
 				filter_term: 'Brad'
 			};
 
