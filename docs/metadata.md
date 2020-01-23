@@ -196,7 +196,7 @@ Update Metadata Template
 To update a metadata template, call the
 [`metadata.updateTemplate(scope, template, operations, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#updateTemplate)
 method with the operations to perform on the template.  See the
-[API Documentation](https://docs.box.com/reference#update-metadata-schema)
+[API Documentation](https://developer.box.com/en/reference/put-metadata-templates-id-id-schema/)
 for more information on the operations available.
 
 <!-- sample put_metadata_templates_id_id_schema -->
@@ -320,6 +320,18 @@ client.metadata.getTemplates('enterprise')
 		*/
 	});
 ```
+
+Similarly, to get all metadata templates that are available to all
+enterprises use the `global` scope.
+
+<!-- sample get_metadata_templates_global -->
+```js
+client.metadata.getTemplates('global')
+	.then(templates => {
+		// ...
+	});
+```
+
 
 Delete Metadata Template
 ------------------------

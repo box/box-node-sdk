@@ -15,7 +15,7 @@ Search for Content
 To get a list of items matching a search query, call the
 [`search.query(searchQuery, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Search.html#query)
 method.  There are many possible options for advanced search filtering, which are
-documented in the [Search API Reference](https://docs.box.com/reference#searching-for-content).
+documented in the [Search API Reference](https://developer.box.com/en/guides/search/).
 
 <!-- sample get_search -->
 ```js
