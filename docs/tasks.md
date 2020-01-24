@@ -292,7 +292,7 @@ To update a task assignment, call the
 [`tasks.updateAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#updateAssignment)
 method.  This can be used to resolve or complete a task.
 
-<!-- sample put_task_assignments_id -->
+<!-- sample put_task_assignments_id resolution_state-->
 ```js
 // Complete a task
 client.tasks.updateAssignment(
@@ -330,14 +330,13 @@ client.tasks.updateAssignment(
 		*/
 	});
 ```
-
+<!-- sample put_task_assignments_id message-->
 ```js
-// Mark the task as "Rejected"
+// Update the task assignment message
 client.tasks.updateAssignment(
 	'12345',
 	{
-		message: 'This needs some more changes',
-		resolution_state: client.tasks.resolutionStates.REJECTED
+		message: 'This needs some more changes'
 	})
 	.then(assignment => {
 		// ...
