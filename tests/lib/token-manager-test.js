@@ -632,6 +632,72 @@ describe('token-manager', function() {
 				});
 		});
 
+		it.only('should retry with new jti claim when server rejects because of rate limiting', function() {
+
+			sandbox.useFakeTimers(100000);
+
+			var firstTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: TEST_WEB_TOKEN
+			};
+
+			var newJWT = 'jhdhioeiu4yo34875twudgshdgr';
+			var secondTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: newJWT
+			};
+
+			// var newJWT2 = 'jhdhioeiufdsaggeg5twudgshdgr';
+			// var thirdTokenParams = {
+			// 	grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+			// 	assertion: newJWT2
+			// };
+
+			var serverDate = 'Sat, 01 Apr 2017 16:56:53 GMT'; // 1491065813
+
+			var serverError = {
+				statusCode: 429,
+				authExpired: false,
+				response: {
+					body: {
+						error: 'rate_limit_exceeded',
+						error_description: 'Request rate limit exceeded, please try again later'
+					},
+					headers: {
+						date: serverDate
+					}
+				}
+			};
+
+			var tokenInfo = {
+				accessToken: 'lsdjhgo87w3h4tbd87fg54'
+			};
+
+			var regeneratedJTI = '630aab1e-912e-468d-b052-fd53a41925ed';
+			var uuidStub = sandbox.stub(uuidFake, 'v4');
+			uuidStub.onCall(0).returns(TEST_JTI);
+			uuidStub.onCall(1).returns(regeneratedJTI);
+			// uuidStub.onCall(2).returns(regeneratedJTI);
+
+			var jwtStub = sandbox.stub(jwtFake, 'sign');
+			jwtStub.withArgs(sinon.match({exp: 101}), sinon.match.any, sinon.match({jwtid: TEST_JTI}))
+				.returns(TEST_WEB_TOKEN);
+			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
+				.returns(newJWT);
+			var getTokensMock = sandbox.mock(tokenManager);
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(firstTokenParams), null)
+				.returns(Promise.reject(serverError));
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(secondTokenParams), null)
+				.returns(Promise.resolve(tokenInfo));
+
+			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
+				.then(tokens => {
+					assert.equal(tokens, tokenInfo);
+				});
+		});
+
 		it('should reject when the API returns any other error', function() {
 
 			var error = new Error('Could not get tokens');
