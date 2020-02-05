@@ -22,7 +22,7 @@ var APIRequestManager = require('../../lib/api-request-manager'),
 // Private
 // ------------------------------------------------------------------------------
 
-var sandbox = sinon.createSandbox();
+var sandbox = sinon.createSandbox({ useFakeTimers: false });
 
 var MODULE_FILE_PATH = '../../lib/token-manager',
 	API_ROOT_URL = 'api.box.com',
@@ -54,7 +54,8 @@ describe('token-manager', function() {
 		config = new Config({
 			clientID: BOX_CLIENT_ID,
 			clientSecret: BOX_CLIENT_SECRET,
-			apiRootURL: API_ROOT_URL
+			apiRootURL: API_ROOT_URL,
+			numMaxRetries: 2
 		});
 
 		// Register Mocks
@@ -69,12 +70,14 @@ describe('token-manager', function() {
 		// Setup File Under Test
 		TokenManager = require(MODULE_FILE_PATH);
 		tokenManager = new TokenManager(config, requestManagerFake);
+		sinon.spy(console, 'log');
 	});
 
 	afterEach(function() {
 		sandbox.verifyAndRestore();
 		mockery.deregisterAll();
 		mockery.disable();
+		console.log.restore();
 	});
 
 	describe('getTokens()', function() {
@@ -516,8 +519,6 @@ describe('token-manager', function() {
 
 		it('should retry with new JWT using server date and new jti claim when server rejects exp claim', function() {
 
-			sandbox.useFakeTimers(100000);
-
 			var firstTokenParams = {
 				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
 				assertion: TEST_WEB_TOKEN
@@ -555,9 +556,9 @@ describe('token-manager', function() {
 			uuidStub.onCall(1).returns(regeneratedJTI);
 
 			var jwtStub = sandbox.stub(jwtFake, 'sign');
-			jwtStub.withArgs(sinon.match({exp: 101}), sinon.match.any, sinon.match({jwtid: TEST_JTI}))
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: TEST_JTI}))
 				.returns(TEST_WEB_TOKEN);
-			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
 				.returns(newJWT);
 			var getTokensMock = sandbox.mock(tokenManager);
 			getTokensMock.expects('getTokens')
@@ -571,11 +572,9 @@ describe('token-manager', function() {
 				.then(tokens => {
 					assert.equal(tokens, tokenInfo);
 				});
-		});
+		}).timeout(5000);
 
 		it('should retry with new JWT using server date and new jti claim when server rejects jti claim', function() {
-
-			sandbox.useFakeTimers(100000);
 
 			var firstTokenParams = {
 				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
@@ -614,9 +613,9 @@ describe('token-manager', function() {
 			uuidStub.onCall(1).returns(regeneratedJTI);
 
 			var jwtStub = sandbox.stub(jwtFake, 'sign');
-			jwtStub.withArgs(sinon.match({exp: 101}), sinon.match.any, sinon.match({jwtid: TEST_JTI}))
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: TEST_JTI}))
 				.returns(TEST_WEB_TOKEN);
-			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
 				.returns(newJWT);
 			var getTokensMock = sandbox.mock(tokenManager);
 			getTokensMock.expects('getTokens')
@@ -630,11 +629,9 @@ describe('token-manager', function() {
 				.then(tokens => {
 					assert.equal(tokens, tokenInfo);
 				});
-		});
+		}).timeout(5000);
 
-		it.only('should retry with new jti claim when server rejects because of rate limiting', function() {
-
-			sandbox.useFakeTimers(100000);
+		it('should retry with new jti claim when server rejects because of rate limiting', function() {
 
 			var firstTokenParams = {
 				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
@@ -647,11 +644,11 @@ describe('token-manager', function() {
 				assertion: newJWT
 			};
 
-			// var newJWT2 = 'jhdhioeiufdsaggeg5twudgshdgr';
-			// var thirdTokenParams = {
-			// 	grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-			// 	assertion: newJWT2
-			// };
+			var newJWT2 = 'jhighreiu4yo34875tfreggshdgr';
+			var thirdTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: newJWT2
+			};
 
 			var serverDate = 'Sat, 01 Apr 2017 16:56:53 GMT'; // 1491065813
 
@@ -664,7 +661,25 @@ describe('token-manager', function() {
 						error_description: 'Request rate limit exceeded, please try again later'
 					},
 					headers: {
+						'retry-after': 1,
 						date: serverDate
+					}
+				}
+			};
+
+			var serverDate2 = 'Sat, 01 Apr 2017 16:56:58 GMT'; // 1491065818
+
+			var serverError2 = {
+				statusCode: 429,
+				authExpired: false,
+				response: {
+					body: {
+						error: 'rate_limit_exceeded',
+						error_description: 'Request rate limit exceeded, please try again later'
+					},
+					headers: {
+						'retry-after': 2,
+						date: serverDate2
 					}
 				}
 			};
@@ -674,29 +689,121 @@ describe('token-manager', function() {
 			};
 
 			var regeneratedJTI = '630aab1e-912e-468d-b052-fd53a41925ed';
+			var regeneratedJTI2 = '890aab1e-912e-467d-b052-ab08a44945sd';
 			var uuidStub = sandbox.stub(uuidFake, 'v4');
 			uuidStub.onCall(0).returns(TEST_JTI);
 			uuidStub.onCall(1).returns(regeneratedJTI);
-			// uuidStub.onCall(2).returns(regeneratedJTI);
+			uuidStub.onCall(2).returns(regeneratedJTI2);
 
 			var jwtStub = sandbox.stub(jwtFake, 'sign');
-			jwtStub.withArgs(sinon.match({exp: 101}), sinon.match.any, sinon.match({jwtid: TEST_JTI}))
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: TEST_JTI}))
 				.returns(TEST_WEB_TOKEN);
-			jwtStub.withArgs(sinon.match({exp: 1491065813 + 1}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
+			jwtStub.withArgs(sinon.match({exp: 1491065813 + 2}), sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
 				.returns(newJWT);
+			jwtStub.withArgs(sinon.match({exp: 1491065818 + 3}), sinon.match.any, sinon.match({jwtid: regeneratedJTI2}))
+				.returns(newJWT2);
 			var getTokensMock = sandbox.mock(tokenManager);
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(firstTokenParams), null)
 				.returns(Promise.reject(serverError));
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(secondTokenParams), null)
+				.returns(Promise.reject(serverError2));
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(thirdTokenParams), null)
 				.returns(Promise.resolve(tokenInfo));
 
 			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
 				.then(tokens => {
 					assert.equal(tokens, tokenInfo);
 				});
-		});
+		}).timeout(5000);
+
+		it('should retry with new jti claim when server rejects for up to max retries', function() {
+
+			var firstTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: TEST_WEB_TOKEN
+			};
+
+			var newJWT = 'jhdhioeiu4yo34875twudgshdgr';
+			var secondTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: newJWT
+			};
+
+			var newJWT2 = 'jhighreiu4yo34875tfreggshdgr';
+			var thirdTokenParams = {
+				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				assertion: newJWT2
+			};
+
+			var serverError = {
+				statusCode: 500,
+				authExpired: false,
+				response: {
+					body: {
+						error: 'internal_server_error',
+						error_description: 'Internal Server Error'
+					},
+					headers: {}
+				}
+			};
+
+			var serverError2 = {
+				statusCode: 429,
+				authExpired: false,
+				response: {
+					body: {
+						error: 'rate_limit_exceeded',
+						error_description: 'Request rate limit exceeded, please try again later'
+					},
+					headers: {}
+				}
+			};
+
+			var serverError3 = {
+				statusCode: 429,
+				authExpired: false,
+				response: {
+					body: {
+						error: 'rate_limit_exceeded',
+						error_description: 'Request rate limit exceeded, please try again later'
+					},
+					headers: {}
+				}
+			};
+
+			var regeneratedJTI = '630aab1e-912e-468d-b052-fd53a41925ed';
+			var regeneratedJTI2 = '890aab1e-912e-467d-b052-ab08a44945sd';
+			var uuidStub = sandbox.stub(uuidFake, 'v4');
+			uuidStub.onCall(0).returns(TEST_JTI);
+			uuidStub.onCall(1).returns(regeneratedJTI);
+			uuidStub.onCall(2).returns(regeneratedJTI2);
+
+			var jwtStub = sandbox.stub(jwtFake, 'sign');
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: TEST_JTI}))
+				.returns(TEST_WEB_TOKEN);
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: regeneratedJTI}))
+				.returns(newJWT);
+			jwtStub.withArgs(sinon.match.any, sinon.match.any, sinon.match({jwtid: regeneratedJTI2}))
+				.returns(newJWT2);
+			var getTokensMock = sandbox.mock(tokenManager);
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(firstTokenParams), null)
+				.returns(Promise.reject(serverError));
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(secondTokenParams), null)
+				.returns(Promise.reject(serverError2));
+			getTokensMock.expects('getTokens')
+				.withArgs(sinon.match(thirdTokenParams), null)
+				.returns(Promise.reject(serverError3));
+
+			return tokenManager.getTokensJWTGrant('user', TEST_ID, null)
+				.catch(err => {
+					assert.equal(err.maxRetriesExceeded, true);
+				});
+		}).timeout(10000);
 
 		it('should reject when the API returns any other error', function() {
 
