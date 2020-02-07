@@ -3,6 +3,7 @@
 ## Upcoming Release
 
 - Added a getter method (getNextMarker()) for the next marker to PagingIterator
+- Fixed JWT retry logic so the a new JTI claim is generated on each retry
 
 ## 1.30.0 [2019-11-21]
 
