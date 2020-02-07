@@ -70,14 +70,12 @@ describe('token-manager', function() {
 		// Setup File Under Test
 		TokenManager = require(MODULE_FILE_PATH);
 		tokenManager = new TokenManager(config, requestManagerFake);
-		sinon.spy(console, 'log');
 	});
 
 	afterEach(function() {
 		sandbox.verifyAndRestore();
 		mockery.deregisterAll();
 		mockery.disable();
-		console.log.restore();
 	});
 
 	describe('getTokens()', function() {
@@ -631,7 +629,7 @@ describe('token-manager', function() {
 				});
 		}).timeout(5000);
 
-		it.only('should retry with new jti claim when server rejects because of rate limiting', function() {
+		it('should retry with new jti claim when server rejects because of rate limiting', function() {
 
 			var firstTokenParams = {
 				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
@@ -684,14 +682,6 @@ describe('token-manager', function() {
 				}
 			};
 
-			var p = Promise.delay(1).then(() => {
-				throw serverError;
-			});
-
-			var p2 = Promise.delay(1).then(() => {
-				throw serverError2;
-			});
-
 			var tokenInfo = {
 				accessToken: 'lsdjhgo87w3h4tbd87fg54'
 			};
@@ -713,10 +703,10 @@ describe('token-manager', function() {
 			var getTokensMock = sandbox.mock(tokenManager);
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(firstTokenParams), null)
-				.returns(p);
+				.returns(Promise.reject(serverError));
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(secondTokenParams), null)
-				.returns(p2);
+				.returns(Promise.reject(serverError2));
 			getTokensMock.expects('getTokens')
 				.withArgs(sinon.match(thirdTokenParams), null)
 				.returns(Promise.resolve(tokenInfo));
