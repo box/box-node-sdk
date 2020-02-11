@@ -38,7 +38,7 @@
     "merge-options": "^1.0.1",
     "npm-upgrade": "^2.0.2",
     "promise-queue": "^2.2.3",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "url-template": "^2.0.8",
     "uuid": "^3.3.3"
   },
