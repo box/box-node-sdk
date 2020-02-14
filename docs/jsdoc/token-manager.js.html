@@ -81,12 +81,12 @@
   */
 function isJWTAuthErrorRetryable(err) {
 
-	return err.authExpired
-		&amp;&amp; err.response.headers.date
-		&amp;&amp; (
-			err.response.body.error_description.indexOf('exp') > -1
-				|| err.response.body.error_description.indexOf('jti') > -1
-		);
+	if (err.authExpired &amp;&amp; err.response.headers.date &amp;&amp; (err.response.body.error_description.indexOf('exp') > -1 || err.response.body.error_description.indexOf('jti') > -1)) {
+		return true;
+	} else if (err.statusCode === 429 || err.statusCode >= 500) {
+		return true;
+	}
+	return false;
 }
 
 // ------------------------------------------------------------------------------
@@ -96,7 +96,8 @@ var errors = require('./util/errors'),
 	jwt = require('jsonwebtoken'),
 	uuid = require('uuid'),
 	httpStatusCodes = require('http-status'),
-	Promise = require('bluebird');
+	Promise = require('bluebird'),
+	getRetryTimeout = require('./util/exponential-backoff');
 
 // ------------------------------------------------------------------------------
 // Constants
@@ -127,6 +128,9 @@ var tokenPaths = {
 	GET: '/token',
 	REVOKE: '/revoke'
 };
+
+// Timer used to track elapsed time starting with executing an async request and ending with emitting the response.
+var asyncRequestTimer;
 
 // The XFF header label - Used to give the API better information for uploads, rate-limiting, etc.
 const HEADER_XFF = 'X-Forwarded-For';
@@ -373,7 +377,6 @@ TokenManager.prototype = {
 		try {
 			assertion = jwt.sign(claims, keyParams, jwtOptions);
 		} catch (jwtErr) {
-
 			return Promise.reject(jwtErr);
 		}
 
@@ -381,29 +384,85 @@ TokenManager.prototype = {
 			grant_type: grantTypes.JWT,
 			assertion
 		};
+		// Start the request timer immediately before executing the async request
+		asyncRequestTimer = process.hrtime();
 		return this.getTokens(params, options)
-			.catch(err => {
+			.catch(err => this.retryJWTGrant(claims, jwtOptions, keyParams, params, options, err, 0));
+	},
 
-				// When a client's clock is out of sync with Box API servers, they'll get an error about the exp claim
-				// In these cases, we can attempt to retry the grant request with a new exp claim calculated frem the
-				// Date header sent by the server
-				if (isJWTAuthErrorRetryable(err)) {
+	/**
+	 * Attempt a retry if possible and create a new JTI claim. If the request hasn't exceeded it's maximum number of retries,
+	 * re-execute the request (after the retry interval). Otherwise, propagate a new error.
+	 *
+	 * @param {Object} claims - JTI claims object
+	 * @param {Object} [jwtOptions] - JWT options for the signature
+	 * @param {Object} keyParams - Key JWT parameters object that contains the private key and the passphrase
+	 * @param {Object} params - Should contain all params expected by Box OAuth2 token endpoint
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @param {Error} error - Error from the previous JWT request
+	 * @param {int} numRetries - Number of retries attempted
+	 * @returns {Promise&lt;TokenInfo>} Promise resolving to the token info
+	 */
+	// eslint-disable-next-line max-params
+	retryJWTGrant(claims, jwtOptions, keyParams, params, options, error, numRetries) {
+		if (numRetries &lt; this.config.numMaxRetries &amp;&amp; isJWTAuthErrorRetryable(error)) {
+			var retryTimeout;
+			numRetries += 1;
+			// If the retry strategy is defined, then use it to determine the time (in ms) until the next retry or to
+			// propagate an error to the user.
+			if (this.config.retryStrategy) {
+				// Get the total elapsed time so far since the request was executed
+				var totalElapsedTime = process.hrtime(asyncRequestTimer);
+				var totalElapsedTimeMS = (totalElapsedTime[0] * 1000) + (totalElapsedTime[1] / 1000000);
+				var retryOptions = {
+					error,
+					numRetryAttempts: numRetries,
+					numMaxRetries: this.config.numMaxRetries,
+					retryIntervalMS: this.config.retryIntervalMS,
+					totalElapsedTimeMS
+				};
 
-					var serverTime = Math.floor(Date.parse(err.response.headers.date) / 1000);
-					claims.exp = serverTime + this.config.appAuth.expirationTime;
-					jwtOptions.jwtid = uuid.v4();
+				retryTimeout = this.config.retryStrategy(retryOptions);
 
-					try {
-						params.assertion = jwt.sign(claims, keyParams, jwtOptions);
-					} catch (jwtErr) {
-						throw jwtErr;
+				// If the retry strategy doesn't return a number/time in ms, then propagate the response error to the user.
+				// However, if the retry strategy returns its own error, this will be propagated to the user instead.
+				if (typeof retryTimeout !== 'number') {
+					if (retryTimeout instanceof Error) {
+						error = retryTimeout;
 					}
-
-					return this.getTokens(params, options);
+					throw error;
 				}
+			} else if (error.response.headers.hasOwnProperty('retry-after')) {
+				retryTimeout = error.response.headers['retry-after'] * 1000;
+			} else {
+				retryTimeout = getRetryTimeout(numRetries, this.config.retryIntervalMS);
+			}
 
-				throw err;
+			var time = Math.floor(Date.now() / 1000);
+			if (error.response.headers.date) {
+				time = Math.floor(Date.parse(error.response.headers.date) / 1000);
+			}
+			// Add length of retry timeout to current expiration time to calculate the expiration time for the JTI claim.
+			claims.exp = time + this.config.appAuth.expirationTime + (retryTimeout / 1000);
+			jwtOptions.jwtid = uuid.v4();
+
+			try {
+				params.assertion = jwt.sign(claims, keyParams, jwtOptions);
+			} catch (jwtErr) {
+				throw jwtErr;
+			}
+
+			return Promise.delay(retryTimeout).then(() => {
+				// Start the request timer immediately before executing the async request
+				asyncRequestTimer = process.hrtime();
+				return this.getTokens(params, options)
+					.catch(err => this.retryJWTGrant(claims, jwtOptions, keyParams, params, options, err, numRetries));
 			});
+		} else if (numRetries >= this.config.numMaxRetries) {
+			error.maxRetriesExceeded = true;
+		}
+
+		throw error;
 	},
 
 	/**
@@ -515,7 +574,7 @@ module.exports = TokenManager;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jan 08 2020 13:26:05 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Feb 13 2020 16:17:59 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>
