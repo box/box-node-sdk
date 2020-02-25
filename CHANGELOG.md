@@ -1,8 +1,12 @@
 # Changelog
 
+## Next Release
+
+- Fixed an issue where an error is thrown during a retry when a response is not returned by the previous call (#476).
+
 ## 1.31.0 [2020-02-13]
 
-- Fix Authentication Request Retries
+- Fixed Authentication Request Retries
 - Added marker-based paging for users endpoints
 - Added `getNextMarker()` to PagingIterator to get the next marker
 
