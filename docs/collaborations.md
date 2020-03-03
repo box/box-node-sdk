@@ -393,7 +393,7 @@ You can accept or reject a pending collaboration by calling
 [`collaborations.respondToPending(collaborationID,newStatus, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#respondToPending)
 with a status of `'accepted'` or `'rejected'`.
 
-<!-- sample put_collaborations_id -->
+<!-- sample put_collaborations_id accept_reject -->
 ```js
 var collaborationID = '22222';
 client.collaborations.respondToPending(collaborationID, 'accepted')

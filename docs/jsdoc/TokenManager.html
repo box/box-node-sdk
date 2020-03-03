@@ -165,7 +165,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line178">line 178</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line182">line 182</a>
     </li></ul></dd>
     
 
@@ -560,7 +560,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line394">line 394</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line453">line 453</a>
     </li></ul></dd>
     
 
@@ -762,7 +762,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line267">line 267</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line271">line 271</a>
     </li></ul></dd>
     
 
@@ -933,7 +933,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line286">line 286</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line290">line 290</a>
     </li></ul></dd>
     
 
@@ -1166,7 +1166,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line321">line 321</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line325">line 325</a>
     </li></ul></dd>
     
 
@@ -1368,7 +1368,7 @@ an external user identifier.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line301">line 301</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line305">line 305</a>
     </li></ul></dd>
     
 
@@ -1573,7 +1573,7 @@ we'll call a token invalid.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line197">line 197</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line201">line 201</a>
     </li></ul></dd>
     
 
@@ -1614,6 +1614,366 @@ we'll call a token invalid.</td>
     <dd>
         
 <span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="retryJWTGrant"><span class="type-signature"></span>retryJWTGrant<span class="signature">(claims, jwtOptions<span class="signature-attributes">opt</span>, keyParams, params, options<span class="signature-attributes">opt</span>, error, numRetries)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Attempt a retry if possible and create a new JTI claim. If the request hasn't exceeded it's maximum number of retries,
+re-execute the request (after the retry interval). Otherwise, propagate a new error.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>claims</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">JTI claims object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>jwtOptions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">JWT options for the signature</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Key JWT parameters object that contains the private key and the passphrase</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Should contain all params expected by Box OAuth2 token endpoint</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Error from the previous JWT request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numRetries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of retries attempted</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line379">line 379</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving to the token info
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
@@ -1775,7 +2135,7 @@ we'll call a token invalid.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line448">line 448</a>
+        <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line507">line 507</a>
     </li></ul></dd>
     
 
@@ -1849,7 +2209,7 @@ we'll call a token invalid.</td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jan 08 2020 13:26:05 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Feb 13 2020 16:17:59 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

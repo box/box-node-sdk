@@ -98,6 +98,7 @@ describe('APIRequestManager', function() {
 		});
 
 	});
+
 	describe('makeRequest()', function() {
 
 		it('should pass the given options to the APIRequest constructor when called', function() {
