@@ -911,22 +911,22 @@ To query box items based on their metadata, call [`metadata.query(from, ancestor
 
 ```js
 var from = 'enterprise_12345.someTemplate',
-	ancestorFolderId = '5555';
-var options = {
-	query: 'amount >= :arg',
-	queryParams: {
-		arg: 100
-	},
-	useIndex: 'amountAsc',
-	orderBy: [
-		{
-			field_key: 'amount',
-			direction: 'asc'
-		}
-	],
-	limit: 100,
-	marker: 'AAAAAmVYB1FWec8GH6yWu2nwmanfMh07IyYInaa7DZDYjgO1H4KoLW29vPlLY173OKsci6h6xGh61gG73gnaxoS+o0BbI1/h6le6cikjlupVhASwJ2Cj0tOD9wlnrUMHHw3/ISf+uuACzrOMhN6d5fYrbidPzS6MdhJOejuYlvsg4tcBYzjauP3+VU51p77HFAIuObnJT0ff'
-}
+	ancestorFolderId = '5555',
+	options = {
+		query: 'amount >= :arg',
+		queryParams: {
+			arg: 100
+		},
+		useIndex: 'amountAsc',
+		orderBy: [
+			{
+				field_key: 'amount',
+				direction: 'asc'
+			}
+		],
+		limit: 100,
+		marker: 'AAAAAmVYB1FWec8GH6yWu2nwmanfMh07IyYInaa7DZDYjgO1H4KoLW29vPlLY173OKsci6h6xGh61gG73gnaxoS+o0BbI1/h6le6cikjlupVhASwJ2Cj0tOD9wlnrUMHHw3/ISf+uuACzrOMhN6d5fYrbidPzS6MdhJOejuYlvsg4tcBYzjauP3+VU51p77HFAIuObnJT0ff'
+	};
 client.metadata.query(from, ancestorFolderId, options)
 	.then(items => {
 		/* items -> {
