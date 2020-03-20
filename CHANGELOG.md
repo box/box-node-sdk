@@ -3,7 +3,7 @@
 ## Next Release
 
 - Fixed an issue where an error is thrown during a retry when a response is not returned by the previous call ([#476](https://github.com/box/box-node-sdk/pull/76)).
-- Added the ability to query Box items based on their metadata ([#487](https://github.com/box/box-node-sdk/pull/487)).
+- Added the ability to [query](./docs/metadata.md#query) Box items based on their metadata ([#487](https://github.com/box/box-node-sdk/pull/487)).
 
 ## 1.31.0 [2020-02-13]
 
