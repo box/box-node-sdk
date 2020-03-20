@@ -16,7 +16,8 @@ var assert = require('chai').assert,
 	fs = require('fs'),
 	url = require('url'),
 	crypto = require('crypto'),
-	path = require('path');
+	path = require('path'),
+	Promise = require('bluebird');
 
 function getFixture(fixture) {
 	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
@@ -3847,7 +3848,7 @@ describe('Endpoint', function() {
 			});
 		});
 
-		describe.only('query()', function() {
+		describe('query()', function() {
 
 			it('should make POST call to query items based on their metadata and return correct result when API call succeeds', function() {
 
@@ -3865,7 +3866,7 @@ describe('Endpoint', function() {
 						}
 					],
 					limit = 100,
-					fixture = getFixture('metadata/get_metadata_templates_scope_200');
+					fixture = getFixture('metadata/post_metadata_query_200');
 
 				var expectedBody = {
 					from,
@@ -3920,8 +3921,8 @@ describe('Endpoint', function() {
 					],
 					limit = 1,
 					marker = 'AAAAAmVYB1FWec8GH6yWu2nwmanfMh07IyYInaa7DZDYjgO1H4KoLW29vPlLY173OKsci6h6xGh61gG73gnaxoS+o0BbI1/h6le6cikjlupVhASwJ2Cj0tOD9wlnrUMHHw3/ISf+uuACzrOMhN6d5fYrbidPzS6MdhJOejuYlvsg4tcBYzjauP3+VU51p77HFAIuObnJT0ff',
-					fixture = getFixture('metadata/get_metadata_templates_scope_200'),
-					fixture2 = getFixture('metadata/get_metadata_templates_scope_200_2')
+					fixture = getFixture('metadata/post_metadata_query_200'),
+					fixture2 = getFixture('metadata/post_metadata_query_200_2');
 
 				var expectedBody = {
 					from,
@@ -3976,8 +3977,25 @@ describe('Endpoint', function() {
 				};
 
 				return iteratorClient.metadata.query(from, ancestorFolderId, options)
+					.then(iterator => Promise.all(
+						[
+							iterator.next(),
+							iterator.next()
+						]))
 					.then(items => {
-						assert.deepEqual(items, JSON.parse(fixture));
+						var firstItem = items[0].value;
+						var secondItem = items[1].value;
+						assert.equal(firstItem.item.id, '1617554169109');
+						assert.equal(firstItem.item.name, 'My Contract.docx');
+						assert.equal(firstItem.item.created_by.name, 'Box Admin');
+						assert.equal(firstItem.metadata.enterprise_123456.someTemplate.$parent, 'file_161753469109');
+						assert.equal(firstItem.metadata.enterprise_123456.someTemplate.customerName, 'Phoenix Corp');
+
+						assert.equal(secondItem.item.id, '123450');
+						assert.equal(secondItem.item.name, '1.jpg');
+						assert.equal(secondItem.item.created_by.name, 'Test User');
+						assert.equal(secondItem.metadata.enterprise_67890.relayWorkflowInformation.$parent, 'file_123450');
+						assert.equal(secondItem.metadata.enterprise_67890.relayWorkflowInformation.workflowName, 'Werk Flow 0');
 					});
 			});
 		});
