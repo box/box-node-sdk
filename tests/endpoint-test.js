@@ -16,7 +16,8 @@ var assert = require('chai').assert,
 	fs = require('fs'),
 	url = require('url'),
 	crypto = require('crypto'),
-	path = require('path');
+	path = require('path'),
+	Promise = require('bluebird');
 
 function getFixture(fixture) {
 	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
@@ -40,7 +41,9 @@ describe('Endpoint', function() {
 		uploadMock,
 		BoxSDK,
 		sdk,
-		basicClient;
+		iteratorSDK,
+		basicClient,
+		iteratorClient;
 
 	beforeEach(function() {
 		nock.disableNetConnect();
@@ -79,7 +82,16 @@ describe('Endpoint', function() {
 			retryIntervalMS: 1
 		});
 
+		iteratorSDK = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			maxNumRetries: 0,
+			retryIntervalMS: 1,
+			iterators: true
+		});
+
 		basicClient = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+		iteratorClient = iteratorSDK.getBasicClient(TEST_ACCESS_TOKEN);
 	});
 
 	afterEach(function() {
@@ -3836,6 +3848,157 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('query()', function() {
+
+			it('should make POST call to query items based on their metadata and return correct result when API call succeeds', function() {
+
+				var from = 'enterprise_12345.someTemplate',
+					query = 'amount >= :arg',
+					queryParams = {
+						arg: 100
+					},
+					ancestorFolderId = '5555',
+					useIndex = 'amountAsc',
+					orderBy = [
+						{
+							field_key: 'amount',
+							direction: 'asc'
+						}
+					],
+					limit = 100,
+					fixture = getFixture('metadata/post_metadata_query_200');
+
+				var expectedBody = {
+					from,
+					query,
+					query_params: queryParams,
+					ancestor_folder_id: ancestorFolderId,
+					use_index: useIndex,
+					order_by: orderBy,
+					limit
+				};
+
+				apiMock.post('/2.0/metadata_queries/execute_read', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				var options = {
+					query,
+					query_params: queryParams,
+					ancestor_folder_id: ancestorFolderId,
+					use_index: useIndex,
+					order_by: orderBy,
+					limit
+				};
+
+				return basicClient.metadata.query(from, ancestorFolderId, options)
+					.then(items => {
+						assert.deepEqual(items, JSON.parse(fixture));
+					});
+			});
+
+			it('should make POST call to query items based on their metadata using iterators and return correct result when API call succeeds', function() {
+
+				var from = 'enterprise_12345.someTemplate',
+					query = 'amount >= :arg',
+					queryParams = {
+						arg: 100
+					},
+					ancestorFolderId = '5555',
+					useIndex = 'amountAsc',
+					orderBy = [
+						{
+							field_key: 'amount',
+							direction: 'asc'
+						}
+					],
+					limit = 1,
+					marker = 'AAAAAmVYB1FWec8GH6yWu2nwmanfMh07IyYInaa7DZDYjgO1H4KoLW29vPlLY173OKsci6h6xGh61gG73gnaxoS+o0BbI1/h6le6cikjlupVhASwJ2Cj0tOD9wlnrUMHHw3/ISf+uuACzrOMhN6d5fYrbidPzS6MdhJOejuYlvsg4tcBYzjauP3+VU51p77HFAIuObnJT0ff',
+					fixture = getFixture('metadata/post_metadata_query_200'),
+					fixture2 = getFixture('metadata/post_metadata_query_200_2');
+
+				var expectedBody = {
+					from,
+					query,
+					query_params: queryParams,
+					ancestor_folder_id: ancestorFolderId,
+					use_index: useIndex,
+					order_by: orderBy,
+					limit
+				};
+
+				var expectedBody2 = {
+					from,
+					query,
+					query_params: queryParams,
+					ancestor_folder_id: ancestorFolderId,
+					use_index: useIndex,
+					order_by: orderBy,
+					limit,
+					marker
+				};
+
+				apiMock.post('/2.0/metadata_queries/execute_read', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				apiMock.post('/2.0/metadata_queries/execute_read', expectedBody2)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture2);
+
+				var options = {
+					query,
+					query_params: queryParams,
+					ancestor_folder_id: ancestorFolderId,
+					use_index: useIndex,
+					order_by: orderBy,
+					limit
+				};
+
+				return iteratorClient.metadata.query(from, ancestorFolderId, options)
+					.then(iterator => Promise.all(
+						[
+							iterator.next(),
+							iterator.next()
+						]))
+					.then(items => {
+						var firstItem = items[0].value;
+						var secondItem = items[1].value;
+						assert.equal(firstItem.item.id, '1617554169109');
+						assert.equal(firstItem.item.name, 'My Contract.docx');
+						assert.equal(firstItem.item.created_by.name, 'Box Admin');
+						assert.equal(firstItem.metadata.enterprise_123456.someTemplate.$parent, 'file_161753469109');
+						assert.equal(firstItem.metadata.enterprise_123456.someTemplate.customerName, 'Phoenix Corp');
+
+						assert.equal(secondItem.item.id, '123450');
+						assert.equal(secondItem.item.name, '1.jpg');
+						assert.equal(secondItem.item.created_by.name, 'Test User');
+						assert.equal(secondItem.metadata.enterprise_67890.relayWorkflowInformation.$parent, 'file_123450');
+						assert.equal(secondItem.metadata.enterprise_67890.relayWorkflowInformation.workflowName, 'Werk Flow 0');
+					});
+			});
+		});
 	});
 
 	describe('Recents Items', function() {

@@ -90,7 +90,7 @@ describe('PagingIterator', function() {
 			assert.isFalse(PagingIterator.isIterable(response));
 		});
 
-		it('should return false when request method is not GET', function() {
+		it('should return false when request method is not GET or POST', function() {
 
 			var response = {
 				body: {
@@ -102,7 +102,7 @@ describe('PagingIterator', function() {
 					]
 				},
 				request: {
-					method: 'POST'
+					method: 'DELETE'
 				}
 			};
 
@@ -388,7 +388,7 @@ describe('PagingIterator', function() {
 				});
 		});
 
-		it('should fetch second page of results when initial buffer is exhausted', function() {
+		it('should fetch second page of results when initial buffer is exhausted for GET requests', function() {
 
 			var item1 = {foo: 'bar'},
 				item2 = {foo: 'baz'};
@@ -436,6 +436,85 @@ describe('PagingIterator', function() {
 			};
 
 			sandbox.mock(clientFake).expects('get')
+				.withArgs(expectedURL, expectedOptions1)
+				.returns(Promise.resolve(response2));
+
+			var iterator = new PagingIterator(response1, clientFake);
+
+			return iterator.next()
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item1);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'done', false);
+					assert.propertyVal(data, 'value', item2);
+
+					return iterator.next();
+				})
+				.then(data => {
+					assert.propertyVal(data, 'value', undefined);
+					assert.propertyVal(data, 'done', true);
+				});
+		});
+
+		it('should fetch second page of results when initial buffer is exhausted for POST requests', function() {
+
+			var item1 = {foo: 'bar'},
+				item2 = {foo: 'baz'};
+			var chunk1 = [item1],
+				chunk2 = [item2];
+			var response1 = {
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					body: {
+						marker: 'abcdef',
+						limit: 1
+					},
+					method: 'POST'
+				},
+				body: {
+					entries: chunk1,
+					limit: 1,
+					next_marker: 'vwxyz'
+				}
+			};
+			var response2 = {
+				statusCode: 200,
+				request: {
+					href: 'https://api.box.com/2.0/items',
+					uri: {},
+					headers: {},
+					body: {
+						marker: 'vwxyz',
+						limit: 1
+					},
+					method: 'POST'
+				},
+				body: {
+					entries: chunk2,
+					limit: 1,
+					next_marker: ''
+				}
+			};
+
+			var expectedURL = 'https://api.box.com/2.0/items';
+			var expectedOptions1 = {
+				headers: {
+					'content-length': 28
+				},
+				qs: {},
+				body: {
+					limit: 1,
+					marker: 'vwxyz'
+				}
+			};
+
+			sandbox.mock(clientFake).expects('post')
 				.withArgs(expectedURL, expectedOptions1)
 				.returns(Promise.resolve(response2));
 
