@@ -2,8 +2,8 @@
 
 ## 1.32.0 [2020-03-30]
 
-- Temporarily removed Node 4 and Node 5 builds from Travis, due to tests not passing.  Will investigate, going forward.
-- Fixed an issue where an error is thrown during a retry when a response is not returned by the previous call ([#476](https://github.com/box/box-node-sdk/pull/76)).
+- Temporarily removed Node 4 and Node 5 builds from Travis, due to tests not passing.  Will investigate, going forward ([#495](https://github.com/box/box-node-sdk/pull/495)).
+- Fixed an issue where an error is thrown during a retry when a response is not returned by the previous call  ([#476](https://github.com/box/box-node-sdk/pull/476)).
 - Added the ability to [query](./docs/metadata.md#query) Box items based on their metadata ([#487](https://github.com/box/box-node-sdk/pull/487)).
 
 ## 1.31.0 [2020-02-13]
