@@ -50,7 +50,7 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-unicorn": "^4.0.3",
     "istanbul": "^0.4.3",
-    "jsdoc": "^3.6.3",
+    "jsdoc": "^3.6.4",
     "jsonlint2": "^1.7.1",
     "leche": "^2.3.0",
     "mocha": "^5.2.0",
