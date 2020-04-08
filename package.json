@@ -60,7 +60,7 @@
     "nyc": "^11.9.0",
     "shelljs": "^0.8.3",
     "shelljs-nodecli": "^0.1.1",
-    "sinon": "^7.5.0"
+    "sinon": "^9.0.2"
   },
   "files": [
     "config",
