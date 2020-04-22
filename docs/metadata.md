@@ -909,6 +909,7 @@ Query
 
 To query box items based on their metadata, call [`metadata.query(from, ancestorFolderId, options, callback)`][query] with the metadata template and the folder ID to restrain the query. Additional options like the a specific query, a marker, etc. can be passed in through the options object.
 
+<!-- sample post_metadata_queries_execute_read -->
 ```js
 var from = 'enterprise_12345.someTemplate',
 	ancestorFolderId = '5555',
