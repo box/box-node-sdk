@@ -169,6 +169,7 @@ client.events.getEnterpriseEventStream({
 You can also filter the event stream to only receive specific event types.  The set of enterprise event types
 is available in `client.events.enterpriseEventTypes`.
 
+<!-- sample options_events enterprise_filter -->
 ```js
 client.events.getEnterpriseEventStream({
     eventTypeFilter: [client.events.enterpriseEventTypes.UPLOAD, client.events.enterpriseEventTypes.DOWNLOAD]
