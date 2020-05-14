@@ -38,11 +38,11 @@ describe('URLPath', function() {
 		assert.equal(path, expectedPath);
 	});
 
-	it('should throw an error for non-alphanumeric path parameters', function() {
+	it.only('should throw an error for relative path parameters', function() {
 		try {
 			pathBuilder('abc/../', 123);
 		} catch (e) {
-			assert.equal(e.message, 'An invalid path parameter passed in. It must be alphanumeric.');
+			assert.include(e.message, 'An invalid path parameter exists');
 			return;
 		}
 		assert.fail('Did not throw an error for invalid path parameters');
