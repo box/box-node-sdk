@@ -39,8 +39,7 @@ assignees: PJSimon, sujaygarlanka
 <!-- If applicable, add screenshots to help explain your problem. -->
 
 ### Versions Used
-Java SDK: <!-- Replace with the version of the Java SDK you're using. -->
-Java: <!-- Replace with the version of Java your application is running on. -->
+Node SDK: <!-- Replace with the version of the Node SDK you're using. -->
 
 [sdk-docs]: ./doc
 [api-docs]: https://developer.box.com/docs
