@@ -1300,6 +1300,32 @@ describe('Files', function() {
 			files.uploadFile(PARENT_FOLDER_ID, FILENAME, CONTENT, options);
 		});
 
+		it('should pass content length parameter when specified', function() {
+
+			var options = {
+				content_modified_at: '2017-11-18T11:18:00-0800',
+				content_created_at: '1988-11-18T11:18:00-0800',
+				content_length: 11
+			};
+			var expectedFormData = {
+				attributes: JSON.stringify({
+					name: FILENAME,
+					parent: { id: PARENT_FOLDER_ID },
+					content_modified_at: options.content_modified_at,
+					content_created_at: options.content_created_at
+				}),
+				content: {
+					value: CONTENT,
+					options: { filename: 'unused', knownLength: options.content_length}
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('upload')
+				.withArgs('/files/content', null, expectedFormData);
+			files.uploadFile(PARENT_FOLDER_ID, FILENAME, CONTENT, options);
+		});
+
 		it('should wrap with default handler when called', function() {
 
 			sandbox.stub(boxClientFake, 'upload').returns(Promise.resolve());
@@ -1361,6 +1387,30 @@ describe('Files', function() {
 				content: {
 					value: CONTENT,
 					options: { filename: 'unused' }
+				}
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('upload')
+				.withArgs('/files/1234/content', null, expectedFormData);
+			files.uploadNewFileVersion(FILE_ID, CONTENT, options);
+		});
+
+		it('should pass content length parameter when specified', function() {
+
+			var options = {
+				name: 'New filename.txt',
+				content_modified_at: '2017-12-17T12:34:56-0800',
+				content_length: 11
+			};
+			var expectedFormData = {
+				attributes: JSON.stringify({
+					name: options.name,
+					content_modified_at: options.content_modified_at
+				}),
+				content: {
+					value: CONTENT,
+					options: { filename: 'unused', knownLength: options.content_length}
 				}
 			};
 

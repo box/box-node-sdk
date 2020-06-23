@@ -230,7 +230,7 @@ Upload a File
 -------------
 
 The simplest way to upload a file to a folder is by calling the
-[`files.uploadFile(parentFolderID, filename, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
+[`files.uploadFile(parentFolderID, filename, content, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
 method with a `stream.Readable` or `Buffer` of the file to upload.
 
 <!-- sample post_files_content -->
@@ -296,13 +296,14 @@ client.files.uploadFile(folderID, 'My File.pdf', stream)
 	});
 ```
 
-To preserve file timestamps, you may pass the created and modified times as optional parameters:
+If the stream passed is not an fs stream, you must pass the stream length as an optional parameter like below. To preserve file timestamps, you may pass the created and modified times as optional parameters:
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file');
 var options = {
 	content_created_at: '2015-05-12T17:38:14-0600',
-	content_modified_at: '2016-02-15T22:42:09-0600'
+	content_modified_at: '2016-02-15T22:42:09-0600',
+	content_length: 5
 };
 client.files.uploadFile('98768', 'New File', stream, options)
 	.then(file => {
@@ -836,7 +837,7 @@ Upload a New Version of a File
 ------------------------------
 
 New versions of a file can be uploaded with the
-[`files.uploadNewFileVersion(fileID, content, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadNewFileVersion) method.
+[`files.uploadNewFileVersion(fileID, content, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadNewFileVersion) method.
 
 <!-- sample post_files_id_content -->
 ```js
@@ -898,15 +899,15 @@ client.files.uploadNewFileVersion('11111', stream)
 				item_status: 'active' } ] }
 		*/
 ```
-
-To rename the file on upload or manually specify a modification timestamp for the file, pass the corresponding optional
-parameter:
+If the stream passed in is not an fs stream, you must pass the stream length as an optional parameter as shown below.
+To rename the file on upload or manually specify a modification timestamp for the file, pass the corresponding optional parameter:
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file.pdf');
 var options = {
 	name: 'New filename.pdf',
-	content_modified_at: '2016-02-15T22:42:09-0600'
+	content_modified_at: '2016-02-15T22:42:09-0600',
+	content_length: 5
 };
 client.files.uploadNewFileVersion('11111', stream, options)
 	.then(file => {
