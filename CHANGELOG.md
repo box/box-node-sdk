@@ -1,6 +1,6 @@
 # Changelog
 
-## Next Release
+## 1.33.0 [2020-06-25]
 
 - Add path parameter sanitization ([#505](https://github.com/box/box-node-sdk/pull/505))
 - Add support for all streams for uploading files ([#519](https://github.com/box/box-node-sdk/pull/519))
