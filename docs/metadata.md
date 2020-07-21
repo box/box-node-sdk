@@ -907,7 +907,7 @@ client.metadata.deleteCascadePolicy(policyID)
 Query
 ---------------------
 
-To query box items based on their metadata, call [`metadata.query(from, ancestorFolderId, options, callback)`][query] with the metadata template and the folder ID to restrain the query. Additional options like the a specific query, a marker, etc. can be passed in through the options object. **Important**: There are two types of response based on whether the fields parameter is passed into the options parameter or not. The example directly below shows the response if the fields parameter is not passed in.
+To query Box items based on their metadata, call [`metadata.query(from, ancestorFolderId, options, callback)`][query] with the metadata template and the folder ID to restrain the query. Additional options like a specific query, a marker, etc. can be passed in through the options object. **Important**: One of two possible response types are returned, based on whether the fields parameter is passed into the options parameter or not. The example directly below shows the response if the fields parameter is not passed in.
 
 <!-- sample post_metadata_queries_execute_read -->
 ```js
