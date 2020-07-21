@@ -907,7 +907,7 @@ client.metadata.deleteCascadePolicy(policyID)
 Query
 ---------------------
 
-To query box items based on their metadata, call [`metadata.query(from, ancestorFolderId, options, callback)`][query] with the metadata template and the folder ID to restrain the query. Additional options like the a specific query, a marker, etc. can be passed in through the options object.
+To query box items based on their metadata, call [`metadata.query(from, ancestorFolderId, options, callback)`][query] with the metadata template and the folder ID to restrain the query. Additional options like the a specific query, a marker, etc. can be passed in through the options object. **Important**: There are two types of response based on whether the fields parameter is passed into the options parameter or not. The example directly below shows the response if the fields parameter is not passed in.
 
 <!-- sample post_metadata_queries_execute_read -->
 ```js
@@ -932,107 +932,163 @@ client.metadata.query(from, ancestorFolderId, options)
 	.then(items => {
 		/* items -> {
 			"entries": [
-			{
-				"item": {
-					"type": "file",
-					"id": "1617554169109",
-					"file_version": {
-						"type": "file_version",
-						"id": "1451884469385",
-						"sha1": "69888bb1bff455d1b2f8afea75ed1ff0b4879bf6"
-					},
-					"sequence_id": "0",
-					"etag": "0",
-					"sha1": "69888bb1bff455d1b2f8afea75ed1ff0b4879bf6",
-					"name": "My Contract.docx",
-					"description": "",
-					"size": 25600,
-					"path_collection": {
-						"total_count": 4,
-						"entries": [
-						{
-							"type": "folder",
-							"id": "0",
-							"sequence_id": null,
-							"etag": null,
-							"name": "All Files"
+				{
+					"item": {
+						"type": "file",
+						"id": "1617554169109",
+						"file_version": {
+							"type": "file_version",
+							"id": "1451884469385",
+							"sha1": "69888bb1bff455d1b2f8afea75ed1ff0b4879bf6"
 						},
-						{
-							"type": "folder",
-							"id": "15017998644",
-							"sequence_id": "0",
-							"etag": "0",
-							"name": "Contracts"
+						"sequence_id": "0",
+						"etag": "0",
+						"sha1": "69888bb1bff455d1b2f8afea75ed1ff0b4879bf6",
+						"name": "My Contract.docx",
+						"description": "",
+						"size": 25600,
+						"path_collection": {
+							"total_count": 4,
+							"entries": [
+								{
+									"type": "folder",
+									"id": "0",
+									"sequence_id": null,
+									"etag": null,
+									"name": "All Files"
+								},
+								{
+									"type": "folder",
+									"id": "15017998644",
+									"sequence_id": "0",
+									"etag": "0",
+									"name": "Contracts"
+								},
+								{
+									"type": "folder",
+									"id": "15286891196",
+									"sequence_id": "1",
+									"etag": "1",
+									"name": "North America"
+								},
+								{
+									"type": "folder",
+									"id": "16125613433",
+									"sequence_id": "0",
+									"etag": "0",
+									"name": "2017"
+								}
+							]
 						},
-						{
-							"type": "folder",
-							"id": "15286891196",
-							"sequence_id": "1",
-							"etag": "1",
-							"name": "North America"
+						"created_at": "2017-04-20T12:55:27-07:00",
+						"modified_at": "2017-04-20T12:55:27-07:00",
+						"trashed_at": null,
+						"purged_at": null,
+						"content_created_at": "2017-01-06T17:59:01-08:00",
+						"content_modified_at": "2017-01-06T17:59:01-08:00",
+						"created_by": {
+							"type": "user",
+							"id": "193973366",
+							"name": "Box Admin",
+							"login": "admin@company.com"
 						},
-						{
+						"modified_by": {
+							"type": "user",
+							"id": "193973366",
+							"name": "Box Admin",
+							"login": "admin@company.com"
+						},
+						"owned_by": {
+							"type": "user",
+							"id": "193973366",
+							"name": "Box Admin",
+							"login": "admin@company.com"
+						},
+						"shared_link": null,
+						"parent": {
 							"type": "folder",
 							"id": "16125613433",
 							"sequence_id": "0",
 							"etag": "0",
 							"name": "2017"
-						}
-						]
+						},
+						"item_status": "active"
 					},
-					"created_at": "2017-04-20T12:55:27-07:00",
-					"modified_at": "2017-04-20T12:55:27-07:00",
-					"trashed_at": null,
-					"purged_at": null,
-					"content_created_at": "2017-01-06T17:59:01-08:00",
-					"content_modified_at": "2017-01-06T17:59:01-08:00",
-					"created_by": {
-						"type": "user",
-						"id": "193973366",
-						"name": "Box Admin",
-						"login": "admin@company.com"
-					},
-					"modified_by": {
-						"type": "user",
-						"id": "193973366",
-						"name": "Box Admin",
-						"login": "admin@company.com"
-					},
-					"owned_by": {
-						"type": "user",
-						"id": "193973366",
-						"name": "Box Admin",
-						"login": "admin@company.com"
-					},
-					"shared_link": null,
-					"parent": {
-						"type": "folder",
-						"id": "16125613433",
-						"sequence_id": "0",
-						"etag": "0",
-						"name": "2017"
-					},
-					"item_status": "active"
-				},
-				"metadata": {
-					"enterprise_123456": {
-						"someTemplate": {
-						"$parent": "file_161753469109",
-						"$version": 0,
-						"customerName": "Phoenix Corp",
-						"$type": "someTemplate-3d5fcaca-f496-4bb6-9046-d25c37bc5594",
-						"$typeVersion": 0,
-						"$id": "ba52e2cc-371d-4659-8d53-50f1ac642e35",
-						"amount": 100,
-						"claimDate": "2016-04-10T00:00:00Z",
-						"region": "West",
-						"$typeScope": "enterprise_123456"
+					"metadata": {
+						"enterprise_12345": {
+							"someTemplate": {
+								"$parent": "file_161753469109",
+								"$version": 0,
+								"customerName": "Phoenix Corp",
+								"$type": "someTemplate-3d5fcaca-f496-4bb6-9046-d25c37bc5594",
+								"$typeVersion": 0,
+								"$id": "ba52e2cc-371d-4659-8d53-50f1ac642e35",
+								"amount": 100,
+								"claimDate": "2016-04-10T00:00:00Z",
+								"region": "West",
+								"$typeScope": "enterprise_123456"
+							}
 						}
 					}
 				}
-			}
 			],
 			"next_marker": ""
+		}
+		*/
+	});
+```
+
+This second example shows the response if the fields parameter is passed in.
+
+```js
+var from = 'enterprise_12345.someTemplate',
+	ancestorFolderId = '5555',
+	options = {
+		query: 'amount >= :arg',
+		queryParams: {
+			arg: 100
+		},
+		useIndex: 'amountAsc',
+		orderBy: [
+			{
+				field_key: 'amount',
+				direction: 'asc'
+			}
+		],
+		fields: [
+			"id",
+			"name",
+			"sha1",
+			"metadata.enterprise12345.someTemplate.amount"
+		]
+		limit: 100,
+		marker: 'AAAAAmVYB1FWec8GH6yWu2nwmanfMh07IyYInaa7DZDYjgO1H4KoLW29vPlLY173OKsci6h6xGh61gG73gnaxoS+o0BbI1/h6le6cikjlupVhASwJ2Cj0tOD9wlnrUMHHw3/ISf+uuACzrOMhN6d5fYrbidPzS6MdhJOejuYlvsg4tcBYzjauP3+VU51p77HFAIuObnJT0ff'
+	};
+client.metadata.query(from, ancestorFolderId, options)
+	.then(items => {
+		/* items -> {
+			"entries":[
+				{
+					"type": "file",
+					"id": "1617554169109",
+					"sha1": "69888bb1bff455d1b2f8afea75ed1ff0b4879bf6",
+					"name": "My Contract.docx",
+					"metadata": {
+						"enterprise_12345": {
+							"someTemplate": {
+								"$parent": "file_161753469109",
+								"$version": 0,
+								"$type": "someTemplate-3d5fcaca-f496-4bb6-9046-d25c37bc5594",
+								"$typeVersion": 0,
+								"$id": "ba52e2cc-371d-4659-8d53-50f1ac642e35",
+								"amount": 100,
+								"$typeScope": "enterprise_123456"
+							}
+						}
+					}
+				}
+			],
+			"next_marker":""
 		}
 		*/
 	});
