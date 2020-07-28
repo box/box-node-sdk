@@ -17,7 +17,8 @@ var assert = require('chai').assert,
 	url = require('url'),
 	crypto = require('crypto'),
 	path = require('path'),
-	Promise = require('bluebird');
+	Promise = require('bluebird'),
+	Readable = require('stream').Readable;
 
 function getFixture(fixture) {
 	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
@@ -2168,6 +2169,65 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('downloadZip()', function() {
+			it.only('should create zip and download it', function() {
+				var name = 'test',
+					items = [
+						{
+							type: 'file',
+							id: '466239504569'
+						},
+						{
+							type: 'folder',
+							id: '466239504580'
+						}
+					],
+					expectedBody = {
+						items,
+						download_file_name: name
+					},
+					outputStream = new Readable(),
+					zipStream = new Readable('zip file'),
+					downloadUrl = 'https://api.box.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/content',
+					statusUrl = 'https://api.box.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/status',
+					fixture = getFixture('files/post_zip_downloads_202'),
+					fixture2 = getFixture('files/get_zip_downloads_status_200');
+
+				apiMock.post('/2.0/zip_downloads', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(202, fixture)
+					.get(downloadUrl)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, zipStream)
+					.get(statusUrl)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture2);
+
+				return basicClient.files.downloadZip(name, items, outputStream)
+					.then(status => assert.deepEqual(status, JSON.parse(fixture2)));
+			});
+		});
 	});
 
 	describe('Folders', function() {
