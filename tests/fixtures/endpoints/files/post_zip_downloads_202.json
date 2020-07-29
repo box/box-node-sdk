@@ -1,5 +1,5 @@
 {
-	"download_url": "https://api.box.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/content",
+	"download_url": "https://dl.boxcloud.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/content",
 	"status_url": "https://api.box.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/status",
 	"expires_at": "2018-04-25T11:00:18-07:00",
 	"name_conflicts": [
