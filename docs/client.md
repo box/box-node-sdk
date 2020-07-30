@@ -16,7 +16,7 @@ client are described in the [Authentication documentation](authentication.md).
   - [PUT](#put)
   - [DELETE](#delete)
   - [OPTIONS](#options)
-- [Batch API](#batch-api)
+- [Batch API (deprecated)](#batch-api-deprecated)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -149,7 +149,7 @@ client.options('/files/content', null, function(err, response) {
 });
 ```
 
-Batch API
+Batch API (deprecated)
 ---------
 
 The client allows calls to be batched so that they will be sent over the network

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.33.0 [2020-06-25]
+
+- Add path parameter sanitization ([#505](https://github.com/box/box-node-sdk/pull/505))
+- Add support for all streams for uploading files ([#519](https://github.com/box/box-node-sdk/pull/519))
+
 ## 1.32.0 [2020-04-01]
 
 - Temporarily removed Node 4 and Node 5 builds from Travis, due to tests not passing.  Will investigate, going forward ([#495](https://github.com/box/box-node-sdk/pull/495)).
