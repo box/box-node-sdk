@@ -10,7 +10,7 @@
     "check-coverage": true,
     "lines": 98,
     "statements": 98,
-    "functions": 99,
+    "functions": 98,
     "branches": 92,
     "report-dir": "./coverage",
     "all": true

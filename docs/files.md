@@ -39,6 +39,8 @@ file's contents, upload new versions, and perform other common file operations
 - [Unlock a File](#unlock-a-file)
 - [Get Representation Info](#get-representation-info)
 - [Get Representation Content](#get-representation-content)
+- [Create a Zip File](#create-a-zip-file)
+- [Download a Zip File](#download-a-zip-file)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1246,3 +1248,97 @@ client.files.getRepresentationContent('12345', '[png?dimensions=1024x1024]', { a
 ```
 
 [get-rep-content]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getRepresentationContent
+
+Create a Zip File
+_________________
+
+Calling [`files.createZip(name, items, callback)`][create-a-zip-file] will let you create a new zip file with the specified name and 
+with the specified items and will return a response with the download and status link. This file does not show up in your Box account, but will be temporarily available for download.
+
+```js
+var name = 'test',
+items = [
+	{
+		type: 'file',
+		id: '466239504569'
+	},
+	{
+		type: 'folder',
+		id: '466239504580'
+	}
+];
+client.files.createZip(name, items)
+	.then(zip => {
+		/* zip -> {
+				"download_url": "https://api.box.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/content",
+				"status_url": "https://api.box.com/2.0/zip_downloads/124hfiowk3fa8kmrwh/status",
+				"expires_at": "2018-04-25T11:00:18-07:00",
+				"name_conflicts": [
+					[
+						{
+							"id": "100",
+							"type": "file",
+							"original_name": "salary.pdf",
+							"download_name": "aqc823.pdf"
+						},
+						{
+							"id": "200",
+							"type": "file",
+							"original_name": "salary.pdf",
+							"download_name": "aci23s.pdf"
+						}
+					],
+					[
+						{
+							"id": "1000",
+							"type": "folder",
+							"original_name": "employees",
+							"download_name": "3d366a_employees"
+						},
+						{
+							"id": "2000",
+							"type": "folder",
+							"original_name": "employees",
+							"download_name": "3aa6a7_employees"
+						}
+					]
+				]
+			}
+		*/
+	});
+```
+[create-a-zip-file]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#createZip
+
+Download a Zip File
+_________________
+
+Calling [`file.download(name, items, stream, callback)`][download-a-zip-file] will let you create a new zip file 
+with the specified name and with the specified items and download it to the stream that is passed in. The return object is status
+object that contains information about the download, including whether it was successful. The created zip file does not show up in your Box account.
+
+```js
+var name = 'test',
+items = [
+	{
+		type: 'file',
+		id: '466239504569'
+	},
+	{
+		type: 'folder',
+		id: '466239504580'
+	}
+],
+stream = new Readable();
+client.files.downloadZip(name, items, stream)
+	.then(status => {
+		/* status -> {
+				"total_file_count": 20,
+				"downloaded_file_count": 10,
+				"skipped_file_count": 10,
+				"skipped_folder_count": 10,
+				"state": "succeeded"
+			}
+		*/
+	});
+```
+[download-a-zip-file]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#downloadZip
