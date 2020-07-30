@@ -1,5 +1,8 @@
 # Changelog
 
+## Next Release
+- Add zip functionality ([#525](https://github.com/box/box-node-sdk/pull/525))
+
 ## 1.33.0 [2020-06-25]
 
 - Add path parameter sanitization ([#505](https://github.com/box/box-node-sdk/pull/505))
