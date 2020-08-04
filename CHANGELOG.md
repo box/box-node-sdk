@@ -1,6 +1,6 @@
 # Changelog
 
-## Next Release
+## 1.34.0 [2020-08-04]
 
 - Add zip functionality ([#525](https://github.com/box/box-node-sdk/pull/525))
 - Add proxy support for `http`, `https`, `socks` and `pac` protocols ([#529](https://github.com/box/box-node-sdk/pull/529))
