@@ -1,5 +1,9 @@
 # Changelog
 
+## Next Release
+
+- Fix iterator bug for uploading new file versions ([#531](https://github.com/box/box-node-sdk/pull/531))
+
 ## 1.34.0 [2020-08-04]
 
 - Add zip functionality ([#525](https://github.com/box/box-node-sdk/pull/525))
