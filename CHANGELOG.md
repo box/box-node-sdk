@@ -1,6 +1,6 @@
 # Changelog
 
-## Next Release
+## 1.34.1 [2020-08-17]
 
 - Fix iterator bug for uploading new file versions ([#531](https://github.com/box/box-node-sdk/pull/531))
 
