@@ -1,4 +1,4 @@
-Box Node.js SDK (Test 1)
+Box Node.js SDK (Test 2)
 ===============
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/box/box-node-sdk.svg)](https://greenkeeper.io/)
