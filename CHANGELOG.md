@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.34.2 [2020-08-19]
+## 1.34.2 [2020-08-20]
 
 - Make iterator bug fix for uploading files non breaking ([#534](https://github.com/box/box-node-sdk/pull/534))
 
