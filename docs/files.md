@@ -1250,11 +1250,12 @@ client.files.getRepresentationContent('12345', '[png?dimensions=1024x1024]', { a
 [get-rep-content]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getRepresentationContent
 
 Create a Zip File
-_________________
+-----------------
 
 Calling [`files.createZip(name, items, callback)`][create-a-zip-file] will let you create a new zip file with the specified name and 
 with the specified items and will return a response with the download and status link. This file does not show up in your Box account, but will be temporarily available for download.
 
+<!-- sample post_zip_downloads -->
 ```js
 var name = 'test',
 items = [
@@ -1310,12 +1311,13 @@ client.files.createZip(name, items)
 [create-a-zip-file]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#createZip
 
 Download a Zip File
-_________________
+-------------------
 
-Calling [`file.download(name, items, stream, callback)`][download-a-zip-file] will let you create a new zip file 
+Calling [`file.downloadZip(name, items, stream, callback)`][download-a-zip-file] will let you create a new zip file 
 with the specified name and with the specified items and download it to the stream that is passed in. The return object is status
 object that contains information about the download, including whether it was successful. The created zip file does not show up in your Box account.
 
+<!-- sample get_zip_downloads_id_content -->
 ```js
 var name = 'test',
 items = [
