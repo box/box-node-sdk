@@ -915,11 +915,11 @@ var from = 'enterprise_12345.someTemplate',
 	ancestorFolderId = '5555',
 	options = {
 		query: 'amount >= :arg',
-		queryParams: {
+		query_params: {
 			arg: 100
 		},
-		useIndex: 'amountAsc',
-		orderBy: [
+		use_index: 'amountAsc',
+		order_by: [
 			{
 				field_key: 'amount',
 				direction: 'asc'
@@ -1045,11 +1045,11 @@ var from = 'enterprise_12345.someTemplate',
 	ancestorFolderId = '5555',
 	options = {
 		query: 'amount >= :arg',
-		queryParams: {
+		query_params: {
 			arg: 100
 		},
-		useIndex: 'amountAsc',
-		orderBy: [
+		use_index: 'amountAsc',
+		order_by: [
 			{
 				field_key: 'amount',
 				direction: 'asc'
