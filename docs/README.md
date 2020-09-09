@@ -7,6 +7,7 @@ the SDK are available by topic:
 
 * [Authentication](authentication.md)
 * [Client](client.md)
+* [Classifications](classifications.md)
 * [Collaborations](collaborations.md)
 * [Collaboration Whitelist](collaboration-whitelist.md)
 * [Collections](collections.md)
