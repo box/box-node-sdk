@@ -418,31 +418,96 @@ describe('Webhooks', function() {
 			clock.restore();
 		});
 
-		it.only('should validate JSON body with Unicode characters', function() {
-			const BODY_UNICODE = '{"type":"skill_invocation","skill":{"id":"16295","type":"skill","name":"New DLP Skill","api_key":"56eadfqrcscncabjfyozqcvsewneh75b"},"token":{"read":{"access_token":"1!ueLhdWUZsZykO5uag6BQ1hXFzgJzzVOSq65gAmH6IvZefuPt59DTsdR5VjgWFjM8x4IPZ_RCpSyhYA_BL3d3v3IJltCwDxJ9iGm5gXazNdzKWfyBy1QYqJPqG4rQV6K0Sko7OJSy-2pHTetNe3pugwv1f8J6vpWe9m4IKRTDTWK856fB2dJGmdLbFGK28K5tltcbwvvmweb8xQrHcMFdkQujPEMOwEEsicQNobcayih8UQChfB_VF5IzntKfEzWbqYYqSbCRe11za3yLtWwsN3adMcDzytxzMPNZ2PCzJVppF1oUUpU4J4MMdeyMYnQQJMp9DlwnG8Oz___-fSSt2YrJ2eHbsNglYGV0YvyTo3lVSR4kwTeKJcViyrO-Ysd8yWA2dxHmAMTnIuIEQSva685WmZMGFUm0-XLaizsykUddGn5_","expires_in":1598562737,"restricted_to":"[{\\"scope\\":\\"gcm\\"},{\\"scope\\":\\"item_read\\",\\"object_id\\":712293940342,\\"object_type\\":\\"file\\"}]","token_type":"bearer"},"write":{"access_token":"1!Tzd07brjt0ltpg-G14g0IhlqZhmqp8PXV41xooDbqR2Zdi3n7xtqyeSXvD8lRAnHnpuDN8kFl_gKVFuozkpWN1Y9v8OmQEIx1pCwbsKXUS4AJC-9cujNHy2JWhCHc5RQtNjBwWigCAriCbxzbNtCNb9MkNfisLDs2gZLNVP5sDBmr62zNEa3DzG67F67Sd7PFkSV1Q9_VWvUbxTxzIlXQtKUu7440Mg9iJ8nmjSWcTKMi2Kz7y1QA_w1TtHhm87hd1h_cafAettbyY0H1BSgpbhOvl4HB0f8_pA3l9pY4jGaddszZiVv1VC8jslCPDsIYQUsghew2-mF6A-JWtR_73ezyDijDYJsqGchnmkdBvXvbwERvAZreOsj-3d5ZvjWx1-I4OCrcDdfLSf_spD7oBlwk1C3zT99MU9AYZZ5qJYZZm4HCWN72sqp3EUQXqu_7L9FpRqD-Z7Xi-cl71T5UtEqLGt-TR8M7rVUya_J6w..","expires_in":1598562737,"restricted_to":"[{\\"scope\\":\\"gcm\\"},{\\"scope\\":\\"item_upload\\",\\"object_id\\":712293940342,\\"object_type\\":\\"file\\"},{\\"scope\\":\\"manage_skill_invocations\\"}]","token_type":"bearer"}},"status":{"state":"invoked","message":"","error_code":"","additional_info":""},"skill_rules":[{"id":"4558911","type":"skill_rule","config":""}],"id":"00825814-4bb5-46b7-998a-79c30215143b_1117251255","created_at":"2020-08-26T14:12:16-07:00","trigger":"FILE_CONTENT","enterprise":{"type":"enterprise","id":"606098","name":"Enterprise for Pal Ramanathan"},"source":{"type":"file","id":"712293940342","name":"\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8 2020-08-05.txt","sequence_id":"1","file_version":{"id":"756943372537"},"owner_enterprise_id":"606098","parent":{"id":"121619842246"},"old_parent_id":"","collab_accessible_by":{"type":"","id":"","name":"","login":""},"size":9},"event":{"event_id":"00825814-4bb5-46b7-998a-79c30215143b","event_type":"ITEM_UPLOAD","created_at":"2020-08-26T14:12:16-07:00","created_by":{"type":"user","id":"236266960","name":"Pal Ramanathan Demo","login":"pramanathan+demo@boxdemo.com"},"source":{"type":"file","id":"712293940342","name":"\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8 2020-08-05.txt","sequence_id":"1","file_version":{"id":"756943372537"},"owner_enterprise_id":"606098","parent":{"id":"121619842246"},"old_parent_id":"","collab_accessible_by":{"type":"","id":"","name":"","login":""}},"skill_rule":{"id":"*"}},"parameters":{}}';
+		// it('should validate JSON body with Unicode characters from Harish', function() {
+		// 	const HEADERS = {
+		// 		'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
+		// 		'box-delivery-timestamp': '2020-08-31T11:28:49-07:00',
+		// 		'box-signature-algorithm': 'HmacSHA256',
+		// 		'box-signature-primary': 'mHsiiomholWgVnvOrY3GrHNZNyaGqSlwU2fh5comYSY=',
+		// 		'box-signature-secondary': '9tL2RXYGw0agnezuhCJmpXOTLmqYaPUqjNFV1S+n0Mo=',
+		// 		'box-signature-version': '1'
+		// 	};
+		// 	var primaryKey = 'WZRd7N843lHJHpLesU8c3upBWZOCofSu';
+		// 	var secondaryKey = '5jBRCVh9xiNzrg0Sz0fiWaNWQK56svm6';
+		// 	const VALIDATION_DATE = Date.parse('2020-08-31T11:28:49-07:00');
+		//
+		// 	const clock = sinon.useFakeTimers(VALIDATION_DATE);
+		//
+		// 	var path = '/Users/psimon/box/sdk/box-node-sdk/tests/fixtures/endpoints/webhooks/validate_webhook_unicode_full.json';
+		// 	var stats = fs.statSync(path);
+		// 	var fileSizeInBytes = stats.size;
+		// 	const fd = fs.openSync(path, 'r');
+		// 	var buffer_from_file = Buffer.alloc(fileSizeInBytes - 1);
+		// 	fs.readSync(fd, buffer_from_file, 0, fileSizeInBytes - 1, null);
+		// 	var payloadbody = buffer_from_file.toString('utf8');
+		//
+		// 	assert.ok(Webhooks.validateMessage(payloadbody, HEADERS, primaryKey, secondaryKey));
+		// 	clock.restore();
+		// });
+
+		it.only('should validate JSON body', function() {
 			const HEADERS = {
 				'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
-				'box-delivery-timestamp': '2020-08-31T11:28:49-07:00',
+				'box-delivery-timestamp': '2020-08-27T08:36:39-07:00',
 				'box-signature-algorithm': 'HmacSHA256',
-				'box-signature-primary': 'mHsiiomholWgVnvOrY3GrHNZNyaGqSlwU2fh5comYSY=',
-				'box-signature-secondary': '9tL2RXYGw0agnezuhCJmpXOTLmqYaPUqjNFV1S+n0Mo=',
+				'box-signature-primary': 'OpzWa5MJRiGsmmrTvW/I7IIGJd8IkBCN/NqMyzagoIk=',
+				'box-signature-secondary': 'OpzWa5MJRiGsmmrTvW/I7IIGJd8IkBCN/NqMyzagoIk=',
 				'box-signature-version': '1'
 			};
-			var primaryKey = 'WZRd7N843lHJHpLesU8c3upBWZOCofSu';
-			var secondaryKey = '5jBRCVh9xiNzrg0Sz0fiWaNWQK56svm6';
-			const VALIDATION_DATE = Date.parse('2020-08-31T11:28:49-07:00');
+			var primaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			var secondaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			const VALIDATION_DATE = Date.parse('2020-08-27T08:36:39-07:00');
 
 			const clock = sinon.useFakeTimers(VALIDATION_DATE);
 
-			// Is this the correct way to do paths?  Couldn't get it to work...
-			// var filePath = path.resolve(__dirname, 'fixtures/endpoints/webhooks/validate_webhook_unicode.json');
-			var payload = fs.readFileSync('/Users/USERNAME/box/sdk/box-node-sdk/tests/fixtures/endpoints/webhooks/validate_webhook_unicode.json', {encoding: 'utf8'});
-			var payloadbody = payload.toString('utf8');
-			var payloadJson = JSON.stringify(payloadbody);
-			console.log(payload);
+			var path = '/Users/psimon/box/sdk/box-node-sdk/tests/fixtures/endpoints/webhooks/validate_webhook_plain.json';
+			var stats = fs.statSync(path);
+			var fileSizeInBytes = stats.size;
+			const fd = fs.openSync(path, 'r');
+			var buffer_from_file = Buffer.alloc(fileSizeInBytes - 1);
+			fs.readSync(fd, buffer_from_file, 0, fileSizeInBytes - 1, null);
+			var payloadbody = buffer_from_file.toString('utf8');
+			var stringifiedJsonPayload = JSON.stringify(payloadbody);
+			var parsedJsonPayload = JSON.parse(payloadbody);
+			var normalizedPayload = payloadbody.normalize();
+
+			console.log('payloadbody');
 			console.log(payloadbody);
-			console.log(payloadJson);
-			assert.ok(Webhooks.validateMessage(JSON.parse(payloadJson), HEADERS, primaryKey, secondaryKey));
+			console.log('stringifiedJsonPayload');
+			console.log(stringifiedJsonPayload.toString());
+			console.log('parsedJsonPayload');
+			console.log(parsedJsonPayload.toString());
+			console.log('normalizedPayload');
+			console.log(normalizedPayload.toString());
+
+			assert.ok(Webhooks.validateMessage(payloadbody, HEADERS, primaryKey, secondaryKey));
+			clock.restore();
+		});
+
+		it.only('should validate JSON body with Japanese Unicode characters', function() {
+			const HEADERS = {
+				'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
+				'box-delivery-timestamp': '2020-08-26T14:12:17-07:00',
+				'box-signature-algorithm': 'HmacSHA256',
+				'box-signature-primary': 'M7TVuH2BhHpP16tzkrYBNM53k9eeOqTHSGvomAfJKYg=',
+				'box-signature-secondary': 'M7TVuH2BhHpP16tzkrYBNM53k9eeOqTHSGvomAfJKYg=',
+				'box-signature-version': '1'
+			};
+			var primaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			var secondaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			const VALIDATION_DATE = Date.parse('2020-08-26T14:12:17-07:00');
+
+			const clock = sinon.useFakeTimers(VALIDATION_DATE);
+
+			var path = '/Users/psimon/box/sdk/box-node-sdk/tests/fixtures/endpoints/webhooks/validate_webhook_escaped_Japanese.json';
+			var stats = fs.statSync(path);
+			var fileSizeInBytes = stats.size;
+			const fd = fs.openSync(path, 'r');
+			var buffer_from_file = Buffer.alloc(fileSizeInBytes - 1);
+			fs.readSync(fd, buffer_from_file, 0, fileSizeInBytes - 1, null);
+			var payloadbody = buffer_from_file.toString('utf8');
+
+			assert.ok(Webhooks.validateMessage(payloadbody, HEADERS, primaryKey, secondaryKey));
 			clock.restore();
 		});
 	});
