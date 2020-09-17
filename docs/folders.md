@@ -9,15 +9,20 @@ group, and perform other common folder operations (move, copy, delete, etc.).
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Get a Folder's Information](#get-a-folders-information)
-- [Get a Folder's Items](#get-a-folders-items)
-- [Update a Folder's Information](#update-a-folders-information)
-- [Create a Folder](#create-a-folder)
-- [Copy a Folder](#copy-a-folder)
-- [Move a Folder](#move-a-folder)
-- [Rename a Folder](#rename-a-folder)
-- [Delete a Folder](#delete-a-folder)
-- [Create a Shared Link for a Folder](#create-a-shared-link-for-a-folder)
+- [Folders](#folders)
+  - [Get a Folder's Information](#get-a-folders-information)
+  - [Get a Folder's Items](#get-a-folders-items)
+  - [Update a Folder's Information](#update-a-folders-information)
+  - [Create a Folder](#create-a-folder)
+  - [Copy a Folder](#copy-a-folder)
+  - [Move a Folder](#move-a-folder)
+  - [Rename a Folder](#rename-a-folder)
+  - [Delete a Folder](#delete-a-folder)
+  - [Find a Folder for a Shared Link](#find-a-folder-for-a-shared-link)
+  - [Create a Shared Link](#create-a-shared-link)
+  - [Update a Shared Link](#update-a-shared-link)
+  - [Get a Shared Link](#get-a-shared-link)
+  - [Remove a Shared Link](#remove-a-shared-link)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -486,94 +491,103 @@ client.folders.delete('12345', {recursive: true})
     });
 ```
 
-Create a Shared Link for a Folder
----------------------------------
+Find a Folder for a Shared Link
+-----------------------------
+
+To find a folder given a shared link, use the
+[`sharedItems.get(url, password, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SharedItems.html#get)
+method.
+
+<!-- sample get_shared_items folders -->
+```js
+client.sharedItems.get(
+  'https://app.box.com/s/gjasdasjhasd',
+  'letmein'
+),then(folder => {
+  //...
+});
+```
+
+Create a Shared Link
+--------------------
 
 You can create a shared link for a folder by calling the
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
 method, passing a new `shared_link` value in the `updates` parameter.
 
-<!-- sample put_folders_id_shared_link_create -->
+<!-- sample put_files_id add_shared_link -->
 ```js
-client.folders.update('12345', {shared_link: client.accessLevels.OPEN})
-    .then(folder => {
-        /* folder -> {
-            type: 'folder',
-            id: '11111',
-            sequence_id: '1',
-            etag: '1',
-            name: 'Pictures from 2017',
-            created_at: '2012-12-12T10:53:43-08:00',
-            modified_at: '2012-12-12T11:15:04-08:00',
-            description: 'Some pictures I took',
-            size: 629644,
-            path_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'folder',
-                    id: '0',
-                    sequence_id: null,
-                    etag: null,
-                    name: 'All Files' },
-                  { type: 'folder',
-                    id: '22222',
-                    sequence_id: '3',
-                    etag: '3',
-                    name: 'Archives' } ] },
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User'
-                login: 'user@example.com' },
-            modified_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            owned_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            shared_link: {
-                url: 'https://app.box.com/s/31uw1b0dxr2swzbv1qu8d4ixz1v727dl',
-                download_url: null,
-                vanity_url: null,
-                effective_access: 'open',
-                is_password_enabled: false,
-                unshared_at: null,
-                download_count: 0,
-                preview_count: 0,
-                access: 'open',
-                permissions: {
-                    can_download: true,
-                    can_preview: true
-                },
-            parent: 
-            { type: 'folder',
-                id: '22222',
-                sequence_id: '3',
-                etag: '3',
-                name: 'Archives' },
-            item_status: 'active',
-            item_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'file',
-                    id: '33333',
-                    sequence_id: '3',
-                    etag: '3',
-                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
-                    name: 'tigers.jpeg' } ],
-                offset: 0,
-                limit: 100 } }
-        */
-    });
+client.folders.update('12345', {
+  shared_link: {
+    access: client.accessLevels.OPEN,
+    permissions: {
+      can_download: false
+    }
+  }
+}).then(folder => {
+  // ...
+})
 ```
 
 A set of shared link access level constants are available through the SDK for convenience:
-* accessLevels.OPEN
-* accessLevels.COLLABORATORS
-* accessLevels.COMPANY
-* accessLevels.DEFAULT
-* accessLevels.DISABLED
+
+* `accessLevels.OPEN`
+* `accessLevels.COLLABORATORS`
+* `accessLevels.COMPANY`
+* `accessLevels.DEFAULT`
+* `accessLevels.DISABLED`
+
+Update a Shared Link
+--------------------
+
+You can update a shared link for a folder by calling the
+[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
+method, passing a new `shared_link` value in the `updates` parameter.
+
+<!-- sample put_files_id add_shared_link -->
+```js
+client.folders.update('12345', {
+  shared_link: {
+    access: client.accessLevels.COMPANY,
+    permissions: {
+      can_download: true
+    }
+  }
+}).then(folder => {
+  // ...
+})
+```
+
+Get a Shared Link
+--------------------
+
+To check for an existing shared link on a folder, inspect the
+`shared_link` field on a folder object.
+
+This object, when present, contains a `unicode` string containing the shared
+link URL.
+
+<!-- sample put_folders_id update_shared_link -->
+```js
+client.folders.get('11111', { fields: 'shared_link' })
+  .then(folder => {
+    let url = folder.shared_link.download_url
+    //...
+  })
+```
+
+Remove a Shared Link
+--------------------
+
+A shared link for a folder can be removed calling
+[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
+with `null` for the `shared_link` value.
+
+<!-- sample put_folders_id remove_shared_link -->
+```js
+client.folders.update('12345', {
+  shared_link: null
+}).then(folder => {
+  // ...
+})
+```
