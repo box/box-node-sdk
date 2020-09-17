@@ -567,7 +567,7 @@ To check for an existing shared link on a folder, inspect the
 This object, when present, contains a `unicode` string containing the shared
 link URL.
 
-<!-- sample put_folders_id update_shared_link -->
+<!-- sample get_folders_id get_shared_link -->
 ```js
 client.folders.get('11111', { fields: 'shared_link' })
   .then(folder => {
