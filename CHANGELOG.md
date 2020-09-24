@@ -1,5 +1,9 @@
 # Changelog
 
+## PATCH
+- Upgrade ajv dependency ([#545](https://github.com/box/box-node-sdk/pull/545))
+
+
 ## 1.34.2 [2020-08-20]
 
 - Make iterator bug fix for uploading files non breaking ([#534](https://github.com/box/box-node-sdk/pull/534))
