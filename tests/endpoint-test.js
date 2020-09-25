@@ -17,7 +17,8 @@ var assert = require('chai').assert,
 	url = require('url'),
 	crypto = require('crypto'),
 	path = require('path'),
-	Promise = require('bluebird');
+	Promise = require('bluebird'),
+	Stream = require('stream');
 
 function getFixture(fixture) {
 	return fs.readFileSync(path.resolve(__dirname, `fixtures/endpoints/${fixture}.json`));
@@ -1365,6 +1366,52 @@ describe('Endpoint', function() {
 					done();
 				});
 			});
+
+			it('should make correct request and correctly parse response when API call is successful by not returning an iterator', function(done) {
+
+				var folderID = '0',
+					filename = 'foo.txt',
+					fileContent = 'foo',
+					fixture = getFixture('files/post_files_content_200');
+
+				uploadMock.post('/2.0/files/content',
+					function(body) {
+
+						// Verify the multi-part form body
+						var lines = body.split(/\r?\n/);
+						assert.match(lines[0], /^-+\d+$/);
+						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
+						assert.equal(lines[2], '');
+
+						var attributes = JSON.parse(lines[3]);
+						assert.propertyVal(attributes, 'name', filename);
+						assert.nestedPropertyVal(attributes, 'parent.id', folderID);
+
+						assert.match(lines[4], /^-+\d+$/);
+						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
+						assert.equal(lines[6], '');
+						assert.equal(lines[7], fileContent);
+						assert.match(lines[8], /^-+\d+-+$/);
+						return true;
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				iteratorClient.files.uploadFile(folderID, filename, fileContent, function(err, data) {
+
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+
+					done();
+				});
+			});
 		});
 
 		describe('getRepresentationInfo()', function() {
@@ -1729,6 +1776,46 @@ describe('Endpoint', function() {
 					.reply(201, fixture);
 
 				return basicClient.files.uploadNewFileVersion(fileID, fileContent, { name })
+					.then(data => assert.deepEqual(data, JSON.parse(fixture)));
+			});
+
+			it('should make POST request to upload new file version content and not return an iterator', function() {
+
+				var fileID = '11111',
+					name = 'New file name.txt',
+					fileContent = 'foo',
+					fixture = getFixture('files/post_files_content_200');
+
+				uploadMock.post(`/2.0/files/${fileID}/content`,
+					function(body) {
+
+						// Verify the multi-part form body
+						var lines = body.split(/\r?\n/);
+						assert.match(lines[0], /^-+\d+$/);
+						assert.equal(lines[1], 'Content-Disposition: form-data; name="attributes"');
+						assert.equal(lines[2], '');
+
+						var attributes = JSON.parse(lines[3]);
+						assert.propertyVal(attributes, 'name', name);
+
+						assert.match(lines[4], /^-+\d+$/);
+						assert.equal(lines[5], 'Content-Disposition: form-data; name="content"; filename="unused"');
+						assert.equal(lines[6], '');
+						assert.equal(lines[7], fileContent);
+						assert.match(lines[8], /^-+\d+-+$/);
+						return true;
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				return iteratorClient.files.uploadNewFileVersion(fileID, fileContent, { name })
 					.then(data => assert.deepEqual(data, JSON.parse(fixture)));
 			});
 		});
@@ -2168,6 +2255,120 @@ describe('Endpoint', function() {
 			});
 		});
 
+		describe('createZip()', function() {
+			it('should create a zip file', function() {
+				var name = 'test',
+					items = [
+						{
+							type: 'file',
+							id: '466239504569'
+						},
+						{
+							type: 'folder',
+							id: '466239504580'
+						}
+					],
+					expectedBody = {
+						items,
+						download_file_name: name
+					},
+					fixture = getFixture('files/post_zip_downloads_202');
+
+				apiMock.post('/2.0/zip_downloads', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(202, fixture);
+
+				return basicClient.files.createZip(name, items)
+					.then(info => {
+						assert.deepEqual(info, JSON.parse(fixture));
+					});
+			});
+		});
+
+		describe('downloadZip()', function() {
+			it('should create a zip file and download it', function() {
+				var name = 'test',
+					items = [
+						{
+							type: 'file',
+							id: '466239504569'
+						},
+						{
+							type: 'folder',
+							id: '466239504580'
+						}
+					],
+					expectedBody = {
+						items,
+						download_file_name: name
+					},
+					zipFileBytes = '',
+					readableStream = new Stream.Readable({
+						read() {
+							this.push('zip file');
+							this.push(null);
+						}
+					}),
+					writableStream = new Stream.Writable({
+						write(chunk, encoding, next) {
+							zipFileBytes += chunk.toString();
+							next();
+						}
+					}),
+					downloadUrl = '/2.0/zip_downloads/124hfiowk3fa8kmrwh/content',
+					statusUrl = '/2.0/zip_downloads/124hfiowk3fa8kmrwh/status',
+					fixture = getFixture('files/post_zip_downloads_202'),
+					fixture2 = getFixture('files/get_zip_downloads_status_200'),
+					fileDownloadRoot = 'https://dl.boxcloud.com',
+					dlMock = nock(fileDownloadRoot);
+
+				apiMock.post('/2.0/zip_downloads', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(202, fixture);
+
+				dlMock.get(downloadUrl)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, readableStream);
+
+				apiMock.get(statusUrl)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture2);
+
+				return basicClient.files.downloadZip(name, items, writableStream)
+					.then(status => {
+						assert.deepEqual(status, JSON.parse(fixture2));
+						assert.equal(zipFileBytes, 'zip file');
+					});
+			});
+		});
 	});
 
 	describe('Folders', function() {

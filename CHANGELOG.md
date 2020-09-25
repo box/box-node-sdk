@@ -1,5 +1,22 @@
 # Changelog
 
+## PATCH
+- Upgrade ajv dependency ([#545](https://github.com/box/box-node-sdk/pull/545))
+
+
+## 1.34.2 [2020-08-20]
+
+- Make iterator bug fix for uploading files non breaking ([#534](https://github.com/box/box-node-sdk/pull/534))
+
+## 1.34.1 [2020-08-17]
+
+- Fix iterator bug for uploading new file versions ([#531](https://github.com/box/box-node-sdk/pull/531))
+
+## 1.34.0 [2020-08-04]
+
+- Add zip functionality ([#525](https://github.com/box/box-node-sdk/pull/525))
+- Add proxy support for `http`, `https`, `socks` and `pac` protocols ([#529](https://github.com/box/box-node-sdk/pull/529))
+
 ## 1.33.0 [2020-06-25]
 
 - Add path parameter sanitization ([#505](https://github.com/box/box-node-sdk/pull/505))
