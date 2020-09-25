@@ -328,7 +328,7 @@ describe('Files', function() {
 				});
 		});
 
-		it('should return jpg when set as extension', function() {
+		it('should make GET request to get jpg file download when jpg set as extension', function() {
 			var response = {
 				statusCode: 200
 			};
@@ -340,7 +340,7 @@ describe('Files', function() {
 			files.getThumbnail(FILE_ID, testQSWithExtension);
 		});
 		
-		it('should return png when set as extension', function() {
+		it('should make GET request to get png file download when png set as extension', function() {
 			var response = {
 				statusCode: 200
 			};
@@ -352,7 +352,7 @@ describe('Files', function() {
 			files.getThumbnail(FILE_ID, testQSWithExtension);
 		});
 
-		it('should return png when extension is not set', function() {
+		it('should make GET request to get png file download when extension is not set', function() {
 			var response = {
 				statusCode: 200
 			};
@@ -362,7 +362,7 @@ describe('Files', function() {
 			files.getThumbnail(FILE_ID, testQS);
 		});
 
-		it('should return png when extension is incorrect', function() {
+		it('should make GET request to get png file download when extension is invalid', function() {
 			var response = {
 				statusCode: 200
 			};
