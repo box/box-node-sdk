@@ -1,8 +1,9 @@
 # Changelog
 
-## PATCH
-- Upgrade ajv dependency ([#545](https://github.com/box/box-node-sdk/pull/545))
+## MINOR
 
+- Upgrade ajv dependency ([#545](https://github.com/box/box-node-sdk/pull/545))
+- Add support for search param to get shared link items ([#547](https://github.com/box/box-node-sdk/pull/547))
 
 ## 1.34.2 [2020-08-20]
 
