@@ -1,8 +1,10 @@
 # Changelog
 
-## PATCH
-- Upgrade ajv dependency ([#545](https://github.com/box/box-node-sdk/pull/545))
+## 1.34.3 [2020-10-02]
 
+**Bug Fixes:**
+
+- Upgrade ajv dependency ([#545](https://github.com/box/box-node-sdk/pull/545))
 
 ## 1.34.2 [2020-08-20]
 
