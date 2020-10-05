@@ -1,6 +1,6 @@
 # Changelog
 
-## NEXT RELEASE (DATE)
+## NEXT VERSION (DATE)
 
 **New Features and Enhancements:**
 
