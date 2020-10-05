@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.34.3 [2020-10-02]
+## NEXT RELEASE (DATE)
+
+**New Features and Enhancements:**
+
+- 
+
+**Bug Fixes:**
+
+- 
+
+## 1.34.3 (2020-10-02)
 
 **Bug Fixes:**
 
