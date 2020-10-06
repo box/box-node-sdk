@@ -1167,7 +1167,7 @@ Get Thumbnail
 -------------
 
 A thumbnail for a file can be retrieved by calling
-[`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail).
+[`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail). Default is to get a `png` thumbnail. To get a `jpg` thumbnail, pass `jpg` as a string through the `options.extension` parameter.
 
 <!-- sample get_files_id_thumbnail_id -->
 ```js
