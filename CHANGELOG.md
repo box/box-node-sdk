@@ -4,7 +4,7 @@
 
 **New Features and Enhancements:**
 
-- 
+- Add the ability to get a jpg thumbnail ([#546](https://github.com/box/box-node-sdk/pull/546))
 
 **Bug Fixes:**
 
