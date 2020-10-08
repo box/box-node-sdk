@@ -136,12 +136,14 @@ Otherwise, you can manually pass the necessary configuration parameters to the S
 
 ```js
 var sdk = new BoxSDK({
-	clientID: 'CLIENT_ID',
-	clientSecret: 'CLIENT_SECRET',
-	appAuth: {
-		keyID: 'PUBLIC_KEY_ID',
-		privateKey: 'PRIVATE_KEY',
-		passphrase: 'PRIVATE_KEY_PASSPHRASE'
+	boxAppSettings: {
+		clientID: 'CLIENT_ID',
+		clientSecret: 'CLIENT_SECRET',
+		appAuth: {
+			publicKeyID: 'PUBLIC_KEY_ID',
+			privateKey: 'PRIVATE_KEY',
+			passphrase: 'PRIVATE_KEY_PASSPHRASE'
+		}
 	}
 });
 
