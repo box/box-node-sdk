@@ -136,7 +136,7 @@ To transfer one managed user's content to another user's account, call the
 [`enterprise.transferUserContent(sourceUserID, destUserID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Enterprise.html#transferUserContent)
 method with the IDs of the source and destination users.
 
-<!-- sample put_users_id_folders_id -->
+<!-- sample put_users_id_folders_0 -->
 ```js
 var sourceUserID = '33333';
 var destinationUserID = '44444';
