@@ -1,14 +1,10 @@
 # Changelog
 
-## NEXT VERSION (DATE)
+## NEXT VERSION - MINOR (DATE)
 
 **New Features and Enhancements:**
 
-- 
-
-**Bug Fixes:**
-
-- 
+- Add support for search param to get shared link items ([#547](https://github.com/box/box-node-sdk/pull/547))
 
 ## 1.34.3 (2020-10-02)
 
