@@ -1,6 +1,6 @@
 # Changelog
 
-## NEXT VERSION - MINOR (DATE)
+## 1.34.4 (2020-10-30)
 
 **New Features and Enhancements:**
 
