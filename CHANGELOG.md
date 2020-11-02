@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.35.0 (2020-10-30)
+## 1.35.0 (2020-11-02)
 
 **New Features and Enhancements:**
 
