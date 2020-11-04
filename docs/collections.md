@@ -4,6 +4,8 @@ Collections
 Collections are used to store a custom user-defined set of items that may not
 all be in the same folder.
 
+Currently, the only collection available is the favorites collection ([source](https://box.dev/reference/resources/collection/)).
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
