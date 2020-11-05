@@ -339,7 +339,7 @@ describe('Files', function() {
 				.returns(Promise.resolve(response));
 			files.getThumbnail(FILE_ID, testQSWithExtension);
 		});
-		
+
 		it('should make GET request to get png file download when png set as extension', function() {
 			var response = {
 				statusCode: 200
@@ -368,6 +368,18 @@ describe('Files', function() {
 			};
 			var testQSWithExtension = Object.assign({}, testQS);
 			testQSWithExtension.extension = 'err';
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
+				.returns(Promise.resolve(response));
+			files.getThumbnail(FILE_ID, testQSWithExtension);
+		});
+
+		it('should make GET request to get png file download when invalid extension name inclused jpg', function() {
+			var response = {
+				statusCode: 200
+			};
+			var testQSWithExtension = Object.assign({}, testQS);
+			testQSWithExtension.extension = 'err-jpg';
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
 				.returns(Promise.resolve(response));
