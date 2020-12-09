@@ -3025,7 +3025,7 @@ describe('Endpoint', function() {
 					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
 			});
 
-			it('should make DELETE call to delete a lock a folder', function() {
+			it('should make DELETE call to delete a lock on a folder', function() {
 
 				var folderLockID = '22222';
 
