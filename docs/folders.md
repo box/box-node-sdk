@@ -535,7 +535,7 @@ Use the [`folders.getLocks(folderID, callback)`](http://opensource.box.com/box-n
 
 ```js
 var folderID = '11111';
-client.folders.getAll(folderID)
+client.folders.getLocks(folderID)
     .then(folderLocks => {
        /* folderLocks -> {
             "entries": [
