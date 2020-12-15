@@ -2968,6 +2968,83 @@ describe('Endpoint', function() {
 			});
 		});
 
+
+		describe('lock()', function() {
+
+			it('should make POST call to lock a folder', function() {
+
+				var folderID = '22222',
+					fixture = getFixture('folders/post_folder_locks_200');
+
+				var expectedBody = {
+					folder: {
+						type: 'folder',
+						id: folderID
+					},
+					locked_operations: {
+						move: true,
+						delete: true
+					}
+				};
+
+				apiMock.post('/2.0/folder_locks', expectedBody)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.lock(folderID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+
+			it('should make GET call to get locks on a folder', function() {
+
+				var folderID = '22222',
+					fixture = getFixture('folders/get_folder_locks_200');
+
+				apiMock.get('/2.0/folder_locks')
+					.query({
+						folder_id: folderID
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.folders.getLocks(folderID)
+					.then(folder => assert.deepEqual(folder, JSON.parse(fixture)));
+			});
+
+			it('should make DELETE call to delete a lock on a folder', function() {
+
+				var folderLockID = '22222';
+
+				apiMock.delete(`/2.0/folder_locks/${folderLockID}`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204, null);
+
+				return basicClient.folders.deleteLock(folderLockID)
+					.then(result => assert.isUndefined(result));
+			});
+		});
+
 	});
 
 	describe('Groups', function() {
