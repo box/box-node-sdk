@@ -18,6 +18,9 @@ group, and perform other common folder operations (move, copy, delete, etc.).
   - [Move a Folder](#move-a-folder)
   - [Rename a Folder](#rename-a-folder)
   - [Delete a Folder](#delete-a-folder)
+  - [Lock a folder](#lock)
+  - [Get All Locks on a Folder](#get-all-locks)
+  - [Delete a Lock on a Folder](#delete-lock)
   - [Find a Folder for a Shared Link](#find-a-folder-for-a-shared-link)
   - [Create a Shared Link](#create-a-shared-link)
   - [Update a Shared Link](#update-a-shared-link)
@@ -486,6 +489,93 @@ A folder can be deleted with the [`folders.delete(folderID, options, callback)`]
 <!-- sample delete_folders_id -->
 ```js
 client.folders.delete('12345', {recursive: true})
+    .then(() => {
+        // deletion succeeded — no value returned
+    });
+```
+
+Lock a Folder
+-------------
+
+Use the [`folders.lock(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#lock) to lock a folder
+
+```js
+var folderID = '11111';
+client.folders.lock(folderID)
+    .then(folderLock => {
+       /* folderLock -> {
+            "id": "12345678",
+            "type": "folder_lock",
+            "created_at": "2020-09-14T23:12:53Z",
+            "created_by": {
+                "id": "11446498",
+                "type": "user"
+            },
+            "folder": {
+                "id": "12345",
+                "type": "folder",
+                "etag": "1",
+                "name": "Contracts",
+                "sequence_id": "3"
+            },
+            "lock_type": "freeze",
+            "locked_operations": {
+                "delete": true,
+                "move": true
+            }
+        }
+        */
+    });
+```
+
+Get All Locks on a Folder
+-------------------------
+
+Use the [`folders.getLocks(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#lock) to get all locks on a folder.
+
+```js
+var folderID = '11111';
+client.folders.getLocks(folderID)
+    .then(folderLocks => {
+       /* folderLocks -> {
+            "entries": [
+                {
+                    "folder": {
+                        "id": "12345",
+                        "etag": "1",
+                        "type": "folder",
+                        "sequence_id": "3",
+                        "name": "Contracts"
+                    },
+                    "id": "12345678",
+                    "type": "folder_lock",
+                    "created_by": {
+                        "id": "11446498",
+                        "type": "user"
+                    },
+                    "created_at": "2020-09-14T23:12:53Z",
+                    "locked_operations": {
+                        "move": true,
+                        "delete": true
+                    },
+                    "lock_type": "freeze"
+                }
+            ],
+            "limit": 1000,
+            "next_marker": null
+        }
+        */
+    });
+```
+
+Delete a Lock on a Folder
+-------------------------
+
+Use the [`folders.deleteLock(folderLockID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deleteLock) method to delete a folder lock.
+
+```js
+var folderLockID = '12345';
+client.folders.deleteLock(folderLockID)
     .then(() => {
         // deletion succeeded — no value returned
     });
