@@ -70,6 +70,7 @@
     "lib"
   ],
   "resolutions": {
-    "handlebars": "4.5.3"
+    "handlebars": "4.5.3",
+    "minimist": "1.2.3"
   }
 }
