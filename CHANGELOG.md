@@ -9,6 +9,7 @@
 
 **Bug Fixes:**
 
+- Update proxy-agent to patch proxy support issue ([#563](https://github.com/box/box-node-sdk/pull/563))
 - Update dependencies to patch security vulnerabilities ([#566](https://github.com/box/box-node-sdk/pull/566))
 
 ## 1.35.0 (2020-11-02)
