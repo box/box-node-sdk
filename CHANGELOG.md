@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.36.0 (2020-01-27)
+
+**New Features and Enhancements:**
+
+- Add folder lock functionality ([#560](https://github.com/box/box-node-sdk/pull/560))
+- Add support for filtering groups by name ([#561](https://github.com/box/box-node-sdk/pull/561))
+
+**Bug Fixes:**
+
+- Update dependencies to patch security vulnerabilities ([#566](https://github.com/box/box-node-sdk/pull/566))
+
 ## 1.35.0 (2020-11-02)
 
 **New Features and Enhancements:**
