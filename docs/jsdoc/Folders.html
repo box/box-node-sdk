@@ -142,7 +142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line32">line 32</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -457,7 +457,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line335">line 335</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line336">line 336</a>
     </li></ul></dd>
     
 
@@ -693,7 +693,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line190">line 190</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line191">line 191</a>
     </li></ul></dd>
     
 
@@ -931,7 +931,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line549">line 549</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line550">line 550</a>
     </li></ul></dd>
     
 
@@ -1261,7 +1261,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line129">line 129</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -1497,7 +1497,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line104">line 104</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -1796,7 +1796,212 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line270">line 270</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line271">line 271</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteLock"><span class="type-signature"></span>deleteLock<span class="signature">(folderLockID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Used to delete a lock on a folder.
+
+API Endpoint: '/folder_locks/:folderLockID'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folderLockID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The Box ID of the folder lock</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Empty response body passed if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line637">line 637</a>
     </li></ul></dd>
     
 
@@ -2063,7 +2268,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line414">line 414</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line415">line 415</a>
     </li></ul></dd>
     
 
@@ -2362,7 +2567,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line488">line 488</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line489">line 489</a>
     </li></ul></dd>
     
 
@@ -2600,7 +2805,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line47">line 47</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -2805,7 +3010,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line297">line 297</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line298">line 298</a>
     </li></ul></dd>
     
 
@@ -3043,7 +3248,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line85">line 85</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line86">line 86</a>
     </li></ul></dd>
     
 
@@ -3281,7 +3486,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line66">line 66</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -3322,6 +3527,211 @@ Method: GET
     <dd>
         
 <span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getLocks"><span class="type-signature"></span>getLocks<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Used to get all locks on a folder.
+
+API Endpoint: '/folder_locks'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folderID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The Box ID of the folder to lock</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed a collection of folder lock objects if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line618">line 618</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to a collection of folder lock objects
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -3548,7 +3958,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line315">line 315</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line316">line 316</a>
     </li></ul></dd>
     
 
@@ -3786,7 +4196,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line431">line 431</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line432">line 432</a>
     </li></ul></dd>
     
 
@@ -4024,7 +4434,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line519">line 519</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line520">line 520</a>
     </li></ul></dd>
     
 
@@ -4065,6 +4475,211 @@ Method: GET
     <dd>
         
 <span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="lock"><span class="type-signature"></span>lock<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Used to lock a Box folder.
+
+API Endpoint: '/folder_locks'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folderID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The Box ID of the folder to lock</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Passed the folder lock object if successful, error otherwise</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line592">line 592</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise resolving to a folder lock object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -4260,7 +4875,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line246">line 246</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line247">line 247</a>
     </li></ul></dd>
     
 
@@ -4496,7 +5111,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line221">line 221</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line222">line 222</a>
     </li></ul></dd>
     
 
@@ -4701,7 +5316,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line574">line 574</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line575">line 575</a>
     </li></ul></dd>
     
 
@@ -5038,7 +5653,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line456">line 456</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line457">line 457</a>
     </li></ul></dd>
     
 
@@ -5333,7 +5948,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line381">line 381</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line382">line 382</a>
     </li></ul></dd>
     
 
@@ -5630,7 +6245,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line163">line 163</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -5928,7 +6543,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line358">line 358</a>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line359">line 359</a>
     </li></ul></dd>
     
 
@@ -6002,7 +6617,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Oct 30 2020 18:54:28 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jan 27 2021 17:42:49 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
