@@ -10,7 +10,8 @@ var sinon = require('sinon'),
 	mockery = require('mockery'),
 	leche = require('leche'),
 	Promise = require('bluebird'),
-	assert = require('chai').assert;
+	assert = require('chai').assert,
+	fs = require('fs');
 
 var BoxClient = require('../../../lib/box-client');
 
@@ -414,6 +415,99 @@ describe('Webhooks', function() {
 
 			const clock = sinon.useFakeTimers(DATE_IN_PAST);
 			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		// it('should validate JSON body with Unicode characters from Harish', function() {
+		// 	const HEADERS = {
+		// 		'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
+		// 		'box-delivery-timestamp': '2020-08-31T11:28:49-07:00',
+		// 		'box-signature-algorithm': 'HmacSHA256',
+		// 		'box-signature-primary': 'mHsiiomholWgVnvOrY3GrHNZNyaGqSlwU2fh5comYSY=',
+		// 		'box-signature-secondary': '9tL2RXYGw0agnezuhCJmpXOTLmqYaPUqjNFV1S+n0Mo=',
+		// 		'box-signature-version': '1'
+		// 	};
+		// 	var primaryKey = 'WZRd7N843lHJHpLesU8c3upBWZOCofSu';
+		// 	var secondaryKey = '5jBRCVh9xiNzrg0Sz0fiWaNWQK56svm6';
+		// 	const VALIDATION_DATE = Date.parse('2020-08-31T11:28:49-07:00');
+		//
+		// 	const clock = sinon.useFakeTimers(VALIDATION_DATE);
+		//
+		// 	var path = '/Users/psimon/box/sdk/box-node-sdk/tests/fixtures/endpoints/webhooks/validate_webhook_unicode_full.json';
+		// 	var stats = fs.statSync(path);
+		// 	var fileSizeInBytes = stats.size;
+		// 	const fd = fs.openSync(path, 'r');
+		// 	var buffer_from_file = Buffer.alloc(fileSizeInBytes - 1);
+		// 	fs.readSync(fd, buffer_from_file, 0, fileSizeInBytes - 1, null);
+		// 	var payloadbody = buffer_from_file.toString('utf8');
+		//
+		// 	assert.ok(Webhooks.validateMessage(payloadbody, HEADERS, primaryKey, secondaryKey));
+		// 	clock.restore();
+		// });
+
+		it.only('should validate JSON body', function() {
+			const HEADERS = {
+				'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
+				'box-delivery-timestamp': '2020-08-27T08:36:39-07:00',
+				'box-signature-algorithm': 'HmacSHA256',
+				'box-signature-primary': 'OpzWa5MJRiGsmmrTvW/I7IIGJd8IkBCN/NqMyzagoIk=',
+				'box-signature-secondary': 'OpzWa5MJRiGsmmrTvW/I7IIGJd8IkBCN/NqMyzagoIk=',
+				'box-signature-version': '1'
+			};
+			var primaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			var secondaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			const VALIDATION_DATE = Date.parse('2020-08-27T08:36:39-07:00');
+
+			const clock = sinon.useFakeTimers(VALIDATION_DATE);
+
+			var path = '/Users/psimon/box/sdk/box-node-sdk/tests/fixtures/endpoints/webhooks/validate_webhook_plain.json';
+			var stats = fs.statSync(path);
+			var fileSizeInBytes = stats.size;
+			const fd = fs.openSync(path, 'r');
+			var buffer_from_file = Buffer.alloc(fileSizeInBytes - 1);
+			fs.readSync(fd, buffer_from_file, 0, fileSizeInBytes - 1, null);
+			var payloadbody = buffer_from_file.toString('utf8');
+			var stringifiedJsonPayload = JSON.stringify(payloadbody);
+			var parsedJsonPayload = JSON.parse(payloadbody);
+			var normalizedPayload = payloadbody.normalize();
+
+			console.log('payloadbody');
+			console.log(payloadbody);
+			console.log('stringifiedJsonPayload');
+			console.log(stringifiedJsonPayload.toString());
+			console.log('parsedJsonPayload');
+			console.log(parsedJsonPayload.toString());
+			console.log('normalizedPayload');
+			console.log(normalizedPayload.toString());
+
+			assert.ok(Webhooks.validateMessage(payloadbody, HEADERS, primaryKey, secondaryKey));
+			clock.restore();
+		});
+
+		it.only('should validate JSON body with Japanese Unicode characters', function() {
+			const HEADERS = {
+				'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
+				'box-delivery-timestamp': '2020-08-26T14:12:17-07:00',
+				'box-signature-algorithm': 'HmacSHA256',
+				'box-signature-primary': 'M7TVuH2BhHpP16tzkrYBNM53k9eeOqTHSGvomAfJKYg=',
+				'box-signature-secondary': 'M7TVuH2BhHpP16tzkrYBNM53k9eeOqTHSGvomAfJKYg=',
+				'box-signature-version': '1'
+			};
+			var primaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			var secondaryKey = 'YxGCuE7zLv1HH344JsXBlHQxo3JPJsCg';
+			const VALIDATION_DATE = Date.parse('2020-08-26T14:12:17-07:00');
+
+			const clock = sinon.useFakeTimers(VALIDATION_DATE);
+
+			var path = '/Users/psimon/box/sdk/box-node-sdk/tests/fixtures/endpoints/webhooks/validate_webhook_escaped_Japanese.json';
+			var stats = fs.statSync(path);
+			var fileSizeInBytes = stats.size;
+			const fd = fs.openSync(path, 'r');
+			var buffer_from_file = Buffer.alloc(fileSizeInBytes - 1);
+			fs.readSync(fd, buffer_from_file, 0, fileSizeInBytes - 1, null);
+			var payloadbody = buffer_from_file.toString('utf8');
+
+			assert.ok(Webhooks.validateMessage(payloadbody, HEADERS, primaryKey, secondaryKey));
 			clock.restore();
 		});
 	});
