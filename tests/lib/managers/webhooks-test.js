@@ -319,8 +319,8 @@ describe('Webhooks', function() {
 	describe('validateMessage()', function() {
 
 		// A sample webhook message that is signed with 'SamplePrimaryKey' and 'SampleSecondaryKey':
-		const	BODY = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt"}}',
-			HEADERS = {
+		let BODY = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt"}}';
+		const HEADERS = {
 				'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
 				'box-delivery-timestamp': '2020-01-01T00:00:00-07:00',
 				'box-signature-algorithm': 'HmacSHA256',
@@ -413,6 +413,43 @@ describe('Webhooks', function() {
 		it('should validate JSON body parsed as Object', function() {
 
 			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should validate JSON body parsed as Object with Japanese characters', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			BODY = '{"webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8 2020-08-05.txt"}}';
+			HEADERS['box-signature-primary'] = 'LV2uCu+5NJtIHrCXDYgZ0v/PP5THGRuegw3RtdnEyuE=';
+
+			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should validate JSON body parsed as Object with emoji characters', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			BODY = '{"webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"\uD83D\uDE00 2020-08-05.txt"}}';
+			HEADERS['box-signature-primary'] = 'xF/SDZosX4le+v4A0Qn59sZhuD1RqY5KRUKzVMSbh0E=';
+
+			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should validate JSON body parsed as Object with a url', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			// eslint-disable-next-line no-useless-escape
+			BODY = '{"webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt","shared_link":{"url":"https:\/\/app.test.com\/s\/test123"}}}';
+			HEADERS['box-signature-primary'] = '+hKJH+wxkEBpkQRag11Ij1Wh4+7QrgUeRe0PPSoGWOI=';
+
+			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
+			clock.restore();
+		});
+
+		it('should validate JSON body parsed as Object with a carriage return', function() {
+			const clock = sinon.useFakeTimers(DATE_IN_PAST);
+			BODY = '{"webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"test \\r"}}';
+			HEADERS['box-signature-primary'] = 'SVkbKgy3dEEf2PbbzpNu2lDZS7zZ/aboU7HOZgBGrJk=';
+
 			assert.ok(Webhooks.validateMessage(JSON.parse(BODY), HEADERS, PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY));
 			clock.restore();
 		});
