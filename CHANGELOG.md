@@ -1,5 +1,11 @@
 # Changelog
 
+## Next Release
+
+**Bug Fixes:**
+
+- Fix webhook signature validation ([#568](https://github.com/box/box-node-sdk/pull/568))
+
 ## 1.36.0 (2020-01-27)
 
 **New Features and Enhancements:**
