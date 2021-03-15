@@ -83,7 +83,8 @@ client.metadata.createTemplate(
 		],
 		{
 			hidden: true,
-			templateKey: 'vcontract'
+			templateKey: 'vcontract',
+			copyInstanceOnItemCopy: false
 		}
 	)
 	.then(template => {
@@ -93,6 +94,7 @@ client.metadata.createTemplate(
 			scope: 'enterprise_12345',
 			displayName: 'Vendor Contract',
 			hidden: true,
+			copyInstanceOnItemCopy: false,
 			fields: 
 			[ { type: 'date',
 				key: 'signed',
