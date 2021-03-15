@@ -2,6 +2,10 @@
 
 ## Next Release
 
+**New Features and Enhancements:**
+
+- Add support for copyInstanceOnItemCopy field for metadata templates ([#572](https://github.com/box/box-node-sdk/pull/572))
+
 **Bug Fixes:**
 
 - Fix webhook signature validation ([#568](https://github.com/box/box-node-sdk/pull/568))
