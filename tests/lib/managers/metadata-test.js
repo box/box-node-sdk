@@ -170,7 +170,8 @@ describe('Metadata', function() {
 				}
 			];
 			options = {
-				hidden: true
+				hidden: true,
+				copyInstanceOnItemCopy: true
 			};
 		});
 
@@ -182,7 +183,8 @@ describe('Metadata', function() {
 					scope: 'enterprise',
 					displayName: name,
 					fields,
-					hidden: true
+					hidden: true,
+					copyInstanceOnItemCopy: true
 				}
 			};
 
