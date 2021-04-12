@@ -102,7 +102,7 @@ App auth applications also often have associated App Users, which are
 the Box API by the application that created them.  You may authenticate as the
 Service Account to provision and manage users, or as an individual app user to
 make calls as that user.  See the [API documentation](https://developer.box.com/)
-and [sample app](https://github.com/box/box-node-sdk/blob/master/examples/app-auth)
+and [sample app](https://github.com/box/box-node-sdk/blob/main/examples/app-auth)
 for detailed instructions on how to use app auth.
 
 Clients for making calls as an App User can be created with the same SDK
