@@ -59,7 +59,7 @@
     "nock": "^9.6.1",
     "np": "^7.2.0",
     "npm-force-resolutions": "0.0.3",
-    "npm-upgrade": "^2.0.3",
+    "npm-upgrade": "^3.0.0",
     "nyc": "^14.0.0",
     "shelljs": "^0.8.3",
     "shelljs-nodecli": "^0.1.1",
