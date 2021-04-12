@@ -173,11 +173,11 @@ to specify a client ID and secret (thanks to @cbetta)
 
 ## 1.16.0 [2018-04-10]
 
-- Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/master/docs/retention-policies.md#assign-retention-policy)
+- Added support for [assigning Retention Policies to Metadata Templates](https://github.com/box/box-node-sdk/blob/main/docs/retention-policies.md#assign-retention-policy)
 
 ## 1.15.0 [2018-03-29]
 
-- Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/master/docs/webhooks.md#validate-a-webhook-message)
+- Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/main/docs/webhooks.md#validate-a-webhook-message)
 to accept the request body as an `Object`
 - Fixed `sdk.configure()` to correct reconfigure all options
 - Improved error messages for API errors and added the request object as `error.request` for easier debugging

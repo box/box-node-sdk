@@ -184,7 +184,7 @@ client.comments.delete('456')
 
 For complete documentation about the available operations, please see
 the [SDK documentation pages](./docs) and the auto-generated
-[JSDocs](https://rawgit.com/box/box-node-sdk/master/docs/jsdoc/index.html).
+[JSDocs](https://rawgit.com/box/box-node-sdk/main/docs/jsdoc/index.html).
 These contain detailed information about which methods are available and
 how to use them.
 

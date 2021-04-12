@@ -41,7 +41,7 @@ function release(type) {
 	exec('git commit --amend --no-edit');
 
 	// ...and publish
-	exec('git push origin master --tags');
+	exec('git push origin main --tags');
 }
 
 //------------------------------------------------------------------------------
