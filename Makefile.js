@@ -51,7 +51,11 @@ function release(type) {
 var MOCHA_BINARY = './node_modules/.bin/_mocha',
 
 	// Directories
+	SRC_DIR = './src/',
 	JS_DIR = './lib/',
+
+	// JS Source Files
+	JS_SRC_FILES = find(SRC_DIR).filter(fileType('js')).join(" "),
 
 	// Files
 	JS_FILES = find(JS_DIR).filter(fileType('js')).join(" "),
@@ -70,6 +74,9 @@ target.lint = function() {
 
 	var code = 0;
 
+	echo('Compiling TypeScript code');
+	code += nodeCLI.exec('./node_modules/.bin/tsc').code;
+
 	echo('Validating JSON Files');
 	code += nodeCLI.exec('jsonlint', '-q', '-c', JSON_FILES).code;
 
@@ -77,7 +84,7 @@ target.lint = function() {
 	code += nodeCLI.exec('jsonlint', 'package.json', '-q', '-V ./config/package.schema.json').code;
 
 	echo('Validating JavaScript files');
-	code += nodeCLI.exec('eslint', '--fix', JS_FILES).code;
+	code += nodeCLI.exec('eslint', '--fix', JS_SRC_FILES).code;
 	code += nodeCLI.exec('eslint', '--fix', './tests').code;
 
 	return code;

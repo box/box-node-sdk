@@ -24,6 +24,9 @@
  * @typedef {?Object} AccessLevel
  */
 
+// needed for Promise
+import * as Bluebird from 'bluebird';
+
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
@@ -176,7 +179,7 @@ function constructBoxUAHeader(client) {
 	var analyticsIdentifiers = {
 		agent: `box-node-sdk/${pkg.version}`,
 		env: `Node/${process.version.replace('v', '')}`
-	};
+	} as Record<string, string>;
 
 	if (client) {
 		analyticsIdentifiers.client = `${client.name}/${client.version}`;
@@ -801,4 +804,4 @@ BoxClient.prototype.plug = function(name, plugin, options) {
  * @module box-node-sdk/lib/box-client
  * @see {@Link BoxClient}
  */
-module.exports = BoxClient;
+export = BoxClient;
