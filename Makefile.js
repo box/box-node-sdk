@@ -51,11 +51,7 @@ function release(type) {
 var MOCHA_BINARY = './node_modules/.bin/_mocha',
 
 	// Directories
-	SRC_DIR = './src/',
-	JS_DIR = './lib/',
-
-	// JS Source Files
-	JS_SRC_FILES = find(SRC_DIR).filter(fileType('js')).join(" "),
+	JS_DIR = './src/',
 
 	// Files
 	JS_FILES = find(JS_DIR).filter(fileType('js')).join(" "),
@@ -84,7 +80,7 @@ target.lint = function() {
 	code += nodeCLI.exec('jsonlint', 'package.json', '-q', '-V ./config/package.schema.json').code;
 
 	echo('Validating JavaScript files');
-	code += nodeCLI.exec('eslint', '--fix', JS_SRC_FILES).code;
+	code += nodeCLI.exec('eslint', '--fix', JS_FILES).code;
 	code += nodeCLI.exec('eslint', '--fix', './tests').code;
 
 	return code;
