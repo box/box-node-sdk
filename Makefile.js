@@ -94,8 +94,8 @@ target.lint = function() {
 };
 
 target.test = function() {
-	var code = target.lint();
-	code += target.build();
+	var code = target.build();
+	code += target.lint();
 	code += nodeCLI.exec('nyc', MOCHA_BINARY, '-c', '-R spec', '--exit', TEST_FILES).code;
 
 	if (code) {
