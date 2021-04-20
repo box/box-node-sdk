@@ -66,12 +66,19 @@ target.all = function() {
 	target.test();
 };
 
-target.lint = function() {
-
+target.build = function() {
 	var code = 0;
 
 	echo('Compiling TypeScript code');
 	code += nodeCLI.exec('./node_modules/.bin/tsc').code;
+
+	return code;
+};
+
+
+target.lint = function() {
+
+	var code = 0;
 
 	echo('Validating JSON Files');
 	code += nodeCLI.exec('jsonlint', '-q', '-c', JSON_FILES).code;
@@ -88,6 +95,7 @@ target.lint = function() {
 
 target.test = function() {
 	var code = target.lint();
+	code += target.build();
 	code += nodeCLI.exec('nyc', MOCHA_BINARY, '-c', '-R spec', '--exit', TEST_FILES).code;
 
 	if (code) {

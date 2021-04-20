@@ -23,6 +23,7 @@
   "main": "./lib/box-node-sdk.js",
   "scripts": {
     "test": "node Makefile.js",
+    "build": "node Makefile.js build",
     "lint": "node Makefile.js lint",
     "docs": "node Makefile.js docs",
     "docs-dev": "node Makefile.js docsDev",
