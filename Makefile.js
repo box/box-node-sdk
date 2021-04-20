@@ -51,7 +51,7 @@ function release(type) {
 var MOCHA_BINARY = './node_modules/.bin/_mocha',
 
 	// Directories
-	JS_DIR = './lib/',
+	JS_DIR = './src/',
 
 	// Files
 	JS_FILES = find(JS_DIR).filter(fileType('js')).join(" "),
@@ -65,6 +65,16 @@ var MOCHA_BINARY = './node_modules/.bin/_mocha',
 target.all = function() {
 	target.test();
 };
+
+target.build = function() {
+	var code = 0;
+
+	echo('Compiling TypeScript code');
+	code += nodeCLI.exec('./node_modules/.bin/tsc').code;
+
+	return code;
+};
+
 
 target.lint = function() {
 
@@ -84,7 +94,8 @@ target.lint = function() {
 };
 
 target.test = function() {
-	var code = target.lint();
+	var code = target.build();
+	code += target.lint();
 	code += nodeCLI.exec('nyc', MOCHA_BINARY, '-c', '-R spec', '--exit', TEST_FILES).code;
 
 	if (code) {

@@ -343,3 +343,8 @@ rules:
         - error
         - module.exports
 
+    node/no-missing-require:
+        - error
+        - tryExtensions:
+            - ".js"
+            - ".ts"
