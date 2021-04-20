@@ -328,6 +328,64 @@ describe('Files', function() {
 				});
 		});
 
+		it('should make GET request to get jpg file download when jpg set as extension', function() {
+			var response = {
+				statusCode: 200
+			};
+			var testQSWithExtension = Object.assign({}, testQS);
+			testQSWithExtension.extension = 'jpg';
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/thumbnail.jpg', expectedThumbnailParams)
+				.returns(Promise.resolve(response));
+			files.getThumbnail(FILE_ID, testQSWithExtension);
+		});
+
+		it('should make GET request to get png file download when png set as extension', function() {
+			var response = {
+				statusCode: 200
+			};
+			var testQSWithExtension = Object.assign({}, testQS);
+			testQSWithExtension.extension = 'png';
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
+				.returns(Promise.resolve(response));
+			files.getThumbnail(FILE_ID, testQSWithExtension);
+		});
+
+		it('should make GET request to get png file download when extension is not set', function() {
+			var response = {
+				statusCode: 200
+			};
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
+				.returns(Promise.resolve(response));
+			files.getThumbnail(FILE_ID, testQS);
+		});
+
+		it('should make GET request to get png file download when extension is invalid', function() {
+			var response = {
+				statusCode: 200
+			};
+			var testQSWithExtension = Object.assign({}, testQS);
+			testQSWithExtension.extension = 'err';
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
+				.returns(Promise.resolve(response));
+			files.getThumbnail(FILE_ID, testQSWithExtension);
+		});
+
+		it('should make GET request to get png file download when invalid extension name inclused jpg', function() {
+			var response = {
+				statusCode: 200
+			};
+			var testQSWithExtension = Object.assign({}, testQS);
+			testQSWithExtension.extension = 'err-jpg';
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
+				.returns(Promise.resolve(response));
+			files.getThumbnail(FILE_ID, testQSWithExtension);
+		});
+
 		it('should call callback with the placeholder location when a 202 ACCEPTED response is returned', function(done) {
 			var placeholderURL = 'https://someplaceholderthumbnail.png',
 				response = {

@@ -27,6 +27,10 @@
 
 **New Features and Enhancements:**
 
+- Add the ability to get a jpg thumbnail ([#546](https://github.com/box/box-node-sdk/pull/546))
+
+**Bug Fixes:**
+
 - Add support for search param to get shared link items ([#547](https://github.com/box/box-node-sdk/pull/547))
 
 ## 1.34.3 (2020-10-02)
