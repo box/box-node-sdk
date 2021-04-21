@@ -43,7 +43,10 @@ var urlPath = require('../util/url-path');
 var BASE_PATH = '/retention_policies',
 	ASSIGNMENTS_PATH = '/retention_policy_assignments',
 	FILE_VERSION_RETENTIONS_PATH = '/file_version_retentions',
-	ASSIGNMENTS_SUBRESOURCE = 'assignments';
+	ASSIGNMENTS_SUBRESOURCE = 'assignments',
+	RETENTION_POLICY_ASSIGNMENTS_PATH = '/retention_policy_assignments',
+	FILES_UNDER_RETENTION_SUBRESOURCE = 'files_under_retention',
+	FILES_VERSIONS_UNDER_RETENTION_SUBRESOURCE = 'files_versions_under_retention';
 
 // -----------------------------------------------------------------------------
 // Public
@@ -315,6 +318,58 @@ RetentionPolicies.prototype.getFileVersionRetention = function(retentionID, opti
 RetentionPolicies.prototype.getAllFileVersionRetentions = function(options, callback) {
 
 	var apiPath = urlPath(FILE_VERSION_RETENTIONS_PATH),
+		params = {
+			qs: options
+		};
+
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+};
+
+/**
+ * Get files under retention by each assignment
+ * To use this feature, you must have the manage retention policies scope enabled
+ * for your API key via your application management console.
+ *
+ * API Endpoint: '/retention_policy_assignments/:assignmentID/files_under_retention'
+ * Method: GET
+ *
+ * @param {string} assignmentID - The Box ID of the policy assignment object to fetch
+ * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+ * @param {Array} [options.fields] - An array of fields to return: disposition_at, winning_retention_policy
+ * @param {int} [options.limit] - The maximum number of items to return in a page
+ * @param {string} [options.marker] - Paging marker, left blank to begin paging from the beginning
+ * @param {Function} [callback] - Pass the file version retention record if successful, error otherwise
+ * @returns {Promise<Object>} A promise resolving to the collection of retention records
+ */
+RetentionPolicies.prototype.getFilesUnderRetentionForAssignment = function(assignmentID, options, callback) {
+
+	var apiPath = urlPath(RETENTION_POLICY_ASSIGNMENTS_PATH, assignmentID, FILES_UNDER_RETENTION_SUBRESOURCE),
+		params = {
+			qs: options
+		};
+
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+};
+
+/**
+ * Get file versions under retention by each assignment
+ * To use this feature, you must have the manage retention policies scope enabled
+ * for your API key via your application management console.
+ *
+ * API Endpoint: '/retention_policy_assignments/:assignmentID/files_under_retention'
+ * Method: GET
+ *
+ * @param {string} assignmentID - The Box ID of the policy assignment object to fetch
+ * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+ * @param {Array} [options.fields] - An array of fields to return: disposition_at, winning_retention_policy
+ * @param {int} [options.limit] - The maximum number of items to return in a page
+ * @param {string} [options.marker] - Paging marker, left blank to begin paging from the beginning
+ * @param {Function} [callback] - Pass the file version retention record if successful, error otherwise
+ * @returns {Promise<Object>} A promise resolving to the collection of retention records
+ */
+RetentionPolicies.prototype.getFilesVersionUnderRetentionForAssignment = function(assignmentID, options, callback) {
+
+	var apiPath = urlPath(RETENTION_POLICY_ASSIGNMENTS_PATH, assignmentID, FILES_VERSIONS_UNDER_RETENTION_SUBRESOURCE),
 		params = {
 			qs: options
 		};

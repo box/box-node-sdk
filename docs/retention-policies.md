@@ -48,7 +48,7 @@ client.retentionPolicies.create(
 		are_owners_notified: true,
 		custom_notification_recipients: []
 		assignment_counts: { enterprise: 0, folder: 1, metadata_template: 0 },
-		created_by: 
+		created_by:
 		{ type: 'user',
 			id: '11111',
 			name: 'Example User',
@@ -82,7 +82,7 @@ client.retentionPolicies.get('123456789')
 			are_owners_notified: true,
 			custom_notification_recipients: []
 			assignment_counts: { enterprise: 0, folder: 1, metadata_template: 0 },
-			created_by: 
+			created_by:
 			{ type: 'user',
 				id: '11111',
 				name: 'Example User',
@@ -115,7 +115,7 @@ client.retentionPolicies.update('123456789', {status: 'retired'})
 			are_owners_notified: true,
 			custom_notification_recipients: []
 			assignment_counts: { enterprise: 0, folder: 1, metadata_template: 0 },
-			created_by: 
+			created_by:
 			{ type: 'user',
 				id: '11111',
 				name: 'Example User',
@@ -136,7 +136,7 @@ To retrieve all of the retention policies for the given enterprise, call the [`r
 client.retentionPolicies.getAll({ policy_name: 'Tax' })
 	.then(policies => {
 		/* policies -> {
-			entries: 
+			entries:
 			[ { type: 'retention_policy',
 				id: '123456789',
 				name: 'Tax Documents' } ],
@@ -178,12 +178,12 @@ client.retentionPolicies.assign('11111', 'folder', '22222')
 		/* assignment -> {
 			type: 'retention_policy_assignment',
 			id: '12345',
-			retention_policy: 
+			retention_policy:
 			{ type: 'retention_policy',
 				id: '11111',
 				policy_name: 'Tax Documents' },
 			assigned_to: { type: 'folder', id: '22222' },
-			assigned_by: 
+			assigned_by:
 			{ type: 'user',
 				id: '33333',
 				name: 'Example User',
@@ -223,7 +223,7 @@ client.retentionPolicies.assign(policyID, client.retentionPolicies.assignmentTyp
 		/* assignment -> {
 			type: 'retention_policy_assignment',
 			id: '12345',
-			retention_policy: 
+			retention_policy:
 			{ type: 'retention_policy',
 				id: '11111',
 				policy_name: 'Tax Documents' },
@@ -231,7 +231,7 @@ client.retentionPolicies.assign(policyID, client.retentionPolicies.assignmentTyp
 			filter_fields: [
 				{ field: '7475b170-3d5e-4dec-b617-9cfd35ae1ecd',
 					value: '59157d60-6fec-419c-b0cc-506391ff51b8' } ]
-			assigned_by: 
+			assigned_by:
 			{ type: 'user',
 				id: '33333',
 				name: 'Example User',
@@ -255,12 +255,12 @@ client.retentionPolicies.getAssignment('12345')
 		/* assignment -> {
 			type: 'retention_policy_assignment',
 			id: '12345',
-			retention_policy: 
+			retention_policy:
 			{ type: 'retention_policy',
 				id: '11111',
 				policy_name: 'Tax Documents' },
 			assigned_to: { type: 'folder', id: '22222' },
-			assigned_by: 
+			assigned_by:
 			{ type: 'user',
 				id: '33333',
 				name: 'Example User',
@@ -287,11 +287,11 @@ client.retentionPolicies.getFileVersionRetention('55555')
 			id: '55555',
 			applied_at: '2015-08-06T22:02:24-07:00',
 			disposition_at: '2016-08-06T21:45:28-07:00',
-			winning_retention_policy: 
+			winning_retention_policy:
 			{ type: 'retention_policy',
 				id: '11111',
 				policy_name: 'Tax Documents' },
-			file_version: 
+			file_version:
 			{ type: 'file_version',
 				id: '44444',
 				sha1: '4262d6250b0e6f440dca43a2337bd4621bad9136' },
@@ -318,12 +318,82 @@ var options = {
 client.retentionPolicies.getAllFileVersionRetentions(options)
 	.then(retentions => {
 		/* retentions -> {
-			entries: 
+			entries:
 			[ { type: 'file_version_retention', id: '112725' },
 				{ type: 'file_version_retention', id: '112729' },
 				{ type: 'file_version_retention', id: '112733' } ],
 			limit: 100,
 			order: [ { by: 'file_version_id', direction: 'ASC' } ] }
 		*/
+	});
+```
+
+Get Files Under Retention For Assignment
+-------------------------------
+
+To retrieve information about a files under retention, call the
+[`retentionPolicies.getFilesUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFilesUnderRetentionForAssignment) method.
+
+<!-- sample get_files_under_retention -->
+```js
+client.retentionPolicies.getFilesUnderRetentionForAssignment('12345')
+	.then(file => {
+		/* file -> {
+			id: 12345,
+			etag: 1,
+			type: 'file',
+			sequence_id: 3,
+			name: 'Contract.pdf',
+			sha1: '85136C79CBF9FE36BB9D05D0639C70C265C18D37',
+			file_version: {
+				id: 123456,
+				type: 'file_version',
+				sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
+			},
+			applied_at: '2012-12-12T10:53:43-08:00',
+			disposition_at: '2012-12-12T10:53:43-08:00',
+			winning_retention_policy: {
+				id: 12345,
+				type: 'file_version',
+				policy_name: 'Some Policy Name',
+				retention_length: 365,
+				disposition_action: 'permanently_delete',
+			},
+		*/
+	});
+```
+
+Get File Versions Under Retention For Assignment
+-------------------------------
+
+To retrieve information about a files under retention, call the
+[`retentionPolicies.getFileVersionUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFileVersionUnderRetentionForAssignment) method.
+
+<!-- sample get_files_under_retention -->
+```js
+client.retentionPolicies.getFilesVersionUnderRetentionForAssignment('12345')
+	.then(fileVersion => {
+		/* fileVersion -> {
+			id: 123456,
+			etag: 1,
+			type: 'file_version',
+			sequence_id: 3,
+			name: 'Contract.pdf',
+			sha1: '85136C79CBF9FE36BB9D05D0639C70C265C18D37',
+			file_version: {
+				id: 1234567,
+				type: 'file_version',
+				sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
+			},
+			applied_at: '2012-12-12T10:53:43-08:00',
+			disposition_at: '2012-12-12T10:53:43-08:00',
+			winning_retention_policy: {
+				id: 12345,
+				type: 'file_version',
+				policy_name: 'Some Policy Name',
+				retention_length: 365,
+				disposition_action: 'permanently_delete',
+			},
+ 		*/
 	});
 ```
