@@ -355,7 +355,7 @@ RetentionPolicies.prototype.getFilesUnderRetentionForAssignment = function(assig
  * To use this feature, you must have the manage retention policies scope enabled
  * for your API key via your application management console.
  *
- * API Endpoint: '/retention_policy_assignments/:assignmentID/files_under_retention'
+ * API Endpoint: '/retention_policy_assignments/:assignmentID/files_versions_under_retention'
  * Method: GET
  *
  * @param {string} assignmentID - The Box ID of the policy assignment object to fetch

@@ -337,28 +337,32 @@ To retrieve information about files under retention, call the
 <!-- sample get_files_under_retention -->
 ```js
 client.retentionPolicies.getFilesUnderRetentionForAssignment('12345')
-	.then(file => {
-		/* file -> {
-			id: 12345,
-			etag: 1,
-			type: 'file',
-			sequence_id: 3,
-			name: 'Contract.pdf',
-			sha1: '85136C79CBF9FE36BB9D05D0639C70C265C18D37',
-			file_version: {
-				id: 123456,
-				type: 'file_version',
-				sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
-			},
-			applied_at: '2012-12-12T10:53:43-08:00',
-			disposition_at: '2012-12-12T10:53:43-08:00',
-			winning_retention_policy: {
+	.then(files => {
+		/* files -> {
+			entries:
+			[ {
 				id: 12345,
-				type: 'file_version',
-				policy_name: 'Some Policy Name',
-				retention_length: 365,
-				disposition_action: 'permanently_delete',
-			},
+				etag: 1,
+				type: 'file',
+				sequence_id: 3,
+				name: 'Contract.pdf',
+				sha1: '85136C79CBF9FE36BB9D05D0639C70C265C18D37',
+				file_version: {
+					id: 123456,
+					type: 'file_version',
+					sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
+				},
+				applied_at: '2012-12-12T10:53:43-08:00',
+				disposition_at: '2012-12-12T10:53:43-08:00',
+				winning_retention_policy: {
+					id: 12345,
+					type: 'file_version',
+					policy_name: 'Some Policy Name',
+					retention_length: 365,
+					disposition_action: 'permanently_delete',
+				} ],
+			limit: 1000,
+			marker: 'some marker'
 		*/
 	});
 ```
@@ -372,28 +376,32 @@ To retrieve information about files under retention, call the
 <!-- sample get_files_under_retention -->
 ```js
 client.retentionPolicies.getFilesVersionUnderRetentionForAssignment('12345')
-	.then(fileVersion => {
-		/* fileVersion -> {
-			id: 123456,
-			etag: 1,
-			type: 'file_version',
-			sequence_id: 3,
-			name: 'Contract.pdf',
-			sha1: '85136C79CBF9FE36BB9D05D0639C70C265C18D37',
-			file_version: {
-				id: 1234567,
+	.then(fileVersions => {
+		/* fileVersions -> {
+			entries:
+			[ {
+				id: 123456,
+				etag: 1,
 				type: 'file_version',
-				sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
-			},
-			applied_at: '2012-12-12T10:53:43-08:00',
-			disposition_at: '2012-12-12T10:53:43-08:00',
-			winning_retention_policy: {
-				id: 12345,
-				type: 'file_version',
-				policy_name: 'Some Policy Name',
-				retention_length: 365,
-				disposition_action: 'permanently_delete',
-			},
- 		*/
+				sequence_id: 3,
+				name: 'Contract.pdf',
+				sha1: '85136C79CBF9FE36BB9D05D0639C70C265C18D37',
+				file_version: {
+					id: 1234567,
+					type: 'file_version',
+					sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
+				},
+				applied_at: '2012-12-12T10:53:43-08:00',
+				disposition_at: '2012-12-12T10:53:43-08:00',
+				winning_retention_policy: {
+					id: 12345,
+					type: 'file_version',
+					policy_name: 'Some Policy Name',
+					retention_length: 365,
+					disposition_action: 'permanently_delete',
+				} ],
+			limit: 1000,
+			marker: 'some marker'
+		*/
 	});
 ```

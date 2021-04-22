@@ -522,4 +522,95 @@ describe('RetentionPolicies', function() {
 		});
 	});
 
+	describe('getFilesUnderRetentionForAssignment()', function() {
+
+		it('should make GET request to get retention records when called', function() {
+
+			var qs = {
+				fields: 'disposition_at,winning_retention_policy'
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/retention_policy_assignments/${POLICY_ID}/files_under_retention`, {qs});
+			retentionPolicies.getFilesUnderRetentionForAssignment(POLICY_ID, qs);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
+			retentionPolicies.getFilesUnderRetentionForAssignment(POLICY_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			retentionPolicies.getFilesUnderRetentionForAssignment(POLICY_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return retentionPolicies.getFilesUnderRetentionForAssignment(POLICY_ID)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('getFilesVersionUnderRetentionForAssignment()', function() {
+
+		it('should make GET request to get retention records when called', function() {
+
+			var qs = {
+				fields: 'disposition_at,winning_retention_policy'
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs(`/retention_policy_assignments/${POLICY_ID}/files_versions_under_retention`, {qs});
+			retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID, qs);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.get)
+				.returnsArg(0);
+			retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
+			retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID, null, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID)
+				.then(data => assert.equal(data, response));
+		});
+	});
 });
