@@ -18,13 +18,13 @@ type CollaborationRole = string;
  * A Box file or folder type constant
  * @typedef {string} ItemType
  */
-type ItemType = string;
+type ItemType = 'file' | 'folder';
 
 /**
  * An access level constant. Used for setting and updating shared links, folder upload, etc.
  * @typedef {?Object} AccessLevel
  */
-type AccessLevel = Object | null;
+type AccessLevel = object | null /* FIXME */;
 
 type APISession = any /* FIXME */;
 type APIRequestManager = any /* FIXME */;
@@ -141,8 +141,8 @@ function getFullURL(defaultBasePath: string, url: string) {
  * @returns {Object} The batch API request object
  * @private
  */
-function formatRequestForBatch(params: Record<string, string>) {
-	var relativePath = params.url.replace(/^http.*?\/\d\.\d\//, '/');
+function formatRequestForBatch(params: Record<string, string | object>) {
+	var relativePath = (params.url as string).replace(/^http.*?\/\d\.\d\//, '/');
 
 	return {
 		method: params.method,
@@ -306,7 +306,7 @@ class BoxClient {
 	 * @returns {Object} - a new object with the headers needed for the request
 	 * @private
 	 */
-	_createHeadersForRequest(callerHeaders: Object | null, accessToken: string) {
+	_createHeadersForRequest(callerHeaders: object | null, accessToken: string) {
 		var headers: Record<string, string> = {};
 
 		// 'Authorization' - contains your valid access token for authorization
@@ -501,7 +501,7 @@ class BoxClient {
 	exchangeToken(
 		scopes: string | string[],
 		resource: string,
-		options: Object,
+		options: Function | object,
 		callback: Function
 	) {
 		// Shuffle optional parameters
@@ -528,7 +528,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	get(path: string, params: Object | null, callback: Function) {
+	get(path: string, params: object | null, callback: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'GET';
 		newParams.url = getFullURL(this._baseURL, path);
@@ -544,7 +544,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	post(path: string, params: Object | null, callback?: Function) {
+	post(path: string, params: object | null, callback?: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'POST';
 		newParams.url = getFullURL(this._baseURL, path);
@@ -559,7 +559,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	put(path: string, params: Object | null, callback: Function) {
+	put(path: string, params: object | null, callback: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'PUT';
 		newParams.url = getFullURL(this._baseURL, path);
@@ -574,7 +574,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	del(path: string, params: Object | null, callback: Function) {
+	del(path: string, params: object | null, callback: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'DELETE';
 		newParams.url = getFullURL(this._baseURL, path);
@@ -589,7 +589,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - Called with API call results, or err if call failed
 	 * @returns {void}
 	 */
-	options(path: string, params: Object | null, callback: Function) {
+	options(path: string, params: object | null, callback: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'OPTIONS';
 		newParams.url = getFullURL(this._baseURL, path);
@@ -607,8 +607,8 @@ class BoxClient {
 	 */
 	upload(
 		path: string,
-		params: Object | null,
-		formData: Object | null,
+		params: object | null,
+		formData: object | null,
 		callback: Function
 	) {
 		var defaults = {
@@ -662,7 +662,7 @@ class BoxClient {
 
 		var batch: any[] = this._batch;
 		this._batch = null;
-		return this.post('/batch', params, /* callback */ undefined)
+		return this.post('/batch', params)
 			.then((res: any /* FIXME */) => {
 				var responses: any[] = res.body.responses;
 
@@ -797,7 +797,7 @@ class BoxClient {
 	 * @returns {void}
 	 * @throws Will throw an error if plugin name matches an existing method on box-client
 	 */
-	plug(name: string, plugin: Function, options: Object) {
+	plug(name: string, plugin: Function, options: object) {
 		options = options || {};
 
 		if (name in this && typeof (this as any)[name] === 'function') {
