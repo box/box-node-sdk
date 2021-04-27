@@ -2,14 +2,13 @@
  * @fileoverview URL Path Builder
  */
 
-'use strict';
-
 // ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
 
 // Pattern to check for relative paths
-var PATTERN = /\/\.+/;
+const PATTERN = /\/\.+/;
+
 /**
  * remove leading & trailing slashes from some string. This is useful for
  * removing slashes from the path segments that are actually a part of the
@@ -19,10 +18,9 @@ var PATTERN = /\/\.+/;
  * @returns {string} The path segment with slashes trimmed (ex: 'users')
  * @private
  */
-function trimSlashes(segment) {
+function trimSlashes(segment: string) {
 	return segment.replace(/^\/|\/$/g, '');
 }
-
 
 // ------------------------------------------------------------------------------
 // Public
@@ -39,17 +37,20 @@ function trimSlashes(segment) {
  * @name URLPath
  * @returns {string} Return a valid URL path comprised of the given path segments
  */
-module.exports = function urlPath(/* arguments*/) {
-	var args = Array.prototype.slice.call(arguments);
-	var path = args.map(x => String(x))
-		.map(x => {
+export = function urlPath(/* arguments*/) {
+	const args = Array.prototype.slice.call(arguments);
+	const path = args
+		.map((x) => String(x))
+		.map((x) => {
 			var trimmedX = trimSlashes(x);
 			if (PATTERN.test(trimmedX)) {
-				throw new Error(`An invalid path parameter exists in ${trimmedX}. Relative path parameters cannot be passed.`);
+				throw new Error(
+					`An invalid path parameter exists in ${trimmedX}. Relative path parameters cannot be passed.`
+				);
 			}
 			return trimmedX;
 		})
-		.map(x => encodeURIComponent(x))
+		.map((x) => encodeURIComponent(x))
 		.join('/');
 	return `/${path}`;
 };
