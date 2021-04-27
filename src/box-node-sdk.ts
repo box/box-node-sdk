@@ -2,12 +2,22 @@
  * @fileoverview Box SDK for Node.js
  */
 
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+
 import { EventEmitter } from 'events';
 import * as qs from 'querystring';
 import AnonymousAPISession = require('./sessions/anonymous-session');
 import APIRequestManager = require('./api-request-manager');
 import BoxClient = require('./box-client');
 import TokenManager = require('./token-manager');
+
+var Config = require('./util/config'),
+	BasicAPISession = require('./sessions/basic-session'),
+	PersistentAPISession = require('./sessions/persistent-session'),
+	AppAuthSession = require('./sessions/app-auth-session'),
+	Webhooks = require('./managers/webhooks');
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -45,16 +55,6 @@ import TokenManager = require('./token-manager');
 type TokenStore = object /* FIXME */;
 type UserConfigurationOptions = object /* FIXME */;
 type TokenRequestOptions = object /* FIXME */;
-
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-var Config = require('./util/config'),
-	BasicAPISession = require('./sessions/basic-session'),
-	PersistentAPISession = require('./sessions/persistent-session'),
-	AppAuthSession = require('./sessions/app-auth-session'),
-	Webhooks = require('./managers/webhooks');
 
 // ------------------------------------------------------------------------------
 // Private
@@ -126,7 +126,6 @@ class BoxSDKNode extends EventEmitter {
 	 * Setup the SDK instance by instantiating necessary objects with current
 	 * configuration values.
 	 *
-	 * @param {EventEmitter} eventBus The event bus to use
 	 * @returns {void}
 	 * @private
 	 */
@@ -186,17 +185,15 @@ class BoxSDKNode extends EventEmitter {
 			typeof boxAppSettings.appAuth === 'object' &&
 			boxAppSettings.appAuth.publicKeyID
 		) {
-			var appAuth: Exclude<typeof params['appAuth'], void> = {};
-			// Assign publicKeyID to keyID
-			appAuth.keyID = boxAppSettings.appAuth.publicKeyID;
+			params.appAuth = {
+				keyID: boxAppSettings.appAuth.publicKeyID, // Assign publicKeyID to keyID
+				privateKey: boxAppSettings.appAuth.privateKey,
+			};
 
-			appAuth.privateKey = boxAppSettings.appAuth.privateKey;
-
-			var passphrase = boxAppSettings.appAuth.passphrase;
+			const passphrase = boxAppSettings.appAuth.passphrase;
 			if (typeof passphrase === 'string') {
-				appAuth.passphrase = passphrase;
+				params.appAuth.passphrase = passphrase;
 			}
-			params.appAuth = appAuth;
 		}
 
 		if (typeof appConfig.enterpriseID === 'string') {
@@ -291,11 +288,11 @@ class BoxSDKNode extends EventEmitter {
 	 * Users themselves (as a user).
 	 *
 	 * @param {string} type The type of entity to operate as, "enterprise" or "user"
-	 * @param {string} id The Box ID of the entity to operate as
+	 * @param {string} [id] (Optional) The Box ID of the entity to operate as
 	 * @param {TokenStore} [tokenStore] (Optional) the token store to use for caching tokens
 	 * @returns {BoxClient} A new client authorized as the app user or enterprise
 	 */
-	getAppAuthClient(type: string, id: string, tokenStore?: TokenStore) {
+	getAppAuthClient(type: string, id?: string, tokenStore?: TokenStore) {
 		if (type === 'enterprise' && !id) {
 			if (this.config.enterpriseID) {
 				id = this.config.enterpriseID;
@@ -360,7 +357,7 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	getTokensRefreshGrant(
 		refreshToken: string,
-		options: TokenRequestOptions | null,
+		options: TokenRequestOptions | Function | null,
 		callback: Function
 	) {
 		if (typeof options === 'function') {
@@ -412,7 +409,7 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	getAppUserTokens(
 		userID: string,
-		options: TokenRequestOptions | null,
+		options: TokenRequestOptions | Function | null,
 		callback: Function
 	) {
 		if (typeof options === 'function') {
@@ -435,7 +432,7 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	revokeTokens(
 		token: string,
-		options: TokenRequestOptions | null,
+		options: TokenRequestOptions | Function | null,
 		callback: Function
 	) {
 		if (typeof options === 'function') {
