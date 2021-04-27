@@ -2,7 +2,9 @@
  * @fileoverview Iterator for paged responses
  */
 
-'use strict';
+import * as qs from 'querystring';
+import { Promise } from 'bluebird';
+import PromiseQueue = require('promise-queue');
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -27,12 +29,9 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-var querystring = require('querystring'),
-	Promise = require('bluebird'),
-	PromiseQueue = require('promise-queue'),
-	errors = require('./errors');
+const errors = require('./errors');
 
-PromiseQueue.configure(Promise);
+PromiseQueue.configure(Promise as any);
 
 // -----------------------------------------------------------------------------
 // Private
@@ -40,7 +39,7 @@ PromiseQueue.configure(Promise);
 
 const PAGING_MODES = Object.freeze({
 	MARKER: 'marker',
-	OFFSET: 'offset'
+	OFFSET: 'offset',
 });
 
 // -----------------------------------------------------------------------------
@@ -51,23 +50,36 @@ const PAGING_MODES = Object.freeze({
  * Asynchronous iterator for paged collections
  */
 class PagingIterator {
-
 	/**
 	 * Determine if a response is iterable
 	 * @param {Object} response - The API response
 	 * @returns {boolean} Whether the response is iterable
 	 */
-	static isIterable(response) {
+	static isIterable(response: any /* FIXME */) {
 		// POST responses for uploading a file are explicitly excluded here because, while the response is iterable,
 		// it always contains only a single entry and historically has not been handled as iterable in the SDK.
 		// This behavior is being preserved here to avoid a breaking change.
 		let UPLOAD_PATTERN = /.*upload\.box\.com.*\/content/;
-		var isGetOrPostRequest = (response.request && (response.request.method === 'GET' || (response.request.method === 'POST' && !UPLOAD_PATTERN.test(response.request.uri.href)))),
-			hasEntries = (response.body && Array.isArray(response.body.entries)),
-			notEventStream = (response.body && !response.body.next_stream_position);
+		var isGetOrPostRequest =
+				response.request &&
+				(response.request.method === 'GET' ||
+					(response.request.method === 'POST' &&
+						!UPLOAD_PATTERN.test(response.request.uri.href))),
+			hasEntries = response.body && Array.isArray(response.body.entries),
+			notEventStream = response.body && !response.body.next_stream_position;
 
 		return Boolean(isGetOrPostRequest && hasEntries && notEventStream);
 	}
+
+	nextField: any /* FIXME */;
+	nextValue: any /* FIXME */;
+	limit: any /* FIXME */;
+	done: boolean;
+	options: Record<string, any> /* FIMXE */;
+
+	fetch: any /* FIXME */;
+	buffer: any /* FIXME */;
+	queue: any /* FIXME */;
 
 	/**
 	 * @constructor
@@ -76,12 +88,10 @@ class PagingIterator {
 	 * @returns {void}
 	 * @throws {Error} Will throw when collection cannot be paged
 	 */
-	constructor(response, client) {
-
+	constructor(response: any /* FIXME */, client: any /* FIXME */) {
 		if (!PagingIterator.isIterable(response)) {
 			throw new Error('Cannot create paging iterator for non-paged response!');
 		}
-
 
 		var data = response.body;
 		if (Number.isSafeInteger(data.offset)) {
@@ -103,10 +113,13 @@ class PagingIterator {
 		var href = response.request.href.split('?')[0];
 		this.options = {
 			headers: response.request.headers,
-			qs: querystring.parse(response.request.uri.query)
+			qs: qs.parse(response.request.uri.query),
 		};
 		if (response.request.body) {
-			if (Object.prototype.toString.call(response.request.body) === '[object Object]') {
+			if (
+				Object.prototype.toString.call(response.request.body) ===
+				'[object Object]'
+			) {
 				this.options.body = response.request.body;
 			} else {
 				this.options.body = JSON.parse(response.request.body);
@@ -139,12 +152,10 @@ class PagingIterator {
 	 * @param {Object} response - The latest API response
 	 * @returns {void}
 	 */
-	_updatePaging(response) {
-
+	_updatePaging(response: any /* FIXME */) {
 		var data = response.body;
 
 		if (this.nextField === PAGING_MODES.OFFSET) {
-
 			this.nextValue += this.limit;
 
 			if (Number.isSafeInteger(data.total_count)) {
@@ -153,7 +164,6 @@ class PagingIterator {
 				this.done = data.entries.length === 0;
 			}
 		} else if (this.nextField === PAGING_MODES.MARKER) {
-
 			if (data.next_marker) {
 				this.nextValue = data.next_marker;
 			} else {
@@ -178,40 +188,34 @@ class PagingIterator {
 	 * @returns {Promise} Promise resolving to iterator state
 	 */
 	_getData() {
+		return this.fetch(this.options).then((response: any /* FIXME */) => {
+			if (response.statusCode !== 200) {
+				throw errors.buildUnexpectedResponseError(response);
+			}
 
-		return this.fetch(this.options)
-			.then(response => {
+			this._updatePaging(response);
 
-				if (response.statusCode !== 200) {
-					throw errors.buildUnexpectedResponseError(response);
+			this.buffer = this.buffer.concat(response.body.entries);
+
+			if (this.buffer.length === 0) {
+				if (this.done) {
+					return {
+						value: undefined,
+						done: true,
+					};
 				}
 
-				this._updatePaging(response);
+				// If we didn't get any data in this page, but the paging
+				// parameters indicate that there is more data, attempt
+				// to fetch more.  This occurs in multiple places in the API
+				return this._getData();
+			}
 
-				this.buffer = this.buffer.concat(response.body.entries);
-
-				if (this.buffer.length === 0) {
-
-					if (this.done) {
-
-						return {
-							value: undefined,
-							done: true
-						};
-					}
-
-					// If we didn't get any data in this page, but the paging
-					// parameters indicate that there is more data, attempt
-					// to fetch more.  This occurs in multiple places in the API
-					return this._getData();
-				}
-
-
-				return {
-					value: this.buffer.shift(),
-					done: false
-				};
-			});
+			return {
+				value: this.buffer.shift(),
+				done: false,
+			};
+		});
 	}
 
 	/**
@@ -219,20 +223,17 @@ class PagingIterator {
 	 * @returns {Promise} Promise resolving to iterator state
 	 */
 	next() {
-
 		if (this.buffer.length > 0) {
-
 			return Promise.resolve({
 				value: this.buffer.shift(),
-				done: false
+				done: false,
 			});
 		}
 
 		if (this.done) {
-
 			return Promise.resolve({
 				value: undefined,
-				done: true
+				done: true,
 			});
 		}
 
@@ -248,4 +249,4 @@ class PagingIterator {
 	}
 }
 
-module.exports = PagingIterator;
+export = PagingIterator;
