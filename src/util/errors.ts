@@ -82,7 +82,7 @@ module.exports = {
 	 * @param {string} message - the response error message
 	 * @returns {Errors~ResponseError} an error describing the response error
 	 */
-	buildResponseError(response: any /* FIXME */, message: string) {
+	buildResponseError(response: any /* FIXME */, message?: string) {
 		response = response || {};
 		message = message || 'API Response Error';
 
@@ -140,7 +140,7 @@ module.exports = {
 	 * @param {string} [message] - Optional message for the error
 	 * @returns {Errors~AuthError} A properly formatted authentication error
 	 */
-	buildAuthError(response: any /* FIXME */, message: string) {
+	buildAuthError(response: any /* FIXME */, message?: string) {
 		message = message || 'Expired Auth: Auth code or refresh token has expired';
 		var responseError = this.buildResponseError(response, message);
 		responseError.authExpired = true;
