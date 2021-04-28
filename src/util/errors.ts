@@ -73,7 +73,7 @@ class Request {
  * @name Errors
  * @module box-node-sdk/lib/util/errors
  */
-module.exports = {
+export = {
 	/**
 	 * Build a response error with the given message, and attaching meta data from the
 	 * response data.
