@@ -84,4 +84,4 @@ class APIRequestManager {
  * @module box-node-sdk/lib/api-request-manager
  * @see {@Link APIRequestManager}
  */
-module.exports = APIRequestManager;
+export = APIRequestManager;
