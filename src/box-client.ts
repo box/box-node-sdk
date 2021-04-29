@@ -750,7 +750,7 @@ class BoxClient {
 	 * @param {Function} method The client method (e.g. client.get)
 	 * @returns {Function}  The wrapped method
 	 */
-	wrapWithDefaultHandler(method: Function) {
+	wrapWithDefaultHandler(method: Function): Function {
 		var self = this;
 		return function wrappedClientMethod(/* arguments */) {
 			// Check if the last argument is a callback
