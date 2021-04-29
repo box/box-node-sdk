@@ -6,9 +6,9 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-import { EventEmitter } from 'events';
 import { Promise } from 'bluebird';
-import errors = require('./util/errors');
+import { EventEmitter } from 'events';
+import errors from './util/errors';
 
 const APIRequest = require('./api-request');
 
