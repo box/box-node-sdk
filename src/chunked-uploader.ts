@@ -2,9 +2,7 @@
  * @fileoverview Upload manager for large file uploads
  */
 
-'use strict';
-
-const Promise = require('bluebird');
+import { Promise } from 'bluebird';
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -61,13 +59,25 @@ const Promise = require('bluebird');
  * @param {Error} err The error that occurred
  */
 
+type ChunkedUploaderOptions = {
+	retryInterval?: number;
+	parallelism?: number;
+	fileAttributes?: Record<string, any>;
+};
+
+type UploadSessionInfo = {
+	id: string;
+	part_size: number;
+};
+
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-const EventEmitter = require('events').EventEmitter,
-	ReadableStream = require('stream').Readable,
-	crypto = require('crypto');
+import { EventEmitter } from 'events';
+import { Readable as ReadableStream } from 'stream';
+import crypto from 'crypto';
+import BoxClient from './box-client';
 
 // -----------------------------------------------------------------------------
 // Private
@@ -75,7 +85,7 @@ const EventEmitter = require('events').EventEmitter,
 
 const DEFAULT_OPTIONS = Object.freeze({
 	parallelism: 4,
-	retryInterval: 1000
+	retryInterval: 1000,
 });
 
 /**
@@ -84,6 +94,16 @@ const DEFAULT_OPTIONS = Object.freeze({
  * @private
  */
 class Chunk extends EventEmitter {
+	client: BoxClient;
+	sessionID: string;
+	chunk: Buffer | string | null;
+	length: number;
+	offset: number;
+	totalSize: number;
+	options: ChunkedUploaderOptions;
+	data: any /* FIXME */;
+	retry: number | NodeJS.Timeout | null;
+	canceled: boolean;
 
 	/**
 	 * Create a Chunk, representing a part of a file being uploaded
@@ -95,8 +115,14 @@ class Chunk extends EventEmitter {
 	 * @param {Object} options The options from the ChunkedUploader
 	 * @param {int} options.retryInterval The number of ms to wait before retrying a chunk upload
 	 */
-	constructor(client, sessionID, chunk, offset, totalSize, options) {
-
+	constructor(
+		client: BoxClient,
+		sessionID: string,
+		chunk: Buffer | string,
+		offset: number,
+		totalSize: number,
+		options: ChunkedUploaderOptions
+	) {
 		super();
 
 		this.client = client;
@@ -116,7 +142,6 @@ class Chunk extends EventEmitter {
 	 * @returns {UploadPart} The chunk object
 	 */
 	getData() {
-
 		return this.data.part;
 	}
 
@@ -127,31 +152,38 @@ class Chunk extends EventEmitter {
 	 * @emits Chunk#error
 	 */
 	upload() {
-
-		this.client.files.uploadPart(this.sessionID, this.chunk, this.offset, this.totalSize, (err, data) => {
-
-			if (this.canceled) {
-				this.chunk = null;
-				return;
-			}
-
-			if (err) {
-				// handle the error or retry
-				if (err.statusCode) {
-					// an API error, probably not retryable!
-					this.emit('error', err);
-				} else {
-					// maybe a network error, retry
-					this.retry = setTimeout(() => this.upload(), this.options.retryInterval);
+		this.client.files.uploadPart(
+			this.sessionID,
+			this.chunk,
+			this.offset,
+			this.totalSize,
+			(err: any /* FIXME */, data: any /* FIXME */) => {
+				if (this.canceled) {
+					this.chunk = null;
+					return;
 				}
-				return;
-			}
 
-			// Record the chunk data for commit, and try to free up the chunk buffer
-			this.data = data;
-			this.chunk = null;
-			this.emit('uploaded', data);
-		});
+				if (err) {
+					// handle the error or retry
+					if (err.statusCode) {
+						// an API error, probably not retryable!
+						this.emit('error', err);
+					} else {
+						// maybe a network error, retry
+						this.retry = setTimeout(
+							() => this.upload(),
+							this.options.retryInterval
+						);
+					}
+					return;
+				}
+
+				// Record the chunk data for commit, and try to free up the chunk buffer
+				this.data = data;
+				this.chunk = null;
+				this.emit('uploaded', data);
+			}
+		);
 	}
 
 	/**
@@ -160,8 +192,7 @@ class Chunk extends EventEmitter {
 	 * @returns {void}
 	 */
 	cancel() {
-
-		clearTimeout(this.retry);
+		clearTimeout(this.retry as any); // number or NodeJS.Timeout
 		this.chunk = null;
 		this.canceled = true;
 	}
@@ -173,6 +204,23 @@ class Chunk extends EventEmitter {
 
 /** Manager for uploading a file in chunks */
 class ChunkedUploader extends EventEmitter {
+	_client: BoxClient;
+	_sessionID: string;
+	_partSize: number;
+	_uploadSessionInfo: UploadSessionInfo;
+	_stream!: ReadableStream | null;
+	_streamBuffer!: Array<any>;
+	_file!: Buffer | string | null;
+	_size: number;
+	_options: Required<ChunkedUploaderOptions>;
+	_isStarted: boolean;
+	_numChunksInFlight: number;
+	_chunks: Array<any>;
+	_position: number;
+	_fileHash: crypto.Hash;
+	_promise?: Promise<any>;
+	_resolve?: Function;
+	_reject?: Function;
 
 	/**
 	 * Create an upload manager
@@ -185,8 +233,13 @@ class ChunkedUploader extends EventEmitter {
 	 * @param {int} [options.parallelism=4] The number of concurrent chunks to upload
 	 * @param {Object} [options.fileAttributes] Attributes to set on the file during commit
 	 */
-	constructor(client, uploadSessionInfo, file, size, options) {
-
+	constructor(
+		client: BoxClient,
+		uploadSessionInfo: UploadSessionInfo,
+		file: ReadableStream | Buffer | string,
+		size: number,
+		options?: ChunkedUploaderOptions
+	) {
 		super();
 
 		this._client = client;
@@ -205,7 +258,11 @@ class ChunkedUploader extends EventEmitter {
 		}
 
 		this._size = size;
-		this._options = Object.assign({}, DEFAULT_OPTIONS, options);
+		this._options = Object.assign(
+			{},
+			DEFAULT_OPTIONS,
+			options
+		) as Required<ChunkedUploaderOptions>;
 
 		this._isStarted = false;
 		this._numChunksInFlight = 0;
@@ -219,14 +276,15 @@ class ChunkedUploader extends EventEmitter {
 	 * @returns {Promise<Object>} A promise resolving to the uploaded file
 	 */
 	start() {
-
 		if (this._isStarted) {
 			return this._promise;
 		}
 
 		// Create the initial chunks
 		for (let i = 0; i < this._options.parallelism; i++) {
-			this._getNextChunk(chunk => (chunk ? this._uploadChunk(chunk) : this._commit()));
+			this._getNextChunk((chunk: any /* FIXME */) =>
+				chunk ? this._uploadChunk(chunk) : this._commit()
+			);
 		}
 		this._isStarted = true;
 
@@ -249,22 +307,24 @@ class ChunkedUploader extends EventEmitter {
 	 * @emits ChunkedUploader#abortFailed
 	 */
 	abort() {
-
-		this._chunks.forEach(chunk => chunk.removeAllListeners().cancel());
+		this._chunks.forEach((chunk) => chunk.removeAllListeners().cancel());
 		this._chunks = [];
 		this._file = null;
 		this._stream = null;
 
-		return this._client.files.abortUploadSession(this._sessionID)
-			/* eslint-disable promise/always-return */
-			.then(() => {
-				this.emit('aborted');
-			})
-			/* eslint-enable promise/always-return */
-			.catch(err => {
-				this.emit('abortFailed', err);
-				throw err;
-			});
+		return (
+			this._client.files
+				.abortUploadSession(this._sessionID)
+				/* eslint-disable promise/always-return */
+				.then(() => {
+					this.emit('aborted');
+				})
+				/* eslint-enable promise/always-return */
+				.catch((err: any /* FIXME */) => {
+					this.emit('abortFailed', err);
+					throw err;
+				})
+		);
 	}
 
 	/**
@@ -273,8 +333,7 @@ class ChunkedUploader extends EventEmitter {
 	 * @returns {void}
 	 * @private
 	 */
-	_getNextChunk(callback) {
-
+	_getNextChunk(callback: Function) {
 		if (this._position >= this._size) {
 			callback(null);
 			return;
@@ -283,26 +342,21 @@ class ChunkedUploader extends EventEmitter {
 		let buf;
 
 		if (this._file) {
-
 			// Buffer/string case, just get the slice we need
 			buf = this._file.slice(this._position, this._position + this._partSize);
 		} else if (this._streamBuffer.length > 0) {
-
 			buf = this._streamBuffer.shift();
 		} else {
-
 			// Stream case, need to read
-			buf = this._stream.read(this._partSize);
+			buf = (this._stream as ReadableStream).read(this._partSize);
 
 			if (!buf) {
 				// stream needs to read more, retry later
 				setImmediate(() => this._getNextChunk(callback));
 				return;
 			} else if (buf.length > this._partSize) {
-
 				// stream is done reading and had extra data, buffer the remainder of the file
 				for (let i = 0; i < buf.length; i += this._partSize) {
-
 					this._streamBuffer.push(buf.slice(i, i + this._partSize));
 				}
 				buf = this._streamBuffer.shift();
@@ -310,7 +364,14 @@ class ChunkedUploader extends EventEmitter {
 		}
 
 		this._fileHash.update(buf);
-		let chunk = new Chunk(this._client, this._sessionID, buf, this._position, this._size, this._options);
+		let chunk = new Chunk(
+			this._client,
+			this._sessionID,
+			buf,
+			this._position,
+			this._size,
+			this._options
+		);
 		this._position += buf.length;
 		callback(chunk);
 	}
@@ -322,17 +383,17 @@ class ChunkedUploader extends EventEmitter {
 	 * @emits ChunkedUploader#chunkError
 	 * @emits ChunkedUploader#chunkUploaded
 	 */
-	_uploadChunk(chunk) {
-
+	_uploadChunk(chunk: any /* FIXME */) {
 		this._numChunksInFlight += 1;
 
-		chunk.on('error', err => this.emit('chunkError', err));
-		chunk.on('uploaded', data => {
-
+		chunk.on('error', (err: any /* FIXME */) => this.emit('chunkError', err));
+		chunk.on('uploaded', (data: any /* FIXME */) => {
 			this._numChunksInFlight -= 1;
 
 			this.emit('chunkUploaded', data);
-			this._getNextChunk(nextChunk => (nextChunk ? this._uploadChunk(nextChunk) : this._commit()));
+			this._getNextChunk((nextChunk: any /* FIXME */) =>
+				nextChunk ? this._uploadChunk(nextChunk) : this._commit()
+			);
 		});
 		chunk.upload();
 		this._chunks.push(chunk);
@@ -345,34 +406,37 @@ class ChunkedUploader extends EventEmitter {
 	 * @emits ChunkedUploader#error
 	 */
 	_commit() {
-
 		if (!this._isStarted || this._numChunksInFlight > 0) {
 			return;
 		}
 
 		let hash = this._fileHash.digest('base64');
 		this._isStarted = false;
-		let options = Object.assign({
-			parts: this._chunks.map(c => c.getData())
-		}, this._options.fileAttributes);
-		this._client.files.commitUploadSession(this._sessionID, hash, options, (err, file) => {
-
+		let options = Object.assign(
+			{
+				parts: this._chunks.map((c) => c.getData()),
+			},
+			this._options.fileAttributes
+		);
+		this._client.files.commitUploadSession(this._sessionID, hash, options, (
+			err: any /* FIMXE */,
+			file: any /* FIMXE */
+		) => {
 			// It's not clear what the SDK can do here, so we just return the error and session info
 			// so users can retry if they wish
 			if (err) {
 				this.emit('error', {
 					uploadSession: this._uploadSessionInfo,
-					error: err
+					error: err,
 				});
-				this._reject(err);
+				this._reject!(err);
 				return;
 			}
 
 			this.emit('uploadComplete', file);
-			this._resolve(file);
+			this._resolve!(file);
 		});
 	}
-
 }
 
 module.exports = ChunkedUploader;
