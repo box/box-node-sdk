@@ -9,13 +9,13 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-import { EventEmitter } from 'events';
-import assert = require('assert');
-import httpStatusCodes = require('http-status');
-import request = require('request');
-import getRetryTimeout = require('./util/exponential-backoff');
 
-const Config = require('./util/config');
+import assert from 'assert';
+import { EventEmitter } from 'events';
+import httpStatusCodes from 'http-status';
+import request from 'request';
+import Config from './util/config';
+import getRetryTimeout from './util/exponential-backoff';
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -189,7 +189,7 @@ function cleanSensitiveHeaders(requestObj: APIRequestRequestObject) {
  * @constructor
  */
 class APIRequest {
-	config: typeof Config;
+	config: Config;
 	eventBus: EventEmitter;
 	isRetryable: boolean;
 
@@ -198,7 +198,7 @@ class APIRequest {
 	stream?: request.Request;
 	numRetries?: number;
 
-	constructor(config: typeof Config, eventBus: EventEmitter) {
+	constructor(config: Config, eventBus: EventEmitter) {
 		assert(
 			config instanceof Config,
 			'Config must be passed to APIRequest constructor'
