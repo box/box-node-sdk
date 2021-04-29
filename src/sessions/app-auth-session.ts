@@ -6,9 +6,9 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
+import assert from 'assert';
 import { Promise } from 'bluebird';
-import assert = require('assert');
-import errors = require('../util/errors');
+import errors from '../util/errors';
 
 // ------------------------------------------------------------------------------
 // Typedefs
