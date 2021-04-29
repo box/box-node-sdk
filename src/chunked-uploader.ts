@@ -439,4 +439,4 @@ class ChunkedUploader extends EventEmitter {
 	}
 }
 
-module.exports = ChunkedUploader;
+export = ChunkedUploader;
