@@ -2,6 +2,13 @@
  * @fileoverview Manager for the Box Collaboration Whitelist Resource
  */
 
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+
+import BoxClient from '../box-client';
+import urlPath from '../util/url-path';
+
 // -----------------------------------------------------------------------------
 // Typedefs
 // -----------------------------------------------------------------------------
@@ -17,14 +24,9 @@ enum CollaborationWhitelistDirection {
 }
 
 // ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-import urlPath = require('../util/url-path');
-import BoxClient = require('../box-client');
-
-// ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
+
 const BASE_PATH = '/collaboration_whitelist_entries',
 	TARGET_ENTRY_PATH = '/collaboration_whitelist_exempt_targets';
 
