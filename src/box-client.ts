@@ -528,7 +528,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	get(path: string, params: object | null, callback: Function) {
+	get(path: string, params?: object | null, callback?: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'GET';
 		newParams.url = getFullURL(this._baseURL, path);
@@ -559,7 +559,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	put(path: string, params: object | null, callback: Function) {
+	put(path: string, params?: object | null, callback?: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'PUT';
 		newParams.url = getFullURL(this._baseURL, path);
