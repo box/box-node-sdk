@@ -37,8 +37,7 @@ function trimSlashes(segment: string) {
  * @name URLPath
  * @returns {string} Return a valid URL path comprised of the given path segments
  */
-export = function urlPath(/* arguments*/) {
-	const args = Array.prototype.slice.call(arguments);
+export = function urlPath(...args: any[]) {
 	const path = args
 		.map((x) => String(x))
 		.map((x) => {
