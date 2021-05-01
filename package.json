@@ -47,6 +47,7 @@
   "devDependencies": {
     "@types/bluebird": "^3.5.33",
     "@types/promise-queue": "^2.2.0",
+    "@types/request": "^2.48.5",
     "chai": "^4.2.0",
     "coveralls": "^3.1.0",
     "eslint": "^4.19.1",

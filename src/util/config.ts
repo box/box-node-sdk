@@ -228,6 +228,7 @@ function updateRequestAgent(
  */
 class Config {
 	_params: Required<UserConfigurationOptions>;
+	[key: string]: any;
 
 	constructor(params: UserConfigurationOptions) {
 		validateBasicParams(params);
