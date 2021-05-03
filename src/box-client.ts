@@ -525,10 +525,10 @@ class BoxClient {
 	 *
 	 * @param {string} path - path to a certain API endpoint (ex: /file)
 	 * @param {?Object} params - object containing parameters for the request, such as query strings and headers
-	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
+	 * @param {APIRequest~Callback} [callback] - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	get(path: string, params: object | null, callback: Function) {
+	get(path: string, params: object | null, callback?: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'GET';
 		newParams.url = getFullURL(this._baseURL, path);
@@ -541,7 +541,7 @@ class BoxClient {
 	 *
 	 * @param {string} path - path to a certain API endpoint (ex: /file)
 	 * @param {?Object} params - object containing parameters for the request, such as query strings and headers
-	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
+	 * @param {APIRequest~Callback} [callback] - passed final API response or err if request failed
 	 * @returns {void}
 	 */
 	post(path: string, params: object | null, callback?: Function) {
