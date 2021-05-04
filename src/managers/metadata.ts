@@ -254,7 +254,7 @@ class Metadata {
 	 * @param {Function} [callback] Passed the collection of policies if successful
 	 * @returns {Promise<Object>} Promise resolving to the collection of policies
 	 */
-	getCascadePoliowner_enterprise_idcies(
+	getCascadePolicies(
 		folderID: string,
 		options?: {
 			owner_enterprise_id?: string;
