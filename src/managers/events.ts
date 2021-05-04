@@ -9,6 +9,8 @@
 import { Promise } from 'bluebird';
 import httpStatusCodes from 'http-status';
 import BoxClient from '../box-client';
+import EnterpriseEventStream from '../enterprise-event-stream';
+import EventStream from '../event-stream';
 import errors from '../util/errors';
 import urlPath from '../util/url-path';
 
@@ -97,13 +99,6 @@ enum EventType {
 	WATERMARK_LABEL_CREATE = 'WATERMARK_LABEL_CREATE',
 	WATERMARK_LABEL_DELETE = 'WATERMARK_LABEL_DELETE',
 }
-
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-var EventStream = require('../event-stream'),
-	EnterpriseEventStream = require('../enterprise-event-stream');
 
 // ------------------------------------------------------------------------------
 // Private
@@ -236,11 +231,13 @@ class Events {
 	 */
 	getEventStream(
 		streamPosition: string,
-		options?: {
-			retryDelay?: number;
-			deduplicationFilterSize?: number;
-			fetchInterval?: number;
-		},
+		options?:
+			| {
+					retryDelay?: number;
+					deduplicationFilterSize?: number;
+					fetchInterval?: number;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		var self = this;
@@ -266,7 +263,11 @@ class Events {
 		return this.getCurrentStreamPosition()
 			.then(
 				(currentStreamPosition: any /* FIXME */) =>
-					new EventStream(self.client, currentStreamPosition, options)
+					new EventStream(
+						self.client,
+						currentStreamPosition,
+						options as Record<string, any>
+					)
 			)
 			.asCallback(callback);
 	}
