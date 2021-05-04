@@ -589,7 +589,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - Called with API call results, or err if call failed
 	 * @returns {void}
 	 */
-	options(path: string, params: object | null, callback: Function) {
+	options(path: string, params: object | null, callback?: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'OPTIONS';
 		newParams.url = getFullURL(this._baseURL, path);
