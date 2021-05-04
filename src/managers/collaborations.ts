@@ -161,11 +161,13 @@ class Collaborations {
 		accessibleBy: Record<string, any>,
 		itemID: string,
 		role: CollaborationRole,
-		options?: {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-		},
+		options?:
+			| {
+					type?: ItemType;
+					notify?: boolean;
+					can_view_path?: boolean;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		var defaultOptions = {
@@ -230,11 +232,13 @@ class Collaborations {
 		userID: number,
 		itemID: string,
 		role: CollaborationRole,
-		options?: {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-		},
+		options?:
+			| {
+					type?: ItemType;
+					notify?: boolean;
+					can_view_path?: boolean;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		if (typeof options === 'function') {
@@ -269,11 +273,13 @@ class Collaborations {
 		email: string,
 		itemID: string,
 		role: CollaborationRole,
-		options?: {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-		},
+		options?:
+			| {
+					type?: ItemType;
+					notify?: boolean;
+					can_view_path?: boolean;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		if (typeof options === 'function') {
@@ -308,11 +314,13 @@ class Collaborations {
 		groupID: number,
 		itemID: string,
 		role: CollaborationRole,
-		options?: {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-		},
+		options?:
+			| {
+					type?: ItemType;
+					notify?: boolean;
+					can_view_path?: boolean;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		if (typeof options === 'function') {
