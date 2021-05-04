@@ -14,7 +14,7 @@ import BoxClient from './box-client';
 // ------------------------------------------------------------------------------
 
 type Options = {
-	streamPosition?: number;
+	streamPosition?: string;
 	startDate?: string;
 	endDate?: string;
 	eventTypeFilter?: EventType[];
@@ -60,7 +60,7 @@ const DEFAULT_OPTIONS = Object.freeze({
 class EnterpriseEventStream extends Readable {
 	_client: BoxClient;
 	_options: Options & Required<Pick<Options, 'pollingInterval' | 'chunkSize'>>;
-	_streamPosition?: number;
+	_streamPosition?: string;
 
 	constructor(client: BoxClient, options?: Options) {
 		super({
@@ -83,7 +83,7 @@ class EnterpriseEventStream extends Readable {
 		if (
 			!this._options.startDate &&
 			!this._options.streamPosition &&
-			this._options.streamPosition !== 0
+			(this._options.streamPosition as any) !== 0
 		) {
 			// If neither startDate nor streamPosition is specified, start from the current time.
 			this._options.startDate = new Date()
@@ -154,7 +154,7 @@ class EnterpriseEventStream extends Readable {
 		const self = this,
 			params: {
 				stream_type?: string;
-				stream_position?: number;
+				stream_position?: string;
 				created_after?: string;
 				created_before?: string;
 				event_type?: string;
@@ -165,7 +165,7 @@ class EnterpriseEventStream extends Readable {
 
 		// Use the current stream position.
 		// Handle the case where the caller passes streamPosition === 0 instead of streamPosition === '0'.
-		if (this._streamPosition || this._streamPosition === 0) {
+		if (this._streamPosition || (this._streamPosition as any) === 0) {
 			params.stream_position = this._streamPosition;
 		}
 
