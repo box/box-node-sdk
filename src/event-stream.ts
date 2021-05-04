@@ -45,7 +45,7 @@ const DEFAULT_OPTIONS: Options = Object.freeze({
 /**
  * Stream of Box events from a given client and point in time.
  * @param {BoxClient} client The client to use to get events
- * @param {number} streamPosition The point in time to start at
+ * @param {string} streamPosition The point in time to start at
  * @param {Object} [options] Optional parameters
  * @param {int} [options.retryDelay=1000] Number of ms to wait before retrying after an error
  * @param {int} [options.deduplicationFilterSize=5000] Number of IDs to track for deduplication
@@ -55,7 +55,7 @@ const DEFAULT_OPTIONS: Options = Object.freeze({
  */
 class EventStream extends Readable {
 	_client: BoxClient;
-	_streamPosition: number;
+	_streamPosition: string;
 	_longPollInfo?: LongPollInfo;
 	_longPollRetries: number;
 	_dedupHash: Record<string, boolean>;
@@ -65,7 +65,7 @@ class EventStream extends Readable {
 
 	constructor(
 		client: BoxClient,
-		streamPosition: number,
+		streamPosition: string,
 		options?: Partial<Options>
 	) {
 		super({
