@@ -359,12 +359,9 @@ class TermsOfService {
 					// Terms of Service already exists. Update the existing terms of service object
 					case httpStatusCodes.CONFLICT:
 						var getOptions = Object.assign({ fields: 'id' }, options);
-						return this.getUserStatus(
-							termsOfServicesID,
-							getOptions
-						).then((userStatus) =>
-							this.updateUserStatus(userStatus.id, isAccepted)
-						);
+						return this.getUserStatus(termsOfServicesID, getOptions).then((
+							userStatus: any /* FIXME */
+						) => this.updateUserStatus(userStatus.id, isAccepted));
 
 					default:
 						throw errors.buildUnexpectedResponseError(response);
