@@ -1866,7 +1866,7 @@ class Files {
 					// 200 - A Boxfile representation generated successfully
 					// return the representation object
 					case httpStatusCodes.OK:
-						if (options && options.generateRepresentations) {
+						if (options && (options as any).generateRepresentations) {
 							var data = response.body.representations.entries;
 							var promiseArray = data.map((entry: any /* FIXME */) => {
 								switch (entry.status.state) {
