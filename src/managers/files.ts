@@ -1014,10 +1014,12 @@ class Files {
 	 */
 	deletePermanently(
 		fileID: string,
-		options?: {
-			[key: string]: any;
-			etag?: string;
-		},
+		options?:
+			| {
+					[key: string]: any;
+					etag?: string;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		if (typeof options === 'function') {
@@ -1367,10 +1369,12 @@ class Files {
 	deleteVersion(
 		fileID: string,
 		versionID: string,
-		options?: {
-			[key: string]: any;
-			etag?: string;
-		},
+		options?:
+			| {
+					[key: string]: any;
+					etag?: string;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		// Switch around arguments if necessary for backwwards compatibility
@@ -1822,9 +1826,11 @@ class Files {
 	getRepresentationInfo(
 		fileID: string,
 		representationType: FileRepresentationType,
-		options?: {
-			generateRepresentations?: boolean;
-		},
+		options?:
+			| {
+					generateRepresentations?: boolean;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		if (typeof options === 'function') {
