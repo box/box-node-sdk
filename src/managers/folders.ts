@@ -160,10 +160,12 @@ class Folders {
 	copy(
 		folderID: string,
 		newParentID: string,
-		options?: {
-			[key: string]: any;
-			name?: string;
-		},
+		options?:
+			| {
+					[key: string]: any;
+					name?: string;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		// @NOTE(mwiller) 2016-10-25: Shuffle arguments to maintain backward compatibility
@@ -206,7 +208,7 @@ class Folders {
 		folderID: string,
 		updates: {
 			[key: string]: any;
-			name?: string;
+			etag?: string;
 		},
 		callback?: Function
 	) {
@@ -407,7 +409,7 @@ class Folders {
 	 * @param {string} folderID - The ID of the folder to add metadata to
 	 * @param {string} scope - The scope of the metadata template, e.g. "enterprise"
 	 * @param {string} template - The metadata template schema to add
-	 * @param {Object} data - Key/value pairs tp add as metadata
+	 * @param {Object} data - Key/value pairs to add as metadata
 	 * @param {Function} [callback] - Called with error if unsuccessful
 	 * @returns {Promise<Object>} A promise resolving to the created metadata
 	 */
