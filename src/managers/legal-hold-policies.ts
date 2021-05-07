@@ -132,9 +132,9 @@ class LegalHoldPolicies {
 	update(
 		policyID: string,
 		updates: {
-			policy_name: string;
-			description: string;
-			release_notes: string;
+			policy_name?: string;
+			description?: string;
+			release_notes?: string;
 		},
 		callback?: Function
 	) {
