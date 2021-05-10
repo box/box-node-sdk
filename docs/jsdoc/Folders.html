@@ -1,3007 +1,6626 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>JSDoc: Class: Folders</title>
-
-		<script src="scripts/prettify/prettify.js"></script>
-		<script src="scripts/prettify/lang-css.js"></script>
-		<!--[if lt IE 9]>
-			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<link
-			type="text/css"
-			rel="stylesheet"
-			href="styles/prettify-tomorrow.css"
-		/>
-		<link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
-	</head>
-
-	<body>
-		<div id="main">
-			<h1 class="page-title">Class: Folders</h1>
-
-			<section>
-				<header>
-					<h2>
-						<span class="attribs"><span class="type-signature"></span></span
-						>Folders<span class="signature">(client)</span
-						><span class="type-signature"> &rarr; {void}</span>
-					</h2>
-				</header>
-
-				<article>
-					<div class="container-overview">
-						<h4 class="name" id="Folders">
-							<span class="type-signature"></span>new Folders<span
-								class="signature"
-								>(client)</span
-							><span class="type-signature"> &rarr; {void}</span>
-						</h4>
-
-						<div class="description">
-							Simple manager for interacting with all 'Folder' endpoints and
-							actions.
-						</div>
-
-						<h5>Parameters:</h5>
-
-						<table class="params">
-							<thead>
-								<tr>
-									<th>Name</th>
-
-									<th>Type</th>
-
-									<th class="last">Description</th>
-								</tr>
-							</thead>
-
-							<tbody>
-								<tr>
-									<td class="name"><code>client</code></td>
-
-									<td class="type">
-										<span class="param-type"
-											><a href="BoxClient.html">BoxClient</a></span
-										>
-									</td>
-
-									<td class="description last">
-										The Box API Client that is responsible for making calls to
-										the API
-									</td>
-								</tr>
-							</tbody>
-						</table>
-
-						<dl class="details">
-							<dt class="tag-source">Source:</dt>
-							<dd class="tag-source">
-								<ul class="dummy">
-									<li>
-										<a href="managers_folders.js.html">managers/folders.js</a>,
-										<a href="managers_folders.js.html#line33">line 33</a>
-									</li>
-								</ul>
-							</dd>
-						</dl>
-
-						<h5>Returns:</h5>
-
-						<dl>
-							<dt>Type</dt>
-							<dd>
-								<span class="param-type">void</span>
-							</dd>
-						</dl>
-					</div>
-
-					<h3 class="subsection-title">Methods</h3>
-
-					<h4 class="name" id="addMetadata">
-						<span class="type-signature"></span>addMetadata<span
-							class="signature"
-							>(folderID, scope, template, data, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Folders</title>
 
-					<div class="description">
-						Adds metadata to a folder. Metadata must either match a template
-						schema or be placed into the unstructured "properties" template in
-						global scope. API Endpoint:
-						'/folders/:folderID/metadata/:scope/:template' Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The ID of the folder to add metadata to
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>scope</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The scope of the metadata template, e.g. "enterprise"
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>template</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The metadata template schema to add
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>data</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Key/value pairs tp add as metadata
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Called with error if unsuccessful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line336">line 336</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the created metadata
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="addToCollection">
-						<span class="type-signature"></span>addToCollection<span
-							class="signature"
-							>(folderID, collectionID, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Add a folder to a given collection API Endpoint:
-						'/folders/:folderID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The folder to add to the collection
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>collectionID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The collection to add the folder to
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated folder if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line191">line 191</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="applyWatermark">
-						<span class="type-signature"></span>applyWatermark<span
-							class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Used to apply or update the watermark for a corresponding Box
-						folder. API Endpoint: '/folders/:folderID/watermark' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder to update watermark for
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Optional parameters, can be left null
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the watermark information if successful, error
-									otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line550">line 550</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the watermark info
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="copy">
-						<span class="type-signature"></span>copy<span class="signature"
-							>(folderID, newParentID, options<span class="signature-attributes"
-								>opt</span
-							>, callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Copy a folder into a new, different folder API Endpoint:
-						'/folders/:folderID/copy Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>newParentID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID for the new parent folder. '0' to copy to All
-									Files.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Optional parameters for the copy operation, can be left null
-									in most cases
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>name</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													A new name to use if there is an identically-named
-													item in the new parent folder
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									passed the new folder info if call was successful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line130">line 130</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the new folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="create">
-						<span class="type-signature"></span>create<span class="signature"
-							>(parentFolderID, name, callback<span class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Creates a new Folder within a parent folder API Endpoint: '/folders
-						Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>parentFolderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Box folder id of the folder to add into
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>name</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">The name for the new folder</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									passed the new folder info if call was successful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line105">line 105</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the created folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="delete">
-						<span class="type-signature"></span>delete<span class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Delete a given folder. API Endpoint: '/folders/:folderID' Method:
-						DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>etag</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Only delete the folder if the ETag matches
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Empty response body passed if successful.
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line271">line 271</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="deleteLock">
-						<span class="type-signature"></span>deleteLock<span
-							class="signature"
-							>(folderLockID, callback<span class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Used to delete a lock on a folder. API Endpoint:
-						'/folder_locks/:folderLockID' Method: DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderLockID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">The Box ID of the folder lock</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Empty response body passed if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line637">line 637</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="deleteMetadata">
-						<span class="type-signature"></span>deleteMetadata<span
-							class="signature"
-							>(folderID, scope, template, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Deletes a metadata template from a folder. API Endpoint:
-						'/folders/:folderID/metadata/:scope/:template' Method: DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The ID of the folder to remove metadata from
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>scope</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The scope of the metadata template
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>template</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The template to remove from the folder
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Called with nothing if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line415">line 415</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="deletePermanently">
-						<span class="type-signature"></span>deletePermanently<span
-							class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Permanently deletes an folder that is in the trash. The item will no
-						longer exist in Box. This action cannot be undone API Endpoint:
-						'/folders/:folderID/trash' Method: DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Optional parameters
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>etag</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Only delete the folder if the ETag matches
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Called with nothing if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line489">line 489</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="get">
-						<span class="type-signature"></span>get<span class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Requests a folder object with the given ID. API Endpoint:
-						'/folders/:folderID' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the folder information if it was acquired successfully
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line48">line 48</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to the folder object</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getAllMetadata">
-						<span class="type-signature"></span>getAllMetadata<span
-							class="signature"
-							>(folderID, callback<span class="signature-attributes">opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Retrieves all metadata associated with a folder. API Endpoint:
-						'/folders/:folderID/metadata' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									the ID of the folder to get metadata for
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									called with an array of metadata when successful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line298">line 298</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the collection of metadata on the folder
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getCollaborations">
-						<span class="type-signature"></span>getCollaborations<span
-							class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Requests collaborations on a given folder. API Endpoint:
-						'/folders/:folderID/collaborations' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the folder information if it was acquired successfully
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line86">line 86</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the collection of collaborations
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getItems">
-						<span class="type-signature"></span>getItems<span class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Requests items contained within a given folder. API Endpoint:
-						'/folders/:folderID/items' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the folder information if it was acquired successfully
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line67">line 67</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the collection of the items in the folder
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getLocks">
-						<span class="type-signature"></span>getLocks<span class="signature"
-							>(folderID, callback<span class="signature-attributes">opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Used to get all locks on a folder. API Endpoint: '/folder_locks'
-						Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder to lock
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed a collection of folder lock objects if successful,
-									error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line618">line 618</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to a collection of folder lock objects
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getMetadata">
-						<span class="type-signature"></span>getMetadata<span
-							class="signature"
-							>(folderID, scope, template, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Retrieve a single metadata template instance for a folder. API
-						Endpoint: '/folders/:folderID/metadata/:scope/:template' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The ID of the folder to retrive the metadata of
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>scope</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The scope of the metadata template, e.g. "global"
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>template</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The metadata template to retrieve
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the metadata template if successful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line316">line 316</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the metadata template
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getTrashedFolder">
-						<span class="type-signature"></span>getTrashedFolder<span
-							class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Retrieves a folder that has been moved to the trash API Endpoint:
-						'/folders/:folderID/trash' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">Funnction</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the folder information if it was acquired successfully
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line432">line 432</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the trashed folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getWatermark">
-						<span class="type-signature"></span>getWatermark<span
-							class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Used to retrieve the watermark for a corresponding Box folder. API
-						Endpoint: '/folders/:folderID/watermark' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder to get watermark for
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the watermark information if successful, error
-									otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line520">line 520</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the watermark info
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="lock">
-						<span class="type-signature"></span>lock<span class="signature"
-							>(folderID, callback<span class="signature-attributes">opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Used to lock a Box folder. API Endpoint: '/folder_locks' Method:
-						POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder to lock
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the folder lock object if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line592">line 592</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to a folder lock object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="move">
-						<span class="type-signature"></span>move<span class="signature"
-							>(folderID, newParentID, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Move a folder into a new parent folder. API Endpoint:
-						'/folders/:folderID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>newParentID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID for the new parent folder. '0' to move to All
-									Files.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated folder information if it was acquired
-									successfully
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line247">line 247</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="removeFromCollection">
-						<span class="type-signature"></span>removeFromCollection<span
-							class="signature"
-							>(folderID, collectionID, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Remove a folder from a given collection API Endpoint:
-						'/folders/:folderID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The folder to remove from the collection
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>collectionID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The collection to remove the folder from
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated folder if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line222">line 222</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="removeWatermark">
-						<span class="type-signature"></span>removeWatermark<span
-							class="signature"
-							>(folderID, callback<span class="signature-attributes">opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Used to remove the watermark for a corresponding Box folder. API
-						Endpoint: '/folders/:folderID/watermark' Method: DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder to remove watermark from
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Empty response body passed if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line575">line 575</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="restoreFromTrash">
-						<span class="type-signature"></span>restoreFromTrash<span
-							class="signature"
-							>(folderID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Restores an item that has been moved to the trash. Default behavior
-						is to restore the item to the folder it was in before it was moved
-						to the trash. If that parent folder no longer exists or if there is
-						now an item with the same name in that parent folder, the new parent
-						older and/or new name will need to be included in the request. API
-						Endpoint: '/folders/:folderID' Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The ID of the folder to restore
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Optional parameters, can be left null
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>name</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">
-													&lt;optional><br />
-
-													&lt;nullable><br />
-												</td>
-
-												<td class="description last">
-													The new name for this item
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>parent_id</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													The new parent folder for this item
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Called with folder information if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line457">line 457</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the restored folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="setMetadata">
-						<span class="type-signature"></span>setMetadata<span
-							class="signature"
-							>(folderID, scope, template, metadata, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Sets metadata on a folder, overwriting any metadata that exists for
-						the provided keys.
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">The folder to set metadata on</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>scope</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The scope of the metadata template
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>template</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The key of the metadata template
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>metadata</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">The metadata to set</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Called with updated metadata if successful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line382">line 382</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated metadata
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="update">
-						<span class="type-signature"></span>update<span class="signature"
-							>(folderID, updates, callback<span class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Update some information about a given folder. API Endpoint:
-						'/folders/:folderID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the folder being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>updates</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Folder fields to update
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>etag</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Only update the folder if the ETag matches
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated folder information if it was acquired
-									successfully
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line164">line 164</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated folder object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="updateMetadata">
-						<span class="type-signature"></span>updateMetadata<span
-							class="signature"
-							>(folderID, scope, template, patch, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Updates a metadata template instance with JSON Patch-formatted data.
-						API Endpoint: '/folders/:folderID/metadata/:scope/:template' Method:
-						PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>folderID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The folder to update metadata for
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>scope</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The scope of the template to update
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>template</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">The template to update</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>patch</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">The patch data</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Called with updated metadata if successful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_folders.js.html">managers/folders.js</a>,
-									<a href="managers_folders.js.html#line359">line 359</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated metadata
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-				</article>
-			</section>
-		</div>
-
-		<nav>
-			<h2><a href="index.html">Home</a></h2>
-			<h3>Modules</h3>
-			<ul>
-				<li>
-					<a href="module-box-node-sdk_lib_api-request.html"
-						>box-node-sdk/lib/api-request</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_api-request-manager.html"
-						>box-node-sdk/lib/api-request-manager</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_box-client.html"
-						>box-node-sdk/lib/box-client</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_box-node-sdk.html"
-						>box-node-sdk/lib/box-node-sdk</a
-					>
-				</li>
-				<li>
-					<a
-						href="module-box-node-sdk_lib_managers_collaboration-allowlists.html"
-						>box-node-sdk/lib/managers/collaboration-allowlists</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_collaborations.html"
-						>box-node-sdk/lib/managers/collaborations</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_collections.html"
-						>box-node-sdk/lib/managers/collections</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_comments.html"
-						>box-node-sdk/lib/managers/comments</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_files.html"
-						>box-node-sdk/lib/managers/files</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_folders.html"
-						>box-node-sdk/lib/managers/folders</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_recent-items.html"
-						>box-node-sdk/lib/managers/recent-items</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_shared-items.html"
-						>box-node-sdk/lib/managers/shared-items</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_terms-of-service.html"
-						>box-node-sdk/lib/managers/terms-of-service</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_users.html"
-						>box-node-sdk/lib/managers/users</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_webhooks.html"
-						>box-node-sdk/lib/managers/webhooks</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_anonymous-session.html"
-						>box-node-sdk/lib/sessions/anonymous-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_app-auth-session.html"
-						>box-node-sdk/lib/sessions/app-auth-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_basic-session.html"
-						>box-node-sdk/lib/sessions/basic-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_persistent-session.html"
-						>box-node-sdk/lib/sessions/persistent-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_token-manager.html"
-						>box-node-sdk/lib/token-manager</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_util_config.html"
-						>box-node-sdk/lib/util/config</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_util_errors.html"
-						>box-node-sdk/lib/util/errors</a
-					>
-				</li>
-			</ul>
-			<h3>Classes</h3>
-			<ul>
-				<li><a href="AnonymousSession.html">AnonymousSession</a></li>
-				<li><a href="APIRequest.html">APIRequest</a></li>
-				<li><a href="APIRequestManager.html">APIRequestManager</a></li>
-				<li><a href="AppAuthSession.html">AppAuthSession</a></li>
-				<li><a href="BasicSession.html">BasicSession</a></li>
-				<li><a href="BoxClient.html">BoxClient</a></li>
-				<li><a href="BoxSDKNode.html">BoxSDKNode</a></li>
-				<li><a href="ChunkedUploader.html">ChunkedUploader</a></li>
-				<li><a href="Collaborations.html">Collaborations</a></li>
-				<li>
-					<a href="CollaborationAllowlist.html">CollaborationAllowlist</a>
-				</li>
-				<li><a href="Collections.html">Collections</a></li>
-				<li><a href="Comments.html">Comments</a></li>
-				<li><a href="Config.html">Config</a></li>
-				<li><a href="DevicePins.html">DevicePins</a></li>
-				<li><a href="Enterprise.html">Enterprise</a></li>
-				<li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li>
-				<li><a href="Events.html">Events</a></li>
-				<li><a href="EventStream.html">EventStream</a></li>
-				<li><a href="Files.html">Files</a></li>
-				<li><a href="Folders.html">Folders</a></li>
-				<li><a href="Groups.html">Groups</a></li>
-				<li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li>
-				<li><a href="Metadata.html">Metadata</a></li>
-				<li><a href="PagingIterator.html">PagingIterator</a></li>
-				<li><a href="PersistentSession.html">PersistentSession</a></li>
-				<li><a href="RecentItems.html">RecentItems</a></li>
-				<li><a href="RetentionPolicies.html">RetentionPolicies</a></li>
-				<li><a href="Search.html">Search</a></li>
-				<li><a href="SharedItems.html">SharedItems</a></li>
-				<li><a href="StoragePolicies.html">StoragePolicies</a></li>
-				<li><a href="Tasks.html">Tasks</a></li>
-				<li><a href="TermsOfService.html">TermsOfService</a></li>
-				<li><a href="TokenManager.html">TokenManager</a></li>
-				<li><a href="Trash.html">Trash</a></li>
-				<li><a href="Users.html">Users</a></li>
-				<li><a href="Webhooks.html">Webhooks</a></li>
-				<li><a href="WebLinks.html">WebLinks</a></li>
-			</ul>
-			<h3>Events</h3>
-			<ul>
-				<li><a href="ChunkedUploader.html#event:aborted">aborted</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:abortFailed">abortFailed</a>
-				</li>
-				<li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a>
-				</li>
-				<li><a href="ChunkedUploader.html#event:error">error</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a>
-				</li>
-			</ul>
-			<h3>Global</h3>
-			<ul>
-				<li>
-					<a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a>
-				</li>
-				<li>
-					<a href="global.html#CURRENT_STREAM_POSITION"
-						>CURRENT_STREAM_POSITION</a
-					>
-				</li>
-				<li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li>
-				<li><a href="global.html#grantTypes">grantTypes</a></li>
-				<li>
-					<a href="global.html#isJWTAuthErrorRetryable"
-						>isJWTAuthErrorRetryable</a
-					>
-				</li>
-				<li>
-					<a href="global.html#pollRepresentationInfo"
-						>pollRepresentationInfo</a
-					>
-				</li>
-				<li><a href="global.html#tokenPaths">tokenPaths</a></li>
-				<li><a href="global.html#URLPath">URLPath</a></li>
-			</ul>
-		</nav>
-
-		<br class="clear" />
-
-		<footer>
-			Documentation generated by
-			<a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Apr 16
-			2021 11:22:39 GMT-0700 (Pacific Daylight Time)
-		</footer>
-
-		<script>
-			prettyPrint();
-		</script>
-		<script src="scripts/linenumber.js"></script>
-	</body>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Folders</h1>
+
+
+
+
+
+
+<section>
+
+<header>
+
+        <h2><span class="attribs"><span class="type-signature"></span></span>Folders<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
+
+
+</header>
+
+<article>
+    <div class="container-overview">
+
+
+
+
+
+
+    <h4 class="name" id="Folders"><span class="type-signature"></span>new Folders<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Simple manager for interacting with all 'Folder' endpoints and actions.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>client</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last">The Box API Client that is responsible for making calls to the API</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line33">line 33</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Methods</h3>
+
+
+
+
+
+
+
+    <h4 class="name" id="addMetadata"><span class="type-signature"></span>addMetadata<span class="signature">(folderID, scope, template, data, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Adds metadata to a folder.  Metadata must either match a template schema or
+be placed into the unstructured "properties" template in global scope.
+
+API Endpoint: '/folders/:folderID/metadata/:scope/:template'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID of the folder to add metadata to</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>scope</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The scope of the metadata template, e.g. "enterprise"</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>template</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The metadata template schema to add</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>data</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Key/value pairs tp add as metadata</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Called with error if unsuccessful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line336">line 336</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the created metadata
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="addToCollection"><span class="type-signature"></span>addToCollection<span class="signature">(folderID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Add a folder to a given collection
+
+API Endpoint: '/folders/:folderID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The folder to add to the collection</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>collectionID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The collection to add the folder to</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated folder if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line191">line 191</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="applyWatermark"><span class="type-signature"></span>applyWatermark<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Used to apply or update the watermark for a corresponding Box folder.
+
+API Endpoint: '/folders/:folderID/watermark'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder to update watermark for</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Optional parameters, can be left null</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the watermark information if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line550">line 550</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the watermark info
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(folderID, newParentID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Copy a folder into a new, different folder
+
+API Endpoint: '/folders/:folderID/copy
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>newParentID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID for the new parent folder. '0' to copy to All Files.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Optional parameters for the copy operation, can be left null in most cases
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">A new name to use if there is an identically-named item in the new parent folder</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">passed the new folder info if call was successful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line130">line 130</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the new folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(parentFolderID, name, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Creates a new Folder within a parent folder
+
+API Endpoint: '/folders
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>parentFolderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Box folder id of the folder to add into</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The name for the new folder</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">passed the new folder info if call was successful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line105">line 105</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the created folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Delete a given folder.
+
+API Endpoint: '/folders/:folderID'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>etag</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Only delete the folder if the ETag matches</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Empty response body passed if successful.</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line271">line 271</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="deleteLock"><span class="type-signature"></span>deleteLock<span class="signature">(folderLockID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Used to delete a lock on a folder.
+
+API Endpoint: '/folder_locks/:folderLockID'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderLockID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder lock</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Empty response body passed if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line637">line 637</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="deleteMetadata"><span class="type-signature"></span>deleteMetadata<span class="signature">(folderID, scope, template, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Deletes a metadata template from a folder.
+
+API Endpoint: '/folders/:folderID/metadata/:scope/:template'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID of the folder to remove metadata from</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>scope</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The scope of the metadata template</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>template</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The template to remove from the folder</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Called with nothing if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line415">line 415</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="deletePermanently"><span class="type-signature"></span>deletePermanently<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Permanently deletes an folder that is in the trash. The item will no longer exist in Box. This action cannot be undone
+
+API Endpoint: '/folders/:folderID/trash'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>etag</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Only delete the folder if the ETag matches</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Called with nothing if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line489">line 489</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Requests a folder object with the given ID.
+
+API Endpoint: '/folders/:folderID'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the folder information if it was acquired successfully</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line48">line 48</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getAllMetadata"><span class="type-signature"></span>getAllMetadata<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Retrieves all metadata associated with a folder.
+
+API Endpoint: '/folders/:folderID/metadata'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">the ID of the folder to get metadata for</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">called with an array of metadata when successful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line298">line 298</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the collection of metadata on the folder
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getCollaborations"><span class="type-signature"></span>getCollaborations<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Requests collaborations on a given folder.
+
+API Endpoint: '/folders/:folderID/collaborations'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the folder information if it was acquired successfully</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line86">line 86</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the collection of collaborations
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getItems"><span class="type-signature"></span>getItems<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Requests items contained within a given folder.
+
+API Endpoint: '/folders/:folderID/items'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the folder information if it was acquired successfully</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line67">line 67</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the collection of the items in the folder
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getLocks"><span class="type-signature"></span>getLocks<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Used to get all locks on a folder.
+
+API Endpoint: '/folder_locks'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder to lock</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed a collection of folder lock objects if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line618">line 618</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to a collection of folder lock objects
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getMetadata"><span class="type-signature"></span>getMetadata<span class="signature">(folderID, scope, template, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Retrieve a single metadata template instance for a folder.
+
+API Endpoint: '/folders/:folderID/metadata/:scope/:template'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID of the folder to retrive the metadata of</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>scope</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The scope of the metadata template, e.g. "global"</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>template</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The metadata template to retrieve</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the metadata template if successful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line316">line 316</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the metadata template
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getTrashedFolder"><span class="type-signature"></span>getTrashedFolder<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Retrieves a folder that has been moved to the trash
+
+API Endpoint: '/folders/:folderID/trash'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Funnction</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the folder information if it was acquired successfully</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line432">line 432</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the trashed folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getWatermark"><span class="type-signature"></span>getWatermark<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Used to retrieve the watermark for a corresponding Box folder.
+
+API Endpoint: '/folders/:folderID/watermark'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder to get watermark for</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the watermark information if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line520">line 520</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the watermark info
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="lock"><span class="type-signature"></span>lock<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Used to lock a Box folder.
+
+API Endpoint: '/folder_locks'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder to lock</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the folder lock object if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line592">line 592</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to a folder lock object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="move"><span class="type-signature"></span>move<span class="signature">(folderID, newParentID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Move a folder into a new parent folder.
+
+API Endpoint: '/folders/:folderID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>newParentID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID for the new parent folder. '0' to move to All Files.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated folder information if it was acquired successfully</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line247">line 247</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="removeFromCollection"><span class="type-signature"></span>removeFromCollection<span class="signature">(folderID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Remove a folder from a given collection
+
+API Endpoint: '/folders/:folderID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The folder to remove from the collection</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>collectionID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The collection to remove the folder from</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated folder if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line222">line 222</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="removeWatermark"><span class="type-signature"></span>removeWatermark<span class="signature">(folderID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Used to remove the watermark for a corresponding Box folder.
+
+API Endpoint: '/folders/:folderID/watermark'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder to remove watermark from</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Empty response body passed if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line575">line 575</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="restoreFromTrash"><span class="type-signature"></span>restoreFromTrash<span class="signature">(folderID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Restores an item that has been moved to the trash. Default behavior is to restore the item
+to the folder it was in before it was moved to the trash. If that parent folder no longer
+exists or if there is now an item with the same name in that parent folder, the new parent
+older and/or new name will need to be included in the request.
+
+API Endpoint: '/folders/:folderID'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID of the folder to restore</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Optional parameters, can be left null
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+                    &lt;nullable><br>
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The new name for this item</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>parent_id</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The new parent folder for this item</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Called with folder information if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line457">line 457</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the restored folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="setMetadata"><span class="type-signature"></span>setMetadata<span class="signature">(folderID, scope, template, metadata, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Sets metadata on a folder, overwriting any metadata that exists for the provided keys.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The folder to set metadata on</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>scope</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The scope of the metadata template</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>template</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The key of the metadata template</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>metadata</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The metadata to set</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Called with updated metadata if successful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line382">line 382</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated metadata
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(folderID, updates, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Update some information about a given folder.
+
+API Endpoint: '/folders/:folderID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the folder being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>updates</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Folder fields to update
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>etag</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Only update the folder if the ETag matches</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated folder information if it was acquired successfully</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line164">line 164</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated folder object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="updateMetadata"><span class="type-signature"></span>updateMetadata<span class="signature">(folderID, scope, template, patch, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Updates a metadata template instance with JSON Patch-formatted data.
+
+API Endpoint: '/folders/:folderID/metadata/:scope/:template'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>folderID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The folder to update metadata for</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>scope</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The scope of the template to update</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>template</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The template to update</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>patch</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The patch data</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Called with updated metadata if successful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_folders.js.html">managers/folders.js</a>, <a href="managers_folders.js.html#line359">line 359</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated metadata
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-allowlists.html">box-node-sdk/lib/managers/collaboration-allowlists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Apr 16 2021 11:22:39 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
 </html>

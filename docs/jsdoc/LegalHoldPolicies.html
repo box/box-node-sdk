@@ -1,1724 +1,3377 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>JSDoc: Class: LegalHoldPolicies</title>
-
-		<script src="scripts/prettify/prettify.js"></script>
-		<script src="scripts/prettify/lang-css.js"></script>
-		<!--[if lt IE 9]>
-			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<link
-			type="text/css"
-			rel="stylesheet"
-			href="styles/prettify-tomorrow.css"
-		/>
-		<link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
-	</head>
-
-	<body>
-		<div id="main">
-			<h1 class="page-title">Class: LegalHoldPolicies</h1>
-
-			<section>
-				<header>
-					<h2>
-						<span class="attribs"><span class="type-signature"></span></span
-						>LegalHoldPolicies<span class="signature">(client)</span
-						><span class="type-signature"> &rarr; {void}</span>
-					</h2>
-				</header>
-
-				<article>
-					<div class="container-overview">
-						<h4 class="name" id="LegalHoldPolicies">
-							<span class="type-signature"></span>new LegalHoldPolicies<span
-								class="signature"
-								>(client)</span
-							><span class="type-signature"> &rarr; {void}</span>
-						</h4>
-
-						<div class="description">
-							Simple manager for interacting with all Legal Holds endpoints and
-							actions.
-						</div>
-
-						<h5>Parameters:</h5>
-
-						<table class="params">
-							<thead>
-								<tr>
-									<th>Name</th>
-
-									<th>Type</th>
-
-									<th class="last">Description</th>
-								</tr>
-							</thead>
-
-							<tbody>
-								<tr>
-									<td class="name"><code>client</code></td>
-
-									<td class="type">
-										<span class="param-type"
-											><a href="BoxClient.html">BoxClient</a></span
-										>
-									</td>
-
-									<td class="description last">
-										The Box API Client that is responsible for making calls to
-										the API
-									</td>
-								</tr>
-							</tbody>
-						</table>
-
-						<dl class="details">
-							<dt class="tag-source">Source:</dt>
-							<dd class="tag-source">
-								<ul class="dummy">
-									<li>
-										<a href="managers_legal-hold-policies.js.html"
-											>managers/legal-hold-policies.js</a
-										>,
-										<a href="managers_legal-hold-policies.js.html#line39"
-											>line 39</a
-										>
-									</li>
-								</ul>
-							</dd>
-						</dl>
-
-						<h5>Returns:</h5>
-
-						<dl>
-							<dt>Type</dt>
-							<dd>
-								<span class="param-type">void</span>
-							</dd>
-						</dl>
-					</div>
-
-					<h3 class="subsection-title">Members</h3>
-
-					<h4 class="name" id="assignmentTypes">
-						<span class="type-signature">(readonly) </span>assignmentTypes<span
-							class="type-signature"
-						>
-							:<a href="global.html#LegalHoldPolicyAssignmentType"
-								>LegalHoldPolicyAssignmentType</a
-							></span
-						>
-					</h4>
-
-					<div class="description">
-						Enum of valid policy assignment types, which specify what object the
-						policy applies to
-					</div>
-
-					<h5>Type:</h5>
-					<ul>
-						<li>
-							<span class="param-type"
-								><a href="global.html#LegalHoldPolicyAssignmentType"
-									>LegalHoldPolicyAssignmentType</a
-								></span
-							>
-						</li>
-					</ul>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line48"
-										>line 48</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h3 class="subsection-title">Methods</h3>
-
-					<h4 class="name" id="assign">
-						<span class="type-signature"></span>assign<span class="signature"
-							>(policyID, assignType, assignID, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Assign a lehal hold policy to an object API Endpoint:
-						'/legal_hold_policy_assignments Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>policyID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">The ID of the policy to assign</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>assignType</code></td>
-
-								<td class="type">
-									<span class="param-type"
-										><a href="global.html#LegalHoldPolicyAssignmentType"
-											>LegalHoldPolicyAssignmentType</a
-										></span
-									>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The type of object the policy will be assigned to
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>assignID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the object to assign the legal hold policy to
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the new assignment object if successful, error
-									otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line201"
-										>line 201</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the created assignment object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="create">
-						<span class="type-signature"></span>create<span class="signature"
-							>(name, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Used to create a single legal hold policy for an enterprise API
-						Endpoint: '/legal_hold_policies' Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>name</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The name of the legal hold policy to be created
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional parameters
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>description</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Description of the legal hold policy
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>filter_started_at</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Date filter, any Custodian assignments will apply only
-													to file versions created or uploaded inside of the
-													date range
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>filter_ended_at</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Date filter, any Custodian assignments will apply only
-													to file versions created or uploaded inside of the
-													date range
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>is_ongoing</code></td>
-
-												<td class="type">
-													<span class="param-type">boolean</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													After initialization, Assignments under this Policy
-													will continue applying to files based on events,
-													indefinitely
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the new policy information if it was acquired
-									successfully, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line70"
-										>line 70</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the created policy
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="delete">
-						<span class="type-signature"></span>delete<span class="signature"
-							>(policyID, callback<span class="signature-attributes">opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Sends request to delete an existing legal hold policy. Note that
-						this is an asynchronous process - the policy will not be fully
-						deleted yet when the response comes back. API Endpoint:
-						'/legal_hold_policies/:policyID' Method: DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>policyID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The legal hold policy to delete
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed nothing if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line159"
-										>line 159</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="deleteAssignment">
-						<span class="type-signature"></span>deleteAssignment<span
-							class="signature"
-							>(assignmentID, callback<span class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-					</h4>
-
-					<div class="description">
-						Sends request to delete an existing legal hold policy. Note that
-						this is an asynchronous process - the policy will not be fully
-						deleted yet when the response comes back. API Endpoint:
-						'/legal_hold_policy_assignments/:assignmentID' Method: DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>assignmentID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The legal hold policy assignment to delete
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed nothing if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line250"
-										>line 250</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;void></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="get">
-						<span class="type-signature"></span>get<span class="signature"
-							>(policyID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Fetches details about a specific legal hold policy API Endpoint:
-						'/legal_hold_policies/:policyID' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>policyID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the legal hold policy being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the policy information if it was acquired successfully,
-									error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line92"
-										>line 92</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to the policy object</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getAll">
-						<span class="type-signature"></span>getAll<span class="signature"
-							>(options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Fetches a list of legal hold policies for the enterprise API
-						Endpoint: '/legal_hold_policies' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>policy_name</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													A full or partial name to filter the legal hold
-													policies by
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>limit</code></td>
-
-												<td class="type">
-													<span class="param-type">int</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Limit result size to this number
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>marker</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Paging marker, leave blank to start at the first page
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the policy objects if they were acquired successfully,
-									error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line138"
-										>line 138</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the collection of policies
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getAllFileVersionLegalHolds">
-						<span class="type-signature"></span>getAllFileVersionLegalHolds<span
-							class="signature"
-							>(policyID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Get a list of legal hold records for held file versions in an
-						enterprise. API Endpoint: '/file_version_legal_holds' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>policyID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									ID of Legal Hold Policy to get File Version Legal Holds for
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Pass the file version legal holds records if successful, error
-									otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line289"
-										>line 289</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the collection of all file version legal
-						holds
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getAssignment">
-						<span class="type-signature"></span>getAssignment<span
-							class="signature"
-							>(assignmentID, options<span class="signature-attributes"
-								>opt</span
-							>, callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Fetch a specific policy assignment API Endpoint:
-						'/legal_hold_policy_assignments/:assignmentID' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>assignmentID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the policy assignment object to fetch
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the assignment object if it was acquired successfully,
-									error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line228"
-										>line 228</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the assignment object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getAssignments">
-						<span class="type-signature"></span>getAssignments<span
-							class="signature"
-							>(policyID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Fetch a list of assignments for a given legal hold policy API
-						Endpoint: '/legal_hold_policies/:policyID/assignments' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>policyID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the legal hold policy to get assignments for
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>assign_to_type</code></td>
-
-												<td class="type">
-													<span class="param-type"
-														><a href="global.html#LegalHoldPolicyAssignmentType"
-															>LegalHoldPolicyAssignmentType</a
-														></span
-													>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Filter assignments of this type only
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>assign_to_id</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Filter assignments to this ID only. Note that this
-													will only show assignments applied directly to this
-													entity.
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the assignment objects if they were acquired
-									successfully, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line179"
-										>line 179</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the collection of policy assignments
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="getFileVersionLegalHold">
-						<span class="type-signature"></span>getFileVersionLegalHold<span
-							class="signature"
-							>(legalHoldID, options<span class="signature-attributes">opt</span
-							>, callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Get the specific legal hold record for a held file version. API
-						Endpoint: '/file_version_legal_holds/:legalHoldID' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>legalHoldID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The ID for the file legal hold record to retrieve
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Pass the file version legal hold record if successful, error
-									otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line268"
-										>line 268</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the legal hold record
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="update">
-						<span class="type-signature"></span>update<span class="signature"
-							>(policyID, updates, callback<span class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Update or modify a legal hold policy. API Endpoint:
-						'/legal_hold_policies/:policyID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>policyID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the legal hold policy to update
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>updates</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The information to be updated
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>policy_name</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Name of Legal Hold Policy
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>description</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Description of Legal Hold Policy
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>release_notes</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Notes around why the policy was released
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated policy information if it was acquired
-									successfully, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_legal-hold-policies.js.html"
-										>managers/legal-hold-policies.js</a
-									>,
-									<a href="managers_legal-hold-policies.js.html#line115"
-										>line 115</a
-									>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated policy
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-				</article>
-			</section>
-		</div>
-
-		<nav>
-			<h2><a href="index.html">Home</a></h2>
-			<h3>Modules</h3>
-			<ul>
-				<li>
-					<a href="module-box-node-sdk_lib_api-request.html"
-						>box-node-sdk/lib/api-request</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_api-request-manager.html"
-						>box-node-sdk/lib/api-request-manager</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_box-client.html"
-						>box-node-sdk/lib/box-client</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_box-node-sdk.html"
-						>box-node-sdk/lib/box-node-sdk</a
-					>
-				</li>
-				<li>
-					<a
-						href="module-box-node-sdk_lib_managers_collaboration-allowlists.html"
-						>box-node-sdk/lib/managers/collaboration-allowlists</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_collaborations.html"
-						>box-node-sdk/lib/managers/collaborations</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_collections.html"
-						>box-node-sdk/lib/managers/collections</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_comments.html"
-						>box-node-sdk/lib/managers/comments</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_files.html"
-						>box-node-sdk/lib/managers/files</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_folders.html"
-						>box-node-sdk/lib/managers/folders</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_recent-items.html"
-						>box-node-sdk/lib/managers/recent-items</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_shared-items.html"
-						>box-node-sdk/lib/managers/shared-items</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_terms-of-service.html"
-						>box-node-sdk/lib/managers/terms-of-service</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_users.html"
-						>box-node-sdk/lib/managers/users</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_webhooks.html"
-						>box-node-sdk/lib/managers/webhooks</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_anonymous-session.html"
-						>box-node-sdk/lib/sessions/anonymous-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_app-auth-session.html"
-						>box-node-sdk/lib/sessions/app-auth-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_basic-session.html"
-						>box-node-sdk/lib/sessions/basic-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_persistent-session.html"
-						>box-node-sdk/lib/sessions/persistent-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_token-manager.html"
-						>box-node-sdk/lib/token-manager</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_util_config.html"
-						>box-node-sdk/lib/util/config</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_util_errors.html"
-						>box-node-sdk/lib/util/errors</a
-					>
-				</li>
-			</ul>
-			<h3>Classes</h3>
-			<ul>
-				<li><a href="AnonymousSession.html">AnonymousSession</a></li>
-				<li><a href="APIRequest.html">APIRequest</a></li>
-				<li><a href="APIRequestManager.html">APIRequestManager</a></li>
-				<li><a href="AppAuthSession.html">AppAuthSession</a></li>
-				<li><a href="BasicSession.html">BasicSession</a></li>
-				<li><a href="BoxClient.html">BoxClient</a></li>
-				<li><a href="BoxSDKNode.html">BoxSDKNode</a></li>
-				<li><a href="ChunkedUploader.html">ChunkedUploader</a></li>
-				<li><a href="Collaborations.html">Collaborations</a></li>
-				<li>
-					<a href="CollaborationAllowlist.html">CollaborationAllowlist</a>
-				</li>
-				<li><a href="Collections.html">Collections</a></li>
-				<li><a href="Comments.html">Comments</a></li>
-				<li><a href="Config.html">Config</a></li>
-				<li><a href="DevicePins.html">DevicePins</a></li>
-				<li><a href="Enterprise.html">Enterprise</a></li>
-				<li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li>
-				<li><a href="Events.html">Events</a></li>
-				<li><a href="EventStream.html">EventStream</a></li>
-				<li><a href="Files.html">Files</a></li>
-				<li><a href="Folders.html">Folders</a></li>
-				<li><a href="Groups.html">Groups</a></li>
-				<li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li>
-				<li><a href="Metadata.html">Metadata</a></li>
-				<li><a href="PagingIterator.html">PagingIterator</a></li>
-				<li><a href="PersistentSession.html">PersistentSession</a></li>
-				<li><a href="RecentItems.html">RecentItems</a></li>
-				<li><a href="RetentionPolicies.html">RetentionPolicies</a></li>
-				<li><a href="Search.html">Search</a></li>
-				<li><a href="SharedItems.html">SharedItems</a></li>
-				<li><a href="StoragePolicies.html">StoragePolicies</a></li>
-				<li><a href="Tasks.html">Tasks</a></li>
-				<li><a href="TermsOfService.html">TermsOfService</a></li>
-				<li><a href="TokenManager.html">TokenManager</a></li>
-				<li><a href="Trash.html">Trash</a></li>
-				<li><a href="Users.html">Users</a></li>
-				<li><a href="Webhooks.html">Webhooks</a></li>
-				<li><a href="WebLinks.html">WebLinks</a></li>
-			</ul>
-			<h3>Events</h3>
-			<ul>
-				<li><a href="ChunkedUploader.html#event:aborted">aborted</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:abortFailed">abortFailed</a>
-				</li>
-				<li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a>
-				</li>
-				<li><a href="ChunkedUploader.html#event:error">error</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a>
-				</li>
-			</ul>
-			<h3>Global</h3>
-			<ul>
-				<li>
-					<a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a>
-				</li>
-				<li>
-					<a href="global.html#CURRENT_STREAM_POSITION"
-						>CURRENT_STREAM_POSITION</a
-					>
-				</li>
-				<li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li>
-				<li><a href="global.html#grantTypes">grantTypes</a></li>
-				<li>
-					<a href="global.html#isJWTAuthErrorRetryable"
-						>isJWTAuthErrorRetryable</a
-					>
-				</li>
-				<li>
-					<a href="global.html#pollRepresentationInfo"
-						>pollRepresentationInfo</a
-					>
-				</li>
-				<li><a href="global.html#tokenPaths">tokenPaths</a></li>
-				<li><a href="global.html#URLPath">URLPath</a></li>
-			</ul>
-		</nav>
-
-		<br class="clear" />
-
-		<footer>
-			Documentation generated by
-			<a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Apr 16
-			2021 11:22:39 GMT-0700 (Pacific Daylight Time)
-		</footer>
-
-		<script>
-			prettyPrint();
-		</script>
-		<script src="scripts/linenumber.js"></script>
-	</body>
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: LegalHoldPolicies</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: LegalHoldPolicies</h1>
+
+
+
+
+
+
+<section>
+
+<header>
+
+        <h2><span class="attribs"><span class="type-signature"></span></span>LegalHoldPolicies<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
+
+
+</header>
+
+<article>
+    <div class="container-overview">
+
+
+
+
+
+
+    <h4 class="name" id="LegalHoldPolicies"><span class="type-signature"></span>new LegalHoldPolicies<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Simple manager for interacting with all Legal Holds endpoints and actions.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>client</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last">The Box API Client that is responsible for making calls to the API</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line39">line 39</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Members</h3>
+
+
+
+<h4 class="name" id="assignmentTypes"><span class="type-signature">(readonly) </span>assignmentTypes<span class="type-signature"> :<a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></span></h4>
+
+
+
+
+<div class="description">
+    Enum of valid policy assignment types, which specify what object the policy applies to
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+
+<span class="param-type"><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line48">line 48</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Methods</h3>
+
+
+
+
+
+
+
+    <h4 class="name" id="assign"><span class="type-signature"></span>assign<span class="signature">(policyID, assignType, assignID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Assign a lehal hold policy to an object
+
+API Endpoint: '/legal_hold_policy_assignments
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policyID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID of the policy to assign</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>assignType</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type"><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The type of object the policy will be assigned to</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>assignID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the object to assign the legal hold policy to</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the new assignment object if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line201">line 201</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the created assignment object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(name, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Used to create a single legal hold policy for an enterprise
+
+API Endpoint: '/legal_hold_policies'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The name of the legal hold policy to be created</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional parameters
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>description</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Description of the legal hold policy</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>filter_started_at</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Date filter, any Custodian assignments will apply only to file versions created or uploaded inside of the date range</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>filter_ended_at</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Date filter, any Custodian assignments will apply only to file versions created or uploaded inside of the date range</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>is_ongoing</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">boolean</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">After initialization, Assignments under this Policy will continue applying to files based on events, indefinitely</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the new policy information if it was acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line70">line 70</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the created policy
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(policyID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Sends request to delete an existing legal hold policy. Note that this is an
+asynchronous process - the policy will not be fully deleted yet when the
+response comes back.
+
+API Endpoint: '/legal_hold_policies/:policyID'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policyID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The legal hold policy to delete</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed nothing if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line159">line 159</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="deleteAssignment"><span class="type-signature"></span>deleteAssignment<span class="signature">(assignmentID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Sends request to delete an existing legal hold policy. Note that this is an
+asynchronous process - the policy will not be fully deleted yet when the
+response comes back.
+
+API Endpoint: '/legal_hold_policy_assignments/:assignmentID'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>assignmentID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The legal hold policy assignment to delete</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed nothing if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line250">line 250</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(policyID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Fetches details about a specific legal hold policy
+
+API Endpoint: '/legal_hold_policies/:policyID'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policyID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the legal hold policy being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the policy information if it was acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line92">line 92</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the policy object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Fetches a list of legal hold policies for the enterprise
+
+API Endpoint: '/legal_hold_policies'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policy_name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">A full or partial name to filter the legal hold policies by</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>limit</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">int</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Limit result size to this number</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>marker</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Paging marker, leave blank to start at the first page</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the policy objects if they were acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line138">line 138</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the collection of policies
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getAllFileVersionLegalHolds"><span class="type-signature"></span>getAllFileVersionLegalHolds<span class="signature">(policyID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Get a list of legal hold records for held file versions in an enterprise.
+
+API Endpoint: '/file_version_legal_holds'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policyID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">ID of Legal Hold Policy to get File Version Legal Holds for</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Pass the file version legal holds records if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line289">line 289</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the collection of all file version legal holds
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getAssignment"><span class="type-signature"></span>getAssignment<span class="signature">(assignmentID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Fetch a specific policy assignment
+
+API Endpoint: '/legal_hold_policy_assignments/:assignmentID'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>assignmentID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the policy assignment object to fetch</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the assignment object if it was acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line228">line 228</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the assignment object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getAssignments"><span class="type-signature"></span>getAssignments<span class="signature">(policyID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Fetch a list of assignments for a given legal hold policy
+
+API Endpoint: '/legal_hold_policies/:policyID/assignments'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policyID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the legal hold policy to get assignments for</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>assign_to_type</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type"><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Filter assignments of this type only</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>assign_to_id</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Filter assignments to this ID only. Note that this will only show assignments applied directly to this entity.</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the assignment objects if they were acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line179">line 179</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the collection of policy assignments
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="getFileVersionLegalHold"><span class="type-signature"></span>getFileVersionLegalHold<span class="signature">(legalHoldID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Get the specific legal hold record for a held file version.
+
+API Endpoint: '/file_version_legal_holds/:legalHoldID'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>legalHoldID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID for the file legal hold record to retrieve</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Pass the file version legal hold record if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line268">line 268</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the legal hold record
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(policyID, updates, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Update or modify a legal hold policy.
+
+API Endpoint: '/legal_hold_policies/:policyID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policyID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the legal hold policy to update</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>updates</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The information to be updated
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>policy_name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Name of Legal Hold Policy</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>description</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Description of Legal Hold Policy</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>release_notes</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Notes around why the policy was released</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated policy information if it was acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_legal-hold-policies.js.html">managers/legal-hold-policies.js</a>, <a href="managers_legal-hold-policies.js.html#line115">line 115</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated policy
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-allowlists.html">box-node-sdk/lib/managers/collaboration-allowlists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Apr 16 2021 11:22:39 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
 </html>

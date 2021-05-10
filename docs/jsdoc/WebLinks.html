@@ -1,1254 +1,2415 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>JSDoc: Class: WebLinks</title>
-
-		<script src="scripts/prettify/prettify.js"></script>
-		<script src="scripts/prettify/lang-css.js"></script>
-		<!--[if lt IE 9]>
-			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<link
-			type="text/css"
-			rel="stylesheet"
-			href="styles/prettify-tomorrow.css"
-		/>
-		<link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
-	</head>
-
-	<body>
-		<div id="main">
-			<h1 class="page-title">Class: WebLinks</h1>
-
-			<section>
-				<header>
-					<h2>
-						<span class="attribs"><span class="type-signature"></span></span
-						>WebLinks<span class="signature">(client)</span
-						><span class="type-signature"> &rarr; {void}</span>
-					</h2>
-				</header>
-
-				<article>
-					<div class="container-overview">
-						<h4 class="name" id="WebLinks">
-							<span class="type-signature"></span>new WebLinks<span
-								class="signature"
-								>(client)</span
-							><span class="type-signature"> &rarr; {void}</span>
-						</h4>
-
-						<div class="description">
-							Simple manager for interacting with all 'Weblinks' endpoints and
-							actions.
-						</div>
-
-						<h5>Parameters:</h5>
-
-						<table class="params">
-							<thead>
-								<tr>
-									<th>Name</th>
-
-									<th>Type</th>
-
-									<th class="last">Description</th>
-								</tr>
-							</thead>
-
-							<tbody>
-								<tr>
-									<td class="name"><code>client</code></td>
-
-									<td class="type">
-										<span class="param-type"
-											><a href="BoxClient.html">BoxClient</a></span
-										>
-									</td>
-
-									<td class="description last">
-										The Box API Client that is responsible for making calls to
-										the API
-									</td>
-								</tr>
-							</tbody>
-						</table>
-
-						<dl class="details">
-							<dt class="tag-source">Source:</dt>
-							<dd class="tag-source">
-								<ul class="dummy">
-									<li>
-										<a href="managers_web-links.js.html"
-											>managers/web-links.js</a
-										>, <a href="managers_web-links.js.html#line28">line 28</a>
-									</li>
-								</ul>
-							</dd>
-						</dl>
-
-						<h5>Returns:</h5>
-
-						<dl>
-							<dt>Type</dt>
-							<dd>
-								<span class="param-type">void</span>
-							</dd>
-						</dl>
-					</div>
-
-					<h3 class="subsection-title">Methods</h3>
-
-					<h4 class="name" id="addToCollection">
-						<span class="type-signature"></span>addToCollection<span
-							class="signature"
-							>(webLinkID, collectionID, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Add a web link to a given collection API Endpoint:
-						'/web_links/:webLinkID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>webLinkID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The web link to add to the collection
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>collectionID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The collection to add the web link to
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated web link if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line182">line 182</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated web link object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="copy">
-						<span class="type-signature"></span>copy<span class="signature"
-							>(webLinkID, newParentID, options<span
-								class="signature-attributes"
-								>opt</span
-							>, callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Copy a web link into a new, different folder API Endpoint:
-						'/web_links/:webLinkID/copy Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>webLinkID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the web link being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>newParentID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID for the new parent folder. '0' to copy to All
-									Files.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Optional parameters for the copy operation, can be left null
-									in most cases
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>name</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													A new name to use if there is an identically-named
-													item in the new parent folder
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									passed the new web link info if call was successful
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line156">line 156</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the new web link object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="create">
-						<span class="type-signature"></span>create<span class="signature"
-							>(url, parentID, options<span class="signature-attributes"
-								>opt</span
-							>, callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Creates a web link object within a given folder. API Endpoint:
-						'/web_links' Method: POST
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>url</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									URL you want the web link to point to. Must include http:// or
-									https://
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>parentID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The ID of the parent folder where you're creating the web link
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional parameters
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>name</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Name for the web link. Will default to the URL if
-													empty.
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>description</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Description of the web link. Will provide more context
-													to users about the web link.
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the new web link information if it was acquired
-									successfully, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line46">line 46</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the created weblink object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="delete">
-						<span class="type-signature"></span>delete<span class="signature"
-							>(weblinkID, callback<span class="signature-attributes">opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Deletes a web link and moves it to the trash API Endpoint:
-						'/web_links/:weblinkID' Method: DELETE
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>weblinkID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the web link being moved to the trash
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Empty body passed if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line114">line 114</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">A promise resolving to nothing</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="get">
-						<span class="type-signature"></span>get<span class="signature"
-							>(weblinkID, options<span class="signature-attributes">opt</span>,
-							callback<span class="signature-attributes">opt</span>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Use to get information about the web link. API Endpoint:
-						'/web_links/:weblinkID' Method: GET
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>weblinkID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of web link being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>options</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Additional options for the request. Can be left null in most
-									cases.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the web-link information if it was acquired
-									successfully, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line73">line 73</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the weblink object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="move">
-						<span class="type-signature"></span>move<span class="signature"
-							>(webLinkID, newParentID, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Move a web link into a new parent folder. API Endpoint:
-						'/web_links/:webLinkID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>webLinkID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the web link being requested
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>newParentID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID for the new parent folder. '0' to move to All
-									Files.
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated web link information if it was acquired
-									successfully
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line131">line 131</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated web link object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="removeFromCollection">
-						<span class="type-signature"></span>removeFromCollection<span
-							class="signature"
-							>(webLinkID, collectionID, callback<span
-								class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Remove a web link from a given collection API Endpoint:
-						'/web_links/:webLinkID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>webLinkID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The web link to remove from the collection
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>collectionID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The collection to remove the web link from
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated web link if successful, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line213">line 213</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated web link object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-
-					<h4 class="name" id="update">
-						<span class="type-signature"></span>update<span class="signature"
-							>(weblinkID, updates, callback<span class="signature-attributes"
-								>opt</span
-							>)</span
-						><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-					</h4>
-
-					<div class="description">
-						Updates information for a web link. API Endpoint:
-						'/web_links/:weblinkID' Method: PUT
-					</div>
-
-					<h5>Parameters:</h5>
-
-					<table class="params">
-						<thead>
-							<tr>
-								<th>Name</th>
-
-								<th>Type</th>
-
-								<th>Attributes</th>
-
-								<th class="last">Description</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td class="name"><code>weblinkID</code></td>
-
-								<td class="type">
-									<span class="param-type">string</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									The Box ID of the web link being updated
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>updates</code></td>
-
-								<td class="type">
-									<span class="param-type">Object</span>
-								</td>
-
-								<td class="attributes"></td>
-
-								<td class="description last">
-									Fields of the weblink to update
-									<h6>Properties</h6>
-
-									<table class="params">
-										<thead>
-											<tr>
-												<th>Name</th>
-
-												<th>Type</th>
-
-												<th>Attributes</th>
-
-												<th class="last">Description</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr>
-												<td class="name"><code>name</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Name for the web link. Will default to the URL if
-													empty.
-												</td>
-											</tr>
-
-											<tr>
-												<td class="name"><code>description</code></td>
-
-												<td class="type">
-													<span class="param-type">string</span>
-												</td>
-
-												<td class="attributes">&lt;optional><br /></td>
-
-												<td class="description last">
-													Description of the web link. Will provide more context
-													to users about the web link.
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="name"><code>callback</code></td>
-
-								<td class="type">
-									<span class="param-type">function</span>
-								</td>
-
-								<td class="attributes">&lt;optional><br /></td>
-
-								<td class="description last">
-									Passed the updated web link information if it was acquired
-									successfully, error otherwise
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<dl class="details">
-						<dt class="tag-source">Source:</dt>
-						<dd class="tag-source">
-							<ul class="dummy">
-								<li>
-									<a href="managers_web-links.js.html">managers/web-links.js</a
-									>, <a href="managers_web-links.js.html#line95">line 95</a>
-								</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<h5>Returns:</h5>
-
-					<div class="param-desc">
-						A promise resolving to the updated web link object
-					</div>
-
-					<dl>
-						<dt>Type</dt>
-						<dd>
-							<span class="param-type">Promise.&lt;Object></span>
-						</dd>
-					</dl>
-				</article>
-			</section>
-		</div>
-
-		<nav>
-			<h2><a href="index.html">Home</a></h2>
-			<h3>Modules</h3>
-			<ul>
-				<li>
-					<a href="module-box-node-sdk_lib_api-request.html"
-						>box-node-sdk/lib/api-request</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_api-request-manager.html"
-						>box-node-sdk/lib/api-request-manager</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_box-client.html"
-						>box-node-sdk/lib/box-client</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_box-node-sdk.html"
-						>box-node-sdk/lib/box-node-sdk</a
-					>
-				</li>
-				<li>
-					<a
-						href="module-box-node-sdk_lib_managers_collaboration-allowlists.html"
-						>box-node-sdk/lib/managers/collaboration-allowlists</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_collaborations.html"
-						>box-node-sdk/lib/managers/collaborations</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_collections.html"
-						>box-node-sdk/lib/managers/collections</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_comments.html"
-						>box-node-sdk/lib/managers/comments</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_files.html"
-						>box-node-sdk/lib/managers/files</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_folders.html"
-						>box-node-sdk/lib/managers/folders</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_recent-items.html"
-						>box-node-sdk/lib/managers/recent-items</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_shared-items.html"
-						>box-node-sdk/lib/managers/shared-items</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_terms-of-service.html"
-						>box-node-sdk/lib/managers/terms-of-service</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_users.html"
-						>box-node-sdk/lib/managers/users</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_managers_webhooks.html"
-						>box-node-sdk/lib/managers/webhooks</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_anonymous-session.html"
-						>box-node-sdk/lib/sessions/anonymous-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_app-auth-session.html"
-						>box-node-sdk/lib/sessions/app-auth-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_basic-session.html"
-						>box-node-sdk/lib/sessions/basic-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_sessions_persistent-session.html"
-						>box-node-sdk/lib/sessions/persistent-session</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_token-manager.html"
-						>box-node-sdk/lib/token-manager</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_util_config.html"
-						>box-node-sdk/lib/util/config</a
-					>
-				</li>
-				<li>
-					<a href="module-box-node-sdk_lib_util_errors.html"
-						>box-node-sdk/lib/util/errors</a
-					>
-				</li>
-			</ul>
-			<h3>Classes</h3>
-			<ul>
-				<li><a href="AnonymousSession.html">AnonymousSession</a></li>
-				<li><a href="APIRequest.html">APIRequest</a></li>
-				<li><a href="APIRequestManager.html">APIRequestManager</a></li>
-				<li><a href="AppAuthSession.html">AppAuthSession</a></li>
-				<li><a href="BasicSession.html">BasicSession</a></li>
-				<li><a href="BoxClient.html">BoxClient</a></li>
-				<li><a href="BoxSDKNode.html">BoxSDKNode</a></li>
-				<li><a href="ChunkedUploader.html">ChunkedUploader</a></li>
-				<li><a href="Collaborations.html">Collaborations</a></li>
-				<li>
-					<a href="CollaborationAllowlist.html">CollaborationAllowlist</a>
-				</li>
-				<li><a href="Collections.html">Collections</a></li>
-				<li><a href="Comments.html">Comments</a></li>
-				<li><a href="Config.html">Config</a></li>
-				<li><a href="DevicePins.html">DevicePins</a></li>
-				<li><a href="Enterprise.html">Enterprise</a></li>
-				<li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li>
-				<li><a href="Events.html">Events</a></li>
-				<li><a href="EventStream.html">EventStream</a></li>
-				<li><a href="Files.html">Files</a></li>
-				<li><a href="Folders.html">Folders</a></li>
-				<li><a href="Groups.html">Groups</a></li>
-				<li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li>
-				<li><a href="Metadata.html">Metadata</a></li>
-				<li><a href="PagingIterator.html">PagingIterator</a></li>
-				<li><a href="PersistentSession.html">PersistentSession</a></li>
-				<li><a href="RecentItems.html">RecentItems</a></li>
-				<li><a href="RetentionPolicies.html">RetentionPolicies</a></li>
-				<li><a href="Search.html">Search</a></li>
-				<li><a href="SharedItems.html">SharedItems</a></li>
-				<li><a href="StoragePolicies.html">StoragePolicies</a></li>
-				<li><a href="Tasks.html">Tasks</a></li>
-				<li><a href="TermsOfService.html">TermsOfService</a></li>
-				<li><a href="TokenManager.html">TokenManager</a></li>
-				<li><a href="Trash.html">Trash</a></li>
-				<li><a href="Users.html">Users</a></li>
-				<li><a href="Webhooks.html">Webhooks</a></li>
-				<li><a href="WebLinks.html">WebLinks</a></li>
-			</ul>
-			<h3>Events</h3>
-			<ul>
-				<li><a href="ChunkedUploader.html#event:aborted">aborted</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:abortFailed">abortFailed</a>
-				</li>
-				<li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a>
-				</li>
-				<li><a href="ChunkedUploader.html#event:error">error</a></li>
-				<li>
-					<a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a>
-				</li>
-			</ul>
-			<h3>Global</h3>
-			<ul>
-				<li>
-					<a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a>
-				</li>
-				<li>
-					<a href="global.html#CURRENT_STREAM_POSITION"
-						>CURRENT_STREAM_POSITION</a
-					>
-				</li>
-				<li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li>
-				<li><a href="global.html#grantTypes">grantTypes</a></li>
-				<li>
-					<a href="global.html#isJWTAuthErrorRetryable"
-						>isJWTAuthErrorRetryable</a
-					>
-				</li>
-				<li>
-					<a href="global.html#pollRepresentationInfo"
-						>pollRepresentationInfo</a
-					>
-				</li>
-				<li><a href="global.html#tokenPaths">tokenPaths</a></li>
-				<li><a href="global.html#URLPath">URLPath</a></li>
-			</ul>
-		</nav>
-
-		<br class="clear" />
-
-		<footer>
-			Documentation generated by
-			<a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Apr 16
-			2021 11:22:39 GMT-0700 (Pacific Daylight Time)
-		</footer>
-
-		<script>
-			prettyPrint();
-		</script>
-		<script src="scripts/linenumber.js"></script>
-	</body>
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: WebLinks</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: WebLinks</h1>
+
+
+
+
+
+
+<section>
+
+<header>
+
+        <h2><span class="attribs"><span class="type-signature"></span></span>WebLinks<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
+
+
+</header>
+
+<article>
+    <div class="container-overview">
+
+
+
+
+
+
+    <h4 class="name" id="WebLinks"><span class="type-signature"></span>new WebLinks<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Simple manager for interacting with all 'Weblinks' endpoints and actions.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>client</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last">The Box API Client that is responsible for making calls to the API</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line28">line 28</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Methods</h3>
+
+
+
+
+
+
+
+    <h4 class="name" id="addToCollection"><span class="type-signature"></span>addToCollection<span class="signature">(webLinkID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Add a web link to a given collection
+
+API Endpoint: '/web_links/:webLinkID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>webLinkID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The web link to add to the collection</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>collectionID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The collection to add the web link to</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated web link if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line182">line 182</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated web link object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(webLinkID, newParentID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Copy a web link into a new, different folder
+
+API Endpoint: '/web_links/:webLinkID/copy
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>webLinkID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the web link being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>newParentID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID for the new parent folder. '0' to copy to All Files.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Optional parameters for the copy operation, can be left null in most cases
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">A new name to use if there is an identically-named item in the new parent folder</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">passed the new web link info if call was successful</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line156">line 156</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the new web link object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(url, parentID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Creates a web link object within a given folder.
+
+API Endpoint: '/web_links'
+Method: POST
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>url</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">URL you want the web link to point to. Must include http:// or https://</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>parentID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The ID of the parent folder where you're creating the web link</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional parameters
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Name for the web link. Will default to the URL if empty.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>description</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Description of the web link. Will provide more context to users about the web link.</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the new web link information if it was acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line46">line 46</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the created weblink object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(weblinkID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Deletes a web link and moves it to the trash
+
+API Endpoint: '/web_links/:weblinkID'
+Method: DELETE
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>weblinkID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the web link being moved to the trash</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Empty body passed if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line114">line 114</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to nothing
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(weblinkID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Use to get information about the web link.
+
+API Endpoint: '/web_links/:weblinkID'
+Method: GET
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>weblinkID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of web link being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the web-link information if it was acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line73">line 73</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the weblink object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="move"><span class="type-signature"></span>move<span class="signature">(webLinkID, newParentID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Move a web link into a new parent folder.
+
+API Endpoint: '/web_links/:webLinkID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>webLinkID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the web link being requested</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>newParentID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID for the new parent folder. '0' to move to All Files.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated web link information if it was acquired successfully</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line131">line 131</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated web link object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="removeFromCollection"><span class="type-signature"></span>removeFromCollection<span class="signature">(webLinkID, collectionID, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Remove a web link from a given collection
+
+API Endpoint: '/web_links/:webLinkID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>webLinkID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The web link to remove from the collection</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>collectionID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The collection to remove the web link from</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated web link if successful, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line213">line 213</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated web link object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(weblinkID, updates, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+
+
+
+
+
+<div class="description">
+    Updates information for a web link.
+
+API Endpoint: '/web_links/:weblinkID'
+Method: PUT
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>weblinkID</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">The Box ID of the web link being updated</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>updates</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Fields of the weblink to update
+                <h6>Properties</h6>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Name for the web link. Will default to the URL if empty.</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>description</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Description of the web link. Will provide more context to users about the web link.</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>callback</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Passed the updated web link information if it was acquired successfully, error otherwise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="managers_web-links.js.html">managers/web-links.js</a>, <a href="managers_web-links.js.html#line95">line 95</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A promise resolving to the updated web link object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-box-node-sdk_lib_api-request.html">box-node-sdk/lib/api-request</a></li><li><a href="module-box-node-sdk_lib_api-request-manager.html">box-node-sdk/lib/api-request-manager</a></li><li><a href="module-box-node-sdk_lib_box-client.html">box-node-sdk/lib/box-client</a></li><li><a href="module-box-node-sdk_lib_box-node-sdk.html">box-node-sdk/lib/box-node-sdk</a></li><li><a href="module-box-node-sdk_lib_managers_collaboration-allowlists.html">box-node-sdk/lib/managers/collaboration-allowlists</a></li><li><a href="module-box-node-sdk_lib_managers_collaborations.html">box-node-sdk/lib/managers/collaborations</a></li><li><a href="module-box-node-sdk_lib_managers_collections.html">box-node-sdk/lib/managers/collections</a></li><li><a href="module-box-node-sdk_lib_managers_comments.html">box-node-sdk/lib/managers/comments</a></li><li><a href="module-box-node-sdk_lib_managers_files.html">box-node-sdk/lib/managers/files</a></li><li><a href="module-box-node-sdk_lib_managers_folders.html">box-node-sdk/lib/managers/folders</a></li><li><a href="module-box-node-sdk_lib_managers_recent-items.html">box-node-sdk/lib/managers/recent-items</a></li><li><a href="module-box-node-sdk_lib_managers_shared-items.html">box-node-sdk/lib/managers/shared-items</a></li><li><a href="module-box-node-sdk_lib_managers_terms-of-service.html">box-node-sdk/lib/managers/terms-of-service</a></li><li><a href="module-box-node-sdk_lib_managers_users.html">box-node-sdk/lib/managers/users</a></li><li><a href="module-box-node-sdk_lib_managers_webhooks.html">box-node-sdk/lib/managers/webhooks</a></li><li><a href="module-box-node-sdk_lib_sessions_anonymous-session.html">box-node-sdk/lib/sessions/anonymous-session</a></li><li><a href="module-box-node-sdk_lib_sessions_app-auth-session.html">box-node-sdk/lib/sessions/app-auth-session</a></li><li><a href="module-box-node-sdk_lib_sessions_basic-session.html">box-node-sdk/lib/sessions/basic-session</a></li><li><a href="module-box-node-sdk_lib_sessions_persistent-session.html">box-node-sdk/lib/sessions/persistent-session</a></li><li><a href="module-box-node-sdk_lib_token-manager.html">box-node-sdk/lib/token-manager</a></li><li><a href="module-box-node-sdk_lib_util_config.html">box-node-sdk/lib/util/config</a></li><li><a href="module-box-node-sdk_lib_util_errors.html">box-node-sdk/lib/util/errors</a></li></ul><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Events</h3><ul><li><a href="ChunkedUploader.html#event:aborted">aborted</a></li><li><a href="ChunkedUploader.html#event:abortFailed">abortFailed</a></li><li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li><li><a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a></li><li><a href="ChunkedUploader.html#event:error">error</a></li><li><a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#URLPath">URLPath</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Apr 16 2021 11:22:39 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
 </html>
