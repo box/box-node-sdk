@@ -27,8 +27,8 @@ enum CollaborationAllowlistDirection {
 // Private
 // ------------------------------------------------------------------------------
 
-const BASE_PATH = '/collaboration_allowlist_entries',
-	TARGET_ENTRY_PATH = '/collaboration_allowlist_exempt_targets';
+const BASE_PATH = '/collaboration_whitelist_entries',
+	TARGET_ENTRY_PATH = '/collaboration_whitelist_exempt_targets';
 
 // ------------------------------------------------------------------------------
 // Public
@@ -52,7 +52,7 @@ class CollaborationAllowlist {
 	/**
 	 * Add a domain to the enterprise's allowlist.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_entries'
+	 * API Endpoint: '/collaboration_whitelist_entries'
 	 * Method: POST
 	 *
 	 * @param {string} domain - The domain to be added to the allowlist
@@ -85,7 +85,7 @@ class CollaborationAllowlist {
 	/**
 	 * Requests a collaboration allowlist entry with a given ID.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_entries/:domainID'
+	 * API Endpoint: '/collaboration_whitelist_entries/:domainID'
 	 * Method: GET
 	 *
 	 * @param {string} domainID - Box ID of the collaboration allowlist being requested
@@ -111,7 +111,7 @@ class CollaborationAllowlist {
 	/**
 	 * Requests all collaboration allowlist entries within an enterprise.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_entries'
+	 * API Endpoint: '/collaboration_whitelist_entries'
 	 * Method: GET
 	 *
 	 * @param {Object} [options] - Additional options. Can be left null in most cases.
@@ -142,7 +142,7 @@ class CollaborationAllowlist {
 	/**
 	 * Delete a given collaboration allowlist entry.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_entries/:domainID'
+	 * API Endpoint: '/collaboration_whitelist_entries/:domainID'
 	 * Method: DELETE
 	 *
 	 * @param {string} domainID - Box ID of the collaboration allowlist being requested
@@ -161,7 +161,7 @@ class CollaborationAllowlist {
 	/**
 	 * Adds a Box User to the exempt target list.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_exempt_targets'
+	 * API Endpoint: '/collaboration_whitelist_exempt_targets'
 	 * Method: GET
 	 *
 	 * @param {string} userID - The ID of the Box User to be added to the allowlist
@@ -189,7 +189,7 @@ class CollaborationAllowlist {
 	/**
 	 * Retrieves information about a collaboration allowlist for user by allowlist ID.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_exempt_targets/:exemptionID'
+	 * API Endpoint: '/collaboration_whitelist_exempt_targets/:exemptionID'
 	 * Method: GET
 	 *
 	 * @param {string} exemptionID - The ID of the collaboration allowlist
@@ -217,7 +217,7 @@ class CollaborationAllowlist {
 	/**
 	 * Retrieve a list of all exemptions to an enterprise's collaboration allowlist.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_exempt_targets'
+	 * API Endpoint: '/collaboration_whitelist_exempt_targets'
 	 * Method: GET
 	 *
 	 * @param {Object} [options] - Additional options. Can be left null in most cases.
@@ -248,7 +248,7 @@ class CollaborationAllowlist {
 	/**
 	 * Delete a given user collaboration allowlist.
 	 *
-	 * API Endpoint: '/collaboration_allowlist_exempt_targets/:exemptionID'
+	 * API Endpoint: '/collaboration_whitelist_exempt_targets/:exemptionID'
 	 * Method: DELETE
 	 *
 	 * @param {string} exemptionID - Box ID of the user collaboration allowlist being requested

@@ -1,5 +1,5 @@
 {
-	"type": "collaboration_allowlist_exempt_target",
+	"type": "collaboration_whitelist_exempt_target",
 	"id": "1234",
 	"user": {
 		"type": "user",

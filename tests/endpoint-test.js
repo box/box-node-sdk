@@ -3807,7 +3807,7 @@ describe('Endpoint', function() {
 		describe('addDomain()', function() {
 			it('should make a post request to create a domain collaboration allowlisting', function() {
 				var postFixture = getFixture(
-						'collaboration-allowlists/post_collaboration_allowlists_200'
+						'collaboration-allowlists/post_collaboration_whitelists_200'
 					),
 					domain = 'test.com',
 					direction = 'both',
@@ -3817,7 +3817,7 @@ describe('Endpoint', function() {
 					};
 
 				apiMock
-					.post('/2.0/collaboration_allowlist_entries', expectedPostBody)
+					.post('/2.0/collaboration_whitelist_entries', expectedPostBody)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3850,7 +3850,7 @@ describe('Endpoint', function() {
 					};
 
 				apiMock
-					.post('/2.0/collaboration_allowlist_exempt_targets', expectedPostBody)
+					.post('/2.0/collaboration_whitelist_exempt_targets', expectedPostBody)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3872,11 +3872,11 @@ describe('Endpoint', function() {
 		describe('getAllAllowlistedDomains()', function() {
 			it('should make GET request to get allowlisted domains', function() {
 				var fixture = getFixture(
-					'collaboration-allowlists/get_collaboration_allowlist_entries_200'
+					'collaboration-allowlists/get_collaboration_whitelist_entries_200'
 				);
 
 				apiMock
-					.get('/2.0/collaboration_allowlist_entries')
+					.get('/2.0/collaboration_whitelist_entries')
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3898,12 +3898,12 @@ describe('Endpoint', function() {
 		describe('getAllowlistedDomain()', function() {
 			it('should make GET request to fetch allowlisted domain', function() {
 				var fixture = getFixture(
-						'collaboration-allowlists/get_collaboration_allowlist_entries_id_200'
+						'collaboration-allowlists/get_collaboration_whitelist_entries_id_200'
 					),
 					allowlistEntryID = '11111';
 
 				apiMock
-					.get(`/2.0/collaboration_allowlist_entries/${allowlistEntryID}`)
+					.get(`/2.0/collaboration_whitelist_entries/${allowlistEntryID}`)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3927,7 +3927,7 @@ describe('Endpoint', function() {
 				var allowlistEntryID = '11111';
 
 				apiMock
-					.delete(`/2.0/collaboration_allowlist_entries/${allowlistEntryID}`)
+					.delete(`/2.0/collaboration_whitelist_entries/${allowlistEntryID}`)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3949,11 +3949,11 @@ describe('Endpoint', function() {
 		describe('getAllExemptions()', function() {
 			it('should make GET call to fetch allowlist exemptions', function() {
 				var fixture = getFixture(
-					'collaboration-allowlists/get_collaboration_allowlist_exempt_targets_200'
+					'collaboration-allowlists/get_collaboration_whitelist_exempt_targets_200'
 				);
 
 				apiMock
-					.get('/2.0/collaboration_allowlist_exempt_targets')
+					.get('/2.0/collaboration_whitelist_exempt_targets')
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3975,12 +3975,12 @@ describe('Endpoint', function() {
 		describe('getExemption()', function() {
 			it('should make GET call to fetch allowlist exemptions', function() {
 				var fixture = getFixture(
-						'collaboration-allowlists/get_collaboration_allowlist_exempt_targets_200'
+						'collaboration-allowlists/get_collaboration_whitelist_exempt_targets_200'
 					),
 					exemptionID = '11111';
 
 				apiMock
-					.get(`/2.0/collaboration_allowlist_exempt_targets/${exemptionID}`)
+					.get(`/2.0/collaboration_whitelist_exempt_targets/${exemptionID}`)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -4004,7 +4004,7 @@ describe('Endpoint', function() {
 				var exemptionID = '11111';
 
 				apiMock
-					.delete(`/2.0/collaboration_allowlist_exempt_targets/${exemptionID}`)
+					.delete(`/2.0/collaboration_whitelist_exempt_targets/${exemptionID}`)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;

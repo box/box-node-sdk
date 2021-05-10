@@ -71,7 +71,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('post')
-				.withArgs('/collaboration_allowlist_entries', expectedParams);
+				.withArgs('/collaboration_whitelist_entries', expectedParams);
 			collaborationAllowlist.addDomain(domainToAllowlist, 'both');
 		});
 
@@ -116,7 +116,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('del')
-				.withArgs('/collaboration_allowlist_entries/1234', null);
+				.withArgs('/collaboration_whitelist_entries/1234', null);
 			collaborationAllowlist.removeDomain(COLLABORATION_ALLOWLIST_ID);
 		});
 
@@ -160,7 +160,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('get')
-				.withArgs('/collaboration_allowlist_entries/1234', testParamsWithQs)
+				.withArgs('/collaboration_whitelist_entries/1234', testParamsWithQs)
 				.returns(Promise.resolve());
 			collaborationAllowlist.getAllowlistedDomain(
 				COLLABORATION_ALLOWLIST_ID,
@@ -222,7 +222,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('get')
-				.withArgs('/collaboration_allowlist_entries', testAllowlistQS)
+				.withArgs('/collaboration_whitelist_entries', testAllowlistQS)
 				.returns(Promise.resolve());
 			collaborationAllowlist.getAllAllowlistedDomains(options);
 		});
@@ -265,7 +265,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('get')
-				.withArgs('/collaboration_allowlist_entries')
+				.withArgs('/collaboration_whitelist_entries')
 				.returns(Promise.resolve());
 			collaborationAllowlist.getAllAllowlistedDomains();
 		});
@@ -286,7 +286,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('post')
-				.withArgs('/collaboration_allowlist_exempt_targets', expectedParams)
+				.withArgs('/collaboration_whitelist_exempt_targets', expectedParams)
 				.returns(Promise.resolve());
 			collaborationAllowlist.addExemption(USER_ID);
 		});
@@ -329,7 +329,7 @@ describe('CollaborationAllowlist', function() {
 				.mock(boxClientFake)
 				.expects('get')
 				.withArgs(
-					'/collaboration_allowlist_exempt_targets/5678',
+					'/collaboration_whitelist_exempt_targets/5678',
 					testParamsWithQs
 				)
 				.returns(Promise.resolve());
@@ -393,7 +393,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('get')
-				.withArgs('/collaboration_allowlist_exempt_targets', testAllowlistQS)
+				.withArgs('/collaboration_whitelist_exempt_targets', testAllowlistQS)
 				.returns(Promise.resolve());
 			collaborationAllowlist.getAllExemptions(options);
 		});
@@ -433,7 +433,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('get')
-				.withArgs('/collaboration_allowlist_exempt_targets')
+				.withArgs('/collaboration_whitelist_exempt_targets')
 				.returns(Promise.resolve());
 			collaborationAllowlist.getAllExemptions();
 		});
@@ -445,7 +445,7 @@ describe('CollaborationAllowlist', function() {
 			sandbox
 				.mock(boxClientFake)
 				.expects('del')
-				.withArgs('/collaboration_allowlist_exempt_targets/5678', null);
+				.withArgs('/collaboration_whitelist_exempt_targets/5678', null);
 			collaborationAllowlist.removeExemption(USER_COLLABORATION_ALLOWLIST_ID);
 		});
 

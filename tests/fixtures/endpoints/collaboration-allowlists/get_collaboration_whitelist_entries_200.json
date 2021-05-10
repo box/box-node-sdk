@@ -1,7 +1,7 @@
 {
 	"entries": [
 		{
-			"type": "collaboration_allowlist_entry",
+			"type": "collaboration_whitelist_entry",
 			"id": "11111",
 			"domain": "box.com",
 			"direction": "both"

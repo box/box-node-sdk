@@ -30,7 +30,7 @@ enterprise by calling
 
 The `direction` parameter determines the level of restriction on which way the collaboration flows. Set to `inbound` will allow users outside of our enterprise to collaboration with content inside your enterprise. Set to `outbound` will allow users inside your enterprise to collaboration with content owned by someone outside your enterprise. Set to `both` will allow both `inbound` and `outbound`.
 
-<!-- sample post_collaboration_allowlist_entries -->
+<!-- sample post_collaboration_whitelist_entries -->
 ```js
 client.collaborationAllowlist.addDomain('test.com', client.collaborationAllowlist.directions.INBOUND, callback);
 ```
@@ -42,7 +42,7 @@ Information about a specific collaboration allowlist record, which shows
 the domain that is allowlisted, can be retrieved by calling
 [`collaborationAllowlist.getAllowlistedDomain(domainID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getAllowlistedDomain).
 
-<!-- sample get_collaboration_allowlist_entries_id -->
+<!-- sample get_collaboration_whitelist_entries_id -->
 ```js
 client.collaborationAllowlist.getAllowlistedDomain('12345', {}, callback);
 ```
@@ -53,7 +53,7 @@ Get Allowlisted Domains for an Enterprise
 You can retrieve a collection of allowlisted domains for an enterprise with
 [`collaborationAllowlist.getAllAllowlistedDomains(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getAllAllowlistedDomains).
 
-<!-- sample get_collaboration_allowlist_entries -->
+<!-- sample get_collaboration_whitelist_entries -->
 ```js
 client.collaborationAllowlist.getAllAllowlistedDomains(callback);
 ```
@@ -74,7 +74,7 @@ Remove a Domain from Collaboration Allowlist
 You can remove a domain from the collaboration allowlist with
 [`collaborationAllowlist.removeDomain(domainID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#removeDomain).
 
-<!-- sample delete_collaboration_allowlist_entries_id -->
+<!-- sample delete_collaboration_whitelist_entries_id -->
 ```js
 client.collaborationAllowlist.removeDomain('12345', callback);
 ```
@@ -86,7 +86,7 @@ You can make a specific user exempt from the collaboration allowlist, which
 allows them to collaborate with users from any domain, by calling
 [`collaborationAllowlist.addExemption(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#addExemption).
 
-<!-- sample post_collaboration_allowlist_exempt_targets -->
+<!-- sample post_collaboration_whitelist_exempt_targets -->
 ```js
 client.collaborationAllowlist.addExemption('5678', callback);
 ```
@@ -97,7 +97,7 @@ Get an Exempt User's Information
 To retrieve information about a specific user exemption record, you can use
 [`collaborationAllowlist.getExemption(exemptionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getExemption).
 
-<!-- sample get_collaboration_allowlist_exempt_targets_id -->
+<!-- sample get_collaboration_whitelist_exempt_targets_id -->
 ```js
 client.collaborationAllowlist.getExemption(`12345`, callback);
 ```
@@ -109,7 +109,7 @@ To retrieve a collection of users who are exempt from the collaboration allowlis
 for an enterprise, call
 [`collaborationAllowlist.getAllExemptions(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getAllExemptions).
 
-<!-- sample get_collaboration_allowlist_exempt_targets -->
+<!-- sample get_collaboration_whitelist_exempt_targets -->
 ```js
 client.colllaborationAllowlist.getAllExemptions(options, callback);
 ```
@@ -130,7 +130,7 @@ To remove a user exemption from collaboration allowlist and make that user
 subject to allowlist restrictions again, you can call
 [`collaborationAllowlist.removeExemption(exemptionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#removeExemption).
 
-<!-- sample delete_collaboration_allowlist_exempt_targets_id -->
+<!-- sample delete_collaboration_whitelist_exempt_targets_id -->
 ```js
 client.collaborationAllowlist.removeExemption('12345678', callback);
 ```
