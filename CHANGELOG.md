@@ -55,8 +55,8 @@
 
 ## 1.32.0 [2020-04-01]
 
-- Temporarily removed Node 4 and Node 5 builds from Travis, due to tests not passing.  Will investigate, going forward ([#495](https://github.com/box/box-node-sdk/pull/495)).
-- Fixed an issue where an error is thrown during a retry when a response is not returned by the previous call  ([#477](https://github.com/box/box-node-sdk/pull/477)).
+- Temporarily removed Node 4 and Node 5 builds from Travis, due to tests not passing. Will investigate, going forward ([#495](https://github.com/box/box-node-sdk/pull/495)).
+- Fixed an issue where an error is thrown during a retry when a response is not returned by the previous call ([#477](https://github.com/box/box-node-sdk/pull/477)).
 - Added the ability to [query](./docs/metadata.md#query) Box items based on their metadata ([#487](https://github.com/box/box-node-sdk/pull/487)).
 
 ## 1.31.0 [2020-02-13]
@@ -103,8 +103,8 @@
 
 - Added support for [replying to a comment](./docs/comments.md#reply-to-a-comment) (thanks @jpan-box!)
 - Fixed an issue where calling `client.events.get()` could return an iterator that would only iterate over
-  the first chunk of events.  This method will now always return the raw JSON data in order to enable manual
-  paging.  For automatic paging through events, `client.events.getEventStream()` or
+  the first chunk of events. This method will now always return the raw JSON data in order to enable manual
+  paging. For automatic paging through events, `client.events.getEventStream()` or
   `client.events.getEnterpriseEventStream()` should be used instead.
 
 ## 1.25.0 [2019-01-24]
@@ -122,13 +122,13 @@
 ## 1.23.0 [2018-11-21]
 
 - Added an `etag` option to common file and folder methods to allow handling race conditions
-    - [`client.files.update()`](./docs/files.md#update-a-files-information)
-    - [`client.files.delete()`](./docs/files.md#delete-a-file)
-    - [`client.files.deletePermanently()`](./docs/trash.md#delete-a-file-from-the-trash)
-    - [`client.files.deleteVersion()`](./docs/files.md#delete-a-previous-file-version)
-    - [`client.folders.update()`](./docs/folders.md#update-a-folders-information)
-    - [`client.folders.delete()`](./docs/folders.md#delete-a-folder)
-    - [`client.folders.deletePermanently()`](./docs/trash.md#delete-a-folder-from-the-trash)
+  - [`client.files.update()`](./docs/files.md#update-a-files-information)
+  - [`client.files.delete()`](./docs/files.md#delete-a-file)
+  - [`client.files.deletePermanently()`](./docs/trash.md#delete-a-file-from-the-trash)
+  - [`client.files.deleteVersion()`](./docs/files.md#delete-a-previous-file-version)
+  - [`client.folders.update()`](./docs/folders.md#update-a-folders-information)
+  - [`client.folders.delete()`](./docs/folders.md#delete-a-folder)
+  - [`client.folders.deletePermanently()`](./docs/trash.md#delete-a-folder-from-the-trash)
 
 ## 1.22.1 [2018-11-15]
 
@@ -138,7 +138,7 @@
 
 - Chunked Uploader methods now return promises for [simpler handling of chunked uploads](./docs/files.md#automatic-uploader)
 - File attributes to set on the newly-uploaded file can now be
-[passed via `options.fileAttributes`](./docs/files.md#automatic-uploader) when creating a Chunked Uploader
+  [passed via `options.fileAttributes`](./docs/files.md#automatic-uploader) when creating a Chunked Uploader
 
 ## 1.21.0 [2018-09-13]
 
@@ -157,10 +157,10 @@
 ## 1.18.0 [2018-05-24]
 
 - Updated dependencies to resolve potential security issues:
-    - `request@2.87.0`
-    - Transitive dependencies of `jsonwebtoken@8.2.1`
+  - `request@2.87.0`
+  - Transitive dependencies of `jsonwebtoken@8.2.1`
 - Added a static `BoxSDK.getBasicClient()` method to enable creating a client without needing
-to specify a client ID and secret (thanks to @cbetta)
+  to specify a client ID and secret (thanks to @cbetta)
 
 ## 1.17.0 [2018-05-10]
 
@@ -179,7 +179,7 @@ to specify a client ID and secret (thanks to @cbetta)
 ## 1.15.0 [2018-03-29]
 
 - Fixed [`client.webhooks.validateMessage() and `sdk.validateWebhookMessage()`](https://github.com/box/box-node-sdk/blob/main/docs/webhooks.md#validate-a-webhook-message)
-to accept the request body as an `Object`
+  to accept the request body as an `Object`
 - Fixed `sdk.configure()` to correct reconfigure all options
 - Improved error messages for API errors and added the request object as `error.request` for easier debugging
 
@@ -201,7 +201,7 @@ to accept the request body as an `Object`
 ## 1.12.1 [2018-01-25]
 
 - Fixed an issue where chunked uploader would not work with response streams from the request library
-(0e7014561f9cd0f7f38f98536b3f0c3946231d2e)
+  (0e7014561f9cd0f7f38f98536b3f0c3946231d2e)
 
 ## 1.12.0 [2018-01-11]
 
@@ -210,22 +210,22 @@ to accept the request body as an `Object`
 ## 1.11.0 [2017-12-12]
 
 - Added options to preserve file timestamps on [file upload](./docs/files.md#upload-a-file)
-and to rename a file or preserve modification timestamp on [new version upload](./docs/files.md#upload-a-new-version-of-a-file)
-- Added [Collaboration Whitelist](./docs/collaboration-whitelist.md) functionality to allow enterprise admins
-to control which external users can collaborate on their content
+  and to rename a file or preserve modification timestamp on [new version upload](./docs/files.md#upload-a-new-version-of-a-file)
+- Added [Collaboration Allowlist](./docs/collaboration-allowlist.md) functionality to allow enterprise admins
+  to control which external users can collaborate on their content
 - Added an option to Token Exchange to generate [annotator tokens](./docs/authentication.md#annotator-tokens) for use with Box View
 
 ## 1.10.1 [2017-11-28]
 
 - Updated to jsonwebtoken@8.1.0 to fix an issue where some users were getting
-an error when using App Auth
+  an error when using App Auth
 
 ## 1.10.0 [2017-01-14]
 
 - Added support for [Terms of Service](./docs/terms-of-service.md) endpoints
 - Fixed a bug where receiving a collection without paging parameters from the API
-would cause the SDK to throw an exception when using the `iterators` SDK option.
-Now, this will return an iterator over the items returned by the API.
+  would cause the SDK to throw an exception when using the `iterators` SDK option.
+  Now, this will return an iterator over the items returned by the API.
 - Fixed a bug in Token Exchange where passing multiple scopes would result in an error
 - Added support for [getting Representations info on a file](./docs/files.md#get-representation-info)
 
@@ -238,11 +238,11 @@ Now, this will return an iterator over the items returned by the API.
 
 - Added support for [Batch API](./docs/client.md#batch-api)
 - Fixed a bug where the Event Stream would make more API calls than necessary,
-potentially hitting Box API rate limits
+  potentially hitting Box API rate limits
 - Added Promise support to methods on the SDK object
 - Added Node.js version to the User-Agent header that the SDK sends
 - Fixed a bug where using multiple Persistent Clients instances could cause some
-clients to end up with expired tokens
+  clients to end up with expired tokens
 
 ## 1.7.0 [2017-07-19]
 
@@ -260,8 +260,8 @@ clients to end up with expired tokens
 ## 1.5.0 [2017-06-15]
 
 - Added support for [Token Exchange](./docs/authentication.md#token-exchange),
-which allows a client to get downscoped tokens suitable for passing to a browser
-app or worker process.
+  which allows a client to get downscoped tokens suitable for passing to a browser
+  app or worker process.
 - Ensured deeply-nested Config properties are immutable
 
 ## 1.4.2 [2017-05-22]
@@ -275,26 +275,26 @@ app or worker process.
 ## 1.4.0 [2017-05-19]
 
 - Added support for [file collaborations](./docs/collaborations.md#add-a-collaboration).
-Users can now invite others to collaborate on single files.
-See [the blog post](https://blog.box.com/blog/file-collaboration-api/) for more information.
+  Users can now invite others to collaborate on single files.
+  See [the blog post](https://blog.box.com/blog/file-collaboration-api/) for more information.
 - Fixed an issue where users were unable to use JWT Server Auth when their computers' clocks
-were not synchronized with the Box API servers.
+  were not synchronized with the Box API servers.
 - All asynchronous client methods now return Promises in addition to taking a
-(now-optional) callback parameter, so you can write more modern JS with the SDK.
+  (now-optional) callback parameter, so you can write more modern JS with the SDK.
 - The SDK can now be preconfigured using a JSON blob that can be downloaded in the
-Box Dev Console for JWT Server Authentication apps, making it easier to get started
-developing!
+  Box Dev Console for JWT Server Authentication apps, making it easier to get started
+  developing!
 - Added support for [chunked upload](./docs/files.md#chunked-upload), where a large
-file can be uploaded one piece at a time.  This makes large file uploads much faster
-and more reliable, since parts can be uploaded in parallel and failed parts can be
-retried in isolation.
+  file can be uploaded one piece at a time. This makes large file uploads much faster
+  and more reliable, since parts can be uploaded in parallel and failed parts can be
+  retried in isolation.
 - Added an `is_confirmed` option to [email alias creation](./docs/users.md#add-email-alias) for
-admins to auto-confirm the alias.
+  admins to auto-confirm the alias.
 - Added support for the [Enterprise Events stream](./docs/events.md#enterprise-events).
 - Added an option to have collections methods (e.g. `folders.getItems()`,
-`enterprise.getUsers()`, etc) return [async iterators](./README.md#iterators) that will automatically
-page through the collection.  This conforms to the [proposed async iteration spec](https://github.com/tc39/proposal-async-iteration),
-which will eventually allow them to be used in ergonomic for-await-of loop syntax.
+  `enterprise.getUsers()`, etc) return [async iterators](./README.md#iterators) that will automatically
+  page through the collection. This conforms to the [proposed async iteration spec](https://github.com/tc39/proposal-async-iteration),
+  which will eventually allow them to be used in ergonomic for-await-of loop syntax.
 
 ## 1.3.0 [2017-01-24]
 

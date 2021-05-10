@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>JSDoc: Source: managers/collaboration-allowlist.js</title>
+
+		<script src="scripts/prettify/prettify.js"></script>
+		<script src="scripts/prettify/lang-css.js"></script>
+		<!--[if lt IE 9]>
+			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="styles/prettify-tomorrow.css"
+		/>
+		<link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
+	</head>
+
+	<body>
+		<div id="main">
+			<h1 class="page-title">Source: managers/collaboration-allowlist.js</h1>
+
+			<section>
+				<article>
+					<pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Manager for the Box Collaboration Allowlist Resource
+ */
+
+'use strict';
+// -----------------------------------------------------------------------------
+// Typedefs
+// -----------------------------------------------------------------------------
+
+/**
+ * Collaboration Allowlist parameter constant
+ * @typedef {string} CollaborationAllowlistDirection Determines the type of restriction for allowlisting for a domain
+ */
+
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+var urlPath = require('../util/url-path');
+
+
+// ------------------------------------------------------------------------------
+// Private
+// ------------------------------------------------------------------------------
+var BASE_PATH = '/collaboration_allowlist_entries',
+	TARGET_ENTRY_PATH = '/collaboration_allowlist_exempt_targets';
+
+// ------------------------------------------------------------------------------
+// Public
+// ------------------------------------------------------------------------------
+
+/**
+ * Simple manager for interacting with all 'Collaboration Allowlist' endpoints and actions.
+ *
+ * @constructor
+ * @param {BoxClient} client - The Box API Client that is responsible for making calls to the API
+ * @returns {void}
+ */
+function CollaborationAllowlist(client) {
+	this.client = client;
+}
+
+/**
+ * Enum of valid collaboration allowlist directions
+ *
+ * @readonly
+ * @enum {CollaborationAllowlistDirection}
+ */
+CollaborationAllowlist.prototype.directions = Object.freeze({
+	INBOUND: 'inbound',
+	OUTBOUND: 'outbound',
+	BOTH: 'both'
+});
+
+/**
+ * Add a domain to the enterprise's allowlist.
+ *
+ * API Endpoint: '/collaboration_allowlist_entries'
+ * Method: POST
+ *
+ * @param {string} domain - The domain to be added to the allowlist
+ * @param {CollaborationAllowlistDirection} direction - Inbound refers to collaboration actions within an enterprise. Outbound
+ *                                                      refers to collaboration actions external to an enterprise. Both refers to
+ *                                                      collaboration actions taken within and external to an enterprise
+ * @param {Function} [callback] - Passed the collaboration allowlist information if it was created successfully
+ * @returns {Promise&lt;Object>} A promise resolve to the collaboration allowlist object
+ */
+CollaborationAllowlist.prototype.addDomain = function(domain, direction, callback) {
+
+	var params = {
+		body: {
+			domain,
+			direction
+		}
+	};
+
+	var apiPath = urlPath(BASE_PATH);
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
+};
+
+/**
+ * Requests a collaboration allowlist entry with a given ID.
+ *
+ * API Endpoint: '/collaboration_allowlist_entries/:domainID'
+ * Method: GET
+ *
+ * @param {string} domainID - Box ID of the collaboration allowlist being requested
+ * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+ * @param {Function} [callback] - Passed the collaboration allowlist information if it was acquired successfully
+ * @returns {Promise&lt;Object>} A promise resolving to the collaboration allowlist object
+ */
+CollaborationAllowlist.prototype.getAllowlistedDomain = function(domainID, options, callback) {
+
+	var params = { qs: options };
+
+	var apiPath = urlPath(BASE_PATH, domainID);
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+};
+
+/**
+ * Requests all collaboration allowlist entries within an enterprise.
+ *
+ * API Endpoint: '/collaboration_allowlist_entries'
+ * Method: GET
+ *
+ * @param {Object} [options] - Additional options. Can be left null in most cases.
+ * @param {int} [options.limit] - The number of collaboration allowlists to retrieve
+ * @param {string} [options.marker] - Paging marker, retrieve records starting at this position in the list. Left blank to start at the beginning.
+ * @param {Function} [callback] - Passed a list of collaboration allowlists if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of collaboration allowlists
+ */
+CollaborationAllowlist.prototype.getAllAllowlistedDomains = function(options, callback) {
+
+	var params = {
+		qs: options
+	};
+
+	var apiPath = urlPath(BASE_PATH);
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+};
+
+/**
+ * Delete a given collaboration allowlist entry.
+ *
+ * API Endpoint: '/collaboration_allowlist_entries/:domainID'
+ * Method: DELETE
+ *
+ * @param {string} domainID - Box ID of the collaboration allowlist being requested
+ * @param {Function} [callback] - Empty response body passed if successful.
+ * @returns {Promise&lt;void>} A promise resolving to nothing
+ */
+CollaborationAllowlist.prototype.removeDomain = function(domainID, callback) {
+
+	var apiPath = urlPath(BASE_PATH, domainID);
+	return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
+};
+
+/**
+ * Adds a Box User to the exempt target list.
+ *
+ * API Endpoint: '/collaboration_allowlist_exempt_targets'
+ * Method: GET
+ *
+ * @param {string} userID - The ID of the Box User to be added to the allowlist
+ * @param {Function} [callback] - Passed a collaboration allowlist for user if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to a user collaboration allowlist
+ */
+CollaborationAllowlist.prototype.addExemption = function(userID, callback) {
+
+	var params = {
+		body: {
+			user: {
+				id: userID,
+				type: 'user'
+			}
+		}
+	};
+
+	var apiPath = urlPath(TARGET_ENTRY_PATH);
+	return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
+};
+
+/**
+ * Retrieves information about a collaboration allowlist for user by allowlist ID.
+ *
+ * API Endpoint: '/collaboration_allowlist_exempt_targets/:exemptionID'
+ * Method: GET
+ *
+ * @param {string} exemptionID - The ID of the collaboration allowlist
+ * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+ * @param {Function} [callback] - Passed the collaboration allowlist information for a user if it was acquired successfully
+ * @returns {Promise&lt;Object>} A promise resolving to the collaboration allowlist object
+ */
+CollaborationAllowlist.prototype.getExemption = function(exemptionID, options, callback) {
+
+	var params = {
+		qs: options
+	};
+
+	var apiPath = urlPath(TARGET_ENTRY_PATH, exemptionID);
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+};
+
+/**
+ * Retrieve a list of all exemptions to an enterprise's collaboration allowlist.
+ *
+ * API Endpoint: '/collaboration_allowlist_exempt_targets'
+ * Method: GET
+ *
+ * @param {Object} [options] - Additional options. Can be left null in most cases.
+ * @param {string} [options.limit] - The number of user collaboration allowlists to retrieve
+ * @param {string} [options.marker] - Paging marker, retrieve records starting at this position in the list. Left blank to start at the beginning.
+ * @param {Function} [callback] - Passed a list of user collaboration allowlists if successful, error otherwise
+ * @returns {Promise&lt;Object>} A promise resolving to the collection of user collaboration allowlists
+ */
+CollaborationAllowlist.prototype.getAllExemptions = function(options, callback) {
+
+	var params = {
+		qs: options
+	};
+
+	var apiPath = urlPath(TARGET_ENTRY_PATH);
+	return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+};
+
+/**
+ * Delete a given user collaboration allowlist.
+ *
+ * API Endpoint: '/collaboration_allowlist_exempt_targets/:exemptionID'
+ * Method: DELETE
+ *
+ * @param {string} exemptionID - Box ID of the user collaboration allowlist being requested
+ * @param {Function} [callback] - Empty response body passed if successful.
+ * @returns {Promise&lt;void>} A promise resolving to nothing
+ */
+CollaborationAllowlist.prototype.removeExemption = function(exemptionID, callback) {
+
+	var apiPath = urlPath(TARGET_ENTRY_PATH, exemptionID);
+	return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
+};
+
+/**
+ * @module box-node-sdk/lib/managers/collaboration-allowlists
+ * @see {@Link CollaborationAllowlist}
+ */
+module.exports = CollaborationAllowlist;
+</code></pre>
+				</article>
+			</section>
+		</div>
+
+		<nav>
+			<h2><a href="index.html">Home</a></h2>
+			<h3>Modules</h3>
+			<ul>
+				<li>
+					<a href="module-box-node-sdk_lib_api-request.html"
+						>box-node-sdk/lib/api-request</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_api-request-manager.html"
+						>box-node-sdk/lib/api-request-manager</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_box-client.html"
+						>box-node-sdk/lib/box-client</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_box-node-sdk.html"
+						>box-node-sdk/lib/box-node-sdk</a
+					>
+				</li>
+				<li>
+					<a
+						href="module-box-node-sdk_lib_managers_collaboration-allowlists.html"
+						>box-node-sdk/lib/managers/collaboration-allowlists</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_collaborations.html"
+						>box-node-sdk/lib/managers/collaborations</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_collections.html"
+						>box-node-sdk/lib/managers/collections</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_comments.html"
+						>box-node-sdk/lib/managers/comments</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_files.html"
+						>box-node-sdk/lib/managers/files</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_folders.html"
+						>box-node-sdk/lib/managers/folders</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_recent-items.html"
+						>box-node-sdk/lib/managers/recent-items</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_shared-items.html"
+						>box-node-sdk/lib/managers/shared-items</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_terms-of-service.html"
+						>box-node-sdk/lib/managers/terms-of-service</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_users.html"
+						>box-node-sdk/lib/managers/users</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_managers_webhooks.html"
+						>box-node-sdk/lib/managers/webhooks</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_sessions_anonymous-session.html"
+						>box-node-sdk/lib/sessions/anonymous-session</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_sessions_app-auth-session.html"
+						>box-node-sdk/lib/sessions/app-auth-session</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_sessions_basic-session.html"
+						>box-node-sdk/lib/sessions/basic-session</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_sessions_persistent-session.html"
+						>box-node-sdk/lib/sessions/persistent-session</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_token-manager.html"
+						>box-node-sdk/lib/token-manager</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_util_config.html"
+						>box-node-sdk/lib/util/config</a
+					>
+				</li>
+				<li>
+					<a href="module-box-node-sdk_lib_util_errors.html"
+						>box-node-sdk/lib/util/errors</a
+					>
+				</li>
+			</ul>
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="AnonymousSession.html">AnonymousSession</a></li>
+				<li><a href="APIRequest.html">APIRequest</a></li>
+				<li><a href="APIRequestManager.html">APIRequestManager</a></li>
+				<li><a href="AppAuthSession.html">AppAuthSession</a></li>
+				<li><a href="BasicSession.html">BasicSession</a></li>
+				<li><a href="BoxClient.html">BoxClient</a></li>
+				<li><a href="BoxSDKNode.html">BoxSDKNode</a></li>
+				<li><a href="ChunkedUploader.html">ChunkedUploader</a></li>
+				<li><a href="Collaborations.html">Collaborations</a></li>
+				<li>
+					<a href="CollaborationAllowlist.html">CollaborationAllowlist</a>
+				</li>
+				<li><a href="Collections.html">Collections</a></li>
+				<li><a href="Comments.html">Comments</a></li>
+				<li><a href="Config.html">Config</a></li>
+				<li><a href="DevicePins.html">DevicePins</a></li>
+				<li><a href="Enterprise.html">Enterprise</a></li>
+				<li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li>
+				<li><a href="Events.html">Events</a></li>
+				<li><a href="EventStream.html">EventStream</a></li>
+				<li><a href="Files.html">Files</a></li>
+				<li><a href="Folders.html">Folders</a></li>
+				<li><a href="Groups.html">Groups</a></li>
+				<li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li>
+				<li><a href="Metadata.html">Metadata</a></li>
+				<li><a href="PagingIterator.html">PagingIterator</a></li>
+				<li><a href="PersistentSession.html">PersistentSession</a></li>
+				<li><a href="RecentItems.html">RecentItems</a></li>
+				<li><a href="RetentionPolicies.html">RetentionPolicies</a></li>
+				<li><a href="Search.html">Search</a></li>
+				<li><a href="SharedItems.html">SharedItems</a></li>
+				<li><a href="StoragePolicies.html">StoragePolicies</a></li>
+				<li><a href="Tasks.html">Tasks</a></li>
+				<li><a href="TermsOfService.html">TermsOfService</a></li>
+				<li><a href="TokenManager.html">TokenManager</a></li>
+				<li><a href="Trash.html">Trash</a></li>
+				<li><a href="Users.html">Users</a></li>
+				<li><a href="Webhooks.html">Webhooks</a></li>
+				<li><a href="WebLinks.html">WebLinks</a></li>
+			</ul>
+			<h3>Events</h3>
+			<ul>
+				<li><a href="ChunkedUploader.html#event:aborted">aborted</a></li>
+				<li>
+					<a href="ChunkedUploader.html#event:abortFailed">abortFailed</a>
+				</li>
+				<li><a href="ChunkedUploader.html#event:chunkError">chunkError</a></li>
+				<li>
+					<a href="ChunkedUploader.html#event:chunkUploaded">chunkUploaded</a>
+				</li>
+				<li><a href="ChunkedUploader.html#event:error">error</a></li>
+				<li>
+					<a href="ChunkedUploader.html#event:uploadComplete">uploadComplete</a>
+				</li>
+			</ul>
+			<h3>Global</h3>
+			<ul>
+				<li>
+					<a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a>
+				</li>
+				<li>
+					<a href="global.html#CURRENT_STREAM_POSITION"
+						>CURRENT_STREAM_POSITION</a
+					>
+				</li>
+				<li><a href="global.html#getRetryTimeout">getRetryTimeout</a></li>
+				<li><a href="global.html#grantTypes">grantTypes</a></li>
+				<li>
+					<a href="global.html#isJWTAuthErrorRetryable"
+						>isJWTAuthErrorRetryable</a
+					>
+				</li>
+				<li>
+					<a href="global.html#pollRepresentationInfo"
+						>pollRepresentationInfo</a
+					>
+				</li>
+				<li><a href="global.html#tokenPaths">tokenPaths</a></li>
+				<li><a href="global.html#URLPath">URLPath</a></li>
+			</ul>
+		</nav>
+
+		<br class="clear" />
+
+		<footer>
+			Documentation generated by
+			<a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Apr 16
+			2021 11:22:38 GMT-0700 (Pacific Daylight Time)
+		</footer>
+
+		<script>
+			prettyPrint();
+		</script>
+		<script src="scripts/linenumber.js"></script>
+	</body>
+</html>

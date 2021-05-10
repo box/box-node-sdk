@@ -62,7 +62,7 @@ var Users = require('./managers/users'),
 	DevicePins = require('./managers/device-pins'),
 	Webhooks = require('./managers/webhooks'),
 	RecentItems = require('./managers/recent-items'),
-	CollaborationWhitelist = require('./managers/collaboration-whitelist'),
+	CollaborationAllowlist = require('./managers/collaboration-allowlist'),
 	TermsOfService = require('./managers/terms-of-service'),
 	StoragePolicies = require('./managers/storage-policies');
 
@@ -220,7 +220,7 @@ class BoxClient {
 	devicePins: any;
 	webhooks: any;
 	recentItems: any;
-	collaborationWhitelist: any;
+	collaborationAllowlist: any;
 	termsOfService: any;
 	storagePolicies: any;
 
@@ -288,9 +288,12 @@ class BoxClient {
 		this.devicePins = new DevicePins(this);
 		this.webhooks = new Webhooks(this);
 		this.recentItems = new RecentItems(this);
-		this.collaborationWhitelist = new CollaborationWhitelist(this);
+		this.collaborationAllowlist = new CollaborationAllowlist(this);
 		this.termsOfService = new TermsOfService(this);
 		this.storagePolicies = new StoragePolicies(this);
+
+		// Legacy insensitive language
+		(this as any).collaborationWhitelist = this.collaborationAllowlist;
 
 		// Array of requests when in batch mode, null otherwise
 		this._batch = null;
