@@ -2,14 +2,13 @@
  * @fileoverview Manager for the Box Search Resource
  */
 
-'use strict';
-
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
 
-var urlPath = require('../util/url-path'),
-	Promise = require('bluebird');
+import { Promise } from 'bluebird';
+import BoxClient from '../box-client';
+import urlPath from '../util/url-path';
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -22,10 +21,24 @@ var urlPath = require('../util/url-path'),
  * @property {string} scope The scope of the template, e.g. 'global' or 'enterprise'
  * @property {Object} filters Key/value filters against individual metadata template properties
  */
+type SearchMetadataFilter = {
+	templateKey: string;
+	scope: string;
+	filters: Record<string, any>;
+};
 
-/** @typedef {string} SearchScope */
+/**
+ * Valid search scopes
+ * @readonly
+ * @enum {SearchScope}
+ */
+enum SearchScope {
+	USER = 'user_content',
+	ENTERPRISE = 'enterprise_content',
+}
 
 /** @typedef {string} SearchTrashContent */
+type SearchTrashContent = string;
 
 // -----------------------------------------------------------------------------
 // Private
@@ -44,21 +57,13 @@ var API_PATHS_SEARCH = '/search';
  * @param {BoxClient} client - The Box API Client that is responsible for making calls to the API
  * @returns {void}
  */
-function Search(client) {
-	this.client = client;
-}
+class Search {
+	client: BoxClient;
+	scopes!: typeof SearchScope;
 
-Search.prototype = {
-
-	/**
-	 * Valid search scopes
-	 * @readonly
-	 * @enum {SearchScope}
-	 */
-	scopes: Object.freeze({
-		USER: 'user_content',
-		ENTERPRISE: 'enterprise_content'
-	}),
+	constructor(client: BoxClient) {
+		this.client = client;
+	}
 
 	/**
 	 * Searches Box for the given query.
@@ -85,10 +90,31 @@ Search.prototype = {
 	 * @param {APIRequest~Callback} [callback] - passed the new comment data if it was posted successfully
 	 * @returns {Promise<Object>} A promise resolving to the collection of search results
 	 */
-	query(searchString, options, callback) {
-
+	query(
+		searchString: string,
+		options?: {
+			scope?: SearchScope;
+			file_extensions?: string;
+			created_at_range?: string;
+			updated_at_range?: string;
+			size_range?: string;
+			owner_user_ids?: string;
+			ancestor_folder_ids?: string;
+			content_types?: string;
+			type?: string;
+			trash_content?: string;
+			mdfilters?: SearchMetadataFilter[];
+			include_recent_shared_links?: boolean;
+			fields?: string;
+			limit?: number;
+			offset?: number;
+			sort?: string;
+			direction?: string;
+		},
+		callback?: Function
+	) {
 		var apiPath = urlPath(API_PATHS_SEARCH),
-			qs = options || {};
+			qs = options || ({} as Record<string, any>);
 
 		qs.query = searchString;
 
@@ -96,16 +122,28 @@ Search.prototype = {
 			if (Array.isArray(qs.mdfilters)) {
 				qs.mdfilters = JSON.stringify(qs.mdfilters);
 			} else {
-				return Promise.reject(new Error('Invalid mdfilters parameter: must be a valid array')).asCallback(callback);
+				return Promise.reject(
+					new Error('Invalid mdfilters parameter: must be a valid array')
+				).asCallback(callback);
 			}
 		}
 
 		var params = {
-			qs
+			qs,
 		};
-		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
 	}
+}
 
-};
+/**
+ * Valid search scopes
+ * @readonly
+ * @enum {SearchScope}
+ */
+Search.prototype.scopes = SearchScope;
 
-module.exports = Search;
+export = Search;
