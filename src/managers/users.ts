@@ -157,7 +157,7 @@ class Users {
 		email: string,
 		options?: {
 			is_confirmed?: boolean;
-		},
+		} | Function,
 		callback?: Function
 	) {
 		options = options || {};
