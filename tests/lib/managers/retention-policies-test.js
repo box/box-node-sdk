@@ -526,9 +526,7 @@ describe('RetentionPolicies', function() {
 
 		it('should make GET request to get retention records when called', function() {
 
-			var qs = {
-				fields: 'disposition_at,winning_retention_policy'
-			};
+			var qs = {};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
@@ -572,9 +570,7 @@ describe('RetentionPolicies', function() {
 
 		it('should make GET request to get retention records when called', function() {
 
-			var qs = {
-				fields: 'disposition_at,winning_retention_policy'
-			};
+			var qs = {};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')

@@ -12,15 +12,7 @@
 				"type": "file_version",
 				"sha1": "134b65991ed521fcfe4724b7d814ab8ded5185dc"
 			},
-			"applied_at": "2012-12-12T10:53:43-08:00",
-			"disposition_at": "2012-12-12T10:53:43-08:00",
-			"winning_retention_policy": {
-				"id": 12345,
-				"type": "file_version",
-				"policy_name": "Some Policy Name",
-				"retention_length": 365,
-				"disposition_action": "permanently_delete"
-			}
+			"applied_at": "2012-12-12T10:53:43-08:00"
 		}
 	],
 	"limit": 1000,
