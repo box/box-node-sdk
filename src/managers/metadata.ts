@@ -2,19 +2,39 @@
  * @fileoverview Manager for the Box Metadata Resource
  */
 
-'use strict';
+// -----------------------------------------------------------------------------
+// Requirements
+// -----------------------------------------------------------------------------
+
+import BoxClient from '../box-client';
+import urlPath from '../util/url-path';
+const merge = require('merge-options');
 
 // -----------------------------------------------------------------------------
 // Typedefs
 // -----------------------------------------------------------------------------
 
-/** @typedef {string} MetadataFieldType */
+/**
+ * Valid metadata field types
+ * @readonly
+ * @enum {MetadataFieldType}
+ */
+enum MetadataFieldType {
+	STRING = 'string',
+	ENUM = 'enum',
+	NUMBER = 'float',
+	DATE = 'date',
+	MULTI_SELECT = 'multiSelect',
+}
 
 /**
  * Metadata enum option
  * @typedef {Object} MetadataEnumOption
  * @property {string} key The option value
  */
+type MetadataEnumOption = {
+	key: string;
+};
 
 /**
  * Field definition for a metadata template
@@ -24,17 +44,17 @@
  * @property {string} displayName The display name of the field
  * @property {MetadataEnumOption[]} [options] For enum fields, the options
  */
-
-// -----------------------------------------------------------------------------
-// Requirements
-// -----------------------------------------------------------------------------
-var urlPath = require('../util/url-path'),
-	merge = require('merge-options');
+type MetadataTemplateField = {
+	type: MetadataFieldType;
+	key: string;
+	displayName: string;
+	options?: MetadataEnumOption[];
+};
 
 // -----------------------------------------------------------------------------
 // Private
 // -----------------------------------------------------------------------------
-var PROPERTIES_TEMPLATE = 'properties',
+const PROPERTIES_TEMPLATE = 'properties',
 	BASE_PATH = '/metadata_templates',
 	SCHEMA_SUBRESOURCE = 'schema',
 	ENTERPRISE_SCOPE = 'enterprise',
@@ -53,39 +73,17 @@ var PROPERTIES_TEMPLATE = 'properties',
  * @param {BoxClient} client - The Box API Client that is responsible for making calls to the API
  * @returns {void}
  */
-function Metadata(client) {
-	this.client = client;
-}
+class Metadata {
+	client: BoxClient;
 
+	templates!: Record<string, any>;
+	scopes!: Record<string, any>;
+	cascadeResolution!: Record<string, any>;
+	fieldTypes!: typeof MetadataFieldType;
 
-Metadata.prototype = {
-
-	templates: {
-		PROPERTIES: PROPERTIES_TEMPLATE
-	},
-
-	scopes: {
-		ENTERPRISE: ENTERPRISE_SCOPE,
-		GLOBAL: GLOBAL_SCOPE
-	},
-
-	cascadeResolution: Object.freeze({
-		PRESERVE_EXISTING: 'none',
-		OVERWRITE: 'overwrite'
-	}),
-
-	/**
-	 * Valid metadata field types
-	 * @readonly
-	 * @enum {MetadataFieldType}
-	 */
-	fieldTypes: Object.freeze({
-		STRING: 'string',
-		ENUM: 'enum',
-		NUMBER: 'float',
-		DATE: 'date',
-		MULTI_SELECT: 'multiSelect'
-	}),
+	constructor(client: BoxClient) {
+		this.client = client;
+	}
 
 	/**
 	 * Retrieve the schema definition for a metadata template
@@ -98,11 +96,14 @@ Metadata.prototype = {
 	 * @param {Function} [callback] - Called with the template schema if successful
 	 * @returns {Promise<Object>} A promise resolving to the template schema
 	 */
-	getTemplateSchema(scope, template, callback) {
-
+	getTemplateSchema(scope: string, template: string, callback?: Function) {
 		var apiPath = urlPath(BASE_PATH, scope, template, SCHEMA_SUBRESOURCE);
-		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			null,
+			callback
+		);
+	}
 
 	/**
 	 * Retrieve the schema definition for a metadata template by ID
@@ -114,11 +115,14 @@ Metadata.prototype = {
 	 * @param {Function} [callback] - Called with the template schema if successful
 	 * @returns {Promise<Object>} A promise resolving to the template schema
 	 */
-	getTemplateByID(templateID, callback) {
-
+	getTemplateByID(templateID: string, callback?: Function) {
 		var apiPath = urlPath(BASE_PATH, templateID);
-		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			null,
+			callback
+		);
+	}
 
 	/**
 	 * Get all templates in a given scope
@@ -130,11 +134,14 @@ Metadata.prototype = {
 	 * @param {Function} [callback] - Called with an array of templates when successful
 	 * @returns {Promise<Object>} A promise resolving to the collection of templates
 	 */
-	getTemplates(scope, callback) {
-
+	getTemplates(scope: string, callback?: Function) {
 		var apiPath = urlPath(BASE_PATH, scope);
-		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			null,
+			callback
+		);
+	}
 
 	/**
 	 * Create a new metadata template
@@ -152,21 +159,34 @@ Metadata.prototype = {
 	 * @param {Function} [callback] - Passed the template if successful, error otherwise
 	 * @returns {Promise<Object>} A promise resolving to the created template
 	 */
-	createTemplate(templateName, fields, options, callback) {
-
+	createTemplate(
+		templateName: string,
+		fields: MetadataTemplateField[],
+		options?: {
+			templateKey?: string;
+			hidden?: boolean;
+			scope?: string;
+			copyInstanceOnItemCopy?: boolean;
+		},
+		callback?: Function
+	) {
 		var apiPath = urlPath(BASE_PATH, SCHEMA_SUBRESOURCE),
 			params = {
 				body: {
 					scope: ENTERPRISE_SCOPE,
 					displayName: templateName,
-					fields
-				}
+					fields,
+				},
 			};
 
 		Object.assign(params.body, options);
 
-		return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
 
 	/**
 	 * Update a metadata template via one or more non-breaking operations.  Each
@@ -183,15 +203,23 @@ Metadata.prototype = {
 	 * @returns {Promise<Object>} A promise resolving to the updated template
 	 * @see {@link https://developer.box.com/en/reference/put-metadata-templates-id-id-schema/}
 	 */
-	updateTemplate(scope, template, operations, callback) {
-
+	updateTemplate(
+		scope: string,
+		template: string,
+		operations: Record<string, any>[],
+		callback?: Function
+	) {
 		var apiPath = urlPath(BASE_PATH, scope, template, SCHEMA_SUBRESOURCE),
 			params = {
-				body: operations
+				body: operations,
 			};
 
-		return this.client.wrapWithDefaultHandler(this.client.put)(apiPath, params, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.put)(
+			apiPath,
+			params,
+			callback
+		);
+	}
 
 	/**
 	 * Delete a metadata template from an enterprise.
@@ -205,11 +233,14 @@ Metadata.prototype = {
 	 * @returns {Promise<void>} A promise resolving to nothing
 	 * @see {@link https://developer.box.com/en/reference/delete-metadata-templates-id-id-schema/}
 	 */
-	deleteTemplate(scope, template, callback) {
-
+	deleteTemplate(scope: string, template: string, callback?: Function) {
 		var apiPath = urlPath(BASE_PATH, scope, template, SCHEMA_SUBRESOURCE);
-		return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			null,
+			callback
+		);
+	}
 
 	/**
 	 * Get the cascade policies associated with a given folder.
@@ -223,15 +254,24 @@ Metadata.prototype = {
 	 * @param {Function} [callback] Passed the collection of policies if successful
 	 * @returns {Promise<Object>} Promise resolving to the collection of policies
 	 */
-	getCascadePolicies(folderID, options, callback) {
-
+	getCascadePolicies(
+		folderID: string,
+		options?: {
+			owner_enterprise_id?: string;
+		},
+		callback?: Function
+	) {
 		var apiPath = urlPath(CASCADE_POLICIES_PATH),
 			params = {
-				qs: Object.assign({ folder_id: folderID }, options)
+				qs: Object.assign({ folder_id: folderID }, options),
 			};
 
-		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
 
 	/**
 	 * Get a metadata cascade policy object by ID
@@ -243,12 +283,15 @@ Metadata.prototype = {
 	 * @param {Function} [callback] Passed the cascade policy if successful
 	 * @returns {Promise<Object>} Promise resolving to the cascade policy
 	 */
-	getCascadePolicy(policyID, callback) {
-
+	getCascadePolicy(policyID: string, callback?: Function) {
 		var apiPath = urlPath(CASCADE_POLICIES_PATH, policyID);
 
-		return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, null, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			null,
+			callback
+		);
+	}
 
 	/**
 	 * Add a new cascade policy to a folder/metadata template, causing the
@@ -264,19 +307,27 @@ Metadata.prototype = {
 	 * @param {Function} [callback] Passed the cascade policy if successful
 	 * @returns {Promise<Object>} Promise resolving to the cascade policy
 	 */
-	createCascadePolicy(scope, templateKey, folderID, callback) {
-
+	createCascadePolicy(
+		scope: string,
+		templateKey: string,
+		folderID: string,
+		callback?: Function
+	) {
 		var apiPath = urlPath(CASCADE_POLICIES_PATH),
 			params = {
 				body: {
 					folder_id: folderID,
 					scope,
-					templateKey
-				}
+					templateKey,
+				},
 			};
 
-		return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
 
 	/**
 	 * Delete the metadata cascade policy with the given ID
@@ -288,11 +339,14 @@ Metadata.prototype = {
 	 * @param {Function} [callback] Passed nothing if successful
 	 * @returns {Promise<void>} Promise resolving to nothing
 	 */
-	deleteCascadePolicy(policyID, callback) {
-
+	deleteCascadePolicy(policyID: string, callback?: Function) {
 		var apiPath = urlPath(CASCADE_POLICIES_PATH, policyID);
-		return this.client.wrapWithDefaultHandler(this.client.del)(apiPath, null, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			null,
+			callback
+		);
+	}
 
 	/**
 	 * If a policy already exists on a folder, this will apply that policy to all existing files and
@@ -306,17 +360,24 @@ Metadata.prototype = {
 	 * @param {Function} [callback] Passed nothing if successful
 	 * @returns {Promise<void>} Promise resolving to nothing
 	 */
-	forceApplyCascadePolicy(policyID, resolutionMethod, callback) {
-
+	forceApplyCascadePolicy(
+		policyID: string,
+		resolutionMethod: string,
+		callback?: Function
+	) {
 		var apiPath = urlPath(CASCADE_POLICIES_PATH, policyID, 'apply'),
 			params = {
 				body: {
-					conflict_resolution: resolutionMethod
-				}
+					conflict_resolution: resolutionMethod,
+				},
 			};
 
-		return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
-	},
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
 
 	/**
 	 * Query Box items by their metadata
@@ -326,7 +387,7 @@ Metadata.prototype = {
 	 *
 	 * @param {string} from - The template used in the query. Must be in the form scope.templateKey
 	 * @param {string} ancestorFolderId - The folder_id to which to restrain the query
-	 * @param {Object} options - Optional parameters
+	 * @param {Object} [options] - Optional parameters
 	 * @param {string} [options.query] - The logical expression of the query
 	 * @param {Object} [options.query_parameters] - Required if query present. The arguments for the query
 	 * @param {string} [options.index_name] - The name of the Index to use
@@ -335,18 +396,54 @@ Metadata.prototype = {
 	 * @param {Function} [callback] - Passed a collection of items and their associated metadata
 	 * @returns {Promise<void>} Promise resolving to a collection of items and their associated metadata
 	 */
-	query(from, ancestorFolderId, options, callback) {
+	query(
+		from: string,
+		ancestorFolderId: string,
+		options?: {
+			query?: string;
+			query_parameters?: Record<string, any>;
+			index_name?: string;
+			order_by: Record<string, any>;
+			fields?: string[];
+		},
+		callback?: Function
+	) {
 		var body = {
 			from,
-			ancestor_folder_id: ancestorFolderId
+			ancestor_folder_id: ancestorFolderId,
 		};
 
 		var params = {
-			body: merge(body, options)
+			body: merge(body, options),
 		};
 
-		return this.client.wrapWithDefaultHandler(this.client.post)(QUERY_PATH, params, callback);
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			QUERY_PATH,
+			params,
+			callback
+		);
 	}
+}
+
+Metadata.prototype.templates = {
+	PROPERTIES: PROPERTIES_TEMPLATE,
 };
 
-module.exports = Metadata;
+Metadata.prototype.scopes = {
+	ENTERPRISE: ENTERPRISE_SCOPE,
+	GLOBAL: GLOBAL_SCOPE,
+};
+
+Metadata.prototype.cascadeResolution = Object.freeze({
+	PRESERVE_EXISTING: 'none',
+	OVERWRITE: 'overwrite',
+});
+
+/**
+ * Valid metadata field types
+ * @readonly
+ * @enum {MetadataFieldType}
+ */
+Metadata.prototype.fieldTypes = MetadataFieldType;
+
+export = Metadata;
