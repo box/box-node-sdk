@@ -211,7 +211,7 @@ to accept the request body as an `Object`
 
 - Added options to preserve file timestamps on [file upload](./docs/files.md#upload-a-file)
 and to rename a file or preserve modification timestamp on [new version upload](./docs/files.md#upload-a-new-version-of-a-file)
-- Added [Collaboration Allowlist](./docs/collaboration-allowlist.md) functionality to allow enterprise admins
+- Added [Collaboration Whitelist](./docs/collaboration-whitelist.md) functionality to allow enterprise admins
 to control which external users can collaborate on their content
 - Added an option to Token Exchange to generate [annotator tokens](./docs/authentication.md#annotator-tokens) for use with Box View
 
