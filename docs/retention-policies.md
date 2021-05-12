@@ -1,5 +1,4 @@
-Retention Policies
-==================
+# Retention Policies
 
 A retention policy blocks permanent deletion of content for a specified amount of time.
 Admins can create retention policies and then later assign them to specific folders or
@@ -8,7 +7,6 @@ policies scope enabled for your API key via your application management console.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Create Retention Policy](#create-retention-policy)
 - [Get Retention Policy](#get-retention-policy)
@@ -22,14 +20,14 @@ policies scope enabled for your API key via your application management console.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Create Retention Policy
------------------------
+## Create Retention Policy
 
 To create a new retention policy, call the
 [`retentionPolicies.create(name, type, action, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#create)
 method.
 
 <!-- sample post_retention_policies -->
+
 ```js
 client.retentionPolicies.create(
 	'Tax Documents',
@@ -59,18 +57,17 @@ client.retentionPolicies.create(
 });
 ```
 
-Get Retention Policy
---------------------
+## Get Retention Policy
 
 To retrieve information about a specific retention policy, call the
 [`retentionPolicies.get(policyID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#get)
 method.
 
 <!-- sample get_retention_policies_id -->
+
 ```js
-client.retentionPolicies.get('123456789')
-	.then(policy => {
-		/* policy -> {
+client.retentionPolicies.get('123456789').then((policy) => {
+	/* policy -> {
 			type: 'retention_policy',
 			id: '123456789',
 			policy_name: 'Tax Documents',
@@ -90,19 +87,20 @@ client.retentionPolicies.get('123456789')
 			created_at: '2015-05-01T11:12:54-07:00',
 			modified_at: '2015-06-08T11:11:50-07:00' }
 		*/
-	});
+});
 ```
 
-Update Retention Policy
------------------------
+## Update Retention Policy
 
 To update or modify an existing retention policy, call the [`retentionPolicies.update(policyID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#update)
 method where `updates` is the set of key-value pairs to be updated on the policy object.
 
 <!-- sample put_retention_policies_id -->
+
 ```js
-client.retentionPolicies.update('123456789', {status: 'retired'})
-	.then(policy => {
+client.retentionPolicies
+	.update('123456789', { status: 'retired' })
+	.then((policy) => {
 		/* policy -> {
 			type: 'retention_policy',
 			id: '123456789',
@@ -126,16 +124,15 @@ client.retentionPolicies.update('123456789', {status: 'retired'})
 	});
 ```
 
-Get Enterprise Retention Policies
----------------------------------
+## Get Enterprise Retention Policies
 
 To retrieve all of the retention policies for the given enterprise, call the [`retentionPolicies.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAll) method.
 
 <!-- sample get_retention_policies -->
+
 ```js
-client.retentionPolicies.getAll({ policy_name: 'Tax' })
-	.then(policies => {
-		/* policies -> {
+client.retentionPolicies.getAll({ policy_name: 'Tax' }).then((policies) => {
+	/* policies -> {
 			entries:
 			[ { type: 'retention_policy',
 				id: '123456789',
@@ -143,20 +140,21 @@ client.retentionPolicies.getAll({ policy_name: 'Tax' })
 			limit: 100,
 			next_marker: 'someMarkerString' }
 		*/
-	});
+});
 ```
 
-Get Retention Policy Assignments
---------------------------------
+## Get Retention Policy Assignments
 
 To get a list of all retention policy assignments associated with a specified retention policy,
 call the [`retentionPolicies.getAssignments(policyID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAssignments)
 method.
 
 <!-- sample get_retention_policies_id_assignments -->
+
 ```js
-client.retentionPolicies.getAssignments('123456789', {type: 'folder'})
-	.then(assignments => {
+client.retentionPolicies
+	.getAssignments('123456789', { type: 'folder' })
+	.then((assignments) => {
 		/* assignments -> {
 			entries: [ { type: 'retention_policy_assignment', id: '12345678' } ],
 			limit: 100,
@@ -165,16 +163,17 @@ client.retentionPolicies.getAssignments('123456789', {type: 'folder'})
 	});
 ```
 
-Assign Retention Policy
------------------------
+## Assign Retention Policy
 
 To assign a retention policy, call the [`retentionPolicies.assign(policyID, assignType, assignID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#assign)
-method.  If assigning to an `enterprise`, no `assignID` should be provided.
+method. If assigning to an `enterprise`, no `assignID` should be provided.
 
 <!-- sample post_retention_policy_assignments -->
+
 ```js
-client.retentionPolicies.assign('11111', 'folder', '22222')
-	.then(assignment => {
+client.retentionPolicies
+	.assign('11111', 'folder', '22222')
+	.then((assignment) => {
 		/* assignment -> {
 			type: 'retention_policy_assignment',
 			id: '12345',
@@ -199,10 +198,10 @@ client.retentionPolicies.assign('98726345', 'enterprise', null, callback);
 
 You can also assign a retention policy to a metadata template, with optional field filters.
 This will attach the retention policy to any items that have the specified metadata template
-applied.  If the `filter_fields` option is provided, the retention policy will only apply to
+applied. If the `filter_fields` option is provided, the retention policy will only apply to
 items with the specified value in the metadata field.
 
-> __Note:__ Currently, only one filter field can be specified, and only enum metadata fields
+> **Note:** Currently, only one filter field can be specified, and only enum metadata fields
 > are supported at this time.
 
 ```js
@@ -214,12 +213,18 @@ var options = {
 		{
 			// fields and enum values are specified by ID
 			field: '7475b170-3d5e-4dec-b617-9cfd35ae1ecd',
-			value: '59157d60-6fec-419c-b0cc-506391ff51b8'
-		}
-	]
+			value: '59157d60-6fec-419c-b0cc-506391ff51b8',
+		},
+	],
 };
-client.retentionPolicies.assign(policyID, client.retentionPolicies.assignmentTypes.METADATA, metadataTemplate, options)
-	.then(assignment => {
+client.retentionPolicies
+	.assign(
+		policyID,
+		client.retentionPolicies.assignmentTypes.METADATA,
+		metadataTemplate,
+		options
+	)
+	.then((assignment) => {
 		/* assignment -> {
 			type: 'retention_policy_assignment',
 			id: '12345',
@@ -241,18 +246,17 @@ client.retentionPolicies.assign(policyID, client.retentionPolicies.assignmentTyp
 	});
 ```
 
-Get Retention Policy Assignment
--------------------------------
+## Get Retention Policy Assignment
 
 To retrieve information about a retention policy assignment, call the
 [`retentionPolicies.getAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAssignment)
 method.
 
 <!-- sample get_retention_policy_assignments_id -->
+
 ```js
-client.retentionPolicies.getAssignment('12345')
-	.then(assignment => {
-		/* assignment -> {
+client.retentionPolicies.getAssignment('12345').then((assignment) => {
+	/* assignment -> {
 			type: 'retention_policy_assignment',
 			id: '12345',
 			retention_policy:
@@ -267,22 +271,21 @@ client.retentionPolicies.getAssignment('12345')
 				login: 'user@example.com' },
 			assigned_at: '2015-07-20T14:28:09-07:00' }
 		*/
-	});
+});
 ```
 
-Get File Version Retention
---------------------------
+## Get File Version Retention
 
-A file version retention is a record for a retained file version.  To get information
+A file version retention is a record for a retained file version. To get information
 for a specific file version retention record, call the
 [`retentionPolicies.getFileVersionRetention(retentionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFileVersionRetention)
 method.
 
 <!-- sample get_file_version_retentions_id -->
+
 ```js
-client.retentionPolicies.getFileVersionRetention('55555')
-	.then(retention => {
-		/* retention -> {
+client.retentionPolicies.getFileVersionRetention('55555').then((retention) => {
+	/* retention -> {
 			type: 'file_version_retention',
 			id: '55555',
 			applied_at: '2015-08-06T22:02:24-07:00',
@@ -297,26 +300,28 @@ client.retentionPolicies.getFileVersionRetention('55555')
 				sha1: '4262d6250b0e6f440dca43a2337bd4621bad9136' },
 			file: { type: 'file', id: '33333', etag: '2' } }
 		*/
-	});
+});
 ```
 
-Get File Version Retentions
----------------------------
+## Get File Version Retentions
 
 To retrieve a list of all file version retentions for the given enterprise or to filter for
 some category of file version retention records, call the
 [`retentionPolicies.getAllFileVersionRetentions(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getAllFileVersionRetentions)
-method.  Optional filters are passed via the `options` parameter.
+method. Optional filters are passed via the `options` parameter.
 
 <!-- sample get_file_version_retentions -->
+
 ```js
 // Get only the retention records set to delete items before a certain date
 var options = {
-	disposition_action: client.retentionPolicies.dispositionActions.PERMANENTLY_DELETE,
-	disposition_before: '2038-01-01T12:34:56-08:00'
+	disposition_action:
+		client.retentionPolicies.dispositionActions.PERMANENTLY_DELETE,
+	disposition_before: '2038-01-01T12:34:56-08:00',
 };
-client.retentionPolicies.getAllFileVersionRetentions(options)
-	.then(retentions => {
+client.retentionPolicies
+	.getAllFileVersionRetentions(options)
+	.then((retentions) => {
 		/* retentions -> {
 			entries:
 			[ { type: 'file_version_retention', id: '112725' },
@@ -328,16 +333,17 @@ client.retentionPolicies.getAllFileVersionRetentions(options)
 	});
 ```
 
-Get Files Under Retention For Assignment
--------------------------------
+## Get Files Under Retention For Assignment
 
 To retrieve information about files under retention, call the
 [`retentionPolicies.getFilesUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFilesUnderRetentionForAssignment) method.
 
 <!-- sample get_files_under_retention -->
+
 ```js
-client.retentionPolicies.getFilesUnderRetentionForAssignment('12345')
-	.then(files => {
+client.retentionPolicies
+	.getFilesUnderRetentionForAssignment('12345')
+	.then((files) => {
 		/* files -> {
 			entries:
 			[ {
@@ -352,31 +358,24 @@ client.retentionPolicies.getFilesUnderRetentionForAssignment('12345')
 					type: 'file_version',
 					sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
 				},
-				applied_at: '2012-12-12T10:53:43-08:00',
-				disposition_at: '2012-12-12T10:53:43-08:00',
-				winning_retention_policy: {
-					id: 12345,
-					type: 'file_version',
-					policy_name: 'Some Policy Name',
-					retention_length: 365,
-					disposition_action: 'permanently_delete',
-				} ],
+				applied_at: '2012-12-12T10:53:43-08:00' } ],
 			limit: 1000,
-			marker: 'some marker'
+			marker: 'some marker' }
 		*/
 	});
 ```
 
-Get File Versions Under Retention For Assignment
--------------------------------
+## Get File Versions Under Retention For Assignment
 
 To retrieve information about files under retention, call the
 [`retentionPolicies.getFileVersionUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFileVersionUnderRetentionForAssignment) method.
 
 <!-- sample get_files_under_retention -->
+
 ```js
-client.retentionPolicies.getFilesVersionUnderRetentionForAssignment('12345')
-	.then(fileVersions => {
+client.retentionPolicies
+	.getFilesVersionUnderRetentionForAssignment('12345')
+	.then((fileVersions) => {
 		/* fileVersions -> {
 			entries:
 			[ {
@@ -391,17 +390,9 @@ client.retentionPolicies.getFilesVersionUnderRetentionForAssignment('12345')
 					type: 'file_version',
 					sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
 				},
-				applied_at: '2012-12-12T10:53:43-08:00',
-				disposition_at: '2012-12-12T10:53:43-08:00',
-				winning_retention_policy: {
-					id: 12345,
-					type: 'file_version',
-					policy_name: 'Some Policy Name',
-					retention_length: 365,
-					disposition_action: 'permanently_delete',
-				} ],
+				applied_at: '2012-12-12T10:53:43-08:00' } ],
 			limit: 1000,
-			marker: 'some marker'
+			marker: 'some marker' }
 		*/
 	});
 ```
