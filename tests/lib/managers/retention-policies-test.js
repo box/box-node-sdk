@@ -566,7 +566,7 @@ describe('RetentionPolicies', function() {
 		});
 	});
 
-	describe('getFilesVersionUnderRetentionForAssignment()', function() {
+	describe('getFileVersionsUnderRetentionForAssignment()', function() {
 
 		it('should make GET request to get retention records when called', function() {
 
@@ -574,8 +574,8 @@ describe('RetentionPolicies', function() {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
-				.withArgs(`/retention_policy_assignments/${POLICY_ID}/files_versions_under_retention`, {qs});
-			retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID, qs);
+				.withArgs(`/retention_policy_assignments/${POLICY_ID}/file_versions_under_retention`, {qs});
+			retentionPolicies.getFileVersionsUnderRetentionForAssignment(POLICY_ID, qs);
 		});
 
 		it('should wrap with default handler when called', function() {
@@ -584,7 +584,7 @@ describe('RetentionPolicies', function() {
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
-			retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID);
+			retentionPolicies.getFileVersionsUnderRetentionForAssignment(POLICY_ID);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
@@ -592,7 +592,7 @@ describe('RetentionPolicies', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID, null, function(err, data) {
+			retentionPolicies.getFileVersionsUnderRetentionForAssignment(POLICY_ID, null, function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -605,7 +605,7 @@ describe('RetentionPolicies', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return retentionPolicies.getFilesVersionUnderRetentionForAssignment(POLICY_ID)
+			return retentionPolicies.getFileVersionsUnderRetentionForAssignment(POLICY_ID)
 				.then(data => assert.equal(data, response));
 		});
 	});

@@ -65,7 +65,7 @@ const BASE_PATH = '/retention_policies',
 	FILE_VERSION_RETENTIONS_PATH = '/file_version_retentions',
 	ASSIGNMENTS_SUBRESOURCE = 'assignments',
 	FILES_UNDER_RETENTION_SUBRESOURCE = 'files_under_retention',
-	FILES_VERSIONS_UNDER_RETENTION_SUBRESOURCE = 'files_versions_under_retention';
+	FILES_VERSIONS_UNDER_RETENTION_SUBRESOURCE = 'file_versions_under_retention';
 
 // -----------------------------------------------------------------------------
 // Public
@@ -452,7 +452,7 @@ class RetentionPolicies {
 	 * To use this feature, you must have the manage retention policies scope enabled
 	 * for your API key via your application management console.
 	 *
-	 * API Endpoint: '/retention_policy_assignments/:assignmentID/files_versions_under_retention'
+	 * API Endpoint: '/retention_policy_assignments/:assignmentID/file_versions_under_retention'
 	 * Method: GET
 	 *
 	 * @param {string} assignmentID - The Box ID of the policy assignment object to fetch
@@ -462,7 +462,7 @@ class RetentionPolicies {
 	 * @param {Function} [callback] - Pass the file version retention record if successful, error otherwise
 	 * @returns {Promise<Object>} A promise resolving to the collection of retention records
 	 */
-	getFilesVersionUnderRetentionForAssignment(
+	getFileVersionsUnderRetentionForAssignment(
 		assignmentID: string,
 		options?: {
 			limit?: number;
