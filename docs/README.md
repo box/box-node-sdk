@@ -9,7 +9,7 @@ the SDK are available by topic:
 * [Client](client.md)
 * [Classifications](classifications.md)
 * [Collaborations](collaborations.md)
-* [Collaboration Whitelist](collaboration-whitelist.md)
+* [Collaboration Allowlist](collaboration-allowlist.md)
 * [Collections](collections.md)
 * [Comments](comments.md)
 * [Device Pins](device-pins.md)
