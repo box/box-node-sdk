@@ -19,7 +19,7 @@
 
     <h1 class="page-title">Class: TokenManager</h1>
 
-    
+
 
 
 
@@ -27,24 +27,24 @@
 <section>
 
 <header>
-    
+
         <h2><span class="attribs"><span class="type-signature"></span></span>TokenManager<span class="signature">(config, requestManager)</span><span class="type-signature"></span></h2>
-        
-    
+
+
 </header>
 
 <article>
     <div class="container-overview">
-    
-        
 
-    
 
-    
+
+
+
+
     <h4 class="name" id="TokenManager"><span class="type-signature"></span>new TokenManager<span class="signature">(config, requestManager)</span><span class="type-signature"></span></h4>
-    
 
-    
+
+
 
 
 
@@ -61,73 +61,73 @@
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>config</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="Config.html">Config</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last">The config object</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>requestManager</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="APIRequestManager.html">APIRequestManager</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last">The API Request Manager</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -138,42 +138,42 @@
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line182">line 182</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -195,36 +195,36 @@
 
 
 
-    
+
     </div>
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
         <h3 class="subsection-title">Methods</h3>
 
-        
-            
 
-    
 
-    
+
+
+
+
     <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(accessToken, scopes, resource<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -242,287 +242,287 @@ an external user identifier.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>accessToken</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">The valid access token to exchange</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>scopes</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 |
 
 <span class="param-type">Array.&lt;string></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">The scope(s) of the new access token</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>resource</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">The absolute URL of an API resource to restrict the new token to</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Optional parameters
                 <h6>Properties</h6>
-                
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>tokenRequestOptions</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>actor</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#ActorParams">ActorParams</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Optional actor parameters for creating annotator tokens</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>sharedLink</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#SharedLinkParams">SharedLinkParams</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Optional shared link parameters for creating tokens using shared links</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -533,42 +533,42 @@ an external user identifier.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line453">line 453</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -587,7 +587,7 @@ an external user identifier.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the new token info
 </div>
@@ -599,29 +599,29 @@ an external user identifier.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="getTokensAuthorizationCodeGrant"><span class="type-signature"></span>getTokensAuthorizationCodeGrant<span class="signature">(authorizationCode, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -638,93 +638,93 @@ an external user identifier.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>authorizationCode</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">authorization code issued by Box</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -735,42 +735,42 @@ an external user identifier.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line271">line 271</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -789,7 +789,7 @@ an external user identifier.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the token info
 </div>
@@ -801,29 +801,29 @@ an external user identifier.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="getTokensClientCredentialsGrant"><span class="type-signature"></span>getTokensClientCredentialsGrant<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -840,62 +840,62 @@ an external user identifier.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -906,42 +906,42 @@ an external user identifier.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line290">line 290</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -960,7 +960,7 @@ an external user identifier.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the token info
 </div>
@@ -972,29 +972,29 @@ an external user identifier.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="getTokensJWTGrant"><span class="type-signature"></span>getTokensJWTGrant<span class="signature">(type, id, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -1011,124 +1011,124 @@ an external user identifier.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>type</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">The type of token to create, "user" or "enterprise"</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>id</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">The ID of the enterprise to generate a token for</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1139,42 +1139,42 @@ an external user identifier.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line325">line 325</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -1193,7 +1193,7 @@ an external user identifier.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the token info
 </div>
@@ -1205,29 +1205,29 @@ an external user identifier.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="getTokensRefreshGrant"><span class="type-signature"></span>getTokensRefreshGrant<span class="signature">(refreshToken, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -1244,93 +1244,93 @@ an external user identifier.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>refreshToken</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">A valid OAuth refresh token</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1341,42 +1341,42 @@ an external user identifier.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line305">line 305</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -1395,7 +1395,7 @@ an external user identifier.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the token info
 </div>
@@ -1407,29 +1407,29 @@ an external user identifier.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="isAccessTokenValid"><span class="type-signature"></span>isAccessTokenValid<span class="signature">(tokenInfo, bufferMS<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -1448,94 +1448,94 @@ that other modules may check the validity of their tokens.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>tokenInfo</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenInfo">TokenInfo</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">the token info to be written</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>bufferMS</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">int</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">An optional buffer we'd like to test against. The greater this buffer, the more aggressively
 we'll call a token invalid.</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1546,42 +1546,42 @@ we'll call a token invalid.</td>
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line201">line 201</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -1600,7 +1600,7 @@ we'll call a token invalid.</td>
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     True if token is valid outside of buffer, otherwise false
 </div>
@@ -1612,29 +1612,29 @@ we'll call a token invalid.</td>
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">boolean</span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="retryJWTGrant"><span class="type-signature"></span>retryJWTGrant<span class="signature">(claims, jwtOptions<span class="signature-attributes">opt</span>, keyParams, params, options<span class="signature-attributes">opt</span>, error, numRetries)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -1652,250 +1652,250 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>claims</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">JTI claims object</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>jwtOptions</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">JWT options for the signature</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>keyParams</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Key JWT parameters object that contains the private key and the passphrase</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>params</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Should contain all params expected by Box OAuth2 token endpoint</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>error</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Error</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Error from the previous JWT request</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>numRetries</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">int</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Number of retries attempted</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -1906,42 +1906,42 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line379">line 379</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -1960,7 +1960,7 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the token info
 </div>
@@ -1972,29 +1972,29 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(token, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -2011,93 +2011,93 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>token</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">A valid access or refresh token to revoke</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -2108,42 +2108,42 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="token-manager.js.html">token-manager.js</a>, <a href="token-manager.js.html#line507">line 507</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -2162,7 +2162,7 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving if the revoke succeeds
 </div>
@@ -2174,25 +2174,25 @@ re-execute the request (after the retry interval). Otherwise, propagate a new er
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise</span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-    
 
-    
 
-    
+
+
+
+
+
 </article>
 
 </section>

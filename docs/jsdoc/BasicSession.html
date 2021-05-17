@@ -19,7 +19,7 @@
 
     <h1 class="page-title">Class: BasicSession</h1>
 
-    
+
 
 
 
@@ -27,24 +27,24 @@
 <section>
 
 <header>
-    
+
         <h2><span class="attribs"><span class="type-signature"></span></span>BasicSession<span class="signature">(accessToken, tokenManager)</span><span class="type-signature"></span></h2>
-        
-    
+
+
 </header>
 
 <article>
     <div class="container-overview">
-    
-        
 
-    
 
-    
+
+
+
+
     <h4 class="name" id="BasicSession"><span class="type-signature"></span>new BasicSession<span class="signature">(accessToken, tokenManager)</span><span class="type-signature"></span></h4>
-    
 
-    
+
+
 
 
 
@@ -67,73 +67,73 @@ that wish to manage tokens themselves.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
 
-        
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>accessToken</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last">The existing access token for a user</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>tokenManager</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="TokenManager.html">TokenManager</a></span>
 
 
-            
+
             </td>
 
-            
 
-            
+
+
 
             <td class="description last">The token manager</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -144,42 +144,42 @@ that wish to manage tokens themselves.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line31">line 31</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -201,36 +201,36 @@ that wish to manage tokens themselves.
 
 
 
-    
+
     </div>
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
         <h3 class="subsection-title">Methods</h3>
 
-        
-            
 
-    
 
-    
+
+
+
+
     <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -247,223 +247,223 @@ that wish to manage tokens themselves.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>scopes</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 |
 
 <span class="param-type">Array.&lt;string></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">The scope(s) requested for the new token</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>resource</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">string</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">The absolute URL of an API resource to scope the new token to</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type">Object</span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Optional parameters
                 <h6>Properties</h6>
-                
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>tokenRequestOptions</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>actor</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#ActorParams">ActorParams</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Optional actor parameters for creating annotator tokens</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
             </td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -474,42 +474,42 @@ that wish to manage tokens themselves.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line65">line 65</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -528,7 +528,7 @@ that wish to manage tokens themselves.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the new token info
 </div>
@@ -540,29 +540,29 @@ that wish to manage tokens themselves.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -585,42 +585,42 @@ know the status of its own token.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line42">line 42</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -639,7 +639,7 @@ know the status of its own token.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving to the access token
 </div>
@@ -651,29 +651,29 @@ know the status of its own token.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise.&lt;string></span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-            
 
-    
 
-    
+
+
+
+
+
     <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-    
 
-    
+
+
 
 
 
@@ -690,62 +690,62 @@ know the status of its own token.
 
 
     <h5>Parameters:</h5>
-    
+
 
 <table class="params">
     <thead>
     <tr>
-        
+
         <th>Name</th>
-        
+
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
-        
 
-        
+        <th>Attributes</th>
+
+
+
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-    
+
 
         <tr>
-            
+
                 <td class="name"><code>options</code></td>
-            
+
 
             <td class="type">
-            
-                
+
+
 <span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
-            
+
             </td>
 
-            
+
                 <td class="attributes">
-                
+
                     &lt;optional><br>
-                
 
-                
 
-                
+
+
+
                 </td>
-            
 
-            
+
+
 
             <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
-    
+
     </tbody>
 </table>
 
@@ -756,42 +756,42 @@ know the status of its own token.
 
 <dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
+    <dd class="tag-source"><ul><li>
         <a href="sessions_basic-session.js.html">sessions/basic-session.js</a>, <a href="sessions_basic-session.js.html#line52">line 52</a>
     </li></ul></dd>
-    
 
-    
 
-    
 
-    
+
+
+
+
 </dl>
 
 
@@ -810,7 +810,7 @@ know the status of its own token.
 
 <h5>Returns:</h5>
 
-        
+
 <div class="param-desc">
     Promise resolving if the revoke succeeds
 </div>
@@ -822,25 +822,25 @@ know the status of its own token.
         Type
     </dt>
     <dd>
-        
+
 <span class="param-type">Promise</span>
 
 
     </dd>
 </dl>
 
-    
 
 
 
 
 
-        
-    
 
-    
 
-    
+
+
+
+
+
 </article>
 
 </section>
