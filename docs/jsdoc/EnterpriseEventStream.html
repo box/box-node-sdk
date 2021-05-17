@@ -19,7 +19,7 @@
 
     <h1 class="page-title">Class: EnterpriseEventStream</h1>
 
-
+    
 
 
 
@@ -27,24 +27,24 @@
 <section>
 
 <header>
-
+    
         <h2><span class="attribs"><span class="type-signature"></span></span>EnterpriseEventStream<span class="signature">(client, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
-
-
+        
+    
 </header>
 
 <article>
     <div class="container-overview">
+    
+        
 
+    
 
-
-
-
-
+    
     <h4 class="name" id="EnterpriseEventStream"><span class="type-signature"></span>new EnterpriseEventStream<span class="signature">(client, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
 
-
-
+    
 
 
 
@@ -67,349 +67,349 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 
     <h5>Parameters:</h5>
-
+    
 
 <table class="params">
     <thead>
     <tr>
-
+        
         <th>Name</th>
-
+        
 
         <th>Type</th>
 
-
+        
         <th>Attributes</th>
+        
 
-
-
+        
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>client</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
 
             <td class="description last">The client to use to get events</td>
         </tr>
 
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>options</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">Object</span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
-
+                
                     &lt;optional><br>
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
 
             <td class="description last">Options
                 <h6>Properties</h6>
-
+                
 
 <table class="params">
     <thead>
     <tr>
-
+        
         <th>Name</th>
-
+        
 
         <th>Type</th>
 
-
+        
         <th>Attributes</th>
+        
 
-
-
+        
         <th>Default</th>
-
+        
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>streamPosition</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">string</span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
-
+                
                     &lt;optional><br>
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
                 <td class="default">
-
+                
                 </td>
-
+            
 
             <td class="description last">The stream position to start from (pass '0' for all past events)</td>
         </tr>
 
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>startDate</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">string</span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
-
+                
                     &lt;optional><br>
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
                 <td class="default">
-
+                
                 </td>
-
+            
 
             <td class="description last">The date to start from</td>
         </tr>
 
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>endDate</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">string</span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
-
+                
                     &lt;optional><br>
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
                 <td class="default">
-
+                
                 </td>
-
+            
 
             <td class="description last">The date to end at</td>
         </tr>
 
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>eventTypeFilter</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">Array.&lt;<a href="global.html#EventType">EventType</a>></span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
-
+                
                     &lt;optional><br>
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
                 <td class="default">
-
+                
                 </td>
-
+            
 
             <td class="description last">Array of event types to return</td>
         </tr>
 
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>pollingInterval</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">int</span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
-
+                
                     &lt;optional><br>
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
                 <td class="default">
-
+                
                     60
-
+                
                 </td>
-
+            
 
             <td class="description last">Polling interval (in seconds).  Pass 0 for no polling.</td>
         </tr>
 
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>chunkSize</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">int</span>
 
 
-
+            
             </td>
 
-
+            
                 <td class="attributes">
-
+                
                     &lt;optional><br>
+                
 
+                
 
-
-
-
+                
                 </td>
+            
 
-
-
+            
                 <td class="default">
-
+                
                     500
-
+                
                 </td>
-
+            
 
             <td class="description last">Number of events to fetch per call (max = 500)</td>
         </tr>
 
-
+    
     </tbody>
 </table>
 
             </td>
         </tr>
 
-
+    
     </tbody>
 </table>
 
@@ -420,42 +420,42 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 <dl class="details">
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul><li>
         <a href="enterprise-event-stream.js.html">enterprise-event-stream.js</a>, <a href="enterprise-event-stream.js.html#line46">line 46</a>
     </li></ul></dd>
+    
 
+    
 
+    
 
-
-
-
-
+    
 </dl>
 
 
@@ -477,13 +477,13 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 
 
-
+    
     </div>
 
-
+    
         <h3 class="subsection-title">Extends</h3>
 
-
+        
 
 
     <ul>
@@ -491,33 +491,33 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
     </ul>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
-
+    
         <h3 class="subsection-title">Methods</h3>
 
+        
+            
 
+    
 
-
-
-
-
+    
     <h4 class="name" id="getStreamPosition"><span class="type-signature"></span>getStreamPosition<span class="signature">()</span><span class="type-signature"> &rarr; (nullable) {string}</span></h4>
+    
 
-
-
+    
 
 
 
@@ -535,42 +535,42 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 <dl class="details">
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul><li>
         <a href="enterprise-event-stream.js.html">enterprise-event-stream.js</a>, <a href="enterprise-event-stream.js.html#line83">line 83</a>
     </li></ul></dd>
+    
 
+    
 
+    
 
-
-
-
-
+    
 </dl>
 
 
@@ -589,7 +589,7 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 <h5>Returns:</h5>
 
-
+        
 <div class="param-desc">
     - Returns null if no events have been fetched from Box yet.
 </div>
@@ -601,29 +601,29 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
         Type
     </dt>
     <dd>
-
+        
 <span class="param-type">string</span>
 
 
     </dd>
 </dl>
 
+    
 
 
 
 
 
+        
+            
 
+    
 
-
-
-
-
-
+    
     <h4 class="name" id="getStreamState"><span class="type-signature"></span>getStreamState<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
 
-
-
+    
 
 
 
@@ -645,42 +645,42 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 <dl class="details">
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul><li>
         <a href="enterprise-event-stream.js.html">enterprise-event-stream.js</a>, <a href="enterprise-event-stream.js.html#line92">line 92</a>
     </li></ul></dd>
+    
 
+    
 
+    
 
-
-
-
-
+    
 </dl>
 
 
@@ -699,7 +699,7 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 <h5>Returns:</h5>
 
-
+        
 <div class="param-desc">
     - The stream state
 </div>
@@ -711,29 +711,29 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
         Type
     </dt>
     <dd>
-
+        
 <span class="param-type">Object</span>
 
 
     </dd>
 </dl>
 
+    
 
 
 
 
 
+        
+            
 
+    
 
-
-
-
-
-
+    
     <h4 class="name" id="setStreamState"><span class="type-signature"></span>setStreamState<span class="signature">(state)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
 
-
-
+    
 
 
 
@@ -750,50 +750,50 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 
     <h5>Parameters:</h5>
-
+    
 
 <table class="params">
     <thead>
     <tr>
-
+        
         <th>Name</th>
-
+        
 
         <th>Type</th>
 
+        
 
-
-
+        
 
         <th class="last">Description</th>
     </tr>
     </thead>
 
     <tbody>
-
+    
 
         <tr>
-
+            
                 <td class="name"><code>state</code></td>
-
+            
 
             <td class="type">
-
-
+            
+                
 <span class="param-type">Object</span>
 
 
-
+            
             </td>
 
+            
 
-
-
+            
 
             <td class="description last">The stream state</td>
         </tr>
 
-
+    
     </tbody>
 </table>
 
@@ -804,42 +804,42 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 <dl class="details">
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul><li>
         <a href="enterprise-event-stream.js.html">enterprise-event-stream.js</a>, <a href="enterprise-event-stream.js.html#line109">line 109</a>
     </li></ul></dd>
+    
 
+    
 
+    
 
-
-
-
-
+    
 </dl>
 
 
@@ -858,7 +858,7 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
 
 <h5>Returns:</h5>
 
-
+        
 
 
 <dl>
@@ -866,25 +866,25 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
         Type
     </dt>
     <dd>
-
+        
 <span class="param-type">void</span>
 
 
     </dd>
 </dl>
 
+    
 
 
 
 
 
+        
+    
 
+    
 
-
-
-
-
-
+    
 </article>
 
 </section>
