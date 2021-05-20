@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.37.2 (2021-05-20)
+
+**Bug Fixes:**
+
+- Fix backwards compatibility issue by moving some TypeScript @types as direct dependencies ([#630](https://github.com/box/box-node-sdk/pull/630))
+
 ## 1.37.1 (2021-05-19)
 
 **Bug Fixes:**
