@@ -33,6 +33,8 @@
     "major": "node Makefile.js major"
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.35",
+    "@types/node": "^15.3.1",
     "ajv": "^6.12.3",
     "bluebird": "^3.7.1",
     "http-status": "^1.4.1",
@@ -45,12 +47,11 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.33",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/promise-queue": "^2.2.0",
-    "@types/uuid": "^8.3.0",
     "@types/request": "^2.48.5",
     "@types/url-template": "^2.0.28",
+    "@types/uuid": "^8.3.0",
     "chai": "^4.2.0",
     "coveralls": "^3.1.0",
     "eslint": "^4.19.1",
