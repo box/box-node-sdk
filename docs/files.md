@@ -1163,8 +1163,10 @@ client.files.promoteVersion(fileID, versionID)
 	});
 ```
 
-Get Thumbnail
+Get Thumbnail (deprecated)
 -------------
+
+This method has been deprecated. Use [Get Representation Content](#get-representation-content) instead.
 
 A thumbnail for a file can be retrieved by calling
 [`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail).
