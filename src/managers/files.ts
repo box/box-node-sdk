@@ -303,6 +303,7 @@ class Files {
 	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
 	 * @param {Function} [callback] - Passed the thumbnail file or the URL to a placeholder thumbnail if successful.
 	 * @returns {Promise<Object>} A promise resolving to the thumbnail information
+	 * @deprecated use getRepresentationContent() instead
 	 */
 	getThumbnail(
 		fileID: string,

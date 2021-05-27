@@ -3803,11 +3803,11 @@ describe('Endpoint', function() {
 		});
 	});
 
-	describe('Collaboration Whitelists', function() {
+	describe('Collaboration Allowlists', function() {
 		describe('addDomain()', function() {
-			it('should make a post request to create a domain collaboration whitelisting', function() {
+			it('should make a post request to create a domain collaboration allowlisting', function() {
 				var postFixture = getFixture(
-						'collaboration-whitelists/post_collaboration_whitelists_200'
+						'collaboration-allowlists/post_collaboration_whitelists_200'
 					),
 					domain = 'test.com',
 					direction = 'both',
@@ -3828,10 +3828,10 @@ describe('Endpoint', function() {
 					})
 					.reply(200, postFixture);
 
-				return basicClient.collaborationWhitelist
+				return basicClient.collaborationAllowlist
 					.addDomain(domain, direction)
-					.then(collabWhitelist => {
-						assert.deepEqual(collabWhitelist, JSON.parse(postFixture));
+					.then(collabAllowlist => {
+						assert.deepEqual(collabAllowlist, JSON.parse(postFixture));
 					});
 			});
 		});
@@ -3839,7 +3839,7 @@ describe('Endpoint', function() {
 		describe('addExemption()', function() {
 			it('should make a post request to add user to exempt target list', function() {
 				var postFixture = getFixture(
-						'collaboration-whitelists/post_collaboration_exempt_targets_200'
+						'collaboration-allowlists/post_collaboration_exempt_targets_200'
 					),
 					userID = '5678',
 					expectedPostBody = {
@@ -3861,18 +3861,18 @@ describe('Endpoint', function() {
 					})
 					.reply(200, postFixture);
 
-				return basicClient.collaborationWhitelist
+				return basicClient.collaborationAllowlist
 					.addExemption(userID)
-					.then(collabWhitelist => {
-						assert.deepEqual(collabWhitelist, JSON.parse(postFixture));
+					.then(collabAllowlist => {
+						assert.deepEqual(collabAllowlist, JSON.parse(postFixture));
 					});
 			});
 		});
 
-		describe('getAllWhitelistedDomains()', function() {
-			it('should make GET request to get whitelisted domains', function() {
+		describe('getAllAllowlistedDomains()', function() {
+			it('should make GET request to get allowlisted domains', function() {
 				var fixture = getFixture(
-					'collaboration-whitelists/get_collaboration_whitelist_entries_200'
+					'collaboration-allowlists/get_collaboration_whitelist_entries_200'
 				);
 
 				apiMock
@@ -3887,23 +3887,23 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				return basicClient.collaborationWhitelist
-					.getAllWhitelistedDomains()
-					.then(collabWhitelist => {
-						assert.deepEqual(collabWhitelist, JSON.parse(fixture));
+				return basicClient.collaborationAllowlist
+					.getAllAllowlistedDomains()
+					.then(collabAllowlist => {
+						assert.deepEqual(collabAllowlist, JSON.parse(fixture));
 					});
 			});
 		});
 
-		describe('getWhitelistedDomain()', function() {
-			it('should make GET request to fetch whitelisted domain', function() {
+		describe('getAllowlistedDomain()', function() {
+			it('should make GET request to fetch allowlisted domain', function() {
 				var fixture = getFixture(
-						'collaboration-whitelists/get_collaboration_whitelist_entries_id_200'
+						'collaboration-allowlists/get_collaboration_whitelist_entries_id_200'
 					),
-					whitelistEntryID = '11111';
+					allowlistEntryID = '11111';
 
 				apiMock
-					.get(`/2.0/collaboration_whitelist_entries/${whitelistEntryID}`)
+					.get(`/2.0/collaboration_whitelist_entries/${allowlistEntryID}`)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3914,20 +3914,20 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				return basicClient.collaborationWhitelist
-					.getWhitelistedDomain(whitelistEntryID)
-					.then(collabWhitelist => {
-						assert.deepEqual(collabWhitelist, JSON.parse(fixture));
+				return basicClient.collaborationAllowlist
+					.getAllowlistedDomain(allowlistEntryID)
+					.then(collabAllowlist => {
+						assert.deepEqual(collabAllowlist, JSON.parse(fixture));
 					});
 			});
 		});
 
 		describe('removeDomain()', function() {
-			it('should make DELETE call to remove domain from whitelist', function() {
-				var whitelistEntryID = '11111';
+			it('should make DELETE call to remove domain from allowlist', function() {
+				var allowlistEntryID = '11111';
 
 				apiMock
-					.delete(`/2.0/collaboration_whitelist_entries/${whitelistEntryID}`)
+					.delete(`/2.0/collaboration_whitelist_entries/${allowlistEntryID}`)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -3938,8 +3938,8 @@ describe('Endpoint', function() {
 					})
 					.reply(204);
 
-				return basicClient.collaborationWhitelist
-					.removeDomain(whitelistEntryID)
+				return basicClient.collaborationAllowlist
+					.removeDomain(allowlistEntryID)
 					.then(value => {
 						assert.isUndefined(value);
 					});
@@ -3947,9 +3947,9 @@ describe('Endpoint', function() {
 		});
 
 		describe('getAllExemptions()', function() {
-			it('should make GET call to fetch whitelist exemptions', function() {
+			it('should make GET call to fetch allowlist exemptions', function() {
 				var fixture = getFixture(
-					'collaboration-whitelists/get_collaboration_whitelist_exempt_targets_200'
+					'collaboration-allowlists/get_collaboration_whitelist_exempt_targets_200'
 				);
 
 				apiMock
@@ -3964,7 +3964,7 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				return basicClient.collaborationWhitelist
+				return basicClient.collaborationAllowlist
 					.getAllExemptions()
 					.then(exemptions => {
 						assert.deepEqual(exemptions, JSON.parse(fixture));
@@ -3973,9 +3973,9 @@ describe('Endpoint', function() {
 		});
 
 		describe('getExemption()', function() {
-			it('should make GET call to fetch whitelist exemptions', function() {
+			it('should make GET call to fetch allowlist exemptions', function() {
 				var fixture = getFixture(
-						'collaboration-whitelists/get_collaboration_whitelist_exempt_targets_200'
+						'collaboration-allowlists/get_collaboration_whitelist_exempt_targets_200'
 					),
 					exemptionID = '11111';
 
@@ -3991,7 +3991,7 @@ describe('Endpoint', function() {
 					})
 					.reply(200, fixture);
 
-				return basicClient.collaborationWhitelist
+				return basicClient.collaborationAllowlist
 					.getExemption(exemptionID)
 					.then(exemption => {
 						assert.deepEqual(exemption, JSON.parse(fixture));
@@ -4000,7 +4000,7 @@ describe('Endpoint', function() {
 		});
 
 		describe('removeExemption()', function() {
-			it('should make DELETE call to remove domain from whitelist', function() {
+			it('should make DELETE call to remove domain from allowlist', function() {
 				var exemptionID = '11111';
 
 				apiMock
@@ -4015,7 +4015,7 @@ describe('Endpoint', function() {
 					})
 					.reply(204);
 
-				return basicClient.collaborationWhitelist
+				return basicClient.collaborationAllowlist
 					.removeExemption(exemptionID)
 					.then(value => {
 						assert.isUndefined(value);

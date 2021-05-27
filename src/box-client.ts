@@ -62,7 +62,7 @@ var Users = require('./managers/users'),
 	DevicePins = require('./managers/device-pins'),
 	Webhooks = require('./managers/webhooks'),
 	RecentItems = require('./managers/recent-items'),
-	CollaborationWhitelist = require('./managers/collaboration-whitelist'),
+	CollaborationAllowlist = require('./managers/collaboration-allowlist'),
 	TermsOfService = require('./managers/terms-of-service'),
 	StoragePolicies = require('./managers/storage-policies');
 
@@ -220,7 +220,7 @@ class BoxClient {
 	devicePins: any;
 	webhooks: any;
 	recentItems: any;
-	collaborationWhitelist: any;
+	collaborationAllowlist: any;
 	termsOfService: any;
 	storagePolicies: any;
 
@@ -231,6 +231,9 @@ class BoxClient {
 	itemTypes!: Record<string, ItemType>;
 	accessLevels!: Record<string, AccessLevel>;
 	CURRENT_USER_ID!: string;
+
+	/** @deprecated */
+	collaborationWhitelist: any;
 
 	/**
 	 * The BoxClient can make API calls on behalf of a valid API Session. It is responsible
@@ -288,9 +291,12 @@ class BoxClient {
 		this.devicePins = new DevicePins(this);
 		this.webhooks = new Webhooks(this);
 		this.recentItems = new RecentItems(this);
-		this.collaborationWhitelist = new CollaborationWhitelist(this);
+		this.collaborationAllowlist = new CollaborationAllowlist(this);
 		this.termsOfService = new TermsOfService(this);
 		this.storagePolicies = new StoragePolicies(this);
+
+		// Legacy insensitive language
+		this.collaborationWhitelist = this.collaborationAllowlist;
 
 		// Array of requests when in batch mode, null otherwise
 		this._batch = null;
@@ -356,9 +362,8 @@ class BoxClient {
 					if (params.streaming) {
 						// streaming is specific to the SDK, so delete it from params before continuing
 						delete params.streaming;
-						var responseStream = this._requestManager.makeStreamingRequest(
-							params
-						);
+						var responseStream =
+							this._requestManager.makeStreamingRequest(params);
 						// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
 						// due to expired access token
 						responseStream.on('response', (response: any /* FIXME */) => {

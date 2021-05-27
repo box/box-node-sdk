@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.37.2 (2021-05-20)
+
+**Bug Fixes:**
+
+- Fix backwards compatibility issue by moving some TypeScript @types as direct dependencies ([#630](https://github.com/box/box-node-sdk/pull/630))
+
+## 1.37.1 (2021-05-19)
+
+**Bug Fixes:**
+
+- Insensitive language: replace whitelist with allowlist ([#625](https://github.com/box/box-node-sdk/pull/625))
+
 ## 1.37.0 (2021-04-16)
 
 **New Features and Enhancements:**

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Collaboration Whitelists Manager Tests
+ * @fileoverview Collaboration Allowlists Manager Tests
  */
 'use strict';
 
@@ -19,21 +19,20 @@ var BoxClient = require('../../../lib/box-client');
 // ------------------------------------------------------------------------------
 var sandbox = sinon.createSandbox(),
 	boxClientFake = leche.fake(BoxClient.prototype),
-	CollaborationWhitelist,
-	collaborationWhitelist,
+	CollaborationAllowlist,
+	collaborationAllowlist,
 	testQS = { testQSKey: 'testQSValue' },
 	testParamsWithQs,
-	COLLABORATION_WHITELIST_ID = '1234',
-	USER_COLLABORATION_WHITELIST_ID = '5678',
+	COLLABORATION_ALLOWLIST_ID = '1234',
+	USER_COLLABORATION_ALLOWLIST_ID = '5678',
 	USER_ID = '12345678',
-	MODULE_FILE_PATH = '../../../lib/managers/collaboration-whitelist';
+	MODULE_FILE_PATH = '../../../lib/managers/collaboration-allowlist';
 
 // ------------------------------------------------------------------------------
 // Tests
 // ------------------------------------------------------------------------------
 
-describe('CollaborationWhitelist', function() {
-
+describe('CollaborationAllowlist', function() {
 	before(function() {
 		// Enable Mockery
 		mockery.enable({ warnOnUnregistered: false });
@@ -42,10 +41,10 @@ describe('CollaborationWhitelist', function() {
 	});
 
 	beforeEach(function() {
-		testParamsWithQs = {qs: testQS};
+		testParamsWithQs = { qs: testQS };
 		// Setup File Under Test
-		CollaborationWhitelist = require(MODULE_FILE_PATH);
-		collaborationWhitelist = new CollaborationWhitelist(boxClientFake);
+		CollaborationAllowlist = require(MODULE_FILE_PATH);
+		collaborationAllowlist = new CollaborationAllowlist(boxClientFake);
 	});
 
 	afterEach(function() {
@@ -59,174 +58,216 @@ describe('CollaborationWhitelist', function() {
 	});
 
 	describe('addDomain()', function() {
-		var domainToWhitelist = 'test.com';
+		var domainToAllowlist = 'test.com';
 		var expectedParams = {
 			body: {
-				domain: domainToWhitelist,
-				direction: 'both'
-			}
+				domain: domainToAllowlist,
+				direction: 'both',
+			},
 		};
 
-		it('should make POST request to create a new collaboration whitelist when called', function() {
+		it('should make POST request to create a new collaboration allowlist when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post')
+			sandbox
+				.mock(boxClientFake)
+				.expects('post')
 				.withArgs('/collaboration_whitelist_entries', expectedParams);
-			collaborationWhitelist.addDomain(domainToWhitelist, 'both');
+			collaborationAllowlist.addDomain(domainToAllowlist, 'both');
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'post');
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
-			collaborationWhitelist.addDomain(domainToWhitelist, 'both');
+			collaborationAllowlist.addDomain(domainToAllowlist, 'both');
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborationWhitelist.addDomain(domainToWhitelist, 'both', function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
+			collaborationAllowlist.addDomain(
+				domainToAllowlist,
+				'both',
+				function(err, data) {
+					assert.ifError(err);
+					assert.equal(data, response);
+					done();
+				}
+			);
 		});
 
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
-			return collaborationWhitelist.addDomain(domainToWhitelist, 'both')
+			return collaborationAllowlist
+				.addDomain(domainToAllowlist, 'both')
 				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('removeDomain()', function() {
-		it('should make DELETE request to update collaboration whitelist info when called', function() {
+		it('should make DELETE request to update collaboration allowlist info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del')
+			sandbox
+				.mock(boxClientFake)
+				.expects('del')
 				.withArgs('/collaboration_whitelist_entries/1234', null);
-			collaborationWhitelist.removeDomain(COLLABORATION_WHITELIST_ID);
+			collaborationAllowlist.removeDomain(COLLABORATION_ALLOWLIST_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'del');
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
-			collaborationWhitelist.removeDomain(COLLABORATION_WHITELIST_ID);
+			collaborationAllowlist.removeDomain(COLLABORATION_ALLOWLIST_ID);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			collaborationWhitelist.removeDomain(COLLABORATION_WHITELIST_ID, function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
+			collaborationAllowlist.removeDomain(
+				COLLABORATION_ALLOWLIST_ID,
+				function(err, data) {
+					assert.ifError(err);
+					assert.equal(data, response);
+					done();
+				}
+			);
 		});
 
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
-			return collaborationWhitelist.removeDomain(COLLABORATION_WHITELIST_ID)
+			return collaborationAllowlist
+				.removeDomain(COLLABORATION_ALLOWLIST_ID)
 				.then(data => assert.equal(data, response));
 		});
 	});
 
-	describe('getWhitelistedDomain()', function() {
-		it('should make GET request to get collaboration whitelist info when called', function() {
+	describe('getAllowlistedDomain()', function() {
+		it('should make GET request to get collaboration allowlist info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get')
+			sandbox
+				.mock(boxClientFake)
+				.expects('get')
 				.withArgs('/collaboration_whitelist_entries/1234', testParamsWithQs)
 				.returns(Promise.resolve());
-			collaborationWhitelist.getWhitelistedDomain(COLLABORATION_WHITELIST_ID, testQS);
+			collaborationAllowlist.getAllowlistedDomain(
+				COLLABORATION_ALLOWLIST_ID,
+				testQS
+			);
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
-			collaborationWhitelist.getWhitelistedDomain(COLLABORATION_WHITELIST_ID, testQS);
+			collaborationAllowlist.getAllowlistedDomain(
+				COLLABORATION_ALLOWLIST_ID,
+				testQS
+			);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborationWhitelist.getWhitelistedDomain(COLLABORATION_WHITELIST_ID, testQS, function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
+			collaborationAllowlist.getAllowlistedDomain(
+				COLLABORATION_ALLOWLIST_ID,
+				testQS,
+				function(err, data) {
+					assert.ifError(err);
+					assert.equal(data, response);
+					done();
+				}
+			);
 		});
 
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return collaborationWhitelist.getWhitelistedDomain(COLLABORATION_WHITELIST_ID, testQS)
+			return collaborationAllowlist
+				.getAllowlistedDomain(COLLABORATION_ALLOWLIST_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
 	});
 
-	describe('getAllWhitelistedDomains()', function() {
+	describe('getAllAllowlistedDomains()', function() {
 		var options = {
-			limit: 5
+			limit: 5,
 		};
 
-		var testWhitelistQS = {
+		var testAllowlistQS = {
 			qs: {
-				limit: 5
-			}
+				limit: 5,
+			},
 		};
 
-		it('should make GET request to get all collaboration whitelists info when called', function() {
+		it('should make GET request to get all collaboration allowlists info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get')
-				.withArgs('/collaboration_whitelist_entries', testWhitelistQS)
+			sandbox
+				.mock(boxClientFake)
+				.expects('get')
+				.withArgs('/collaboration_whitelist_entries', testAllowlistQS)
 				.returns(Promise.resolve());
-			collaborationWhitelist.getAllWhitelistedDomains(options);
+			collaborationAllowlist.getAllAllowlistedDomains(options);
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
-			collaborationWhitelist.getAllWhitelistedDomains(options);
+			collaborationAllowlist.getAllAllowlistedDomains(options);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborationWhitelist.getAllWhitelistedDomains(options, function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
+			collaborationAllowlist.getAllAllowlistedDomains(
+				options,
+				function(err, data) {
+					assert.ifError(err);
+					assert.equal(data, response);
+					done();
+				}
+			);
 		});
 
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return collaborationWhitelist.getAllWhitelistedDomains(options)
+			return collaborationAllowlist
+				.getAllAllowlistedDomains(options)
 				.then(data => assert.equal(data, response));
 		});
 
-		it('should make GET request to get all collaboration whitelists info with no params when called', function() {
+		it('should make GET request to get all collaboration allowlists info with no params when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get')
+			sandbox
+				.mock(boxClientFake)
+				.expects('get')
 				.withArgs('/collaboration_whitelist_entries')
 				.returns(Promise.resolve());
-			collaborationWhitelist.getAllWhitelistedDomains();
+			collaborationAllowlist.getAllAllowlistedDomains();
 		});
 	});
 
@@ -235,32 +276,36 @@ describe('CollaborationWhitelist', function() {
 			body: {
 				user: {
 					type: 'user',
-					id: USER_ID
-				}
-			}
+					id: USER_ID,
+				},
+			},
 		};
 
-		it('should make POST request to create collaboration whitelist info for a user when called', function() {
+		it('should make POST request to create collaboration allowlist info for a user when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post')
+			sandbox
+				.mock(boxClientFake)
+				.expects('post')
 				.withArgs('/collaboration_whitelist_exempt_targets', expectedParams)
 				.returns(Promise.resolve());
-			collaborationWhitelist.addExemption(USER_ID);
+			collaborationAllowlist.addExemption(USER_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
-			collaborationWhitelist.addExemption(USER_ID);
+			collaborationAllowlist.addExemption(USER_ID);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborationWhitelist.addExemption(USER_ID, function(err, data) {
+			collaborationAllowlist.addExemption(USER_ID, function(err, data) {
 				assert.ifError(err);
 				assert.equal(data, response);
 				done();
@@ -271,80 +316,103 @@ describe('CollaborationWhitelist', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
-			return collaborationWhitelist.addExemption(USER_ID)
+			return collaborationAllowlist
+				.addExemption(USER_ID)
 				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('getExemption()', function() {
-		it('should make GET request to get collaboration whitelist info for a user when called', function() {
+		it('should make GET request to get collaboration allowlist info for a user when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get')
-				.withArgs('/collaboration_whitelist_exempt_targets/5678', testParamsWithQs)
+			sandbox
+				.mock(boxClientFake)
+				.expects('get')
+				.withArgs(
+					'/collaboration_whitelist_exempt_targets/5678',
+					testParamsWithQs
+				)
 				.returns(Promise.resolve());
-			collaborationWhitelist.getExemption(USER_COLLABORATION_WHITELIST_ID, testQS);
+			collaborationAllowlist.getExemption(
+				USER_COLLABORATION_ALLOWLIST_ID,
+				testQS
+			);
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
-			collaborationWhitelist.getExemption(USER_COLLABORATION_WHITELIST_ID, testQS);
+			collaborationAllowlist.getExemption(
+				USER_COLLABORATION_ALLOWLIST_ID,
+				testQS
+			);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborationWhitelist.getExemption(USER_COLLABORATION_WHITELIST_ID, testQS, function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
+			collaborationAllowlist.getExemption(
+				USER_COLLABORATION_ALLOWLIST_ID,
+				testQS,
+				function(err, data) {
+					assert.ifError(err);
+					assert.equal(data, response);
+					done();
+				}
+			);
 		});
 
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return collaborationWhitelist.getExemption(USER_COLLABORATION_WHITELIST_ID, testQS)
+			return collaborationAllowlist
+				.getExemption(USER_COLLABORATION_ALLOWLIST_ID, testQS)
 				.then(data => assert.equal(data, response));
 		});
 	});
 
 	describe('getAllExemptions()', function() {
 		var options = {
-			limit: 5
+			limit: 5,
 		};
 
-		var testWhitelistQS = {
+		var testAllowlistQS = {
 			qs: {
-				limit: 5
-			}
+				limit: 5,
+			},
 		};
 
-		it('should make GET request to get all collaboration whitelists info when called', function() {
+		it('should make GET request to get all collaboration allowlists info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get')
-				.withArgs('/collaboration_whitelist_exempt_targets', testWhitelistQS)
+			sandbox
+				.mock(boxClientFake)
+				.expects('get')
+				.withArgs('/collaboration_whitelist_exempt_targets', testAllowlistQS)
 				.returns(Promise.resolve());
-			collaborationWhitelist.getAllExemptions(options);
+			collaborationAllowlist.getAllExemptions(options);
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
-			collaborationWhitelist.getAllExemptions(options);
+			collaborationAllowlist.getAllExemptions(options);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborationWhitelist.getAllExemptions(options, function(err, data) {
+			collaborationAllowlist.getAllExemptions(options, function(err, data) {
 				assert.ifError(err);
 				assert.equal(data, response);
 				done();
@@ -355,51 +423,62 @@ describe('CollaborationWhitelist', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
-			return collaborationWhitelist.getAllExemptions(options)
+			return collaborationAllowlist
+				.getAllExemptions(options)
 				.then(data => assert.equal(data, response));
 		});
 
-		it('should make GET request to get all collaboration whitelists info when called', function() {
+		it('should make GET request to get all collaboration allowlists info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('get')
+			sandbox
+				.mock(boxClientFake)
+				.expects('get')
 				.withArgs('/collaboration_whitelist_exempt_targets')
 				.returns(Promise.resolve());
-			collaborationWhitelist.getAllExemptions();
+			collaborationAllowlist.getAllExemptions();
 		});
 	});
 
 	describe('removeExemption()', function() {
-		it('should make DELETE request to update user collaboration whitelist info when called', function() {
+		it('should make DELETE request to update user collaboration allowlist info when called', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('del')
+			sandbox
+				.mock(boxClientFake)
+				.expects('del')
 				.withArgs('/collaboration_whitelist_exempt_targets/5678', null);
-			collaborationWhitelist.removeExemption(USER_COLLABORATION_WHITELIST_ID);
+			collaborationAllowlist.removeExemption(USER_COLLABORATION_ALLOWLIST_ID);
 		});
 
 		it('should wrap with default handler when called', function() {
 			sandbox.stub(boxClientFake, 'del');
-			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+			sandbox
+				.mock(boxClientFake)
+				.expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.del)
 				.returnsArg(0);
-			collaborationWhitelist.removeExemption(USER_COLLABORATION_WHITELIST_ID);
+			collaborationAllowlist.removeExemption(USER_COLLABORATION_ALLOWLIST_ID);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			collaborationWhitelist.removeExemption(USER_COLLABORATION_WHITELIST_ID, function(err, data) {
-				assert.ifError(err);
-				assert.equal(data, response);
-				done();
-			});
+			collaborationAllowlist.removeExemption(
+				USER_COLLABORATION_ALLOWLIST_ID,
+				function(err, data) {
+					assert.ifError(err);
+					assert.equal(data, response);
+					done();
+				}
+			);
 		});
 
 		it('should return promise resolving to results when called', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
-			return collaborationWhitelist.removeExemption(USER_COLLABORATION_WHITELIST_ID)
+			return collaborationAllowlist
+				.removeExemption(USER_COLLABORATION_ALLOWLIST_ID)
 				.then(data => assert.equal(data, response));
 		});
 	});
