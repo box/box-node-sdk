@@ -4841,6 +4841,50 @@ describe('Endpoint', function() {
 					);
 			});
 		});
+
+		describe('getFilesUnderRetentionForAssignment()', function() {
+			it('should make GET call to retrieve files under retention for assignment', function() {
+
+				var assignmentID = '444444',
+					fixture = getFixture('retention-policies/get_files_under_retention_200');
+
+				apiMock.get(`/2.0/retention_policy_assignments/${assignmentID}/files_under_retention`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.getFilesUnderRetentionForAssignment(assignmentID)
+					.then(files => assert.deepEqual(files, JSON.parse(fixture)));
+			});
+		});
+
+		describe('getFileVersionsUnderRetentionForAssignment()', function() {
+			it('should make GET call to retrieve file versions under retention for assignment', function() {
+
+				var assignmentID = '444444',
+					fixture = getFixture('retention-policies/get_file_versions_under_retention_200');
+
+				apiMock.get(`/2.0/retention_policy_assignments/${assignmentID}/file_versions_under_retention`)
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+
+				return basicClient.retentionPolicies.getFileVersionsUnderRetentionForAssignment(assignmentID)
+					.then(files => assert.deepEqual(files, JSON.parse(fixture)));
+			});
+		});
 	});
 
 	describe('Search', function() {
