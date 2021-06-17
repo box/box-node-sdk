@@ -5,7 +5,6 @@
 import assert = require('assert');
 import * as https from 'https';
 import * as url from 'url';
-import ProxyAgent = require('proxy-agent');
 
 // ------------------------------------------------------------------------------
 // Requirements
@@ -199,6 +198,7 @@ function updateRequestAgent(
 		Required<Pick<UserConfigurationOptions, 'proxy'>>
 ) {
 	if (params.proxy.url) {
+		const ProxyAgent = require('proxy-agent');
 		params.request.agentClass = ProxyAgent;
 		params.request.agentOptions = Object.assign(
 			{},
