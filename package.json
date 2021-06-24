@@ -1,86 +1,88 @@
 {
-  "name": "box-node-sdk",
-  "author": "Box <oss@box.com>",
-  "version": "1.37.2",
-  "description": "Official SDK for Box Plaform APIs",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/box/box-node-sdk.git"
-  },
-  "keywords": [
-    "box",
-    "platform",
-    "api",
-    "apis",
-    "upload",
-    "download",
-    "sdk"
-  ],
-  "engines": {
-    "node": ">= 4.0.0"
-  },
-  "main": "./lib/box-node-sdk.js",
-  "scripts": {
-    "test": "node Makefile.js",
-    "build": "node Makefile.js build",
-    "lint": "node Makefile.js lint",
-    "docs": "node Makefile.js docs",
-    "docs-dev": "node Makefile.js docsDev",
-    "deps": "npm prune && npm install",
-    "patch": "node Makefile.js patch",
-    "minor": "node Makefile.js minor",
-    "major": "node Makefile.js major"
-  },
-  "dependencies": {
-    "@types/bluebird": "^3.5.35",
-    "@types/node": "^15.3.1",
-    "ajv": "^6.12.3",
-    "bluebird": "^3.7.1",
-    "http-status": "^1.4.1",
-    "jsonwebtoken": "^8.5.1",
-    "merge-options": "^1.0.1",
-    "promise-queue": "^2.2.3",
-    "proxy-agent": "^4.0.0",
-    "request": "^2.88.0",
-    "url-template": "^2.0.8",
-    "uuid": "^3.3.3"
-  },
-  "devDependencies": {
-    "@types/jsonwebtoken": "^8.5.1",
-    "@types/promise-queue": "^2.2.0",
-    "@types/request": "^2.48.5",
-    "@types/url-template": "^2.0.28",
-    "@types/uuid": "^8.3.0",
-    "chai": "^4.2.0",
-    "coveralls": "^3.1.0",
-    "eslint": "^4.19.1",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-unicorn": "^4.0.3",
-    "istanbul": "^0.4.3",
-    "jsdoc": "^3.6.3",
-    "jsonlint": "^1.6.3",
-    "jsonlint2": "^1.7.1",
-    "leche": "^2.3.0",
-    "mocha": "^6.0.0",
-    "mockery": "^2.1.0",
-    "nock": "^9.6.1",
-    "np": "^7.2.0",
-    "npm-force-resolutions": "0.0.3",
-    "npm-upgrade": "^3.0.0",
-    "nyc": "^14.0.0",
-    "shelljs": "^0.8.3",
-    "shelljs-nodecli": "^0.1.1",
-    "sinon": "^7.5.0",
-    "typescript": "^4.2.4"
-  },
-  "files": [
-    "config",
-    "lib"
-  ],
-  "resolutions": {
-    "handlebars": "4.5.3",
-    "minimist": "1.2.5"
-  }
+	"name": "box-node-sdk",
+	"author": "Box <oss@box.com>",
+	"version": "1.37.2",
+	"description": "Official SDK for Box Plaform APIs",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/box/box-node-sdk.git"
+	},
+	"keywords": [
+		"box",
+		"platform",
+		"api",
+		"apis",
+		"upload",
+		"download",
+		"sdk"
+	],
+	"engines": {
+		"node": ">= 4.0.0"
+	},
+	"main": "./lib/box-node-sdk.js",
+	"scripts": {
+		"test": "node Makefile.js",
+		"build": "node Makefile.js build",
+		"lint": "node Makefile.js lint",
+		"docs": "node Makefile.js docs",
+		"docs-dev": "node Makefile.js docsDev",
+		"typedoc": "typedoc",
+		"deps": "npm prune && npm install",
+		"patch": "node Makefile.js patch",
+		"minor": "node Makefile.js minor",
+		"major": "node Makefile.js major"
+	},
+	"dependencies": {
+		"@types/bluebird": "^3.5.35",
+		"@types/node": "^15.3.1",
+		"ajv": "^6.12.3",
+		"bluebird": "^3.7.1",
+		"http-status": "^1.4.1",
+		"jsonwebtoken": "^8.5.1",
+		"merge-options": "^1.0.1",
+		"promise-queue": "^2.2.3",
+		"proxy-agent": "^4.0.0",
+		"request": "^2.88.0",
+		"url-template": "^2.0.8",
+		"uuid": "^3.3.3"
+	},
+	"devDependencies": {
+		"@types/jsonwebtoken": "^8.5.1",
+		"@types/promise-queue": "^2.2.0",
+		"@types/request": "^2.48.5",
+		"@types/url-template": "^2.0.28",
+		"@types/uuid": "^8.3.0",
+		"chai": "^4.2.0",
+		"coveralls": "^3.1.0",
+		"eslint": "^4.19.1",
+		"eslint-plugin-node": "^6.0.1",
+		"eslint-plugin-promise": "^3.8.0",
+		"eslint-plugin-unicorn": "^4.0.3",
+		"istanbul": "^0.4.3",
+		"jsdoc": "^3.6.3",
+		"jsonlint": "^1.6.3",
+		"jsonlint2": "^1.7.1",
+		"leche": "^2.3.0",
+		"mocha": "^6.0.0",
+		"mockery": "^2.1.0",
+		"nock": "^9.6.1",
+		"np": "^7.2.0",
+		"npm-force-resolutions": "0.0.3",
+		"npm-upgrade": "^3.0.0",
+		"nyc": "^14.0.0",
+		"shelljs": "^0.8.3",
+		"shelljs-nodecli": "^0.1.1",
+		"sinon": "^7.5.0",
+		"typedoc": "^0.21.0",
+		"typescript": "^4.2.4"
+	},
+	"files": [
+		"config",
+		"lib"
+	],
+	"resolutions": {
+		"handlebars": "4.5.3",
+		"minimist": "1.2.5"
+	}
 }

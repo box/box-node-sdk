@@ -10,7 +10,7 @@ import { EventEmitter } from 'events';
 import * as qs from 'querystring';
 import AnonymousAPISession = require('./sessions/anonymous-session');
 import APIRequestManager = require('./api-request-manager');
-import BoxClient = require('./box-client');
+import BoxClient from './box-client';
 import TokenManager = require('./token-manager');
 
 var Config = require('./util/config'),

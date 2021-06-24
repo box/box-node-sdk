@@ -1,0 +1,4 @@
+{
+	"entryPoints": ["src/box-node-sdk.ts", "src/box-client.ts"],
+	"out": "docs/typedoc"
+}
