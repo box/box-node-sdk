@@ -21,12 +21,12 @@ import getRetryTimeout from './util/exponential-backoff';
 // Typedefs and Callbacks
 // ------------------------------------------------------------------------------
 
+// @NOTE(fschott) 08-19-2014: We cannot return the request/response objects directly because they contain loads of extra
+// information, unnecessary bloat, circular dependencies, and cause an infinite loop when stringifying.
 /**
  * The API response object includes information about the request made and its response. The information attached is a subset
  * of the information returned by the request module, which is too large and complex to be safely handled (contains circular
  * references, errors on serialization, etc.)
- * @NOTE(fschott) 08-19-2014: We cannot return the request/response objects directly because they contain loads of extra
- *  information, unnecessary bloat, circular dependencies, and cause an infinite loop when stringifying.
  *
  * @typedef {Object} APIRequest~ResponseObject
  * @property {APIRequest~RequestObject} request Information about the request that generated this response
@@ -43,12 +43,12 @@ type APIRequestResponseObject = {
 	body?: object | Buffer | string;
 };
 
+// @NOTE(fschott) 08-19-2014: We cannot return the request/response objects directly because they contain loads of extra
+// information, unnecessary bloat, circular dependencies, and cause an infinite loop when stringifying.
 /**
  * The API request object includes information about the request made. The information attached is a subset of the information
  * of a request module instance, which is too large and complex to be safely handled (contains circular references, errors on
  * serialization, etc.).
- * @NOTE(fschott) 08-19-2014: We cannot return the request/response objects directly because they contain loads of extra
- *  information, unnecessary bloat, circular dependencies, and cause an infinite loop when stringifying.
  *
  * @typedef {Object} APIRequest~RequestObject
  * @property {Object} uri Information about the request, including host, path, and the full 'href' url

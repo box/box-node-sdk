@@ -52,6 +52,7 @@
     "@types/request": "^2.48.5",
     "@types/url-template": "^2.0.28",
     "@types/uuid": "^8.3.0",
+    "better-docs": "^2.3.2",
     "chai": "^4.2.0",
     "coveralls": "^3.1.0",
     "eslint": "^4.19.1",
