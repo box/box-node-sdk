@@ -247,7 +247,7 @@ class BoxSDKNode extends EventEmitter {
 	 * and can refresh them automatically if the access token expires. If a central data-store is given, the session
 	 * can read & write tokens to it.
 	 *
-	 * @NOTE: If tokenInfo or tokenStore are formatted incorrectly, this method will throw an error. If you
+	 * NOTE: If tokenInfo or tokenStore are formatted incorrectly, this method will throw an error. If you
 	 * haven't explicitly created either of these objects or are otherwise not completly confident in their validity,
 	 * you should wrap your call to getPersistentClient in a try-catch to handle any potential errors.
 	 *

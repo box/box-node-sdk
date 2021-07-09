@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: managers/search.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: managers/search.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Manager for the Box Search Resource
+ */
+
+// -----------------------------------------------------------------------------
+// Requirements
+// -----------------------------------------------------------------------------
+
+import { Promise } from 'bluebird';
+import BoxClient from '../box-client';
+import urlPath from '../util/url-path';
+
+// -----------------------------------------------------------------------------
+// Typedefs
+// -----------------------------------------------------------------------------
+
+/**
+ * Search metadata filter
+ * @typedef {Object} SearchMetadataFilter
+ * @property {string} templateKey The template to filter against
+ * @property {string} scope The scope of the template, e.g. 'global' or 'enterprise'
+ * @property {Object} filters Key/value filters against individual metadata template properties
+ */
+type SearchMetadataFilter = {
+	templateKey: string;
+	scope: string;
+	filters: Record&lt;string, any>;
+};
+
+/**
+ * Valid search scopes
+ * @readonly
+ * @enum {SearchScope}
+ */
+enum SearchScope {
+	USER = 'user_content',
+	ENTERPRISE = 'enterprise_content',
+}
+
+/** @typedef {string} SearchTrashContent */
+type SearchTrashContent = string;
+
+// -----------------------------------------------------------------------------
+// Private
+// -----------------------------------------------------------------------------
+
+var API_PATHS_SEARCH = '/search';
+
+// -----------------------------------------------------------------------------
+// Public
+// -----------------------------------------------------------------------------
+
+/**
+ * Simple manager for interacting with the search endpoints and actions.
+ *
+ * @constructor
+ * @param {BoxClient} client - The Box API Client that is responsible for making calls to the API
+ * @returns {void}
+ */
+class Search {
+	client: BoxClient;
+	scopes!: typeof SearchScope;
+
+	constructor(client: BoxClient) {
+		this.client = client;
+	}
+
+	/**
+	 * Searches Box for the given query.
+	 *
+	 * @param {string} searchString - The query string to use for search
+	 * @param {Object} [options] - Additional search filters. Can be left null in most cases.
+	 * @param {SearchScope} [options.scope] - The scope on which you want search. Can be user_content for a search limited to the current user or enterprise_content to search an entire enterprise
+	 * @param {string} [options.file_extensions] - Single or comma-delimited list of file extensions to filter against
+	 * @param {string} [options.created_at_range] - Date range for filtering on item creation time, e.g. '2014-05-15T13:35:01-07:00,2014-05-17T13:35:01-07:00'
+	 * @param {string} [options.updated_at_range] - Date range for filtering on item update time, e.g. '2014-05-15T13:35:01-07:00,2014-05-17T13:35:01-07:00'
+	 * @param {string} [options.size_range] - Range of item sizes (in bytes) to filter on, as lower_bound,upper_bound.  Either bound can be ommitted, e.g. ',100000' for &lt;= 100KB
+	 * @param {string} [options.owner_user_ids] - Comma-delimited list of user IDs to filter item owner against
+	 * @param {string} [options.ancestor_folder_ids] - Comma-delimited list of folder IDs, search results will contain only items in these folders (and folders within them)
+	 * @param {string} [options.content_types] - Query within specified comma-delimited fields. The types can be name, description, file_content, comments, or tags
+	 * @param {string} [options.type] - The type of objects you want to include in the search results. The type can be file, folder, or web_link
+	 * @param {string} [options.trash_content=non_trashed_only] - Controls whether to search in the trash. The value can be trashed_only or non_trashed_only
+	 * @param {SearchMetadataFilter[]} [options.mdfilters] - Searches for objects with a specific metadata object association.  Searches with the this parameter do not require a query string
+	 * @param {boolean} [options.include_recent_shared_links] - Determines whether to include items accessible only via shared link in the response.
+	 * @param {string} [options.fields] - Comma-delimited list of fields to be included in the response
+	 * @param {int} [options.limit=30] - The number of search results to return, max 200
+	 * @param {int} [options.offset=0] - The search result at which to start the response, must be a multiple of limit
+	 * @param {string} [options.sort] - The field on which the results should be sorted, e.g. "modified_at"
+	 * @param {string} [options.direction] - The sort direction: "ASC" for ascending and "DESC" for descending
+	 * @param {APIRequest~Callback} [callback] - passed the new comment data if it was posted successfully
+	 * @returns {Promise&lt;Object>} A promise resolving to the collection of search results
+	 */
+	query(
+		searchString: string,
+		options?: {
+			scope?: SearchScope;
+			file_extensions?: string;
+			created_at_range?: string;
+			updated_at_range?: string;
+			size_range?: string;
+			owner_user_ids?: string;
+			ancestor_folder_ids?: string;
+			content_types?: string;
+			type?: string;
+			trash_content?: string;
+			mdfilters?: SearchMetadataFilter[];
+			include_recent_shared_links?: boolean;
+			fields?: string;
+			limit?: number;
+			offset?: number;
+			sort?: string;
+			direction?: string;
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(API_PATHS_SEARCH),
+			qs = options || ({} as Record&lt;string, any>);
+
+		qs.query = searchString;
+
+		if (qs.mdfilters) {
+			if (Array.isArray(qs.mdfilters)) {
+				qs.mdfilters = JSON.stringify(qs.mdfilters);
+			} else {
+				return Promise.reject(
+					new Error('Invalid mdfilters parameter: must be a valid array')
+				).asCallback(callback);
+			}
+		}
+
+		var params = {
+			qs,
+		};
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+}
+
+/**
+ * Valid search scopes
+ * @readonly
+ * @enum {SearchScope}
+ */
+Search.prototype.scopes = SearchScope;
+
+export = Search;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jul 07 2021 19:56:20 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
