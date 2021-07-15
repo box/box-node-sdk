@@ -136,6 +136,7 @@ Groups can also be added as collaborators by providing the group ID to
 [`collaborations.createWithGroupID(groupID, itemID, role, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Collaborations.html#createWithGroupID).
 All members of the group will receive the same role and permissions.
 
+<!-- sample post_collaborations group -->
 ```js
 client.collaborations.createWithGroupID('56473', '987654', client.collaborationRoles.UPLOADER)
 	.then(collaboration => {

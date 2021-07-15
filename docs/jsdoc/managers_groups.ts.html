@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: managers/groups.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: managers/groups.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Manager for the Groups resource
+ * @author mwiller
+ */
+
+// -----------------------------------------------------------------------------
+// Requirements
+// -----------------------------------------------------------------------------
+
+import BoxClient from '../box-client';
+import urlPath from '../util/url-path';
+
+// -----------------------------------------------------------------------------
+// Typedefs
+// -----------------------------------------------------------------------------
+
+/**
+ * Enum of valid access levels for groups, which are used to specify who can
+ * perform certain actions on the group.
+ * @enum {GroupAccessLevel}
+ */
+enum GroupAccessLevel {
+	ADMINS = 'admins_only',
+	MEMBERS = 'admins_and_members',
+	ALL_USERS = 'all_managed_users',
+}
+
+/**
+ * Enum of valid user roles within a group
+ * @enum {GroupUserRole}
+ */
+enum GroupUserRole {
+	MEMBER = 'member',
+	ADMIN = 'admin',
+}
+
+// -----------------------------------------------------------------------------
+// Private
+// -----------------------------------------------------------------------------
+
+const BASE_PATH = '/groups',
+	MEMBERSHIPS_PATH = '/group_memberships',
+	MEMBERSHIPS_SUBRESOURCE = 'memberships',
+	COLLABORATIONS_SUBRESOURCE = 'collaborations';
+
+// -----------------------------------------------------------------------------
+// Public
+// -----------------------------------------------------------------------------
+
+/**
+ * Simple manager for interacting with all 'Groups' endpoints and actions.
+ *
+ * @constructor
+ * @param {BoxClient} client - The Box API Client that is responsible for making calls to the API
+ * @returns {void}
+ */
+class Groups {
+	client: BoxClient;
+	accessLevels!: typeof GroupAccessLevel;
+	userRoles!: typeof GroupUserRole;
+
+	constructor(client: BoxClient) {
+		this.client = client;
+	}
+
+	/**
+	 * Used to create a new group
+	 *
+	 * API Endpoint: '/groups'
+	 * Method: POST
+	 *
+	 * @param {string} name - The name for the new group
+	 * @param {Object} [options] - Additional parameters
+	 * @param {string} [options.provenance] - Used to track the external source where the group is coming from
+	 * @param {string} [options.external_sync_identifier] - Used as a group identifier for groups coming from an external source
+	 * @param {string} [options.description] - Description of the group
+	 * @param {GroupAccessLevel} [options.invitability_level] - Specifies who can invite this group to collaborate on folders
+	 * @param {GroupAccessLevel} [options.member_viewability_level] - Specifies who can view the members of this group
+	 * @param {Function} [callback] - Passed the new group object if it was created successfully, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the new group object
+	 */
+	create(
+		name: string,
+		options?: {
+			provenance?: string;
+			external_sync_identifier?: string;
+			description?: string;
+			invitability_level?: GroupAccessLevel;
+			member_viewability_level?: GroupAccessLevel;
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(BASE_PATH),
+			params: Record&lt;string, any> = {
+				body: options || {},
+			};
+
+		params.body.name = name;
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Used to fetch information about a group
+	 *
+	 * API Endpoint: '/groups/:groupID'
+	 * Method: GET
+	 *
+	 * @param {string} groupID - The ID of the group to retrieve
+	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+	 * @param {Function} [callback] - Passed the group object if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the group object
+	 */
+	get(groupID: string, options?: Record&lt;string, any>, callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, groupID),
+			params = {
+				qs: options,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Used to update or modify a group object
+	 *
+	 * API Endpoint: '/groups/:groupID'
+	 * Method: PUT
+	 *
+	 * @param {string} groupID - The ID of the group to update
+	 * @param {Object} updates - Group fields to update
+	 * @param {Function} [callback] - Passed the updated group object if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the updated group object
+	 */
+	update(groupID: string, updates?: Record&lt;string, any>, callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, groupID),
+			params = {
+				body: updates,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.put)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Delete a group
+	 *
+	 * API Endpoint: '/groups/:groupID'
+	 * Method: DELETE
+	 *
+	 * @param {string} groupID - The ID of the group to delete
+	 * @param {Function} [callback] - Passed nothing if successful, error otherwise
+	 * @returns {Promise&lt;void>} A promise resolving to nothing
+	 */
+	delete(groupID: string, callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, groupID);
+
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			null,
+			callback
+		);
+	}
+
+	/**
+	 * Add a user to a group, which creates a membership record for the user
+	 *
+	 * API Endpoint: '/group_memberships'
+	 * Method: POST
+	 *
+	 * @param {string} groupID - The ID of the group to add the user to
+	 * @param {string} userID - The ID of the user to add the the group
+	 * @param {Object} [options] - Optional parameters for adding the user, can be left null in most cases
+	 * @param {GroupUserRole} [options.role] - The role of the user in the group
+	 * @param {Function} [callback] - Passed the membership record if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the new membership object
+	 */
+	addUser(
+		groupID: string,
+		userID: string,
+		options?: {
+			role?: GroupUserRole;
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(MEMBERSHIPS_PATH),
+			params = {
+				body: {
+					user: {
+						id: userID,
+					},
+					group: {
+						id: groupID,
+					},
+				},
+			};
+
+		Object.assign(params.body, options);
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Fetch a specific membership record, which shows that a given user is a member
+	 * of some group.
+	 *
+	 * API Endpoint: '/group_memberships/:membershipID'
+	 * Method: GET
+	 *
+	 * @param {string} membershipID - The ID of the membership to fetch
+	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+	 * @param {Function} [callback] - Passed the membership record if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the membership object
+	 */
+	getMembership(
+		membershipID: string,
+		options?: Record&lt;string, any>,
+		callback?: Function
+	) {
+		var apiPath = urlPath(MEMBERSHIPS_PATH, membershipID),
+			params = {
+				qs: options,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Used to update or modify a group object
+	 *
+	 * API Endpoint: '/group_memberships/:membershipID'
+	 * Method: PUT
+	 *
+	 * @param {string} membershipID - The ID of the membership to update
+	 * @param {Object} options - Membership record fields to update
+	 * @param {Function} [callback] - Passed the updated membership object if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the updated membership object
+	 */
+	updateMembership(
+		membershipID: string,
+		options: Record&lt;string, any>,
+		callback?: Function
+	) {
+		var apiPath = urlPath(MEMBERSHIPS_PATH, membershipID),
+			params = {
+				body: options,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.put)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Used to remove a group membership
+	 *
+	 * API Endpoint: '/group_memberships/:membershipID'
+	 * Method: DELETE
+	 *
+	 * @param {string} membershipID - The ID of the membership to be removed
+	 * @param {Function} [callback] - Passed nothing if successful, error otherwise
+	 * @returns {Promise&lt;void>} A promise resolving to nothing
+	 */
+	removeMembership(membershipID: string, callback?: Function) {
+		var apiPath = urlPath(MEMBERSHIPS_PATH, membershipID);
+
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			null,
+			callback
+		);
+	}
+
+	/**
+	 * Retreieve a list of memberships for the group, which show which users
+	 * belong to the group
+	 *
+	 * API Endpoint: '/groups/:groupID/memberships'
+	 * Method: GET
+	 *
+	 * @param {string} groupID - The ID of the group to get memberships for
+	 * @param {Object} [options] - Optional parameters, can be left null in most cases
+	 * @param {int} [options.limit] - The number of memberships to retrieve
+	 * @param {int} [options.offset] - Paging marker, retrieve records starting at this position in the list
+	 * @param {Function} [callback] - Passed a list of memberships if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the collection of memberships
+	 */
+	getMemberships(
+		groupID: string,
+		options?: {
+			limit?: number;
+			offset?: number;
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(BASE_PATH, groupID, MEMBERSHIPS_SUBRESOURCE),
+			params = {
+				qs: options,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Retreieve a list of groups in the caller's enterprise.  This ability is
+	 * restricted to certain users with permission to view groups.
+	 *
+	 * API Endpoint: '/groups'
+	 * Method: GET
+	 *
+	 * @param {Object} [options] - Optional parameters, can be left null in most cases
+	 * @param {string} [options.filter_term] - Limits the results to only groups whose name starts with the search term
+	 * @param {int} [options.limit] - The number of memberships to retrieve
+	 * @param {int} [options.offset] - Paging marker, retrieve records starting at this position in the list
+	 * @param {Function} [callback] - Passed a list of groups if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the collection of groups
+	 */
+	getAll(
+		options?: {
+			filter_term?: string;
+			limit?: number;
+			offset?: number;
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(BASE_PATH),
+			params = {
+				qs: options,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Retreieve a list of collaborations for the group, which show which items the
+	 * group has access to.
+	 *
+	 * API Endpoint: '/groups/:groupID/collaborations'
+	 * Method: GET
+	 *
+	 * @param {string} groupID - The ID of the group to get collaborations for
+	 * @param {Object} [options] - Optional parameters, can be left null in most cases
+	 * @param {int} [options.limit] - The number of memberships to retrieve
+	 * @param {int} [options.offset] - Paging marker, retrieve records starting at this position in the list
+	 * @param {Function} [callback] - Passed a list of collaborations if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the collection of collaborations for the group
+	 */
+	getCollaborations(
+		groupID: string,
+		options?: {
+			limit?: number;
+			offset?: number;
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(BASE_PATH, groupID, COLLABORATIONS_SUBRESOURCE),
+			params = {
+				qs: options,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+}
+
+/**
+ * Enum of valid access levels for groups, which are used to specify who can
+ * perform certain actions on the group.
+ * @enum {GroupAccessLevel}
+ */
+Groups.prototype.accessLevels = GroupAccessLevel;
+
+/**
+ * Enum of valid user roles within a group
+ * @enum {GroupUserRole}
+ */
+Groups.prototype.userRoles = GroupUserRole;
+
+export = Groups;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jul 07 2021 19:56:20 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

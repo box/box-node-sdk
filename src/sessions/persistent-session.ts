@@ -264,7 +264,7 @@ class PersistentSession {
 	 */
 	exchangeToken(
 		scopes: string | string[],
-		resource: string,
+		resource?: string,
 		options?: {
 			tokenRequestOptions?: TokenRequestOptions;
 		}

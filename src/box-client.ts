@@ -505,9 +505,9 @@ class BoxClient {
 	 */
 	exchangeToken(
 		scopes: string | string[],
-		resource: string,
-		options: Function | object,
-		callback: Function
+		resource?: string,
+		options?: Function | object,
+		callback?: Function
 	) {
 		// Shuffle optional parameters
 		if (typeof options === 'function') {

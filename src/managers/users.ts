@@ -119,9 +119,9 @@ class Users {
 		);
 	}
 
+	// @NOTE(mwiller) 2014-06-10: This does not include their primary email address!
 	/**
 	 * Get all linked email addresses for a user.
-	 * @NOTE(mwiller) 2014-06-10: This does not include their primary email address!
 	 *
 	 * API Endpoint: '/users/:id/email_aliases'
 	 * Method: GET
