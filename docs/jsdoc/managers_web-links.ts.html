@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: managers/web-links.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: managers/web-links.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Manager for the Web Links Resource
+ */
+
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+
+import BoxClient from '../box-client';
+import urlPath from '../util/url-path';
+
+// ------------------------------------------------------------------------------
+// Private
+// ------------------------------------------------------------------------------
+
+const BASE_PATH = '/web_links';
+
+// ------------------------------------------------------------------------------
+// Public
+// ------------------------------------------------------------------------------
+
+/**
+ * Simple manager for interacting with all 'Weblinks' endpoints and actions.
+ *
+ * @constructor
+ * @param {BoxClient} client - The Box API Client that is responsible for making calls to the API
+ * @returns {void}
+ */
+class WebLinks {
+	client: BoxClient;
+
+	constructor(client: BoxClient) {
+		this.client = client;
+	}
+
+	/**
+	 * Creates a web link object within a given folder.
+	 *
+	 * API Endpoint: '/web_links'
+	 * Method: POST
+	 *
+	 * @param {string} url - URL you want the web link to point to. Must include http:// or https://
+	 * @param {string} parentID - The ID of the parent folder where you're creating the web link
+	 * @param {Object} [options] - Additional parameters
+	 * @param {string} [options.name] - Name for the web link. Will default to the URL if empty.
+	 * @param {string} [options.description] - Description of the web link. Will provide more context to users about the web link.
+	 * @param {Function} [callback] - Passed the new web link information if it was acquired successfully, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the created weblink object
+	 */
+	create(
+		url: string,
+		parentID: string,
+		options?: {
+			name?: string;
+			description?: string;
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(BASE_PATH),
+			params = {
+				body: {
+					url,
+					parent: {
+						id: parentID,
+					},
+				},
+			};
+
+		Object.assign(params.body, options);
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Use to get information about the web link.
+	 *
+	 * API Endpoint: '/web_links/:weblinkID'
+	 * Method: GET
+	 *
+	 * @param {string} weblinkID - The Box ID of web link being requested
+	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+	 * @param {Function} [callback] - Passed the web-link information if it was acquired successfully, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the weblink object
+	 */
+	get(weblinkID: string, options?: Record&lt;string, any>, callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, weblinkID),
+			params = {
+				qs: options,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Updates information for a web link.
+	 *
+	 * API Endpoint: '/web_links/:weblinkID'
+	 * Method: PUT
+	 *
+	 * @param {string} weblinkID - The Box ID of the web link being updated
+	 * @param {Object} updates - Fields of the weblink to update
+	 * @param {string} [updates.name] - Name for the web link. Will default to the URL if empty.
+	 * @param {string} [updates.description] - Description of the web link. Will provide more context to users about the web link.
+	 * @param {Function} [callback] - Passed the updated web link information if it was acquired successfully, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the updated web link object
+	 */
+	update(
+		weblinkID: string,
+		updates?: {
+			name?: string;
+			description?: string;
+			collections?: string[];
+		},
+		callback?: Function
+	) {
+		var apiPath = urlPath(BASE_PATH, weblinkID),
+			params = {
+				body: updates,
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.put)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Deletes a web link and moves it to the trash
+	 *
+	 * API Endpoint: '/web_links/:weblinkID'
+	 * Method: DELETE
+	 *
+	 * @param {string} weblinkID - The Box ID of the web link being moved to the trash
+	 * @param {Function} [callback] - Empty body passed if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to nothing
+	 */
+	delete(weblinkID: string, callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, weblinkID);
+
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			null,
+			callback
+		);
+	}
+
+	/**
+	 * Move a web link into a new parent folder.
+	 *
+	 * API Endpoint: '/web_links/:webLinkID'
+	 * Method: PUT
+	 *
+	 * @param {string} webLinkID - The Box ID of the web link being requested
+	 * @param {string} newParentID - The Box ID for the new parent folder. '0' to move to All Files.
+	 * @param {Function} [callback] - Passed the updated web link information if it was acquired successfully
+	 * @returns {Promise&lt;Object>} A promise resolving to the updated web link object
+	 */
+	move(webLinkID: string, newParentID: string, callback?: Function) {
+		var params = {
+			body: {
+				parent: {
+					id: newParentID,
+				},
+			},
+		};
+		var apiPath = urlPath(BASE_PATH, webLinkID);
+		return this.client.wrapWithDefaultHandler(this.client.put)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Copy a web link into a new, different folder
+	 *
+	 * API Endpoint: '/web_links/:webLinkID/copy
+	 * Method: POST
+	 *
+	 * @param {string} webLinkID - The Box ID of the web link being requested
+	 * @param {string} newParentID - The Box ID for the new parent folder. '0' to copy to All Files.
+	 * @param {Object} [options] - Optional parameters for the copy operation, can be left null in most cases
+	 * @param {string} [options.name] - A new name to use if there is an identically-named item in the new parent folder
+	 * @param {Function} [callback] - passed the new web link info if call was successful
+	 * @returns {Promise&lt;Object>} A promise resolving to the new web link object
+	 */
+	copy(
+		webLinkID: string,
+		newParentID: string,
+		options?: {
+			name?: string;
+		},
+		callback?: Function
+	) {
+		options = options || {};
+
+		(options as Record&lt;string, any>).parent = {
+			id: newParentID,
+		};
+
+		var params = {
+			body: options,
+		};
+		var apiPath = urlPath(BASE_PATH, webLinkID, '/copy');
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Add a web link to a given collection
+	 *
+	 * API Endpoint: '/web_links/:webLinkID'
+	 * Method: PUT
+	 *
+	 * @param {string} webLinkID - The web link to add to the collection
+	 * @param {string} collectionID - The collection to add the web link to
+	 * @param {Function} [callback] - Passed the updated web link if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the updated web link object
+	 */
+	addToCollection(
+		webLinkID: string,
+		collectionID: string,
+		callback?: Function
+	) {
+		return this.get(webLinkID, { fields: 'collections' })
+			.then((data: any /* FIXME */) => {
+				var collections = data.collections || [];
+
+				// Convert to correct format
+				collections = collections.map((c: any /* FIXME */) => ({ id: c.id }));
+
+				if (!collections.find((c: any /* FIXME */) => c.id === collectionID)) {
+					collections.push({ id: collectionID });
+				}
+
+				return this.update(webLinkID, { collections });
+			})
+			.asCallback(callback);
+	}
+
+	/**
+	 * Remove a web link from a given collection
+	 *
+	 * API Endpoint: '/web_links/:webLinkID'
+	 * Method: PUT
+	 *
+	 * @param {string} webLinkID - The web link to remove from the collection
+	 * @param {string} collectionID - The collection to remove the web link from
+	 * @param {Function} [callback] - Passed the updated web link if successful, error otherwise
+	 * @returns {Promise&lt;Object>} A promise resolving to the updated web link object
+	 */
+	removeFromCollection(
+		webLinkID: string,
+		collectionID: string,
+		callback?: Function
+	) {
+		return this.get(webLinkID, { fields: 'collections' })
+			.then((data: any /* FIXME */) => {
+				var collections = data.collections || [];
+				// Convert to correct object format and remove the specified collection
+				collections = collections
+					.map((c: any /* FIXME */) => ({ id: c.id }))
+					.filter((c: any /* FIXME */) => c.id !== collectionID);
+
+				return this.update(webLinkID, { collections });
+			})
+			.asCallback(callback);
+	}
+}
+
+export = WebLinks;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jul 07 2021 19:56:20 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
