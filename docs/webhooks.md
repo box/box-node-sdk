@@ -30,7 +30,7 @@ The notification URL must be a valid HTTPS URL that you specify when you create 
 webhook.
 
 The triggerTypes param is an array of strings. Available options are documented here:
-<https://developer.box.com/en/guides/webhooks/manage/triggers/>
+<https://developer.box.com/guides/webhooks/triggers/>
 
 <!-- sample post_webhooks -->
 ```js
