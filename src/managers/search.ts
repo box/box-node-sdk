@@ -80,7 +80,7 @@ class Search {
 	 * @param {string} [options.content_types] - Query within specified comma-delimited fields. The types can be name, description, file_content, comments, or tags
 	 * @param {string} [options.type] - The type of objects you want to include in the search results. The type can be file, folder, or web_link
 	 * @param {string} [options.trash_content=non_trashed_only] - Controls whether to search in the trash. The value can be trashed_only or non_trashed_only
-	 * @param {SearchMetadataFilter[]} [options.mdfilters] - Searches for objects with a specific metadata object association.  Searches with the this parameter do not require a query string
+	 * @param {SearchMetadataFilter[]} [options.mdfilters] - Searches for objects with a specific metadata object association.  Searches with this parameter do not require a query string
 	 * @param {boolean} [options.include_recent_shared_links] - Determines whether to include items accessible only via shared link in the response.
 	 * @param {string} [options.fields] - Comma-delimited list of fields to be included in the response
 	 * @param {int} [options.limit=30] - The number of search results to return, max 200
