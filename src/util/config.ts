@@ -5,6 +5,7 @@
 import assert = require('assert');
 import * as https from 'https';
 import * as url from 'url';
+import { Readable } from 'stream';
 
 // ------------------------------------------------------------------------------
 // Requirements
@@ -213,6 +214,33 @@ function updateRequestAgent(
 	}
 }
 
+/**
+ * Deep freeze an object and all nested objects within it. It doesn't go deep on
+ * Buffers and Readable streams so can be used on objects containing requests.
+ * @param {Object} obj The object to freeze
+ * @returns {Object} The frozen object
+ */
+function deepFreezeWithRequest(obj: any) {
+	Object.freeze(obj);
+
+	Object.getOwnPropertyNames(obj).forEach(function (name) {
+		const prop = obj[name];
+
+		if (
+			prop !== null &&
+			typeof prop === 'object' &&
+			obj.hasOwnProperty(name) &&
+			!Object.isFrozen(prop) &&
+			!(prop instanceof Buffer) &&
+			!(prop instanceof Readable)
+		) {
+			deepFreezeWithRequest(obj[name]);
+		}
+	});
+
+	return obj;
+}
+
 // ------------------------------------------------------------------------------
 // Public
 // ------------------------------------------------------------------------------
@@ -252,7 +280,7 @@ class Config {
 		updateRequestAgent(this._params);
 		Object.assign(this, this._params);
 		// Freeze the object so that configuration options cannot be modified
-		Object.freeze(this);
+		deepFreezeWithRequest(this);
 	}
 
 	/**
