@@ -116,6 +116,56 @@ describe('Config', function() {
 			});
 		});
 
+
+		it('should deeply freeze config object when called', function() {
+			var config = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				request: {
+					json: false,
+				},
+			});
+
+			assert.throws(function() {
+				config.request.json = true;
+			});
+		});
+
+		it('should correctly freeze config objects with Buffers in them', function() {
+			var config = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				appAuth: {
+					keyID: 'fh83745',
+					privateKey: Buffer.from('abc'), // we expect this to not throw because Buffer can't be frozen
+					passphrase: 'Such secrets, wow!',
+				},
+			});
+
+			assert.throws(function() {
+				config.appAuth.privateKey = Buffer.from('abd');
+			});
+		});
+
+		it('should correctly freeze config objects with Streams in them', function() {
+			var stream = new Readable();
+			stream._read = () => { /* empty */ };
+
+			var config = new Config({
+				clientID: 'id',
+				clientSecret: 'secret',
+				request: {
+					body: stream,
+				},
+			});
+
+			config.request.body.on('data', () => { /* empty */ }); // this would throw if the stream was frozen
+
+			assert.throws(function() {
+				config.request.newField = 0;
+			});
+		});
+
 		leche.withData({
 			'missing key ID': [{privateKey: TEST_PRIVATE_KEY, passphrase: TEST_PASSPHRASE}],
 			'missing private key': [{keyID: TEST_KEY_ID, passphrase: TEST_PASSPHRASE}],
