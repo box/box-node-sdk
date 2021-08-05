@@ -1,5 +1,11 @@
 # Changelog
 
+## Next Release
+
+**Bug Fixes:**
+
+- Deeply freeze Config except Buffers and Readable streams ([#651](https://github.com/box/box-node-sdk/pull/651))
+
 ## 1.37.2 (2021-05-20)
 
 **Bug Fixes:**
