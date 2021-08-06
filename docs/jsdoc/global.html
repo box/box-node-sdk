@@ -148,7 +148,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line105">line 105</a>
+        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -1845,6 +1845,166 @@ remain in effect.
     <dd>
         
 <span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deepFreezeWithRequest"><span class="type-signature"></span>deepFreezeWithRequest<span class="signature">(obj)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Deep freeze an object and all nested objects within it. It doesn't go deep on
+Buffers and Readable streams so can be used on objects containing requests.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The object to freeze</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_config.ts.html">util/config.ts</a>, <a href="util_config.ts.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The frozen object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
 
 
     </dd>
@@ -4102,7 +4262,7 @@ references, errors on serialization, etc.)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_config.ts.html">util/config.ts</a>, <a href="util_config.ts.html#line158">line 158</a>
+        <a href="util_config.ts.html">util/config.ts</a>, <a href="util_config.ts.html#line181">line 181</a>
     </li></ul></dd>
     
 
@@ -7393,7 +7553,7 @@ request.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_config.ts.html">util/config.ts</a>, <a href="util_config.ts.html#line175">line 175</a>
+        <a href="util_config.ts.html">util/config.ts</a>, <a href="util_config.ts.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -7495,13 +7655,13 @@ request.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jul 07 2021 19:56:20 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Aug 05 2021 17:53:49 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
