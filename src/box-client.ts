@@ -581,7 +581,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	del(path: string, params: object | null, callback: Function) {
+	del(path: string, params: object | null, callback?: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'DELETE';
 		newParams.url = getFullURL(this._baseURL, path);
