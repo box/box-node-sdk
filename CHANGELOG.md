@@ -2,9 +2,22 @@
 
 ## Next Release
 
+## 1.38.0 (2021-08-05)
+
+**New Features and Enhancements:**
+
+- Add sensitive-language event types for admin invites ([#648](https://github.com/box/box-node-sdk/pull/648))
+- Use BetterDocs to adapt JSDocs to TypeScript ([#646](https://github.com/box/box-node-sdk/pull/646))
+- Change ProxyAgent import to be dynamic ([#641](https://github.com/box/box-node-sdk/pull/641))
+- New API for get files and file versions under retention ([#585](https://github.com/box/box-node-sdk/pull/585))
+
 **Bug Fixes:**
 
 - Deeply freeze Config except Buffers and Readable streams ([#651](https://github.com/box/box-node-sdk/pull/651))
+- Fix a typo in docs of src/managers/search.ts ([#649](https://github.com/box/box-node-sdk/pull/649))
+- Update broken documentation link ([#647](https://github.com/box/box-node-sdk/pull/647))
+- fix type annotations for exchangeToken functions ([#645](https://github.com/box/box-node-sdk/pull/645))
+- Deprecate files getThumbnail API in favor of getRepresentationContent ([#627](https://github.com/box/box-node-sdk/pull/627))
 
 ## 1.37.2 (2021-05-20)
 
