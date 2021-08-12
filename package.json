@@ -24,7 +24,7 @@
 	"scripts": {
 		"test": "node Makefile.js",
 		"build": "node Makefile.js build",
-		"codegen": "ts-node codegen.tsx",
+		"codegen": "ts-node codegen/codegen.tsx",
 		"lint": "node Makefile.js lint",
 		"docs": "node Makefile.js docs",
 		"docs-dev": "node Makefile.js docsDev",

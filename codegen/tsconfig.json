@@ -1,0 +1,4 @@
+{
+	"compilerOptions": { "target": "ES2019", "jsxFactory": "createJsxElement" },
+	"extends": "../tsconfig.json"
+}
