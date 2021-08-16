@@ -81,11 +81,28 @@ export type OpenAPIOperation = {
 	parameters?: Array<{
 		name: string;
 		description: string;
-		in: 'query';
+		in: 'query' | 'path';
 		required: boolean;
 		example: string | number | boolean /* any? */;
-		schema: {
-			type: 'string';
-		};
+		schema: OpenAPISchema;
 	}>;
+};
+
+/**
+ * The Schema Object allows the definition of input and output data types.
+ */
+export type OpenAPISchema = {
+	/**
+	 * The type keyword is fundamental to JSON Schema. It specifies the data type for a schema.
+	 *
+	 * Value MUST be a string. Multiple types via an array are not supported.
+	 */
+	type:
+		| 'string'
+		| 'number'
+		| 'integer'
+		| 'object'
+		| 'array'
+		| 'boolean'
+		| 'null';
 };

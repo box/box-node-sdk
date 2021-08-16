@@ -6,11 +6,30 @@ class SignRequests {
         this.client = client
     }
     /**
+     * Get sign request by ID
+     * Gets a sign request by ID.
+     * @param {object} options
+     * @param {string} options.sign_request_id The ID of the sign request
+     * @param {Function} [callback] Passed the result if succesful, error otherwise
+     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+     */
+    get_sign_requests_id(options: {
+        /**
+         * The ID of the sign request
+         */
+        readonly sign_request_id: string;
+    }, callback?: Function): Promise<object> {
+        const apiPath = urlPath("sign_requests", options.sign_request_id), params = {
+            qs: options
+        };
+        return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+    }
+    /**
      * List sign requests
      * Gets sign requests created by a user.
      * @param {object} [options]
      * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
-     * @param {integer} [options.limit] The maximum number of items to return per page.
+     * @param {number} [options.limit] The maximum number of items to return per page.
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
      */
@@ -25,28 +44,9 @@ class SignRequests {
         /**
          * The maximum number of items to return per page.
          */
-        readonly limit?: integer;
-    }, callback?: Function) {
-        const apiPath = urlPath(BASE_PATH, weblinkId), params = {
-            qs: options
-        };
-        return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
-    }
-    /**
-     * Get sign request by ID
-     * Gets a sign request by ID.
-     * @param {object} options
-     * @param {string} options.sign_request_id The ID of the sign request
-     * @param {Function} [callback] Passed the result if succesful, error otherwise
-     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
-     */
-    get_sign_requests_id(options: {
-        /**
-         * The ID of the sign request
-         */
-        readonly sign_request_id: string;
-    }, callback?: Function) {
-        const apiPath = urlPath(BASE_PATH, weblinkId), params = {
+        readonly limit?: number;
+    }, callback?: Function): Promise<object> {
+        const apiPath = urlPath("sign_requests"), params = {
             qs: options
         };
         return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
@@ -59,10 +59,49 @@ class SignRequests {
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
      */
-    post_sign_requests(options?: {}, callback?: Function) {
-        const apiPath = urlPath(BASE_PATH, weblinkId), params = {
+    post_sign_requests(options?: {}, callback?: Function): Promise<object> {
+        const apiPath = urlPath("sign_requests"), params = {
             qs: options
         };
-        return this.client.wrapWithDefaultHandler(this.client.get)(apiPath, params, callback);
+        return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
+    }
+    /**
+     * Cancel sign request
+     * Cancels a sign request.
+     * @param {object} options
+     * @param {string} options.sign_request_id The ID of the sign request
+     * @param {Function} [callback] Passed the result if succesful, error otherwise
+     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+     */
+    post_sign_requests_id_cancel(options: {
+        /**
+         * The ID of the sign request
+         */
+        readonly sign_request_id: string;
+    }, callback?: Function): Promise<object> {
+        const apiPath = urlPath("sign_requests", options.sign_request_id, "cancel"), params = {
+            qs: options
+        };
+        return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
+    }
+    /**
+     * Resend sign request
+     * Resends a sign request email to all outstanding signers.
+     * @param {object} options
+     * @param {string} options.sign_request_id The ID of the sign request
+     * @param {Function} [callback] Passed the result if succesful, error otherwise
+     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+     */
+    post_sign_requests_id_resend(options: {
+        /**
+         * The ID of the sign request
+         */
+        readonly sign_request_id: string;
+    }, callback?: Function): Promise<object> {
+        const apiPath = urlPath("sign_requests", options.sign_request_id, "resend"), params = {
+            qs: options
+        };
+        return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
     }
 }
+export = SignRequests;

@@ -1,14 +1,18 @@
-import * as ts from 'typescript';
+//
+// NOTE https://ts-ast-viewer.com/
+//
+
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import type { OpenAPI, OpenAPIPathItem } from './openapi';
+import * as ts from 'typescript';
+import type { OpenAPI, OpenAPIPathItem, OpenAPISchema } from './openapi';
 import {
 	BinaryExpression,
 	Block,
 	CallExpression,
 	ClassDeclaration,
 	ConstructorDeclaration,
-	ExpressionStatement,
+	ExportAssignment,
 	Identifier,
 	ImportClause,
 	ImportDeclaration,
@@ -16,6 +20,7 @@ import {
 	JSDocParameterTag,
 	JSDocReturnTag,
 	MethodDeclaration,
+	Null,
 	ObjectLiteralExpression,
 	ParameterDeclaration,
 	PropertyAccessExpression,
@@ -24,7 +29,6 @@ import {
 	PropertySignature,
 	ReturnStatement,
 	StringLiteral,
-	Super,
 	This,
 	TypeLiteralNode,
 	TypeReferenceNode,
@@ -41,63 +45,37 @@ export function createJsxElement(
 	return type(props || {}, ...children);
 }
 
-function makeFactorialFunction() {
-	const functionName = ts.factory.createIdentifier('factorial');
-	const paramName = ts.factory.createIdentifier('n');
-	const parameter = ts.factory.createParameterDeclaration(
-		/*decorators*/ undefined,
-		/*modifiers*/ undefined,
-		/*dotDotDotToken*/ undefined,
-		paramName
-	);
+function createTypeNodeForSchema({
+	spec,
+	schema,
+}: {
+	spec: OpenAPI;
+	schema: OpenAPISchema;
+}) {
+	const { type } = schema;
+	switch (type) {
+		case 'string':
+			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
 
-	const condition = ts.factory.createBinaryExpression(
-		paramName,
-		ts.SyntaxKind.LessThanEqualsToken,
-		ts.factory.createNumericLiteral(1)
-	);
-	const ifBody = ts.factory.createBlock(
-		[ts.factory.createReturnStatement(ts.factory.createNumericLiteral(1))],
-		/*multiline*/ true
-	);
+		case 'number':
+		case 'integer':
+			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword);
 
-	const decrementedArg = ts.factory.createBinaryExpression(
-		paramName,
-		ts.SyntaxKind.MinusToken,
-		ts.factory.createNumericLiteral(1)
-	);
-	const recurse = ts.factory.createBinaryExpression(
-		paramName,
-		ts.SyntaxKind.AsteriskToken,
-		ts.factory.createCallExpression(functionName, /*typeArgs*/ undefined, [
-			decrementedArg,
-		])
-	);
-	const statements = [
-		ts.factory.createIfStatement(condition, ifBody),
-		ts.factory.createReturnStatement(recurse),
-	];
+		case 'object':
+			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword);
 
-	return ts.factory.createFunctionDeclaration(
-		/*decorators*/ undefined,
-		/*modifiers*/ [ts.factory.createToken(ts.SyntaxKind.ExportKeyword)],
-		/*asteriskToken*/ undefined,
-		functionName,
-		/*typeParameters*/ undefined,
-		[parameter],
-		/*returnType*/ ts.factory.createKeywordTypeNode(
-			ts.SyntaxKind.NumberKeyword
-		),
-		ts.factory.createBlock(statements, /*multiline*/ true)
-	);
+		case 'boolean':
+			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword);
+
+		case 'null':
+			return ts.factory.createLiteralTypeNode(<Null />);
+
+		case 'array':
+		default:
+			throw new Error(`Invalid schema type: ${type}`);
+	}
 }
 
-//
-// NOTE https://ts-ast-viewer.com/
-//
-
-// TODO generator should be able to generate any (params) mathod for calling a single endpoint directly
-// types are either translated inline or a separate type is created
 function createMethodForOperation({
 	spec,
 	pathKey,
@@ -110,6 +88,11 @@ function createMethodForOperation({
 	const pathItem = spec.paths[pathKey][verb]!;
 	const parameters = pathItem.parameters || [];
 	const isOptionsRequired = parameters.some((parameter) => parameter.required);
+	const returnType = (
+		<TypeReferenceNode typeName={<Identifier text="Promise" />}>
+			{ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)}
+		</TypeReferenceNode>
+	);
 
 	return [
 		<JSDocComment
@@ -129,7 +112,10 @@ function createMethodForOperation({
 					name={<Identifier text={`options.${parameter.name}`} />}
 					isBracketed={!parameter.required}
 					typeExpression={ts.factory.createJSDocTypeExpression(
-						<TypeReferenceNode typeName={parameter.schema.type} />
+						createTypeNodeForSchema({
+							spec,
+							schema: parameter.schema,
+						})
 					)}
 					comment={parameter.description.replace(/\s+/g, ' ')}
 				/>
@@ -145,11 +131,7 @@ function createMethodForOperation({
 				comment="Passed the result if succesful, error otherwise"
 			/>
 			<JSDocReturnTag
-				typeExpression={ts.factory.createJSDocTypeExpression(
-					ts.factory.createTypeReferenceNode(
-						ts.factory.createIdentifier('Promise<object>')
-					)
-				)}
+				typeExpression={ts.factory.createJSDocTypeExpression(returnType)}
 				comment="A promise resolving to the result or rejecting with an error"
 			/>
 		</JSDocComment>,
@@ -170,9 +152,10 @@ function createMethodForOperation({
 											ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword),
 										]}
 										questionToken={!parameter.required}
-										type={
-											<TypeReferenceNode typeName={parameter.schema.type} />
-										}
+										type={createTypeNodeForSchema({
+											spec,
+											schema: parameter.schema,
+										})}
 									/>,
 								])
 								.flat()}
@@ -185,6 +168,7 @@ function createMethodForOperation({
 					type={<TypeReferenceNode typeName="Function" />}
 				/>,
 			]}
+			type={returnType}
 		>
 			<Block multiLine>
 				<VariableStatement
@@ -195,10 +179,36 @@ function createMethodForOperation({
 								initializer={
 									<CallExpression
 										expression={<Identifier text="urlPath" />}
-										argumentsArray={[
-											<Identifier text="BASE_PATH" />,
-											<Identifier text="weblinkId" />,
-										]}
+										argumentsArray={pathKey
+											.split('/')
+											.filter(Boolean)
+											.map((part) => {
+												if (/^{.+}$/.test(part)) {
+													const param = parameters.find(
+														(parameter) => `{${parameter.name}}` === part
+													);
+													if (!param) {
+														throw new Error(
+															`Uknown param ${part} in path ${pathKey}.`
+														);
+													}
+
+													if (param.in !== 'path') {
+														throw new Error(
+															`Expected param ${part} to be in path not ${param.in}.`
+														);
+													}
+
+													return (
+														<PropertyAccessExpression
+															expression={<Identifier text="options" />}
+															name={<Identifier text={param.name} />}
+														/>
+													);
+												}
+
+												return <StringLiteral text={part} />;
+											})}
 									/>
 								}
 							/>
@@ -239,7 +249,7 @@ function createMethodForOperation({
 												name="client"
 											/>
 										}
-										name="get"
+										name={verb}
 									/>,
 								]}
 							/>
@@ -256,8 +266,6 @@ function createMethodForOperation({
 	];
 }
 
-// create class declaration with methods responsible for different calls
-// take in operation ids as arguments
 function createClassForOperations({
 	spec,
 	operationIds,
@@ -337,17 +345,21 @@ export async function generate(specPath: string) {
 			createClassForOperations({
 				spec,
 				operationIds: [
-					'get_sign_requests',
 					'get_sign_requests_id',
+					'get_sign_requests',
 					'post_sign_requests',
+					'post_sign_requests_id_cancel',
+					'post_sign_requests_id_resend',
 				],
 			}),
-			// makeFactorialFunction(),
+			<ExportAssignment
+				isExportEquals
+				expression={<Identifier text="SignRequests" />}
+			/>,
 		]),
 		resultFile
 	);
 
-	// save file to sign-requests
 	await fs.writeFile(
 		path.join(__dirname, '../src/managers/sign-requests.ts'),
 		result

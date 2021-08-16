@@ -88,6 +88,25 @@ export function ConstructorDeclaration(
 	);
 }
 
+export function ExportAssignment({
+	decorators,
+	modifiers,
+	isExportEquals,
+	expression,
+}: {
+	decorators?: readonly ts.Decorator[];
+	modifiers?: readonly ts.Modifier[];
+	isExportEquals?: boolean;
+	expression: ts.Expression;
+}): ts.ExportAssignment {
+	return ts.factory.createExportAssignment(
+		decorators,
+		modifiers,
+		isExportEquals,
+		expression
+	);
+}
+
 export function ExpressionStatement(
 	{
 		expression,
@@ -221,6 +240,10 @@ export function MethodDeclaration(
 	);
 }
 
+export function Null(): ts.NullLiteral {
+	return ts.factory.createNull();
+}
+
 export function ObjectLiteralExpression(
 	{
 		properties,
@@ -347,10 +370,13 @@ export function ReturnStatement(
 	return ts.factory.createReturnStatement(expression || child);
 }
 
-export function StringLiteral(
-	{ text, isSingleQuote }: { text: string; isSingleQuote?: boolean },
-	child: string
-): ts.StringLiteral {
+export function StringLiteral({
+	text,
+	isSingleQuote,
+}: {
+	text: string;
+	isSingleQuote?: boolean;
+}): ts.StringLiteral {
 	return ts.factory.createStringLiteral(text, isSingleQuote);
 }
 
