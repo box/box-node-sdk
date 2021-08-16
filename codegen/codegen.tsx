@@ -1,6 +1,9 @@
 import * as ts from 'typescript';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import type { OpenAPI, OpenAPIPathItem } from './openapi';
 import {
+	BinaryExpression,
 	Block,
 	CallExpression,
 	ClassDeclaration,
@@ -9,14 +12,25 @@ import {
 	Identifier,
 	ImportClause,
 	ImportDeclaration,
+	JSDocComment,
+	JSDocParameterTag,
+	JSDocReturnTag,
 	MethodDeclaration,
+	ObjectLiteralExpression,
 	ParameterDeclaration,
+	PropertyAccessExpression,
+	PropertyAssignment,
 	PropertyDeclaration,
 	PropertySignature,
+	ReturnStatement,
 	StringLiteral,
 	Super,
+	This,
 	TypeLiteralNode,
 	TypeReferenceNode,
+	VariableDeclaration,
+	VariableDeclarationList,
+	VariableStatement,
 } from './ts-factory';
 
 export function createJsxElement(
@@ -92,23 +106,64 @@ function createMethodForOperation({
 	spec: OpenAPI;
 	pathKey: keyof OpenAPI['paths'];
 	verb: ('get' | 'post') & keyof OpenAPIPathItem;
-}) {
+}): [ts.JSDoc, ts.MethodDeclaration] {
 	const pathItem = spec.paths[pathKey][verb]!;
+	const parameters = pathItem.parameters || [];
+	const isOptionsRequired = parameters.some((parameter) => parameter.required);
 
-	return (
+	return [
+		<JSDocComment
+			comment={[pathItem.summary, pathItem.description]
+				.filter(Boolean)
+				.join('\n')}
+		>
+			<JSDocParameterTag
+				name={<Identifier text="options" />}
+				isBracketed={!isOptionsRequired}
+				typeExpression={ts.factory.createJSDocTypeExpression(
+					ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)
+				)}
+			/>
+			{parameters.map((parameter) => (
+				<JSDocParameterTag
+					name={<Identifier text={`options.${parameter.name}`} />}
+					isBracketed={!parameter.required}
+					typeExpression={ts.factory.createJSDocTypeExpression(
+						<TypeReferenceNode typeName={parameter.schema.type} />
+					)}
+					comment={parameter.description.replace(/\s+/g, ' ')}
+				/>
+			))}
+			<JSDocParameterTag
+				name={<Identifier text="callback" />}
+				isBracketed
+				typeExpression={ts.factory.createJSDocTypeExpression(
+					ts.factory.createTypeReferenceNode(
+						ts.factory.createIdentifier('Function')
+					)
+				)}
+				comment="Passed the result if succesful, error otherwise"
+			/>
+			<JSDocReturnTag
+				typeExpression={ts.factory.createJSDocTypeExpression(
+					ts.factory.createTypeReferenceNode(
+						ts.factory.createIdentifier('Promise<object>')
+					)
+				)}
+				comment="A promise resolving to the result or rejecting with an error"
+			/>
+		</JSDocComment>,
 		<MethodDeclaration
 			name={pathItem.operationId}
 			parameters={[
 				<ParameterDeclaration
 					name="options"
-					questionToken={pathItem.parameters.every(
-						(parameter) => !parameter.required
-					)}
+					questionToken={!isOptionsRequired}
 					type={
 						<TypeLiteralNode
-							members={pathItem.parameters
+							members={parameters
 								.map((parameter) => [
-									ts.factory.createJSDocComment(parameter.description),
+									<JSDocComment comment={parameter.description} />,
 									<PropertySignature
 										name={parameter.name}
 										modifiers={[
@@ -130,20 +185,76 @@ function createMethodForOperation({
 					type={<TypeReferenceNode typeName="Function" />}
 				/>,
 			]}
-			body={<Block />}
-		/>
-	);
+		>
+			<Block multiLine>
+				<VariableStatement
+					declarationList={
+						<VariableDeclarationList flags={ts.NodeFlags.Const}>
+							<VariableDeclaration
+								name="apiPath"
+								initializer={
+									<CallExpression
+										expression={<Identifier text="urlPath" />}
+										argumentsArray={[
+											<Identifier text="BASE_PATH" />,
+											<Identifier text="weblinkId" />,
+										]}
+									/>
+								}
+							/>
+							<VariableDeclaration
+								name="params"
+								initializer={
+									<ObjectLiteralExpression multiLine>
+										<PropertyAssignment
+											name="qs"
+											initializer={<Identifier text="options" />}
+										/>
+									</ObjectLiteralExpression>
+								}
+							/>
+						</VariableDeclarationList>
+					}
+				/>
+				<ReturnStatement>
+					<CallExpression
+						expression={
+							<CallExpression
+								expression={
+									<PropertyAccessExpression
+										expression={
+											<PropertyAccessExpression
+												expression={<This />}
+												name="client"
+											/>
+										}
+										name="wrapWithDefaultHandler"
+									/>
+								}
+								argumentsArray={[
+									<PropertyAccessExpression
+										expression={
+											<PropertyAccessExpression
+												expression={<This />}
+												name="client"
+											/>
+										}
+										name="get"
+									/>,
+								]}
+							/>
+						}
+						argumentsArray={[
+							<Identifier text="apiPath" />,
+							<Identifier text="params" />,
+							<Identifier text="callback" />,
+						]}
+					/>
+				</ReturnStatement>
+			</Block>
+		</MethodDeclaration>,
+	];
 }
-
-// /**
-//  *
-//  * @param param1 ddgdg
-//  * @param params2 gadgadga
-//  * @returns
-//  */
-// function test(/*adgdagad */ param1: string, params2: string) {
-// 	return 2;
-// }
 
 // create class declaration with methods responsible for different calls
 // take in operation ids as arguments
@@ -154,78 +265,49 @@ function createClassForOperations({
 	spec: OpenAPI;
 	operationIds: string[];
 }) {
-	const dataId = <Identifier text="data" />;
+	const clientId = <Identifier text="client" />;
 
 	return (
 		<ClassDeclaration name="SignRequests">
 			<PropertyDeclaration
-				name="client"
+				name={clientId}
 				type={<TypeReferenceNode typeName="BoxClient" />}
 			/>
 			<ConstructorDeclaration
 				parameters={[
 					<ParameterDeclaration
-						name={dataId}
-						questionToken
-						type={
-							<TypeReferenceNode typeName="Partial">
-								<TypeReferenceNode typeName="foo" />
-							</TypeReferenceNode>
-						}
+						name={clientId}
+						type={<TypeReferenceNode typeName="BoxClient" />}
 					/>,
 				]}
-				body={
-					<Block multiLine>
-						<ExpressionStatement>
-							<CallExpression
-								expression={<Super />}
-								argumentsArray={[dataId]}
-							/>
-						</ExpressionStatement>
-					</Block>
-				}
-			/>
-			{ts.factory.createJSDocComment('comment for the method below', [
-				ts.factory.createJSDocParameterTag(
-					undefined /*identifier */,
-					<Identifier text="param1" />,
-					false /*is bracketed*/,
-					undefined /* type expr */,
-					true /*name first*/,
-					'comment for this param'
-				),
-				ts.factory.createJSDocParameterTag(
-					undefined /*identifier */,
-					<Identifier text="ss.param1" />,
-					false /*is bracketed*/,
-					// undefined /* type expr */,
-					ts.factory.createJSDocTypeExpression(
-						ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
-					),
-					undefined /*name first*/,
-					'comment for this param'
-				),
-				ts.factory.createJSDocDeprecatedTag(
-					<Identifier text="agadgadg" />,
-					// undefined as any,
-					'dep id'
-				),
-			])}
-			{operationIds.map((operationId) => {
-				for (const [pathKey, pathItem] of Object.entries(spec.paths)) {
-					for (const verb of ['get', 'post'] as const) {
-						if (pathItem[verb]?.operationId === operationId) {
-							return createMethodForOperation({
-								spec,
-								pathKey,
-								verb,
-							});
+			>
+				<Block multiLine>
+					<BinaryExpression
+						left={
+							<PropertyAccessExpression expression={<This />} name={clientId} />
+						}
+						operator={ts.factory.createToken(ts.SyntaxKind.EqualsToken)}
+						right={clientId}
+					/>
+				</Block>
+			</ConstructorDeclaration>
+			{operationIds
+				.map((operationId) => {
+					for (const [pathKey, pathItem] of Object.entries(spec.paths)) {
+						for (const verb of ['get', 'post'] as const) {
+							if (pathItem[verb]?.operationId === operationId) {
+								return createMethodForOperation({
+									spec,
+									pathKey,
+									verb,
+								});
+							}
 						}
 					}
-				}
 
-				throw new Error(`Operation "${operationId}" not found in the spec`);
-			})}
+					throw new Error(`Operation "${operationId}" not found in the spec`);
+				})
+				.flat()}
 		</ClassDeclaration>
 	);
 }
@@ -257,13 +339,20 @@ export async function generate(specPath: string) {
 				operationIds: [
 					'get_sign_requests',
 					'get_sign_requests_id',
-					// 'post_sign_requests',
+					'post_sign_requests',
 				],
 			}),
 			// makeFactorialFunction(),
 		]),
 		resultFile
 	);
+
+	// save file to sign-requests
+	await fs.writeFile(
+		path.join(__dirname, '../src/managers/sign-requests.ts'),
+		result
+	);
+
 	console.log(result);
 }
 

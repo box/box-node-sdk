@@ -78,7 +78,7 @@ export type OpenAPIOperation = {
 	 * location. The list can use the Reference Object to link to parameters
 	 * that are defined at the OpenAPI Object's components/parameters.
 	 */
-	parameters: Array<{
+	parameters?: Array<{
 		name: string;
 		description: string;
 		in: 'query';

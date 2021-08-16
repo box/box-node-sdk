@@ -1,5 +1,17 @@
 import * as ts from 'typescript';
 
+export function BinaryExpression({
+	left,
+	operator,
+	right,
+}: {
+	left: ts.Expression;
+	operator: ts.BinaryOperator | ts.BinaryOperatorToken;
+	right: ts.Expression;
+}): ts.BinaryExpression {
+	return ts.factory.createBinaryExpression(left, operator, right);
+}
+
 export function Block(
 	{
 		statements,
@@ -54,22 +66,25 @@ export function ClassDeclaration(
 	);
 }
 
-export function ConstructorDeclaration({
-	decorators,
-	modifiers,
-	parameters = [],
-	body,
-}: {
-	decorators?: readonly ts.Decorator[];
-	modifiers?: readonly ts.Modifier[];
-	parameters?: readonly ts.ParameterDeclaration[];
-	body?: ts.Block;
-}): ts.ConstructorDeclaration {
+export function ConstructorDeclaration(
+	{
+		decorators,
+		modifiers,
+		parameters = [],
+		body,
+	}: {
+		decorators?: readonly ts.Decorator[];
+		modifiers?: readonly ts.Modifier[];
+		parameters?: readonly ts.ParameterDeclaration[];
+		body?: ts.Block;
+	},
+	child?: ts.Block
+): ts.ConstructorDeclaration {
 	return ts.factory.createConstructorDeclaration(
 		decorators,
 		modifiers,
 		parameters,
-		body
+		body || child
 	);
 }
 
@@ -119,27 +134,80 @@ export function ImportDeclaration({
 	);
 }
 
-export function MethodDeclaration({
-	decorators,
-	modifiers,
-	asteriskToken,
+export function JSDocComment(
+	{
+		comment,
+		tags,
+	}: {
+		comment?: string;
+		tags?: readonly ts.JSDocTag[];
+	},
+	...children: ts.JSDocTag[]
+): ts.JSDoc {
+	return ts.factory.createJSDocComment(comment, (tags || children).flat());
+}
+
+export function JSDocParameterTag({
+	tagName,
 	name,
-	questionToken,
-	typeParameters,
-	parameters,
-	type,
-	body,
+	isBracketed = false,
+	typeExpression,
+	isNameFirst = false,
+	comment,
 }: {
-	decorators?: readonly ts.Decorator[];
-	modifiers?: readonly ts.Modifier[];
-	asteriskToken?: ts.AsteriskToken;
-	name: string | ts.PropertyName;
-	questionToken?: boolean;
-	typeParameters?: readonly ts.TypeParameterDeclaration[];
-	parameters: readonly ts.ParameterDeclaration[];
-	type?: ts.TypeNode;
-	body?: ts.Block;
-}): ts.MethodDeclaration {
+	tagName?: ts.Identifier;
+	name: ts.EntityName;
+	isBracketed?: boolean;
+	typeExpression?: ts.JSDocTypeExpression;
+	isNameFirst?: boolean;
+	comment?: string;
+}): ts.JSDocParameterTag {
+	return ts.factory.createJSDocParameterTag(
+		tagName,
+		name,
+		isBracketed,
+		typeExpression,
+		isNameFirst,
+		comment
+	);
+}
+
+export function JSDocReturnTag({
+	tagName,
+	typeExpression,
+	comment,
+}: {
+	tagName?: ts.Identifier;
+	typeExpression: ts.JSDocTypeExpression;
+	comment?: string;
+}): ts.JSDocReturnTag {
+	return ts.factory.createJSDocReturnTag(tagName, typeExpression, comment);
+}
+
+export function MethodDeclaration(
+	{
+		decorators,
+		modifiers,
+		asteriskToken,
+		name,
+		questionToken,
+		typeParameters,
+		parameters,
+		type,
+		body,
+	}: {
+		decorators?: readonly ts.Decorator[];
+		modifiers?: readonly ts.Modifier[];
+		asteriskToken?: ts.AsteriskToken;
+		name: string | ts.PropertyName;
+		questionToken?: boolean;
+		typeParameters?: readonly ts.TypeParameterDeclaration[];
+		parameters: readonly ts.ParameterDeclaration[];
+		type?: ts.TypeNode;
+		body?: ts.Block;
+	},
+	child?: ts.Block
+): ts.MethodDeclaration {
 	return ts.factory.createMethodDeclaration(
 		decorators,
 		modifiers,
@@ -149,7 +217,23 @@ export function MethodDeclaration({
 		typeParameters,
 		parameters,
 		type,
-		body
+		body || child
+	);
+}
+
+export function ObjectLiteralExpression(
+	{
+		properties,
+		multiLine,
+	}: {
+		properties?: readonly ts.ObjectLiteralElementLike[];
+		multiLine?: boolean;
+	},
+	...children: readonly ts.ObjectLiteralElementLike[]
+): ts.ObjectLiteralExpression {
+	return ts.factory.createObjectLiteralExpression(
+		properties || children,
+		multiLine
 	);
 }
 
@@ -179,6 +263,26 @@ export function ParameterDeclaration({
 		type,
 		initializer
 	);
+}
+
+export function PropertyAccessExpression({
+	expression,
+	name,
+}: {
+	expression: ts.Expression;
+	name: string | ts.Identifier | ts.PrivateIdentifier;
+}): ts.PropertyAccessExpression {
+	return ts.factory.createPropertyAccessExpression(expression, name);
+}
+
+export function PropertyAssignment({
+	name,
+	initializer,
+}: {
+	name: string | ts.PropertyName;
+	initializer: ts.Expression;
+}): ts.PropertyAssignment {
+	return ts.factory.createPropertyAssignment(name, initializer);
 }
 
 export function PropertyDeclaration({
@@ -232,6 +336,17 @@ export function QuestionToken(): ts.QuestionToken {
 	return ts.factory.createToken(ts.SyntaxKind.QuestionToken);
 }
 
+export function ReturnStatement(
+	{
+		expression,
+	}: {
+		expression?: ts.Expression;
+	},
+	child?: ts.Expression
+): ts.ReturnStatement {
+	return ts.factory.createReturnStatement(expression || child);
+}
+
 export function StringLiteral(
 	{ text, isSingleQuote }: { text: string; isSingleQuote?: boolean },
 	child: string
@@ -241,6 +356,10 @@ export function StringLiteral(
 
 export function Super(): ts.SuperExpression {
 	return ts.factory.createSuper();
+}
+
+export function This(): ts.ThisExpression {
+	return ts.factory.createThis();
 }
 
 export function TypeLiteralNode({
@@ -264,5 +383,58 @@ export function TypeReferenceNode(
 	return ts.factory.createTypeReferenceNode(
 		typeName,
 		typeArguments || children
+	);
+}
+
+export function VariableDeclaration({
+	name,
+	exclamationToken,
+	type,
+	initializer,
+}: {
+	name: string | ts.BindingName;
+	exclamationToken?: ts.ExclamationToken;
+	type?: ts.TypeNode;
+	initializer?: ts.Expression;
+}): ts.VariableDeclaration {
+	return ts.factory.createVariableDeclaration(
+		name,
+		exclamationToken,
+		type,
+		initializer
+	);
+}
+
+export function VariableDeclarationList(
+	{
+		declarations,
+		flags,
+	}: {
+		declarations?: readonly ts.VariableDeclaration[];
+		flags?: ts.NodeFlags;
+	},
+	...children: readonly ts.VariableDeclaration[]
+): ts.VariableDeclarationList {
+	return ts.factory.createVariableDeclarationList(
+		declarations || children,
+		flags
+	);
+}
+
+export function VariableStatement(
+	{
+		modifiers,
+		declarationList,
+	}: {
+		modifiers?: readonly ts.Modifier[];
+		declarationList?:
+			| ts.VariableDeclarationList
+			| readonly ts.VariableDeclaration[];
+	},
+	...children: readonly ts.VariableDeclaration[]
+): ts.VariableStatement {
+	return ts.factory.createVariableStatement(
+		modifiers,
+		declarationList || children
 	);
 }
