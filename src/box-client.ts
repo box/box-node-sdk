@@ -5,6 +5,33 @@
 import { Promise } from 'bluebird';
 
 // ------------------------------------------------------------------------------
+// API Resource Managers
+// ------------------------------------------------------------------------------
+import CollaborationAllowlist from './managers/collaboration-allowlist';
+import Collaborations from './managers/collaborations';
+import Collections from './managers/collections';
+import Comments from './managers/comments';
+import DevicePins from './managers/device-pins';
+import Enterprise from './managers/enterprise';
+import Events from './managers/events';
+import Files from './managers/files';
+import Folders from './managers/folders';
+import Groups from './managers/groups';
+import LegalHoldPolicies from './managers/legal-hold-policies';
+import Metadata from './managers/metadata';
+import RecentItems from './managers/recent-items';
+import RetentionPolicies from './managers/retention-policies';
+import Search from './managers/search';
+import SharedItems from './managers/shared-items';
+import StoragePolicies from './managers/storage-policies';
+import Tasks from './managers/tasks';
+import TermsOfService from './managers/terms-of-service';
+import Trash from './managers/trash';
+import Users from './managers/users';
+import WebLinks from './managers/web-links';
+import Webhooks from './managers/webhooks';
+
+// ------------------------------------------------------------------------------
 // Typedefs and Callbacks
 // ------------------------------------------------------------------------------
 
@@ -40,31 +67,6 @@ var util = require('util'),
 	merge = require('merge-options'),
 	PagingIterator = require('./util/paging-iterator'),
 	pkg = require('../package.json');
-
-// API Resource Managers
-var Users = require('./managers/users'),
-	Files = require('./managers/files'),
-	Folders = require('./managers/folders'),
-	Collaborations = require('./managers/collaborations'),
-	Groups = require('./managers/groups'),
-	Comments = require('./managers/comments'),
-	SharedItems = require('./managers/shared-items'),
-	Metadata = require('./managers/metadata'),
-	Collections = require('./managers/collections'),
-	Events = require('./managers/events'),
-	Search = require('./managers/search'),
-	Tasks = require('./managers/tasks'),
-	Trash = require('./managers/trash'),
-	Enterprise = require('./managers/enterprise'),
-	LegalHoldPolicies = require('./managers/legal-hold-policies'),
-	WebLinks = require('./managers/web-links'),
-	RetentionPolicies = require('./managers/retention-policies'),
-	DevicePins = require('./managers/device-pins'),
-	Webhooks = require('./managers/webhooks'),
-	RecentItems = require('./managers/recent-items'),
-	CollaborationAllowlist = require('./managers/collaboration-allowlist'),
-	TermsOfService = require('./managers/terms-of-service'),
-	StoragePolicies = require('./managers/storage-policies');
 
 // ------------------------------------------------------------------------------
 // Private
@@ -579,7 +581,7 @@ class BoxClient {
 	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
-	del(path: string, params: object | null, callback: Function) {
+	del(path: string, params: object | null, callback?: Function) {
 		var newParams = merge({}, params || {});
 		newParams.method = 'DELETE';
 		newParams.url = getFullURL(this._baseURL, path);
