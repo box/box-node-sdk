@@ -35,11 +35,13 @@
 	},
 	"dependencies": {
 		"@types/bluebird": "^3.5.35",
+		"@types/lodash": "^4.14.172",
 		"@types/node": "^15.3.1",
 		"ajv": "^6.12.3",
 		"bluebird": "^3.7.1",
 		"http-status": "^1.4.1",
 		"jsonwebtoken": "^8.5.1",
+		"lodash": "^4.17.21",
 		"merge-options": "^1.0.1",
 		"promise-queue": "^2.2.3",
 		"proxy-agent": "^4.0.0",

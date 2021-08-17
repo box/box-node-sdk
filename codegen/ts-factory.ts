@@ -62,7 +62,7 @@ export function ClassDeclaration(
 		name,
 		typeParameters,
 		heritageClauses,
-		(members || children).flat()
+		members || children.flat()
 	);
 }
 
@@ -153,6 +153,34 @@ export function ImportDeclaration({
 	);
 }
 
+export function InterfaceDeclaration(
+	{
+		decorators,
+		modifiers,
+		name,
+		typeParameters,
+		heritageClauses,
+		members,
+	}: {
+		decorators?: readonly ts.Decorator[];
+		modifiers?: readonly ts.Modifier[];
+		name: string | ts.Identifier;
+		typeParameters?: readonly ts.TypeParameterDeclaration[];
+		heritageClauses?: readonly ts.HeritageClause[];
+		members?: readonly ts.TypeElement[];
+	},
+	...children: ts.TypeElement[]
+): ts.InterfaceDeclaration {
+	return ts.factory.createInterfaceDeclaration(
+		decorators,
+		modifiers,
+		name,
+		typeParameters,
+		heritageClauses,
+		members || children.flat()
+	);
+}
+
 export function JSDocComment(
 	{
 		comment,
@@ -163,7 +191,10 @@ export function JSDocComment(
 	},
 	...children: ts.JSDocTag[]
 ): ts.JSDoc {
-	return ts.factory.createJSDocComment(comment, (tags || children).flat());
+	return ts.factory.createJSDocComment(
+		comment,
+		tags || children.flat().filter(Boolean)
+	);
 }
 
 export function JSDocParameterTag({
@@ -388,12 +419,15 @@ export function This(): ts.ThisExpression {
 	return ts.factory.createThis();
 }
 
-export function TypeLiteralNode({
-	members,
-}: {
-	members?: readonly ts.TypeElement[] | undefined;
-}): ts.TypeLiteralNode {
-	return ts.factory.createTypeLiteralNode(members);
+export function TypeLiteralNode(
+	{
+		members,
+	}: {
+		members?: readonly ts.TypeElement[];
+	},
+	...children: ts.TypeElement[]
+): ts.TypeLiteralNode {
+	return ts.factory.createTypeLiteralNode(members || children.flat());
 }
 
 export function TypeReferenceNode(

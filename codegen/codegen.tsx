@@ -3,9 +3,16 @@
 //
 
 import * as fs from 'fs/promises';
+import { camelCase, upperFirst } from 'lodash';
 import * as path from 'path';
 import * as ts from 'typescript';
-import type { OpenAPI, OpenAPIPathItem, OpenAPISchema } from './openapi';
+import {
+	isOpenAPIReference,
+	OpenAPI,
+	OpenAPIPathItem,
+	OpenAPIReference,
+	OpenAPISchema,
+} from './openapi';
 import {
 	BinaryExpression,
 	Block,
@@ -16,6 +23,7 @@ import {
 	Identifier,
 	ImportClause,
 	ImportDeclaration,
+	InterfaceDeclaration,
 	JSDocComment,
 	JSDocParameterTag,
 	JSDocReturnTag,
@@ -45,13 +53,36 @@ export function createJsxElement(
 	return type(props || {}, ...children);
 }
 
+function getIdentifierForSchemaName(name: string): ts.Identifier {
+	return <Identifier text={upperFirst(camelCase(name))} />;
+}
+
 function createTypeNodeForSchema({
 	spec,
 	schema,
 }: {
 	spec: OpenAPI;
-	schema: OpenAPISchema;
-}) {
+	schema: OpenAPISchema | OpenAPIReference;
+}): ts.TypeNode {
+	if (isOpenAPIReference(schema)) {
+		const { $ref } = schema;
+
+		const parts = $ref.match(/^#\/components\/schemas\/([\w-]+)$/);
+		if (!parts) {
+			throw new Error(`Invalid reference in schema: ${$ref}`);
+		}
+
+		const refSchemaName = parts[1];
+		return (
+			<TypeReferenceNode typeName={getIdentifierForSchemaName(refSchemaName)} />
+		);
+	}
+
+	if (schema.allOf) {
+		// TODO better support for allOf
+		return createTypeNodeForSchema({ spec, schema: schema.allOf[0] });
+	}
+
 	const { type } = schema;
 	switch (type) {
 		case 'string':
@@ -71,7 +102,15 @@ function createTypeNodeForSchema({
 			return ts.factory.createLiteralTypeNode(<Null />);
 
 		case 'array':
+			const { items } = schema;
+			if (!items) {
+				throw new Error(`Missing items for type array in the schema`);
+			}
+			return ts.factory.createArrayTypeNode(
+				createTypeNodeForSchema({ spec, schema: items })
+			);
 		default:
+			console.log(1, schema);
 			throw new Error(`Invalid schema type: ${type}`);
 	}
 }
@@ -94,12 +133,23 @@ function createMethodForOperation({
 		</TypeReferenceNode>
 	);
 
+	const bodySchema = pathItem.requestBody?.content['application/json']?.schema;
+	const bodyId = <Identifier text="body" />;
+
 	return [
 		<JSDocComment
 			comment={[pathItem.summary, pathItem.description]
 				.filter(Boolean)
-				.join('\n')}
+				.join('\n\n')}
 		>
+			{bodySchema && (
+				<JSDocParameterTag
+					name={bodyId}
+					typeExpression={ts.factory.createJSDocTypeExpression(
+						createTypeNodeForSchema({ spec, schema: bodySchema })
+					)}
+				/>
+			)}
 			<JSDocParameterTag
 				name={<Identifier text="options" />}
 				isBracketed={!isOptionsRequired}
@@ -138,12 +188,18 @@ function createMethodForOperation({
 		<MethodDeclaration
 			name={pathItem.operationId}
 			parameters={[
+				bodySchema && (
+					<ParameterDeclaration
+						name={bodyId}
+						type={createTypeNodeForSchema({ spec, schema: bodySchema })}
+					/>
+				),
 				<ParameterDeclaration
 					name="options"
 					questionToken={!isOptionsRequired}
 					type={
-						<TypeLiteralNode
-							members={parameters
+						<TypeLiteralNode>
+							{parameters
 								.map((parameter) => [
 									<JSDocComment comment={parameter.description} />,
 									<PropertySignature
@@ -159,7 +215,7 @@ function createMethodForOperation({
 									/>,
 								])
 								.flat()}
-						/>
+						</TypeLiteralNode>
 					}
 				/>,
 				<ParameterDeclaration
@@ -167,7 +223,7 @@ function createMethodForOperation({
 					questionToken
 					type={<TypeReferenceNode typeName="Function" />}
 				/>,
-			]}
+			].filter(Boolean)}
 			type={returnType}
 		>
 			<Block multiLine>
@@ -272,10 +328,11 @@ function createClassForOperations({
 }: {
 	spec: OpenAPI;
 	operationIds: string[];
-}) {
+}): [ts.JSDoc, ts.ClassDeclaration] {
 	const clientId = <Identifier text="client" />;
 
-	return (
+	return [
+		<JSDocComment comment="Class for API access" />,
 		<ClassDeclaration name="SignRequests">
 			<PropertyDeclaration
 				name={clientId}
@@ -316,8 +373,56 @@ function createClassForOperations({
 					throw new Error(`Operation "${operationId}" not found in the spec`);
 				})
 				.flat()}
-		</ClassDeclaration>
-	);
+		</ClassDeclaration>,
+	];
+}
+
+function createInterfaceForSchema({
+	spec,
+	name,
+}: {
+	spec: OpenAPI;
+	name: string;
+}): [ts.JSDoc, ts.InterfaceDeclaration] {
+	const schema = spec.components?.schemas?.[name];
+	if (!schema) {
+		throw new Error(`Missing schema ${name} to create an interface`);
+	}
+
+	if (isOpenAPIReference(schema)) {
+		throw new Error(`Reference in schema ${name} is not supported`);
+	}
+
+	return [
+		<JSDocComment
+			comment={[schema.title, schema.description].filter(Boolean).join('\n\n')}
+		/>,
+		<InterfaceDeclaration name={getIdentifierForSchemaName(name)}>
+			{Object.entries(schema.properties || {})
+				.map(([key, property]) => {
+					if (isOpenAPIReference(property)) {
+						return null; // TODO fixme
+					}
+
+					return [
+						<JSDocComment
+							comment={[
+								property.description,
+								property.example && `Example: ${property.example}`,
+								property.default && `@default ${property.default}`,
+							]
+								.filter(Boolean)
+								.join('\n')}
+						/>,
+						<PropertySignature
+							name={key}
+							type={createTypeNodeForSchema({ spec, schema: property })}
+						/>,
+					];
+				})
+				.flat()}
+		</InterfaceDeclaration>,
+	];
 }
 
 export async function generate(specPath: string) {
@@ -342,7 +447,7 @@ export async function generate(specPath: string) {
 				moduleSpecifier={<StringLiteral text="../util/url-path" />}
 				importClause={<ImportClause name={<Identifier text="urlPath" />} />}
 			/>,
-			createClassForOperations({
+			...createClassForOperations({
 				spec,
 				operationIds: [
 					'get_sign_requests_id',
@@ -352,6 +457,9 @@ export async function generate(specPath: string) {
 					'post_sign_requests_id_resend',
 				],
 			}),
+			// TODO: save interfaces into separate files under src/schemas/
+			// To make the PR smaller we can now only include the schemas that are used in the sign request
+			...createInterfaceForSchema({ spec, name: 'SignRequestCreateRequest' }),
 			<ExportAssignment
 				isExportEquals
 				expression={<Identifier text="SignRequests" />}
