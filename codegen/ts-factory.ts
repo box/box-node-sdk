@@ -107,6 +107,38 @@ export function ExportAssignment({
 	);
 }
 
+export function ExportDeclaration({
+	decorators,
+	modifiers,
+	isTypeOnly,
+	exportClause,
+	moduleSpecifier,
+}: {
+	decorators?: readonly ts.Decorator[];
+	modifiers?: readonly ts.Modifier[];
+	isTypeOnly: boolean;
+	exportClause?: ts.NamedExportBindings;
+	moduleSpecifier?: ts.Expression;
+}): ts.ExportDeclaration {
+	return ts.factory.createExportDeclaration(
+		decorators,
+		modifiers,
+		isTypeOnly,
+		exportClause,
+		moduleSpecifier
+	);
+}
+
+export function ExportSpecifier({
+	propertyName,
+	name,
+}: {
+	propertyName?: string | ts.Identifier;
+	name: string | ts.Identifier;
+}): ts.ExportSpecifier {
+	return ts.factory.createExportSpecifier(propertyName, name);
+}
+
 export function ExpressionStatement(
 	{
 		expression,
@@ -269,6 +301,17 @@ export function MethodDeclaration(
 		type,
 		body || child
 	);
+}
+
+export function NamedExports(
+	{
+		elements,
+	}: {
+		elements?: readonly ts.ExportSpecifier[];
+	},
+	...children: readonly ts.ExportSpecifier[]
+): ts.NamedExports {
+	return ts.factory.createNamedExports(elements || children);
 }
 
 export function Null(): ts.NullLiteral {

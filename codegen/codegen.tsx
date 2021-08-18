@@ -3,7 +3,7 @@
 //
 
 import * as fs from 'fs/promises';
-import { camelCase, upperFirst } from 'lodash';
+import { camelCase, upperFirst, kebabCase } from 'lodash';
 import * as path from 'path';
 import * as ts from 'typescript';
 import {
@@ -20,6 +20,8 @@ import {
 	ClassDeclaration,
 	ConstructorDeclaration,
 	ExportAssignment,
+	ExportDeclaration,
+	ExportSpecifier,
 	Identifier,
 	ImportClause,
 	ImportDeclaration,
@@ -28,6 +30,7 @@ import {
 	JSDocParameterTag,
 	JSDocReturnTag,
 	MethodDeclaration,
+	NamedExports,
 	Null,
 	ObjectLiteralExpression,
 	ParameterDeclaration,
@@ -44,6 +47,8 @@ import {
 	VariableDeclarationList,
 	VariableStatement,
 } from './ts-factory';
+
+const SCHEMAS_RELATIVE_PATH = '../src/schemas';
 
 export function createJsxElement(
 	type: (...args: any[]) => ts.Node,
@@ -74,7 +79,12 @@ function createTypeNodeForSchema({
 
 		const refSchemaName = parts[1];
 		return (
-			<TypeReferenceNode typeName={getIdentifierForSchemaName(refSchemaName)} />
+			<TypeReferenceNode
+				typeName={ts.factory.createQualifiedName(
+					<Identifier text="schemas" />,
+					getIdentifierForSchemaName(refSchemaName)
+				)}
+			/>
 		);
 	}
 
@@ -110,7 +120,6 @@ function createTypeNodeForSchema({
 				createTypeNodeForSchema({ spec, schema: items })
 			);
 		default:
-			console.log(1, schema);
 			throw new Error(`Invalid schema type: ${type}`);
 	}
 }
@@ -383,7 +392,7 @@ function createInterfaceForSchema({
 }: {
 	spec: OpenAPI;
 	name: string;
-}): [ts.JSDoc, ts.InterfaceDeclaration] {
+}): ts.Node[] {
 	const schema = spec.components?.schemas?.[name];
 	if (!schema) {
 		throw new Error(`Missing schema ${name} to create an interface`);
@@ -394,10 +403,23 @@ function createInterfaceForSchema({
 	}
 
 	return [
+		<ImportDeclaration
+			importClause={
+				<ImportClause
+					namedBindings={ts.factory.createNamespaceImport(
+						<Identifier text="schemas" />
+					)}
+				/>
+			}
+			moduleSpecifier={<StringLiteral text="." />}
+		/>,
 		<JSDocComment
 			comment={[schema.title, schema.description].filter(Boolean).join('\n\n')}
 		/>,
-		<InterfaceDeclaration name={getIdentifierForSchemaName(name)}>
+		<InterfaceDeclaration
+			name={getIdentifierForSchemaName(name)}
+			modifiers={[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)]}
+		>
 			{Object.entries(schema.properties || {})
 				.map(([key, property]) => {
 					if (isOpenAPIReference(property)) {
@@ -425,20 +447,95 @@ function createInterfaceForSchema({
 	];
 }
 
+const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+
+export async function writeNodesToFile({
+	fullPath,
+	nodes,
+	languageVersion = ts.ScriptTarget.Latest,
+}: {
+	fullPath: string;
+	nodes: readonly ts.Node[];
+	languageVersion?: ts.ScriptTarget;
+}) {
+	const fileName = path.basename(fullPath);
+	const data = printer.printList(
+		ts.ListFormat.MultiLine,
+		ts.factory.createNodeArray(nodes),
+		ts.createSourceFile(fileName, '', languageVersion)
+	);
+	await fs.writeFile(fullPath, data);
+}
+
+export async function generateInterfacesForSchema({
+	spec,
+	names,
+}: {
+	spec: OpenAPI;
+	names: string[];
+}) {
+	const schemasDirPath = path.join(__dirname, SCHEMAS_RELATIVE_PATH);
+	// make sure the target directory exisits
+	await fs.mkdir(schemasDirPath, { recursive: true });
+
+	const indexExports: ts.ExportDeclaration[] = [];
+
+	for (const name of names) {
+		const schema = spec.components?.schemas?.[name];
+		if (!schema) {
+			throw new Error(`Missing schema ${name} in the OpenAPI spec`);
+		}
+
+		const { text: interfaceName } = getIdentifierForSchemaName(name);
+		const baseFileName = `${kebabCase(interfaceName)}.generated`;
+		const fileName = `${baseFileName}.ts`;
+
+		await writeNodesToFile({
+			fullPath: path.join(schemasDirPath, fileName),
+			nodes: createInterfaceForSchema({ spec, name }),
+		});
+
+		indexExports.push(
+			<ExportDeclaration
+				isTypeOnly
+				exportClause={
+					<NamedExports>
+						<ExportSpecifier name={interfaceName} />
+					</NamedExports>
+				}
+				moduleSpecifier={<StringLiteral text={`./${baseFileName}`} />}
+			/>
+		);
+	}
+
+	// todo write index for schemas with exports
+	await writeNodesToFile({
+		fullPath: path.join(schemasDirPath, 'index.ts'),
+		nodes: indexExports,
+	});
+}
+
 export async function generate(specPath: string) {
 	const spec = require(specPath);
 
-	const resultFile = ts.createSourceFile(
-		'someFileName.ts',
-		'',
-		ts.ScriptTarget.Latest,
-		/*setParentNodes*/ false,
-		ts.ScriptKind.TS
+	await generateInterfacesForSchema({
+		spec,
+		names: [
+			'File--Mini',
+			'Folder--Mini',
+			'SignRequestCreateRequest',
+			'SignRequestCreateSigner',
+			'SignRequestPrefillTag',
+		],
+	});
+
+	const fullPath = path.join(
+		__dirname,
+		'../src/managers/sign-requests.generated.ts'
 	);
-	const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-	const result = printer.printList(
-		ts.ListFormat.MultiLine,
-		ts.factory.createNodeArray([
+	await writeNodesToFile({
+		fullPath,
+		nodes: [
 			<ImportDeclaration
 				moduleSpecifier={<StringLiteral text="../box-client" />}
 				importClause={<ImportClause name={<Identifier text="BoxClient" />} />}
@@ -446,6 +543,23 @@ export async function generate(specPath: string) {
 			<ImportDeclaration
 				moduleSpecifier={<StringLiteral text="../util/url-path" />}
 				importClause={<ImportClause name={<Identifier text="urlPath" />} />}
+			/>,
+			<ImportDeclaration
+				importClause={
+					<ImportClause
+						namedBindings={ts.factory.createNamespaceImport(
+							<Identifier text="schemas" />
+						)}
+					/>
+				}
+				moduleSpecifier={
+					<StringLiteral
+						text={path.relative(
+							path.dirname(fullPath),
+							path.join(__dirname, SCHEMAS_RELATIVE_PATH)
+						)}
+					/>
+				}
 			/>,
 			...createClassForOperations({
 				spec,
@@ -457,23 +571,12 @@ export async function generate(specPath: string) {
 					'post_sign_requests_id_resend',
 				],
 			}),
-			// TODO: save interfaces into separate files under src/schemas/
-			// To make the PR smaller we can now only include the schemas that are used in the sign request
-			...createInterfaceForSchema({ spec, name: 'SignRequestCreateRequest' }),
 			<ExportAssignment
 				isExportEquals
 				expression={<Identifier text="SignRequests" />}
 			/>,
-		]),
-		resultFile
-	);
-
-	await fs.writeFile(
-		path.join(__dirname, '../src/managers/sign-requests.ts'),
-		result
-	);
-
-	console.log(result);
+		],
+	});
 }
 
 (async () => {
