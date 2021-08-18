@@ -7,3 +7,11 @@ import * as schemas from ".";
  */
 export interface FolderMini {
 }
+export const FolderMini = {
+    serialize(value: FolderMini) {
+        return {};
+    },
+    deserialize(data: any): FolderMini {
+        return {};
+    }
+};

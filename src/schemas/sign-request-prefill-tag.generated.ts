@@ -10,20 +10,38 @@ export interface SignRequestPrefillTag {
      * This references the ID of a specific tag contained in a file of the sign request.
      * Example: 1234
      */
-    document_tag_id?: string;
+    documentTagId?: string;
     /**
      * Text prefill value
      * Example: text
      */
-    text_value?: string;
+    textValue?: string;
     /**
      * Checkbox prefill value
      * Example: true
      */
-    checkbox_value?: boolean;
+    checkboxValue?: boolean;
     /**
      * Date prefill value
      * Example: 2021-04-26T08:12:13.982Z
      */
-    date_value?: string;
+    dateValue?: string;
 }
+export const SignRequestPrefillTag = {
+    serialize(value: SignRequestPrefillTag) {
+        return {
+            document_tag_id: value.documentTagId,
+            text_value: value.textValue,
+            checkbox_value: value.checkboxValue,
+            date_value: value.dateValue
+        };
+    },
+    deserialize(data: any): SignRequestPrefillTag {
+        return {
+            documentTagId: data.document_tag_id,
+            textValue: data.text_value,
+            checkboxValue: data.checkbox_value,
+            dateValue: data.date_value
+        };
+    }
+};

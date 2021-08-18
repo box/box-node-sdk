@@ -110,13 +110,13 @@ export function ExportAssignment({
 export function ExportDeclaration({
 	decorators,
 	modifiers,
-	isTypeOnly,
+	isTypeOnly = false,
 	exportClause,
 	moduleSpecifier,
 }: {
 	decorators?: readonly ts.Decorator[];
 	modifiers?: readonly ts.Modifier[];
-	isTypeOnly: boolean;
+	isTypeOnly?: boolean;
 	exportClause?: ts.NamedExportBindings;
 	moduleSpecifier?: ts.Expression;
 }): ts.ExportDeclaration {
@@ -329,7 +329,7 @@ export function ObjectLiteralExpression(
 	...children: readonly ts.ObjectLiteralElementLike[]
 ): ts.ObjectLiteralExpression {
 	return ts.factory.createObjectLiteralExpression(
-		(properties || children).filter(Boolean),
+		(properties || children).filter(Boolean).flat().filter(Boolean),
 		multiLine
 	);
 }
@@ -508,36 +508,21 @@ export function VariableDeclaration({
 	);
 }
 
-export function VariableDeclarationList(
+export function VariableStatement(
 	{
+		modifiers,
 		declarations,
 		flags,
 	}: {
+		modifiers?: readonly ts.Modifier[];
 		declarations?: readonly ts.VariableDeclaration[];
 		flags?: ts.NodeFlags;
 	},
 	...children: readonly ts.VariableDeclaration[]
-): ts.VariableDeclarationList {
-	return ts.factory.createVariableDeclarationList(
+): ts.VariableStatement {
+	const declarationList = ts.factory.createVariableDeclarationList(
 		declarations || children,
 		flags
 	);
-}
-
-export function VariableStatement(
-	{
-		modifiers,
-		declarationList,
-	}: {
-		modifiers?: readonly ts.Modifier[];
-		declarationList?:
-			| ts.VariableDeclarationList
-			| readonly ts.VariableDeclaration[];
-	},
-	...children: readonly ts.VariableDeclaration[]
-): ts.VariableStatement {
-	return ts.factory.createVariableStatement(
-		modifiers,
-		declarationList || children
-	);
+	return ts.factory.createVariableStatement(modifiers, declarationList);
 }

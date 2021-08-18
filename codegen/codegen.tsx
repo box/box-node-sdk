@@ -3,7 +3,7 @@
 //
 
 import * as fs from 'fs/promises';
-import { camelCase, upperFirst, kebabCase } from 'lodash';
+import { camelCase, kebabCase, snakeCase, upperFirst } from 'lodash';
 import * as path from 'path';
 import * as ts from 'typescript';
 import {
@@ -44,7 +44,6 @@ import {
 	TypeLiteralNode,
 	TypeReferenceNode,
 	VariableDeclaration,
-	VariableDeclarationList,
 	VariableStatement,
 } from './ts-factory';
 
@@ -62,6 +61,15 @@ function getIdentifierForSchemaName(name: string): ts.Identifier {
 	return <Identifier text={upperFirst(camelCase(name))} />;
 }
 
+function getIdentifierForSchemaRef(ref: string): ts.Identifier {
+	const parts = ref.match(/^#\/components\/schemas\/([\w-]+)$/);
+	if (!parts) {
+		throw new Error(`Invalid reference in schema: ${ref}`);
+	}
+	const name = parts[1];
+	return getIdentifierForSchemaName(name);
+}
+
 function createTypeNodeForSchema({
 	spec,
 	schema,
@@ -70,19 +78,11 @@ function createTypeNodeForSchema({
 	schema: OpenAPISchema | OpenAPIReference;
 }): ts.TypeNode {
 	if (isOpenAPIReference(schema)) {
-		const { $ref } = schema;
-
-		const parts = $ref.match(/^#\/components\/schemas\/([\w-]+)$/);
-		if (!parts) {
-			throw new Error(`Invalid reference in schema: ${$ref}`);
-		}
-
-		const refSchemaName = parts[1];
 		return (
 			<TypeReferenceNode
 				typeName={ts.factory.createQualifiedName(
 					<Identifier text="schemas" />,
-					getIdentifierForSchemaName(refSchemaName)
+					getIdentifierForSchemaRef(schema.$ref)
 				)}
 			/>
 		);
@@ -236,67 +236,63 @@ function createMethodForOperation({
 			type={returnType}
 		>
 			<Block multiLine>
-				<VariableStatement
-					declarationList={
-						<VariableDeclarationList flags={ts.NodeFlags.Const}>
-							<VariableDeclaration
-								name="apiPath"
-								initializer={
-									<CallExpression
-										expression={<Identifier text="urlPath" />}
-										argumentsArray={pathKey
-											.split('/')
-											.filter(Boolean)
-											.map((part) => {
-												if (/^{.+}$/.test(part)) {
-													const param = parameters.find(
-														(parameter) => `{${parameter.name}}` === part
-													);
-													if (!param) {
-														throw new Error(
-															`Uknown param ${part} in path ${pathKey}.`
-														);
-													}
+				<VariableStatement flags={ts.NodeFlags.Const}>
+					<VariableDeclaration
+						name="apiPath"
+						initializer={
+							<CallExpression
+								expression={<Identifier text="urlPath" />}
+								argumentsArray={pathKey
+									.split('/')
+									.filter(Boolean)
+									.map((part) => {
+										if (/^{.+}$/.test(part)) {
+											const param = parameters.find(
+												(parameter) => `{${parameter.name}}` === part
+											);
+											if (!param) {
+												throw new Error(
+													`Uknown param ${part} in path ${pathKey}.`
+												);
+											}
 
-													if (param.in !== 'path') {
-														throw new Error(
-															`Expected param ${part} to be in path not ${param.in}.`
-														);
-													}
+											if (param.in !== 'path') {
+												throw new Error(
+													`Expected param ${part} to be in path not ${param.in}.`
+												);
+											}
 
-													return (
-														<PropertyAccessExpression
-															expression={<Identifier text="options" />}
-															name={<Identifier text={param.name} />}
-														/>
-													);
-												}
+											return (
+												<PropertyAccessExpression
+													expression={<Identifier text="options" />}
+													name={<Identifier text={param.name} />}
+												/>
+											);
+										}
 
-												return <StringLiteral text={part} />;
-											})}
+										return <StringLiteral text={part} />;
+									})}
+							/>
+						}
+					/>
+					<VariableDeclaration
+						name="params"
+						initializer={
+							<ObjectLiteralExpression multiLine>
+								<PropertyAssignment
+									name="qs"
+									initializer={<Identifier text="options" />}
+								/>
+								{bodySchema && (
+									<PropertyAssignment
+										name="body"
+										initializer={<Identifier text="body" />}
 									/>
-								}
-							/>
-							<VariableDeclaration
-								name="params"
-								initializer={
-									<ObjectLiteralExpression multiLine>
-										<PropertyAssignment
-											name="qs"
-											initializer={<Identifier text="options" />}
-										/>
-										{bodySchema && (
-											<PropertyAssignment
-												name="body"
-												initializer={<Identifier text="body" />}
-											/>
-										)}
-									</ObjectLiteralExpression>
-								}
-							/>
-						</VariableDeclarationList>
-					}
-				/>
+								)}
+							</ObjectLiteralExpression>
+						}
+					/>
+				</VariableStatement>
 				<ReturnStatement>
 					<CallExpression
 						expression={
@@ -408,9 +404,20 @@ function createInterfaceForSchema({
 		throw new Error(`Reference in schema ${name} is not supported`);
 	}
 
-	const { required = [] } = schema;
+	if (schema.type !== 'object') {
+		throw new Error(`Expecting ${name} to be an object schema`);
+	}
+
+	const id = getIdentifierForSchemaName(name);
+	const { properties = {}, required = [] } = schema;
+
+	const valueId = <Identifier text="value" />;
+	const dataId = <Identifier text="data" />;
+
+	const convertPropName = camelCase;
 
 	return [
+		// <></>,
 		<ImportDeclaration
 			importClause={
 				<ImportClause
@@ -425,10 +432,10 @@ function createInterfaceForSchema({
 			comment={[schema.title, schema.description].filter(Boolean).join('\n\n')}
 		/>,
 		<InterfaceDeclaration
-			name={getIdentifierForSchemaName(name)}
+			name={id}
 			modifiers={[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)]}
 		>
-			{Object.entries(schema.properties || {})
+			{Object.entries(properties)
 				.map(([key, property]) => {
 					if (isOpenAPIReference(property)) {
 						return null; // TODO fixme
@@ -445,7 +452,7 @@ function createInterfaceForSchema({
 								.join('\n')}
 						/>,
 						<PropertySignature
-							name={key}
+							name={convertPropName(key)}
 							questionToken={!required.includes(key)}
 							type={createTypeNodeForSchema({ spec, schema: property })}
 						/>,
@@ -453,6 +460,161 @@ function createInterfaceForSchema({
 				})
 				.flat()}
 		</InterfaceDeclaration>,
+		<VariableStatement
+			modifiers={[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)]}
+			flags={ts.NodeFlags.Const}
+		>
+			<VariableDeclaration
+				name={id}
+				initializer={
+					<ObjectLiteralExpression multiLine>
+						<MethodDeclaration
+							name="serialize"
+							parameters={[
+								<ParameterDeclaration
+									name={valueId}
+									type={<TypeReferenceNode typeName={id} />}
+								/>,
+							]}
+						>
+							<Block multiLine>
+								<ReturnStatement>
+									<ObjectLiteralExpression multiLine>
+										{Object.keys(properties).map((key) => (
+											<PropertyAssignment
+												name={key}
+												initializer={
+													<PropertyAccessExpression
+														expression={valueId}
+														name={convertPropName(key)}
+													/>
+												}
+											/>
+										))}
+									</ObjectLiteralExpression>
+								</ReturnStatement>
+							</Block>
+						</MethodDeclaration>
+						<MethodDeclaration
+							name="deserialize"
+							parameters={[
+								<ParameterDeclaration
+									name={dataId}
+									type={ts.factory.createKeywordTypeNode(
+										ts.SyntaxKind.AnyKeyword
+									)}
+								/>,
+							]}
+							type={<TypeReferenceNode typeName={id} />}
+						>
+							<Block multiLine>
+								<ReturnStatement>
+									<ObjectLiteralExpression multiLine>
+										{Object.entries(properties).map(([key, property]) => {
+											// TODO better support for allOf
+											if ((property as OpenAPISchema).allOf) {
+												(property as OpenAPIReference).$ref = (
+													(property as OpenAPISchema)
+														.allOf![0] as OpenAPIReference
+												).$ref;
+											}
+
+											const propAccessExpr = (
+												<PropertyAccessExpression
+													expression={dataId}
+													name={key}
+												/>
+											);
+
+											const PropAssignmentCall = ({
+												schemaId,
+												name,
+											}: {
+												schemaId: ts.Identifier;
+												name: string;
+											}) => (
+												<PropertyAssignment
+													name={convertPropName(key)}
+													initializer={
+														<CallExpression
+															expression={
+																<PropertyAccessExpression
+																	expression={
+																		<PropertyAccessExpression
+																			expression={<Identifier text="schemas" />}
+																			name={schemaId}
+																		/>
+																	}
+																	name={name}
+																/>
+															}
+															argumentsArray={[propAccessExpr]}
+														/>
+													}
+												/>
+											);
+
+											if (isOpenAPIReference(property)) {
+												return (
+													<PropAssignmentCall
+														name="unserialize"
+														schemaId={getIdentifierForSchemaRef(property.$ref)}
+													/>
+												);
+											}
+
+											const { type } = property;
+
+											if (!type) {
+												console.log(`Missing type for ${key}`, property);
+												return;
+											}
+											switch (type) {
+												case 'string':
+												case 'number':
+												case 'integer':
+												case 'boolean':
+													return (
+														<PropertyAssignment
+															name={convertPropName(key)}
+															initializer={propAccessExpr}
+														/>
+													);
+
+												case 'array':
+													const { items } = property;
+													if (!items) {
+														throw new Error(
+															`Missing items for type array in the schema`
+														);
+													}
+													if (isOpenAPIReference(items)) {
+														return (
+															<PropAssignmentCall
+																name="unserializeArray"
+																schemaId={id}
+															/>
+														);
+													}
+
+													throw new Error(
+														`Type ${items.type} not supported in array property ${key}`
+													);
+
+												case 'object':
+												case 'null':
+												default:
+													throw new Error(`Invalid schema type: ${type}`);
+											}
+										})}
+									</ObjectLiteralExpression>
+								</ReturnStatement>
+							</Block>
+						</MethodDeclaration>
+					</ObjectLiteralExpression>
+				}
+			/>
+		</VariableStatement>,
 	];
 }
 
@@ -507,12 +669,6 @@ export async function generateInterfacesForSchema({
 
 		indexExports.push(
 			<ExportDeclaration
-				isTypeOnly
-				exportClause={
-					<NamedExports>
-						<ExportSpecifier name={interfaceName} />
-					</NamedExports>
-				}
 				moduleSpecifier={<StringLiteral text={`./${baseFileName}`} />}
 			/>
 		);

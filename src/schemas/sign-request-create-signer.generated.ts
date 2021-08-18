@@ -24,7 +24,7 @@ export interface SignRequestCreateSigner {
      * sender signs, they will be redirected to the next `in_person` signer.
      * Example: true
      */
-    is_in_person?: boolean;
+    isInPerson?: boolean;
     /**
      * Order of the signer
      * Example: 2
@@ -35,5 +35,25 @@ export interface SignRequestCreateSigner {
      * for authentication when accessing the embed URL.
      * Example: 1234
      */
-    embed_url_external_user_id?: string;
+    embedUrlExternalUserId?: string;
 }
+export const SignRequestCreateSigner = {
+    serialize(value: SignRequestCreateSigner) {
+        return {
+            email: value.email,
+            role: value.role,
+            is_in_person: value.isInPerson,
+            order: value.order,
+            embed_url_external_user_id: value.embedUrlExternalUserId
+        };
+    },
+    deserialize(data: any): SignRequestCreateSigner {
+        return {
+            email: data.email,
+            role: data.role,
+            isInPerson: data.is_in_person,
+            order: data.order,
+            embedUrlExternalUserId: data.embed_url_external_user_id
+        };
+    }
+};
