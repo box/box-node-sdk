@@ -22,7 +22,7 @@ import RecentItems from './managers/recent-items';
 import RetentionPolicies from './managers/retention-policies';
 import Search from './managers/search';
 import SharedItems from './managers/shared-items';
-import SignRequests from './managers/sign-requests';
+import SignRequests from './managers/sign-requests.generated';
 import StoragePolicies from './managers/storage-policies';
 import Tasks from './managers/tasks';
 import TermsOfService from './managers/terms-of-service';

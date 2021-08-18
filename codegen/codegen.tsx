@@ -285,6 +285,12 @@ function createMethodForOperation({
 											name="qs"
 											initializer={<Identifier text="options" />}
 										/>
+										{bodySchema && (
+											<PropertyAssignment
+												name="body"
+												initializer={<Identifier text="body" />}
+											/>
+										)}
 									</ObjectLiteralExpression>
 								}
 							/>
@@ -402,6 +408,8 @@ function createInterfaceForSchema({
 		throw new Error(`Reference in schema ${name} is not supported`);
 	}
 
+	const { required = [] } = schema;
+
 	return [
 		<ImportDeclaration
 			importClause={
@@ -438,6 +446,7 @@ function createInterfaceForSchema({
 						/>,
 						<PropertySignature
 							name={key}
+							questionToken={!required.includes(key)}
 							type={createTypeNodeForSchema({ spec, schema: property })}
 						/>,
 					];
@@ -449,6 +458,7 @@ function createInterfaceForSchema({
 
 const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 
+// TODO add Prettier phase
 export async function writeNodesToFile({
 	fullPath,
 	nodes,

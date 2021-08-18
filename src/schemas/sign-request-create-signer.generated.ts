@@ -18,22 +18,22 @@ export interface SignRequestCreateSigner {
      * Example: signer
      * @default signer
      */
-    role: string;
+    role?: string;
     /**
      * Used in combination with an embed URL for a sender. After the
      * sender signs, they will be redirected to the next `in_person` signer.
      * Example: true
      */
-    is_in_person: boolean;
+    is_in_person?: boolean;
     /**
      * Order of the signer
      * Example: 2
      */
-    order: number;
+    order?: number;
     /**
      * User ID for the signer in an external application responsible
      * for authentication when accessing the embed URL.
      * Example: 1234
      */
-    embed_url_external_user_id: string;
+    embed_url_external_user_id?: string;
 }

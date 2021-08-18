@@ -69,7 +69,8 @@ class SignRequests {
      */
     post_sign_requests(body: schemas.SignRequestCreateRequest, options?: {}, callback?: Function): Promise<object> {
         const apiPath = urlPath("sign_requests"), params = {
-            qs: options
+            qs: options,
+            body: body
         };
         return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
     }
