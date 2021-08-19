@@ -1,4 +1,5 @@
 import * as schemas from ".";
+import { Serializable } from "../util/serializable";
 /**
  * Create a sign request
  * 
@@ -57,7 +58,7 @@ export interface SignRequestCreateRequest {
      */
     externalId?: string;
 }
-export const SignRequestCreateRequest = {
+export const SignRequestCreateRequest = new Serializable({
     serialize(value: SignRequestCreateRequest) {
         return {
             is_document_preparation_needed: value.isDocumentPreparationNeeded,
@@ -65,10 +66,10 @@ export const SignRequestCreateRequest = {
             email_subject: value.emailSubject,
             email_message: value.emailMessage,
             are_reminders_enabled: value.areRemindersEnabled,
-            signers: value.signers,
-            source_files: value.sourceFiles,
-            parent_folder: value.parentFolder,
-            prefill_tags: value.prefillTags,
+            signers: schemas.SignRequestCreateSigner.serializeArray(value.signers),
+            source_files: schemas.FileMini.serializeArray(value.sourceFiles),
+            parent_folder: schemas.FolderMini.serialize(value.parentFolder),
+            prefill_tags: schemas.SignRequestPrefillTag.serializeArray(value.prefillTags),
             days_valid: value.daysValid,
             external_id: value.externalId
         };
@@ -80,12 +81,12 @@ export const SignRequestCreateRequest = {
             emailSubject: data.email_subject,
             emailMessage: data.email_message,
             areRemindersEnabled: data.are_reminders_enabled,
-            signers: schemas.SignRequestCreateRequest.unserializeArray(data.signers),
-            sourceFiles: schemas.SignRequestCreateRequest.unserializeArray(data.source_files),
-            parentFolder: schemas.FolderMini.unserialize(data.parent_folder),
-            prefillTags: schemas.SignRequestCreateRequest.unserializeArray(data.prefill_tags),
+            signers: schemas.SignRequestCreateSigner.deserializeArray(data.signers),
+            sourceFiles: schemas.FileMini.deserializeArray(data.source_files),
+            parentFolder: schemas.FolderMini.deserialize(data.parent_folder),
+            prefillTags: schemas.SignRequestPrefillTag.deserializeArray(data.prefill_tags),
             daysValid: data.days_valid,
             externalId: data.external_id
         };
     }
-};
+});

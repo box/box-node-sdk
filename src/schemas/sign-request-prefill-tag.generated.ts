@@ -1,4 +1,5 @@
 import * as schemas from ".";
+import { Serializable } from "../util/serializable";
 /**
  * Sign Request Prefill Tag
  * 
@@ -27,7 +28,7 @@ export interface SignRequestPrefillTag {
      */
     dateValue?: string;
 }
-export const SignRequestPrefillTag = {
+export const SignRequestPrefillTag = new Serializable({
     serialize(value: SignRequestPrefillTag) {
         return {
             document_tag_id: value.documentTagId,
@@ -44,4 +45,4 @@ export const SignRequestPrefillTag = {
             dateValue: data.date_value
         };
     }
-};
+});

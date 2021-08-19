@@ -1,4 +1,5 @@
 import * as schemas from ".";
+import { Serializable } from "../util/serializable";
 /**
  * Signer fields for Create Sign Request
  * 
@@ -37,7 +38,7 @@ export interface SignRequestCreateSigner {
      */
     embedUrlExternalUserId?: string;
 }
-export const SignRequestCreateSigner = {
+export const SignRequestCreateSigner = new Serializable({
     serialize(value: SignRequestCreateSigner) {
         return {
             email: value.email,
@@ -56,4 +57,4 @@ export const SignRequestCreateSigner = {
             embedUrlExternalUserId: data.embed_url_external_user_id
         };
     }
-};
+});
