@@ -72,6 +72,13 @@ function getIdentifierForSchemaRef(ref: string): ts.Identifier {
 	return getIdentifierForSchemaName(name);
 }
 
+// TODO add better support for allOf
+function compressSchema(schema: OpenAPISchema | OpenAPIReference) {
+	(schema as OpenAPISchema).allOf?.forEach((item) =>
+		Object.assign(schema, item)
+	);
+}
+
 function createTypeNodeForSchema({
 	spec,
 	schema,
@@ -79,6 +86,8 @@ function createTypeNodeForSchema({
 	spec: OpenAPI;
 	schema: OpenAPISchema | OpenAPIReference;
 }): ts.TypeNode {
+	compressSchema(schema);
+
 	if (isOpenAPIReference(schema)) {
 		return (
 			<TypeReferenceNode
@@ -88,11 +97,6 @@ function createTypeNodeForSchema({
 				)}
 			/>
 		);
-	}
-
-	if (schema.allOf) {
-		// TODO better support for allOf
-		return createTypeNodeForSchema({ spec, schema: schema.allOf[0] });
 	}
 
 	const { type } = schema;
@@ -399,13 +403,6 @@ function createClassForOperations({
 	);
 }
 
-// TODO add better support for allOf
-function compressSchema(schema: OpenAPISchema | OpenAPIReference) {
-	(schema as OpenAPISchema).allOf?.forEach((item) =>
-		Object.assign(schema, item)
-	);
-}
-
 function createInterfaceForSchema({
 	spec,
 	name,
@@ -523,7 +520,7 @@ function createInterfaceForSchema({
 				{Object.entries(properties)
 					.map(([key, property]) => {
 						if (isOpenAPIReference(property)) {
-							return null; // TODO fixme
+							throw new Error(`Unexpected reference in ${key}`);
 						}
 
 						return [
@@ -537,7 +534,7 @@ function createInterfaceForSchema({
 									.join('\n')}
 							/>,
 							<PropertySignature
-								name={key} // name={convertPropName(key)}
+								name={addSerialization ? convertPropName(key) : key}
 								questionToken={!required.includes(key)}
 								type={createTypeNodeForSchema({ spec, schema: property })}
 							/>,
@@ -802,7 +799,7 @@ export async function generateInterfacesForSchema({
 		);
 	}
 
-	// todo write index for schemas with exports
+	// write index for schemas with exports
 	await writeNodesToFile({
 		fullPath: path.join(schemasDirPath, 'index.ts'),
 		nodes: indexExports,
