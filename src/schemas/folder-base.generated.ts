@@ -32,19 +32,3 @@ export interface FolderBase {
      */
     type?: string;
 }
-export const FolderBase = new Serializable({
-    serialize(value: FolderBase) {
-        return {
-            id: value.id,
-            etag: value.etag,
-            type: value.type
-        };
-    },
-    deserialize(data: any): FolderBase {
-        return {
-            id: data.id,
-            etag: data.etag,
-            type: data.type
-        };
-    }
-});

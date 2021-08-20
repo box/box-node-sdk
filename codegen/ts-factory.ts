@@ -329,7 +329,7 @@ export function ObjectLiteralExpression(
 	...children: readonly ts.ObjectLiteralElementLike[]
 ): ts.ObjectLiteralExpression {
 	return ts.factory.createObjectLiteralExpression(
-		(properties || children).filter(Boolean).flat().filter(Boolean),
+		(properties || children).flat().filter(Boolean),
 		multiLine
 	);
 }

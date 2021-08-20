@@ -9,24 +9,10 @@ import { Serializable } from "../util/serializable";
 export interface FolderMini extends schemas.FolderBase {
     /**
      */
-    sequenceId?: string;
+    sequence_id?: string;
     /**
      * The name of the folder.
      * Example: Contracts
      */
     name?: string;
 }
-export const FolderMini = new Serializable({
-    serialize(value: FolderMini) {
-        return {
-            sequence_id: value.sequenceId,
-            name: value.name
-        };
-    },
-    deserialize(data: any): FolderMini {
-        return {
-            sequenceId: data.sequence_id,
-            name: data.name
-        };
-    }
-});

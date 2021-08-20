@@ -13,15 +13,3 @@ export interface FileVersionMini extends schemas.FileVersionBase {
      */
     sha1?: string;
 }
-export const FileVersionMini = new Serializable({
-    serialize(value: FileVersionMini) {
-        return {
-            sha1: value.sha1
-        };
-    },
-    deserialize(data: any): FileVersionMini {
-        return {
-            sha1: data.sha1
-        };
-    }
-});

@@ -32,19 +32,3 @@ export interface FileBase {
      */
     type?: string;
 }
-export const FileBase = new Serializable({
-    serialize(value: FileBase) {
-        return {
-            id: value.id,
-            etag: value.etag,
-            type: value.type
-        };
-    },
-    deserialize(data: any): FileBase {
-        return {
-            id: data.id,
-            etag: data.etag,
-            type: data.type
-        };
-    }
-});

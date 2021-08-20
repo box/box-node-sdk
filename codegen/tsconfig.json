@@ -1,4 +1,8 @@
 {
-	"compilerOptions": { "target": "ES2019", "jsxFactory": "createJsxElement" },
+	"compilerOptions": {
+		"target": "ES2019",
+		"jsxFactory": "createJsxElement",
+		"jsxFragmentFactory": "createJsxFragment"
+	},
 	"extends": "../tsconfig.json"
 }

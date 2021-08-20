@@ -9,7 +9,7 @@ import { Serializable } from "../util/serializable";
 export interface FileMini extends schemas.FileBase {
     /**
      */
-    sequenceId?: string;
+    sequence_id?: string;
     /**
      * The name of the file
      * Example: Contract.pdf
@@ -23,23 +23,5 @@ export interface FileMini extends schemas.FileBase {
     sha1?: string;
     /**
      */
-    fileVersion?: schemas.FileVersionMini;
+    file_version?: schemas.FileVersionMini;
 }
-export const FileMini = new Serializable({
-    serialize(value: FileMini) {
-        return {
-            sequence_id: value.sequenceId,
-            name: value.name,
-            sha1: value.sha1,
-            file_version: schemas.FileVersionMini.serialize(value.fileVersion)
-        };
-    },
-    deserialize(data: any): FileMini {
-        return {
-            sequenceId: data.sequence_id,
-            name: data.name,
-            sha1: data.sha1,
-            fileVersion: schemas.FileVersionMini.deserialize(data.file_version)
-        };
-    }
-});

@@ -19,17 +19,3 @@ export interface FileVersionBase {
      */
     type?: string;
 }
-export const FileVersionBase = new Serializable({
-    serialize(value: FileVersionBase) {
-        return {
-            id: value.id,
-            type: value.type
-        };
-    },
-    deserialize(data: any): FileVersionBase {
-        return {
-            id: data.id,
-            type: data.type
-        };
-    }
-});
