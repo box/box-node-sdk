@@ -430,10 +430,6 @@ function createInterfaceForSchema({
 
 	compressSchema(schema);
 
-	// if (isOpenAPIReference(schema)) {
-	// 	throw new Error(`Reference in schema ${name} is not supported`);
-	// }
-
 	if (schema.type !== 'object') {
 		throw new Error(`Expecting ${name} to be an object schema`);
 	}
