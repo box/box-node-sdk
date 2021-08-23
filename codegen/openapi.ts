@@ -110,6 +110,8 @@ export type OpenAPIOperation = {
 	 * HTTP spec is vague, requestBody SHALL be ignored by consumers.
 	 */
 	requestBody?: OpenAPIRequestBody;
+
+	responses?: Record<string, { content?: Record<string, OpenAPIMediaType> }>;
 };
 
 export type OpenAPIReference = { $ref: string };

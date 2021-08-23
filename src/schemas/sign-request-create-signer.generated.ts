@@ -10,7 +10,7 @@ export interface SignRequestCreateSigner {
      * Email address of the signer
      * Example: example@gmail.com
      */
-    email: string;
+    email?: string;
     /**
      * Defines the role of the signer in the sign request. A `signer`
      * must sign the document and an `approver` must approve the document. A

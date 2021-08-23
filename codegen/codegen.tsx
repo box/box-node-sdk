@@ -144,9 +144,17 @@ function createMethodForOperation({
 	const pathItem = spec.paths[pathKey][verb]!;
 	const parameters = pathItem.parameters || [];
 	const isOptionsRequired = parameters.some((parameter) => parameter.required);
+	const returnTypeSchema = (
+		pathItem.responses?.['200'] ?? pathItem.responses?.['201']
+	)?.content?.['application/json']?.schema;
 	const returnType = (
 		<TypeReferenceNode typeName={<Identifier text="Promise" />}>
-			{ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)}
+			{returnTypeSchema
+				? createTypeNodeForSchema({
+						spec,
+						schema: returnTypeSchema,
+				  })
+				: ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)}
 		</TypeReferenceNode>
 	);
 
@@ -541,7 +549,16 @@ function createInterfaceForSchema({
 							/>,
 							<PropertySignature
 								name={addSerialization ? convertPropName(key) : key}
-								questionToken={!required.includes(key)}
+								questionToken={
+									![
+										required,
+										...((
+											spec.components?.schemas?.[
+												getIdentifierForSchemaName(schema.$ref).text
+											] as OpenAPISchema
+										)?.required ?? []),
+									].includes(key)
+								}
 								type={createTypeNodeForSchema({ spec, schema: property })}
 							/>,
 						];
@@ -812,21 +829,19 @@ export async function generateInterfacesForSchema({
 	});
 }
 
-export async function generateSignRequestManager({ spec }: { spec: OpenAPI }) {
-	await generateInterfacesForSchema({
-		spec,
-		names: [
-			'File--Base',
-			'File--Mini',
-			'FileVersion--Base',
-			'FileVersion--Mini',
-			'Folder--Base',
-			'Folder--Mini',
-			'SignRequestCreateRequest',
-			'SignRequestCreateSigner',
-			'SignRequestPrefillTag',
-		],
-	});
+export async function generateSignRequestManager({
+	spec,
+	interfaceNames,
+}: {
+	spec: OpenAPI;
+	interfaceNames?: string[];
+}) {
+	if (interfaceNames) {
+		await generateInterfacesForSchema({
+			spec,
+			names: interfaceNames,
+		});
+	}
 
 	const fullPath = path.join(
 		__dirname,
@@ -894,7 +909,25 @@ export async function generateSignRequestManager({ spec }: { spec: OpenAPI }) {
 (async () => {
 	try {
 		const spec = require('../openapi.json');
-		await generateSignRequestManager({ spec });
+		await generateSignRequestManager({
+			spec,
+			interfaceNames: [
+				'File--Base',
+				'File--Mini',
+				'FileVersion--Base',
+				'FileVersion--Mini',
+				'Folder--Base',
+				'Folder--Mini',
+				'SignRequest',
+				'SignRequestCreateRequest',
+				'SignRequestCreateSigner',
+				'SignRequestCreateSigner',
+				'SignRequestPrefillTag',
+				'SignRequests',
+				'SignRequestSigner',
+				'SignRequestSignerInput',
+			],
+		});
 	} catch (e) {
 		console.error(e);
 	}

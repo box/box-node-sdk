@@ -35,14 +35,14 @@ export interface SignRequestCreateRequest {
     /**
      * Array of signers for the sign request. 35 is the max number of signers permitted.
      */
-    signers: schemas.SignRequestCreateSigner[];
+    signers?: schemas.SignRequestCreateSigner[];
     /**
      * List of files to create a signing document from. This is currently limited to one file. Only the ID and type fields are required for each file.
      */
-    source_files: schemas.FileMini[];
+    source_files?: schemas.FileMini[];
     /**
      */
-    parent_folder: schemas.FolderMini;
+    parent_folder?: schemas.FolderMini;
     /**
      * When a document contains sign related tags in the content, you can prefill them using this `prefill_tags` by referencing the 'id' of the tag as the `external_id` field of the prefill tag.
      */

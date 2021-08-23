@@ -16,14 +16,14 @@ class SignRequests {
      * @param {object} options
      * @param {string} options.sign_request_id The ID of the sign request
      * @param {Function} [callback] Passed the result if succesful, error otherwise
-     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+     * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
      */
     getById(options: {
         /**
          * The ID of the sign request
          */
         readonly sign_request_id: string;
-    }, callback?: Function): Promise<object> {
+    }, callback?: Function): Promise<schemas.SignRequest> {
         const apiPath = urlPath("sign_requests", options.sign_request_id), params = {
             qs: options
         };
@@ -37,7 +37,7 @@ class SignRequests {
      * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
      * @param {number} [options.limit] The maximum number of items to return per page.
      * @param {Function} [callback] Passed the result if succesful, error otherwise
-     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+     * @returns {Promise<schemas.SignRequests>} A promise resolving to the result or rejecting with an error
      */
     getAll(options?: {
         /**
@@ -51,7 +51,7 @@ class SignRequests {
          * The maximum number of items to return per page.
          */
         readonly limit?: number;
-    }, callback?: Function): Promise<object> {
+    }, callback?: Function): Promise<schemas.SignRequests> {
         const apiPath = urlPath("sign_requests"), params = {
             qs: options
         };
@@ -65,9 +65,9 @@ class SignRequests {
      * @param {schemas.SignRequestCreateRequest} body
      * @param {object} [options]
      * @param {Function} [callback] Passed the result if succesful, error otherwise
-     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+     * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
      */
-    create(body: schemas.SignRequestCreateRequest, options?: {}, callback?: Function): Promise<object> {
+    create(body: schemas.SignRequestCreateRequest, options?: {}, callback?: Function): Promise<schemas.SignRequest> {
         const apiPath = urlPath("sign_requests"), params = {
             qs: options,
             body: body
@@ -81,14 +81,14 @@ class SignRequests {
      * @param {object} options
      * @param {string} options.sign_request_id The ID of the sign request
      * @param {Function} [callback] Passed the result if succesful, error otherwise
-     * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+     * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
      */
     cancelById(options: {
         /**
          * The ID of the sign request
          */
         readonly sign_request_id: string;
-    }, callback?: Function): Promise<object> {
+    }, callback?: Function): Promise<schemas.SignRequest> {
         const apiPath = urlPath("sign_requests", options.sign_request_id, "cancel"), params = {
             qs: options
         };
