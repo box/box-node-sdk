@@ -1,5 +1,4 @@
 import * as schemas from ".";
-import { Serializable } from "../util/serializable";
 /**
  * Folder (Mini)
  * 

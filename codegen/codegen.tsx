@@ -494,19 +494,21 @@ function createInterfaceForSchema({
 				}
 				moduleSpecifier={<StringLiteral text="." />}
 			/>
-			<ImportDeclaration
-				importClause={
-					<ImportClause
-						namedBindings={ts.factory.createNamedImports([
-							ts.factory.createImportSpecifier(
-								undefined,
-								<Identifier text="Serializable" />
-							),
-						])}
-					/>
-				}
-				moduleSpecifier={<StringLiteral text="../util/serializable" />}
-			/>
+			{addSerialization && (
+				<ImportDeclaration
+					importClause={
+						<ImportClause
+							namedBindings={ts.factory.createNamedImports([
+								ts.factory.createImportSpecifier(
+									undefined,
+									<Identifier text="Serializable" />
+								),
+							])}
+						/>
+					}
+					moduleSpecifier={<StringLiteral text="../util/serializable" />}
+				/>
+			)}
 			<JSDocComment
 				comment={[schema.title, schema.description]
 					.filter(Boolean)
