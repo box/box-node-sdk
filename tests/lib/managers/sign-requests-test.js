@@ -26,8 +26,8 @@ var sandbox = sinon.createSandbox(),
 // Tests
 // ------------------------------------------------------------------------------
 
-describe('SignRequests', function() {
-	before(function() {
+describe('SignRequests', function () {
+	before(function () {
 		// Enable Mockery
 		mockery.enable({
 			useCleanCache: true,
@@ -37,42 +37,42 @@ describe('SignRequests', function() {
 		mockery.registerAllowable(MODULE_FILE_PATH);
 	});
 
-	beforeEach(function() {
+	beforeEach(function () {
 		// Setup File Under Test
 		SignRequests = require(MODULE_FILE_PATH);
 		signRequests = new SignRequests(boxClientFake);
 		testQS = { testQSKey: 'testQSValue' };
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sandbox.verifyAndRestore();
 		mockery.resetCache();
 	});
 
-	after(function() {
+	after(function () {
 		mockery.deregisterAll();
 		mockery.disable();
 	});
 
-	describe('create()', function() {
+	describe('create()', function () {
 		var signers, sourceFiles, parentFolder, expectedParams;
 
-		beforeEach(function() {
+		beforeEach(function () {
 			signers = [
 				{
 					role: 'signer',
-					email: 'mhagmajer@gmail.com',
+					email: 'signer@example.com',
 				},
 			];
 			sourceFiles = [
 				{
 					type: 'file',
-					id: '847129705371',
+					id: '1234567890',
 				},
 			];
 			parentFolder = {
 				type: 'folder',
-				id: '135393938385',
+				id: '1234567890',
 			};
 			expectedParams = {
 				body: {
@@ -84,7 +84,7 @@ describe('SignRequests', function() {
 			};
 		});
 
-		it('should make POST request with all parameters to create a sign request when all optional parameters are passed', function() {
+		it('should make POST request with all parameters to create a sign request when all optional parameters are passed', function () {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox
 				.mock(boxClientFake)
