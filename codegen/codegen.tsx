@@ -134,10 +134,12 @@ function createMethodForOperation({
 	spec,
 	pathKey,
 	verb,
+	name,
 }: {
 	spec: OpenAPI;
 	pathKey: keyof OpenAPI['paths'];
-	verb: ('get' | 'post') & keyof OpenAPIPathItem;
+	verb: ('get' | 'post' | 'put' | 'delete') & keyof OpenAPIPathItem;
+	name?: string;
 }): ts.Node[] {
 	const pathItem = spec.paths[pathKey][verb]!;
 	const parameters = pathItem.parameters || [];
@@ -202,7 +204,7 @@ function createMethodForOperation({
 				/>
 			</JSDocComment>
 			<MethodDeclaration
-				name={pathItem.operationId}
+				name={name || pathItem.operationId}
 				parameters={[
 					bodySchema && (
 						<ParameterDeclaration
@@ -345,17 +347,24 @@ function createMethodForOperation({
 
 function createClassForOperations({
 	spec,
-	operationIds,
+	name,
+	operations,
 }: {
 	spec: OpenAPI;
-	operationIds: string[];
+	name: string;
+	operations: Record<
+		string,
+		{
+			name?: string;
+		}
+	>;
 }): ts.Node[] {
 	const clientId = <Identifier text="client" />;
 
 	return (
 		<>
 			<JSDocComment comment="Class for API access" />
-			<ClassDeclaration name="SignRequests">
+			<ClassDeclaration name={name}>
 				<PropertyDeclaration
 					name={clientId}
 					type={<TypeReferenceNode typeName="BoxClient" />}
@@ -381,15 +390,16 @@ function createClassForOperations({
 						/>
 					</Block>
 				</ConstructorDeclaration>
-				{operationIds
-					.map((operationId) => {
+				{Object.entries(operations)
+					.map(([operationId, operation]) => {
 						for (const [pathKey, pathItem] of Object.entries(spec.paths)) {
-							for (const verb of ['get', 'post'] as const) {
+							for (const verb of ['get', 'post', 'put', 'delete'] as const) {
 								if (pathItem[verb]?.operationId === operationId) {
 									return createMethodForOperation({
 										spec,
 										pathKey,
 										verb,
+										name: operation.name,
 									});
 								}
 							}
@@ -806,9 +816,7 @@ export async function generateInterfacesForSchema({
 	});
 }
 
-export async function generate(specPath: string) {
-	const spec = require(specPath);
-
+export async function generateSignRequestManager({ spec }: { spec: OpenAPI }) {
 	await generateInterfacesForSchema({
 		spec,
 		names: [
@@ -859,13 +867,24 @@ export async function generate(specPath: string) {
 				/>
 				{createClassForOperations({
 					spec,
-					operationIds: [
-						'get_sign_requests_id',
-						'get_sign_requests',
-						'post_sign_requests',
-						'post_sign_requests_id_cancel',
-						'post_sign_requests_id_resend',
-					],
+					name: 'SignRequests',
+					operations: {
+						get_sign_requests_id: {
+							name: 'getById',
+						},
+						get_sign_requests: {
+							name: 'getAll',
+						},
+						post_sign_requests: {
+							name: 'create',
+						},
+						post_sign_requests_id_cancel: {
+							name: 'cancelById',
+						},
+						post_sign_requests_id_resend: {
+							name: 'resendById',
+						},
+					},
 				})}
 				<ExportAssignment
 					isExportEquals
@@ -878,7 +897,8 @@ export async function generate(specPath: string) {
 
 (async () => {
 	try {
-		await generate('../openapi.json');
+		const spec = require('../openapi.json');
+		await generateSignRequestManager({ spec });
 	} catch (e) {
 		console.error(e);
 	}

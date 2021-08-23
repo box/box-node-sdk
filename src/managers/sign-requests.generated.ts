@@ -18,7 +18,7 @@ class SignRequests {
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
      */
-    get_sign_requests_id(options: {
+    getById(options: {
         /**
          * The ID of the sign request
          */
@@ -39,7 +39,7 @@ class SignRequests {
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
      */
-    get_sign_requests(options?: {
+    getAll(options?: {
         /**
          * Defines the position marker at which to begin returning results. This is
          * used when paginating using marker-based pagination.
@@ -67,7 +67,7 @@ class SignRequests {
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
      */
-    post_sign_requests(body: schemas.SignRequestCreateRequest, options?: {}, callback?: Function): Promise<object> {
+    create(body: schemas.SignRequestCreateRequest, options?: {}, callback?: Function): Promise<object> {
         const apiPath = urlPath("sign_requests"), params = {
             qs: options,
             body: body
@@ -83,7 +83,7 @@ class SignRequests {
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
      */
-    post_sign_requests_id_cancel(options: {
+    cancelById(options: {
         /**
          * The ID of the sign request
          */
@@ -103,7 +103,7 @@ class SignRequests {
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
      */
-    post_sign_requests_id_resend(options: {
+    resendById(options: {
         /**
          * The ID of the sign request
          */

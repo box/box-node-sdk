@@ -46,11 +46,14 @@ export type OpenAPIPathItem = {
 	/** A definition of a GET operation on this path. */
 	get?: OpenAPIOperation;
 
+	/** A definition of a POST operation on this path. */
+	post?: OpenAPIOperation;
+
 	/** A definition of a PUT operation on this path. */
 	put?: OpenAPIOperation;
 
-	/** A definition of a POST operation on this path. */
-	post?: OpenAPIOperation;
+	/** A definition of a DELETE operation on this path. */
+	delete?: OpenAPIOperation;
 };
 
 /**
