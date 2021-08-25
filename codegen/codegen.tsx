@@ -357,26 +357,35 @@ function createClassForOperations({
 	spec,
 	name,
 	operations,
+	comment,
 }: {
 	spec: OpenAPI;
 	name: string;
-	operations: Record<
-		string,
-		{
-			name?: string;
-		}
-	>;
+	operations: Array<{
+		name: string;
+		operationId: string;
+	}>;
+	comment?: string;
 }): ts.Node[] {
 	const clientId = <Identifier text="client" />;
 
 	return (
 		<>
-			<JSDocComment comment="Class for API access" />
+			<JSDocComment comment={comment} />
 			<ClassDeclaration name={name}>
 				<PropertyDeclaration
 					name={clientId}
 					type={<TypeReferenceNode typeName="BoxClient" />}
 				/>
+				<JSDocComment>
+					<JSDocParameterTag
+						name={<Identifier text="client" />}
+						typeExpression={ts.factory.createJSDocTypeExpression(
+							<TypeReferenceNode typeName="BoxClient" />
+						)}
+						comment="The Box API Client that is responsible for making calls to the API"
+					/>
+				</JSDocComment>
 				<ConstructorDeclaration
 					parameters={[
 						<ParameterDeclaration
@@ -398,8 +407,8 @@ function createClassForOperations({
 						/>
 					</Block>
 				</ConstructorDeclaration>
-				{Object.entries(operations)
-					.map(([operationId, operation]) => {
+				{operations
+					.map(({ operationId, name }) => {
 						for (const [pathKey, pathItem] of Object.entries(spec.paths)) {
 							for (const verb of ['get', 'post', 'put', 'delete'] as const) {
 								if (pathItem[verb]?.operationId === operationId) {
@@ -407,7 +416,7 @@ function createClassForOperations({
 										spec,
 										pathKey,
 										verb,
-										name: operation.name,
+										name: name,
 									});
 								}
 							}
@@ -845,6 +854,8 @@ export async function generateSignRequestManager({
 		});
 	}
 
+	const className = 'SignRequestsManager'; // avoid name clash with SignRequests schema
+
 	const fullPath = path.join(
 		__dirname,
 		'../src/managers/sign-requests.generated.ts'
@@ -880,28 +891,35 @@ export async function generateSignRequestManager({
 				/>
 				{createClassForOperations({
 					spec,
-					name: 'SignRequests',
-					operations: {
-						get_sign_requests_id: {
+					name: className,
+					comment:
+						'Simple manager for interacting with all Sign Requests endpoints and actions.',
+					operations: [
+						{
 							name: 'getById',
+							operationId: 'get_sign_requests_id',
 						},
-						get_sign_requests: {
+						{
 							name: 'getAll',
+							operationId: 'get_sign_requests',
 						},
-						post_sign_requests: {
+						{
 							name: 'create',
+							operationId: 'post_sign_requests',
 						},
-						post_sign_requests_id_cancel: {
+						{
 							name: 'cancelById',
+							operationId: 'post_sign_requests_id_cancel',
 						},
-						post_sign_requests_id_resend: {
+						{
 							name: 'resendById',
+							operationId: 'post_sign_requests_id_resend',
 						},
-					},
+					],
 				})}
 				<ExportAssignment
 					isExportEquals
-					expression={<Identifier text="SignRequests" />}
+					expression={<Identifier text={className} />}
 				/>
 			</>
 		),

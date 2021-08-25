@@ -2,10 +2,13 @@ import BoxClient from "../box-client";
 import urlPath from "../util/url-path";
 import * as schemas from "../schemas";
 /**
- * Class for API access
+ * Simple manager for interacting with all Sign Requests endpoints and actions.
  */
-class SignRequests {
+class SignRequestsManager {
     client: BoxClient;
+    /**
+     * @param {BoxClient} client The Box API Client that is responsible for making calls to the API
+     */
     constructor(client: BoxClient) {
         this.client = client
     }
@@ -115,4 +118,4 @@ class SignRequests {
         return this.client.wrapWithDefaultHandler(this.client.post)(apiPath, params, callback);
     }
 }
-export = SignRequests;
+export = SignRequestsManager;
