@@ -29,5 +29,5 @@ export interface FileBase {
      * `file`
      * Example: file
      */
-    type?: string;
+    type?: "file";
 }

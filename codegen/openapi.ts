@@ -295,6 +295,12 @@ export type OpenAPISchema = {
 	required?: string[];
 
 	/**
+	 * The enum keyword is used to restrict a value to a fixed set of values. It
+	 * must be an array with at least one element, where each element is unique.
+	 */
+	enum?: string[];
+
+	/**
 	 * The properties (key-value pairs) on an object are defined using the
 	 * properties keyword. The value of properties is an object, where each key
 	 * is the name of a property and each value is a schema used to validate

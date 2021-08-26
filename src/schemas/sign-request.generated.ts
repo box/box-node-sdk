@@ -9,11 +9,11 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
      * object type
      * Example: sign-request
      */
-    type?: string;
+    type?: "sign-request";
     /**
      * Array of signers for the sign request
      */
-    signers?: schemas.SignRequestSigner[];
+    signers: schemas.SignRequestSigner[];
     /**
      * Sign request ID
      * Example: 12345
@@ -35,7 +35,7 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
      * Describes the status of the sign request
      * Example: converting
      */
-    status?: string;
+    status?: "converting" | "created" | "sent" | "viewed" | "signed" | "cancelled" | "declined" | "error_converting" | "error_sending" | "expired";
     /**
      * List of files that will be signed, which are copies of the original
      * source files. A new version of these files are created as signers sign

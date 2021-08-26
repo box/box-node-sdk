@@ -99,6 +99,28 @@ function createTypeNodeForSchema({
 		);
 	}
 
+	const { enum: schemaEnum } = schema;
+	if (schemaEnum) {
+		return ts.factory.createUnionTypeNode(
+			schemaEnum
+				.map((enumVal) => {
+					switch (typeof enumVal) {
+						case 'string':
+							return ts.factory.createStringLiteral(enumVal);
+
+						case 'number':
+							return ts.factory.createNumericLiteral(enumVal);
+
+						default:
+							throw new Error(
+								`Invalid enum value: ${schemaEnum}. Expecting string or number`
+							);
+					}
+				})
+				.map((literal) => ts.factory.createLiteralTypeNode(literal))
+		);
+	}
+
 	const { type } = schema;
 	switch (type) {
 		case 'string':
@@ -562,11 +584,13 @@ function createInterfaceForSchema({
 								questionToken={
 									![
 										...required,
-										...((
-											spec.components?.schemas?.[
-												getIdentifierForSchemaName(schema.$ref).text
-											] as OpenAPISchema
-										)?.required ?? []),
+										...((schema.$ref &&
+											(
+												spec.components?.schemas?.[
+													getIdentifierForSchemaRef(schema.$ref).text
+												] as OpenAPISchema
+											)?.required) ||
+											[]),
 									].includes(key)
 								}
 								type={createTypeNodeForSchema({ spec, schema: property })}

@@ -9,7 +9,7 @@ export interface SignRequestSignerInput extends schemas.SignRequestPrefillTag {
      * Type of input
      * Example: text
      */
-    type?: string;
+    type?: "signature" | "date" | "text" | "checkbox";
     /**
      * Index of page that the input is on
      * Example: 4

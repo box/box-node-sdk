@@ -16,5 +16,5 @@ export interface FileVersionBase {
      * `file_version`
      * Example: file_version
      */
-    type?: string;
+    type?: "file_version";
 }

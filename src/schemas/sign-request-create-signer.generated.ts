@@ -18,7 +18,7 @@ export interface SignRequestCreateSigner {
      * Example: signer
      * @default signer
      */
-    role?: string;
+    role?: "signer" | "approver" | "final_copy_reader";
     /**
      * Used in combination with an embed URL for a sender. After the
      * sender signs, they will be redirected to the next `in_person` signer.

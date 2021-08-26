@@ -29,5 +29,5 @@ export interface FolderBase {
      * `folder`
      * Example: folder
      */
-    type?: string;
+    type?: "folder";
 }
