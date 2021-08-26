@@ -40,6 +40,9 @@ export interface SignRequestCreateRequest {
      */
     source_files?: schemas.FileMini[];
     /**
+     * The destination folder to place final, signed document and signing
+     * log. Only `ID` and `type` fields are required. The root folder,
+     * folder ID `0`, cannot be used.
      */
     parent_folder?: schemas.FolderMini;
     /**

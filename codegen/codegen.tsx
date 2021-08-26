@@ -491,6 +491,10 @@ function createInterfaceForSchema({
 		/>
 	);
 
+	const comment = [schema.title, schema.description]
+		.filter(Boolean)
+		.join('\n\n');
+
 	return (
 		<>
 			<ImportDeclaration
@@ -518,11 +522,7 @@ function createInterfaceForSchema({
 					moduleSpecifier={<StringLiteral text="../util/serializable" />}
 				/>
 			)}
-			<JSDocComment
-				comment={[schema.title, schema.description]
-					.filter(Boolean)
-					.join('\n\n')}
-			/>
+			{comment && <JSDocComment comment={comment} />}
 			<InterfaceDeclaration
 				name={id}
 				modifiers={[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)]}
@@ -544,16 +544,15 @@ function createInterfaceForSchema({
 			>
 				{Object.entries(properties)
 					.map(([key, property]) => {
-						if (isOpenAPIReference(property)) {
-							throw new Error(`Unexpected reference in ${key}`);
-						}
+						compressSchema(property);
+						const propSchema = property as OpenAPISchema;
 
 						return [
 							<JSDocComment
 								comment={[
-									property.description,
-									property.example && `Example: ${property.example}`,
-									property.default && `@default ${property.default}`,
+									propSchema.description,
+									propSchema.example && `Example: ${propSchema.example}`,
+									propSchema.default && `@default ${propSchema.default}`,
 								]
 									.filter(Boolean)
 									.join('\n')}

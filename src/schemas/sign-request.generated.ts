@@ -27,6 +27,8 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
      */
     prepare_url?: string;
     /**
+     * Reference to a file that holds a log of all signer activity for
+     * the request
      */
     signing_log?: schemas.FileMini;
     /**
