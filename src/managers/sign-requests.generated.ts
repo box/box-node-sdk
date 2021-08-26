@@ -18,7 +18,7 @@ class SignRequestsManager {
 	 * Gets a sign request by ID.
 	 * @param {object} options Options for the request
 	 * @param {string} options.sign_request_id The ID of the sign request
-	 * @param {Function} [callback] Passed the result if succesful, error otherwise
+	 * @param {Function} [callback] Passed the result if successful, error otherwise
 	 * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
 	 */
 	getById(
@@ -47,7 +47,7 @@ class SignRequestsManager {
 	 * @param {object} [options] Options for the request
 	 * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
 	 * @param {number} [options.limit] The maximum number of items to return per page.
-	 * @param {Function} [callback] Passed the result if succesful, error otherwise
+	 * @param {Function} [callback] Passed the result if successful, error otherwise
 	 * @returns {Promise<schemas.SignRequests>} A promise resolving to the result or rejecting with an error
 	 */
 	getAll(
@@ -83,7 +83,7 @@ class SignRequestsManager {
 	 * sending the sign request to signers.
 	 * @param {schemas.SignRequestCreateRequest} body
 	 * @param {object} [options] Options for the request
-	 * @param {Function} [callback] Passed the result if succesful, error otherwise
+	 * @param {Function} [callback] Passed the result if successful, error otherwise
 	 * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
 	 */
 	create(
@@ -108,7 +108,7 @@ class SignRequestsManager {
 	 * Cancels a sign request.
 	 * @param {object} options Options for the request
 	 * @param {string} options.sign_request_id The ID of the sign request
-	 * @param {Function} [callback] Passed the result if succesful, error otherwise
+	 * @param {Function} [callback] Passed the result if successful, error otherwise
 	 * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
 	 */
 	cancelById(
@@ -136,7 +136,7 @@ class SignRequestsManager {
 	 * Resends a sign request email to all outstanding signers.
 	 * @param {object} options Options for the request
 	 * @param {string} options.sign_request_id The ID of the sign request
-	 * @param {Function} [callback] Passed the result if succesful, error otherwise
+	 * @param {Function} [callback] Passed the result if successful, error otherwise
 	 * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
 	 */
 	resendById(

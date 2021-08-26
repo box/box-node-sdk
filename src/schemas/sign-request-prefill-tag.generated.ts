@@ -10,7 +10,7 @@ export interface SignRequestPrefillTag {
 	 * This references the ID of a specific tag contained in a file of the sign request.
 	 * Example: 1234
 	 */
-	document_tag_id?: string;
+	document_tag_id: string;
 	/**
 	 * Text prefill value
 	 * Example: text

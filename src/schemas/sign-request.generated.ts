@@ -18,7 +18,7 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 	 * Sign request ID
 	 * Example: 12345
 	 */
-	id?: string;
+	id: string;
 	/**
 	 * This URL is returned if `is_document_preparation_needed` is
 	 * set to `true` in the request. It is used to prepare the sign request

@@ -17,7 +17,7 @@ export interface FileBase {
 	 * the `file_id` is `123`.
 	 * Example: 12345
 	 */
-	id?: string;
+	id: string;
 	/**
 	 * The HTTP `etag` of this file. This can be used within some API
 	 * endpoints in the `If-Match` and `If-None-Match` headers to only
@@ -29,5 +29,5 @@ export interface FileBase {
 	 * `file`
 	 * Example: file
 	 */
-	type?: 'file';
+	type: 'file';
 }
