@@ -231,7 +231,7 @@ function createMethodForOperation({
 							ts.factory.createIdentifier('Function')
 						)
 					)}
-					comment="Passed the result if succesful, error otherwise"
+					comment="Passed the result if successful, error otherwise"
 				/>
 				<JSDocReturnTag
 					typeExpression={ts.factory.createJSDocTypeExpression(returnType)}
