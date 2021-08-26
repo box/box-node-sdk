@@ -418,15 +418,12 @@ export function PropertySignature({
 	questionToken?: boolean;
 	type?: ts.TypeNode;
 }): ts.PropertySignature {
-	const ps = ts.factory.createPropertySignature(
+	return ts.factory.createPropertySignature(
 		modifiers,
 		name,
 		questionToken ? QuestionToken() : undefined,
 		type
 	);
-	(ps as any).jsDoc = ts.factory.createJSDocComment('adgadggadgad');
-	(ps as any).jsDocComments = ts.factory.createJSDocComment('adgadggadgad');
-	return ps;
 }
 
 export function QuestionToken(): ts.QuestionToken {

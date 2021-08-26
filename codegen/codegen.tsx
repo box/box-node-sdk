@@ -297,7 +297,7 @@ function createMethodForOperation({
 												);
 												if (!param) {
 													throw new Error(
-														`Uknown param ${part} in path ${pathKey}.`
+														`Unknown param ${part} in path ${pathKey}.`
 													);
 												}
 
