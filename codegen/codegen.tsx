@@ -7,6 +7,7 @@ import * as fs from 'fs/promises';
 import { camelCase, kebabCase, merge, upperFirst } from 'lodash';
 import * as path from 'path';
 import * as ts from 'typescript';
+import * as prettier from 'prettier';
 import {
 	isOpenAPIReference,
 	OpenAPI,
@@ -79,7 +80,6 @@ function compressSchema(schema: OpenAPISchema | OpenAPIReference) {
 		throw new Error('anyOf and oneOf in schema definition are not supported');
 	}
 
-	// TODO add better support for allOf
 	allOf?.forEach((item) => merge(schema, item));
 }
 
@@ -808,7 +808,6 @@ function createInterfaceForSchema({
 
 const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 
-// TODO add Prettier phase
 export async function writeNodesToFile({
 	fullPath,
 	nodes,
@@ -819,12 +818,21 @@ export async function writeNodesToFile({
 	languageVersion?: ts.ScriptTarget;
 }) {
 	const fileName = path.basename(fullPath);
-	const data = printer.printList(
+	const source = printer.printList(
 		ts.ListFormat.MultiLine,
 		ts.factory.createNodeArray(nodes),
 		ts.createSourceFile(fileName, '', languageVersion)
 	);
-	await fs.writeFile(fullPath, data);
+
+	const prettierConfig = await prettier.resolveConfig(fullPath);
+	if (!prettierConfig) {
+		throw new Error(`Coundn't locate prettier config for file ${fullPath}`);
+	}
+
+	await fs.writeFile(
+		fullPath,
+		prettier.format(source, { parser: 'typescript', ...prettierConfig })
+	);
 }
 
 export async function generateInterfacesForSchema({
