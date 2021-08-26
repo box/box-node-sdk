@@ -868,12 +868,23 @@ export async function generateInterfacesForSchema({
 	});
 }
 
-export async function generateSignRequestManager({
+export async function generateManagerClass({
+	name,
+	comment,
+	relativePath,
 	spec,
 	interfaceNames,
+	operations,
 }: {
+	name: string;
+	comment: string;
+	relativePath: string;
 	spec: OpenAPI;
 	interfaceNames?: string[];
+	operations: Array<{
+		name: string;
+		operationId: string;
+	}>;
 }) {
 	if (interfaceNames) {
 		await generateInterfacesForSchema({
@@ -882,12 +893,8 @@ export async function generateSignRequestManager({
 		});
 	}
 
-	const className = 'SignRequestsManager'; // avoid name clash with SignRequests schema
+	const fullPath = path.join(__dirname, relativePath);
 
-	const fullPath = path.join(
-		__dirname,
-		'../src/managers/sign-requests.generated.ts'
-	);
 	await writeNodesToFile({
 		fullPath,
 		nodes: (
@@ -919,35 +926,13 @@ export async function generateSignRequestManager({
 				/>
 				{createClassForOperations({
 					spec,
-					name: className,
-					comment:
-						'Simple manager for interacting with all Sign Requests endpoints and actions.',
-					operations: [
-						{
-							name: 'getById',
-							operationId: 'get_sign_requests_id',
-						},
-						{
-							name: 'getAll',
-							operationId: 'get_sign_requests',
-						},
-						{
-							name: 'create',
-							operationId: 'post_sign_requests',
-						},
-						{
-							name: 'cancelById',
-							operationId: 'post_sign_requests_id_cancel',
-						},
-						{
-							name: 'resendById',
-							operationId: 'post_sign_requests_id_resend',
-						},
-					],
+					name,
+					comment,
+					operations,
 				})}
 				<ExportAssignment
 					isExportEquals
-					expression={<Identifier text={className} />}
+					expression={<Identifier text={name} />}
 				/>
 			</>
 		),
@@ -957,8 +942,34 @@ export async function generateSignRequestManager({
 (async () => {
 	try {
 		const spec = require('../openapi.json');
-		await generateSignRequestManager({
+		await generateManagerClass({
+			name: 'SignRequestsManager', // avoid name clash with SignRequests schema
+			comment:
+				'Simple manager for interacting with all Sign Requests endpoints and actions.',
+			relativePath: '../src/managers/sign-requests.generated.ts',
 			spec,
+			operations: [
+				{
+					name: 'getById',
+					operationId: 'get_sign_requests_id',
+				},
+				{
+					name: 'getAll',
+					operationId: 'get_sign_requests',
+				},
+				{
+					name: 'create',
+					operationId: 'post_sign_requests',
+				},
+				{
+					name: 'cancelById',
+					operationId: 'post_sign_requests_id_cancel',
+				},
+				{
+					name: 'resendById',
+					operationId: 'post_sign_requests_id_resend',
+				},
+			],
 			interfaceNames: [
 				'File--Base',
 				'File--Mini',
