@@ -94,8 +94,11 @@ export type OpenAPIOperation = {
 	 * identify an operation, therefore, it is RECOMMENDED to follow common
 	 * programming naming conventions.
 	 */
-	operationId: string; // unique operation identifier
+	operationId: string;
 
+	/**
+	 * Box extension to the OpenAPI Schema
+	 */
 	'x-box-tag': string;
 
 	/**
@@ -123,7 +126,106 @@ export type OpenAPIOperation = {
 	 */
 	requestBody?: OpenAPIRequestBody;
 
-	responses?: Record<string, { content?: Record<string, OpenAPIMediaType> }>;
+	/**
+	 * REQUIRED. The list of possible responses as they are returned from
+	 * executing this operation.
+	 */
+	responses: OpenAPIResponses;
+};
+
+/**
+ * A container for the expected responses of an operation. The container maps a
+ * HTTP response code to the expected response.
+ *
+ * The documentation is not necessarily expected to cover all possible HTTP
+ * response codes because they may not be known in advance. However,
+ * documentation is expected to cover a successful operation response and any
+ * known errors.
+ *
+ * The default MAY be used as a default response object for all HTTP codes that
+ * are not covered individually by the specification.
+ *
+ * The Responses Object MUST contain at least one response code, and it SHOULD
+ * be the response for a successful operation call.
+ */
+export type OpenAPIResponses = Record<string, OpenAPIResponse>;
+
+/**
+ * Describes a single response from an API Operation, including design-time,
+ * static links to operations based on the response.
+ */
+export type OpenAPIResponse = {
+	/**
+	 * REQUIRED. A short description of the response. CommonMark syntax MAY be
+	 * used for rich text representation.
+	 */
+	description: string;
+
+	/**
+	 * Maps a header name to its definition. RFC7230 states header names are
+	 * case insensitive. If a response header is defined with the name
+	 * "Content-Type", it SHALL be ignored.
+	 */
+	headers?: Record<string, OpenAPIHeader>;
+
+	/**
+	 * A map containing descriptions of potential response payloads. The key is
+	 * a media type or media type range and the value describes it. For
+	 * responses that match multiple keys, only the most specific key is
+	 * applicable. e.g. text/plain overrides text/*
+	 */
+	content?: Record<string, OpenAPIMediaType>;
+
+	/**
+	 * A map of operations links that can be followed from the response. The key
+	 * of the map is a short name for the link, following the naming constraints
+	 * of the names for Component Objects.
+	 */
+	links?: Record<string, any>;
+};
+
+/**
+ * The Header Object follows the structure of the Parameter Object with the
+ * following changes:
+ *
+ * - name MUST NOT be specified, it is given in the corresponding headers map.
+ * - in MUST NOT be specified, it is implicitly in header.
+ * - All traits that are affected by the location MUST be applicable to a
+ *   location of header (for example, style).
+ */
+export type OpenAPIHeader = {
+	description?: string;
+	schema?: OpenAPISchema | OpenAPIReference;
+};
+
+/**
+ * The Link object represents a possible design-time link for a response. The
+ * presence of a link does not guarantee the caller's ability to successfully
+ * invoke it, rather it provides a known relationship and traversal mechanism
+ * between responses and other operations.
+ *
+ * Unlike dynamic links (i.e. links provided in the response payload), the OAS
+ * linking mechanism does not require link information in the runtime response.
+ *
+ * For computing links, and providing instructions to execute them, a runtime
+ * expression is used for accessing values in an operation and using them as
+ * parameters while invoking the linked operation.
+ */
+export type OpenAPILink = {
+	/**
+	 * A relative or absolute URI reference to an OAS operation. This field is
+	 * mutually exclusive of the operationId field, and MUST point to an
+	 * Operation Object. Relative operationRef values MAY be used to locate an
+	 * existing Operation Object in the OpenAPI definition.
+	 */
+	operationRef?: string;
+
+	/**
+	 * The name of an existing, resolvable OAS operation, as defined with a
+	 * unique operationId. This field is mutually exclusive of the operationRef
+	 * field.
+	 */
+	operationId?: string;
 };
 
 export type OpenAPIReference = { $ref: string };
@@ -150,22 +252,73 @@ export type OpenAPISchema = {
 		| 'boolean'
 		| 'null';
 
-	title?: string;
-
-	description?: string;
-
-	required?: string[];
-
-	properties?: Record<string, OpenAPISchema | OpenAPIReference>;
-
-	example?: any;
-
-	default?: any;
-
 	/** used with type: 'array' */
 	items?: OpenAPISchema | OpenAPIReference;
 
+	/**
+	 * To validate against allOf, the given data must be valid against all of
+	 * the given subschemas.
+	 */
 	allOf?: (OpenAPISchema | OpenAPIReference)[];
+
+	/**
+	 * To validate against anyOf, the given data must be valid against any (one
+	 * or more) of the given subschemas.
+	 */
+	anyOf?: (OpenAPISchema | OpenAPIReference)[];
+
+	/**
+	 * To validate against oneOf, the given data must be valid against exactly
+	 * one of the given subschemas.
+	 */
+	oneOf?: (OpenAPISchema | OpenAPIReference)[];
+
+	/**
+	 *  A “title” will preferably be short, whereas a “description” will provide
+	 *  a more lengthy explanation about the purpose of the data described by
+	 *  the schema.
+	 */
+	title?: string;
+
+	/**
+	 *  A “title” will preferably be short, whereas a “description” will provide
+	 *  a more lengthy explanation about the purpose of the data described by
+	 *  the schema.
+	 */
+	description?: string;
+
+	/**
+	 * Determines whether this parameter is mandatory. If the parameter location
+	 * is "path", this property is REQUIRED and its value MUST be true.
+	 * Otherwise, the property MAY be included and its default value is false.
+	 */
+	required?: string[];
+
+	/**
+	 * The properties (key-value pairs) on an object are defined using the
+	 * properties keyword. The value of properties is an object, where each key
+	 * is the name of a property and each value is a schema used to validate
+	 * that property. Any property that doesn’t match any of the property names
+	 * in the properties keyword is ignored by this keyword.
+	 */
+	properties?: Record<string, OpenAPISchema | OpenAPIReference>;
+
+	/**
+	 * A free-form property to include an example of an instance for this
+	 * schema. To represent examples that cannot be naturally represented in
+	 * JSON or YAML, a string value can be used to contain the example with
+	 * escaping where necessary.
+	 */
+	example?: any;
+
+	/**
+	 * The default value represents what would be assumed by the consumer of the
+	 * input as the value of the schema if one is not provided. Unlike JSON
+	 * Schema, the value MUST conform to the defined type for the Schema Object
+	 * defined at the same level. For example, if type is string, then default
+	 * can be "foo" but cannot be 1.
+	 */
+	default?: any;
 };
 
 /** Describes a single request body. */
