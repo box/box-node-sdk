@@ -14,8 +14,6 @@ export interface SignRequestSigner extends schemas.SignRequestCreateSigner {
      * Final decision made by the signer
      */
     signer_decision?: object;
-    /**
-     */
     inputs?: schemas.SignRequestSignerInput[];
     /**
      * URL to direct a signer to for signing

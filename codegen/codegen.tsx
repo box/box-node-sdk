@@ -3,7 +3,7 @@
 //
 
 import * as fs from 'fs/promises';
-import { camelCase, kebabCase, upperFirst } from 'lodash';
+import { camelCase, kebabCase, merge, upperFirst } from 'lodash';
 import * as path from 'path';
 import * as ts from 'typescript';
 import {
@@ -72,11 +72,14 @@ function getIdentifierForSchemaRef(ref: string): ts.Identifier {
 	return getIdentifierForSchemaName(name);
 }
 
-// TODO add better support for allOf
 function compressSchema(schema: OpenAPISchema | OpenAPIReference) {
-	(schema as OpenAPISchema).allOf?.forEach((item) =>
-		Object.assign(schema, item)
-	);
+	const { allOf, anyOf, oneOf } = schema as OpenAPISchema;
+	if (anyOf || oneOf) {
+		throw new Error('anyOf and oneOf in schema definition are not supported');
+	}
+
+	// TODO add better support for allOf
+	allOf?.forEach((item) => merge(schema, item));
 }
 
 function createTypeNodeForSchema({
@@ -569,16 +572,16 @@ function createInterfaceForSchema({
 						compressSchema(property);
 						const propSchema = property as OpenAPISchema;
 
+						const comment = [
+							propSchema.description,
+							propSchema.example && `Example: ${propSchema.example}`,
+							propSchema.default && `@default ${propSchema.default}`,
+						]
+							.filter(Boolean)
+							.join('\n');
+
 						return [
-							<JSDocComment
-								comment={[
-									propSchema.description,
-									propSchema.example && `Example: ${propSchema.example}`,
-									propSchema.default && `@default ${propSchema.default}`,
-								]
-									.filter(Boolean)
-									.join('\n')}
-							/>,
+							comment && <JSDocComment comment={comment} />,
 							<PropertySignature
 								name={addSerialization ? convertPropName(key) : key}
 								questionToken={
@@ -597,7 +600,8 @@ function createInterfaceForSchema({
 							/>,
 						];
 					})
-					.flat()}
+					.flat()
+					.filter(Boolean)}
 			</InterfaceDeclaration>
 			{addSerialization && (
 				<VariableStatement
