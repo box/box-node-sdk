@@ -1,5 +1,6 @@
 //
-// NOTE https://ts-ast-viewer.com/
+// Useful TypeScript AST viewer for reverse engineering of the code:
+// https://ts-ast-viewer.com/
 //
 
 import * as fs from 'fs/promises';
