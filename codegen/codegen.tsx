@@ -207,6 +207,7 @@ function createMethodForOperation({
 					typeExpression={ts.factory.createJSDocTypeExpression(
 						ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)
 					)}
+					comment="Options for the request"
 				/>
 				{parameters.map((parameter) => (
 					<JSDocParameterTag

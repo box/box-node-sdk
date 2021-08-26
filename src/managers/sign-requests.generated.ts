@@ -16,7 +16,7 @@ class SignRequestsManager {
      * Get sign request by ID
      * 
      * Gets a sign request by ID.
-     * @param {object} options
+     * @param {object} options Options for the request
      * @param {string} options.sign_request_id The ID of the sign request
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
@@ -36,7 +36,7 @@ class SignRequestsManager {
      * List sign requests
      * 
      * Gets sign requests created by a user.
-     * @param {object} [options]
+     * @param {object} [options] Options for the request
      * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
      * @param {number} [options.limit] The maximum number of items to return per page.
      * @param {Function} [callback] Passed the result if succesful, error otherwise
@@ -66,7 +66,7 @@ class SignRequestsManager {
      * Creates a sign request. This involves preparing a document for signing and
      * sending the sign request to signers.
      * @param {schemas.SignRequestCreateRequest} body
-     * @param {object} [options]
+     * @param {object} [options] Options for the request
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
      */
@@ -81,7 +81,7 @@ class SignRequestsManager {
      * Cancel sign request
      * 
      * Cancels a sign request.
-     * @param {object} options
+     * @param {object} options Options for the request
      * @param {string} options.sign_request_id The ID of the sign request
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<schemas.SignRequest>} A promise resolving to the result or rejecting with an error
@@ -101,7 +101,7 @@ class SignRequestsManager {
      * Resend sign request
      * 
      * Resends a sign request email to all outstanding signers.
-     * @param {object} options
+     * @param {object} options Options for the request
      * @param {string} options.sign_request_id The ID of the sign request
      * @param {Function} [callback] Passed the result if succesful, error otherwise
      * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
