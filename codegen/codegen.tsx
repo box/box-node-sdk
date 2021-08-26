@@ -561,7 +561,7 @@ function createInterfaceForSchema({
 								name={addSerialization ? convertPropName(key) : key}
 								questionToken={
 									![
-										required,
+										...required,
 										...((
 											spec.components?.schemas?.[
 												getIdentifierForSchemaName(schema.$ref).text
@@ -939,7 +939,6 @@ export async function generateSignRequestManager({
 				'Folder--Mini',
 				'SignRequest',
 				'SignRequestCreateRequest',
-				'SignRequestCreateSigner',
 				'SignRequestCreateSigner',
 				'SignRequestPrefillTag',
 				'SignRequests',

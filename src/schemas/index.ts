@@ -7,7 +7,6 @@ export * from "./folder-mini.generated";
 export * from "./sign-request.generated";
 export * from "./sign-request-create-request.generated";
 export * from "./sign-request-create-signer.generated";
-export * from "./sign-request-create-signer.generated";
 export * from "./sign-request-prefill-tag.generated";
 export * from "./sign-requests.generated";
 export * from "./sign-request-signer.generated";

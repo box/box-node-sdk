@@ -14,5 +14,5 @@ export interface SignRequestSignerInput extends schemas.SignRequestPrefillTag {
      * Index of page that the input is on
      * Example: 4
      */
-    page_index?: number;
+    page_index: number;
 }
