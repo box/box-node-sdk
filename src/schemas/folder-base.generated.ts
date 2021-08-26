@@ -17,7 +17,7 @@ export interface FolderBase {
 	 * the `folder_id` is `123`.
 	 * Example: 12345
 	 */
-	id?: string;
+	id: string;
 	/**
 	 * The HTTP `etag` of this folder. This can be used within some API
 	 * endpoints in the `If-Match` and `If-None-Match` headers to only
@@ -29,5 +29,5 @@ export interface FolderBase {
 	 * `folder`
 	 * Example: folder
 	 */
-	type?: 'folder';
+	type: 'folder';
 }
