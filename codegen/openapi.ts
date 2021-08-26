@@ -54,6 +54,18 @@ export type OpenAPIPathItem = {
 
 	/** A definition of a DELETE operation on this path. */
 	delete?: OpenAPIOperation;
+
+	/** A definition of a OPTIONS operation on this path. */
+	options?: OpenAPIOperation;
+
+	/** A definition of a HEAD operation on this path. */
+	head?: OpenAPIOperation;
+
+	/** A definition of a PATCH operation on this path. */
+	patch?: OpenAPIOperation;
+
+	/** A definition of a TRACE operation on this path. */
+	trace?: OpenAPIOperation;
 };
 
 /**
