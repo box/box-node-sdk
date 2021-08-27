@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"target": "ES2019",
+		"jsx": "react",
+		"jsxFactory": "tsx.createElement",
+		"jsxFragmentFactory": "tsx.createFragment"
+	},
+	"extends": "../tsconfig.json"
+}

@@ -2,6 +2,10 @@
 
 ## Next Release
 
+**New Features and Enhancements:**
+
+- Add support for Box Sign API ([#658](https://github.com/box/box-node-sdk/pull/658))
+
 ## 1.38.0 (2021-08-05)
 
 **New Features and Enhancements:**

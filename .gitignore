@@ -11,4 +11,6 @@ docs/jsdoc-dev
 .vscode/
 .npmrc
 
-lib/
+/lib/
+
+/openapi.json
