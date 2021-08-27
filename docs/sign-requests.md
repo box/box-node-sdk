@@ -1,373 +1,100 @@
-Sign Requests
-=========
+# Sign Requests
 
 <!-- TODO autogenerate description -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [Create a sign request](#create-a-sign-request)
-- [Get a sign request's information](#get-a-sign-requests-information)
-- [Update a sign request](#update-a-sign-request)
-- [Delete a sign request](#delete-a-sign-request)
-- [Copy a sign request](#copy-a-sign-request)
-- [Move a sign request](#move-a-sign-request)
+- [Get sign request by ID](#get-sign-request-by-id)
+- [List sign requests](#list-sign-requests)
+- [Create sign request](#create-sign-request)
+- [Cancel sign request](#cancel-sign-request)
+- [Resend sign request](#resend-sign-request)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 <!-- TODO autogenerate -->
 
-Create a sign request
------------------
+## Get sign request by ID
 
-To create a sign request call the [`weblinks.create(url, parentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#create)
+Gets a sign request by ID [`signRequests.getById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#getById)
 method.
 
-<!-- sample post_web_links -->
-```js
-client.weblinks.create(
-	'https://www.box.com',
-	'22222',
-	{
-		name: 'Box Website!',
-		description: 'Cloud Content Management'
-	})
-	.then(weblink => {
-		/* weblink -> {
-			type: 'web_link',
-			id: '11111',
-			sequence_id: '0',
-			etag: '0',
-			name: 'Box Website!',
-			url: 'https://www.box.com',
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2015-05-07T15:00:01-07:00',
-			modified_at: '2015-05-07T15:00:01-07:00',
-			parent: 
-			{ type: 'folder',
-				id: '22222',
-				sequence_id: '1',
-				etag: '1',
-				name: 'Bookmarks' },
-			description: 'Enterprise Cloud Content Management',
-			item_status: 'active',
-			trashed_at: null,
-			purged_at: null,
-			shared_link: null,
-			path_collection: 
-			{ total_count: 2,
-				entries: 
-				[ { type: 'folder',
-					id: '0',
-					sequence_id: null,
-					etag: null,
-					name: 'All Files' },
-					{ type: 'folder',
-					id: '22222',
-					sequence_id: '1',
-					etag: '1',
-					name: 'Bookmarks' } ] },
-			modified_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			owned_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' } }
-		*/
-	});
-```
-
-Get a sign request's information
-----------------------------
-
-You can request a sign request object by ID by calling
-[`weblinks.get(weblinkID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#get).
-
-<!-- sample get_web_links_id -->
-```js
-client.weblinks.get('11111')
-	.then(weblink => {
-		/* weblink -> {
-			type: 'web_link',
-			id: '11111',
-			sequence_id: '0',
-			etag: '0',
-			name: 'Box Website!',
-			url: 'https://www.box.com',
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2015-05-07T15:00:01-07:00',
-			modified_at: '2015-05-07T15:00:01-07:00',
-			parent: 
-			{ type: 'folder',
-				id: '22222',
-				sequence_id: '1',
-				etag: '1',
-				name: 'Bookmarks' },
-			description: 'Enterprise Cloud Content Management',
-			item_status: 'active',
-			trashed_at: null,
-			purged_at: null,
-			shared_link: null,
-			path_collection: 
-			{ total_count: 2,
-				entries: 
-				[ { type: 'folder',
-					id: '0',
-					sequence_id: null,
-					etag: null,
-					name: 'All Files' },
-					{ type: 'folder',
-					id: '22222',
-					sequence_id: '1',
-					etag: '1',
-					name: 'Bookmarks' } ] },
-			modified_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			owned_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' } }
-		*/
-	});
-```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
+<!-- sample get_sign_requests_id -->
 
 ```js
-client.weblinks.get('11111', {fields: 'url,name,description'})
-	.then(weblink => {
-		/* weblink -> {
-			type: 'web_link',
-			id: '11111',
-			sequence_id: '0',
-			etag: '0',
-			name: 'Box Website!',
-			url: 'https://www.box.com',
-			description: 'Enterprise Cloud Content Management' }
-		*/
-	});
+const sr = await client.signRequests.getById({
+	sign_request_id: 12345,
+});
+console.log(
+	`Sign request id ${sr.id} contains ${sr.source_files.length} files`
+);
 ```
 
-Update a sign request
------------------
+## List sign requests
 
-To update a sign request call the [`weblinks.update(weblinkID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#update)
-method with the fields to update and their new values.
-
-<!-- sample put_web_links_id -->
-```js
-client.weblinks.update(
-	'11111',
-	{
-		name: 'Box Marketing Site',
-		description: 'First page that customers land on'
-	})
-	.then(weblink => {
-		/* weblink -> {
-			type: 'web_link',
-			id: '11111',
-			sequence_id: '0',
-			etag: '0',
-			name: 'Box Marketing Site',
-			url: 'https://www.box.com',
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2015-05-07T15:00:01-07:00',
-			modified_at: '2017-06-13T12:34:51-07:00',
-			parent: 
-			{ type: 'folder',
-				id: '22222',
-				sequence_id: '1',
-				etag: '1',
-				name: 'Bookmarks' },
-			description: 'First page that customers land on',
-			item_status: 'active',
-			trashed_at: null,
-			purged_at: null,
-			shared_link: null,
-			path_collection: 
-			{ total_count: 2,
-				entries: 
-				[ { type: 'folder',
-					id: '0',
-					sequence_id: null,
-					etag: null,
-					name: 'All Files' },
-					{ type: 'folder',
-					id: '22222',
-					sequence_id: '1',
-					etag: '1',
-					name: 'Bookmarks' } ] },
-			modified_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			owned_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' } }
-		*/
-	});
-```
-
-Delete a sign request
------------------
-
-To move a sign request to the trash call the [`weblinks.delete(weblinkID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#delete)
+Gets sign requests created by a user [`signRequests.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#getAll)
 method.
 
-<!-- sample delete_web_links_id -->
+<!-- sample get_sign_requests -->
+
 ```js
-client.weblinks.delete('11111')
-	.then(() => {
-		// deletion succeeded — no value returned
-	});
+const result = await client.signRequests.getAll();
+console.log(`There are ${result.count} sign requests`);
 ```
 
-Copy a sign request
----------------
+## Create sign request
 
-Call the
-[`weblinks.copy(webLinkID, destinationFolderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#copy)
-method to copy a sign request into another folder.
+Creates a sign request. This involves preparing a document for signing and sending the sign request to signers. [`signRequests.create(body, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#create)
+method.
+
+<!-- sample post_sign_requests -->
 
 ```js
-client.weblinks.copy('11111', '0')
-    .then(webLinkCopy => {
-       /* webLinkCopy -> {
-		    type: 'web_link',
-			id: '11112',
-			sequence_id: '0',
-			etag: '0',
-			name: 'Renamed sign request copy',
-			url: 'http://example.com',
-			created_by:
-			{ type: 'user',
-				id: '22222',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2019-03-26T12:49:06-07:00',
-			modified_at: '2019-03-26T12:49:06-07:00',
-			parent:
-			{ type: 'folder',
-				id: '0',
-				sequence_id: null,
-				etag: null,
-				name: 'All Files' },
-			description: '',
-			item_status: 'active',
-			trashed_at: null,
-			purged_at: null,
-			shared_link: null,
-			path_collection:
-			{ total_count: 1,
-				entries:
-				[ { type: 'folder',
-					id: '0',
-					sequence_id: null,
-					etag: null,
-					name: 'All Files' } ] },
-			modified_by:
-			{ type: 'user',
-				id: '22222',
-				name: 'Example User',
-				login: 'user@example.com' },
-			owned_by:
-			{ type: 'user',
-				id: '22222',
-				name: 'Example User',
-				login: 'user@example.com' } }
-        */
-    });
+const signRequest = await client.signRequests.create({
+	signers: [
+		{
+			role: 'signer',
+			email: 'user@example.com',
+		},
+	],
+	source_files: [
+		{
+			type: 'file',
+			id: '12345',
+		},
+	],
+	parent_folder: {
+		type: 'folder',
+		id: '1234567',
+	},
+});
+console.log(`Created a new sign request id ${signRequest.id}`);
 ```
 
-An optional `name` parameter can also be passed to rename the folder on copy.  This can be
-used to avoid a name conflict when there is already an item with the same name in the
-target folder.
+## Cancel sign request
+
+Cancels a sign request [`signRequests.cancelById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#cancelById)
+method.
+
+<!-- sample post_sign_requests_id_cancel -->
 
 ```js
-client.weblinks.copy('12345', '0', {name: 'Renamed sign request'})
-    .then(webLinkCopy => {
-        // ...
-    });
+const signRequest = await client.signRequests.cancelById({
+	sign_request_id: 12345,
+});
+console.log(`Sign request id ${sr.id} cancelled`);
 ```
 
-Move a sign request
----------------
+## Resend sign request
 
-Call the [`weblinks.move(webLinkID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/WebLinks.html#move) method with the destination you want the folder moved to.
+Resends a sign request email to all outstanding signers [`signRequests.resendById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#resendById)
+method.
+
+<!-- sample post_sign_requests_id_resend -->
 
 ```js
-var webLinkID = '88888';
-var destinationFolderID = '0';
-client.weblinks.move(webLinkID, destinationFolderID)
-    .then(webLink => {
-       /* webLink -> {
-		    type: 'web_link',
-			id: '88888',
-			sequence_id: '0',
-			etag: '0',
-			name: 'Example sign request',
-			url: 'http://example.com',
-			created_by:
-			{ type: 'user',
-				id: '22222',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2019-03-26T12:49:06-07:00',
-			modified_at: '2019-03-26T12:49:06-07:00',
-			parent:
-			{ type: 'folder',
-				id: '0',
-				sequence_id: null,
-				etag: null,
-				name: 'All Files' },
-			description: '',
-			item_status: 'active',
-			trashed_at: null,
-			purged_at: null,
-			shared_link: null,
-			path_collection:
-			{ total_count: 1,
-				entries:
-				[ { type: 'folder',
-					id: '0',
-					sequence_id: null,
-					etag: null,
-					name: 'All Files' } ] },
-			modified_by:
-			{ type: 'user',
-				id: '22222',
-				name: 'Example User',
-				login: 'user@example.com' },
-			owned_by:
-			{ type: 'user',
-				id: '22222',
-				name: 'Example User',
-				login: 'user@example.com' } }
-        */
-    });
+const id = 12345;
+await client.signRequests.resendById({ sign_request_id: id });
+console.log(`Sign request id ${sr.id} resent`);
 ```
