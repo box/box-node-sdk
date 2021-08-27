@@ -26,8 +26,8 @@ var sandbox = sinon.createSandbox(),
 // Tests
 // ------------------------------------------------------------------------------
 
-describe('SignRequests', function () {
-	before(function () {
+describe('SignRequests', () => {
+	before(() => {
 		// Enable Mockery
 		mockery.enable({
 			useCleanCache: true,
@@ -37,63 +37,107 @@ describe('SignRequests', function () {
 		mockery.registerAllowable(MODULE_FILE_PATH);
 	});
 
-	beforeEach(function () {
+	beforeEach(() => {
 		// Setup File Under Test
 		SignRequests = require(MODULE_FILE_PATH);
 		signRequests = new SignRequests(boxClientFake);
 		testQS = { testQSKey: 'testQSValue' };
 	});
 
-	afterEach(function () {
+	afterEach(() => {
 		sandbox.verifyAndRestore();
 		mockery.resetCache();
 	});
 
-	after(function () {
+	after(() => {
 		mockery.deregisterAll();
 		mockery.disable();
 	});
 
-	describe('create()', function () {
-		var signers, sourceFiles, parentFolder, expectedParams;
-
-		beforeEach(function () {
-			signers = [
+	[
+		{
+			name: 'getById',
+			args: [
 				{
-					role: 'signer',
-					email: 'signer@example.com',
+					sign_request_id: '12345',
 				},
-			];
-			sourceFiles = [
+			],
+			expectedMethod: 'get',
+			expectedPath: args => `${BASE_PATH}/${args[0].sign_request_id}`,
+			expectedParams: args => ({ qs: args[0] }),
+		},
+		{
+			name: 'getAll',
+			args: [],
+			expectedMethod: 'get',
+			expectedPath: () => BASE_PATH,
+			expectedParams: () => ({ qs: undefined }),
+		},
+		{
+			name: 'create',
+			args: [
 				{
-					type: 'file',
-					id: '1234567890',
+					signers: [
+						{
+							role: 'signer',
+							email: 'signer@example.com',
+						},
+					],
+					source_files: [
+						{
+							type: 'file',
+							id: '1234567890',
+						},
+					],
+					parent_folder: {
+						type: 'folder',
+						id: '1234567890',
+					},
 				},
-			];
-			parentFolder = {
-				type: 'folder',
-				id: '1234567890',
-			};
-			expectedParams = {
-				body: {
-					signers,
-					source_files: sourceFiles,
-					parent_folder: parentFolder,
+				testQS,
+			],
+			expectedMethod: 'post',
+			expectedPath: () => BASE_PATH,
+			expectedParams: args => ({
+				body: args[0],
+				qs: args[1],
+			}),
+		},
+		{
+			name: 'cancelById',
+			args: [
+				{
+					sign_request_id: '12345',
 				},
-				qs: testQS,
-			};
-		});
-
-		it('should make POST request with all parameters to create a sign request when all optional parameters are passed', function () {
+			],
+			expectedMethod: 'post',
+			expectedPath: args => `${BASE_PATH}/${args[0].sign_request_id}/cancel`,
+			expectedParams: args => ({ qs: args[0] }),
+		},
+		{
+			name: 'resendById',
+			args: [
+				{
+					sign_request_id: '12345',
+				},
+			],
+			expectedMethod: 'post',
+			expectedPath: args => `${BASE_PATH}/${args[0].sign_request_id}/resend`,
+			expectedParams: args => ({ qs: args[0] }),
+		},
+	].forEach(testCase => describe(`${testCase.name}()`, () => {
+		const name = testCase.name;
+		it(`should make ${name.toUpperCase()} request when calling ${name}`, () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox
 				.mock(boxClientFake)
-				.expects('post')
-				.withArgs(BASE_PATH, expectedParams);
-			signRequests.create(
-				{ signers, source_files: sourceFiles, parent_folder: parentFolder },
-				testQS
-			);
+				.expects(testCase.expectedMethod)
+				.withArgs(
+					testCase.expectedPath(testCase.args),
+					testCase.expectedParams(testCase.args)
+				);
+			signRequests[name].apply(signRequests, testCase.args);
 		});
-	});
+	})
+	);
 });
