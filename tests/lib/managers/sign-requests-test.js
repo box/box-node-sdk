@@ -127,7 +127,7 @@ describe('SignRequests', () => {
 		},
 	].forEach(testCase => describe(`${testCase.name}()`, () => {
 		const name = testCase.name;
-		it(`should make ${expectedMethod.toUpperCase()} request when calling ${name}`, () => {
+		it(`should make ${testCase.expectedMethod.toUpperCase()} request when calling ${name}`, () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox
 				.mock(boxClientFake)
