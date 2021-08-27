@@ -1,4 +1,21 @@
+//
+// Useful TypeScript AST viewer for reverse engineering of the code:
+// https://ts-ast-viewer.com/
+//
+
 import * as ts from 'typescript';
+
+export function createElement(
+	type: (...args: any[]) => ts.Node,
+	props?: Record<string, any>,
+	...children: any[]
+): ts.Node {
+	return type(props || {}, ...children);
+}
+
+export function createFragment(props: void, ...children: any[]) {
+	return children.flat().filter(Boolean);
+}
 
 export function BinaryExpression({
 	left,
