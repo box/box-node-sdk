@@ -33,7 +33,7 @@ export function createMethodForOperation({
 }: {
 	spec: OpenAPI;
 	pathKey: keyof OpenAPI['paths'];
-	verb: ('get' | 'post' | 'put' | 'delete') & keyof OpenAPIPathItem;
+	verb: ('get' | 'post' | 'put' | 'delete' | 'options') & keyof OpenAPIPathItem;
 	name?: string;
 }): ts.Node[] {
 	const pathItem = spec.paths[pathKey][verb]!;

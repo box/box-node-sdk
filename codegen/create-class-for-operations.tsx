@@ -75,13 +75,19 @@ export function createClassForOperations({
 				{operations
 					.map(({ operationId, name }) => {
 						for (const [pathKey, pathItem] of Object.entries(spec.paths)) {
-							for (const verb of ['get', 'post', 'put', 'delete'] as const) {
+							for (const verb of [
+								'get',
+								'post',
+								'put',
+								'delete',
+								'options',
+							] as const) {
 								if (pathItem[verb]?.operationId === operationId) {
 									return createMethodForOperation({
 										spec,
 										pathKey,
 										verb,
-										name: name,
+										name,
 									});
 								}
 							}
