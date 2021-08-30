@@ -1,10 +1,11 @@
 # Changelog
 
-## Next Release
+## 1.39.0 (2021-08-30)
 
 **New Features and Enhancements:**
 
 - Add support for Box Sign API ([#658](https://github.com/box/box-node-sdk/pull/658))
+- Enhance TS Imports ([#656](https://github.com/box/box-node-sdk/pull/656))
 
 ## 1.38.0 (2021-08-05)
 
