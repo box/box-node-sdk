@@ -43,7 +43,7 @@
     "jsonwebtoken": "^8.5.1",
     "merge-options": "^1.0.1",
     "promise-queue": "^2.2.3",
-    "proxy-agent": "^4.0.0",
+    "proxy-agent": "^5.0.0",
     "request": "^2.88.0",
     "url-template": "^2.0.8",
     "uuid": "^3.3.3"
