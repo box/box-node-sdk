@@ -30,9 +30,10 @@ class SignRequestsManager {
 		},
 		callback?: Function
 	): Promise<schemas.SignRequest> {
-		const apiPath = urlPath('sign_requests', options.sign_request_id),
+		const { sign_request_id: signRequestId, ...queryParams } = options,
+			apiPath = urlPath('sign_requests', signRequestId),
 			params = {
-				qs: options,
+				qs: queryParams,
 			};
 		return this.client.wrapWithDefaultHandler(this.client.get)(
 			apiPath,
@@ -66,9 +67,10 @@ class SignRequestsManager {
 		},
 		callback?: Function
 	): Promise<schemas.SignRequests> {
-		const apiPath = urlPath('sign_requests'),
+		const { ...queryParams } = options,
+			apiPath = urlPath('sign_requests'),
 			params = {
-				qs: options,
+				qs: queryParams,
 			};
 		return this.client.wrapWithDefaultHandler(this.client.get)(
 			apiPath,
@@ -91,9 +93,10 @@ class SignRequestsManager {
 		options?: {},
 		callback?: Function
 	): Promise<schemas.SignRequest> {
-		const apiPath = urlPath('sign_requests'),
+		const { ...queryParams } = options,
+			apiPath = urlPath('sign_requests'),
 			params = {
-				qs: options,
+				qs: queryParams,
 				body: body,
 			};
 		return this.client.wrapWithDefaultHandler(this.client.post)(
@@ -120,9 +123,10 @@ class SignRequestsManager {
 		},
 		callback?: Function
 	): Promise<schemas.SignRequest> {
-		const apiPath = urlPath('sign_requests', options.sign_request_id, 'cancel'),
+		const { sign_request_id: signRequestId, ...queryParams } = options,
+			apiPath = urlPath('sign_requests', signRequestId, 'cancel'),
 			params = {
-				qs: options,
+				qs: queryParams,
 			};
 		return this.client.wrapWithDefaultHandler(this.client.post)(
 			apiPath,
@@ -148,9 +152,10 @@ class SignRequestsManager {
 		},
 		callback?: Function
 	): Promise<object> {
-		const apiPath = urlPath('sign_requests', options.sign_request_id, 'resend'),
+		const { sign_request_id: signRequestId, ...queryParams } = options,
+			apiPath = urlPath('sign_requests', signRequestId, 'resend'),
 			params = {
-				qs: options,
+				qs: queryParams,
 			};
 		return this.client.wrapWithDefaultHandler(this.client.post)(
 			apiPath,

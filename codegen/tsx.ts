@@ -29,6 +29,27 @@ export function BinaryExpression({
 	return ts.factory.createBinaryExpression(left, operator, right);
 }
 
+export function BindingElement({
+	dotDotDotToken,
+	propertyName,
+	name,
+	initializer,
+}: {
+	dotDotDotToken?: boolean;
+	propertyName?: string | ts.PropertyName;
+	name: string | ts.BindingName;
+	initializer?: ts.Expression;
+}): ts.BindingElement {
+	return ts.factory.createBindingElement(
+		dotDotDotToken
+			? ts.factory.createToken(ts.SyntaxKind.DotDotDotToken)
+			: undefined,
+		propertyName,
+		name,
+		initializer
+	);
+}
+
 export function Block(
 	{
 		statements,
@@ -333,6 +354,19 @@ export function NamedExports(
 
 export function Null(): ts.NullLiteral {
 	return ts.factory.createNull();
+}
+
+export function ObjectBindingPattern(
+	{
+		elements,
+	}: {
+		elements?: readonly ts.BindingElement[];
+	},
+	...children: readonly ts.BindingElement[]
+): ts.ObjectBindingPattern {
+	return ts.factory.createObjectBindingPattern(
+		(elements || children).flat().filter(Boolean)
+	);
 }
 
 export function ObjectLiteralExpression(
