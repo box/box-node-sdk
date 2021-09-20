@@ -1,8 +1,8 @@
+import { camelCase } from 'lodash';
 import * as ts from 'typescript';
 import { createTypeNodeForSchema } from './create-type-node-for-schema';
 import { OpenAPI, OpenAPIPathItem } from './openapi';
 import * as tsx from './tsx';
-import { camelCase } from 'lodash';
 import {
 	BindingElement,
 	Block,
