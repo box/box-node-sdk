@@ -168,6 +168,7 @@ class Enterprise {
 	 * @param {string} [options.timezone] - The user's timezone
 	 * @param {boolean} [options.is_exempt_from_device_limits] - Whether to exempt this user from Enterprise device limits
 	 * @param {boolean} [options.is_exempt_from_login_verification] - Whether or not this user must use two-factor authentication
+	 * @param {boolean} [options.is_external_collab_restricted] - Whether the user is allowed to collaborate with users outside their enterprise
 	 * @param {Function} [callback] - Passed the created user if successful, error otherwise
 	 * @returns {Promise<Object>} A promise resolving to the created user
 	 */
@@ -188,6 +189,7 @@ class Enterprise {
 			timezone?: string;
 			is_exempt_from_device_limits?: boolean;
 			is_exempt_from_login_verification?: boolean;
+			is_external_collab_restricted?: boolean;
 		},
 		callback?: Function
 	) {

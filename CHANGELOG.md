@@ -6,6 +6,7 @@
 
 - Add support for Box Sign API ([#658](https://github.com/box/box-node-sdk/pull/658))
 - Enhance TS Imports ([#656](https://github.com/box/box-node-sdk/pull/656))
+- Add support for is_external_collab_restricted User property ([#668](https://github.com/box/box-node-sdk/pull/668))
 
 ## 1.38.0 (2021-08-05)
 
