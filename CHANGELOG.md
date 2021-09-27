@@ -2,6 +2,10 @@
 
 ## 1.39.0 (2021-08-30)
 
+**Breaking changes:**
+
+- Drop support for Node 6,7 ([#670](https://github.com/box/box-node-sdk/pull/670))
+
 **New Features and Enhancements:**
 
 - Add support for Box Sign API ([#658](https://github.com/box/box-node-sdk/pull/658))
