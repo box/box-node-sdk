@@ -57,25 +57,25 @@ describe('SignRequests', () => {
 	[
 		{
 			name: 'getById',
-			args: [
+			args: () => [
 				{
 					sign_request_id: '12345',
 				},
 			],
 			expectedMethod: 'get',
 			expectedPath: args => `${BASE_PATH}/${args[0].sign_request_id}`,
-			expectedParams: args => ({ qs: args[0] }),
+			expectedParams: () => ({ qs: {} }),
 		},
 		{
 			name: 'getAll',
-			args: [],
+			args: () => [],
 			expectedMethod: 'get',
 			expectedPath: () => BASE_PATH,
-			expectedParams: () => ({ qs: undefined }),
+			expectedParams: () => ({ qs: {} }),
 		},
 		{
 			name: 'create',
-			args: [
+			args: () => [
 				{
 					signers: [
 						{
@@ -105,39 +105,36 @@ describe('SignRequests', () => {
 		},
 		{
 			name: 'cancelById',
-			args: [
+			args: () => [
 				{
 					sign_request_id: '12345',
 				},
 			],
 			expectedMethod: 'post',
 			expectedPath: args => `${BASE_PATH}/${args[0].sign_request_id}/cancel`,
-			expectedParams: args => ({ qs: args[0] }),
+			expectedParams: () => ({ qs: {} }),
 		},
 		{
 			name: 'resendById',
-			args: [
+			args: () => [
 				{
 					sign_request_id: '12345',
 				},
 			],
 			expectedMethod: 'post',
 			expectedPath: args => `${BASE_PATH}/${args[0].sign_request_id}/resend`,
-			expectedParams: args => ({ qs: args[0] }),
+			expectedParams: () => ({ qs: {} }),
 		},
-	].forEach(testCase => describe(`${testCase.name}()`, () => {
-		const name = testCase.name;
-		it(`should make ${testCase.expectedMethod.toUpperCase()} request when calling ${name}`, () => {
-			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox
-				.mock(boxClientFake)
-				.expects(testCase.expectedMethod)
-				.withArgs(
-					testCase.expectedPath(testCase.args),
-					testCase.expectedParams(testCase.args)
-				);
-			signRequests[name].apply(signRequests, testCase.args);
-		});
-	})
+	].forEach(testCase => describe(`${testCase.name}()`, () => it(`should make ${testCase.expectedMethod.toUpperCase()} request when calling ${
+		testCase.name
+	}`, () => {
+		const args = testCase.args();
+		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+		sandbox
+			.mock(boxClientFake)
+			.expects(testCase.expectedMethod)
+			.withArgs(testCase.expectedPath(args), testCase.expectedParams(args));
+		signRequests[testCase.name].apply(signRequests, args);
+	}))
 	);
 });

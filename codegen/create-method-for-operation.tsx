@@ -1,8 +1,10 @@
+import { camelCase } from 'lodash';
 import * as ts from 'typescript';
 import { createTypeNodeForSchema } from './create-type-node-for-schema';
 import { OpenAPI, OpenAPIPathItem } from './openapi';
 import * as tsx from './tsx';
 import {
+	BindingElement,
 	Block,
 	CallExpression,
 	Identifier,
@@ -10,6 +12,7 @@ import {
 	JSDocParameterTag,
 	JSDocReturnTag,
 	MethodDeclaration,
+	ObjectBindingPattern,
 	ObjectLiteralExpression,
 	ParameterDeclaration,
 	PropertyAccessExpression,
@@ -55,6 +58,7 @@ export function createMethodForOperation({
 
 	const bodySchema = pathItem.requestBody?.content['application/json']?.schema;
 	const bodyId = <Identifier text="body" />;
+	const queryParamsId = <Identifier text="queryParams" />;
 
 	return (
 		<>
@@ -153,6 +157,30 @@ export function createMethodForOperation({
 				<Block multiLine>
 					<VariableStatement flags={ts.NodeFlags.Const}>
 						<VariableDeclaration
+							name={
+								<ObjectBindingPattern>
+									{parameters
+										.filter((parameter) => parameter.in !== 'query')
+										.map((parameter) => {
+											if (parameter.in !== 'path') {
+												throw new Error(
+													`Expected ${parameter.name} to be in path not ${parameter.in}`
+												);
+											}
+
+											return (
+												<BindingElement
+													propertyName={parameter.name}
+													name={camelCase(parameter.name)}
+												/>
+											);
+										})}
+									<BindingElement dotDotDotToken name={queryParamsId} />
+								</ObjectBindingPattern>
+							}
+							initializer={<Identifier text="options" />}
+						/>
+						<VariableDeclaration
 							name="apiPath"
 							initializer={
 								<CallExpression
@@ -177,12 +205,7 @@ export function createMethodForOperation({
 													);
 												}
 
-												return (
-													<PropertyAccessExpression
-														expression={<Identifier text="options" />}
-														name={<Identifier text={param.name} />}
-													/>
-												);
+												return <Identifier text={camelCase(param.name)} />;
 											}
 
 											return <StringLiteral text={part} />;
@@ -194,10 +217,7 @@ export function createMethodForOperation({
 							name="params"
 							initializer={
 								<ObjectLiteralExpression multiLine>
-									<PropertyAssignment
-										name="qs"
-										initializer={<Identifier text="options" />}
-									/>
+									<PropertyAssignment name="qs" initializer={queryParamsId} />
 									{bodySchema && (
 										<PropertyAssignment
 											name="body"
