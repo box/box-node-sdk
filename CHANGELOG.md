@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.39.0 (2021-08-30)
+## 2.0.0 (2021-09-29)
 
 **Breaking changes:**
 
@@ -8,9 +8,15 @@
 
 **New Features and Enhancements:**
 
+- Add support for is_external_collab_restricted User property ([#668](https://github.com/box/box-node-sdk/pull/668))
+- Bump proxy-agent from 4.0.0 to 5.0.0 ([#664](https://github.com/box/box-node-sdk/pull/664))
+
+## 1.39.0 (2021-08-30)
+
+**New Features and Enhancements:**
+
 - Add support for Box Sign API ([#658](https://github.com/box/box-node-sdk/pull/658))
 - Enhance TS Imports ([#656](https://github.com/box/box-node-sdk/pull/656))
-- Add support for is_external_collab_restricted User property ([#668](https://github.com/box/box-node-sdk/pull/668))
 
 ## 1.38.0 (2021-08-05)
 
