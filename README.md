@@ -237,6 +237,11 @@ in the `tests/` directory!
 
 For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
+Change Log
+----------
+
+See [CHANGELOG.md](/CHANGELOG.md).
+
 Copyright and License
 ---------------------
 
