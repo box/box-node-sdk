@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises';
 import { kebabCase } from 'lodash';
 import * as path from 'path';
+import { sortBy } from 'lodash';
 import * as ts from 'typescript';
 import { OpenAPI } from './openapi';
 import * as tsx from './tsx';
@@ -22,7 +23,7 @@ export async function generateInterfacesForSchema({
 	// make sure the target directory exisits
 	await fs.mkdir(schemasDirPath, { recursive: true });
 
-	const indexExports: ts.ExportDeclaration[] = [];
+	const generatedExports: string[] = [];
 
 	for (const name of Object.keys(interfaces)) {
 		const schema = spec.components?.schemas?.[name];
@@ -39,12 +40,12 @@ export async function generateInterfacesForSchema({
 			nodes: interfaces[name],
 		});
 
-		indexExports.push(
-			<ExportDeclaration
-				moduleSpecifier={<StringLiteral text={`./${baseFileName}`} />}
-			/>
-		);
+		generatedExports.push(`./${baseFileName}`);
 	}
+
+	const indexExports = sortBy(generatedExports).map((filePath) => (
+		<ExportDeclaration moduleSpecifier={<StringLiteral text={filePath} />} />
+	));
 
 	// write index for schemas with exports
 	await writeNodesToFile({
