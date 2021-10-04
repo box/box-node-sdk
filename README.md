@@ -23,6 +23,7 @@ Getting Started Docs: https://developer.box.com/guides/tooling/sdks/node/
   - [Constructing API Calls Manually](#constructing-api-calls-manually)
 - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
 - [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
+- [Changelog](#changelog)
 - [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -236,6 +237,11 @@ in the `tests/` directory!
 1. Create a pull request with your changes — we'll review it and help you get it merged.
 
 For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
+
+Changelog
+----------
+
+See [CHANGELOG.md](./CHANGELOG.md).
 
 Copyright and License
 ---------------------
