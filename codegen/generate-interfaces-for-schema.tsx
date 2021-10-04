@@ -1,8 +1,8 @@
 import * as fs from 'fs/promises';
 import { kebabCase } from 'lodash';
 import * as path from 'path';
+import { sortBy } from 'lodash';
 import * as ts from 'typescript';
-import { createInterfaceForSchema } from './create-interface-for-schema';
 import { OpenAPI } from './openapi';
 import * as tsx from './tsx';
 import { ExportDeclaration, StringLiteral } from './tsx';
@@ -14,18 +14,18 @@ const SCHEMAS_RELATIVE_PATH = '../src/schemas';
 
 export async function generateInterfacesForSchema({
 	spec,
-	names,
+	interfaces,
 }: {
 	spec: OpenAPI;
-	names: string[];
+	interfaces: Record<string, ts.Node[]>;
 }) {
 	const schemasDirPath = path.join(__dirname, SCHEMAS_RELATIVE_PATH);
 	// make sure the target directory exisits
 	await fs.mkdir(schemasDirPath, { recursive: true });
 
-	const indexExports: ts.ExportDeclaration[] = [];
+	const generatedExports: string[] = [];
 
-	for (const name of names) {
+	for (const name of Object.keys(interfaces)) {
 		const schema = spec.components?.schemas?.[name];
 		if (!schema) {
 			throw new Error(`Missing schema ${name} in the OpenAPI spec`);
@@ -37,15 +37,15 @@ export async function generateInterfacesForSchema({
 
 		await writeNodesToFile({
 			fullPath: path.join(schemasDirPath, fileName),
-			nodes: createInterfaceForSchema({ spec, name }),
+			nodes: interfaces[name],
 		});
 
-		indexExports.push(
-			<ExportDeclaration
-				moduleSpecifier={<StringLiteral text={`./${baseFileName}`} />}
-			/>
-		);
+		generatedExports.push(`./${baseFileName}`);
 	}
+
+	const indexExports = sortBy(generatedExports).map((filePath) => (
+		<ExportDeclaration moduleSpecifier={<StringLiteral text={filePath} />} />
+	));
 
 	// write index for schemas with exports
 	await writeNodesToFile({

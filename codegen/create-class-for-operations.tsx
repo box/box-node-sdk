@@ -20,11 +20,13 @@ tsx;
 
 export function createClassForOperations({
 	spec,
+	interfaces,
 	name,
 	operations,
 	comment,
 }: {
 	spec: OpenAPI;
+	interfaces: Record<string, ts.Node[]>;
 	name: string;
 	operations: Array<{
 		name: string;
@@ -85,6 +87,7 @@ export function createClassForOperations({
 								if (pathItem[verb]?.operationId === operationId) {
 									return createMethodForOperation({
 										spec,
+										interfaces,
 										pathKey,
 										verb,
 										name,

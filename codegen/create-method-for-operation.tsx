@@ -30,11 +30,13 @@ tsx;
 
 export function createMethodForOperation({
 	spec,
+	interfaces,
 	pathKey,
 	verb,
 	name,
 }: {
 	spec: OpenAPI;
+	interfaces: Record<string, ts.Node[]>;
 	pathKey: keyof OpenAPI['paths'];
 	verb: ('get' | 'post' | 'put' | 'delete' | 'options') & keyof OpenAPIPathItem;
 	name?: string;
@@ -50,6 +52,7 @@ export function createMethodForOperation({
 			{returnTypeSchema
 				? createTypeNodeForSchema({
 						spec,
+						interfaces,
 						schema: returnTypeSchema,
 				  })
 				: ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)}
@@ -71,7 +74,7 @@ export function createMethodForOperation({
 					<JSDocParameterTag
 						name={bodyId}
 						typeExpression={ts.factory.createJSDocTypeExpression(
-							createTypeNodeForSchema({ spec, schema: bodySchema })
+							createTypeNodeForSchema({ spec, interfaces, schema: bodySchema })
 						)}
 					/>
 				)}
@@ -90,6 +93,7 @@ export function createMethodForOperation({
 						typeExpression={ts.factory.createJSDocTypeExpression(
 							createTypeNodeForSchema({
 								spec,
+								interfaces,
 								schema: parameter.schema,
 							})
 						)}
@@ -117,7 +121,11 @@ export function createMethodForOperation({
 					bodySchema && (
 						<ParameterDeclaration
 							name={bodyId}
-							type={createTypeNodeForSchema({ spec, schema: bodySchema })}
+							type={createTypeNodeForSchema({
+								spec,
+								interfaces,
+								schema: bodySchema,
+							})}
 						/>
 					),
 					<ParameterDeclaration
@@ -138,6 +146,7 @@ export function createMethodForOperation({
 											questionToken={!parameter.required}
 											type={createTypeNodeForSchema({
 												spec,
+												interfaces,
 												schema: parameter.schema,
 											})}
 										/>,
