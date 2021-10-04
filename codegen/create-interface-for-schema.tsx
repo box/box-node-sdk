@@ -37,10 +37,12 @@ tsx;
 
 export function createInterfaceForSchema({
 	spec,
+	interfaces,
 	name,
 	addSerialization = false,
 }: {
 	spec: OpenAPI;
+	interfaces: Record<string, ts.Node[]>;
 	name: string;
 	addSerialization?: boolean;
 }): ts.Node[] {
@@ -138,7 +140,11 @@ export function createInterfaceForSchema({
 									ts.factory.createExpressionWithTypeArguments(
 										<PropertyAccessExpression
 											expression={<Identifier text="schemas" />}
-											name={getIdentifierForSchemaRef(schema.$ref)}
+											name={getIdentifierForSchemaRef({
+												spec,
+												interfaces,
+												ref: schema.$ref,
+											})}
 										/>,
 										undefined
 									),
@@ -170,13 +176,21 @@ export function createInterfaceForSchema({
 										...((schema.$ref &&
 											(
 												spec.components?.schemas?.[
-													getIdentifierForSchemaRef(schema.$ref).text
+													getIdentifierForSchemaRef({
+														spec,
+														interfaces,
+														ref: schema.$ref,
+													}).text
 												] as OpenAPISchema
 											)?.required) ||
 											[]),
 									].includes(key)
 								}
-								type={createTypeNodeForSchema({ spec, schema: property })}
+								type={createTypeNodeForSchema({
+									spec,
+									interfaces,
+									schema: property,
+								})}
 							/>,
 						];
 					})
@@ -223,9 +237,11 @@ export function createInterfaceForSchema({
 																<PropAssignmentCall
 																	key={key}
 																	name="serialize"
-																	schemaId={getIdentifierForSchemaRef(
-																		property.$ref
-																	)}
+																	schemaId={getIdentifierForSchemaRef({
+																		spec,
+																		interfaces,
+																		ref: property.$ref,
+																	})}
 																	argumentsArray={[propAccessExpr]}
 																/>
 															);
@@ -261,9 +277,11 @@ export function createInterfaceForSchema({
 																		<PropAssignmentCall
 																			key={key}
 																			name="serializeArray"
-																			schemaId={getIdentifierForSchemaRef(
-																				items.$ref
-																			)}
+																			schemaId={getIdentifierForSchemaRef({
+																				spec,
+																				interfaces,
+																				ref: items.$ref,
+																			})}
 																			argumentsArray={[propAccessExpr]}
 																		/>
 																	);
@@ -314,9 +332,11 @@ export function createInterfaceForSchema({
 																<PropAssignmentCall
 																	key={convertPropName(key)}
 																	name="deserialize"
-																	schemaId={getIdentifierForSchemaRef(
-																		property.$ref
-																	)}
+																	schemaId={getIdentifierForSchemaRef({
+																		spec,
+																		interfaces,
+																		ref: property.$ref,
+																	})}
 																	argumentsArray={[propAccessExpr]}
 																/>
 															);
@@ -352,9 +372,11 @@ export function createInterfaceForSchema({
 																		<PropAssignmentCall
 																			key={convertPropName(key)}
 																			name="deserializeArray"
-																			schemaId={getIdentifierForSchemaRef(
-																				items.$ref
-																			)}
+																			schemaId={getIdentifierForSchemaRef({
+																				spec,
+																				interfaces,
+																				ref: items.$ref,
+																			})}
 																			argumentsArray={[propAccessExpr]}
 																		/>
 																	);

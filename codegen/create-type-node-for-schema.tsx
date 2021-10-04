@@ -12,9 +12,11 @@ tsx;
 
 export function createTypeNodeForSchema({
 	spec,
+	interfaces,
 	schema,
 }: {
 	spec: OpenAPI;
+	interfaces: Record<string, ts.Node[]>;
 	schema: OpenAPISchema | OpenAPIReference;
 }): ts.TypeNode {
 	compressSchema(schema);
@@ -24,7 +26,7 @@ export function createTypeNodeForSchema({
 			<TypeReferenceNode
 				typeName={ts.factory.createQualifiedName(
 					<Identifier text="schemas" />,
-					getIdentifierForSchemaRef(schema.$ref)
+					getIdentifierForSchemaRef({ spec, interfaces, ref: schema.$ref })
 				)}
 			/>
 		);
@@ -76,7 +78,7 @@ export function createTypeNodeForSchema({
 				throw new Error(`Missing items for type array in the schema`);
 			}
 			return ts.factory.createArrayTypeNode(
-				createTypeNodeForSchema({ spec, schema: items })
+				createTypeNodeForSchema({ spec, interfaces, schema: items })
 			);
 		default:
 			throw new Error(`Invalid schema type: ${type}`);

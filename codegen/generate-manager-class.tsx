@@ -21,27 +21,19 @@ export async function generateManagerClass({
 	comment,
 	relativePath,
 	spec,
-	interfaceNames,
 	operations,
 }: {
 	name: string;
 	comment: string;
 	relativePath: string;
 	spec: OpenAPI;
-	interfaceNames?: string[];
 	operations: Array<{
 		name: string;
 		operationId: string;
 	}>;
 }) {
-	if (interfaceNames) {
-		await generateInterfacesForSchema({
-			spec,
-			names: interfaceNames,
-		});
-	}
-
 	const fullPath = path.join(__dirname, relativePath);
+	const interfaces: Record<string, ts.Node[]> = {};
 
 	await writeNodesToFile({
 		fullPath,
@@ -74,6 +66,7 @@ export async function generateManagerClass({
 				/>
 				{createClassForOperations({
 					spec,
+					interfaces,
 					name,
 					comment,
 					operations,
@@ -84,5 +77,10 @@ export async function generateManagerClass({
 				/>
 			</>
 		),
+	});
+
+	await generateInterfacesForSchema({
+		spec,
+		interfaces,
 	});
 }

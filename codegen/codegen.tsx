@@ -38,21 +38,6 @@ import { generateManagerClass } from './generate-manager-class';
 					operationId: 'post_sign_requests_id_resend',
 				},
 			],
-			interfaceNames: [
-				'File--Base',
-				'File--Mini',
-				'FileVersion--Base',
-				'FileVersion--Mini',
-				'Folder--Base',
-				'Folder--Mini',
-				'SignRequest',
-				'SignRequestCreateRequest',
-				'SignRequestCreateSigner',
-				'SignRequestPrefillTag',
-				'SignRequests',
-				'SignRequestSigner',
-				'SignRequestSignerInput',
-			],
 		});
 	} catch (e) {
 		console.error(e);
