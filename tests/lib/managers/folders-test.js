@@ -36,7 +36,7 @@ var sandbox = sinon.createSandbox(),
 
 describe('Folders', function() {
 
-	before(function() {
+	beforeAll(function() {
 		// Enable Mockery
 		mockery.enable({
 			useCleanCache: true,
@@ -59,7 +59,7 @@ describe('Folders', function() {
 		mockery.resetCache();
 	});
 
-	after(function() {
+	afterAll(function() {
 		mockery.deregisterAll();
 		mockery.disable();
 	});

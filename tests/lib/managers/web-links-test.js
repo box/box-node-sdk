@@ -32,7 +32,7 @@ var sandbox = sinon.createSandbox(),
 
 describe('WebLinks', function() {
 
-	before(function() {
+	beforeAll(function() {
 		// Enable Mockery
 		mockery.enable({
 			useCleanCache: true
@@ -55,7 +55,7 @@ describe('WebLinks', function() {
 		mockery.resetCache();
 	});
 
-	after(function() {
+	afterAll(function() {
 		mockery.deregisterAll();
 		mockery.disable();
 	});

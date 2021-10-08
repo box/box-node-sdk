@@ -31,7 +31,7 @@ var sandbox = sinon.createSandbox(),
 
 describe('Search', function() {
 
-	before(function() {
+	beforeAll(function() {
 		// Enable Mockery
 		mockery.enable({
 			useCleanCache: true,
@@ -52,7 +52,7 @@ describe('Search', function() {
 		mockery.resetCache();
 	});
 
-	after(function() {
+	afterAll(function() {
 		mockery.deregisterAll();
 		mockery.disable();
 	});

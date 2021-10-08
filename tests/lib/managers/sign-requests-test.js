@@ -27,7 +27,7 @@ var sandbox = sinon.createSandbox(),
 // ------------------------------------------------------------------------------
 
 describe('SignRequests', () => {
-	before(() => {
+	beforeAll(() => {
 		// Enable Mockery
 		mockery.enable({
 			useCleanCache: true,
@@ -49,7 +49,7 @@ describe('SignRequests', () => {
 		mockery.resetCache();
 	});
 
-	after(() => {
+	afterAll(() => {
 		mockery.deregisterAll();
 		mockery.disable();
 	});

@@ -32,7 +32,7 @@ var sandbox = sinon.createSandbox(),
 
 describe('RecentItems', function() {
 
-	before(function() {
+	beforeAll(function() {
 		// Enable Mockery
 		mockery.enable({ useCleanCache: true });
 		// Register Mocks
@@ -51,7 +51,7 @@ describe('RecentItems', function() {
 		mockery.resetCache();
 	});
 
-	after(function() {
+	afterAll(function() {
 		mockery.deregisterAll();
 		mockery.disable();
 	});

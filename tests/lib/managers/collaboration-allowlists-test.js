@@ -33,7 +33,7 @@ var sandbox = sinon.createSandbox(),
 // ------------------------------------------------------------------------------
 
 describe('CollaborationAllowlist', function() {
-	before(function() {
+	beforeAll(function() {
 		// Enable Mockery
 		mockery.enable({ warnOnUnregistered: false });
 		// Register Mocks
@@ -52,7 +52,7 @@ describe('CollaborationAllowlist', function() {
 		mockery.resetCache();
 	});
 
-	after(function() {
+	afterAll(function() {
 		mockery.deregisterAll();
 		mockery.disable();
 	});

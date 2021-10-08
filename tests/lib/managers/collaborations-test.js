@@ -36,7 +36,7 @@ var sandbox = sinon.createSandbox(),
 
 describe('Collaborations', function() {
 
-	before(function() {
+	beforeAll(function() {
 		// Enable Mockery
 		mockery.enable({ useCleanCache: true });
 		// Register Mocks
@@ -57,7 +57,7 @@ describe('Collaborations', function() {
 		mockery.resetCache();
 	});
 
-	after(function() {
+	afterAll(function() {
 		mockery.deregisterAll();
 		mockery.disable();
 	});
