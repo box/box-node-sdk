@@ -262,7 +262,7 @@ describe('EnterpriseEventStream', function() {
 				next_stream_position: newStreamPosition
 			});
 
-			enterpriseEventStream.fetchEvents();
+			// enterpriseEventStream.fetchEvents();
 			assert.propertyVal(enterpriseEventStream, '_streamPosition', TEST_STREAM_POSITION);
 		});
 
@@ -291,6 +291,8 @@ describe('EnterpriseEventStream', function() {
 				TEST_EVENT_2
 			]);
 			var spy = sandbox.stub(enterpriseEventStream, 'push');
+			sandbox.stub(enterpriseEventStream, 'pause');
+			sandbox.stub(enterpriseEventStream, 'resume');
 
 			enterpriseEventStream._read();
 
