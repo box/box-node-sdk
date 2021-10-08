@@ -222,14 +222,14 @@ describe('DevicePins', function() {
 			});
 		});
 
-		it('should wrap GET call with default handler when called', function() {
+		it('should wrap GET call with default handler when called', function(done) {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
 			sandbox.stub(boxClientFake.users, 'get').returns(Promise.resolve(user));
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.get)
 				.returnsArg(0);
-			devicePins.getAll();
+			devicePins.getAll(null, done);
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
