@@ -292,6 +292,11 @@ describe('Webhooks', function() {
 		const PRIMARY_SIGNATURE_KEY = 'SamplePrimaryKey';
 		const SECONDARY_SIGNATURE_KEY = 'SampleSecondaryKey';
 
+		beforeEach(() => {
+			Webhooks.primarySignatureKey = null;
+			Webhooks.secondarySignatureKey = null;
+		})
+
 		it('should set the primary and secondary keys when both are passed', function() {
 			Webhooks.setSignatureKeys(PRIMARY_SIGNATURE_KEY, SECONDARY_SIGNATURE_KEY);
 
