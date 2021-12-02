@@ -38,7 +38,7 @@ file's contents, upload new versions, and perform other common file operations
 	- [Get a Shared Link](#get-a-shared-link)
 	- [Remove a Shared Link](#remove-a-shared-link)
 	- [Promote Version](#promote-version)
-	- [Get Thumbnail](#get-thumbnail)
+	- [Get Thumbnail](#get-thumbnail-deprecated)
 	- [Get Embed Link](#get-embed-link)
 	- [Lock a File](#lock-a-file)
 	- [Unlock a File](#unlock-a-file)
@@ -303,19 +303,38 @@ client.files.uploadFile(folderID, 'My File.pdf', stream)
 	});
 ```
 
-If the stream passed is not an fs stream, you must pass the stream length as an optional parameter like below. To preserve file timestamps, you may pass the created and modified times as optional parameters:
+To preserve file timestamps, you may pass the created and modified times as optional parameters:
 ```js
 var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file');
 var options = {
 	content_created_at: '2015-05-12T17:38:14-0600',
 	content_modified_at: '2016-02-15T22:42:09-0600',
-	content_length: 5
 };
 client.files.uploadFile('98768', 'New File', stream, options)
 	.then(file => {
 		// ...
 	});
+```
+
+If you want to pass a Readable you must pass the content length as an optional parameter.
+Here is an example of passing Base64 String as file content:
+```js
+var {Readable, ReadableOptions} = require('stream');
+var fs = require('fs');
+var base64Content = 'TXkgY29udGVudAo='; // your base64 content
+var base64Buffer = Buffer.from(base64Content, 'base64');
+// we are using just Readable to creata stream, but you can use any library you want
+var stream = new Readable()
+stream._read = () => {
+	stream.push(base64Buffer);
+	stream.push(null);
+};
+// you have to pass options and define content length
+var options = {
+	content_length: Buffer.byteLength(base64Content, 'base64')
+};
+client.files.uploadFile('0', 'My Base64 File.txt', stream, options);
 ```
 
 Chunked Upload
