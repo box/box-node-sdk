@@ -10,6 +10,7 @@ docs/jsdoc-dev
 .nyc_output
 .vscode/
 .npmrc
+.nvmrc
 
 /lib/
 
