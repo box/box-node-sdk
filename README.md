@@ -73,7 +73,7 @@ Box supports three different types of client:
 
 - **Basic Client:** Simple, makes calls via the given access token until the access token expires
 - **Persistent Client:** For use with traditional OAuth2 apps, can refresh its tokens automatically and persist them via a token store
-- **App Auth Client:** Uses the app auth JWT grant to act on behalf of app-managed users and create new tokens automatically
+- **App Auth Client:** Uses the app auth JWT grant to act on behalf of app/managed users and create new tokens automatically
 
 ### Basic Client
 
@@ -131,7 +131,7 @@ var sdk = BoxSDK.getPreconfiguredInstance(sdkConfig);
 // so you don't need to specify it here
 var serviceAccountClient = sdk.getAppAuthClient('enterprise');
 
-// Get an app user client
+// Get an app user or managed user client
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 
@@ -151,7 +151,7 @@ var sdk = new BoxSDK({
 // Get the service account client, used to create and manage app user accounts
 var serviceAccountClient = sdk.getAppAuthClient('enterprise', 'APP_ENTERPRISE_ID');
 
-// Get an app user client
+// Get an app user or managed user client
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 

@@ -58,7 +58,7 @@ var client = sdk.getBasicClient('YOUR-DEVELOPER-TOKEN');
 Server auth allows your application to authenticate itself with the Box API
 for a given enterprise.  By default, your application has a
 [Service Account](https://developer.box.com/en/guides/authentication/user-types/app-users/#service-accounts)
-that represents it and can perform API calls.  The Service Account is separate
+that represents it and can perform API calls. The Service Account is separate
 from the Box accounts of the application developer and the enterprise admin of
 any enterprise that has authorized the app — files stored in that account are
 not accessible in any other account by default, and vice versa.
@@ -99,13 +99,13 @@ var serviceAccountClient = sdk.getAppAuthClient('enterprise', 'YOUR-ENTERPRISE-I
 App auth applications also often have associated App Users, which are
 [created and managed directly by the application](https://developer.box.com/en/guides/authentication/user-types/app-users/)
 — they do not have normal login credentials, and can only be accessed through
-the Box API by the application that created them.  You may authenticate as the
-Service Account to provision and manage users, or as an individual app user to
-make calls as that user.  See the [API documentation](https://developer.box.com/)
+the Box API by the application that created them. You may authenticate as the
+Service Account to provision and manage users, or as an individual app user or
+managed user to make calls as that user. See the [API documentation](https://developer.box.com/)
 and [sample app](https://github.com/box/box-node-sdk/blob/main/examples/app-auth)
 for detailed instructions on how to use app auth.
 
-Clients for making calls as an App User can be created with the same SDK
+Clients for making calls as an App User or Managed User can be created with the same SDK
 instance as in the above examples, similarly to creating a Service Account client:
 
 <!-- sample x_auth init_with_jwt_with_user_id -->

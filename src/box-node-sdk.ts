@@ -283,9 +283,9 @@ class BoxSDKNode extends EventEmitter {
 	}
 
 	/**
-	 * Create a new client using App Auth for the given entity.  This allows either
+	 * Create a new client using App Auth for the given entity. This allows either
 	 * managing App Users (as the enterprise) or performing operations as the App
-	 * Users themselves (as a user).
+	 * Users or Managed Users themselves (as a user).
 	 *
 	 * @param {string} type The type of entity to operate as, "enterprise" or "user"
 	 * @param {string} [id] (Optional) The Box ID of the entity to operate as
