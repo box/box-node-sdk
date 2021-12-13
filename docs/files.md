@@ -320,8 +320,8 @@ client.files.uploadFile('98768', 'New File', stream, options)
 If you want to pass a Readable you must pass the content length as an optional parameter.
 Here is an example of passing Base64 String as file content:
 ```js
-var {Readable, ReadableOptions} = require('stream');
-var fs = require('fs');
+var {Readable} = require('stream');
+
 var base64Content = 'TXkgY29udGVudAo='; // your base64 content
 var base64Buffer = Buffer.from(base64Content, 'base64');
 // we are using just Readable to creata stream, but you can use any library you want
