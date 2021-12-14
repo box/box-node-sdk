@@ -324,7 +324,7 @@ var {Readable} = require('stream');
 
 var base64Content = 'TXkgY29udGVudAo='; // your base64 content
 var base64Buffer = Buffer.from(base64Content, 'base64');
-// we are using just Readable to creata stream, but you can use any library you want
+// we are using just Readable to create a stream, but you can use any library you want
 var stream = new Readable()
 stream._read = () => {
 	stream.push(base64Buffer);
