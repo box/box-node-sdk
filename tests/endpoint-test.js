@@ -18,7 +18,7 @@ var assert = require('chai').assert,
 	crypto = require('crypto'),
 	path = require('path'),
 	Promise = require('bluebird'),
-	Stream = require('stream');
+	{ Stream, Readable } = require('stream');
 
 function getFixture(fixture) {
 	return fs.readFileSync(
@@ -1442,6 +1442,74 @@ describe('Endpoint', function() {
 					folderID,
 					filename,
 					fileContent,
+					function(err, data) {
+						assert.isNull(err);
+						assert.deepEqual(data, JSON.parse(fixture));
+
+						done();
+					}
+				);
+			});
+
+			it('using Readable', function(done) {
+				var folderID = '0',
+					filename = 'foo.txt',
+					someContent = 'Some content',
+					base64Content = Buffer.from(someContent, 'utf8').toString('base64'),
+					fixture = getFixture('files/post_files_content_200'),
+					options = {
+						content_length: Buffer.byteLength(base64Content, 'base64')
+					},
+					base64Buffer = Buffer.from(base64Content, 'base64');
+
+
+				var readable = new Readable();
+				readable._read = () => {
+					readable.push(base64Buffer);
+					readable.push(null);
+				};
+
+				uploadMock
+					.post('/2.0/files/content', function(body) {
+						// Verify the multi-part form body
+						var lines = body.split(/\r?\n/);
+						assert.match(lines[0], /^-+\d+$/);
+						assert.equal(
+							lines[1],
+							'Content-Disposition: form-data; name="attributes"'
+						);
+						assert.equal(lines[2], '');
+
+						var attributes = JSON.parse(lines[3]);
+						assert.propertyVal(attributes, 'name', filename);
+						assert.nestedPropertyVal(attributes, 'parent.id', folderID);
+
+						assert.match(lines[4], /^-+\d+$/);
+						assert.equal(
+							lines[5],
+							'Content-Disposition: form-data; name="content"; filename="unused"'
+						);
+						assert.equal(lines[6], 'Content-Type: application/octet-stream');
+						assert.equal(lines[7], '');
+						assert.equal(lines[8], someContent);
+						assert.match(lines[9], /^-+\d+-+$/);
+						return true;
+					})
+					.matchHeader('Authorization', function(authHeader) {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', function(uaHeader) {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, fixture);
+
+				iteratorClient.files.uploadFile(
+					folderID,
+					filename,
+					readable,
+					options,
 					function(err, data) {
 						assert.isNull(err);
 						assert.deepEqual(data, JSON.parse(fixture));
