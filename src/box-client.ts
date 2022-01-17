@@ -49,9 +49,9 @@ type ItemType = 'file' | 'folder';
 
 /**
  * An access level constant. Used for setting and updating shared links, folder upload, etc.
- * @typedef {?Object} AccessLevel
+ * @typedef {string} AccessLevel
  */
-type AccessLevel = object | null /* FIXME */;
+type AccessLevel = string | null /* FIXME */;
 
 type APISession = any /* FIXME */;
 type APIRequestManager = any /* FIXME */;
@@ -860,10 +860,10 @@ BoxClient.prototype.itemTypes = {
  * @type {AccessLevel}
  */
 BoxClient.prototype.accessLevels = {
-	OPEN: { access: 'open' },
-	COLLABORATORS: { access: 'collaborators' },
-	COMPANY: { access: 'company' },
-	DEFAULT: {},
+	OPEN: 'open',
+	COLLABORATORS: 'collaborators',
+	COMPANY: 'company',
+	DEFAULT: '',
 	DISABLED: null,
 };
 
