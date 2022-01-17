@@ -49,9 +49,16 @@ type ItemType = 'file' | 'folder';
 
 /**
  * An access level constant. Used for setting and updating shared links, folder upload, etc.
- * @typedef {string} AccessLevel
+ * @typedef {?Object} AccessLevel
+ * @deprecated use sharedLinkAccessLevels instead
  */
-type AccessLevel = string | null /* FIXME */;
+type AccessLevel = object | null /* FIXME */;
+
+/**
+ * An access level constant. Used for setting and updating shared links, folder upload, etc.
+ * @typedef {string} SharedLinkAccessLevel
+ */
+ type SharedLinkAccessLevel = string;
 
 type APISession = any /* FIXME */;
 type APIRequestManager = any /* FIXME */;
@@ -233,6 +240,7 @@ class BoxClient {
 	collaborationRoles!: Record<string, CollaborationRole>;
 	itemTypes!: Record<string, ItemType>;
 	accessLevels!: Record<string, AccessLevel>;
+	sharedLinkAccessLevels!: Record<string, SharedLinkAccessLevel>;
 	CURRENT_USER_ID!: string;
 
 	/** @deprecated */
@@ -855,16 +863,30 @@ BoxClient.prototype.itemTypes = {
 /**
  * Enum of valid values for setting different access levels. To be used when
  * creating and editting shared links, upload emails, etc.
+ * @deprecated use sharedLinkAccessLevels instead
  *
  * @readonly
  * @type {AccessLevel}
  */
 BoxClient.prototype.accessLevels = {
+	OPEN: { access: 'open' },
+	COLLABORATORS: { access: 'collaborators' },
+	COMPANY: { access: 'company' },
+	DEFAULT: {},
+	DISABLED: null,
+};
+
+/**
+ * Enum of valid values for setting different access levels. To be used when
+ * creating and editting shared links.
+ *
+ * @readonly
+ * @type {SharedLinkAccessLevel}
+ */
+ BoxClient.prototype.sharedLinkAccessLevels = {
 	OPEN: 'open',
 	COLLABORATORS: 'collaborators',
-	COMPANY: 'company',
-	DEFAULT: '',
-	DISABLED: null,
+	COMPANY: 'company'
 };
 
 /** @const {string} */
