@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: util/errors.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -125,15 +125,15 @@ export = {
 			debugID += `.${response.headers[TRACE_ID_HEADER_NAME]}`;
 		}
 
-		if (response.body) {
-			if (response.body.request_id) {
+		if (response.data) {
+			if (response.data.request_id) {
 				// Prepend request ID
-				debugID = response.body.request_id + debugID;
+				debugID = response.data.request_id + debugID;
 			}
 
-			errorCode = response.body.code || response.body.error;
+			errorCode = response.data.code || response.data.error;
 			errorDescription =
-				response.body.message || response.body.error_description;
+				response.data.message || response.data.error_description;
 		}
 
 		var errorMessage;

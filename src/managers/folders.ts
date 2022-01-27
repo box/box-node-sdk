@@ -668,11 +668,11 @@ class Folders {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== 200) {
+				if (response.status !== 200) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				return response.body.watermark;
+				return response.data.watermark;
 			})
 			.asCallback(callback);
 	}

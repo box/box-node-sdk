@@ -14,8 +14,10 @@ import assert from 'assert';
 import { EventEmitter } from 'events';
 import httpStatusCodes from 'http-status';
 import request from 'request';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import Config from './util/config';
 import getRetryTimeout from './util/exponential-backoff';
+import * as qs from 'querystring';
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -30,17 +32,17 @@ import getRetryTimeout from './util/exponential-backoff';
  *
  * @typedef {Object} APIRequest~ResponseObject
  * @property {APIRequest~RequestObject} request Information about the request that generated this response
- * @property {int} statusCode The response HTTP status code
+ * @property {int} status The response HTTP status code
  * @property {Object} headers A collection of response headers
- * @property {Object|Buffer|string} [body] The response body. Encoded to JSON by default, but can be a buffer
+ * @property {Object|Buffer|string} [data] The response body. Encoded to JSON by default, but can be a buffer
  *  (if encoding fails or if json encoding is disabled) or a string (if string encoding is enabled). Will be undefined
  *  if no response body is sent.
  */
 type APIRequestResponseObject = {
 	request: APIRequestRequestObject;
-	statusCode: number;
+	status: number;
 	headers: Record<string, string>;
-	body?: object | Buffer | string;
+	data?: object | Buffer | string;
 };
 
 // @NOTE(fschott) 08-19-2014: We cannot return the request/response objects directly because they contain loads of extra
@@ -57,9 +59,9 @@ type APIRequestResponseObject = {
  */
 
 type APIRequestRequestObject = {
-	uri: Record<string, any>;
-	method: string;
-	headers: Record<string, string>;
+	url?: string;
+	method?: string;
+	headers?: Record<string, string | number | boolean>;
 };
 
 /**
@@ -69,14 +71,14 @@ type APIRequestRequestObject = {
  * @typedef {Error} APIRequest~Error
  * @property {APIRequest~RequestObject} request Information about the request that generated this error
  * @property {APIRequest~ResponseObject} [response] Information about the response related to this error, if available
- * @property {int} [statusCode] The response HTTP status code
+ * @property {int} [status] The response HTTP status code
  * @property {boolean} [maxRetriesExceeded] True iff the max number of retries were exceeded. Otherwise, undefined.
  */
 
 type APIRequestError = {
 	request: APIRequestRequestObject;
 	response?: APIRequestResponseObject;
-	statusCode?: number;
+	status?: number;
 	maxRetriesExceeded?: boolean;
 };
 
@@ -123,7 +125,7 @@ retryableStatusCodes[httpStatusCodes.TOO_MANY_REQUESTS] = true;
  * @private
  */
 function isTemporaryError(response: APIRequestResponseObject) {
-	var statusCode = response.statusCode;
+	var statusCode = response.status;
 
 	// An API error is a temporary/transient if it returns a 5xx HTTP Status, with the exception of the 507 status.
 	// The API returns a 507 error when the user has run out of account space, in which case, it should be treated
@@ -194,8 +196,15 @@ class APIRequest {
 	isRetryable: boolean;
 
 	_callback?: APIRequestCallback;
-	request?: request.Request;
-	stream?: request.Request;
+
+	request?: AxiosRequestConfig;
+	stream?: AxiosRequestConfig;
+
+	response?: AxiosResponse;
+
+	// axiosRequest?: AxiosRequestConfig
+	// request?: request.Request;
+	// stream?: request.Request;
 	numRetries?: number;
 
 	constructor(config: Config, eventBus: EventEmitter) {
@@ -221,7 +230,7 @@ class APIRequest {
 	 * @param {APIRequest~Callback} [callback] Callback for handling the response
 	 * @returns {void}
 	 */
-	execute(callback?: APIRequestCallback) {
+	async execute(callback?: APIRequestCallback) {
 		this._callback = callback || this._callback;
 
 		// Initiate an async- or stream-based request, based on the presence of the callback.
@@ -230,17 +239,120 @@ class APIRequest {
 			if (!asyncRequestTimer) {
 				asyncRequestTimer = process.hrtime();
 			}
-			this.request = request(
-				this.config.request,
-				this._handleResponse.bind(this)
-			);
+
+			// console.log("#Config#" + this.config.request)
+
+			// for (let key in this.config.request) {
+			// 	let value = this.config.request[key];
+			// 	console.log("##Config.request[" + key + "] = " + value)
+			// }
+
+			// for (let key in this.config.request['agentOptions']) {
+			// 	let value = this.config.request['agentOptions'][key];
+			// 	console.log("##Config.request.agentOptions[" + key + "] = " + value)
+			// }
+
+			// for (let key in this.config.request['headers']) {
+			// 	let value = this.config.request['headers'][key];
+			// 	console.log("##Config.request.headers[" + key + "] = " + value)
+			// }
+
+			// for (let key in this.config.request['form']) {
+			// 	let value = this.config.request['form'][key];
+			// 	console.log("##Config.request.form[" + key + "] = " + value)
+			// }
+
+
+			// this.request = request(
+			// 	this.config.request,
+			// 	this._handleResponse.bind(this)
+			// );
+
+			const querystring = qs.stringify(this.config.request.form);
+			// console.log("\nAJ: querystring: " + querystring)
+
+
+			var url = this.config.request['url']
+			if (this.config.request.qs) {
+				url +=  '?' + qs.stringify(this.config.request.qs);
+			}
+
+			this.request = {
+				url: url,//this.config.request['url'],
+				method: this.config.request['method'],
+				headers: this.config.request['headers'],
+				data: this.config.request.body ?? qs.stringify(this.config.request.form),
+				maxRedirects: 0,
+				validateStatus: (_: number) => true, //TODO: AJ add this to global config
+				// params: this.config.request['form'],
+				responseType: 'json'
+			}
+
+			try {
+				this.response = await axios(this.request);
+
+				// console.log("[API_REQUEST] result: SUKCES!!! ")
+				this._handleResponse(null, this.response);
+			  } catch (error) {
+				console.log("[API_REQUEST] result error: " + JSON.stringify(error, null,4));
+
+				this._handleResponse(error, null);
+			  }
+
+			// axios(this.request)
+			// .then(response => {
+			// 	console.log("[API_REQUEST] result: SUKCES!!! ")
+
+			// 	this._handleResponse(null, response);
+			// })
+			// .catch(error => {
+			// 	console.log("[API_REQUEST] result error: " + JSON.stringify(error, null,4));
+
+			// 	this._handleResponse(error, null);
+			// })
 		} else {
-			this.request = request(this.config.request);
-			this.stream = this.request;
-			this.stream.on('error', (err) => this.eventBus.emit('response', err));
-			this.stream.on('response', (response) =>
-				this.eventBus.emit('response', null, response)
-			);
+			const querystring = qs.stringify(this.config.request.form);
+			console.log("\nAJ: querystring: " + querystring)
+
+			var url = this.config.request['url']
+			if (this.config.request.qs) {
+				url +=  '?' + qs.stringify(this.config.request.qs);
+			}
+
+			this.request = {
+				url: url,
+				method: this.config.request['method'],
+				headers: this.config.request['headers'],
+				maxRedirects: 0,
+				data: this.config.request.body ??  qs.stringify(this.config.request.form),
+				responseType: 'stream'
+			}
+
+			// this.request = request(this.config.request);
+
+			try {
+				this.response = await axios(this.request);
+
+				console.log("[API_REQUEST] result: SUKCES!!! ")
+				this.eventBus.emit('response', null, this.response);
+			  } catch (error) {
+				console.log("[API_REQUEST] result error: " + JSON.stringify(error, null,4));
+				this.eventBus.emit('response', error);
+			  }
+
+			// .then(response => {
+			// 	console.log("[API_REQUST_STREAM] result: SUKCES!!! ")
+			// 	this.eventBus.emit('response', null, response)
+			// })
+			// .catch(error => {
+			// 	console.log("[API_REQUST_STREAM] result error)");
+			// 	this.eventBus.emit('response', error);
+			// });
+
+			// this.stream.on('error', (err) => this.eventBus.emit('response', err));
+			// this.stream.on('response', (response) =>
+			// 	this.eventBus.emit('response', null, response)
+			// );
 		}
 	}
 
@@ -248,10 +360,10 @@ class APIRequest {
 	 * Return the response read stream for a request. This will be undefined until
 	 * a stream-based request has been started.
 	 *
-	 * @returns {?ReadableStream} The response stream
+	 * @returns {?APIRequest~ResponseObject} The response object with stream data
 	 */
 	getResponseStream() {
-		return this.stream;
+		return this.response;
 	}
 
 	/**
@@ -265,13 +377,16 @@ class APIRequest {
 	 */
 	_handleResponse(err?: any /* FIXME */, response?: any /* FIXME */) {
 		// Clean sensitive headers here to prevent the user from accidentily using/logging them in prod
-		cleanSensitiveHeaders(this.request!);
+		// cleanSensitiveHeaders(this.axiosRequest!);
+		// cleanSensitiveHeaders(this.request!);
+
+		console.log("\nAJ: [_handleResponse] {params} ERROS: " + err + " reposne: " + response)
 
 		// If the API connected successfully but responded with a temporary error (like a 5xx code,
 		// a rate limited response, etc.) then this is considered an error as well.
 		if (!err && isTemporaryError(response)) {
-			var errorMessage = `${response.statusCode} - ${
-				(httpStatusCodes as any)[response.statusCode]
+			var errorMessage = `${response.status} - ${
+				(httpStatusCodes as any)[response.status]
 			}`;
 			err = new Error(errorMessage);
 		}
@@ -281,7 +396,7 @@ class APIRequest {
 			err.request = this.request;
 			if (response) {
 				err.response = response;
-				err.statusCode = response.statusCode;
+				err.status = response.status;
 			}
 
 			// Have the SDK emit the error response
@@ -386,6 +501,7 @@ class APIRequest {
 				return;
 			}
 
+			console.log("\nAJ: [_finish]:" + response);
 			callback(null, response);
 		});
 	}

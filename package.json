@@ -47,7 +47,8 @@
     "proxy-agent": "^5.0.0",
     "request": "^2.88.0",
     "url-template": "^2.0.8",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+		"axios" :"^0.25.0"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",

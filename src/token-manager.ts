@@ -83,11 +83,11 @@ function isJWTAuthErrorRetryable(err: any /* FIXME */) {
 	if (
 		err.authExpired &&
 		err.response.headers.date &&
-		(err.response.body.error_description.indexOf('exp') > -1 ||
-			err.response.body.error_description.indexOf('jti') > -1)
+		(err.response.data.error_description.indexOf('exp') > -1 ||
+			err.response.data.error_description.indexOf('jti') > -1)
 	) {
 		return true;
-	} else if (err.statusCode === 429 || err.statusCode >= 500) {
+	} else if (err.status === 429 || err.status >= 500) {
 		return true;
 	}
 	return false;
@@ -254,7 +254,7 @@ class TokenManager {
 		var params = {
 			method: 'POST',
 			url: this.oauthBaseURL + tokenPaths.GET,
-			headers: {} as Record<string, any>,
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' } as Record<string, any>,
 			form: formParams,
 		};
 		options = options || {};
@@ -273,12 +273,13 @@ class TokenManager {
 			// Response Error: The API is telling us that we attempted an invalid token grant. This
 			// means that our refresh token or auth code has exipred, so propagate an "Expired Tokens"
 			// error.
+
 			if (
-				response.body &&
-				response.body.error &&
-				response.body.error === 'invalid_grant'
+				response.data &&
+				response.data.error &&
+				response.data.error === 'invalid_grant'
 			) {
-				var errDescription = response.body.error_description;
+				var errDescription = response.data.error_description;
 				var message = errDescription
 					? `Auth Error: ${errDescription}`
 					: undefined;
@@ -289,14 +290,14 @@ class TokenManager {
 			// out of options. Build an "Unexpected Response" error and propagate it out for the
 			// consumer to handle.
 			if (
-				response.statusCode !== httpStatusCodes.OK ||
-				response.body instanceof Buffer
+				response.status !== httpStatusCodes.OK ||
+				response.data instanceof Buffer
 			) {
 				throw errors.buildUnexpectedResponseError(response);
 			}
 
 			// Check to see if token response is valid in case the API returns us a 200 with a malformed token
-			if (!isValidTokenResponse(formParams.grant_type, response.body)) {
+			if (!isValidTokenResponse(formParams.grant_type, response.data)) {
 				throw errors.buildResponseError(
 					response,
 					'Token format from response invalid'
@@ -304,7 +305,7 @@ class TokenManager {
 			}
 
 			// Got valid token response. Parse out the TokenInfo and propagate it back.
-			return getTokensFromGrantResponse(response.body);
+			return getTokensFromGrantResponse(response.data);
 		});
 	}
 
@@ -319,6 +320,7 @@ class TokenManager {
 		authorizationCode: string,
 		options?: TokenRequestOptions
 	) {
+
 		if (!isValidCodeOrToken(authorizationCode)) {
 			return Promise.reject(new Error('Invalid authorization code.'));
 		}
@@ -352,6 +354,7 @@ class TokenManager {
 	 * @returns {Promise<TokenInfo>} Promise resolving to the token info
 	 */
 	getTokensRefreshGrant(refreshToken: string, options?: TokenRequestOptions) {
+
 		if (!isValidCodeOrToken(refreshToken)) {
 			return Promise.reject(new Error('Invalid refresh token.'));
 		}
@@ -372,6 +375,7 @@ class TokenManager {
 	 * @returns {Promise<TokenInfo>} Promise resolving to the token info
 	 */
 	getTokensJWTGrant(type: string, id: string, options?: TokenRequestOptions) {
+
 		if (!this.config.appAuth.keyID) {
 			return Promise.reject(
 				new Error('Must provide app auth configuration to use JWT Grant')

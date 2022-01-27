@@ -506,7 +506,7 @@ describe('TermsOfService', function() {
 
 		it('should make GET request to retrieve custom terms of service user status when called', function() {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					total_count: 2,
 					entries: [
@@ -533,7 +533,7 @@ describe('TermsOfService', function() {
 
 		it('should call callback with requested terms of service user status info when a 200 response is returned', function(done) {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					total_count: 2,
 					entries: [
@@ -555,14 +555,14 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, null, function(err, termsOfServiceUserStatusObject) {
 				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user object is returned');
+				assert.strictEqual(termsOfServiceUserStatusObject, response.data.entries[0], 'terms of service user object is returned');
 				done();
 			});
 		});
 
 		it('should call callback with error when a non 200 is received', function(done) {
 			var response = {
-				statusCode: 500,
+				status: 500,
 				body: {}
 			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -575,7 +575,7 @@ describe('TermsOfService', function() {
 
 		it('should return a promise resolving to requested terms of service user status object when a 200 response is returned', function() {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					total_count: 2,
 					entries: [
@@ -598,13 +598,13 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return termsOfService.getUserStatus(TERMS_OF_SERVICE_ID)
 				.then(termsOfServiceUserStatusObject => {
-					assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user status object is returned');
+					assert.strictEqual(termsOfServiceUserStatusObject, response.data.entries[0], 'terms of service user status object is returned');
 				});
 		});
 
 		it('should return promise rejects with an error when a non 200 is received', function() {
 			var response = {
-				statusCode: 500,
+				status: 500,
 				body: {}
 			};
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -617,7 +617,7 @@ describe('TermsOfService', function() {
 
 		it('should make GET request to retrieve custom terms of service user status when called with option param', function() {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					total_count: 2,
 					entries: [
@@ -644,7 +644,7 @@ describe('TermsOfService', function() {
 
 		it('should call callback with requested terms of service user status info when a 200 response is returned with optional param', function(done) {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					total_count: 2,
 					entries: [
@@ -666,14 +666,14 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, options, function(err, termsOfServiceUserStatusObject) {
 				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user object is returned');
+				assert.strictEqual(termsOfServiceUserStatusObject, response.data.entries[0], 'terms of service user object is returned');
 				done();
 			});
 		});
 
 		it('should return a promise resolving to requested terms of service user status object when a 200 response is returned with optional param', function() {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					total_count: 2,
 					entries: [
@@ -695,7 +695,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, options)
 				.then(termsOfServiceUserStatusObject => {
-					assert.strictEqual(termsOfServiceUserStatusObject, response.body.entries[0], 'terms of service user status object is returned');
+					assert.strictEqual(termsOfServiceUserStatusObject, response.data.entries[0], 'terms of service user status object is returned');
 				});
 		});
 	});
@@ -763,7 +763,7 @@ describe('TermsOfService', function() {
 			var expectedParam = { body: { tos: {id: '1234', type: 'terms_of_service'}, user: {id: '5678', type: 'user'}, is_accepted: true} };
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				total_count: 2,
 				entries: [
 					{
@@ -792,28 +792,28 @@ describe('TermsOfService', function() {
 
 		it('should call callback with the created terms of service user status info when a 200 response is returned', function(done) {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {}
 			};
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
 			termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options, function(err, termsOfServiceUserStatusObject) {
 				assert.ifError(err);
-				assert.strictEqual(termsOfServiceUserStatusObject, response.body, 'terms of service user object is returned');
+				assert.strictEqual(termsOfServiceUserStatusObject, response.data, 'terms of service user object is returned');
 				done();
 			});
 		});
 
 		it('should return a promise resolving to created terms of service user status object when a 200 response is returned', function() {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {}
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options)
 				.then(termsOfServiceUserStatusObject => {
-					assert.strictEqual(termsOfServiceUserStatusObject, response.body, 'terms of service user status object is returned');
+					assert.strictEqual(termsOfServiceUserStatusObject, response.data, 'terms of service user status object is returned');
 				});
 		});
 
@@ -821,7 +821,7 @@ describe('TermsOfService', function() {
 			var userStatus = {};
 
 			var response = {
-				statusCode: 409,
+				status: 409,
 				body: {
 					entries: [userStatus]
 				}
@@ -841,7 +841,7 @@ describe('TermsOfService', function() {
 			var userStatus = {};
 
 			var response = {
-				statusCode: 409,
+				status: 409,
 				body: {
 					entries: [userStatus]
 				}
@@ -865,7 +865,7 @@ describe('TermsOfService', function() {
 			var userStatus = {};
 
 			var response = {
-				statusCode: 500,
+				status: 500,
 				body: {
 					entries: [userStatus]
 				}
@@ -884,7 +884,7 @@ describe('TermsOfService', function() {
 			var userStatus = {};
 
 			var response = {
-				statusCode: 409,
+				status: 409,
 				body: {
 					entries: [userStatus]
 				}
@@ -906,7 +906,7 @@ describe('TermsOfService', function() {
 			var userStatus = {};
 
 			var response = {
-				statusCode: 500,
+				status: 500,
 				body: {
 					entries: [userStatus]
 				}

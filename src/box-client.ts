@@ -2,7 +2,7 @@
  * @fileoverview Box API Client
  */
 
-import { Promise } from 'bluebird';
+import { Promise as PromiseBB } from 'bluebird';
 // ------------------------------------------------------------------------------
 // API Resource Managers
 // ------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ function buildAuthorizationHeader(accessToken: string) {
 }
 
 /**
- * Returns true iff the response is a 401 UNAUTHORIZED that is caused by an expired access token.
+ * Returns true if the response is a 401 UNAUTHORIZED that is caused by an expired access token.
  * @param {APIRequest~ResponseObject} response - The response returned by an APIRequestManager request
  * @returns {boolean} - true iff the response is a 401 UNAUTHORIZED caused by an expired access token
  * @private
@@ -109,14 +109,14 @@ function isUnauthorizedDueToExpiredAccessToken(response: any /* FIXME */) {
 	// 3) The status code is UNAUTHORIZED and the response body is a non-empty object. This indicates that the 401 was returned for some reason other
 	//    than expired tokens, so return false.
 
-	if (Buffer.isBuffer(response.body)) {
+	if (Buffer.isBuffer(response.data)) {
 		return false;
 	}
 
 	var isResponseStatusCodeUnauthorized =
-			response.statusCode === httpStatusCodes.UNAUTHORIZED,
+			response.status === httpStatusCodes.UNAUTHORIZED,
 		isResponseBodyEmpty =
-			!response.body || Object.getOwnPropertyNames(response.body).length === 0;
+			!response.data || Object.getOwnPropertyNames(response.data).length === 0;
 	return isResponseStatusCodeUnauthorized && isResponseBodyEmpty;
 }
 
@@ -164,7 +164,7 @@ function formatRequestForBatch(params: Record<string, string | object>) {
  */
 function formatResponseForBatch(response: any /* FIXME */) {
 	return {
-		statusCode: response.status,
+		status: response.status,
 		headers: response.headers,
 		body: response.response,
 	};
@@ -337,7 +337,7 @@ class BoxClient {
 	/**
 	 * Makes an API request to the Box API on behalf of the client. Before executing
 	 * the request, it first ensures the user has usable tokens. Will be called again
-	 * if the request returns a temporary error. Will propogate error if request returns
+	 * if the request returns a temporary error. Will propagate error if request returns
 	 * a permanent error, or if usable tokens are not available.
 	 *
 	 * @param {Object} params - Request lib params to configure the request
@@ -350,14 +350,14 @@ class BoxClient {
 
 		if (this._batch) {
 			// eslint-disable-next-line promise/avoid-new
-			promise = new Promise((resolve, reject) => {
+			promise = new PromiseBB((resolve, reject) => {
 				this._batch.push({ params, resolve, reject });
 			});
 		} else {
 			// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
 			promise = this._session
 				.getAccessToken(this._tokenOptions)
-				.then((accessToken: string) => {
+				.then(async (accessToken: string) => {
 					params.headers = this._createHeadersForRequest(
 						params.headers,
 						accessToken
@@ -366,22 +366,21 @@ class BoxClient {
 					if (params.streaming) {
 						// streaming is specific to the SDK, so delete it from params before continuing
 						delete params.streaming;
-						var responseStream =
-							this._requestManager.makeStreamingRequest(params);
+						var responseStream = await this._requestManager.makeStreamingRequest(params);
 						// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
 						// due to expired access token
-						responseStream.on('response', (response: any /* FIXME */) => {
-							if (isUnauthorizedDueToExpiredAccessToken(response)) {
-								var expiredTokensError = errors.buildAuthError(response);
+						// responseStream.on('response', (response: any /* FIXME */) => {//response
+							if (isUnauthorizedDueToExpiredAccessToken(responseStream)) {
+								var expiredTokensError = errors.buildAuthError(responseStream);
 
 								// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
 								if (this._session.handleExpiredTokensError) {
 									this._session.handleExpiredTokensError(expiredTokensError);
 								}
 							}
-						});
+						// });
 
-						return responseStream;
+						return responseStream.data;
 					}
 
 					// Make the request to Box, and perform standard response handling
@@ -391,7 +390,9 @@ class BoxClient {
 
 		return promise
 			.then((response: any /* FIXME */) => {
-				if (!response.statusCode) {
+				console.log("AJ: [_makeRequest]  " + response.data);
+
+				if (!response.status) {
 					// Response is not yet complete, and is just a stream that will return the response later
 					// Just return the stream, since it doesn't need further response handling
 					return response;
@@ -407,8 +408,9 @@ class BoxClient {
 
 					throw expiredTokensError;
 				}
-
+				console.log("AJ: [_makeRequest] before return");
 				return response;
+
 			})
 			.asCallback(callback);
 	}
@@ -505,7 +507,7 @@ class BoxClient {
 	 * @param {ActorParams} [options.actor] - Optional actor parameters for creating annotator tokens with Token Auth client
 	 * @param {SharedLinkParams} [options.sharedLink] - Optional shared link parameters for creating tokens using shared links
 	 * @param {Function} [callback] Called with the new token
-	 * @returns {Promise<TokenInfo>} A promise resolving to the exchanged token info
+	 * @returns {PromiseBB<TokenInfo>} A promise resolving to the exchanged token info
 	 */
 	exchangeToken(
 		scopes: string | string[],
@@ -656,7 +658,7 @@ class BoxClient {
 	batchExec = util.deprecate(function (this: BoxClient, callback: Function) {
 		/* eslint-disable no-invalid-this */
 		if (!this._batch) {
-			return Promise.reject(
+			return PromiseBB.reject(
 				new Error('Must start a batch before executing')
 			).asCallback(callback);
 		}
@@ -738,15 +740,15 @@ class BoxClient {
 
 			// Successful Response
 			if (
-				response.statusCode >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &&
-				response.statusCode <= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
+				response.status >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &&
+				response.status <= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
 			) {
 				if (self._useIterators && PagingIterator.isIterable(response)) {
 					callback(null, new PagingIterator(response, self));
 					return;
 				}
 
-				callback(null, response.body);
+				callback(null, response.data);
 				return;
 			}
 			// Unexpected Response
@@ -772,17 +774,17 @@ class BoxClient {
 
 			var ret = method.apply(self, arguments);
 
-			if (ret instanceof Promise) {
+			if (ret instanceof PromiseBB) {
 				ret = ret.then((response) => {
 					if (
-						response.statusCode >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &&
-						response.statusCode <= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
+						response.status >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &&
+						response.status <= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
 					) {
 						if (self._useIterators && PagingIterator.isIterable(response)) {
 							return new PagingIterator(response, self);
 						}
 
-						return response.body;
+						return response.data;
 					}
 
 					throw errors.buildUnexpectedResponseError(response);

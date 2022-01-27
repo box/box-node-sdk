@@ -1289,7 +1289,7 @@ describe('Folders', function() {
 
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/folders/${FOLDER_ID}/watermark`, testParamsWithQs)
-				.returns(Promise.resolve({statusCode: 200, body: {}}));
+				.returns(Promise.resolve({status: 200, body: {}}));
 			folders.getWatermark(FOLDER_ID, testQS);
 		});
 
@@ -1318,7 +1318,7 @@ describe('Folders', function() {
 
 		it('should call callback with error when API call returns non-200 status code', function(done) {
 
-			var res = {statusCode: 404};
+			var res = {status: 404};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
 				.returns(Promise.resolve(res));
 			folders.getWatermark(FOLDER_ID, null, function(err) {
@@ -1330,7 +1330,7 @@ describe('Folders', function() {
 
 		it('should return promise that rejects when API call returns non-200 status code', function() {
 
-			var res = {statusCode: 404};
+			var res = {status: 404};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
 				.returns(Promise.resolve(res));
 			return folders.getWatermark(FOLDER_ID)
@@ -1347,7 +1347,7 @@ describe('Folders', function() {
 			};
 
 			var res = {
-				statusCode: 200,
+				status: 200,
 				body: {watermark}
 			};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)
@@ -1368,7 +1368,7 @@ describe('Folders', function() {
 			};
 
 			var res = {
-				statusCode: 200,
+				status: 200,
 				body: {watermark}
 			};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/folders/${FOLDER_ID}/watermark`)

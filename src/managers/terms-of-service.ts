@@ -271,10 +271,10 @@ class TermsOfService {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== 200) {
+				if (response.status !== 200) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
-				return response.body.entries[0];
+				return response.data.entries[0];
 			})
 			.asCallback(callback);
 	}
@@ -349,11 +349,11 @@ class TermsOfService {
 		return this.client
 			.post(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				switch (response.statusCode) {
+				switch (response.status) {
 					// 200 - A user status has been successfully created on terms of service
 					// return the terms of service user status object
 					case httpStatusCodes.OK:
-						return response.body;
+						return response.data;
 
 					// 409 - Conflict
 					// Terms of Service already exists. Update the existing terms of service object

@@ -77,7 +77,7 @@ describe('SharedItems', function() {
 
 		it('should make GET request to get shared item info when called', function() {
 			var responseBody = {id: '123', name: 'Some Shared Item'},
-				response = {statusCode: 200, body: responseBody};
+				response = {status: 200, body: responseBody};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.mock(boxClientFake).expects('get')
@@ -88,7 +88,7 @@ describe('SharedItems', function() {
 
 		it('should call callback the shared item info when a 200 OK response is returned', function(done) {
 			var responseBody = {id: '123', name: 'Some Shared Item'},
-				response = {statusCode: 200, body: responseBody};
+				response = {status: 200, body: responseBody};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -102,7 +102,7 @@ describe('SharedItems', function() {
 
 		it('should return promise resolving to the shared item info when a 200 OK response is returned', function() {
 			var responseBody = {id: '123', name: 'Some Shared Item'},
-				response = {statusCode: 200, body: responseBody};
+				response = {status: 200, body: responseBody};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -114,7 +114,7 @@ describe('SharedItems', function() {
 		});
 
 		it('should call callback with a password missing error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -127,7 +127,7 @@ describe('SharedItems', function() {
 		});
 
 		it('should return promise rejecting with a password_missing error when a password is given and a 403 FORBIDDEN response is returned', function() {
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -140,7 +140,7 @@ describe('SharedItems', function() {
 		});
 
 		it('should call callback with a password_incorrect error when a password is given and a 403 FORBIDDEN response is returned', function(done) {
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -153,7 +153,7 @@ describe('SharedItems', function() {
 		});
 
 		it('should return promise rejecting with a password_incorrect error when a password is given and a 403 FORBIDDEN response is returned', function() {
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -192,7 +192,7 @@ describe('SharedItems', function() {
 		it('should call callback with unexpected response error when the API call returns an unknown status code', function(done) {
 
 			var response = {
-				statusCode: 404
+				status: 404
 			};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);
@@ -206,7 +206,7 @@ describe('SharedItems', function() {
 		it('should return promise rejecting with unexpected response error when the API call returns an unknown status code', function() {
 
 			var response = {
-				statusCode: 404
+				status: 404
 			};
 
 			sandbox.stub(boxClientFake, 'buildSharedItemAuthHeader').returns(testAuthHeader);

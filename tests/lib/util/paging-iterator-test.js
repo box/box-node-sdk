@@ -410,7 +410,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response2 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=vwxyz&limit=1',
 					uri: {
@@ -484,7 +484,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response2 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items',
 					uri: {},
@@ -562,7 +562,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response2 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?offset=1&limit=99999',
 					uri: {
@@ -635,7 +635,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response2 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
 					uri: {
@@ -651,7 +651,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response3 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
 					uri: {
@@ -733,7 +733,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response2 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
 					uri: {
@@ -750,7 +750,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response3 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?offset=1&limit=1',
 					uri: {
@@ -854,7 +854,7 @@ describe('PagingIterator', function() {
 			};
 
 			var errorResponse = {
-				statusCode: 400
+				status: 400
 			};
 
 			sandbox.stub(clientFake, 'get').returns(Promise.resolve(errorResponse));
@@ -890,7 +890,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response2 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=vwxyz&limit=1',
 					uri: {
@@ -906,7 +906,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response3 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=qwerty&limit=1',
 					uri: {
@@ -994,7 +994,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response2 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=vwxyz&limit=1',
 					uri: {
@@ -1010,7 +1010,7 @@ describe('PagingIterator', function() {
 				}
 			};
 			var response3 = {
-				statusCode: 200,
+				status: 200,
 				request: {
 					href: 'https://api.box.com/2.0/items?marker=qwerty&limit=1',
 					uri: {

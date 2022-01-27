@@ -106,7 +106,7 @@ describe('Files', function() {
 
 		it('should make GET request to get file download when called', function() {
 			var response = {
-				statusCode: 302,
+				status: 302,
 				headers: {
 					location: 'box.com/somedownloadurl'
 				}
@@ -119,7 +119,7 @@ describe('Files', function() {
 
 		it('should call callback with the download URL when a 302 FOUND response is returned', function(done) {
 			var response = {
-				statusCode: 302,
+				status: 302,
 				headers: {
 					location: 'box.com/somedownloadurl'
 				}
@@ -134,7 +134,7 @@ describe('Files', function() {
 
 		it('should return a promise resolving to the download URL when a 302 FOUND response is returned', function() {
 			var response = {
-				statusCode: 302,
+				status: 302,
 				headers: {
 					location: 'box.com/somedownloadurl'
 				}
@@ -147,7 +147,7 @@ describe('Files', function() {
 		});
 
 		it('should call callback with an error when a 202 ACCEPTED response is returned', function(done) {
-			var response = {statusCode: 202};
+			var response = {status: 202};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getDownloadURL(FILE_ID, testQS, function(err) {
@@ -158,7 +158,7 @@ describe('Files', function() {
 		});
 
 		it('should return a promise that rejects when a 202 ACCEPTED response is returned', function() {
-			var response = {statusCode: 202};
+			var response = {status: 202};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return files.getDownloadURL(FILE_ID, testQS)
@@ -191,7 +191,7 @@ describe('Files', function() {
 		});
 
 		it('should call callback with unexpected response error when the API returns unknown status code', function() {
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getDownloadURL(FILE_ID, testQS)
@@ -295,7 +295,7 @@ describe('Files', function() {
 		it('should make GET request to get file download when called', function() {
 
 			var response = {
-				statusCode: 200
+				status: 200
 			};
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/files/1234/thumbnail.png', expectedThumbnailParams)
@@ -305,33 +305,33 @@ describe('Files', function() {
 
 		it('should call callback with the thumbnail file when a 200 OK response is returned', function(done) {
 			var fileData = 'thisistheimagefile! 0101010110111011',
-				response = {statusCode: 200, body: fileData};
+				response = {status: 200, body: fileData};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
 			files.getThumbnail(FILE_ID, testQS, function(err, data) {
 				assert.ifError(err);
-				assert.deepEqual(data, {statusCode: 200, file: fileData});
+				assert.deepEqual(data, {status: 200, file: fileData});
 				done();
 			});
 		});
 
 		it('should return a promise resolving to the thumbnail file when a 200 OK response is returned', function() {
 			var fileData = 'thisistheimagefile! 0101010110111011',
-				response = {statusCode: 200, body: fileData};
+				response = {status: 200, body: fileData};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
 			return files.getThumbnail(FILE_ID, testQS)
 				.then(data => {
-					assert.deepEqual(data, {statusCode: 200, file: fileData});
+					assert.deepEqual(data, {status: 200, file: fileData});
 				});
 		});
 
 		it('should call callback with the placeholder location when a 202 ACCEPTED response is returned', function(done) {
 			var placeholderURL = 'https://someplaceholderthumbnail.png',
 				response = {
-					statusCode: 202,
+					status: 202,
 					headers: {
 						location: placeholderURL
 					}
@@ -339,7 +339,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getThumbnail(FILE_ID, testQS, function(err, data) {
 				assert.ifError(err);
-				assert.deepEqual(data, { statusCode: 202, location: placeholderURL});
+				assert.deepEqual(data, { status: 202, location: placeholderURL});
 				done();
 			});
 		});
@@ -347,7 +347,7 @@ describe('Files', function() {
 		it('should return a promise resolving to the placeholder location when a 202 ACCEPTED response is returned', function() {
 			var placeholderURL = 'https://someplaceholderthumbnail.png',
 				response = {
-					statusCode: 202,
+					status: 202,
 					headers: {
 						location: placeholderURL
 					}
@@ -355,14 +355,14 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return files.getThumbnail(FILE_ID, testQS)
 				.then(data => {
-					assert.deepEqual(data, { statusCode: 202, location: placeholderURL});
+					assert.deepEqual(data, { status: 202, location: placeholderURL});
 				});
 		});
 
 		it('should call callback with the placeholder location when a 302 FOUND response is returned', function(done) {
 			var placeholderURL = 'https://someplaceholderthumbnail.png',
 				response = {
-					statusCode: 302,
+					status: 302,
 					headers: {
 						location: placeholderURL
 					}
@@ -370,7 +370,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getThumbnail(FILE_ID, testQS, function(err, data) {
 				assert.ifError(err);
-				assert.deepEqual(data, { statusCode: 302, location: placeholderURL});
+				assert.deepEqual(data, { status: 302, location: placeholderURL});
 				done();
 			});
 		});
@@ -378,7 +378,7 @@ describe('Files', function() {
 		it('should return a promise resolving to the placeholder location when a 302 FOUND response is returned', function() {
 			var placeholderURL = 'https://someplaceholderthumbnail.png',
 				response = {
-					statusCode: 302,
+					status: 302,
 					headers: {
 						location: placeholderURL
 					}
@@ -386,7 +386,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return files.getThumbnail(FILE_ID, testQS)
 				.then(data => {
-					assert.deepEqual(data, { statusCode: 302, location: placeholderURL});
+					assert.deepEqual(data, { status: 302, location: placeholderURL});
 				});
 		});
 
@@ -412,7 +412,7 @@ describe('Files', function() {
 
 		it('should call callback with unexpected response error when the API returns unknown status code', function(done) {
 
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
@@ -425,7 +425,7 @@ describe('Files', function() {
 
 		it('should return a promise that rejects with unexpected response error when the API returns unknown status code', function() {
 
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
@@ -1850,7 +1850,7 @@ describe('Files', function() {
 		it('should make GET request to create embed link', function() {
 
 			var embedLink = { expiring_embed_link: {url: 'https://app.box.com/preview/expiring_embed/1234'}},
-				response = {statusCode: 200, body: embedLink};
+				response = {status: 200, body: embedLink};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
@@ -1861,7 +1861,7 @@ describe('Files', function() {
 
 		it('should call callback with the embed link when a 200 ok response is returned', function(done) {
 			var embedLink = { expiring_embed_link: {url: 'https://app.box.com/preview/expiring_embed/1234'}},
-				response = {statusCode: 200, body: embedLink};
+				response = {status: 200, body: embedLink};
 
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}`)
 				.returns(Promise.resolve(response));
@@ -1874,7 +1874,7 @@ describe('Files', function() {
 
 		it('should return promise resolving to the embed link when a 200 ok response is returned', function() {
 			var embedLink = { expiring_embed_link: {url: 'https://app.box.com/preview/expiring_embed/1234'}},
-				response = {statusCode: 200, body: embedLink};
+				response = {status: 200, body: embedLink};
 
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}`)
 				.returns(Promise.resolve(response));
@@ -1887,7 +1887,7 @@ describe('Files', function() {
 		it('should call callback with a response error when API returns non-200 result', function(done) {
 
 			var response = {
-				statusCode: 404
+				status: 404
 			};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -1903,7 +1903,7 @@ describe('Files', function() {
 		it('should return promise that rejects with a response error when API returns non-200 result', function() {
 
 			var response = {
-				statusCode: 404
+				status: 404
 			};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -2237,7 +2237,7 @@ describe('Files', function() {
 
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs(`/files/${FILE_ID}/watermark`, testParamsWithQs)
-				.returns(Promise.resolve({statusCode: 200, body: {}}));
+				.returns(Promise.resolve({status: 200, body: {}}));
 			files.getWatermark(FILE_ID, testQS);
 		});
 
@@ -2266,7 +2266,7 @@ describe('Files', function() {
 
 		it('should call callback with error when API call returns non-200 status code', function(done) {
 
-			var res = {statusCode: 404};
+			var res = {status: 404};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
 				.returns(Promise.resolve(res));
 			files.getWatermark(FILE_ID, null, function(err) {
@@ -2278,7 +2278,7 @@ describe('Files', function() {
 
 		it('should return promise that rejects when API call returns non-200 status code', function() {
 
-			var res = {statusCode: 404};
+			var res = {status: 404};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
 				.returns(Promise.resolve(res));
 			return files.getWatermark(FILE_ID)
@@ -2295,7 +2295,7 @@ describe('Files', function() {
 			};
 
 			var res = {
-				statusCode: 200,
+				status: 200,
 				body: {watermark}
 			};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
@@ -2316,7 +2316,7 @@ describe('Files', function() {
 			};
 
 			var res = {
-				statusCode: 200,
+				status: 200,
 				body: {watermark}
 			};
 			sandbox.stub(boxClientFake, 'get').withArgs(`/files/${FILE_ID}/watermark`)
@@ -2596,7 +2596,7 @@ describe('Files', function() {
 		it('should make PUT call to upload part when called', function() {
 
 			var apiResponse = {
-				statusCode: 200,
+				status: 200,
 				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
 			};
 
@@ -2644,7 +2644,7 @@ describe('Files', function() {
 		it('should call callback with error when the API call returns a non-200 status code', function(done) {
 
 			var apiResponse = {
-				statusCode: 400
+				status: 400
 			};
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
@@ -2659,7 +2659,7 @@ describe('Files', function() {
 		it('should return promise that rejects when the API call returns a non-200 status code', function() {
 
 			var apiResponse = {
-				statusCode: 400
+				status: 400
 			};
 
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(apiResponse));
@@ -2673,7 +2673,7 @@ describe('Files', function() {
 		it('should call callback with parsed body when API call is successful', function(done) {
 
 			var apiResponse = {
-				statusCode: 200,
+				status: 200,
 				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
 			};
 
@@ -2697,7 +2697,7 @@ describe('Files', function() {
 		it('should return promise resolving to parsed body when API call is successful', function() {
 
 			var apiResponse = {
-				statusCode: 200,
+				status: 200,
 				body: new Buffer('{"part": {"part_id": "00000000", "size": 10, "offset": 0, "sha1": "0987654321abcdef"}}')
 			};
 
@@ -2743,7 +2743,7 @@ describe('Files', function() {
 			};
 
 			var response = {
-				statusCode: 201
+				status: 201
 			};
 
 			sandbox.mock(boxClientFake).expects('post')
@@ -2772,7 +2772,7 @@ describe('Files', function() {
 			};
 
 			var response = {
-				statusCode: 201
+				status: 201
 			};
 
 			sandbox.mock(boxClientFake).expects('post')
@@ -2820,7 +2820,7 @@ describe('Files', function() {
 			};
 
 			var response = {
-				statusCode: 201,
+				status: 201,
 				body: responseBody
 			};
 
@@ -2841,7 +2841,7 @@ describe('Files', function() {
 			};
 
 			var response = {
-				statusCode: 201,
+				status: 201,
 				body: responseBody
 			};
 
@@ -2859,7 +2859,7 @@ describe('Files', function() {
 			var originalScheduler = Promise.setScheduler(fn => fn());
 
 			var retryResponse = {
-				statusCode: 202,
+				status: 202,
 				headers: {
 					'retry-after': 1
 				}
@@ -2871,7 +2871,7 @@ describe('Files', function() {
 			};
 
 			var successResponse = {
-				statusCode: 201,
+				status: 201,
 				body: responseBody
 			};
 
@@ -2893,7 +2893,7 @@ describe('Files', function() {
 		it('should call callback with an error when unknown response code is received', function(done) {
 
 			var response = {
-				statusCode: 303
+				status: 303
 			};
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
@@ -2907,7 +2907,7 @@ describe('Files', function() {
 		it('should return promise that rejects when unknown response code is received', function() {
 
 			var response = {
-				statusCode: 303
+				status: 303
 			};
 
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
@@ -2942,7 +2942,7 @@ describe('Files', function() {
 			};
 
 			var commitResponse = {
-				statusCode: 201
+				status: 201
 			};
 
 			sandbox.mock(files).expects('getUploadSessionParts')
@@ -2984,7 +2984,7 @@ describe('Files', function() {
 			};
 
 			var commitResponse = {
-				statusCode: 201
+				status: 201
 			};
 
 			var filesMock = sandbox.mock(files);
@@ -3392,7 +3392,7 @@ describe('Files', function() {
 
 		it('should make GET request to get file representation when called', function() {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					representations: {
 						entries: [
@@ -3413,7 +3413,7 @@ describe('Files', function() {
 
 		it('should call callback with the representation when a 200 response is returned', function(done) {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					representations: {
 						entries: [
@@ -3429,13 +3429,13 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err, representationObject) {
 				assert.ifError(err);
-				assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
+				assert.strictEqual(representationObject, response.data.representations, 'representation object is returned');
 				done();
 			});
 		});
 		it('should return a promise resolving to a representation object when a 200 response is returned', function() {
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					representations: {
 						entries: [
@@ -3451,21 +3451,21 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.then(representationObject => {
-					assert.strictEqual(representationObject, response.body.representations, 'representation object is returned');
+					assert.strictEqual(representationObject, response.data.representations, 'representation object is returned');
 				});
 		});
 		it('should call callback with an error when a 202 ACCEPTED response is returned', function(done) {
-			var response = {statusCode: 202};
+			var response = {status: 202};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
 				assert.instanceOf(err, Error);
-				assert.strictEqual(err.statusCode, response.statusCode);
+				assert.strictEqual(err.statusCode, response.status);
 				done();
 			});
 		});
 		it('should return a promise that rejects when a 202 ACCEPTED response is returned', function() {
-			var response = {statusCode: 202};
+			var response = {status: 202};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
@@ -3498,7 +3498,7 @@ describe('Files', function() {
 
 		it('should call callback with unexpected response error when the API returns unknown status code', function(done) {
 
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 
@@ -3511,7 +3511,7 @@ describe('Files', function() {
 
 		it('should return a promise that rejects with unexpected response error when the API returns unknown status code', function() {
 
-			var response = {statusCode: 403};
+			var response = {status: 403};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 

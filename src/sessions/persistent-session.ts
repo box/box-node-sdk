@@ -151,7 +151,7 @@ class PersistentSession {
 					// we'll need to check the central data store for the latest valid tokens that some other server in the app
 					// cluster would have received. So, instead pull tokens from the central store and attempt to use them.
 					if (
-						err.statusCode === httpStatusCodes.BAD_REQUEST &&
+						err.status === httpStatusCodes.BAD_REQUEST &&
 						this._tokenStore
 					) {
 						var invalidGrantError = err;

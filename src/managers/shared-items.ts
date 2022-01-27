@@ -63,10 +63,10 @@ class SharedItems {
 		return this.client
 			.get(BASE_PATH, params)
 			.then((response: any /* FIXME */) => {
-				switch (response.statusCode) {
+				switch (response.status) {
 					// 200 - Shared Item Recieved
 					case httpStatusCodes.OK:
-						return response.body;
+						return response.data;
 
 					// 403 - Incorrect or missing password
 					// Propagate an error explaining that the password is either missing or incorrect

@@ -171,7 +171,7 @@ class StoragePolicies {
 				}
 
 				// Unwrap the collection and give back just the assignment object
-				return response.body.entries[0];
+				return response.data.entries[0];
 			})
 			.asCallback(callback);
 	}

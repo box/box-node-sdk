@@ -148,7 +148,7 @@ describe('APIRequest', function() {
 
 		it('should emit response event with response when streaming request completes', function() {
 			var apiRequest = new APIRequest(config, eventBusFake);
-			var response = {statusCode: 200};
+			var response = {status: 200};
 
 			sandbox.mock(eventBusFake).expects('emit')
 				.withArgs('response', null, response);
@@ -177,7 +177,7 @@ describe('APIRequest', function() {
 
 		it('should return a temporary error to the callback when a 502 temporary error occurs and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 502,
+				status: 502,
 				request: {}
 			};
 
@@ -239,7 +239,7 @@ describe('APIRequest', function() {
 
 		it('should return request and response information when a 504 temporary error occurs and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 504,
+				status: 504,
 				body: 'some body! (can be a string if someone set json:false and encoding: utf-8)',
 				headers: { foo: 'bar' },
 				request: {}
@@ -251,8 +251,8 @@ describe('APIRequest', function() {
 			var apiRequest = new APIRequest(config, eventBusFake);
 			apiRequest.execute(function callback(err) {
 				assert.equal(err.statusCode, responseInfo.statusCode);
-				assert.equal(err.response.statusCode, responseInfo.statusCode);
-				assert.equal(err.response.body, responseInfo.body);
+				assert.equal(err.response.status, responseInfo.status);
+				assert.equal(err.response.data, responseInfo.body);
 				assert.equal(err.response.headers, responseInfo.headers);
 				done();
 			});
@@ -260,7 +260,7 @@ describe('APIRequest', function() {
 
 		it('should return a successful response to the callback when a successful status code is returned and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 200,
+				status: 200,
 				request: {}
 			};
 
@@ -270,14 +270,14 @@ describe('APIRequest', function() {
 			var apiRequest = new APIRequest(config, eventBusFake);
 			apiRequest.execute(function callback(err, response) {
 				assert.isNull(err, 'there was no request error');
-				assert.propertyVal(response, 'statusCode', 200);
+				assert.propertyVal(response, 'status', 200);
 				done();
 			});
 		});
 
 		it('should return a successful response to the callback when a 400 status code is returned and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 400,
+				status: 400,
 				request: {}
 			};
 
@@ -295,7 +295,7 @@ describe('APIRequest', function() {
 
 		it('should remove sensitive header information from the request when an successful response occurs', function(done) {
 			var responseInfo = {
-					statusCode: 200,
+					status: 200,
 					request: requestObjectFake
 				},
 				requestHeaders = {
@@ -324,7 +324,7 @@ describe('APIRequest', function() {
 		it('should retry the request on a set interval when retryIntervalMS is set and a callback exists', function(done) {
 			var clock = sinon.useFakeTimers();
 			var responseInfo = {
-				statusCode: 500,
+				status: 500,
 				request: {}
 			};
 
@@ -352,7 +352,7 @@ describe('APIRequest', function() {
 		it('should use retry strategy to determine the retry interval when config.retryStrategy is set, returns a number, and a callback exists', function(done) {
 			var clock = sinon.useFakeTimers();
 			var responseInfo = {
-				statusCode: 500,
+				status: 500,
 				request: {}
 			};
 
@@ -383,7 +383,7 @@ describe('APIRequest', function() {
 
 		it('should propagate the retry strategy error when the retry strategy returns an error and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 500,
+				status: 500,
 				request: {}
 			};
 			var expectedError = new Error('500 - Internal Server Error');
@@ -411,7 +411,7 @@ describe('APIRequest', function() {
 
 		it('should propagate the response error when the retry strategy does not return a number or error, and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 500,
+				status: 500,
 				request: {}
 			};
 			var expectedError = new Error('500 - Internal Server Error');
@@ -440,7 +440,7 @@ describe('APIRequest', function() {
 		it('should call the callback asynchronously when callback exists', function(done) {
 			var endOfTest = false,
 				responseInfo = {
-					statusCode: 200,
+					status: 200,
 					request: {}
 				};
 
@@ -470,7 +470,7 @@ describe('APIRequest', function() {
 
 		it('should emit a temporary error when a 504 temporary error occurs and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 504,
+				status: 504,
 				request: {}
 			};
 			var expectedError = {
@@ -489,11 +489,11 @@ describe('APIRequest', function() {
 
 		it('should emit a successful response event when a successful status code is returned and a callback exists', function(done) {
 			var responseInfo = {
-				statusCode: 200,
+				status: 200,
 				request: {}
 			};
 			var expectedResponse = {
-				statusCode: 200
+				status: 200
 			};
 
 			requestStub.yieldsAsync(null, responseInfo);

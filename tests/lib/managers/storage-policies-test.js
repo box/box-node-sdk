@@ -54,7 +54,7 @@ describe('StoragePolicies', function() {
 		it('should reject with an error when API response has non-200 status code', function() {
 
 			var response = {
-				statusCode: 400
+				status: 400
 			};
 
 			sandbox.mock(boxClientFake).expects('get')

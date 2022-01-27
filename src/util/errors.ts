@@ -38,26 +38,27 @@ const TRACE_ID_HEADER_NAME = 'box-request-id';
 class Request {
 	method: any /* FIXME */;
 	url: any /* FIXME */;
-	httpVersion: any /* FIXME */;
+	// httpVersion: any /* FIXME */;
 	headers: any /* FIXME */;
-	body: any /* FIXME */;
+	data: any /* FIXME */;
 
 	constructor(req: any /* FIXME */) {
 		this.method = req.method;
-		if (req.uri) {
-			this.url = {
-				protocol: req.uri.protocol,
-				host: req.uri.host,
-				path: req.uri.pathname,
-				query: qs.parse(req.uri.query),
-				fragment: req.uri.hash,
-			};
-		} else {
-			this.url = null;
-		}
-		this.httpVersion = req.response ? req.response.httpVersion : null;
+		this.url = req.url;
+		// if (req.url) {
+		// 	this.url = {
+		// 		protocol: req.uri.protocol,
+		// 		host: req.uri.host,
+		// 		path: req.uri.pathname,
+		// 		query: qs.parse(req.uri.query),
+		// 		fragment: req.uri.hash,
+		// 	};
+		// } else {
+		// 	this.url = null;
+		// }
+		// this.httpVersion = req.response ? req.response.httpVersion : null;
 		this.headers = req.headers;
-		this.body = req.body;
+		this.data = req.data;
 	}
 }
 
@@ -86,7 +87,7 @@ export = {
 		response = response || {};
 		message = message || 'API Response Error';
 
-		var statusCode = response.statusCode;
+		var statusCode = response.status;
 		var statusMessage = httpStatusCodes[statusCode];
 		var debugID = ''; // Of the form <requestID>.<traceID>, both parts optional
 		var errorCode;
@@ -97,15 +98,15 @@ export = {
 			debugID += `.${response.headers[TRACE_ID_HEADER_NAME]}`;
 		}
 
-		if (response.body) {
-			if (response.body.request_id) {
+		if (response.data) {
+			if (response.data.request_id) {
 				// Prepend request ID
-				debugID = response.body.request_id + debugID;
+				debugID = response.data.request_id + debugID;
 			}
 
-			errorCode = response.body.code || response.body.error;
+			errorCode = response.data.code || response.data.error;
 			errorDescription =
-				response.body.message || response.body.error_description;
+				response.data.message || response.data.error_description;
 		}
 
 		var errorMessage;
@@ -124,10 +125,10 @@ export = {
 
 		var responseError: any /* FIXME */ = new Error(errorMessage);
 
-		responseError.statusCode = response.statusCode;
+		responseError.status = response.status;
 		responseError.response = response;
-		responseError.request = response.request
-			? new Request(response.request)
+		responseError.request = response.config
+			? new Request(response.config)
 			: {};
 
 		return responseError;

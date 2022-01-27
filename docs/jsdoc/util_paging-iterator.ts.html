@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: util/paging-iterator.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -93,8 +93,8 @@ class PagingIterator {
 				(response.request.method === 'GET' ||
 					(response.request.method === 'POST' &amp;&amp;
 						!UPLOAD_PATTERN.test(response.request.uri.href))),
-			hasEntries = response.body &amp;&amp; Array.isArray(response.body.entries),
-			notEventStream = response.body &amp;&amp; !response.body.next_stream_position;
+			hasEntries = response.data &amp;&amp; Array.isArray(response.data.entries),
+			notEventStream = response.data &amp;&amp; !response.data.next_stream_position;
 
 		return Boolean(isGetOrPostRequest &amp;&amp; hasEntries &amp;&amp; notEventStream);
 	}
@@ -121,7 +121,7 @@ class PagingIterator {
 			throw new Error('Cannot create paging iterator for non-paged response!');
 		}
 
-		var data = response.body;
+		var data = response.data;
 		if (Number.isSafeInteger(data.offset)) {
 			this.nextField = PAGING_MODES.OFFSET;
 			this.nextValue = data.offset;
@@ -169,7 +169,7 @@ class PagingIterator {
 		if (response.request.method === 'POST') {
 			this.fetch = client.post.bind(client, href);
 		}
-		this.buffer = response.body.entries;
+		this.buffer = response.data.entries;
 		this.queue = new PromiseQueue(1, Infinity);
 		this._updatePaging(response);
 	}
@@ -181,7 +181,7 @@ class PagingIterator {
 	 * @returns {void}
 	 */
 	_updatePaging(response: any /* FIXME */) {
-		var data = response.body;
+		var data = response.data;
 
 		if (this.nextField === PAGING_MODES.OFFSET) {
 			this.nextValue += this.limit;
@@ -223,7 +223,7 @@ class PagingIterator {
 
 			this._updatePaging(response);
 
-			this.buffer = this.buffer.concat(response.body.entries);
+			this.buffer = this.buffer.concat(response.data.entries);
 
 			if (this.buffer.length === 0) {
 				if (this.done) {

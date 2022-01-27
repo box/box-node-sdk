@@ -166,6 +166,7 @@ class AppAuthSession {
 			!this._tokenInfo ||
 			!this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)
 		) {
+			console.log("\nAJ: before _refreshAppAuthAccessToken ** \n");
 			return this._refreshAppAuthAccessToken(options);
 		}
 

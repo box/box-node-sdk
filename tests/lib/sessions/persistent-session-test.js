@@ -254,7 +254,7 @@ describe('PersistentAPISession', function() {
 			var tokensError = new Error('Refresh token is old');
 			tokensError.statusCode = 400;
 			tokensError.response = {
-				statusCode: 400
+				status: 400
 			};
 
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.reject(tokensError));

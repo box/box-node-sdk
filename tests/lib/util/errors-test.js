@@ -42,7 +42,7 @@ describe('Errors', function() {
 	describe('buildAuthError()', function() {
 		it('should build an error object with the proper status code and message', function() {
 			var response = {
-				statusCode: 401
+				status: 401
 			};
 			var errObject = errors.buildAuthError(response);
 			assert(errObject.authExpired);
@@ -53,7 +53,7 @@ describe('Errors', function() {
 		it('should use provided message when message argument is passed', function() {
 
 			var response = {
-				statusCode: 401
+				status: 401
 			};
 			var message = 'test';
 			var errObject = errors.buildAuthError(response, message);
@@ -66,7 +66,7 @@ describe('Errors', function() {
 	describe('buildResponseError()', function() {
 		it('should build an error object with the proper properties when called with a response object and a message', function() {
 			var response = {
-				statusCode: 505,
+				status: 505,
 				body: {foo: 'bar'}
 			};
 			var errObject = errors.buildResponseError(response, 'testMessage');
@@ -81,7 +81,7 @@ describe('Errors', function() {
 			var requestID = '98nq34otquhet';
 
 			var response = {
-				statusCode: 505,
+				status: 505,
 				body: {
 					foo: 'bar',
 					request_id: requestID
@@ -97,7 +97,7 @@ describe('Errors', function() {
 			var traceID = 'KUHFIUYVIYTFIYTF*&^TI&YGIU';
 
 			var response = {
-				statusCode: 505,
+				status: 505,
 				body: {
 					foo: 'bar'
 				},
@@ -116,7 +116,7 @@ describe('Errors', function() {
 				traceID = 'KUHFIUYVIYTFIYTF*&^TI&YGIU';
 
 			var response = {
-				statusCode: 404,
+				status: 404,
 				body: {
 					foo: 'bar',
 					request_id: requestID
@@ -133,7 +133,7 @@ describe('Errors', function() {
 		it('should attach formatted request object when request context is present', function() {
 
 			var response = {
-				statusCode: 505,
+				status: 505,
 				body: {foo: 'bar'},
 				httpVersion: '1.1',
 				request: {
@@ -178,7 +178,7 @@ describe('Errors', function() {
 		it('should not throw when request URI and response pointer are undefined', function() {
 
 			var response = {
-				statusCode: 505,
+				status: 505,
 				body: {foo: 'bar'},
 				httpVersion: '1.1',
 				request: {
@@ -209,7 +209,7 @@ describe('Errors', function() {
 	describe('buildUnexpectedResponseError()', function() {
 		it('should build an error object with the proper properties when called with a response object', function() {
 			var response = {
-				statusCode: 505,
+				status: 505,
 				body: {foo: 'bar'}
 			};
 			var errObject = errors.buildUnexpectedResponseError(response);
@@ -220,7 +220,7 @@ describe('Errors', function() {
 
 		it('should build an error object with the proper properties when called with an error response object', function() {
 			var response = {
-				statusCode: 505,
+				status: 505,
 				body: {
 					code: 'error_code',
 					message: 'Bad things happened',

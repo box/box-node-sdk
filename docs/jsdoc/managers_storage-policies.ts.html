@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: managers/storage-policies.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -199,7 +199,7 @@ class StoragePolicies {
 				}
 
 				// Unwrap the collection and give back just the assignment object
-				return response.body.entries[0];
+				return response.data.entries[0];
 			})
 			.asCallback(callback);
 	}

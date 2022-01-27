@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: managers/folders.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -700,7 +700,7 @@ class Folders {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				return response.body.watermark;
+				return response.data.watermark;
 			})
 			.asCallback(callback);
 	}

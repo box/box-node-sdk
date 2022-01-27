@@ -41,7 +41,7 @@ and is often useful for passing query string, request body, or header parameters
 The response object that results from the call is an instance of
 [http.IncomingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage).
 By default the entire response will have already been read and the body will be attached
-as `response.body`.
+as `response.data`.
 
 ### GET
 
@@ -62,7 +62,7 @@ client.get('/files/1234', params, function(err, response) {
         // handle error
     }
 
-    console.log(response.body);
+    console.log(response.data);
 });
 ```
 
@@ -88,7 +88,7 @@ client.post('/folders', params, function(err, response) {
         // handle error
     }
 
-    console.log(response.body);
+    console.log(response.data);
 });
 ```
 
@@ -111,7 +111,7 @@ client.put('/folders/1234', params, function(err, response) {
         // handle error
     }
 
-    console.log(response.body);
+    console.log(response.data);
 });
 ```
 
@@ -128,7 +128,7 @@ client.del('/folders/1234', null, function(err, response) {
         // handle error
     }
 
-    console.log(response.body);
+    console.log(response.data);
 });
 ```
 
@@ -145,7 +145,7 @@ client.options('/files/content', null, function(err, response) {
         // handle error
     }
 
-    console.log(response.body);
+    console.log(response.data);
 });
 ```
 

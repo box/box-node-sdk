@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: box-client.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -137,14 +137,14 @@ function isUnauthorizedDueToExpiredAccessToken(response: any /* FIXME */) {
 	// 3) The status code is UNAUTHORIZED and the response body is a non-empty object. This indicates that the 401 was returned for some reason other
 	//    than expired tokens, so return false.
 
-	if (Buffer.isBuffer(response.body)) {
+	if (Buffer.isBuffer(response.data)) {
 		return false;
 	}
 
 	var isResponseStatusCodeUnauthorized =
 			response.statusCode === httpStatusCodes.UNAUTHORIZED,
 		isResponseBodyEmpty =
-			!response.body || Object.getOwnPropertyNames(response.body).length === 0;
+			!response.data || Object.getOwnPropertyNames(response.data).length === 0;
 	return isResponseStatusCodeUnauthorized &amp;&amp; isResponseBodyEmpty;
 }
 
@@ -192,7 +192,7 @@ function formatRequestForBatch(params: Record&lt;string, string | object>) {
  */
 function formatResponseForBatch(response: any /* FIXME */) {
 	return {
-		statusCode: response.status,
+		status: response.status,
 		headers: response.headers,
 		body: response.response,
 	};
@@ -774,7 +774,7 @@ class BoxClient {
 					return;
 				}
 
-				callback(null, response.body);
+				callback(null, response.data);
 				return;
 			}
 			// Unexpected Response
@@ -810,7 +810,7 @@ class BoxClient {
 							return new PagingIterator(response, self);
 						}
 
-						return response.body;
+						return response.data;
 					}
 
 					throw errors.buildUnexpectedResponseError(response);

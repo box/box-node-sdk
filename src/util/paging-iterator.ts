@@ -65,8 +65,8 @@ class PagingIterator {
 				(response.request.method === 'GET' ||
 					(response.request.method === 'POST' &&
 						!UPLOAD_PATTERN.test(response.request.uri.href))),
-			hasEntries = response.body && Array.isArray(response.body.entries),
-			notEventStream = response.body && !response.body.next_stream_position;
+			hasEntries = response.data && Array.isArray(response.data.entries),
+			notEventStream = response.data && !response.data.next_stream_position;
 
 		return Boolean(isGetOrPostRequest && hasEntries && notEventStream);
 	}
@@ -93,7 +93,7 @@ class PagingIterator {
 			throw new Error('Cannot create paging iterator for non-paged response!');
 		}
 
-		var data = response.body;
+		var data = response.data;
 		if (Number.isSafeInteger(data.offset)) {
 			this.nextField = PAGING_MODES.OFFSET;
 			this.nextValue = data.offset;
@@ -141,7 +141,7 @@ class PagingIterator {
 		if (response.request.method === 'POST') {
 			this.fetch = client.post.bind(client, href);
 		}
-		this.buffer = response.body.entries;
+		this.buffer = response.data.entries;
 		this.queue = new PromiseQueue(1, Infinity);
 		this._updatePaging(response);
 	}
@@ -153,7 +153,7 @@ class PagingIterator {
 	 * @returns {void}
 	 */
 	_updatePaging(response: any /* FIXME */) {
-		var data = response.body;
+		var data = response.data;
 
 		if (this.nextField === PAGING_MODES.OFFSET) {
 			this.nextValue += this.limit;
@@ -189,13 +189,13 @@ class PagingIterator {
 	 */
 	_getData() {
 		return this.fetch(this.options).then((response: any /* FIXME */) => {
-			if (response.statusCode !== 200) {
+			if (response.status !== 200) {
 				throw errors.buildUnexpectedResponseError(response);
 			}
 
 			this._updatePaging(response);
 
-			this.buffer = this.buffer.concat(response.body.entries);
+			this.buffer = this.buffer.concat(response.data.entries);
 
 			if (this.buffer.length === 0) {
 				if (this.done) {

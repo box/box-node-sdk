@@ -165,7 +165,7 @@ class Chunk extends EventEmitter {
 
 				if (err) {
 					// handle the error or retry
-					if (err.statusCode) {
+					if (err.status) {
 						// an API error, probably not retryable!
 						this.emit('error', err);
 					} else {

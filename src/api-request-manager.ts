@@ -6,7 +6,7 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-import { Promise } from 'bluebird';
+import { Promise as PromiseBB} from 'bluebird';
 import { EventEmitter } from 'events';
 import errors from './util/errors';
 
@@ -56,7 +56,7 @@ class APIRequestManager {
 
 		// Make the request
 		var apiRequest = new APIRequest(requestConfig, this.eventBus);
-		return Promise.fromCallback((callback) =>
+		return PromiseBB.fromCallback((callback) =>
 			apiRequest.execute(callback)
 		).catch((err) => errors.unwrapAndThrow(err));
 	}
@@ -65,9 +65,9 @@ class APIRequestManager {
 	 * Make a request to the API, and return a read stream for the response.
 	 *
 	 * @param {Object} options The request options
-	 * @returns {Stream.Readable} The response stream
+	 * @returns {APIRequest~ResponseObject} The response stream
 	 */
-	makeStreamingRequest(options: any /* FIXME */) {
+	async makeStreamingRequest(options: any /* FIXME */) {
 		// Add default APIRequestManager options to each request
 		var requestConfig = this.config.extend({
 			request: options,
@@ -75,7 +75,7 @@ class APIRequestManager {
 
 		// Make the request
 		var apiRequest = new APIRequest(requestConfig, this.eventBus);
-		apiRequest.execute();
+		await apiRequest.execute();
 		return apiRequest.getResponseStream();
 	}
 }

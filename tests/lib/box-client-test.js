@@ -70,9 +70,9 @@ describe('box-client', function() {
 		fakeParamsWithBody = {body: fakeBody};
 		fakeParamsWithQs = {qs: fakeQs};
 		fakeResponseBody = {some: 'responseBody'};
-		fakeOKResponse = {statusCode: httpStatusCodes.OK, body: fakeResponseBody};
+		fakeOKResponse = {status: httpStatusCodes.OK, body: fakeResponseBody};
 		fakeResponseStream = new EventEmitter();
-		fakeUnauthorizedResponse = {statusCode: httpStatusCodes.UNAUTHORIZED, body: {}};
+		fakeUnauthorizedResponse = {status: httpStatusCodes.UNAUTHORIZED, body: {}};
 		fakeMultipartFormData = [{format: 'doesNotMatter'}];
 
 		// Setup Mockery
@@ -699,7 +699,7 @@ describe('box-client', function() {
 			var promise = basicClient.get('/foo');
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					responses: [
 						{
@@ -728,7 +728,7 @@ describe('box-client', function() {
 			basicClient.get('/foo');
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					responses: [
 						{
@@ -744,7 +744,7 @@ describe('box-client', function() {
 			sandbox.stub(basicClient, 'post').returns(Promise.resolve(response));
 
 			return basicClient.batchExec().then(data => {
-				assert.equal(data, response.body);
+				assert.equal(data, response.data);
 			});
 		});
 
@@ -775,7 +775,7 @@ describe('box-client', function() {
 			basicClient.get('/foo');
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					responses: [
 						{
@@ -793,7 +793,7 @@ describe('box-client', function() {
 			basicClient.batchExec(function(err, data) {
 
 				assert.ifError(err);
-				assert.equal(data, response.body);
+				assert.equal(data, response.data);
 				done();
 			});
 		});
@@ -1292,7 +1292,7 @@ describe('box-client', function() {
 		it('should pass response body to callback when called with 2xx response', function(done) {
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: 'It worked!'
 			};
 
@@ -1309,7 +1309,7 @@ describe('box-client', function() {
 		it('should pass unexpected response error to callback when called with unsuccessful response', function(done) {
 
 			var unexpectedResponse = {
-				statusCode: 403
+				status: 403
 			};
 
 			var wrappedCallback = basicClient.defaultResponseHandler(function(err) {

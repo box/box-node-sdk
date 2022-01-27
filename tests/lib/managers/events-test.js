@@ -76,7 +76,7 @@ describe('Events', function() {
 						stream_position: 'now'
 					})
 				}))
-				.returns(Promise.resolve({statusCode: 200, body: {}}));
+				.returns(Promise.resolve({status: 200, body: {}}));
 
 			events.getCurrentStreamPosition();
 		});
@@ -105,7 +105,7 @@ describe('Events', function() {
 		it('should call callback with a response error when API returns non-200 result', function(done) {
 
 			var response = {
-				statusCode: 404
+				status: 404
 			};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -121,7 +121,7 @@ describe('Events', function() {
 		it('should return a promise that rejects when API returns non-200 result', function() {
 
 			var response = {
-				statusCode: 404
+				status: 404
 			};
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
@@ -136,7 +136,7 @@ describe('Events', function() {
 		it('should call callback with current stream position when API call succeeds', function(done) {
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					next_stream_position: TEST_STREAM_POSITION
 				}
@@ -155,7 +155,7 @@ describe('Events', function() {
 		it('should return a promise resolving to current stream position when API call succeeds', function() {
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					next_stream_position: TEST_STREAM_POSITION
 				}
@@ -223,7 +223,7 @@ describe('Events', function() {
 		it('should make API call to get long poll info when called', function() {
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					entries: [{type: 'realtime_server'}]
 				}
@@ -261,7 +261,7 @@ describe('Events', function() {
 		it('should call callback with an error when API call returns non-200 status', function(done) {
 
 			var response = {
-				statusCode: 403
+				status: 403
 			};
 			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
 
@@ -275,7 +275,7 @@ describe('Events', function() {
 		it('should return promise that rejects when API call returns non-200 status', function() {
 
 			var response = {
-				statusCode: 403
+				status: 403
 			};
 			sandbox.stub(boxClientFake, 'options').returns(Promise.resolve(response));
 
@@ -289,7 +289,7 @@ describe('Events', function() {
 		it('should call callback with an error when API does not return realtime server info', function(done) {
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					entries: []
 				}
@@ -306,7 +306,7 @@ describe('Events', function() {
 		it('should return promise that rejects when API does not return realtime server info', function() {
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					entries: []
 				}
@@ -326,7 +326,7 @@ describe('Events', function() {
 				url: 'https://realtime.box.com/foo'
 			};
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					entries: [realtimeInfo]
 				}
@@ -348,7 +348,7 @@ describe('Events', function() {
 				url: 'https://realtime.box.com/foo'
 			};
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					entries: [realtimeInfo]
 				}

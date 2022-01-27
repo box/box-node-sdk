@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: managers/files.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -160,7 +160,7 @@ function pollRepresentationInfo(client: BoxClient, infoURL: string) {
 			throw errors.buildUnexpectedResponseError(response);
 		}
 
-		var info = response.body;
+		var info = response.data;
 
 		switch (info.status.state) {
 			case 'success':
@@ -356,7 +356,7 @@ class Files {
 					case httpStatusCodes.ACCEPTED:
 					case httpStatusCodes.FOUND:
 						return {
-							statusCode: response.statusCode,
+							status: response.statusCode,
 							location: response.headers.location,
 						};
 
@@ -364,8 +364,8 @@ class Files {
 					// return the thumbnail file
 					case httpStatusCodes.OK:
 						return {
-							statusCode: response.statusCode,
-							file: response.body,
+							status: response.statusCode,
+							file: response.data,
 						};
 
 					// Unexpected Response
@@ -1150,7 +1150,7 @@ class Files {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				return response.body.expiring_embed_link.url;
+				return response.data.expiring_embed_link.url;
 			})
 			.asCallback(callback);
 	}
@@ -1322,7 +1322,7 @@ class Files {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				return response.body.watermark;
+				return response.data.watermark;
 			})
 			.asCallback(callback);
 	}
@@ -1545,7 +1545,7 @@ class Files {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				return JSON.parse(response.body);
+				return JSON.parse(response.data);
 			})
 			.asCallback(callback);
 	}
@@ -1620,8 +1620,8 @@ class Files {
 				return this.client.post(apiURL, params);
 			})
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode === 201) {
-					return response.body;
+				if (response.status === 201) {
+					return response.data;
 				}
 
 				if (response.statusCode === 202) {
@@ -1896,7 +1896,7 @@ class Files {
 					// return the representation object
 					case httpStatusCodes.OK:
 						if (options &amp;&amp; (options as any).generateRepresentations) {
-							var data = response.body.representations.entries;
+							var data = response.data.representations.entries;
 							var promiseArray = data.map((entry: any /* FIXME */) => {
 								switch (entry.status.state) {
 									case 'success':
@@ -1911,7 +1911,7 @@ class Files {
 							return Promise.all(promiseArray).then((entries) => ({ entries }));
 						}
 
-						return response.body.representations;
+						return response.data.representations;
 
 					// Unexpected Response
 					default:
@@ -2048,7 +2048,7 @@ class Files {
 			.post(ZIP_DOWNLOAD_PATH, params)
 			.then((response: any /* FIXME */) =>
 				this.client
-					.get(response.body.download_url, downloadStreamOptions)
+					.get(response.data.download_url, downloadStreamOptions)
 					.then((responseStream: Readable) => {
 						responseStream.pipe(stream);
 						// eslint-disable-next-line promise/avoid-new
@@ -2057,8 +2057,8 @@ class Files {
 							responseStream.on('error', (error) => reject(error));
 						}).then(() =>
 							this.client
-								.get(response.body.status_url)
-								.then((responseStatus: any /* FIXME */) => responseStatus.body)
+								.get(response.data.status_url)
+								.then((responseStatus: any /* FIXME */) => responseStatus.data)
 						);
 					})
 			)

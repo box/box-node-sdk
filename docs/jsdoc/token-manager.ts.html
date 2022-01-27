@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: token-manager.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -111,8 +111,8 @@ function isJWTAuthErrorRetryable(err: any /* FIXME */) {
 	if (
 		err.authExpired &amp;&amp;
 		err.response.headers.date &amp;&amp;
-		(err.response.body.error_description.indexOf('exp') > -1 ||
-			err.response.body.error_description.indexOf('jti') > -1)
+		(err.response.data.error_description.indexOf('exp') > -1 ||
+			err.response.data.error_description.indexOf('jti') > -1)
 	) {
 		return true;
 	} else if (err.statusCode === 429 || err.statusCode >= 500) {
@@ -302,11 +302,11 @@ class TokenManager {
 			// means that our refresh token or auth code has exipred, so propagate an "Expired Tokens"
 			// error.
 			if (
-				response.body &amp;&amp;
-				response.body.error &amp;&amp;
-				response.body.error === 'invalid_grant'
+				response.data &amp;&amp;
+				response.data.error &amp;&amp;
+				response.data.error === 'invalid_grant'
 			) {
-				var errDescription = response.body.error_description;
+				var errDescription = response.data.error_description;
 				var message = errDescription
 					? `Auth Error: ${errDescription}`
 					: undefined;
@@ -318,13 +318,13 @@ class TokenManager {
 			// consumer to handle.
 			if (
 				response.statusCode !== httpStatusCodes.OK ||
-				response.body instanceof Buffer
+				response.data instanceof Buffer
 			) {
 				throw errors.buildUnexpectedResponseError(response);
 			}
 
 			// Check to see if token response is valid in case the API returns us a 200 with a malformed token
-			if (!isValidTokenResponse(formParams.grant_type, response.body)) {
+			if (!isValidTokenResponse(formParams.grant_type, response.data)) {
 				throw errors.buildResponseError(
 					response,
 					'Token format from response invalid'
@@ -332,7 +332,7 @@ class TokenManager {
 			}
 
 			// Got valid token response. Parse out the TokenInfo and propagate it back.
-			return getTokensFromGrantResponse(response.body);
+			return getTokensFromGrantResponse(response.data);
 		});
 	}
 

@@ -151,9 +151,9 @@ describe('Endpoint', function() {
 
 				basicClient.collaborations.get(collaborationID, null, function(err) {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 404);
-					assert.nestedProperty(err, 'response.body');
-					assert.deepEqual(err.response.body, JSON.parse(fixture));
+					assert.propertyVal(err, 'status', 404);
+					assert.nestedProperty(err, 'response.data');
+					assert.deepEqual(err.response.data, JSON.parse(fixture));
 
 					done();
 				});
@@ -239,9 +239,9 @@ describe('Endpoint', function() {
 					options,
 					function(err) {
 						assert.instanceOf(err, Error);
-						assert.propertyVal(err, 'statusCode', 404);
-						assert.nestedProperty(err, 'response.body');
-						assert.deepEqual(err.response.body, JSON.parse(fixture));
+						assert.propertyVal(err, 'status', 404);
+						assert.nestedProperty(err, 'response.data');
+						assert.deepEqual(err.response.data, JSON.parse(fixture));
 
 						done();
 					}
@@ -358,9 +358,9 @@ describe('Endpoint', function() {
 					basicClient.collaborationRoles.PREVIEWER,
 					function(err) {
 						assert.instanceOf(err, Error);
-						assert.propertyVal(err, 'statusCode', 400);
-						assert.nestedProperty(err, 'response.body');
-						assert.deepEqual(err.response.body, JSON.parse(fixture));
+						assert.propertyVal(err, 'status', 400);
+						assert.nestedProperty(err, 'response.data');
+						assert.deepEqual(err.response.data, JSON.parse(fixture));
 
 						done();
 					}
@@ -446,9 +446,9 @@ describe('Endpoint', function() {
 					basicClient.collaborationRoles.PREVIEWER,
 					function(err) {
 						assert.instanceOf(err, Error);
-						assert.propertyVal(err, 'statusCode', 400);
-						assert.nestedProperty(err, 'response.body');
-						assert.deepEqual(err.response.body, JSON.parse(fixture));
+						assert.propertyVal(err, 'status', 400);
+						assert.nestedProperty(err, 'response.data');
+						assert.deepEqual(err.response.data, JSON.parse(fixture));
 
 						done();
 					}
@@ -534,9 +534,9 @@ describe('Endpoint', function() {
 					basicClient.collaborationRoles.PREVIEWER,
 					function(err) {
 						assert.instanceOf(err, Error);
-						assert.propertyVal(err, 'statusCode', 400);
-						assert.nestedProperty(err, 'response.body');
-						assert.deepEqual(err.response.body, JSON.parse(fixture));
+						assert.propertyVal(err, 'status', 400);
+						assert.nestedProperty(err, 'response.data');
+						assert.deepEqual(err.response.data, JSON.parse(fixture));
 
 						done();
 					}
@@ -1109,7 +1109,7 @@ describe('Endpoint', function() {
 				basicClient.files.getThumbnail(fileID, null, function(err, data) {
 					assert.isNull(err);
 					assert.deepEqual(data, {
-						statusCode: 202,
+						status: 202,
 						location: thumbnailURL,
 					});
 
@@ -2169,7 +2169,7 @@ describe('Endpoint', function() {
 				return basicClient.files
 					.setMetadata(fileID, scope, template, metadataValues)
 					.then(() => assert.fail('Expected method to fail'))
-					.catch(err => assert.propertyVal(err, 'statusCode', 400));
+					.catch(err => assert.propertyVal(err, 'status', 400));
 			});
 		});
 
@@ -2888,7 +2888,7 @@ describe('Endpoint', function() {
 				return basicClient.folders
 					.setMetadata(folderID, scope, template, metadataValues)
 					.then(() => assert.fail('Expected method to fail'))
-					.catch(err => assert.propertyVal(err, 'statusCode', 400));
+					.catch(err => assert.propertyVal(err, 'status', 400));
 			});
 		});
 

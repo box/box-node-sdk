@@ -152,11 +152,11 @@ class Events {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== httpStatusCodes.OK) {
+				if (response.status !== httpStatusCodes.OK) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				return response.body.next_stream_position;
+				return response.data.next_stream_position;
 			})
 			.asCallback(callback);
 	}
@@ -197,11 +197,11 @@ class Events {
 		return this.client
 			.options(apiPath, {})
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== httpStatusCodes.OK) {
+				if (response.status !== httpStatusCodes.OK) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				var longpollInfo = response.body.entries.find(
+				var longpollInfo = response.data.entries.find(
 					(entry: any /* FIXME */) => entry.type === 'realtime_server'
 				);
 

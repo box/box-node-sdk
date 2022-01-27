@@ -83,7 +83,7 @@ describe('token-manager', function() {
 		it('should make a POST request against the OAuth token endpoint when called', function() {
 
 			var response = {
-				statusCode: 200,
+				status: 200,
 				body: {
 					access_token: 'at',
 					refresh_token: 'rt',
@@ -132,7 +132,7 @@ describe('token-manager', function() {
 						acquiredAtMS: Date.now()
 					},
 					formParams = {grant_type: grantType},
-					responseInfo = {statusCode: 200, body: successfulResponseBody};
+					responseInfo = {status: 200, body: successfulResponseBody};
 
 				// Stub out the API request
 				sandbox.stub(requestManagerFake, 'makeRequest').returns(Promise.resolve(responseInfo));
@@ -158,7 +158,7 @@ describe('token-manager', function() {
 		it('should propagate an error when request encounters an error', function() {
 			var requestError = new Error(),
 				responseBody = 'responseStuff',
-				responseInfo = {statusCode: 400, body: responseBody};
+				responseInfo = {status: 400, body: responseBody};
 			requestError.response = responseInfo;
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
@@ -172,7 +172,7 @@ describe('token-manager', function() {
 
 		it('should propagate an "Expired Auth" error when request returns an invalid token grant response error', function() {
 			var responseBody = {error: 'invalid_grant'},
-				responseInfo = {statusCode: 403, body: responseBody};
+				responseInfo = {status: 403, body: responseBody};
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.returns(Promise.resolve(responseInfo));
@@ -186,7 +186,7 @@ describe('token-manager', function() {
 
 		it('should propagate an "Unexpected Response" error when a request returns without JSON', function() {
 			var responseBody = new Buffer(1),
-				responseInfo = {statusCode: 200, body: responseBody};
+				responseInfo = {status: 200, body: responseBody};
 
 			sandbox.mock(requestManagerFake).expects('makeRequest')
 				.returns(Promise.resolve(responseInfo));
@@ -221,7 +221,7 @@ describe('token-manager', function() {
 		}, function(grantType, responseBody) {
 
 			it('should propagate a response error', function() {
-				var responseInfo = {statusCode: 200, body: responseBody};
+				var responseInfo = {status: 200, body: responseBody};
 
 				sandbox.mock(requestManagerFake).expects('makeRequest')
 					.returns(Promise.resolve(responseInfo));
@@ -237,7 +237,7 @@ describe('token-manager', function() {
 		it('should set the X-Forwarded-For header when options.ip is set', function() {
 
 			var responseBody = {access_token: 'at', refresh_token: 'rt', expires_in: 234234};
-			var responseInfo = {statusCode: 200, body: responseBody};
+			var responseInfo = {status: 200, body: responseBody};
 			var optionsIP = {
 				ip: '123.456.789.0'
 			};
@@ -535,7 +535,7 @@ describe('token-manager', function() {
 			};
 
 			var serverError = {
-				statusCode: 400,
+				status: 400,
 				authExpired: true,
 				response: {
 					body: {
@@ -592,7 +592,7 @@ describe('token-manager', function() {
 			};
 
 			var serverError = {
-				statusCode: 400,
+				status: 400,
 				authExpired: true,
 				response: {
 					body: {
@@ -651,7 +651,7 @@ describe('token-manager', function() {
 			var serverDate = 'Sat, 01 Apr 2017 16:56:53 GMT'; // 1491065813
 
 			var serverError = {
-				statusCode: 429,
+				status: 429,
 				authExpired: false,
 				response: {
 					body: {
@@ -668,7 +668,7 @@ describe('token-manager', function() {
 			var serverDate2 = 'Sat, 01 Apr 2017 16:56:58 GMT'; // 1491065818
 
 			var serverError2 = {
-				statusCode: 429,
+				status: 429,
 				authExpired: false,
 				response: {
 					body: {
@@ -737,7 +737,7 @@ describe('token-manager', function() {
 			};
 
 			var serverError = {
-				statusCode: 500,
+				status: 500,
 				authExpired: false,
 				response: {
 					body: {
@@ -749,7 +749,7 @@ describe('token-manager', function() {
 			};
 
 			var serverError2 = {
-				statusCode: 429,
+				status: 429,
 				authExpired: false,
 				response: {
 					body: {
@@ -761,7 +761,7 @@ describe('token-manager', function() {
 			};
 
 			var serverError3 = {
-				statusCode: 429,
+				status: 429,
 				authExpired: false,
 				response: {
 					body: {
