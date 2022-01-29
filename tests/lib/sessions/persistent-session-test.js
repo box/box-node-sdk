@@ -235,7 +235,7 @@ describe('PersistentAPISession', function() {
 		it('should read tokens from token store when one is present and the refresh request fails with a 400 error', function() {
 
 			var tokensError = new Error('Refresh token is old');
-			tokensError.statusCode = 400;
+			tokensError.status = 400;
 
 			sandbox.stub(tokenManagerFake, 'getTokensRefreshGrant').returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
@@ -252,7 +252,7 @@ describe('PersistentAPISession', function() {
 		it('should return a promise that rejects with auth error when the refresh fails and there are no new tokens in the store', function() {
 
 			var tokensError = new Error('Refresh token is old');
-			tokensError.statusCode = 400;
+			tokensError.status = 400;
 			tokensError.response = {
 				status: 400
 			};

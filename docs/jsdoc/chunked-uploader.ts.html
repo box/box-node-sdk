@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: chunked-uploader.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -193,7 +193,7 @@ class Chunk extends EventEmitter {
 
 				if (err) {
 					// handle the error or retry
-					if (err.statusCode) {
+					if (err.status) {
 						// an API error, probably not retryable!
 						this.emit('error', err);
 					} else {

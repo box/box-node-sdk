@@ -1,3 +1,5 @@
+// BoxSDK = require('/Users/ajankowski/work/projects/sdk/node/box-node-sdk');
+
 /**
  * @fileoverview Box SDK Node Endpoint Integration Tests
  */
@@ -608,7 +610,8 @@ describe('Endpoint', function() {
 					collaborationID,
 					function(err, data) {
 						assert.isNull(err);
-						assert.isUndefined(data);
+						assert.equal(data, '');
+						// assert.isUndefined(data); //TODO: AJ assert.isUndefined(data);
 
 						done();
 					}
@@ -862,7 +865,8 @@ describe('Endpoint', function() {
 
 				basicClient.comments.delete(commentID, function(err, data) {
 					assert.isNull(err);
-					assert.isUndefined(data);
+					// assert.isUndefined(data);
+					assert.equal(data, '');
 
 					done();
 				});
@@ -915,7 +919,8 @@ describe('Endpoint', function() {
 
 				basicClient.devicePins.delete(devicePinID, null, function(err, data) {
 					assert.isNull(err);
-					assert.isUndefined(data);
+					// assert.isUndefined(data);
+					assert.equal(data, '');
 
 					done();
 				});
@@ -1033,7 +1038,7 @@ describe('Endpoint', function() {
 					dlMock = nock(fileDownloadRoot);
 
 				apiMock
-					.get(`/2.0/files/${fileID}/content`)
+					.get(`/2.0/files/${fileID}/content?`)
 					.matchHeader('Authorization', function(authHeader) {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
@@ -1059,6 +1064,8 @@ describe('Endpoint', function() {
 					.reply(200, function() {
 						return fileStream;
 					});
+
+				console.log(nock.activeMocks());
 
 				basicClient.files.getReadStream(fileID, {}, function(err, data) {
 					assert.ifError(err);
@@ -1335,7 +1342,8 @@ describe('Endpoint', function() {
 
 				basicClient.files.delete(fileID, function(err, data) {
 					assert.isNull(err);
-					assert.isUndefined(data);
+					// assert.isUndefined(data);
+					assert.equal(data, '');
 
 					done();
 				});
@@ -2047,7 +2055,7 @@ describe('Endpoint', function() {
 
 				return basicClient.files
 					.deleteMetadata(fileID, scope, template)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -2214,7 +2222,7 @@ describe('Endpoint', function() {
 
 				return basicClient.files
 					.deletePermanently(fileID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -2424,7 +2432,7 @@ describe('Endpoint', function() {
 
 				return basicClient.files
 					.removeWatermark(fileID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -2447,7 +2455,7 @@ describe('Endpoint', function() {
 
 				return basicClient.files
 					.deleteVersion(fileID, fileVersionID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -2690,7 +2698,7 @@ describe('Endpoint', function() {
 
 				return basicClient.folders
 					.removeWatermark(folderID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -2764,7 +2772,7 @@ describe('Endpoint', function() {
 
 				return basicClient.folders
 					.deleteMetadata(folderID, scope, template)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -3144,7 +3152,7 @@ describe('Endpoint', function() {
 
 				return basicClient.folders
 					.delete(folderID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -3214,7 +3222,7 @@ describe('Endpoint', function() {
 
 				return basicClient.folders
 					.deletePermanently(folderID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -3292,7 +3300,7 @@ describe('Endpoint', function() {
 
 				return basicClient.folders
 					.deleteLock(folderLockID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 	});
@@ -3391,7 +3399,7 @@ describe('Endpoint', function() {
 
 				return basicClient.groups
 					.delete(groupID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -3524,7 +3532,7 @@ describe('Endpoint', function() {
 
 				return basicClient.groups
 					.removeMembership(membershipID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -3701,7 +3709,7 @@ describe('Endpoint', function() {
 
 				return basicClient.legalHoldPolicies
 					.delete(policyID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -3866,7 +3874,7 @@ describe('Endpoint', function() {
 
 				return basicClient.legalHoldPolicies
 					.deleteAssignment(assignmentID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 	});
@@ -4318,7 +4326,7 @@ describe('Endpoint', function() {
 
 				return basicClient.metadata
 					.deleteTemplate(scope, templateKey)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -4426,7 +4434,7 @@ describe('Endpoint', function() {
 
 				return basicClient.metadata
 					.deleteCascadePolicy(policyID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -4457,7 +4465,7 @@ describe('Endpoint', function() {
 
 				return basicClient.metadata
 					.forceApplyCascadePolicy(policyID, resolutionMethod)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -5107,7 +5115,7 @@ describe('Endpoint', function() {
 
 				return basicClient.tasks
 					.delete(taskID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -5278,7 +5286,7 @@ describe('Endpoint', function() {
 
 				return basicClient.tasks
 					.deleteAssignment(assignmentID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 	});
@@ -5356,7 +5364,7 @@ describe('Endpoint', function() {
 
 				return basicClient.users
 					.delete(userID, { force })
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -5554,7 +5562,7 @@ describe('Endpoint', function() {
 
 				return basicClient.webhooks
 					.delete(webhookID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 	});
@@ -5578,7 +5586,7 @@ describe('Endpoint', function() {
 
 				return basicClient.weblinks
 					.delete(weblinkID)
-					.then(result => assert.isUndefined(result));
+					.then(result => assert.isEmpty(result));
 			});
 		});
 
@@ -5902,7 +5910,8 @@ describe('Endpoint', function() {
 				return basicClient.storagePolicies
 					.removeAssignment(assignmentID)
 					.then(data => {
-						assert.isUndefined(data);
+						// assert.isUndefined(data);
+						assert.equal(data, '');
 					});
 			});
 		});

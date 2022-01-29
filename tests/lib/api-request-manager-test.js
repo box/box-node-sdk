@@ -147,7 +147,7 @@ describe('APIRequestManager', function() {
 
 		it('should resolve when the API request returns a response', function() {
 
-			var response = {statusCode: 200};
+			var response = {status: 200};
 
 			var requestManager = new APIRequestManager(config, eventBusFake);
 			sandbox.mock(apiRequestFake).expects('execute')

@@ -277,7 +277,7 @@ describe('Box Node SDK', function() {
 				}));
 				// The retry options object should contain an Error with the correct status code
 				assert.instanceOf(args[0].error, Error);
-				assert.equal(args[0].error.statusCode, 500);
+				assert.equal(args[0].error.status, 500);
 				// The retry options object should contain the total elapsed time in MS as a number
 				assert.isNumber(args[0].totalElapsedTimeMS);
 			});
@@ -1526,7 +1526,7 @@ describe('Box Node SDK', function() {
 			})
 			.catch(err => {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', 400);
+				assert.propertyVal(err, 'status', 400);
 			});
 		var batchPromise = client.batchExec()
 			.then(results => {
@@ -1632,7 +1632,7 @@ describe('Box Node SDK', function() {
 
 			client.files.update(fileID, {name: fileName}, function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', 400);
+				assert.propertyVal(err, 'status', 400);
 				resolve();
 			});
 		});

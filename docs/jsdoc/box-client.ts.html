@@ -142,7 +142,7 @@ function isUnauthorizedDueToExpiredAccessToken(response: any /* FIXME */) {
 	}
 
 	var isResponseStatusCodeUnauthorized =
-			response.statusCode === httpStatusCodes.UNAUTHORIZED,
+			response.status === httpStatusCodes.UNAUTHORIZED,
 		isResponseBodyEmpty =
 			!response.data || Object.getOwnPropertyNames(response.data).length === 0;
 	return isResponseStatusCodeUnauthorized &amp;&amp; isResponseBodyEmpty;
@@ -419,7 +419,7 @@ class BoxClient {
 
 		return promise
 			.then((response: any /* FIXME */) => {
-				if (!response.statusCode) {
+				if (!response.status) {
 					// Response is not yet complete, and is just a stream that will return the response later
 					// Just return the stream, since it doesn't need further response handling
 					return response;
@@ -766,8 +766,8 @@ class BoxClient {
 
 			// Successful Response
 			if (
-				response.statusCode >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &amp;&amp;
-				response.statusCode &lt;= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
+				response.status >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &amp;&amp;
+				response.status &lt;= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
 			) {
 				if (self._useIterators &amp;&amp; PagingIterator.isIterable(response)) {
 					callback(null, new PagingIterator(response, self));
@@ -803,8 +803,8 @@ class BoxClient {
 			if (ret instanceof Promise) {
 				ret = ret.then((response) => {
 					if (
-						response.statusCode >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &amp;&amp;
-						response.statusCode &lt;= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
+						response.status >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &amp;&amp;
+						response.status &lt;= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
 					) {
 						if (self._useIterators &amp;&amp; PagingIterator.isIterable(response)) {
 							return new PagingIterator(response, self);

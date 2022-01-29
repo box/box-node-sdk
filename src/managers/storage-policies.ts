@@ -165,7 +165,7 @@ class StoragePolicies {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== httpStatus.OK) {
+				if (response.status !== httpStatus.OK) {
 					// Unexpected status code, throw an error
 					throw errors.buildUnexpectedResponseError(response);
 				}

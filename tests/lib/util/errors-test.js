@@ -72,7 +72,7 @@ describe('Errors', function() {
 			var errObject = errors.buildResponseError(response, 'testMessage');
 
 			assert.strictEqual(errObject.message, 'testMessage [505 HTTP Version not Supported]');
-			assert.strictEqual(errObject.statusCode, 505);
+			assert.strictEqual(errObject.status, 505);
 			assert.strictEqual(errObject.response, response);
 		});
 
@@ -214,7 +214,7 @@ describe('Errors', function() {
 			};
 			var errObject = errors.buildUnexpectedResponseError(response);
 			assert.strictEqual(errObject.message, 'Unexpected API Response [505 HTTP Version not Supported]');
-			assert.strictEqual(errObject.statusCode, 505);
+			assert.strictEqual(errObject.status, 505);
 			assert.strictEqual(errObject.response, response);
 		});
 
@@ -230,7 +230,7 @@ describe('Errors', function() {
 
 			var errObject = errors.buildUnexpectedResponseError(response);
 			assert.strictEqual(errObject.message, 'Unexpected API Response [505 HTTP Version not Supported] error_code - Bad things happened');
-			assert.strictEqual(errObject.statusCode, 505);
+			assert.strictEqual(errObject.status, 505);
 			assert.strictEqual(errObject.response, response);
 		});
 	});

@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: sessions/persistent-session.ts</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -179,7 +179,7 @@ class PersistentSession {
 					// we'll need to check the central data store for the latest valid tokens that some other server in the app
 					// cluster would have received. So, instead pull tokens from the central store and attempt to use them.
 					if (
-						err.statusCode === httpStatusCodes.BAD_REQUEST &amp;&amp;
+						err.status === httpStatusCodes.BAD_REQUEST &amp;&amp;
 						this._tokenStore
 					) {
 						var invalidGrantError = err;

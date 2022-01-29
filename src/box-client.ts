@@ -856,7 +856,7 @@ BoxClient.prototype.itemTypes = {
 
 /**
  * Enum of valid values for setting different access levels. To be used when
- * creating and editting shared links, upload emails, etc.
+ * creating and editing shared links, upload emails, etc.
  *
  * @readonly
  * @type {AccessLevel}

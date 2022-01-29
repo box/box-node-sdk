@@ -152,7 +152,7 @@ client.files.deletePermanently('11111', { etag: '5' })
 		// File successfully deleted
 	})
 	.catch(err => {
-		if (err.statusCode === 412) {
+		if (err.status === 412) {
 			// Precondition failed — the file was modified before the deletion was processed
 			// Read the file again to ensure it is safe to delete and then retry
 		}
@@ -413,7 +413,7 @@ client.folders.deletePermanently('22222', { etag: '5' })
 		// Folder successfully deleted
 	})
 	.catch(err => {
-		if (err.statusCode === 412) {
+		if (err.status === 412) {
 			// Precondition failed — the folder was modified before the deletion was processed
 			// Read the folder again to ensure it is safe to delete and then retry
 		}

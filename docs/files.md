@@ -173,7 +173,7 @@ client.files.update('11111', { name: 'New name.pdf', etag: '5', fields: 'name' }
 		// ...
 	})
 	.catch(err => {
-		if (err.statusCode === 412) {
+		if (err.status === 412) {
 			// Precondition failed — the file was modified before our updates were processed
 			// We should read the file again to ensure our updates are safe and retry
 		}
@@ -804,7 +804,7 @@ client.files.delete('11111', { etag: '5' })
 		// File successfully deleted
 	})
 	.catch(err => {
-		if (err.statusCode === 412) {
+		if (err.status === 412) {
 			// Precondition failed — the file was modified before the deletion was processed
 			// Read the file again to ensure it is safe to delete and then retry
 		}
@@ -1044,7 +1044,7 @@ client.files.deleteVersion(fileID, versionID, { etag: '5' })
 		// File version successfully deleted
 	})
 	.catch(err => {
-		if (err.statusCode === 412) {
+		if (err.status === 412) {
 			// Precondition failed — the file was modified before the deletion was processed
 			// Read the file again to ensure it is safe to delete and then retry
 		}

@@ -247,7 +247,7 @@ client.folders.update('22222', { name: 'Renamed Folder', etag: '5', fields: 'nam
         */
 	})
 	.catch(err => {
-		if (err.statusCode === 412) {
+		if (err.status === 412) {
 			// Precondition failed — the folder was modified before the update was processed
 			// Read the folder again to ensure it is safe to update and then retry
 		}

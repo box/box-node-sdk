@@ -151,7 +151,7 @@ retryableStatusCodes[httpStatusCodes.TOO_MANY_REQUESTS] = true;
  * @private
  */
 function isTemporaryError(response: APIRequestResponseObject) {
-	var statusCode = response.statusCode;
+	var statusCode = response.status;
 
 	// An API error is a temporary/transient if it returns a 5xx HTTP Status, with the exception of the 507 status.
 	// The API returns a 507 error when the user has run out of account space, in which case, it should be treated
@@ -298,8 +298,8 @@ class APIRequest {
 		// If the API connected successfully but responded with a temporary error (like a 5xx code,
 		// a rate limited response, etc.) then this is considered an error as well.
 		if (!err &amp;&amp; isTemporaryError(response)) {
-			var errorMessage = `${response.statusCode} - ${
-				(httpStatusCodes as any)[response.statusCode]
+			var errorMessage = `${response.status} - ${
+				(httpStatusCodes as any)[response.status]
 			}`;
 			err = new Error(errorMessage);
 		}
@@ -309,7 +309,7 @@ class APIRequest {
 			err.request = this.request;
 			if (response) {
 				err.response = response;
-				err.statusCode = response.statusCode;
+				err.status = response.status;
 			}
 
 			// Have the SDK emit the error response

@@ -114,7 +114,7 @@ export = {
 		response = response || {};
 		message = message || 'API Response Error';
 
-		var statusCode = response.statusCode;
+		var statusCode = response.status;
 		var statusMessage = httpStatusCodes[statusCode];
 		var debugID = ''; // Of the form &lt;requestID>.&lt;traceID>, both parts optional
 		var errorCode;
@@ -152,7 +152,7 @@ export = {
 
 		var responseError: any /* FIXME */ = new Error(errorMessage);
 
-		responseError.statusCode = response.statusCode;
+		responseError.status = response.status;
 		responseError.response = response;
 		responseError.request = response.request
 			? new Request(response.request)

@@ -717,7 +717,7 @@ describe('box-client', function() {
 			basicClient.batchExec();
 
 			return promise.then(data => {
-				assert.propertyVal(data, 'statusCode', 200);
+				assert.propertyVal(data, 'status', 200);
 				assert.nestedPropertyVal(data, 'body.foo', 'bar');
 			});
 		});
@@ -1315,7 +1315,7 @@ describe('box-client', function() {
 			var wrappedCallback = basicClient.defaultResponseHandler(function(err) {
 
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', unexpectedResponse.statusCode);
+				assert.propertyVal(err, 'status', unexpectedResponse.status);
 				done();
 			});
 

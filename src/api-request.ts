@@ -240,36 +240,7 @@ class APIRequest {
 				asyncRequestTimer = process.hrtime();
 			}
 
-			// console.log("#Config#" + this.config.request)
-
-			// for (let key in this.config.request) {
-			// 	let value = this.config.request[key];
-			// 	console.log("##Config.request[" + key + "] = " + value)
-			// }
-
-			// for (let key in this.config.request['agentOptions']) {
-			// 	let value = this.config.request['agentOptions'][key];
-			// 	console.log("##Config.request.agentOptions[" + key + "] = " + value)
-			// }
-
-			// for (let key in this.config.request['headers']) {
-			// 	let value = this.config.request['headers'][key];
-			// 	console.log("##Config.request.headers[" + key + "] = " + value)
-			// }
-
-			// for (let key in this.config.request['form']) {
-			// 	let value = this.config.request['form'][key];
-			// 	console.log("##Config.request.form[" + key + "] = " + value)
-			// }
-
-
-			// this.request = request(
-			// 	this.config.request,
-			// 	this._handleResponse.bind(this)
-			// );
-
 			const querystring = qs.stringify(this.config.request.form);
-			// console.log("\nAJ: querystring: " + querystring)
 
 
 			var url = this.config.request['url']
@@ -284,36 +255,17 @@ class APIRequest {
 				data: this.config.request.body ?? qs.stringify(this.config.request.form),
 				maxRedirects: 0,
 				validateStatus: (_: number) => true, //TODO: AJ add this to global config
-				// params: this.config.request['form'],
-				responseType: 'json'
+				// params: this.config.request['form']
+				// responseType: 'json'
 			}
 
 			try {
 				this.response = await axios(this.request);
-
-				// console.log("[API_REQUEST] result: SUKCES!!! ")
 				this._handleResponse(null, this.response);
 			  } catch (error) {
-				console.log("[API_REQUEST] result error: " + JSON.stringify(error, null,4));
-
 				this._handleResponse(error, null);
 			  }
-
-			// axios(this.request)
-			// .then(response => {
-			// 	console.log("[API_REQUEST] result: SUKCES!!! ")
-
-			// 	this._handleResponse(null, response);
-			// })
-			// .catch(error => {
-			// 	console.log("[API_REQUEST] result error: " + JSON.stringify(error, null,4));
-
-			// 	this._handleResponse(error, null);
-			// })
 		} else {
-			const querystring = qs.stringify(this.config.request.form);
-			console.log("\nAJ: querystring: " + querystring)
-
 			var url = this.config.request['url']
 			if (this.config.request.qs) {
 				url +=  '?' + qs.stringify(this.config.request.qs);
@@ -328,31 +280,12 @@ class APIRequest {
 				responseType: 'stream'
 			}
 
-			// this.request = request(this.config.request);
-
 			try {
 				this.response = await axios(this.request);
-
-				console.log("[API_REQUEST] result: SUKCES!!! ")
 				this.eventBus.emit('response', null, this.response);
 			  } catch (error) {
-				console.log("[API_REQUEST] result error: " + JSON.stringify(error, null,4));
 				this.eventBus.emit('response', error);
 			  }
-
-			// .then(response => {
-			// 	console.log("[API_REQUST_STREAM] result: SUKCES!!! ")
-			// 	this.eventBus.emit('response', null, response)
-			// })
-			// .catch(error => {
-			// 	console.log("[API_REQUST_STREAM] result error)");
-			// 	this.eventBus.emit('response', error);
-			// });
-
-			// this.stream.on('error', (err) => this.eventBus.emit('response', err));
-			// this.stream.on('response', (response) =>
-			// 	this.eventBus.emit('response', null, response)
-			// );
 		}
 	}
 
@@ -379,8 +312,6 @@ class APIRequest {
 		// Clean sensitive headers here to prevent the user from accidentily using/logging them in prod
 		// cleanSensitiveHeaders(this.axiosRequest!);
 		// cleanSensitiveHeaders(this.request!);
-
-		console.log("\nAJ: [_handleResponse] {params} ERROS: " + err + " reposne: " + response)
 
 		// If the API connected successfully but responded with a temporary error (like a 5xx code,
 		// a rate limited response, etc.) then this is considered an error as well.
@@ -501,7 +432,6 @@ class APIRequest {
 				return;
 			}
 
-			console.log("\nAJ: [_finish]:" + response);
 			callback(null, response);
 		});
 	}

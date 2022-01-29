@@ -113,7 +113,7 @@ describe('Events', function() {
 			events.getCurrentStreamPosition(function(err) {
 
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', response.statusCode);
+				assert.propertyVal(err, 'status', response.status);
 				done();
 			});
 		});
@@ -129,7 +129,7 @@ describe('Events', function() {
 			events.getCurrentStreamPosition()
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', response.statusCode);
+					assert.propertyVal(err, 'status', response.status);
 				});
 		});
 
@@ -267,7 +267,7 @@ describe('Events', function() {
 
 			events.getLongPollInfo(function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', response.statusCode);
+				assert.propertyVal(err, 'status', response.status);
 				done();
 			});
 		});
@@ -282,7 +282,7 @@ describe('Events', function() {
 			events.getLongPollInfo()
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', response.statusCode);
+					assert.propertyVal(err, 'status', response.status);
 				});
 		});
 

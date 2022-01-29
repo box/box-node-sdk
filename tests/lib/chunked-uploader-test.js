@@ -877,7 +877,7 @@ describe('ChunkedUploader', function() {
 
 			let uploadError = new Error('Chunk totally failed!');
 			let uploadAPIError = new Error('Chunk failed in API');
-			uploadAPIError.statusCode = 500;
+			uploadAPIError.status = 500;
 
 			let expectedChunks = [
 				{
@@ -924,7 +924,7 @@ describe('ChunkedUploader', function() {
 
 			let uploadError = new Error('Chunk totally failed!');
 			let uploadAPIError = new Error('Chunk failed in API');
-			uploadAPIError.statusCode = 500;
+			uploadAPIError.status = 500;
 
 			let expectedChunks = [
 				{
@@ -960,7 +960,7 @@ describe('ChunkedUploader', function() {
 
 			let uploadError = new Error('Chunk totally failed!');
 			let uploadAPIError = new Error('Chunk failed in API');
-			uploadAPIError.statusCode = 500;
+			uploadAPIError.status = 500;
 			let abortError = new Error('Could not delete upload session');
 
 			let expectedChunks = [
@@ -1010,7 +1010,7 @@ describe('ChunkedUploader', function() {
 
 			let uploadError = new Error('Chunk totally failed!');
 			let uploadAPIError = new Error('Chunk failed in API');
-			uploadAPIError.statusCode = 500;
+			uploadAPIError.status = 500;
 			let abortError = new Error('Could not delete upload session');
 
 			let expectedChunks = [

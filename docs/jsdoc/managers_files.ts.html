@@ -156,7 +156,7 @@ function createFileContentFormData(
  */
 function pollRepresentationInfo(client: BoxClient, infoURL: string) {
 	return client.get(infoURL).then((response: any /* FIXME */) => {
-		if (response.statusCode !== 200) {
+		if (response.status !== 200) {
 			throw errors.buildUnexpectedResponseError(response);
 		}
 
@@ -250,7 +250,7 @@ class Files {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				switch (response.statusCode) {
+				switch (response.status) {
 					// 302 - Found
 					// No data returned, but the location header points to a download link for that file.
 					case httpStatusCodes.FOUND:
@@ -349,14 +349,14 @@ class Files {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				switch (response.statusCode) {
+				switch (response.status) {
 					// 202 - Thumbnail will be generated, but is not ready yet
 					// 302 - Thumbnail can not be generated
 					// return the url for a thumbnail placeholder
 					case httpStatusCodes.ACCEPTED:
 					case httpStatusCodes.FOUND:
 						return {
-							status: response.statusCode,
+							status: response.status,
 							location: response.headers.location,
 						};
 
@@ -364,7 +364,7 @@ class Files {
 					// return the thumbnail file
 					case httpStatusCodes.OK:
 						return {
-							status: response.statusCode,
+							status: response.status,
 							file: response.data,
 						};
 
@@ -987,7 +987,7 @@ class Files {
 	) {
 		return this.addMetadata(fileID, scope, template, metadata)
 			.catch((err: any /* FIXME */) => {
-				if (err.statusCode !== 409) {
+				if (err.status !== 409) {
 					throw err;
 				}
 
@@ -1146,7 +1146,7 @@ class Files {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== httpStatusCodes.OK) {
+				if (response.status !== httpStatusCodes.OK) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
@@ -1318,7 +1318,7 @@ class Files {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== 200) {
+				if (response.status !== 200) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
@@ -1541,7 +1541,7 @@ class Files {
 		return this.client
 			.put(apiURL, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== 200) {
+				if (response.status !== 200) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
@@ -1624,7 +1624,7 @@ class Files {
 					return response.data;
 				}
 
-				if (response.statusCode === 202) {
+				if (response.status === 202) {
 					var retryInterval = response.headers['retry-after'] || 1;
 					return Promise.delay(retryInterval * 1000).then(() => {
 						// Ensure we don't have to fetch parts from the API again on retry
@@ -1884,7 +1884,7 @@ class Files {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				switch (response.statusCode) {
+				switch (response.status) {
 					// 202 - A Box file representation will be generated, but is not ready yet
 					case httpStatusCodes.ACCEPTED:
 						throw errors.buildResponseError(

@@ -115,7 +115,7 @@ function isJWTAuthErrorRetryable(err: any /* FIXME */) {
 			err.response.data.error_description.indexOf('jti') > -1)
 	) {
 		return true;
-	} else if (err.statusCode === 429 || err.statusCode >= 500) {
+	} else if (err.status === 429 || err.status >= 500) {
 		return true;
 	}
 	return false;
@@ -317,7 +317,7 @@ class TokenManager {
 			// out of options. Build an "Unexpected Response" error and propagate it out for the
 			// consumer to handle.
 			if (
-				response.statusCode !== httpStatusCodes.OK ||
+				response.status !== httpStatusCodes.OK ||
 				response.data instanceof Buffer
 			) {
 				throw errors.buildUnexpectedResponseError(response);

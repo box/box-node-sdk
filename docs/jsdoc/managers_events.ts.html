@@ -180,7 +180,7 @@ class Events {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== httpStatusCodes.OK) {
+				if (response.status !== httpStatusCodes.OK) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
@@ -225,7 +225,7 @@ class Events {
 		return this.client
 			.options(apiPath, {})
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== httpStatusCodes.OK) {
+				if (response.status !== httpStatusCodes.OK) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 

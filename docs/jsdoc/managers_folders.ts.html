@@ -514,7 +514,7 @@ class Folders {
 	) {
 		return this.addMetadata(folderID, scope, template, metadata)
 			.catch((err: any /* FIXME */) => {
-				if (err.statusCode !== 409) {
+				if (err.status !== 409) {
 					throw err;
 				}
 
@@ -696,7 +696,7 @@ class Folders {
 		return this.client
 			.get(apiPath, params)
 			.then((response: any /* FIXME */) => {
-				if (response.statusCode !== 200) {
+				if (response.status !== 200) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 

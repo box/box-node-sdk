@@ -250,7 +250,7 @@ describe('APIRequest', function() {
 
 			var apiRequest = new APIRequest(config, eventBusFake);
 			apiRequest.execute(function callback(err) {
-				assert.equal(err.statusCode, responseInfo.statusCode);
+				assert.equal(err.status, responseInfo.status);
 				assert.equal(err.response.status, responseInfo.status);
 				assert.equal(err.response.data, responseInfo.body);
 				assert.equal(err.response.headers, responseInfo.headers);
@@ -288,7 +288,7 @@ describe('APIRequest', function() {
 			apiRequest.execute(function callback(err, response) {
 				assert.isNull(err, 'there was no request error');
 				assert(response);
-				assert.equal(response.statusCode, 400);
+				assert.equal(response.status, 400);
 				done();
 			});
 		});

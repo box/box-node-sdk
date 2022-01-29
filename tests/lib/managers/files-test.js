@@ -152,7 +152,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getDownloadURL(FILE_ID, testQS, function(err) {
 				assert.instanceOf(err, Error);
-				assert.strictEqual(err.statusCode, response.statusCode);
+				assert.strictEqual(err.status, response.status);
 				done();
 			});
 		});
@@ -164,7 +164,7 @@ describe('Files', function() {
 			return files.getDownloadURL(FILE_ID, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.strictEqual(err.statusCode, response.statusCode);
+					assert.strictEqual(err.status, response.status);
 				});
 		});
 
@@ -197,7 +197,7 @@ describe('Files', function() {
 			files.getDownloadURL(FILE_ID, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.strictEqual(err.statusCode, response.statusCode);
+					assert.strictEqual(err.status, response.status);
 				});
 		});
 	});
@@ -418,7 +418,7 @@ describe('Files', function() {
 
 			files.getThumbnail(FILE_ID, testQS, function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', response.statusCode);
+				assert.propertyVal(err, 'status', response.status);
 				done();
 			});
 		});
@@ -432,7 +432,7 @@ describe('Files', function() {
 			return files.getThumbnail(FILE_ID, testQS)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', response.statusCode);
+					assert.propertyVal(err, 'status', response.status);
 				});
 		});
 	});
@@ -1895,7 +1895,7 @@ describe('Files', function() {
 			files.getEmbedLink(FILE_ID, function(err) {
 
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', response.statusCode);
+				assert.propertyVal(err, 'status', response.status);
 				done();
 			});
 		});
@@ -1911,7 +1911,7 @@ describe('Files', function() {
 			return files.getEmbedLink(FILE_ID)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', response.statusCode);
+					assert.propertyVal(err, 'status', response.status);
 				});
 		});
 
@@ -3460,7 +3460,7 @@ describe('Files', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
 				assert.instanceOf(err, Error);
-				assert.strictEqual(err.statusCode, response.status);
+				assert.strictEqual(err.status, response.status);
 				done();
 			});
 		});
@@ -3471,7 +3471,7 @@ describe('Files', function() {
 			return files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.strictEqual(err.statusCode, response.statusCode);
+					assert.strictEqual(err.status, response.status);
 				});
 		});
 		it('should call callback with an error when the API call does not succeed', function(done) {
@@ -3504,7 +3504,7 @@ describe('Files', function() {
 
 			files.getRepresentationInfo(FILE_ID, TEST_REPRESENTATION, function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', response.statusCode);
+				assert.propertyVal(err, 'status', response.status);
 				done();
 			});
 		});
@@ -3518,7 +3518,7 @@ describe('Files', function() {
 			return files.getThumbnail(FILE_ID, TEST_REPRESENTATION)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', response.statusCode);
+					assert.propertyVal(err, 'status', response.status);
 				});
 		});
 	});

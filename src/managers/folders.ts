@@ -486,7 +486,7 @@ class Folders {
 	) {
 		return this.addMetadata(folderID, scope, template, metadata)
 			.catch((err: any /* FIXME */) => {
-				if (err.statusCode !== 409) {
+				if (err.status !== 409) {
 					throw err;
 				}
 

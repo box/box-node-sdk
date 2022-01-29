@@ -217,7 +217,7 @@ class PagingIterator {
 	 */
 	_getData() {
 		return this.fetch(this.options).then((response: any /* FIXME */) => {
-			if (response.statusCode !== 200) {
+			if (response.status !== 200) {
 				throw errors.buildUnexpectedResponseError(response);
 			}
 

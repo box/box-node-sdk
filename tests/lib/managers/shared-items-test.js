@@ -121,7 +121,7 @@ describe('SharedItems', function() {
 			sharedItems.get(testSharedItemURL, null, testQS, function(err) {
 				assert.instanceOf(err, Error);
 				assert.propertyVal(err, 'message', 'Shared link password missing [403 Forbidden]');
-				assert.propertyVal(err, 'statusCode', response.statusCode);
+				assert.propertyVal(err, 'status', response.status);
 				done();
 			});
 		});
@@ -135,7 +135,7 @@ describe('SharedItems', function() {
 				.catch(err => {
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'message', 'Shared link password missing [403 Forbidden]');
-					assert.propertyVal(err, 'statusCode', response.statusCode);
+					assert.propertyVal(err, 'status', response.status);
 				});
 		});
 
@@ -147,7 +147,7 @@ describe('SharedItems', function() {
 			sharedItems.get(testSharedItemURL, testSharedItemPassword, testQS, function(err) {
 				assert.instanceOf(err, Error);
 				assert.propertyVal(err, 'message', 'Incorrect shared link password [403 Forbidden]');
-				assert.propertyVal(err, 'statusCode', response.statusCode);
+				assert.propertyVal(err, 'status', response.status);
 				done();
 			});
 		});
@@ -161,7 +161,7 @@ describe('SharedItems', function() {
 				.catch(err => {
 					assert.instanceOf(err, Error);
 					assert.propertyVal(err, 'message', 'Incorrect shared link password [403 Forbidden]');
-					assert.propertyVal(err, 'statusCode', response.statusCode);
+					assert.propertyVal(err, 'status', response.status);
 				});
 		});
 

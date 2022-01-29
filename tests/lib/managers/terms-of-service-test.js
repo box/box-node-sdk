@@ -568,7 +568,7 @@ describe('TermsOfService', function() {
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			termsOfService.getUserStatus(TERMS_OF_SERVICE_ID, null, function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', 500);
+				assert.propertyVal(err, 'status', 500);
 				done();
 			});
 		});
@@ -611,7 +611,7 @@ describe('TermsOfService', function() {
 			return termsOfService.getUserStatus(TERMS_OF_SERVICE_ID)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 500);
+					assert.propertyVal(err, 'status', 500);
 				});
 		});
 
@@ -875,7 +875,7 @@ describe('TermsOfService', function() {
 				.returns(Promise.resolve(response));
 			termsOfService.setUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true, options, function(err) {
 				assert.instanceOf(err, Error);
-				assert.propertyVal(err, 'statusCode', 500);
+				assert.propertyVal(err, 'status', 500);
 				done();
 			});
 		});
@@ -917,7 +917,7 @@ describe('TermsOfService', function() {
 			return termsOfService.setUserStatus(TERMS_OF_SERVICE_USER_STATUS_ID, true, options)
 				.catch(err => {
 					assert.instanceOf(err, Error);
-					assert.propertyVal(err, 'statusCode', 500);
+					assert.propertyVal(err, 'status', 500);
 				});
 		});
 	});

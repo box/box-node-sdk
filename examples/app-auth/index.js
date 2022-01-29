@@ -256,7 +256,7 @@ app.get('/thumbnail/:id', function(req, res) {
 	req.sdk.files.getThumbnail(req.params.id, {}, function(err, data) {
 
 		if (err) {
-			res.status(err.statusCode || 500).json(err);
+			res.status(err.status || 500).json(err);
 			return;
 		}
 
