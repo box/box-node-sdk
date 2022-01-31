@@ -30,6 +30,7 @@ import Trash from './managers/trash';
 import Users from './managers/users';
 import WebLinks from './managers/web-links';
 import Webhooks from './managers/webhooks';
+import FormData = require('form-data');
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -390,8 +391,6 @@ class BoxClient {
 
 		return promise
 			.then((response: any /* FIXME */) => {
-				console.log("AJ: [_makeRequest]  " + response.data);
-
 				if (!response.status) {
 					// Response is not yet complete, and is just a stream that will return the response later
 					// Just return the stream, since it doesn't need further response handling
@@ -408,7 +407,6 @@ class BoxClient {
 
 					throw expiredTokensError;
 				}
-				console.log("AJ: [_makeRequest] before return");
 				return response;
 
 			})
@@ -619,7 +617,7 @@ class BoxClient {
 	upload(
 		path: string,
 		params: object | null,
-		formData: object | null,
+		formData: FormData | null,
 		callback: Function
 	) {
 		var defaults = {
@@ -627,7 +625,11 @@ class BoxClient {
 		};
 		var newParams = merge(defaults, params || {});
 		newParams.url = getFullURL(this._uploadBaseURL, path);
-		newParams.formData = formData;
+		// Content-Type': 'multipart/form-data',
+		// newParams.formData = formData;
+		newParams.body = formData;
+		newParams.headers = formData?.getHeaders() || {};
+
 		newParams.timeout = this._uploadRequestTimeoutMS;
 
 		return this._makeRequest(newParams, callback);

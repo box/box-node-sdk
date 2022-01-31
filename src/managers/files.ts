@@ -14,6 +14,7 @@ import urlTemplate from 'url-template';
 import BoxClient from '../box-client';
 import errors from '../util/errors';
 import urlPath from '../util/url-path';
+var FormData = require('form-data');
 
 const ChunkedUploader = require('../chunked-uploader');
 
@@ -750,20 +751,28 @@ class Files {
 			delete options.content_length;
 		}
 
-		var apiPath = urlPath(BASE_PATH, '/content'),
-			multipartFormData = {
-				attributes: createFileMetadataFormData(
-					parentFolderID,
-					filename,
-					options
-				),
-				content: createFileContentFormData(content, formOptions),
-			};
+		var apiPath = urlPath(BASE_PATH, '/content');
+			// multipartFormData = {
+			// 	attributes: createFileMetadataFormData(
+			// 		parentFolderID,
+			// 		filename,
+			// 		options
+			// 	),
+			// 	content: createFileContentFormData(content, formOptions),
+			// };
+
+			var data = new FormData();
+			data.append('attributes', createFileMetadataFormData(
+				parentFolderID,
+				filename,
+				options
+			));
+			data.append('content', JSON.stringify(createFileContentFormData(content, formOptions)));
 
 		return this.client.wrapWithDefaultHandler(this.client.upload)(
 			apiPath,
 			null,
-			multipartFormData,
+			data,
 			callback
 		);
 	}

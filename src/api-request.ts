@@ -198,13 +198,8 @@ class APIRequest {
 	_callback?: APIRequestCallback;
 
 	request?: AxiosRequestConfig;
-	stream?: AxiosRequestConfig;
-
 	response?: AxiosResponse;
 
-	// axiosRequest?: AxiosRequestConfig
-	// request?: request.Request;
-	// stream?: request.Request;
 	numRetries?: number;
 
 	constructor(config: Config, eventBus: EventEmitter) {
@@ -233,6 +228,11 @@ class APIRequest {
 	async execute(callback?: APIRequestCallback) {
 		this._callback = callback || this._callback;
 
+		var url = this.config.request['url']
+		if (this.config.request.qs) {
+			url +=  '?' + qs.stringify(this.config.request.qs);
+		}
+
 		// Initiate an async- or stream-based request, based on the presence of the callback.
 		if (this._callback) {
 			// Start the request timer immediately before executing the async request
@@ -240,23 +240,13 @@ class APIRequest {
 				asyncRequestTimer = process.hrtime();
 			}
 
-			const querystring = qs.stringify(this.config.request.form);
-
-
-			var url = this.config.request['url']
-			if (this.config.request.qs) {
-				url +=  '?' + qs.stringify(this.config.request.qs);
-			}
-
 			this.request = {
-				url: url,//this.config.request['url'],
+				url: url,
 				method: this.config.request['method'],
 				headers: this.config.request['headers'],
 				data: this.config.request.body ?? qs.stringify(this.config.request.form),
 				maxRedirects: 0,
-				validateStatus: (_: number) => true, //TODO: AJ add this to global config
-				// params: this.config.request['form']
-				// responseType: 'json'
+				validateStatus: (_: number) => true,
 			}
 
 			try {
@@ -266,16 +256,12 @@ class APIRequest {
 				this._handleResponse(error, null);
 			  }
 		} else {
-			var url = this.config.request['url']
-			if (this.config.request.qs) {
-				url +=  '?' + qs.stringify(this.config.request.qs);
-			}
-
 			this.request = {
 				url: url,
 				method: this.config.request['method'],
 				headers: this.config.request['headers'],
 				maxRedirects: 0,
+				validateStatus: (_: number) => true,
 				data: this.config.request.body ??  qs.stringify(this.config.request.form),
 				responseType: 'stream'
 			}
@@ -310,7 +296,6 @@ class APIRequest {
 	 */
 	_handleResponse(err?: any /* FIXME */, response?: any /* FIXME */) {
 		// Clean sensitive headers here to prevent the user from accidentily using/logging them in prod
-		// cleanSensitiveHeaders(this.axiosRequest!);
 		// cleanSensitiveHeaders(this.request!);
 
 		// If the API connected successfully but responded with a temporary error (like a 5xx code,

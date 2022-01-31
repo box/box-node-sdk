@@ -1065,8 +1065,6 @@ describe('Endpoint', function() {
 						return fileStream;
 					});
 
-				console.log(nock.activeMocks());
-
 				basicClient.files.getReadStream(fileID, {}, function(err, data) {
 					assert.ifError(err);
 					assert.property(
