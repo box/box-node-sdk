@@ -415,10 +415,10 @@ class Metadata {
 			ancestor_folder_id: ancestorFolderId,
 		};
 
-		delete options?.index_name;
+		const { index_name: indexName, ...newOptions } = options ?? {};
 
 		var params = {
-			body: merge(body, options),
+			body: merge(body, newOptions),
 		};
 
 		return this.client.wrapWithDefaultHandler(this.client.post)(
