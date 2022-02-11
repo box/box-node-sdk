@@ -920,7 +920,6 @@ var from = 'enterprise_12345.someTemplate',
 		query_params: {
 			arg: 100
 		},
-		use_index: 'amountAsc',
 		order_by: [
 			{
 				field_key: 'amount',
@@ -1050,7 +1049,6 @@ var from = 'enterprise_12345.someTemplate',
 		query_params: {
 			arg: 100
 		},
-		use_index: 'amountAsc',
 		order_by: [
 			{
 				field_key: 'amount',
