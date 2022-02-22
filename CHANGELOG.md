@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0] (2022-02-22)
+## [2.1.0] (2022-02-22)
 
 ### New Features and Enhancements:
 
