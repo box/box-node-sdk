@@ -29,20 +29,19 @@ jobs:
         run: npm install
       - name: Build and test
         run: npm test
-      - name: Check coveralls
-        run: cat coverage/lcov.info
-      - name: Coveralls Parallel
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: run-node-${{ matrix.node }}
-          parallel: true
-  finish:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
+# Coveralls raport is broken
+#      - name: Coveralls Parallel
+#        uses: coverallsapp/github-action@master
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          flag-name: run-node-${{ matrix.node }}
+#          parallel: true
+#  finish:
+#    needs: build-and-test
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Coveralls Finished
+#        uses: coverallsapp/github-action@master
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          parallel-finished: true
