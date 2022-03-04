@@ -81,7 +81,7 @@
     "npm-upgrade": "^3.0.0",
     "nyc": "^14.0.0",
     "prettier": "^2.3.2",
-    "shelljs": "^0.8.3",
+    "shelljs": "^0.8.5",
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^7.5.0",
     "standard-version": "^9.3.2",
