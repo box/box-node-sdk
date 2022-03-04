@@ -380,7 +380,9 @@ class Metadata {
 	}
 
 	/**
-	 * Query Box items by their metadata
+	 * Query Box items by their metadata.
+	 * We no longer require the index_name/use_index for queries that leverage indexes,
+     * internal analysis engine determines which existing index will satisfy the query.
 	 *
 	 * API Endpoint: '/metadata_queries/execute_read'
 	 * Method: POST
@@ -390,7 +392,7 @@ class Metadata {
 	 * @param {Object} [options] - Optional parameters
 	 * @param {string} [options.query] - The logical expression of the query
 	 * @param {Object} [options.query_parameters] - Required if query present. The arguments for the query
-	 * @param {string} [options.index_name] - The name of the Index to use
+	 * @param {string} [options.index_name] - DEPRECATED: This parameter is ignored. The name of the index to use
 	 * @param {Object} [options.order_by] - The field_key(s) to order on and the corresponding direction(s)
 	 * @param {Array} [options.fields] - An array of fields to return
 	 * @param {Function} [callback] - Passed a collection of items and their associated metadata
@@ -413,8 +415,10 @@ class Metadata {
 			ancestor_folder_id: ancestorFolderId,
 		};
 
+		const { index_name: indexName, ...newOptions } = options ?? {};
+
 		var params = {
-			body: merge(body, options),
+			body: merge(body, newOptions),
 		};
 
 		return this.client.wrapWithDefaultHandler(this.client.post)(
