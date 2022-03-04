@@ -1,5 +1,15 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.1.0](https://github.com/box/box-node-sdk/compare/v2.0.0...v2.1.0) (2022-03-04)
+
+
+### New Features and Enhancements
+
+* Deprecating `index_name` when executing metadata query ([#686](https://github.com/box/box-node-sdk/issues/686)) ([e01cc65](https://github.com/box/box-node-sdk/commit/e01cc650e4e793955be543e93928ad82a3254492))
+* **test:** add support for testing with Jest ([#676](https://github.com/box/box-node-sdk/issues/676)) ([1a11759](https://github.com/box/box-node-sdk/commit/1a11759db999510c69d6a27f7becd565620bb000))
+
 ## [2.0.0](https://github.com/box/box-node-sdk/compare/v1.39.0...v2.0.0) (2021-09-29)
 
 ### ⚠ BREAKING CHANGES
