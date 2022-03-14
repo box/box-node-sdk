@@ -13,15 +13,11 @@ Getting Started Docs: https://developer.box.com/guides/tooling/sdks/node/
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Creating API Clients](#creating-api-clients)
-  - [Basic Client](#basic-client)
-  - [Persistent Client](#persistent-client)
-  - [App Auth Client](#app-auth-client)
 - [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
-  - [Constructing API Calls Manually](#constructing-api-calls-manually)
+- [Versions](#versions)
 - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
 - [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
 - [Changelog](#changelog)
@@ -29,15 +25,15 @@ Getting Started Docs: https://developer.box.com/guides/tooling/sdks/node/
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Installation
-------------
+## Installation
+
 
 ```
 npm install --save box-node-sdk
 ```
 
-Getting Started
----------------
+## Getting Started
+
 
 To get started with the SDK, get a Developer Token from the Configuration page
 of your app in the [Box Developer Console][dev-console].
@@ -65,8 +61,8 @@ client.users.get(client.CURRENT_USER_ID)
 
 [dev-console]: https://app.box.com/developers/console
 
-Creating API Clients
---------------------
+## Creating API Clients
+
 
 Clients are used to communicate with the API on behalf of a user.
 
@@ -157,8 +153,8 @@ var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 
 
-Using the Client to Make API Calls
-----------------------------------
+## Using the Client to Make API Calls
+
 
 The different API endpoints you can call are represented as methods, grouped into
 managers by the type of object they interact with.
@@ -220,31 +216,31 @@ client.del('/files/123');
 	.catch(error => { /* handle any errors */ });
 ```
 
-# Versions
+## Versions
 We use a modified version of [Semantic Versioning](https://semver.org/) for all changes. See [version strategy](VERSIONS.md) for details which is effective from 30 July 2022.
 
-## Supported Version
+### Supported Version
 
 Only the current MAJOR version of SDK is supported. New features, functionality, bug fixes, and security updates will only be added to the current MAJOR version.
 
 A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often). At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to allow customers to plan for the upgrade. We always recommend that all users run the latest available minor release for whatever major version is in use. We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
 
-## Version schedule
+### Version schedule
 
 | Version | Current Patch/Minor | Supported Environments | State     | First Release | EOL/Terminated |
 |---------|---------------------|------------------------|-----------|---------------|----------------|
 | 2       | 2.0.0               |                        | Supported | 29 Sep 2021   | TBD            |
 | 1       | 1.39.0              |                        | EOL       | 28 Mar 2019   | 29 Sep 2021    |
 
-Questions, Bugs, and Feature Requests?
---------------------------------------
+## Questions, Bugs, and Feature Requests?
+
 
 [Browse the issues tickets](https://github.com/box/box-node-sdk/issues)! Or, if that doesn't work, [file a new one](https://github.com/box/box-node-sdk/issues/new) and someone will get back to you.   If you have general questions about the
 Box API, you can post to the [Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum).
 
 
-Contributing to the Box Node.js SDK
------------------------------------
+## Contributing to the Box Node.js SDK
+
 
 1. Clone this repo.
 1. Run `npm install`.
@@ -255,13 +251,12 @@ in the `tests/` directory!
 
 For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
-Changelog
-----------
+## Changelog
+
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-Copyright and License
----------------------
+## Copyright and License
 
 Copyright 2018 Box, Inc. All rights reserved.
 
