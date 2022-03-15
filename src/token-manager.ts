@@ -340,6 +340,8 @@ class TokenManager {
 	getTokensClientCredentialsGrant(options?: TokenRequestOptions) {
 		var params = {
 			grant_type: grantTypes.CLIENT_CREDENTIALS,
+			box_subject_type: this.config.boxSubjectType,
+			box_subject_id: this.config.boxSubjectId
 		};
 		return this.getTokens(params, options);
 	}

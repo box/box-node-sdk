@@ -30,10 +30,7 @@
     "docs": "node Makefile.js docs",
     "docs-dev": "node Makefile.js docsDev",
     "doctoc": "doctoc docs",
-    "deps": "npm prune && npm install",
-    "patch": "node Makefile.js patch",
-    "minor": "node Makefile.js minor",
-    "major": "node Makefile.js major"
+    "deps": "npm prune && npm install"
   },
   "dependencies": {
     "@types/bluebird": "^3.5.35",

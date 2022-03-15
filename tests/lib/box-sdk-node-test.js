@@ -330,27 +330,69 @@ describe('box-node-sdk', function() {
 	});
 
 	describe('getAnonymousClient()', function() {
-
-		beforeEach(function() {
-			sdk = new BoxSDKNode(TEST_CONFIG);
-		});
+		const CCG_CONFIG = {
+			clientID: 'client-id',
+			clientSecret: 'client-secret',
+			enterpriseID: 'enterprise-id'
+		};
 
 		it('should return an instance of an Anonymous Client when called', function() {
-			var anonymousClient = sdk.getAnonymousClient();
+			sdk = new BoxSDKNode(CCG_CONFIG);
+			const anonymousClient = sdk.getAnonymousClient();
 			assert.ok((anonymousClient instanceof BasicClient), 'Returned instance of Anonymous Client');
 		});
 
 		it('should use the SDK anonymous session when called', function() {
-			var anonymousSession = {tokenInfo: 'anon'};
+			// Reconstruct the SDK instance so it uses the stub
+			const anonymousSession = {tokenInfo: 'anon'};
 			AnonymousAPISession.returns(anonymousSession);
 
-			// Reconstruct the SDK instance so it uses the stub
-			sdk = new BoxSDKNode(TEST_CONFIG);
+			sdk = new BoxSDKNode(CCG_CONFIG);
 
 			sdk.getAnonymousClient();
 
 			assert.ok(BasicClient.calledWithNew(), 'New client should be created');
-			assert.ok(BasicClient.calledWithMatch(anonymousSession, TEST_CONFIG), 'Anonymous session should be passed in');
+			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
+			assert.ok(AnonymousAPISession.calledWithMatch(CCG_CONFIG), 'Anonymous session should be passed config');
+			assert.ok(BasicClient.calledWithMatch(anonymousSession, CCG_CONFIG), 'Anonymous session should be passed in');
+			assert.ok(TokenManagerConstructorStub.calledWithNew(), 'New token manager should be created');
+			assert.ok(TokenManagerConstructorStub
+				.calledWithMatch({boxSubjectType: 'enterprise', boxSubjectId: 'enterprise-id'}, requestManagerFake),
+			'New token manager should be configured for CCG'
+			);
+		});
+	});
+
+	describe('getCCGClientForUser()', function() {
+		const CCG_CONFIG = {
+			clientID: 'client-id',
+			clientSecret: 'client-secret'
+		};
+
+		it('should return an instance of an Anonymous Client when called', function() {
+			sdk = new BoxSDKNode(CCG_CONFIG);
+			const anonymousClient = sdk.getCCGClientForUser('user-id');
+			assert.ok((anonymousClient instanceof BasicClient), 'Returned instance of Anonymous Client');
+		});
+
+		it('should use the SDK anonymous session when called', function() {
+			// Reconstruct the SDK instance so it uses the stub
+			const anonymousSession = {tokenInfo: 'anon'};
+			AnonymousAPISession.returns(anonymousSession);
+
+			sdk = new BoxSDKNode(CCG_CONFIG);
+
+			sdk.getCCGClientForUser('user-id');
+
+			assert.ok(BasicClient.calledWithNew(), 'New client should be created');
+			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
+			assert.ok(AnonymousAPISession.calledWithMatch(CCG_CONFIG), 'Anonymous session should be passed config');
+			assert.ok(BasicClient.calledWithMatch(anonymousSession, CCG_CONFIG), 'Anonymous session should be passed in');
+			assert.ok(TokenManagerConstructorStub.calledWithNew(), 'New token manager should be created');
+			assert.ok(TokenManagerConstructorStub
+				.calledWithMatch({boxSubjectType: 'user', boxSubjectId: 'user-id'}, requestManagerFake),
+			'New token manager should be configured for CCG'
+			);
 		});
 	});
 

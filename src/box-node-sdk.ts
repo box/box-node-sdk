@@ -55,6 +55,10 @@ var Config = require('./util/config'),
 type TokenStore = object /* FIXME */;
 type UserConfigurationOptions = object /* FIXME */;
 type TokenRequestOptions = object /* FIXME */;
+type CCGConfig = {
+	boxSubjectType: "user" | "enterprise",
+	boxSubjectId: string
+}
 
 // ------------------------------------------------------------------------------
 // Private
@@ -266,17 +270,46 @@ class BoxSDKNode extends EventEmitter {
 	}
 
 	/**
-	 * Returns A Box Client with an Anonymous API Session. An Anonymous API Session has access to an anonymous
-	 * client-credentials token, which isn't tied to any specific user. Because of this, the client will only
-	 * have access to endpoints that allow client-credential tokens. All Anonymous API Sessions share the
+	 * Returns a Box Client configured to use Client Credentials Grant for a service account. Requires enterprise ID
+	 * to be set when configuring SDK instance.
+	 *
+	 * @returns {BoxClient} Returns a new Box Client paired to a AnonymousAPISession. All Anonymous API Sessions share the
 	 * same tokens, which allows them to refresh them efficiently and reduce load on both the application and
 	 * the API.
-	 *
-	 * @returns {BoxClient} Returns a new Box Client paired to a AnonymousAPISession
 	 */
 	getAnonymousClient() {
+		if (!this.config.enterpriseID) {
+			throw new Error('Enterprise ID must be passed');
+		}
+		return this._getCCGClient({boxSubjectType: "enterprise", boxSubjectId: this.config.enterpriseID});
+	}
+
+	/**
+	 * Returns a Box Client configured to use Client Credentials Grant for a specified user.
+	 *
+	 * @param userId the user ID to use when getting the access token
+	 * @returns {BoxClient} Returns a new Box Client paired to a AnonymousAPISession. All Anonymous API Sessions share the
+	 * same tokens, which allows them to refresh them efficiently and reduce load on both the application and
+	 * the API.
+	 */
+	getCCGClientForUser(userId: string) {
+		return this._getCCGClient({boxSubjectType: "user", boxSubjectId: userId})
+	}
+
+	_getCCGClient(config: CCGConfig) {
+		const anonymousTokenManager = new TokenManager(
+			{
+				...this.config,
+				...config
+			},
+			this.requestManager
+		);
+		const newAnonymousSession = new AnonymousAPISession(
+			this.config,
+			anonymousTokenManager
+		);
 		return new BoxClient(
-			this.anonymousSession,
+			newAnonymousSession,
 			this.config,
 			this.requestManager
 		);
