@@ -328,11 +328,27 @@ describe('token-manager', function() {
 	});
 
 	describe('getTokensClientCredentialsGrant', function() {
-		it('should acquire token info using the client credentials grant', function() {
+		const BOX_ENTERPRISE_ID = 'enterprise-id';
+		const BOX_SUBJECT_TYPE = 'enterprise';
 
+		beforeEach(function() {
+			config = new Config({
+				clientID: BOX_CLIENT_ID,
+				clientSecret: BOX_CLIENT_SECRET,
+				apiRootURL: API_ROOT_URL,
+				numMaxRetries: 2,
+				boxSubjectId: BOX_ENTERPRISE_ID,
+				boxSubjectType: BOX_SUBJECT_TYPE
+			});
+			tokenManager = new TokenManager(config, requestManagerFake);
+		});
+
+		it('should acquire token info using the client credentials grant', function() {
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withArgs({
-					grant_type: GRANT_TYPE_CLIENT_CREDENTIALS
+					grant_type: GRANT_TYPE_CLIENT_CREDENTIALS,
+					box_subject_id: BOX_ENTERPRISE_ID,
+					box_subject_type: BOX_SUBJECT_TYPE
 				})
 				.returns(Promise.resolve());
 
@@ -346,7 +362,9 @@ describe('token-manager', function() {
 
 			sandbox.mock(tokenManager).expects('getTokens')
 				.withExactArgs({
-					grant_type: GRANT_TYPE_CLIENT_CREDENTIALS
+					grant_type: GRANT_TYPE_CLIENT_CREDENTIALS,
+					box_subject_id: BOX_ENTERPRISE_ID,
+					box_subject_type: BOX_SUBJECT_TYPE,
 				}, options)
 				.returns(Promise.resolve());
 

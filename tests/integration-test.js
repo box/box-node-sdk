@@ -31,7 +31,9 @@ describe('Box Node SDK', function() {
 		TEST_CLIENT_ID = 'client_id',
 		TEST_CLIENT_SECRET = 'TOP SECRET',
 		TEST_ACCESS_TOKEN = 'at',
-		MODULE_FILE_PATH = '../lib/box-node-sdk';
+		MODULE_FILE_PATH = '../lib/box-node-sdk',
+		TEST_ENTERPRISE_ID = 'enterprise_id',
+		TEST_USER_ID = 'user_id';
 
 	var apiMock,
 		BoxSDK;
@@ -293,7 +295,60 @@ describe('Box Node SDK', function() {
 			.post('/oauth2/token', {
 				grant_type: 'client_credentials',
 				client_id: TEST_CLIENT_ID,
-				client_secret: TEST_CLIENT_SECRET
+				client_secret: TEST_CLIENT_SECRET,
+				box_subject_type: 'enterprise',
+				box_subject_id: TEST_ENTERPRISE_ID
+			})
+			.reply(200, {
+				access_token: TEST_ACCESS_TOKEN,
+				expires_in: 256
+			})
+			.get(`/2.0/files/${fileID}`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.matchHeader('BoxApi', function(boxHeader) {
+				assert.equal(boxHeader, `shared_link=${encodeURIComponent(sharedLink)}`);
+				return true;
+			})
+			.reply(200, {
+				id: fileID,
+				name: fileName
+			});
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET,
+			enterpriseID: TEST_ENTERPRISE_ID
+		});
+
+		var client = sdk.getAnonymousClient();
+		client.setSharedContext(sharedLink);
+
+		client.files.get(fileID, {}, function(err, data) {
+
+			assert.ifError(err);
+			assert.propertyVal(data, 'id', fileID);
+			assert.propertyVal(data, 'name', fileName);
+			done();
+		});
+
+	});
+
+	it('should get anonymous tokens and make API call when user CCG client manager is used', function(done) {
+
+		var fileID = '98740596456',
+			fileName = 'Test Document.pdf',
+			sharedLink = 'https://app.box.com/s/dhfkuagdjfhashfbshd';
+
+		apiMock
+			.post('/oauth2/token', {
+				grant_type: 'client_credentials',
+				client_id: TEST_CLIENT_ID,
+				client_secret: TEST_CLIENT_SECRET,
+				box_subject_type: 'user',
+				box_subject_id: TEST_USER_ID
 			})
 			.reply(200, {
 				access_token: TEST_ACCESS_TOKEN,
@@ -318,7 +373,7 @@ describe('Box Node SDK', function() {
 			clientSecret: TEST_CLIENT_SECRET
 		});
 
-		var client = sdk.getAnonymousClient();
+		var client = sdk.getCCGClientForUser(TEST_USER_ID);
 		client.setSharedContext(sharedLink);
 
 		client.files.get(fileID, {}, function(err, data) {
