@@ -34,7 +34,7 @@ describe('box-node-sdk', function() {
 		BasicClient,
 		BasicAPISession,
 		PersistentAPISession,
-		AnonymousAPISession,
+		CCGAPISession,
 		AppAuthSessionConstructorStub,
 		WebhooksFake,
 		appAuthSessionFake,
@@ -86,7 +86,7 @@ describe('box-node-sdk', function() {
 		BasicClient = sandbox.stub();
 		BasicAPISession = sandbox.stub();
 		PersistentAPISession = sandbox.stub();
-		AnonymousAPISession = sandbox.stub();
+		CCGAPISession = sandbox.stub();
 		appAuthSessionFake = leche.fake(AppAuthSession.prototype);
 		AppAuthSessionConstructorStub = sandbox.stub();
 		WebhooksFake = leche.fake(Webhooks);
@@ -98,7 +98,7 @@ describe('box-node-sdk', function() {
 		mockery.registerMock('./box-client', BasicClient);
 		mockery.registerMock('./sessions/basic-session', BasicAPISession);
 		mockery.registerMock('./sessions/persistent-session', PersistentAPISession);
-		mockery.registerMock('./sessions/anonymous-session', AnonymousAPISession);
+		mockery.registerMock('./sessions/ccg-session', CCGAPISession);
 		mockery.registerMock('./sessions/app-auth-session', AppAuthSessionConstructorStub);
 		mockery.registerMock('./managers/webhooks', WebhooksFake);
 
@@ -132,8 +132,8 @@ describe('box-node-sdk', function() {
 
 			sdk = new BoxSDKNode(TEST_CONFIG);
 
-			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
-			assert.ok(AnonymousAPISession.calledWithMatch(TEST_CONFIG), 'Anonymous session should be passed config');
+			assert.ok(CCGAPISession.calledWithNew(), 'Should construct new anonymous session');
+			assert.ok(CCGAPISession.calledWithMatch(TEST_CONFIG), 'Anonymous session should be passed config');
 			assert.ok(sdk, 'SDK should be constructed');
 		});
 
@@ -179,8 +179,8 @@ describe('box-node-sdk', function() {
 
 			sdk = BoxSDKNode.getPreconfiguredInstance(TEST_APP_SETTINGS);
 
-			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
-			assert.ok(AnonymousAPISession.calledWithMatch(TEST_APP_SETTINGS_CONFIG), 'Anonymous session should be passed config');
+			assert.ok(CCGAPISession.calledWithNew(), 'Should construct new anonymous session');
+			assert.ok(CCGAPISession.calledWithMatch(TEST_APP_SETTINGS_CONFIG), 'Anonymous session should be passed config');
 			assert.ok(sdk, 'SDK should be constructed');
 		});
 
@@ -345,15 +345,15 @@ describe('box-node-sdk', function() {
 		it('should use the SDK anonymous session when called', function() {
 			// Reconstruct the SDK instance so it uses the stub
 			const anonymousSession = {tokenInfo: 'anon'};
-			AnonymousAPISession.returns(anonymousSession);
+			CCGAPISession.returns(anonymousSession);
 
 			sdk = new BoxSDKNode(CCG_CONFIG);
 
 			sdk.getAnonymousClient();
 
 			assert.ok(BasicClient.calledWithNew(), 'New client should be created');
-			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
-			assert.ok(AnonymousAPISession.calledWithMatch(CCG_CONFIG), 'Anonymous session should be passed config');
+			assert.ok(CCGAPISession.calledWithNew(), 'Should construct new anonymous session');
+			assert.ok(CCGAPISession.calledWithMatch(CCG_CONFIG), 'Anonymous session should be passed config');
 			assert.ok(BasicClient.calledWithMatch(anonymousSession, CCG_CONFIG), 'Anonymous session should be passed in');
 			assert.ok(TokenManagerConstructorStub.calledWithNew(), 'New token manager should be created');
 			assert.ok(TokenManagerConstructorStub
@@ -378,15 +378,15 @@ describe('box-node-sdk', function() {
 		it('should use the SDK anonymous session when called', function() {
 			// Reconstruct the SDK instance so it uses the stub
 			const anonymousSession = {tokenInfo: 'anon'};
-			AnonymousAPISession.returns(anonymousSession);
+			CCGAPISession.returns(anonymousSession);
 
 			sdk = new BoxSDKNode(CCG_CONFIG);
 
 			sdk.getCCGClientForUser('user-id');
 
 			assert.ok(BasicClient.calledWithNew(), 'New client should be created');
-			assert.ok(AnonymousAPISession.calledWithNew(), 'Should construct new anonymous session');
-			assert.ok(AnonymousAPISession.calledWithMatch(CCG_CONFIG), 'Anonymous session should be passed config');
+			assert.ok(CCGAPISession.calledWithNew(), 'Should construct new anonymous session');
+			assert.ok(CCGAPISession.calledWithMatch(CCG_CONFIG), 'Anonymous session should be passed config');
 			assert.ok(BasicClient.calledWithMatch(anonymousSession, CCG_CONFIG), 'Anonymous session should be passed in');
 			assert.ok(TokenManagerConstructorStub.calledWithNew(), 'New token manager should be created');
 			assert.ok(TokenManagerConstructorStub
