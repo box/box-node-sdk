@@ -17,7 +17,7 @@ overview of how the Box API handles authentication.
   - [Traditional 3-Legged OAuth2](#traditional-3-legged-oauth2)
     - [Token Store](#token-store)
   - [Box View Authentication with App Tokens](#box-view-authentication-with-app-tokens)
-  - [Anonymous Authentication](#anonymous-authentication)
+  - [Client Credentials Grant Authentication](#client-credentials-grant-authentication)
 - [As-User](#as-user)
 - [Proxy Support](#proxy-support)
 - [Token Exchange](#token-exchange)
@@ -228,21 +228,50 @@ var sdk = new BoxSDK({
 var client = sdk.getBasicClient('YOUR-APP-TOKEN');
 ```
 
-### Anonymous Authentication
+### Client Credentials Grant Authentication
 
-Additionally, you may authenticate as a client without an attached user,
-which can be used to make API calls that do not require a logged-in user (e.g.
-open shared links).  This functionality is only available to approved applications.
+Allows you to obtain an access token by having client credentials and secret with enterprise or user ID,
+which allows you to work using service (anonymous) or user account.
 
-<!-- sample x_auth init_with_anonymous_user -->
+#### Obtaining Service Account token
+
+The [Service Account](https://developer.box.com/guides/getting-started/user-types/service-account//) 
+is separate from the Box accounts of the application developer and the
+enterprise admin of any enterprise that has authorized the app — files stored in that account
+are not accessible in any other account by default, and vice versa.
+To obtain service account you will have to provide enterprise ID with client id and secret:
+
+<!-- sample x_auth with_client_credentials -->
 ```js
-var BoxSDK = require('box-node-sdk');
-var sdk = new BoxSDK({
-	clientID: 'YOUR-CLIENT-ID',
-	clientSecret: 'YOUR-CLIENT_SECRET'
-});
+const BoxSDK = require('box-node-sdk');
+const sdkConfig = {
+	boxAppSettings: {
+		clientID: "CLIENT_ID",
+		clientSecret: "CLIENT_SECRET"
+	}, 
+	enterpriseID: "ENTERPRISE_ID"
+}
+const sdk = BoxSDK.getPreconfiguredInstance(sdkConfig)
 
-var client = sdk.getAnonymousClient();
+const client = sdk.getAnonymousClient();
+```
+
+#### Obtaining User token
+
+To obtain user account you will have to provide user ID with client id and secret.
+
+```js
+const BoxSDK = require('box-node-sdk');
+const sdkConfig = {
+	boxAppSettings: {
+		clientID: "CLIENT_ID",
+		clientSecret: "CLIENT_SECRET"
+	}, 
+	enterpriseID: "ENTERPRISE_ID" //The enterprise id in this case is optional and can be ommited.
+}
+const sdk = BoxSDK.getPreconfiguredInstance(sdkConfig)
+
+const client = sdk.getCCGClientForUser("USER_ID");
 ```
 
 As-User
