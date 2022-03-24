@@ -26,12 +26,12 @@ type TokenRequestOptions = any /* FIXME */;
 // ------------------------------------------------------------------------------
 
 /**
- * An Anonymous Box API Session.
+ * The Client Credentials Grant Box API Session.
  *
- * The Anonymous API Session holds a Client Credentials accessToken, which it
- * returns to the client so that it may make calls on behalf of anonymous users.
+ * The Client Credentials Grant API Session holds a Client Credentials accessToken, which it
+ * returns to the client so that it may make calls on behalf of service account or specified users.
  *
- * Anonymous tokens will be refreshed in the background if a request is made within the
+ * Tokens will be refreshed in the background if a request is made within the
  * "stale buffer" (defaults to 10 minutes before the token is set to expire).
  * If the token is also expired, all incoming requests will be held until a fresh token
  * is retrieved.
@@ -40,7 +40,7 @@ type TokenRequestOptions = any /* FIXME */;
  * @param {TokenManager} tokenManager The TokenManager
  * @constructor
  */
-class AnonymousSession {
+class CCGSession {
 	_config: Config;
 	_tokenManager: TokenManager;
 	_tokenInfo: TokenInfo;
@@ -57,14 +57,14 @@ class AnonymousSession {
 	}
 
 	/**
-	 * Initiate a refresh of the anonymous access tokens. New tokens should be passed to the
+	 * Initiate a refresh of the access tokens. New tokens should be passed to the
 	 * caller, and then cached for later use.
 	 *
 	 * @param {?TokenRequestOptions} [options] - Sets optional behavior for the token grant
 	 * @returns {Promise<string>} Promise resolving to the access token
 	 * @private
 	 */
-	_refreshAnonymousAccessToken(options?: TokenRequestOptions) {
+	_refreshAccessToken(options?: TokenRequestOptions) {
 		// If tokens aren't already being refreshed, start the refresh
 		if (!this._refreshPromise) {
 			// Initiate a refresh
@@ -104,7 +104,7 @@ class AnonymousSession {
 			!this._tokenInfo ||
 			!this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)
 		) {
-			return this._refreshAnonymousAccessToken(options);
+			return this._refreshAccessToken(options);
 		}
 
 		// Your token is not currently stale! Return the current access token.
@@ -126,30 +126,30 @@ class AnonymousSession {
 	}
 
 	/**
-	 * Return the anonymous session token, since there is no need to downscope a
-	 * token that does not have any associated user credentials.
+	 * Exchange the client access token for one with lower scope
+	 *
 	 * @param {string|string[]} scopes The scope(s) requested for the new token
 	 * @param {string} [resource] The absolute URL of an API resource to scope the new token to
-	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
-	 * @returns {Promise<TokenInfo>} Promise resolving to the new token info
+	 * @param {Object} [options] - Optional parameters
+	 * @param {TokenRequestOptions} [options.tokenRequestOptions] - Sets optional behavior for the token grant
+	 * @returns {void}
 	 */
 	exchangeToken(
 		scopes: string | string[],
 		resource?: string,
-		options?: TokenRequestOptions
+		options?: {
+			tokenRequestOptions?: TokenRequestOptions;
+		}
 	) {
 		// We need to get the access token, in case it hasn't been generated yet
-		return (
-			this.getAccessToken(options)
-				// Pass back the entire token info object, not just the acces token,
-				// to maintain parity with the other session classes
-				.then(() => this._tokenInfo)
+		return this.getAccessToken(options).then((accessToken) =>
+			this._tokenManager.exchangeToken(accessToken, scopes, resource, options)
 		);
 	}
 }
 
 /**
- * @module box-node-sdk/lib/sessions/anonymous-session
- * @see {@Link AnonymousSession}
+ * @module box-node-sdk/lib/sessions/ccg-session
+ * @see {@Link CCGSession}
  */
-export = AnonymousSession;
+export = CCGSession;

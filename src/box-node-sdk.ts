@@ -8,12 +8,12 @@
 
 import { EventEmitter } from 'events';
 import * as qs from 'querystring';
-import AnonymousAPISession = require('./sessions/anonymous-session');
+import CCGAPISession = require('./sessions/ccg-session');
 import APIRequestManager = require('./api-request-manager');
 import BoxClient = require('./box-client');
 import TokenManager = require('./token-manager');
 
-var Config = require('./util/config'),
+const Config = require('./util/config'),
 	BasicAPISession = require('./sessions/basic-session'),
 	PersistentAPISession = require('./sessions/persistent-session'),
 	AppAuthSession = require('./sessions/app-auth-session'),
@@ -90,7 +90,7 @@ class BoxSDKNode extends EventEmitter {
 
 	requestManager!: APIRequestManager;
 	tokenManager!: TokenManager;
-	anonymousSession!: AnonymousAPISession;
+	ccgSession!: CCGAPISession;
 
 	/**
 	 * Expose the BoxClient property enumerations to the SDK as a whole. This allows
@@ -111,11 +111,11 @@ class BoxSDKNode extends EventEmitter {
 	constructor(params: UserConfigurationOptions) {
 		super();
 
-		var eventBus = new EventEmitter();
+		const eventBus = new EventEmitter();
 
-		var self = this;
+		const self = this;
 		eventBus.on('response', function () {
-			var args: any /* FIXME */ = [].slice.call(arguments);
+			const args: any /* FIXME */ = [].slice.call(arguments);
 			args.unshift('response');
 			self.emit.apply(self, args);
 		});
@@ -139,7 +139,7 @@ class BoxSDKNode extends EventEmitter {
 
 		// Initialize the rest of the SDK with the given configuration
 		this.tokenManager = new TokenManager(this.config, this.requestManager);
-		this.anonymousSession = new AnonymousAPISession(
+		this.ccgSession = new CCGAPISession(
 			this.config,
 			this.tokenManager
 		);
@@ -158,13 +158,13 @@ class BoxSDKNode extends EventEmitter {
 			);
 		}
 
-		var boxAppSettings = appConfig.boxAppSettings;
-		var webhooks = appConfig.webhooks;
+		const boxAppSettings = appConfig.boxAppSettings;
+		const webhooks = appConfig.webhooks;
 		if (typeof webhooks === 'object') {
 			Webhooks.setSignatureKeys(webhooks.primaryKey, webhooks.secondaryKey);
 		}
 
-		var params: {
+		const params: {
 			clientID?: string;
 			clientSecret?: string;
 			appAuth?: {
@@ -227,7 +227,7 @@ class BoxSDKNode extends EventEmitter {
 	 * @returns {BoxClient} Returns a new Box Client paired to a new BasicAPISession
 	 */
 	getBasicClient(accessToken: string) {
-		var apiSession = new BasicAPISession(accessToken, this.tokenManager);
+		const apiSession = new BasicAPISession(accessToken, this.tokenManager);
 		return new BoxClient(apiSession, this.config, this.requestManager);
 	}
 
@@ -260,7 +260,7 @@ class BoxSDKNode extends EventEmitter {
 	 * @returns {BoxClient} Returns a new Box Client paired to a new PersistentAPISession
 	 */
 	getPersistentClient(tokenInfo: any /* FIXME */, tokenStore?: TokenStore) {
-		var apiSession = new PersistentAPISession(
+		const apiSession = new PersistentAPISession(
 			tokenInfo,
 			tokenStore,
 			this.config,
@@ -304,7 +304,7 @@ class BoxSDKNode extends EventEmitter {
 			},
 			this.requestManager
 		);
-		const newAnonymousSession = new AnonymousAPISession(
+		const newAnonymousSession = new CCGAPISession(
 			this.config,
 			anonymousTokenManager
 		);
@@ -334,7 +334,7 @@ class BoxSDKNode extends EventEmitter {
 			}
 		}
 
-		var appAuthSession = new AppAuthSession(
+		const appAuthSession = new AppAuthSession(
 			type,
 			id,
 			this.config,
@@ -438,7 +438,7 @@ class BoxSDKNode extends EventEmitter {
 	 * @param {string} userID The ID of the App User to generate a token for
 	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant, null for default behavior
 	 * @param {Function} [callback] Passed the tokens if successful
-	 * @returns {Promise<TokentInfo>} Promise reolving to the token infp
+	 * @returns {Promise<TokentInfo>} Promise resolving to the token info
 	 */
 	getAppUserTokens(
 		userID: string,
