@@ -9,22 +9,22 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var assert = require('chai').assert,
+const assert = require('chai').assert,
 	sinon = require('sinon'),
 	leche = require('leche'),
 	Promise = require('bluebird'),
 	mockery = require('mockery');
 
-var TokenManager = require('../../../lib/token-manager');
+const TokenManager = require('../../../lib/token-manager');
 
 
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.createSandbox(),
+let sandbox = sinon.createSandbox(),
 	tokenManagerFake,
-	AnonymousAPISession,
-	anonymousSession,
+	CCGAPISession,
+	ccgSession,
 	testTokenInfo = {
 		accessToken: 'at',
 		accessTokenTTLMS: 100,
@@ -36,13 +36,13 @@ var sandbox = sinon.createSandbox(),
 		expiredBufferMS: 30000,
 		staleBufferMS: 120000
 	},
-	MODULE_FILE_PATH = '../../../lib/sessions/anonymous-session';
+	MODULE_FILE_PATH = '../../../lib/sessions/ccg-session';
 
 
 // ------------------------------------------------------------------------------
 // Tests
 // ------------------------------------------------------------------------------
-describe('AnonymousAPISession', function() {
+describe('CCGAPISession', function() {
 
 	beforeEach(function() {
 
@@ -54,8 +54,8 @@ describe('AnonymousAPISession', function() {
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
 
 		// Setup File Under Test
-		AnonymousAPISession = require(MODULE_FILE_PATH);
-		anonymousSession = new AnonymousAPISession(config, tokenManagerFake);
+		CCGAPISession = require(MODULE_FILE_PATH);
+		ccgSession = new CCGAPISession(config, tokenManagerFake);
 	});
 
 	afterEach(function() {
@@ -66,7 +66,7 @@ describe('AnonymousAPISession', function() {
 
 	describe('getAccessToken()', function() {
 
-		var newTokenInfo;
+		let newTokenInfo;
 
 		beforeEach(function() {
 
@@ -79,12 +79,12 @@ describe('AnonymousAPISession', function() {
 
 		it('should resolve to stored access token when access tokens are fresh', function() {
 
-			anonymousSession._tokenInfo = testTokenInfo;
+			ccgSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.never();
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(true);
 
-			return anonymousSession.getAccessToken()
+			return ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, testTokenInfo.accessToken);
 				});
@@ -92,12 +92,12 @@ describe('AnonymousAPISession', function() {
 
 		it('should request new tokens when current tokens are no longer fresh', function() {
 
-			anonymousSession._tokenInfo = testTokenInfo;
+			ccgSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.returns(Promise.resolve(newTokenInfo));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
-			return anonymousSession.getAccessToken()
+			return ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
@@ -105,15 +105,15 @@ describe('AnonymousAPISession', function() {
 
 		it('should request new tokens with options when options are passed in', function() {
 
-			var options = {ip: '127.0.0.1'};
+			const options = {ip: '127.0.0.1'};
 
-			anonymousSession._tokenInfo = testTokenInfo;
+			ccgSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.withArgs(options)
 				.returns(Promise.resolve(newTokenInfo));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
-			return anonymousSession.getAccessToken(options)
+			return ccgSession.getAccessToken(options)
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
@@ -121,18 +121,18 @@ describe('AnonymousAPISession', function() {
 
 		it('should only make a single request for new tokens when called multiple times', function() {
 
-			anonymousSession._tokenInfo = testTokenInfo;
+			ccgSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.once()
 				.returns(Promise.resolve(newTokenInfo));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
-			var promise1 = anonymousSession.getAccessToken()
+			const promise1 = ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			var promise2 = anonymousSession.getAccessToken()
+			const promise2 = ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
@@ -145,18 +145,18 @@ describe('AnonymousAPISession', function() {
 
 		it('should allow a new request for tokens once in-progress call completes', function() {
 
-			anonymousSession._tokenInfo = testTokenInfo;
+			ccgSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.twice()
 				.returns(Promise.resolve(newTokenInfo));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
-			var promise1 = anonymousSession.getAccessToken()
+			const promise1 = ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			var promise2 = anonymousSession.getAccessToken()
+			const promise2 = ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
@@ -165,19 +165,19 @@ describe('AnonymousAPISession', function() {
 				promise1,
 				promise2
 			])
-				.then(() => anonymousSession.getAccessToken());
+				.then(() => ccgSession.getAccessToken());
 		});
 
 		it('should return a promise that rejects when the request for new tokens fails', function() {
 
-			var tokensError = new Error('Oh no!');
+			const tokensError = new Error('Oh no!');
 
-			anonymousSession._tokenInfo = testTokenInfo;
+			ccgSession._tokenInfo = testTokenInfo;
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.returns(Promise.reject(tokensError));
 			sandbox.stub(tokenManagerFake, 'isAccessTokenValid').returns(false);
 
-			return anonymousSession.getAccessToken()
+			return ccgSession.getAccessToken()
 				.catch(err => {
 					assert.equal(err, tokensError);
 				});
@@ -189,16 +189,16 @@ describe('AnonymousAPISession', function() {
 			sandbox.mock(tokenManagerFake).expects('getTokensClientCredentialsGrant')
 				.once()
 				.returns(Promise.resolve(newTokenInfo));
-			var tokensValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
+			const tokensValidStub = sandbox.stub(tokenManagerFake, 'isAccessTokenValid');
 			tokensValidStub.withArgs(testTokenInfo).returns(false);
 			tokensValidStub.withArgs(newTokenInfo).returns(true);
 
-			var promise1 = anonymousSession.getAccessToken()
+			const promise1 = ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
 
-			var promise2 = anonymousSession.getAccessToken()
+			const promise2 = ccgSession.getAccessToken()
 				.then(token => {
 					assert.equal(token, newTokenInfo.accessToken);
 				});
@@ -207,7 +207,7 @@ describe('AnonymousAPISession', function() {
 				promise1,
 				promise2
 			])
-				.then(() => anonymousSession.getAccessToken())
+				.then(() => ccgSession.getAccessToken())
 				.then(accessToken => {
 					assert.equal(accessToken, newTokenInfo.accessToken);
 				});
@@ -217,73 +217,77 @@ describe('AnonymousAPISession', function() {
 	describe('revokeTokens()', function() {
 
 		it('should call tokenManager.revokeTokens with options.ip when called', function() {
-			anonymousSession._tokenInfo = testTokenInfo;
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
+			ccgSession._tokenInfo = testTokenInfo;
+			const options = {ip: '127.0.0.1, 192.168.10.10'};
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, options)
 				.returns(Promise.resolve());
 
-			return anonymousSession.revokeTokens(options);
+			return ccgSession.revokeTokens(options);
 		});
 
 		it('should call tokenManager.revokeTokens without options.ip when called', function() {
-			anonymousSession._tokenInfo = testTokenInfo;
+			ccgSession._tokenInfo = testTokenInfo;
 
 			sandbox.mock(tokenManagerFake).expects('revokeTokens')
 				.withExactArgs(testTokenInfo.accessToken, null)
 				.returns(Promise.resolve());
 
-			return anonymousSession.revokeTokens(null);
+			return ccgSession.revokeTokens(null);
 		});
 
 	});
 
 	describe('exchangeToken()', function() {
+		const TEST_SCOPE = 'item_preview';
+		const TEST_RESOURCE = 'https://api.box.com/2.0/folders/0';
 
 		it('should get access token with options.ip and return promise resolving to its own token info when called', function() {
+			const exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
+			ccgSession._tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
 
-			var tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
-			anonymousSession._tokenInfo = tokenInfo;
+			const options = {ip: '127.0.0.1, 192.168.10.10'};
 
-			var options = {};
-			options.ip = '127.0.0.1, 192.168.10.10';
-
-			sandbox.mock(anonymousSession).expects('getAccessToken')
+			sandbox.mock(ccgSession).expects('getAccessToken')
 				.withArgs(options)
-				.returns(Promise.resolve(tokenInfo.accessToken));
+				.returns(Promise.resolve(testTokenInfo.accessToken));
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, options)
+				.returns(Promise.resolve(exchangedTokenInfo));
 
-			return anonymousSession.exchangeToken('item_preview', null, options)
+			return ccgSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, options)
 				.then(data => {
-					assert.equal(data, tokenInfo);
+					assert.equal(data, exchangedTokenInfo);
 				});
 		});
 
-		it('should get access token with null options and return promise resolving to its own token info when called', function() {
+		it('should get access token and exchange for lower scope with null options when called', function() {
 
-			var tokenInfo = {accessToken: 'laksjhdksaertiwndgsrdlfk'};
-			anonymousSession._tokenInfo = tokenInfo;
+			const exchangedTokenInfo = {accessToken: 'poaisdlknbadfjg'};
 
-			sandbox.mock(anonymousSession).expects('getAccessToken')
+			sandbox.mock(ccgSession).expects('getAccessToken')
 				.withArgs(null)
-				.returns(Promise.resolve(tokenInfo.accessToken));
+				.returns(Promise.resolve(testTokenInfo.accessToken));
+			sandbox.mock(tokenManagerFake).expects('exchangeToken')
+				.withArgs(testTokenInfo.accessToken, TEST_SCOPE, TEST_RESOURCE, null)
+				.returns(Promise.resolve(exchangedTokenInfo));
 
-			return anonymousSession.exchangeToken('item_preview', null, null)
+			return ccgSession.exchangeToken(TEST_SCOPE, TEST_RESOURCE, null)
 				.then(data => {
-					assert.equal(data, tokenInfo);
+					assert.equal(data, exchangedTokenInfo);
 				});
 		});
 
 		it('should return promise that rejects when getting the access token fails', function() {
 
-			var error = new Error('Could not get tokens');
+			const error = new Error('Could not get tokens');
 
-			sandbox.mock(anonymousSession)
+			sandbox.mock(ccgSession)
 				.expects('getAccessToken')
 				.returns(Promise.reject(error));
 
-			return anonymousSession.exchangeToken('item_preview', null)
+			return ccgSession.exchangeToken('item_preview', null)
 				.catch(err => {
 					assert.equal(err, error);
 				});
