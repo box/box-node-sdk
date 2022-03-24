@@ -233,10 +233,10 @@ A current release is on the leading edge of our SDK development, and is intended
 
 ### Version schedule
 
-| Version | Current Patch/Minor | Supported Environments | State     | First Release | EOL/Terminated |
-|---------|---------------------|------------------------|-----------|---------------|----------------|
-| 2       | 2.0.0               |                        | Supported | 29 Sep 2021   | TBD            |
-| 1       | 1.39.0              |                        | EOL       | 28 Mar 2019   | 29 Sep 2021    |
+| Version | Supported Environments | State     | First Release | EOL/Terminated |
+|---------|------------------------|-----------|---------------|----------------|
+| 2       |                        | Supported | 29 Sep 2021   | TBD            |
+| 1       |                        | EOL       | 28 Mar 2019   | 29 Sep 2021    |
 
 ## Questions, Bugs, and Feature Requests?
 
