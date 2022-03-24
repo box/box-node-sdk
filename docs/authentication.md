@@ -239,7 +239,7 @@ The [Service Account](https://developer.box.com/guides/getting-started/user-type
 is separate from the Box accounts of the application developer and the
 enterprise admin of any enterprise that has authorized the app — files stored in that account
 are not accessible in any other account by default, and vice versa.
-To obtain service account you will have to provide enterprise ID with client id and secret:
+To obtain service account, you will have to provide enterprise ID with client ID and secret:
 
 <!-- sample x_auth with_client_credentials -->
 ```js
@@ -258,7 +258,7 @@ const client = sdk.getAnonymousClient();
 
 #### Obtaining User token
 
-To obtain user account you will have to provide user ID with client id and secret.
+To obtain user account you will have to provide user ID with client ID and secret.
 
 ```js
 const BoxSDK = require('box-node-sdk');
