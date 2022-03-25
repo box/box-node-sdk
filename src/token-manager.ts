@@ -443,7 +443,7 @@ class TokenManager {
 			numRetries < this.config.numMaxRetries &&
 			isJWTAuthErrorRetryable(error)
 		) {
-			var retryTimeout;
+			var retryTimeoutinSeconds;
 			numRetries += 1;
 			// If the retry strategy is defined, then use it to determine the time (in ms) until the next retry or to
 			// propagate an error to the user.
@@ -460,13 +460,13 @@ class TokenManager {
 					totalElapsedTimeMS,
 				};
 
-				retryTimeout = this.config.retryStrategy(retryOptions);
+				retryTimeoutinSeconds = this.config.retryStrategy(retryOptions);
 
 				// If the retry strategy doesn't return a number/time in ms, then propagate the response error to the user.
 				// However, if the retry strategy returns its own error, this will be propagated to the user instead.
-				if (typeof retryTimeout !== 'number') {
-					if (retryTimeout instanceof Error) {
-						error = retryTimeout;
+				if (typeof retryTimeoutinSeconds !== 'number') {
+					if (retryTimeoutinSeconds instanceof Error) {
+						error = retryTimeoutinSeconds;
 					}
 					throw error;
 				}
@@ -475,9 +475,9 @@ class TokenManager {
 				error.response.hasOwnProperty('headers') &&
 				error.response.headers.hasOwnProperty('retry-after')
 			) {
-				retryTimeout = error.response.headers['retry-after'] * 1000;
+				retryTimeoutinSeconds = error.response.headers['retry-after'];
 			} else {
-				retryTimeout = getRetryTimeout(numRetries, this.config.retryIntervalMS);
+				retryTimeoutinSeconds = Math.ceil(getRetryTimeout(numRetries, this.config.retryIntervalMS) / 1000);
 			}
 
 			var time = Math.floor(Date.now() / 1000);
@@ -485,8 +485,7 @@ class TokenManager {
 				time = Math.floor(Date.parse(error.response.headers.date) / 1000);
 			}
 			// Add length of retry timeout to current expiration time to calculate the expiration time for the JTI claim.
-			claims.exp =
-				time + this.config.appAuth.expirationTime + retryTimeout / 1000;
+			claims.exp = Math.ceil(time + this.config.appAuth.expirationTime + retryTimeoutinSeconds);
 			jwtOptions.jwtid = uuid.v4();
 
 			try {
@@ -495,7 +494,7 @@ class TokenManager {
 				throw jwtErr;
 			}
 
-			return Promise.delay(retryTimeout).then(() => {
+			return Promise.delay(retryTimeoutinSeconds).then(() => {
 				// Start the request timer immediately before executing the async request
 				asyncRequestTimer = process.hrtime();
 				return this.getTokens(params, options).catch((err) =>
