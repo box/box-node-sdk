@@ -36,12 +36,12 @@
 
 import { EventEmitter } from 'events';
 import * as qs from 'querystring';
-import AnonymousAPISession = require('./sessions/anonymous-session');
+import CCGAPISession = require('./sessions/ccg-session');
 import APIRequestManager = require('./api-request-manager');
 import BoxClient = require('./box-client');
 import TokenManager = require('./token-manager');
 
-var Config = require('./util/config'),
+const Config = require('./util/config'),
 	BasicAPISession = require('./sessions/basic-session'),
 	PersistentAPISession = require('./sessions/persistent-session'),
 	AppAuthSession = require('./sessions/app-auth-session'),
@@ -83,6 +83,10 @@ var Config = require('./util/config'),
 type TokenStore = object /* FIXME */;
 type UserConfigurationOptions = object /* FIXME */;
 type TokenRequestOptions = object /* FIXME */;
+type CCGConfig = {
+	boxSubjectType: "user" | "enterprise",
+	boxSubjectId: string
+}
 
 // ------------------------------------------------------------------------------
 // Private
@@ -114,7 +118,7 @@ class BoxSDKNode extends EventEmitter {
 
 	requestManager!: APIRequestManager;
 	tokenManager!: TokenManager;
-	anonymousSession!: AnonymousAPISession;
+	ccgSession!: CCGAPISession;
 
 	/**
 	 * Expose the BoxClient property enumerations to the SDK as a whole. This allows
@@ -135,11 +139,11 @@ class BoxSDKNode extends EventEmitter {
 	constructor(params: UserConfigurationOptions) {
 		super();
 
-		var eventBus = new EventEmitter();
+		const eventBus = new EventEmitter();
 
-		var self = this;
+		const self = this;
 		eventBus.on('response', function () {
-			var args: any /* FIXME */ = [].slice.call(arguments);
+			const args: any /* FIXME */ = [].slice.call(arguments);
 			args.unshift('response');
 			self.emit.apply(self, args);
 		});
@@ -163,7 +167,7 @@ class BoxSDKNode extends EventEmitter {
 
 		// Initialize the rest of the SDK with the given configuration
 		this.tokenManager = new TokenManager(this.config, this.requestManager);
-		this.anonymousSession = new AnonymousAPISession(
+		this.ccgSession = new CCGAPISession(
 			this.config,
 			this.tokenManager
 		);
@@ -182,13 +186,13 @@ class BoxSDKNode extends EventEmitter {
 			);
 		}
 
-		var boxAppSettings = appConfig.boxAppSettings;
-		var webhooks = appConfig.webhooks;
+		const boxAppSettings = appConfig.boxAppSettings;
+		const webhooks = appConfig.webhooks;
 		if (typeof webhooks === 'object') {
 			Webhooks.setSignatureKeys(webhooks.primaryKey, webhooks.secondaryKey);
 		}
 
-		var params: {
+		const params: {
 			clientID?: string;
 			clientSecret?: string;
 			appAuth?: {
@@ -251,7 +255,7 @@ class BoxSDKNode extends EventEmitter {
 	 * @returns {BoxClient} Returns a new Box Client paired to a new BasicAPISession
 	 */
 	getBasicClient(accessToken: string) {
-		var apiSession = new BasicAPISession(accessToken, this.tokenManager);
+		const apiSession = new BasicAPISession(accessToken, this.tokenManager);
 		return new BoxClient(apiSession, this.config, this.requestManager);
 	}
 
@@ -284,7 +288,7 @@ class BoxSDKNode extends EventEmitter {
 	 * @returns {BoxClient} Returns a new Box Client paired to a new PersistentAPISession
 	 */
 	getPersistentClient(tokenInfo: any /* FIXME */, tokenStore?: TokenStore) {
-		var apiSession = new PersistentAPISession(
+		const apiSession = new PersistentAPISession(
 			tokenInfo,
 			tokenStore,
 			this.config,
@@ -294,26 +298,55 @@ class BoxSDKNode extends EventEmitter {
 	}
 
 	/**
-	 * Returns A Box Client with an Anonymous API Session. An Anonymous API Session has access to an anonymous
-	 * client-credentials token, which isn't tied to any specific user. Because of this, the client will only
-	 * have access to endpoints that allow client-credential tokens. All Anonymous API Sessions share the
+	 * Returns a Box Client configured to use Client Credentials Grant for a service account. Requires enterprise ID
+	 * to be set when configuring SDK instance.
+	 *
+	 * @returns {BoxClient} Returns a new Box Client paired to a AnonymousAPISession. All Anonymous API Sessions share the
 	 * same tokens, which allows them to refresh them efficiently and reduce load on both the application and
 	 * the API.
-	 *
-	 * @returns {BoxClient} Returns a new Box Client paired to a AnonymousAPISession
 	 */
 	getAnonymousClient() {
+		if (!this.config.enterpriseID) {
+			throw new Error('Enterprise ID must be passed');
+		}
+		return this._getCCGClient({boxSubjectType: "enterprise", boxSubjectId: this.config.enterpriseID});
+	}
+
+	/**
+	 * Returns a Box Client configured to use Client Credentials Grant for a specified user.
+	 *
+	 * @param userId the user ID to use when getting the access token
+	 * @returns {BoxClient} Returns a new Box Client paired to a AnonymousAPISession. All Anonymous API Sessions share the
+	 * same tokens, which allows them to refresh them efficiently and reduce load on both the application and
+	 * the API.
+	 */
+	getCCGClientForUser(userId: string) {
+		return this._getCCGClient({boxSubjectType: "user", boxSubjectId: userId})
+	}
+
+	_getCCGClient(config: CCGConfig) {
+		const anonymousTokenManager = new TokenManager(
+			{
+				...this.config,
+				...config
+			},
+			this.requestManager
+		);
+		const newAnonymousSession = new CCGAPISession(
+			this.config,
+			anonymousTokenManager
+		);
 		return new BoxClient(
-			this.anonymousSession,
+			newAnonymousSession,
 			this.config,
 			this.requestManager
 		);
 	}
 
 	/**
-	 * Create a new client using App Auth for the given entity.  This allows either
+	 * Create a new client using App Auth for the given entity. This allows either
 	 * managing App Users (as the enterprise) or performing operations as the App
-	 * Users themselves (as a user).
+	 * Users or Managed Users themselves (as a user).
 	 *
 	 * @param {string} type The type of entity to operate as, "enterprise" or "user"
 	 * @param {string} [id] (Optional) The Box ID of the entity to operate as
@@ -329,7 +362,7 @@ class BoxSDKNode extends EventEmitter {
 			}
 		}
 
-		var appAuthSession = new AppAuthSession(
+		const appAuthSession = new AppAuthSession(
 			type,
 			id,
 			this.config,
@@ -433,7 +466,7 @@ class BoxSDKNode extends EventEmitter {
 	 * @param {string} userID The ID of the App User to generate a token for
 	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant, null for default behavior
 	 * @param {Function} [callback] Passed the tokens if successful
-	 * @returns {Promise&lt;TokentInfo>} Promise reolving to the token infp
+	 * @returns {Promise&lt;TokentInfo>} Promise resolving to the token info
 	 */
 	getAppUserTokens(
 		userID: string,
@@ -496,13 +529,13 @@ export = BoxSDKNode;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Sep 29 2021 05:48:05 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Mar 28 2022 03:04:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

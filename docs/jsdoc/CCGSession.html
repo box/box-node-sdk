@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: SharedItems</title>
+    <title>JSDoc: Class: CCGSession</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: SharedItems</h1>
+    <h1 class="page-title">Class: CCGSession</h1>
 
     
 
@@ -28,9 +28,17 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>SharedItems<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>CCGSession<span class="signature">(config, tokenManager)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Simple manager for interacting with all 'Shared Item' endpoints and actions.</div>
+            <div class="class-description">The Client Credentials Grant Box API Session.
+
+The Client Credentials Grant API Session holds a Client Credentials accessToken, which it
+returns to the client so that it may make calls on behalf of service account or specified users.
+
+Tokens will be refreshed in the background if a request is made within the
+"stale buffer" (defaults to 10 minutes before the token is set to expire).
+If the token is also expired, all incoming requests will be held until a fresh token
+is retrieved.</div>
         
     
 </header>
@@ -45,7 +53,7 @@
     
 
     
-    <h4 class="name" id="SharedItems"><span class="type-signature"></span>new SharedItems<span class="signature">(client)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="CCGSession"><span class="type-signature"></span>new CCGSession<span class="signature">(config, tokenManager)</span><span class="type-signature"></span></h4>
     
 
     
@@ -85,13 +93,13 @@
 
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>config</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="BoxClient.html">BoxClient</a></span>
+<span class="param-type"><a href="Config.html">Config</a></span>
 
 
             
@@ -101,7 +109,30 @@
 
             
 
-            <td class="description last">The Box API Client that is responsible for making calls to the API</td>
+            <td class="description last">The SDK configuration options</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tokenManager</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="TokenManager.html">TokenManager</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The TokenManager</td>
         </tr>
 
     
@@ -142,7 +173,304 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_shared-items.ts.html">managers/shared-items.ts</a>, <a href="managers_shared-items.ts.html#line24">line 24</a>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Exchange the client access token for one with lower scope
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>scopes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The scope(s) requested for the new token</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>resource</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The absolute URL of an API resource to scope the new token to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional parameters
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tokenRequestOptions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -190,33 +518,13 @@
 
 
 
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
         
             
 
     
 
     
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(url, password<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
     
 
     
@@ -224,10 +532,10 @@
 
 
 <div class="description">
-    Requests a Box item associated with a shared link.
-
-API Endpoint: '/shared_items'
-Method: GET
+    Produces a valid, anonymous access token.
+Performs a refresh before returning if the current token is expired. If the current
+token is considered stale but still valid, return the current token but initiate a
+new refresh in the background.
 </div>
 
 
@@ -265,77 +573,13 @@ Method: GET
 
         <tr>
             
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Shared Link URL</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Shared Link Password (null if no password)</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
 
 
             
@@ -355,40 +599,7 @@ Method: GET
 
             
 
-            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">passed the shared item if it was successfully acquired</td>
+            <td class="description last">Sets optional behavior for the token grant</td>
         </tr>
 
     
@@ -429,7 +640,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_shared-items.ts.html">managers/shared-items.ts</a>, <a href="managers_shared-items.ts.html#line40">line 40</a>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -458,7 +669,7 @@ Method: GET
 
         
 <div class="param-desc">
-    A promise resolving to the shared item object
+    Promise resolving to the access token
 </div>
 
 
@@ -469,7 +680,178 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Revokes the anonymous token used by this anonymous session, and clears the saved tokenInfo.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line90">line 90</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving if the revoke succeeds
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
 
 
     </dd>
@@ -503,7 +885,7 @@ Method: GET
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Mar 28 2022 03:04:25 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Mar 28 2022 03:04:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

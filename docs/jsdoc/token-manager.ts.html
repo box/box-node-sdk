@@ -368,6 +368,8 @@ class TokenManager {
 	getTokensClientCredentialsGrant(options?: TokenRequestOptions) {
 		var params = {
 			grant_type: grantTypes.CLIENT_CREDENTIALS,
+			box_subject_type: this.config.boxSubjectType,
+			box_subject_id: this.config.boxSubjectId
 		};
 		return this.getTokens(params, options);
 	}
@@ -469,7 +471,7 @@ class TokenManager {
 			numRetries &lt; this.config.numMaxRetries &amp;&amp;
 			isJWTAuthErrorRetryable(error)
 		) {
-			var retryTimeout;
+			var retryTimeoutinSeconds;
 			numRetries += 1;
 			// If the retry strategy is defined, then use it to determine the time (in ms) until the next retry or to
 			// propagate an error to the user.
@@ -486,13 +488,13 @@ class TokenManager {
 					totalElapsedTimeMS,
 				};
 
-				retryTimeout = this.config.retryStrategy(retryOptions);
+				retryTimeoutinSeconds = this.config.retryStrategy(retryOptions);
 
 				// If the retry strategy doesn't return a number/time in ms, then propagate the response error to the user.
 				// However, if the retry strategy returns its own error, this will be propagated to the user instead.
-				if (typeof retryTimeout !== 'number') {
-					if (retryTimeout instanceof Error) {
-						error = retryTimeout;
+				if (typeof retryTimeoutinSeconds !== 'number') {
+					if (retryTimeoutinSeconds instanceof Error) {
+						error = retryTimeoutinSeconds;
 					}
 					throw error;
 				}
@@ -501,9 +503,9 @@ class TokenManager {
 				error.response.hasOwnProperty('headers') &amp;&amp;
 				error.response.headers.hasOwnProperty('retry-after')
 			) {
-				retryTimeout = error.response.headers['retry-after'] * 1000;
+				retryTimeoutinSeconds = error.response.headers['retry-after'];
 			} else {
-				retryTimeout = getRetryTimeout(numRetries, this.config.retryIntervalMS);
+				retryTimeoutinSeconds = Math.ceil(getRetryTimeout(numRetries, this.config.retryIntervalMS) / 1000);
 			}
 
 			var time = Math.floor(Date.now() / 1000);
@@ -511,8 +513,7 @@ class TokenManager {
 				time = Math.floor(Date.parse(error.response.headers.date) / 1000);
 			}
 			// Add length of retry timeout to current expiration time to calculate the expiration time for the JTI claim.
-			claims.exp =
-				time + this.config.appAuth.expirationTime + retryTimeout / 1000;
+			claims.exp = Math.ceil(time + this.config.appAuth.expirationTime + retryTimeoutinSeconds);
 			jwtOptions.jwtid = uuid.v4();
 
 			try {
@@ -521,7 +522,7 @@ class TokenManager {
 				throw jwtErr;
 			}
 
-			return Promise.delay(retryTimeout).then(() => {
+			return Promise.delay(retryTimeoutinSeconds).then(() => {
 				// Start the request timer immediately before executing the async request
 				asyncRequestTimer = process.hrtime();
 				return this.getTokens(params, options).catch((err) =>
@@ -673,13 +674,13 @@ export = TokenManager;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AnonymousSession.html">AnonymousSession</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Sep 29 2021 05:48:05 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Mar 28 2022 03:04:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
