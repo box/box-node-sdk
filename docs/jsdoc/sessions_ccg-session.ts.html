@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: schemas/file-mini.generated.ts</title>
+    <title>JSDoc: Source: sessions/ccg-session.ts</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: schemas/file-mini.generated.ts</h1>
+    <h1 class="page-title">Source: sessions/ccg-session.ts</h1>
 
     
 
@@ -26,47 +26,161 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import * as schemas from '.';
-/**
- * File (Mini)
- *
- * A mini representation of a file, used when
- * nested under another resource.
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview An Anonymous Box API Session.
  */
-export interface FileMini extends schemas.FileBase {
+
+// ------------------------------------------------------------------------------
+// Requirements
+// ------------------------------------------------------------------------------
+
+import { Promise } from 'bluebird';
+
+// ------------------------------------------------------------------------------
+// Typedefs
+// ------------------------------------------------------------------------------
+
+type Config = any /* FIXME */;
+type TokenManager = any /* FIXME */;
+type TokenInfo = any /* FIXME */;
+type TokenRequestOptions = any /* FIXME */;
+
+// ------------------------------------------------------------------------------
+// Private
+// ------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------
+// Public
+// ------------------------------------------------------------------------------
+
+/**
+ * The Client Credentials Grant Box API Session.
+ *
+ * The Client Credentials Grant API Session holds a Client Credentials accessToken, which it
+ * returns to the client so that it may make calls on behalf of service account or specified users.
+ *
+ * Tokens will be refreshed in the background if a request is made within the
+ * "stale buffer" (defaults to 10 minutes before the token is set to expire).
+ * If the token is also expired, all incoming requests will be held until a fresh token
+ * is retrieved.
+ *
+ * @param {Config} config The SDK configuration options
+ * @param {TokenManager} tokenManager The TokenManager
+ * @constructor
+ */
+class CCGSession {
+	_config: Config;
+	_tokenManager: TokenManager;
+	_tokenInfo: TokenInfo;
+	_refreshPromise: Promise&lt;any> | null;
+
+	constructor(config: Config, tokenManager: TokenManager) {
+		this._config = config;
+		this._tokenManager = tokenManager;
+
+		// The TokenInfo object for this anonymous session
+		this._tokenInfo = null;
+
+		this._refreshPromise = null;
+	}
+
 	/**
-	 * A numeric identifier that represents the most recent user event
-	 * that has been applied to this item.
+	 * Initiate a refresh of the access tokens. New tokens should be passed to the
+	 * caller, and then cached for later use.
 	 *
-	 * This can be used in combination with the `GET /events`-endpoint
-	 * to filter out user events that would have occurred before this
-	 * identifier was read.
+	 * @param {?TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise&lt;string>} Promise resolving to the access token
+	 * @private
+	 */
+	_refreshAccessToken(options?: TokenRequestOptions) {
+		// If tokens aren't already being refreshed, start the refresh
+		if (!this._refreshPromise) {
+			// Initiate a refresh
+			this._refreshPromise = this._tokenManager
+				.getTokensClientCredentialsGrant(options)
+				.then((tokenInfo: TokenInfo) => {
+					// Set new token info and propagate the new access token
+					this._tokenInfo = tokenInfo;
+					return tokenInfo.accessToken;
+				})
+				.finally(() => {
+					// Refresh complete, clear promise
+					this._refreshPromise = null;
+				});
+		}
+
+		return this._refreshPromise as Promise&lt;any>;
+	}
+
+	/**
+	 * Produces a valid, anonymous access token.
+	 * Performs a refresh before returning if the current token is expired. If the current
+	 * token is considered stale but still valid, return the current token but initiate a
+	 * new refresh in the background.
 	 *
-	 * An example would be where a Box Drive-like application
-	 * would fetch an item via the API, and then listen to incoming
-	 * user events for changes to the item. The application would
-	 * ignore any user events where the `sequence_id` in the event
-	 * is smaller than or equal to the `sequence_id` in the originally
-	 * fetched resource.
-	 * Example: 3
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise&lt;string>} Promise resolving to the access token
 	 */
-	sequence_id?: string;
+	getAccessToken(options?: TokenRequestOptions) {
+		// If the current token is no longer fresh, get a new token. All incoming
+		// requests will be held until a fresh token is retrieved.
+		var expirationBuffer = Math.max(
+			this._config.expiredBufferMS,
+			this._config.staleBufferMS
+		);
+		if (
+			!this._tokenInfo ||
+			!this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)
+		) {
+			return this._refreshAccessToken(options);
+		}
+
+		// Your token is not currently stale! Return the current access token.
+		return Promise.resolve(this._tokenInfo.accessToken);
+	}
+
 	/**
-	 * The name of the file
-	 * Example: Contract.pdf
+	 * Revokes the anonymous token used by this anonymous session, and clears the saved tokenInfo.
+	 *
+	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+	 * @returns {Promise} Promise resolving if the revoke succeeds
 	 */
-	name?: string;
+	revokeTokens(options?: TokenRequestOptions) {
+		// The current anonymous token is revoked (but a new one will be created automatically as needed).
+		var tokenInfo = this._tokenInfo || {},
+			accessToken = tokenInfo.accessToken;
+		this._tokenInfo = null;
+		return this._tokenManager.revokeTokens(accessToken, options);
+	}
+
 	/**
-	 * The SHA1 hash of the file. This can be used to compare the contents
-	 * of a file on Box with a local file.
-	 * Example: 85136C79CBF9FE36BB9D05D0639C70C265C18D37
+	 * Exchange the client access token for one with lower scope
+	 *
+	 * @param {string|string[]} scopes The scope(s) requested for the new token
+	 * @param {string} [resource] The absolute URL of an API resource to scope the new token to
+	 * @param {Object} [options] - Optional parameters
+	 * @param {TokenRequestOptions} [options.tokenRequestOptions] - Sets optional behavior for the token grant
+	 * @returns {void}
 	 */
-	sha1?: string;
-	/**
-	 * The information about the current version of the file.
-	 */
-	file_version?: schemas.FileVersionMini;
+	exchangeToken(
+		scopes: string | string[],
+		resource?: string,
+		options?: {
+			tokenRequestOptions?: TokenRequestOptions;
+		}
+	) {
+		// We need to get the access token, in case it hasn't been generated yet
+		return this.getAccessToken(options).then((accessToken) =>
+			this._tokenManager.exchangeToken(accessToken, scopes, resource, options)
+		);
+	}
 }
+
+/**
+ * @module box-node-sdk/lib/sessions/ccg-session
+ * @see {@Link CCGSession}
+ */
+export = CCGSession;
 </code></pre>
         </article>
     </section>

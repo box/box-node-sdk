@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BasicSession</title>
+    <title>JSDoc: Class: CCGSession</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BasicSession</h1>
+    <h1 class="page-title">Class: CCGSession</h1>
 
     
 
@@ -28,15 +28,17 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>BasicSession<span class="signature">(accessToken, tokenManager)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>CCGSession<span class="signature">(config, tokenManager)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">A BasicSession holds only a single accessToken. It has no idea how to authenticate,
-refresh, or persist its token information. When that token expires, the session
-and any clients using it will become useless.
+            <div class="class-description">The Client Credentials Grant Box API Session.
 
-Basic API Session is the most simple API Session to use, which makes it a good choice
-for simple applications, developers who are just getting started, and applications
-that wish to manage tokens themselves.</div>
+The Client Credentials Grant API Session holds a Client Credentials accessToken, which it
+returns to the client so that it may make calls on behalf of service account or specified users.
+
+Tokens will be refreshed in the background if a request is made within the
+"stale buffer" (defaults to 10 minutes before the token is set to expire).
+If the token is also expired, all incoming requests will be held until a fresh token
+is retrieved.</div>
         
     
 </header>
@@ -51,7 +53,7 @@ that wish to manage tokens themselves.</div>
     
 
     
-    <h4 class="name" id="BasicSession"><span class="type-signature"></span>new BasicSession<span class="signature">(accessToken, tokenManager)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CCGSession"><span class="type-signature"></span>new CCGSession<span class="signature">(config, tokenManager)</span><span class="type-signature"></span></h4>
     
 
     
@@ -91,13 +93,13 @@ that wish to manage tokens themselves.</div>
 
         <tr>
             
-                <td class="name"><code>accessToken</code></td>
+                <td class="name"><code>config</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="Config.html">Config</a></span>
 
 
             
@@ -107,7 +109,7 @@ that wish to manage tokens themselves.</div>
 
             
 
-            <td class="description last">The existing access token for a user</td>
+            <td class="description last">The SDK configuration options</td>
         </tr>
 
     
@@ -130,7 +132,7 @@ that wish to manage tokens themselves.</div>
 
             
 
-            <td class="description last">The token manager</td>
+            <td class="description last">The TokenManager</td>
         </tr>
 
     
@@ -171,7 +173,7 @@ that wish to manage tokens themselves.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_basic-session.ts.html">sessions/basic-session.ts</a>, <a href="sessions_basic-session.ts.html#line25">line 25</a>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -227,7 +229,7 @@ that wish to manage tokens themselves.</div>
     
 
     
-    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>>}</span></h4>
+    <h4 class="name" id="exchangeToken"><span class="type-signature"></span>exchangeToken<span class="signature">(scopes, resource<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -424,39 +426,6 @@ that wish to manage tokens themselves.</div>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>actor</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#ActorParams">ActorParams</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Optional actor parameters for creating annotator tokens</td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -501,7 +470,7 @@ that wish to manage tokens themselves.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_basic-session.ts.html">sessions/basic-session.ts</a>, <a href="sessions_basic-session.ts.html#line57">line 57</a>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -529,10 +498,6 @@ that wish to manage tokens themselves.</div>
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    Promise resolving to the new token info
-</div>
-
 
 
 <dl>
@@ -541,7 +506,7 @@ that wish to manage tokens themselves.</div>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="global.html#TokenInfo">TokenInfo</a>></span>
+<span class="param-type">void</span>
 
 
     </dd>
@@ -559,7 +524,7 @@ that wish to manage tokens themselves.</div>
     
 
     
-    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    <h4 class="name" id="getAccessToken"><span class="type-signature"></span>getAccessToken<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
     
 
     
@@ -567,118 +532,10 @@ that wish to manage tokens themselves.</div>
 
 
 <div class="description">
-    Returns the clients access token. BasicSession never returns an error, since it doesn't
-know the status of its own token.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_basic-session.ts.html">sessions/basic-session.ts</a>, <a href="sessions_basic-session.ts.html#line36">line 36</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Promise resolving to the access token
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Revokes the session's access token.
+    Produces a valid, anonymous access token.
+Performs a refresh before returning if the current token is expired. If the current
+token is considered stale but still valid, return the current token but initiate a
+new refresh in the background.
 </div>
 
 
@@ -783,7 +640,178 @@ know the status of its own token.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessions_basic-session.ts.html">sessions/basic-session.ts</a>, <a href="sessions_basic-session.ts.html#line45">line 45</a>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Promise resolving to the access token
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="revokeTokens"><span class="type-signature"></span>revokeTokens<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Revokes the anonymous token used by this anonymous session, and clears the saved tokenInfo.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#TokenRequestOptions">TokenRequestOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sets optional behavior for the token grant</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sessions_ccg-session.ts.html">sessions/ccg-session.ts</a>, <a href="sessions_ccg-session.ts.html#line90">line 90</a>
     </li></ul></dd>
     
 
