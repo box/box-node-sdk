@@ -262,6 +262,12 @@ For more information, please see [the Contribution guidelines](./CONTRIBUTING.md
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
+## Documentation
+
+You can find guides and tutorials in the `docs` directory.
+
+* [Configuration](docs/configuration.md)
+
 ## Copyright and License
 
 Copyright 2018 Box, Inc. All rights reserved.
