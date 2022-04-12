@@ -203,7 +203,7 @@ class BoxClient {
 	_tokenOptions: any;
 
 	users: any;
-	files: any;
+	files: Files;
 	folders: any;
 	comments: any;
 	collaborations: any;

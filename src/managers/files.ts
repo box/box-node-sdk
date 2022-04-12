@@ -58,6 +58,22 @@ enum LockType {
 	UNLOCK = 'unlock',
 }
 
+type FileSharedLinkAccess = 'open' | 'company' | 'collaborators';
+
+type FileSharedLinkPermissions = {
+	can_view?: boolean,
+	can_download?: boolean,
+	can_edit?: boolean,
+}
+
+type FileSharedLink = {
+	access?: FileSharedLinkAccess,
+	password?: string | null,
+	unshared_at?: string | null,
+	vanity_name?: string | null,
+	permissions?: FileSharedLinkPermissions
+}
+
 // -----------------------------------------------------------------------------
 // Private
 // -----------------------------------------------------------------------------
@@ -392,6 +408,7 @@ class Files {
 		updates: {
 			[key: string]: any;
 			etag?: string;
+			shared_link?: FileSharedLink
 		},
 		callback?: Function
 	) {
