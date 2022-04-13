@@ -13,7 +13,7 @@ import errors from '../util/errors';
 // -----------------------------------------------------------------------------
 // Typedefs
 // -----------------------------------------------------------------------------
-type FolderSharedLinkAccess = 'open' | 'company' | 'collaborators';
+type FolderSharedLinkAccess = 'open' | 'company' | 'collaborators' | null;
 
 type FolderSharedLinkPermissions = {
 	can_view?: boolean,

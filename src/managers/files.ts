@@ -58,7 +58,7 @@ enum LockType {
 	UNLOCK = 'unlock',
 }
 
-type FileSharedLinkAccess = 'open' | 'company' | 'collaborators';
+type FileSharedLinkAccess = 'open' | 'company' | 'collaborators' | null;
 
 type FileSharedLinkPermissions = {
 	can_view?: boolean,
