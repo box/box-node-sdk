@@ -13,7 +13,20 @@ import errors from '../util/errors';
 // -----------------------------------------------------------------------------
 // Typedefs
 // -----------------------------------------------------------------------------
+type FolderSharedLinkAccess = 'open' | 'company' | 'collaborators' | null;
 
+type FolderSharedLinkPermissions = {
+	can_view?: boolean,
+	can_download?: boolean
+}
+
+type FolderSharedLink = {
+	access?: FolderSharedLinkAccess,
+	password?: string | null,
+	unshared_at?: string | null,
+	vanity_name?: string | null,
+	permissions?: FolderSharedLinkPermissions
+}
 // ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
@@ -209,6 +222,7 @@ class Folders {
 		updates: {
 			[key: string]: any;
 			etag?: string;
+			shared_link?: FolderSharedLink;
 		},
 		callback?: Function
 	) {
@@ -536,7 +550,7 @@ class Folders {
 	 *
 	 * @param  {string} folderID  - The ID of the folder being requested
 	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
-	 * @param  {Funnction} [callback]  - Passed the folder information if it was acquired successfully
+	 * @param  {Function} [callback]  - Passed the folder information if it was acquired successfully
 	 * @returns {Promise<Object>} A promise resolving to the trashed folder object
 	 */
 	getTrashedFolder(

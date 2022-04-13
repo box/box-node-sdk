@@ -203,8 +203,8 @@ class BoxClient {
 	_tokenOptions: any;
 
 	users: any;
-	files: any;
-	folders: any;
+	files: Files;
+	folders: Folders;
 	comments: any;
 	collaborations: any;
 	groups: any;
@@ -341,7 +341,7 @@ class BoxClient {
 	 * a permanent error, or if usable tokens are not available.
 	 *
 	 * @param {Object} params - Request lib params to configure the request
-	 * @param {APIRequest~Callback} [callback] - passed response data
+	 * @param {Function} [callback] - passed response data
 	 * @returns {Promise} Promise resolving to the response
 	 * @private
 	 */
@@ -534,7 +534,7 @@ class BoxClient {
 	 *
 	 * @param {string} path - path to a certain API endpoint (ex: /file)
 	 * @param {?Object} params - object containing parameters for the request, such as query strings and headers
-	 * @param {APIRequest~Callback} [callback] - passed final API response or err if request failed
+	 * @param {Function} [callback] - passed final API response or err if request failed
 	 * @returns {void}
 	 */
 	get(path: string, params?: object | null, callback?: Function) {
@@ -550,7 +550,7 @@ class BoxClient {
 	 *
 	 * @param {string} path - path to a certain API endpoint (ex: /file)
 	 * @param {?Object} params - object containing parameters for the request, such as query strings and headers
-	 * @param {APIRequest~Callback} [callback] - passed final API response or err if request failed
+	 * @param {Function} [callback] - passed final API response or err if request failed
 	 * @returns {void}
 	 */
 	post(path: string, params: object | null, callback?: Function) {
@@ -565,7 +565,7 @@ class BoxClient {
 	 *
 	 * @param {string} path - path to a certain API endpoint (ex: /file)
 	 * @param {?Object} params - object containing parameters for the request, such as query strings and headers
-	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
+	 * @param {Function} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
 	put(path: string, params?: object | null, callback?: Function) {
@@ -580,7 +580,7 @@ class BoxClient {
 	 *
 	 * @param {string} path - path to a certain API endpoint (ex: /file)
 	 * @param {?Object} params - object containing parameters for the request, such as query strings and headers
-	 * @param {APIRequest~Callback} callback - passed final API response or err if request failed
+	 * @param {Function} callback - passed final API response or err if request failed
 	 * @returns {void}
 	 */
 	del(path: string, params: object | null, callback?: Function) {
@@ -595,7 +595,7 @@ class BoxClient {
 	 *
 	 * @param {string} path - Path to an API endpoint (e.g. /files/content)
 	 * @param {?Object} params - An optional object containing request parameters
-	 * @param {APIRequest~Callback} callback - Called with API call results, or err if call failed
+	 * @param {Function} callback - Called with API call results, or err if call failed
 	 * @returns {void}
 	 */
 	options(path: string, params: object | null, callback?: Function) {
@@ -611,7 +611,7 @@ class BoxClient {
 	 * @param {string} path - path to an upload API endpoint
 	 * @param {?Object} params - an optional object containing request parameters
 	 * @param {?Object} formData - multipart form data to include in the upload request {@see https://github.com/mikeal/request#multipartform-data-multipart-form-uploads}
-	 * @param {APIRequest~Callback} callback - called with API call results, or an error if the call failed
+	 * @param {Function} callback - called with API call results, or an error if the call failed
 	 * @returns {void}
 	 */
 	upload(
@@ -720,7 +720,7 @@ class BoxClient {
 	 * back to the callback as errors. This is the standard behavior of most endpoints.
 	 *
 	 * @param {Function} callback The original callback given by the consumer
-	 * @returns {?APIRequest~Callback} A new callback that processes the response before passing it to the callback.
+	 * @returns {?Function} A new callback that processes the response before passing it to the callback.
 	 */
 	defaultResponseHandler(callback: Function) {
 		var self = this;
