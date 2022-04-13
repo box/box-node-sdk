@@ -1,5 +1,4 @@
-Files
-=====
+# Files
 
 File objects represent individual files in Box. They can be used to download a
 file's contents, upload new versions, and perform other common file operations
@@ -8,49 +7,47 @@ file's contents, upload new versions, and perform other common file operations
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Files](#files)
-	- [Get a File's Information](#get-a-files-information)
-	- [Update a File's Information](#update-a-files-information)
-	- [Download a File](#download-a-file)
-	- [Get a File's Download URL](#get-a-files-download-url)
-	- [Upload a File](#upload-a-file)
-	- [Chunked Upload](#chunked-upload)
-		- [Automatic Uploader](#automatic-uploader)
-		- [Manual Process](#manual-process)
-			- [Create Upload Session](#create-upload-session)
-			- [Upload Part](#upload-part)
-			- [Commit Upload Session](#commit-upload-session)
-			- [Abort Upload Session](#abort-upload-session)
-			- [Get Upload Session Parts](#get-upload-session-parts)
-			- [Get Upload Session Status](#get-upload-session-status)
-	- [Upload Preflight Check](#upload-preflight-check)
-	- [Move a File](#move-a-file)
-	- [Copy a File](#copy-a-file)
-	- [Delete a File](#delete-a-file)
-	- [Get File Versions](#get-file-versions)
-	- [Upload a New Version of a File](#upload-a-new-version-of-a-file)
-	- [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
-	- [Delete a Previous File Version](#delete-a-previous-file-version)
-	- [Find a File for a Shared Link](#find-a-file-for-a-shared-link)
-	- [Create a Shared Link](#create-a-shared-link)
-	- [Update a Shared Link](#update-a-shared-link)
-	- [Get a Shared Link](#get-a-shared-link)
-	- [Remove a Shared Link](#remove-a-shared-link)
-	- [Promote Version](#promote-version)
-	- [Get Thumbnail](#get-thumbnail-deprecated)
-	- [Get Embed Link](#get-embed-link)
-	- [Lock a File](#lock-a-file)
-	- [Unlock a File](#unlock-a-file)
-	- [Get Representation Info](#get-representation-info)
-	- [Get Representation Content](#get-representation-content)
-	- [Create a Zip File](#create-a-zip-file)
-	- [Download a Zip File](#download-a-zip-file)
+    - [Get a File's Information](#get-a-files-information)
+    - [Update a File's Information](#update-a-files-information)
+    - [Download a File](#download-a-file)
+    - [Get a File's Download URL](#get-a-files-download-url)
+    - [Upload a File](#upload-a-file)
+    - [Chunked Upload](#chunked-upload)
+        - [Automatic Uploader](#automatic-uploader)
+        - [Manual Process](#manual-process)
+            - [Create Upload Session](#create-upload-session)
+            - [Upload Part](#upload-part)
+            - [Commit Upload Session](#commit-upload-session)
+            - [Abort Upload Session](#abort-upload-session)
+            - [Get Upload Session Parts](#get-upload-session-parts)
+            - [Get Upload Session Status](#get-upload-session-status)
+    - [Upload Preflight Check](#upload-preflight-check)
+    - [Move a File](#move-a-file)
+    - [Copy a File](#copy-a-file)
+    - [Delete a File](#delete-a-file)
+    - [Get File Versions](#get-file-versions)
+    - [Upload a New Version of a File](#upload-a-new-version-of-a-file)
+    - [Download a Previous Version of a File](#download-a-previous-version-of-a-file)
+    - [Delete a Previous File Version](#delete-a-previous-file-version)
+    - [Find a File for a Shared Link](#find-a-file-for-a-shared-link)
+    - [Create or update a Shared Link](#create-or-update-a-shared-link)
+    - [Get a Shared Link](#get-a-shared-link)
+    - [Get information about Shared Link Permissions Options](#get-information-about-shared-link-permissions-options)
+    - [Remove a Shared Link](#remove-a-shared-link)
+    - [Promote Version](#promote-version)
+    - [Get Thumbnail](#get-thumbnail-deprecated)
+    - [Get Embed Link](#get-embed-link)
+    - [Lock a File](#lock-a-file)
+    - [Unlock a File](#unlock-a-file)
+    - [Get Representation Info](#get-representation-info)
+    - [Get Representation Content](#get-representation-content)
+    - [Create a Zip File](#create-a-zip-file)
+    - [Download a Zip File](#download-a-zip-file)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Get a File's Information
-------------------------
+## Get a File's Information
 
 Calling
 [`files.get(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#get)
@@ -142,8 +139,7 @@ client.files.get('11111', { fields: 'size,owned_by' })
 	});
 ```
 
-Update a File's Information
----------------------------
+## Update a File's Information
 
 Updating a file's information is done by calling
 [`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
@@ -180,8 +176,7 @@ client.files.update('11111', { name: 'New name.pdf', etag: '5', fields: 'name' }
 	});
 ```
 
-Download a File
----------------
+## Download a File
 
 A file can be downloaded by calling
 [`files.getReadStream(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getReadStream),
@@ -218,8 +213,7 @@ of the byte indices to start and stop at to the `byteRange` option.
 client.files.getReadStream('12345', {byteRange: [0, 99] }, callback);
 ```
 
-Get a File's Download URL
--------------------------
+## Get a File's Download URL
 
 The download URL of a file an be retrieved by calling
 [`files.getDownloadURL(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getDownloadURL).
@@ -233,8 +227,7 @@ client.files.getDownloadURL('12345')
 	});
 ```
 
-Upload a File
--------------
+## Upload a File
 
 The simplest way to upload a file to a folder is by calling the
 [`files.uploadFile(parentFolderID, filename, content, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadFile)
@@ -337,8 +330,7 @@ var options = {
 client.files.uploadFile('0', 'My Base64 File.txt', stream, options);
 ```
 
-Chunked Upload
---------------
+## Chunked Upload
 
 For large files or in cases where the network connection is less reliable,
 you may want to upload the file in parts.  This allows a single part to fail
@@ -642,8 +634,7 @@ Information about an in-progress upload session can be retrieved by calling
 client.files.getUploadSessionStatus('93D9A837B45F', callback);
 ```
 
-Upload Preflight Check
-----------------------
+## Upload Preflight Check
 
 The Preflight Check in the
 [`files.preflightUploadFile(parentFolderID, fileData, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#preflightUploadFile)
@@ -686,8 +677,7 @@ method.
 client.files.preflightUploadNewFileVersion('87646', {size: 300000000}, null, callback);
 ```
 
-Move a File
------------
+## Move a File
 
 To move a file from one folder to another, call
 [`files.move(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#move)
@@ -698,8 +688,7 @@ with the ID of the file to move and the ID of the folder to move it to.
 client.files.move('12345', '9876', callback);
 ```
 
-Copy a File
------------
+## Copy a File
 
 A file can be copied to a new folder with the
 [`files.copy(fileID, newParentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#copy)
@@ -778,8 +767,7 @@ target folder.
 client.files.copy('12345', '0', {name: 'Renamed file.png'}, callback);
 ```
 
-Delete a File
--------------
+## Delete a File
 
 Calling the
 [`files.delete(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#delete)
@@ -811,8 +799,7 @@ client.files.delete('11111', { etag: '5' })
 	});
 ```
 
-Get File Versions
------------------
+## Get File Versions
 
 Retrieve a list of previous versions of a file by calling the
 [`files.getVersions(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getVersions).
@@ -859,8 +846,7 @@ client.files.getVersions('12345', {fields: 'name,size,sha1'})
 	});
 ```
 
-Upload a New Version of a File
-------------------------------
+## Upload a New Version of a File
 
 New versions of a file can be uploaded with the
 [`files.uploadNewFileVersion(fileID, content, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#uploadNewFileVersion) method.
@@ -871,59 +857,60 @@ var fs = require('fs');
 var stream = fs.createReadStream('/path/to/file.pdf');
 client.files.uploadNewFileVersion('11111', stream)
 	.then(file => {
-		/* file -> {
-			total_count: 1,
-			entries: 
-			[ { type: 'file',
-				id: '11111',
-				file_version: 
-					{ type: 'file_version',
-					id: '22222',
-					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
-				sequence_id: '0',
-				etag: '0',
-				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
-				name: 'My File.pdf',
-				description: '',
-				size: 68431,
-				path_collection: 
-					{ total_count: 1,
-					entries: 
-					[ { type: 'folder',
-						id: '0',
-						sequence_id: null,
-						etag: null,
-						name: 'All Files' } ] },
-				created_at: '2017-05-16T15:18:02-07:00',
-				modified_at: '2017-05-16T15:18:02-07:00',
-				trashed_at: null,
-				purged_at: null,
-				content_created_at: '2017-05-16T15:18:02-07:00',
-				content_modified_at: '2017-05-16T15:18:02-07:00',
-				created_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Test User',
-					login: 'test@example.com' },
-				modified_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Test User',
-					login: 'test@example.com' },
-				owned_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Test User',
-					login: 'test@example.com' },
-				shared_link: null,
-				parent: 
-					{ type: 'folder',
-					id: '0',
-					sequence_id: null,
-					etag: null,
-					name: 'All Files' }
-				item_status: 'active' } ] }
-		*/
+        /* file -> {
+            total_count: 1,
+            entries: 
+            [ { type: 'file',
+                id: '11111',
+                file_version: 
+                    { type: 'file_version',
+                    id: '22222',
+                    sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+                sequence_id: '0',
+                etag: '0',
+                sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+                name: 'My File.pdf',
+                description: '',
+                size: 68431,
+                path_collection: 
+                    { total_count: 1,
+                    entries: 
+                    [ { type: 'folder',
+                        id: '0',
+                        sequence_id: null,
+                        etag: null,
+                        name: 'All Files' } ] },
+                created_at: '2017-05-16T15:18:02-07:00',
+                modified_at: '2017-05-16T15:18:02-07:00',
+                trashed_at: null,
+                purged_at: null,
+                content_created_at: '2017-05-16T15:18:02-07:00',
+                content_modified_at: '2017-05-16T15:18:02-07:00',
+                created_by: 
+                    { type: 'user',
+                    id: '33333',
+                    name: 'Test User',
+                    login: 'test@example.com' },
+                modified_by: 
+                    { type: 'user',
+                    id: '33333',
+                    name: 'Test User',
+                    login: 'test@example.com' },
+                owned_by: 
+                    { type: 'user',
+                    id: '33333',
+                    name: 'Test User',
+                    login: 'test@example.com' },
+                shared_link: null,
+                parent: 
+                    { type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files' }
+                item_status: 'active' } ] }
+        */
+    })
 ```
 If the stream passed in is not an fs stream, you must pass the stream length as an optional parameter as shown below.
 To rename the file on upload or manually specify a modification timestamp for the file, pass the corresponding optional parameter:
@@ -937,63 +924,63 @@ var options = {
 };
 client.files.uploadNewFileVersion('11111', stream, options)
 	.then(file => {
-		/* file -> {
-			total_count: 1,
-			entries: 
-			[ { type: 'file',
-				id: '11111',
-				file_version: 
-					{ type: 'file_version',
-					id: '22222',
-					sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
-				sequence_id: '0',
-				etag: '0',
-				sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
-				name: 'New filename.pdf',
-				description: '',
-				size: 68431,
-				path_collection: 
-					{ total_count: 1,
-					entries: 
-					[ { type: 'folder',
-						id: '0',
-						sequence_id: null,
-						etag: null,
-						name: 'All Files' } ] },
-				created_at: '2017-05-16T15:18:02-07:00',
-				modified_at: '2017-05-16T15:18:02-07:00',
-				trashed_at: null,
-				purged_at: null,
-				content_created_at: '2017-05-16T15:18:02-07:00',
-				content_modified_at: '2016-02-15T22:42:09-0600',
-				created_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Test User',
-					login: 'test@example.com' },
-				modified_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Test User',
-					login: 'test@example.com' },
-				owned_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Test User',
-					login: 'test@example.com' },
-				shared_link: null,
-				parent: 
-					{ type: 'folder',
-					id: '0',
-					sequence_id: null,
-					etag: null,
-					name: 'All Files' }
-				item_status: 'active' } ] }
-		*/
+        /* file -> {
+            total_count: 1,
+            entries: 
+            [ { type: 'file',
+                id: '11111',
+                file_version: 
+                    { type: 'file_version',
+                    id: '22222',
+                    sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33' },
+                sequence_id: '0',
+                etag: '0',
+                sha1: '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33',
+                name: 'New filename.pdf',
+                description: '',
+                size: 68431,
+                path_collection: 
+                    { total_count: 1,
+                    entries: 
+                    [ { type: 'folder',
+                        id: '0',
+                        sequence_id: null,
+                        etag: null,
+                        name: 'All Files' } ] },
+                created_at: '2017-05-16T15:18:02-07:00',
+                modified_at: '2017-05-16T15:18:02-07:00',
+                trashed_at: null,
+                purged_at: null,
+                content_created_at: '2017-05-16T15:18:02-07:00',
+                content_modified_at: '2016-02-15T22:42:09-0600',
+                created_by: 
+                    { type: 'user',
+                    id: '33333',
+                    name: 'Test User',
+                    login: 'test@example.com' },
+                modified_by: 
+                    { type: 'user',
+                    id: '33333',
+                    name: 'Test User',
+                    login: 'test@example.com' },
+                owned_by: 
+                    { type: 'user',
+                    id: '33333',
+                    name: 'Test User',
+                    login: 'test@example.com' },
+                shared_link: null,
+                parent: 
+                    { type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files' }
+                item_status: 'active' } ] }
+        */
+    })
 ```
 
-Download a Previous Version of a File
--------------------------------------
+## Download a Previous Version of a File
 
 For users with premium accounts, previous versions of a file can be downloaded
 by calling
@@ -1014,8 +1001,7 @@ client.files.getReadStream('12345', {version: '2'}, function(error, stream) {
 });
 ```
 
-Delete a Previous File Version
-------------------------------
+## Delete a Previous File Version
 
 An old version of a file can be moved to the trash by calling the
 [`files.deleteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteVersion)
@@ -1052,8 +1038,7 @@ client.files.deleteVersion(fileID, versionID, { etag: '5' })
 ```
 
 
-Find a File for a Shared Link
------------------------------
+## Find a File for a Shared Link
 
 To find a file given a shared link, use the
 [`sharedItems.get(url, password, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SharedItems.html#get)
@@ -1069,58 +1054,65 @@ client.sharedItems.get(
 });
 ```
 
-Create a Shared Link
---------------------
+## Create or update a Shared Link
 
-You can create a shared link for a file by calling the
+To create or update a shared link for a file use 
 [`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
-method, passing a new `shared_link` value in the `updates` parameter.
+method, passing a new `shared_link` value in the `updates` parameter:
 
-<!-- sample put_files_id add_shared_link -->
+<!-- sample put_files_id shared_link_create -->
 ```js
 client.files.update('12345', {
   shared_link: {
-    access: client.accessLevels.OPEN,
+    access: "open",
+    password: "do-not-use-this-password", 
+    unshared_at: "2022-12-12T10:53:43-08:00",
+    vanity_name: "my-shared-link",
     permissions: {
-      can_download: false
+	  can_view: true,
+	  can_download: true,
+	  can_edit: true
     }
   }
 }).then(file => {
   // ...
 })
 ```
+This will make a shared link to be `open` to everyone, but users will need to provide `password` to access the file.
+This link will be unshared at `"2022-12-12T10:53:43-08:00"`. By setting `vanity_name` we create custom URL 
+`https://app.box.com/v/my-shared-link`. Custom URLs should not be used when sharing sensitive content as vanity URLs are 
+a lot easier to guess than regular shared links.
+Additionally, everyone who has this link can `view`, `download` and `edit` the file.
 
-A set of shared link access level constants are available through the SDK for convenience:
+You can create shared link using default values
+```js
+client.files.update('12345', {
+  shared_link: {}
+}).then(file => {
+  // ...
+})
+```
+ - Default `access` value comes from the access level specified by the enterprise admin.
+ - Default `password`, `unshared_at`, `vanity_name` will be empty.
+ - Default `permissions` comes from the values specified by the enterprise admin.
 
-* `accessLevels.OPEN`
-* `accessLevels.COLLABORATORS`
-* `accessLevels.COMPANY`
-* `accessLevels.DEFAULT`
-* `accessLevels.DISABLED`
-
-Update a Shared Link
---------------------
-
-You can update a shared link for a file by calling the
-[`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
-method, passing a new `shared_link` value in the `updates` parameter.
-
-<!-- sample put_files_id add_shared_link -->
+You can remove any field set on a link by sending value `null` (or empty object when it comes to `permissions`).
+This will cause it's value to be default. For example, let's remove `access` and `permissions`:
 ```js
 client.files.update('12345', {
   shared_link: {
-    access: client.accessLevels.COMPANY,
-    permissions: {
-      can_download: true
-    }
+    access: null,
+    permissions: {}
   }
 }).then(file => {
   // ...
 })
 ```
+This will remove `open` access, and it will fall back to default value set by the enterprise admin.
+The `permissions` we set on a shared link will be removed and default permissions defined by the enterprise admin will be applied.
+Other properties of the shared link will not be changed as we are not sending them.
 
-Get a Shared Link
---------------------
+## Get a Shared Link
 
 To check for an existing shared link on a file, inspect the
 `shared_link` field on a file object.
@@ -1137,8 +1129,22 @@ client.files.get('11111', { fields: 'shared_link' })
   })
 ```
 
-Remove a Shared Link
---------------------
+## Get information about Shared Link Permissions Options
+
+To check what permissions can be set on a shared link you can ask for `shared_link_permission_options`:
+
+```js
+client.files.get('11111', { fields: 'shared_link_permission_options' })
+  .then(file => {
+    let options = file.shared_link_permission_options
+    // options = [ "can_download", "can_preview", "can_edit" ]
+  })
+```
+
+Allowed values are defined by the enterprise admin in "Enterprise Settings -> Content & Sharing -> Actions link recipients can take",
+possible values are `["can_preview"]`, `["can_preview", "can_download"]` or `["can_preview", "can_download", "can_edit"]`.
+
+## Remove a Shared Link
 
 A shared link for a file can be removed calling
 [`files.update(fileID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#update)
@@ -1154,8 +1160,7 @@ client.files.update('12345', {
 ```
 
 
-Promote Version
----------------
+## Promote Version
 
 Promote file version to the top of the stack by calling the [`files.promoteVersion(fileID, versionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#promoteVersion) method.
 
@@ -1182,8 +1187,7 @@ client.files.promoteVersion(fileID, versionID)
 	});
 ```
 
-Get Thumbnail (deprecated)
--------------
+## Get Thumbnail (deprecated)
 
 This method has been deprecated. Use [Get Representation Content](#get-representation-content) instead.
 
@@ -1204,8 +1208,7 @@ client.files.getThumbnail('12345')
 	});
 ```
 
-Get Embed Link
---------------
+## Get Embed Link
 
 An embed link for a file can be generated by calling the
 [`files.getEmbedLink(fileID,callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getEmbedLink)
@@ -1222,8 +1225,7 @@ client.files.getEmbedLink('12345')
 ```
 
 
-Lock a File
------------
+## Lock a File
 
 A file can be locked, which prevents other users from editing the file, by calling the
 [`files.lock(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#lock)
@@ -1256,8 +1258,7 @@ client.files.lock('11111', options)
 	});
 ```
 
-Unlock a File
--------------
+## Unlock a File
 
 A file can be unlocked by calling the
 [`files.unlock(fileID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#unlock)
@@ -1275,8 +1276,7 @@ client.files.unlock('11111')
 	});
 ```
 
-Get Representation Info
------------------------
+## Get Representation Info
 
 A file's representation info can be retrieved by calling
 [`files.getRepresentationInfo(fileID, representationTypes, callback)`][get-rep-info].
@@ -1322,8 +1322,7 @@ client.files.getRepresentationInfo('67890', '[pdf][extracted_text]', { generateR
 [get-rep-info]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getRepresentationInfo
 [x-rep-hints]: https://developer.box.com/en/reference/get-files-id/#param-X-Rep-Hints
 
-Get Representation Content
---------------------------
+## Get Representation Content
 
 To get a stream over the contents of a single file representation, call the
 [`files.getRepresentationContent(fileID, representationType, options, callback)`][get-rep-content]
@@ -1361,8 +1360,7 @@ client.files.getRepresentationContent('12345', '[png?dimensions=1024x1024]', { a
 
 [get-rep-content]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getRepresentationContent
 
-Create a Zip File
------------------
+## Create a Zip File
 
 Calling [`files.createZip(name, items, callback)`][create-a-zip-file] will let you create a new zip file with the specified name and 
 with the specified items and will return a response with the download and status link. This file does not show up in your Box account, but will be temporarily available for download.
@@ -1422,8 +1420,7 @@ client.files.createZip(name, items)
 ```
 [create-a-zip-file]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#createZip
 
-Download a Zip File
--------------------
+## Download a Zip File
 
 Calling [`file.downloadZip(name, items, stream, callback)`][download-a-zip-file] will let you create a new zip file 
 with the specified name and with the specified items and download it to the stream that is passed in. The return object is status
