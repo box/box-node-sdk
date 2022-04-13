@@ -408,7 +408,7 @@ class Files {
 		updates: {
 			[key: string]: any;
 			etag?: string;
-			shared_link?: FileSharedLink
+			shared_link?: FileSharedLink;
 		},
 		callback?: Function
 	) {
