@@ -154,7 +154,7 @@ class Chunk extends EventEmitter {
 	upload() {
 		this.client.files.uploadPart(
 			this.sessionID,
-			this.chunk,
+			this.chunk!,
 			this.offset,
 			this.totalSize,
 			(err: any /* FIXME */, data: any /* FIXME */) => {
