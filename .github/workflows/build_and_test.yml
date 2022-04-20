@@ -1,4 +1,4 @@
-name: build-main
+name: build-and-test
 on:
   pull_request_target:
     types: [ opened, synchronize ]
@@ -24,8 +24,10 @@ jobs:
           cache: 'npm'
       - name: npm install
         run: npm install
+      - name: Lint
+        run: npm run lint
       - name: Build and test
-        run: npm test
+        run: npm run test
 # Coveralls report is broken
 #      - name: Coveralls Parallel
 #        uses: coverallsapp/github-action@master

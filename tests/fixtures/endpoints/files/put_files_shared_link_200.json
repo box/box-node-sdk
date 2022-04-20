@@ -1,0 +1,23 @@
+{
+  "type": "file",
+  "id": "1234567890",
+  "etag": "4",
+  "shared_link": {
+	"url": "https://someurl.box.com/s/2mgkgxe98et1li2w0lslbqv9wa724m3b",
+	"download_url": "https://someurl.box.com/shared/static/2mgkgxe98et1li2w0lslbqv9wa724m3b",
+	"vanity_url": null,
+	"vanity_name": null,
+	"effective_access": "open",
+	"effective_permission": "can_edit",
+	"is_password_enabled": true,
+	"unshared_at": "2022-12-12T10:53:43-08:00",
+	"download_count": 0,
+	"preview_count": 0,
+	"access": "open",
+	"permissions": {
+	  "can_preview": true,
+	  "can_download": true,
+	  "can_edit": true
+	}
+  }
+}
