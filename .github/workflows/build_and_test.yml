@@ -24,8 +24,10 @@ jobs:
           cache: 'npm'
       - name: npm install
         run: npm install
-      - name: Build, lint and test
-        run: npm run lint test
+      - name: Lint
+        run: npm run lint
+      - name: Build and test
+        run: npm run test
 # Coveralls report is broken
 #      - name: Coveralls Parallel
 #        uses: coverallsapp/github-action@master
