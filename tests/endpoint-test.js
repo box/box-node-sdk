@@ -1264,6 +1264,7 @@ describe('Endpoint', () => {
 				var folderID = '0',
 					filename = 'foo.txt',
 					fileContent = 'foo',
+					fileDescription = 'boo',
 					fixture = getFixture('files/post_files_content_200');
 				uploadMock
 					.post('/2.0/files/content', body => {
@@ -1277,6 +1278,7 @@ describe('Endpoint', () => {
 						assert.equal(lines[2], '');
 						var attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', filename);
+						assert.propertyVal(attributes, 'description', fileDescription);
 						assert.nestedPropertyVal(attributes, 'parent.id', folderID);
 						assert.match(lines[4], /^-+\d+$/);
 						assert.equal(
@@ -1301,6 +1303,7 @@ describe('Endpoint', () => {
 					folderID,
 					filename,
 					fileContent,
+					{ description: fileDescription },
 					(err, data) => {
 						assert.isNull(err);
 						assert.deepEqual(data, JSON.parse(fixture));
@@ -1312,6 +1315,7 @@ describe('Endpoint', () => {
 				var folderID = '0',
 					filename = 'foo.txt',
 					fileContent = 'foo',
+					fileDescription = 'boo',
 					fixture = getFixture('files/post_files_content_200');
 				uploadMock
 					.post('/2.0/files/content', body => {
@@ -1325,6 +1329,7 @@ describe('Endpoint', () => {
 						assert.equal(lines[2], '');
 						var attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', filename);
+						assert.propertyVal(attributes, 'description', fileDescription);
 						assert.nestedPropertyVal(attributes, 'parent.id', folderID);
 						assert.match(lines[4], /^-+\d+$/);
 						assert.equal(
@@ -1349,6 +1354,7 @@ describe('Endpoint', () => {
 					folderID,
 					filename,
 					fileContent,
+					{ description: fileDescription },
 					(err, data) => {
 						assert.isNull(err);
 						assert.deepEqual(data, JSON.parse(fixture));
@@ -1360,10 +1366,12 @@ describe('Endpoint', () => {
 				var folderID = '0',
 					filename = 'foo.txt',
 					someContent = 'Some content',
+					fileDescription = 'boo',
 					base64Content = Buffer.from(someContent, 'utf8').toString('base64'),
 					fixture = getFixture('files/post_files_content_200'),
 					options = {
-						content_length: Buffer.byteLength(base64Content, 'base64')
+						content_length: Buffer.byteLength(base64Content, 'base64'),
+						description: fileDescription
 					},
 					base64Buffer = Buffer.from(base64Content, 'base64');
 				var readable = new Readable();
@@ -1383,6 +1391,7 @@ describe('Endpoint', () => {
 						assert.equal(lines[2], '');
 						var attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', filename);
+						assert.propertyVal(attributes, 'description', fileDescription);
 						assert.nestedPropertyVal(attributes, 'parent.id', folderID);
 						assert.match(lines[4], /^-+\d+$/);
 						assert.equal(
@@ -1756,6 +1765,7 @@ describe('Endpoint', () => {
 				var fileID = '11111',
 					name = 'New file name.txt',
 					fileContent = 'foo',
+					fileDescription = 'boo',
 					fixture = getFixture('files/post_files_content_200');
 				uploadMock
 					.post(`/2.0/files/${fileID}/content`, body => {
@@ -1769,6 +1779,7 @@ describe('Endpoint', () => {
 						assert.equal(lines[2], '');
 						var attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', name);
+						assert.propertyVal(attributes, 'description', fileDescription);
 						assert.match(lines[4], /^-+\d+$/);
 						assert.equal(
 							lines[5],
@@ -1789,13 +1800,14 @@ describe('Endpoint', () => {
 					})
 					.reply(201, fixture);
 				return basicClient.files
-					.uploadNewFileVersion(fileID, fileContent, {name})
+					.uploadNewFileVersion(fileID, fileContent, {name, description: fileDescription})
 					.then(data => assert.deepEqual(data, JSON.parse(fixture)));
 			});
 			it('should make POST request to upload new file version content and not return an iterator', () => {
 				var fileID = '11111',
 					name = 'New file name.txt',
 					fileContent = 'foo',
+					fileDescription = 'boo',
 					fixture = getFixture('files/post_files_content_200');
 				uploadMock
 					.post(`/2.0/files/${fileID}/content`, body => {
@@ -1809,6 +1821,7 @@ describe('Endpoint', () => {
 						assert.equal(lines[2], '');
 						var attributes = JSON.parse(lines[3]);
 						assert.propertyVal(attributes, 'name', name);
+						assert.propertyVal(attributes, 'description', fileDescription);
 						assert.match(lines[4], /^-+\d+$/);
 						assert.equal(
 							lines[5],
@@ -1829,7 +1842,7 @@ describe('Endpoint', () => {
 					})
 					.reply(201, fixture);
 				return iteratorClient.files
-					.uploadNewFileVersion(fileID, fileContent, {name})
+					.uploadNewFileVersion(fileID, fileContent, {name, description: fileDescription})
 					.then(data => assert.deepEqual(data, JSON.parse(fixture)));
 			});
 		});
