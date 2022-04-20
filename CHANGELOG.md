@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/box/box-node-sdk/compare/v2.1.0...v2.2.0) (2022-04-20)
+
+
+### New Features and Enhancements
+
+* editable shared links ([#722](https://github.com/box/box-node-sdk/issues/722)) ([f0c0135](https://github.com/box/box-node-sdk/commit/f0c0135511fde46144e6c496432104321af443f6))
+
 ## [2.1.0](https://github.com/box/box-node-sdk/compare/v2.0.0...v2.1.0) (2022-03-28)
 
 
