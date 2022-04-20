@@ -1,5 +1,4 @@
-Folders
-=======
+# Folders
 
 Folder objects represent a folder from a user's account. They can be used to
 iterate through a folder's contents, collaborate a folder with another user or
@@ -18,19 +17,17 @@ group, and perform other common folder operations (move, copy, delete, etc.).
   - [Move a Folder](#move-a-folder)
   - [Rename a Folder](#rename-a-folder)
   - [Delete a Folder](#delete-a-folder)
-  - [Lock a folder](#lock)
-  - [Get All Locks on a Folder](#get-all-locks)
-  - [Delete a Lock on a Folder](#delete-lock)
+  - [Lock a folder](#lock-a-folder)
+  - [Get All Locks on a Folder](#get-all-locks-on-a-folder)
+  - [Delete a Lock on a Folder](#delete-a-lock-on-a-folder)
   - [Find a Folder for a Shared Link](#find-a-folder-for-a-shared-link)
-  - [Create a Shared Link](#create-a-shared-link)
-  - [Update a Shared Link](#update-a-shared-link)
+  - [Ceate or update a Shared Link](#create-or-update-a-shared-link)
   - [Get a Shared Link](#get-a-shared-link)
   - [Remove a Shared Link](#remove-a-shared-link)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Get a Folder's Information
---------------------------
+## Get a Folder's Information
 
 Folder information can be retrieved by calling the
 [`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#get)
@@ -122,8 +119,7 @@ client.folders.get('0')
     });
 ```
 
-Get a Folder's Items
---------------------
+## Get a Folder's Items
 
 Folder items can be retrieved by calling the
 [`folders.getItems(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getItems)
@@ -162,8 +158,7 @@ client.folders.getItems(
     });
 ```
 
-Update a Folder's Information
------------------------------
+## Update a Folder's Information
 
 Updating a folder's information is done by calling the 
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
@@ -254,8 +249,7 @@ client.folders.update('22222', { name: 'Renamed Folder', etag: '5', fields: 'nam
 	});
 ```
 
-Create a Folder
----------------
+## Create a Folder
 
 Create a child folder by calling the [`folders.create(parentFolderID, newFolderName, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#create) method.
 
@@ -314,8 +308,7 @@ client.folders.create('0', 'New Folder')
 ```
 
 
-Copy a Folder
--------------
+## Copy a Folder
 
 Call the
 [`folders.copy(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#copy)
@@ -398,8 +391,7 @@ client.folders.copy('12345', '0', {name: 'Renamed folder'})
     });
 ```
 
-Move a Folder
--------------
+## Move a Folder
 
 Call the [`folders.move(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#move) method with the destination you want the folder moved to.
 
@@ -470,8 +462,7 @@ client.folders.move(folderID, destinationfolderID)
     });
 ```
 
-Rename a Folder
----------------
+## Rename a Folder
 
 Use the [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update) method to rename a folder by passing a new name for the folder in `updates.name`.
 
@@ -481,8 +472,7 @@ client.folders.update('12345', {name: 'New Name'}, callback);
 ```
 
 
-Delete a Folder
----------------
+## Delete a Folder
 
 A folder can be deleted with the [`folders.delete(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#delete) method.
 
@@ -494,8 +484,7 @@ client.folders.delete('12345', {recursive: true})
     });
 ```
 
-Lock a Folder
--------------
+## Lock a Folder
 
 Use the [`folders.lock(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#lock) to lock a folder
 
@@ -528,8 +517,7 @@ client.folders.lock(folderID)
     });
 ```
 
-Get All Locks on a Folder
--------------------------
+## Get All Locks on a Folder
 
 Use the [`folders.getLocks(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#lock) to get all locks on a folder.
 
@@ -568,8 +556,7 @@ client.folders.getLocks(folderID)
     });
 ```
 
-Delete a Lock on a Folder
--------------------------
+## Delete a Lock on a Folder
 
 Use the [`folders.deleteLock(folderLockID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deleteLock) method to delete a folder lock.
 
@@ -581,8 +568,7 @@ client.folders.deleteLock(folderLockID)
     });
 ```
 
-Find a Folder for a Shared Link
------------------------------
+## Find a Folder for a Shared Link
 
 To find a folder given a shared link, use the
 [`sharedItems.get(url, password, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SharedItems.html#get)
@@ -598,48 +584,22 @@ client.sharedItems.get(
 });
 ```
 
-Create a Shared Link
---------------------
+## Create or update a Shared Link
 
-You can create a shared link for a folder by calling the
+To create or update a shared link for a file use
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
 method, passing a new `shared_link` value in the `updates` parameter.
 
-<!-- sample put_files_id add_shared_link -->
+<!-- sample put_folders_id shared_link_create -->
 ```js
 client.folders.update('12345', {
   shared_link: {
-    access: client.accessLevels.OPEN,
+    access: "open",
+    password: "do-not-use-this-password",
+    unshared_at: "2022-12-12T10:53:43-08:00",
+    vanity_name: "my-shared-link",
     permissions: {
-      can_download: false
-    }
-  }
-}).then(folder => {
-  // ...
-})
-```
-
-A set of shared link access level constants are available through the SDK for convenience:
-
-* `accessLevels.OPEN`
-* `accessLevels.COLLABORATORS`
-* `accessLevels.COMPANY`
-* `accessLevels.DEFAULT`
-* `accessLevels.DISABLED`
-
-Update a Shared Link
---------------------
-
-You can update a shared link for a folder by calling the
-[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
-method, passing a new `shared_link` value in the `updates` parameter.
-
-<!-- sample put_files_id add_shared_link -->
-```js
-client.folders.update('12345', {
-  shared_link: {
-    access: client.accessLevels.COMPANY,
-    permissions: {
+      can_view: true,
       can_download: true
     }
   }
@@ -647,9 +607,41 @@ client.folders.update('12345', {
   // ...
 })
 ```
+This will make a shared link to be `open` to everyone, but users will need to provide `password` to access the folder.
+This link will be unshared at `"2022-12-12T10:53:43-08:00"`. By setting `vanity_name` we create custom URL
+`https://app.box.com/v/my-shared-link`. Custom URLs should not be used when sharing sensitive content as vanity URLs are
+a lot easier to guess than regular shared links.
+Additionally, everyone who has this link can `view` and `download` the folder.
 
-Get a Shared Link
---------------------
+You can create shared link using default values
+```js
+client.folders.update('12345', {
+  shared_link: {}
+}).then(folder => {
+  // ...
+})
+```
+- Default `access` value comes from the access level specified by the enterprise admin.
+- Default `password`, `unshared_at`, `vanity_name` will be empty.
+- Default `permissions` allows to view and download folder.
+
+You can remove any field set on a link by sending value `null` (or empty object when it comes to `permissions`).
+This will cause it's value to be default. For example, let's remove `access` and `permissions`:
+```js
+client.folders.update('12345', {
+  shared_link: {
+    access: null,
+    permissions: {}
+  }
+}).then(folder => {
+  // ...
+})
+```
+This will remove `open` access, and it will fall back to default value set by the enterprise admin.
+The `permissions` we set on a shared link will be removed and default permissions will be applied.
+Other properties of the shared link will not be changed as we are not sending them.
+
+## Get a Shared Link
 
 To check for an existing shared link on a folder, inspect the
 `shared_link` field on a folder object.
@@ -661,13 +653,12 @@ link URL.
 ```js
 client.folders.get('11111', { fields: 'shared_link' })
   .then(folder => {
-    let url = folder.shared_link.download_url
+    let url = folder.shared_link.url
     //...
   })
 ```
 
-Remove a Shared Link
---------------------
+## Remove a Shared Link
 
 A shared link for a folder can be removed calling
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
