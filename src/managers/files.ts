@@ -737,6 +737,7 @@ class Files {
 	 * @param {string} [options.content_created_at] - RFC 3339 timestamp when the file was created
 	 * @param {string} [options.content_modified_at] - RFC 3339 timestamp when the file was last modified
 	 * @param {int} [options.content_length] - Optional length of the content. Required if content is a read stream of any type other than fs stream.
+	 * @param {string} [options.description] - Optional description of the uploaded file.
 	 * @param {Function} [callback] - called with data about the upload if successful, or an error if the
 	 * upload failed
 	 * @returns {Promise<Object>} A promise resolving to the uploaded file
@@ -750,6 +751,7 @@ class Files {
 					content_created_at?: string;
 					content_modified_at?: string;
 					content_length?: number;
+					description?: string;
 			  }
 			| Function,
 		callback?: Function
@@ -799,6 +801,7 @@ class Files {
 	 * @param {string} [options.content_modified_at] - RFC 3339 timestamp when the file was last modified
 	 * @param {string} [options.name] - A new name for the file
 	 * @param {int} [options.content_length] - Optional length of the content. Required if content is a read stream of any type other than fs stream.
+	 * @param {string} [options.description] - Optional description of the uploaded new file version.
 	 * @param {Function} [callback] - called with data about the upload if successful, or an error if the
 	 * upload failed
 	 * @returns {Promise<Object>} A promise resolving to the uploaded file
@@ -811,6 +814,7 @@ class Files {
 					content_modified_at?: string;
 					name?: string;
 					content_length?: number;
+					description?: string;
 			  }
 			| Function,
 		callback?: Function
@@ -1549,6 +1553,7 @@ class Files {
 	 * @param {string} fileHash - The base64-encoded SHA-1 hash of the file being uploaded
 	 * @param {Object} [options] - Optional parameters set on the created file, can be left null
 	 * @param {UploadPart[]} [options.parts] The list of uploaded parts to be committed, will be fetched from the API otherwise
+	 * @param {string} [options.description] - Optional description of the uploaded file.
 	 * @param {Function} [callback] - Passed the new file information if successful
 	 * @returns {Promise<Object>} A promise resolving to the uploaded file object
 	 */
@@ -1557,6 +1562,7 @@ class Files {
 		fileHash: string,
 		options?: {
 			parts?: UploadPart[];
+			description?: string;
 		},
 		callback?: Function
 	) {
