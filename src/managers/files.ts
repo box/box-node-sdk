@@ -62,15 +62,15 @@ type FileSharedLinkAccess = 'open' | 'company' | 'collaborators' | null;
 
 type FileSharedLinkPermissions = {
 	/**
-	 * If the shared link allows for viewing only of files. This can only be set when access is set to open or company.
+	 * If the shared link allows only to view files. This can only be set when access is set to open or company.
 	 */
 	can_view?: true,
 	/**
-	 * If the shared link allows for downloading of files. This can only be set when access is set to open or company.
+	 * If the shared link allows only to download files. This can only be set when access is set to open or company.
 	 */
 	can_download?: boolean,
 	/**
-	 * If the shared link allows for editing of the files. This can only be set when access is set to open or company.
+	 * If the shared link allows only to edit files. This can only be set when access is set to open or company.
 	 */
 	can_edit?: boolean,
 }

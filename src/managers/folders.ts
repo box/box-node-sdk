@@ -17,11 +17,11 @@ type FolderSharedLinkAccess = 'open' | 'company' | 'collaborators' | null;
 
 type FolderSharedLinkPermissions = {
 	/**
-	 * If the shared link allows for viewing only of folders. This can only be set when access is set to open or company.
+	 * If the shared link allows only to view folders. This can only be set when access is set to open or company.
 	 */
 	can_view?: true,
 	/**
-	 * If the shared link allows for downloading of folders. This can only be set when access is set to open or company.
+	 * If the shared link allows only to download folders. This can only be set when access is set to open or company.
 	 */
 	can_download?: boolean
 }
