@@ -590,7 +590,7 @@ To create or update a shared link for a file use
 [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
 method, passing a new `shared_link` value in the `updates` parameter.
 
-<!-- sample put_folders_id shared_link_create -->
+<!-- sample put_folders_id add_shared_link -->
 ```js
 client.folders.update('12345', {
   shared_link: {
