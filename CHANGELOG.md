@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/box/box-node-sdk/compare/v2.2.0...v2.3.0) (2022-04-28)
+
+
+### New Features and Enhancements
+
+* Add `description` parameter to `uploadFile` methods ([#730](https://github.com/box/box-node-sdk/issues/730)) ([2596584](https://github.com/box/box-node-sdk/commit/2596584dffb44c1995c8b6b3faa67564f4d32499))
+
+### Bug Fixes
+
+* added missing `js-docs` on shared links ([#731](https://github.com/box/box-node-sdk/issues/731)) ([3554d41](https://github.com/box/box-node-sdk/commit/3554d41d9050e7a81224c35e3e2e257604a0b41b))
+
 ## [2.2.0](https://github.com/box/box-node-sdk/compare/v2.1.0...v2.2.0) (2022-04-20)
 
 
