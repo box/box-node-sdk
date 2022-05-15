@@ -161,6 +161,22 @@ describe('APIRequest', function() {
 			apiRequest.execute();
 		});
 
+		it('should emit response event with error when streaming request completes with a client error', function() {
+			var apiRequest = new APIRequest(config, eventBusFake);
+			var response = {statusCode: 429};
+			var error = new Error('429 - Too Many Requests');
+
+			sandbox.mock(eventBusFake).expects('emit')
+				.withArgs('response', sinon.match.instanceOf(Error).and(sinon.match.has('message', error.message)));
+
+			var requestOnStub = sandbox.stub(requestObjectFake, 'on');
+			requestOnStub.withArgs('error');
+			requestOnStub.withArgs('response').yields(response);
+			sandbox.stub(requestObjectFake, 'emit');
+
+			apiRequest.execute();
+		});
+
 		it('should return a request error to the callback when one occurs and a callback exists', function(done) {
 			var requestError = new Error('ECONNREFUSED');
 
