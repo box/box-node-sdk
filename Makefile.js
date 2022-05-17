@@ -87,8 +87,7 @@ target.lint = function() {
 	code += nodeCLI.exec('jsonlint', 'package.json', '-q', '-V ./config/package.schema.json').code;
 
 	echo('Validating JavaScript files');
-	code += nodeCLI.exec('eslint', '--fix', JS_FILES).code;
-	code += nodeCLI.exec('eslint', '--fix', './tests').code;
+	code += nodeCLI.exec('eslint', '--fix', ...JS_FILES, './tests').code;
 
 	return code;
 };

@@ -144,6 +144,30 @@ function isTemporaryError(response: APIRequestResponseObject) {
 	return false;
 }
 
+function isClientErrorResponse(response: { statusCode: number }) {
+	if (!response || typeof response !== 'object') {
+		throw new Error(
+			`Expecting response to be an object, got: ${String(response)}`
+		);
+	}
+	const { statusCode } = response;
+	if (typeof statusCode !== 'number') {
+		throw new Error(
+			`Expecting status code of response to be a number, got: ${String(
+				statusCode
+			)}`
+		);
+	}
+	return 400 <= statusCode && statusCode < 500;
+}
+
+function createErrorForResponse(response: { statusCode: number }): Error {
+	var errorMessage = `${response.statusCode} - ${
+		(httpStatusCodes as any)[response.statusCode]
+	}`;
+	return new Error(errorMessage);
+}
+
 /**
  * Determine whether a given request can be retried, based on its options
  * @param {Object} options The request options
@@ -237,10 +261,16 @@ class APIRequest {
 		} else {
 			this.request = request(this.config.request);
 			this.stream = this.request;
-			this.stream.on('error', (err) => this.eventBus.emit('response', err));
-			this.stream.on('response', (response) =>
-				this.eventBus.emit('response', null, response)
-			);
+			this.stream.on('error', (err) => {
+				this.eventBus.emit('response', err);
+			});
+			this.stream.on('response', (response) => {
+				if (isClientErrorResponse(response)) {
+					this.eventBus.emit('response', createErrorForResponse(response));
+					return;
+				}
+				this.eventBus.emit('response', null, response);
+			});
 		}
 	}
 
@@ -270,10 +300,7 @@ class APIRequest {
 		// If the API connected successfully but responded with a temporary error (like a 5xx code,
 		// a rate limited response, etc.) then this is considered an error as well.
 		if (!err && isTemporaryError(response)) {
-			var errorMessage = `${response.statusCode} - ${
-				(httpStatusCodes as any)[response.statusCode]
-			}`;
-			err = new Error(errorMessage);
+			err = createErrorForResponse(response);
 		}
 
 		if (err) {
