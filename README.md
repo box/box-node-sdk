@@ -229,13 +229,17 @@ We use a modified version of [Semantic Versioning](https://semver.org/) for all 
 
 Only the current MAJOR version of SDK is supported. New features, functionality, bug fixes, and security updates will only be added to the current MAJOR version.
 
-A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often). At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to allow customers to plan for the upgrade. We always recommend that all users run the latest available minor release for whatever major version is in use. We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
+A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  
+Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often). 
+At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to 
+allow customers to plan for the upgrade. We always recommend that all users run the latest available minor release for whatever major version is in use. 
+We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
 
 ### Version schedule
 
 | Version | Supported Environments | State     | First Release | EOL/Terminated |
 |---------|------------------------|-----------|---------------|----------------|
-| 2       |                        | Supported | 29 Sep 2021   | TBD            |
+| 2       | Node.js >= 6 and <= 14 | Supported | 29 Sep 2021   | TBD            |
 | 1       |                        | EOL       | 28 Mar 2019   | 29 Sep 2021    |
 
 ## Questions, Bugs, and Feature Requests?
