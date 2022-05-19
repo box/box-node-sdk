@@ -2,7 +2,7 @@ Box Node.js SDK
 ===============
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/box/box-node-sdk.svg)](https://greenkeeper.io/)
-![Platform](https://img.shields.io/badge/node-6--14-blue)
+![Platform](https://img.shields.io/badge/node-8--14-blue)
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
@@ -239,7 +239,7 @@ We highly recommend upgrading to the latest SDK major release at the earliest co
 
 | Version | Supported Environments | State     | First Release | EOL/Terminated |
 |---------|------------------------|-----------|---------------|----------------|
-| 2       | Node.js >= 6 and <= 14 | Supported | 29 Sep 2021   | TBD            |
+| 2       | Node.js >= 8 and <= 14 | Supported | 29 Sep 2021   | TBD            |
 | 1       |                        | EOL       | 28 Mar 2019   | 29 Sep 2021    |
 
 ## Questions, Bugs, and Feature Requests?
