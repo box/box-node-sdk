@@ -31,7 +31,7 @@
     "docs-dev": "node Makefile.js docsDev",
     "doctoc": "doctoc docs",
     "deps": "npm prune && npm install",
-	"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
+    "changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
   },
   "dependencies": {
     "@types/bluebird": "^3.5.35",
