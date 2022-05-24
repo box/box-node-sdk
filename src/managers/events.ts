@@ -172,10 +172,10 @@ class Events {
 	 * @returns {Promise<Object>} A promise resolving to the collection of events
 	 */
 	get(options?: Record<string, any>, callback?: Function) {
-		var params = {
+		const params = {
 			qs: options,
 		};
-		var apiPath = urlPath(BASE_PATH);
+		const apiPath = urlPath(BASE_PATH);
 		return this.client.wrapWithDefaultHandler(this.client.get)(
 			apiPath,
 			params,
@@ -193,7 +193,7 @@ class Events {
 	 * @returns {Promise<Object>} A promise resolving to the long poll info
 	 */
 	getLongPollInfo(callback?: Function) {
-		var apiPath = urlPath(BASE_PATH);
+		const apiPath = urlPath(BASE_PATH);
 		return this.client
 			.options(apiPath, {})
 			.then((response: any /* FIXME */) => {
@@ -201,7 +201,7 @@ class Events {
 					throw errors.buildUnexpectedResponseError(response);
 				}
 
-				var longpollInfo = response.body.entries.find(
+				let longpollInfo = response.body.entries.find(
 					(entry: any /* FIXME */) => entry.type === 'realtime_server'
 				);
 
@@ -242,7 +242,7 @@ class Events {
 			| Function,
 		callback?: Function
 	) {
-		var self = this;
+		const self = this;
 		if (typeof streamPosition === 'string') {
 			if (typeof options === 'function') {
 				callback = options;
@@ -301,10 +301,11 @@ class Events {
 			eventTypeFilter?: EventType[];
 			pollingInterval?: number;
 			chunkSize?: number;
+			streamType?: 'admin_logs' | 'admin_logs_streaming';
 		},
 		callback?: Function
 	) {
-		var self = this;
+		const self = this;
 		return Promise.resolve(
 			new EnterpriseEventStream(self.client, options)
 		).asCallback(callback);
