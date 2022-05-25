@@ -171,7 +171,10 @@ class Events {
 	 * @param {Function} [callback] Passed the current stream position if successful
 	 * @returns {Promise<Object>} A promise resolving to the collection of events
 	 */
-	get(options?: Record<string, any>, callback?: Function) {
+	get(options?: {
+		[key: string]: any;
+		streamType?: 'admin_logs' | 'admin_logs_streaming' | string
+	}, callback?: Function) {
 		const params = {
 			qs: options,
 		};
