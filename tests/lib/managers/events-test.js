@@ -45,6 +45,7 @@ describe('Events', () => {
 		mockery.registerMock('../event-stream', EventStreamConstructorStub);
 		mockery.registerMock('../enterprise-event-stream', EnterpriseEventStreamConstructorStub);
 		mockery.registerAllowable(MODULE_FILE_PATH, true);
+		// eslint-disable-next-line global-require
 		Events = require(MODULE_FILE_PATH);
 		events = new Events(boxClientFake);
 	});
@@ -130,7 +131,7 @@ describe('Events', () => {
 	});
 	describe('get()', () => {
 		it('should make API call to get events when called', () => {
-			var qs = {
+			const qs = {
 				stream_position: TEST_STREAM_POSITION
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
@@ -147,7 +148,7 @@ describe('Events', () => {
 			events.get({});
 		});
 		it('should pass results to callback when callback is present', done => {
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
 			events.get({}, (err, data) => {
@@ -157,19 +158,31 @@ describe('Events', () => {
 			});
 		});
 		it('should return promise resolving to results when called', () => {
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return events.get()
 				.then(data => assert.equal(data, response));
 		});
 		it('should make API call with stream type to get events when called', () => {
-			var qs = {
+			const qs = {
 				stream_type: 'admin_logs_streaming'
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/events', sinon.match({qs}));
+
+			events.get(qs);
+		});
+		it('should remove start and end dates when admin_logs_streaming', () => {
+			const qs = {
+				stream_type: 'admin_logs_streaming',
+				created_after: '2001-01-01T00:00:00-08:00',
+				created_before: '2001-02-01T00:00:00-08:00'
+			};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/events', sinon.match({ qs: {stream_type: 'admin_logs_streaming'} }));
 
 			events.get(qs);
 		});

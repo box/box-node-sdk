@@ -167,17 +167,45 @@ class Events {
 	 * API Endpoint: '/events'
 	 * Method: GET
 	 *
+	 * To get events from admin events stream you have to pick stream_type from `admin_logs` or `admin_logs_streaming`.
+	 * The `admin_logs` stream emphasis is on completeness over latency,
+	 * which means that Box will deliver admin events in chronological order and without duplicates,
+	 * but with higher latency. You can specify start and end time/dates.
+	 *
+	 * To monitor recent events that have been generated within Box across the enterprise use
+	 * `admin_logs_streaming` as stream type. The emphasis for this feed is on low latency rather than chronological
+	 * accuracy, which means that Box may return events more than once and out of chronological order.
+	 * Events are returned via the API around 12 seconds after they are processed by Box
+	 * (the 12 seconds buffer ensures that new events are not written after your cursor position).
+	 * Only two weeks of events are available via this feed, and you cannot set start and end time/dates.
+	 *
 	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+	 * @param {string} [options.stream_type] - From which stream events should be selected.
+	 * 	Possible values are `admin_logs` and `admin_logs_streaming`
+	 * @param {string} [options.created_after] - The date to start from in ISO-8601 timestamp format: '2001-01-01T00:00:00-08:00'
+	 * @param {string} [options.created_before] - The date to end at in ISO-8601 timestamp format: '2001-01-01T00:00:00-08:00'
+	 * @param {string} [options.event_type] - String of event types to return coma separated: for example 'DOWNLOAD,UPLOAD'
+	 * @param {number} [options.limit] - Number of events to fetch per call
+	 * @param {string} [options.stream_position] - The stream position to start from (pass '0' for all past events)
 	 * @param {Function} [callback] Passed the current stream position if successful
 	 * @returns {Promise<Object>} A promise resolving to the collection of events
 	 */
 	get(options?: {
 		[key: string]: any;
-		streamType?: 'admin_logs' | 'admin_logs_streaming' | string
+		stream_type?: 'admin_logs' | 'admin_logs_streaming',
+		created_after?: string,
+		created_before?: string,
+		event_type?: string,
+		limit?: number,
+		stream_position?: string
 	}, callback?: Function) {
 		const params = {
 			qs: options,
 		};
+		if(options && options.stream_type && options.stream_type === 'admin_logs_streaming') {
+			const {created_after, created_before, ...filteredOptions} = options;
+			params.qs = filteredOptions;
+		}
 		const apiPath = urlPath(BASE_PATH);
 		return this.client.wrapWithDefaultHandler(this.client.get)(
 			apiPath,
@@ -286,6 +314,20 @@ class Events {
 	 * Once the stream catches up to the current time, it will begin polling every 'pollingInterval' seconds.
 	 * If 'pollingInterval' = 0, then the stream will end when it catches up to the current time (no polling).
 	 *
+	 * By default, stream pools `admin_logs` for events. The emphasis for this stream is on completeness over latency,
+	 * which means that Box will deliver admin events in chronological order and without duplicates,
+	 * but with higher latency. You can specify start and end time/dates.
+	 *
+	 * To monitor recent events that have been generated within Box across the enterprise use
+	 * `admin_logs_streaming` as stream type. The emphasis for this feed is on low latency rather than chronological
+	 * accuracy, which means that Box may return events more than once and out of chronological order.
+	 * Events are returned via the API around 12 seconds after they are processed by Box
+	 * (the 12 seconds buffer ensures that new events are not written after your cursor position).
+	 * Only two weeks of events are available via this feed, and you cannot set start and end time/dates.
+	 *
+	 * This method will only work with an API connection for an enterprise admin account
+	 * or service account with a manage enterprise properties.
+	 *
 	 * @param {Object} [options] - Options
 	 * @param {string} [options.streamPosition] - The stream position to start from (pass '0' for all past events)
 	 * @param {string} [options.startDate] - The date to start from
@@ -293,6 +335,8 @@ class Events {
 	 * @param {EventType[]} [options.eventTypeFilter] - Array of event types to return
 	 * @param {int} [options.pollingInterval=60] - Polling interval (in seconds).  Pass 0 for no polling.
 	 * @param {int} [options.chunkSize=500] - Number of events to fetch per call (max = 500)
+	 * @param {string} [options.streamType] - From which stream events should be selected.
+	 * 	Possible values are `admin_logs` and `admin_logs_streaming`
 	 * @param {Function} [callback] Passed the events stream if successful
 	 * @returns {Promise<EnterpriseEventStream>} A promise resolving to the enterprise event stream
 	 */
