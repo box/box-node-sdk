@@ -41,14 +41,12 @@ Events received from the API are then forwarded to any listeners.
 <!-- sample options_events -->
 ```js
 client.events.getEventStream(function(err, stream) {
-
-	if (err) {
-		// handle error
-	}
-
-	stream.on('data', function(event) {
-		// handle the event
-	});
+  if (err) {
+    // handle error
+  }
+  stream.on('data', function(event) {
+    // handle the event
+  });
 });
 ```
 
@@ -122,15 +120,33 @@ Events received from the API are then forwarded to the listener.
 <!-- sample options_events enterprise -->
 ```js
 client.events.getEnterpriseEventStream(function(err, stream) {
-	
-	if (err) { // Handle error }
-
-	stream.on('data', function(event) {
-		// Handle the event
-	});
+  if (err) { 
+    // Handle error 
+  }
+  stream.on('data', function(event) {
+    // Handle the event
+  });
 });
 ```
 
+To get events from admin events stream you have to pick stream_type from `admin_logs` or `admin_logs_streaming`.
+By default, the `admin_logs` stream is selected. Emphasis of this stream is on completeness over latency,
+which means that Box will deliver admin events in chronological order and without duplicates,
+but with higher latency. You can specify start and end time/dates.
+
+To monitor recent events that have been generated within Box across the enterprise use
+`admin_logs_streaming` as stream type. The emphasis for this feed is on low latency rather than chronological
+accuracy, which means that Box may return events more than once and out of chronological order.
+Events are returned via the API around 12 seconds after they are processed by Box
+(the 12 seconds buffer ensures that new events are not written after your cursor position).
+Only two weeks of events are available via this feed, and you cannot set start and end time/dates.
+
+Use `streamType` option to select stream type:
+```js
+client.events.getEnterpriseEventStream({
+  streamType: 'admin_logs_streaming'
+}, callback);
+```
 By default, the stream will start at the current time.  You can also start the stream
 from a specific date or from a previous stream position.  To start from the earliest available events (~1 year),
 pass `streamPosition = '0'`.  The stream will fetch all past events as quickly as your listener consumes them.
@@ -139,31 +155,25 @@ Once the stream catches up to the current time, it will begin polling for new ev
 
 ```js
 client.events.getEnterpriseEventStream({
-    startDate: '2016-01-01T00:00:00-08:00',
-    pollingInterval: 60
+  startDate: '2016-01-01T00:00:00-08:00',
+  pollingInterval: 60
 }, callback);
 ```
 
-Note that Box buffers enterprise events for ~60 seconds before making them available to the `/events` API
-(to ensure that events are delivered in-order and without duplicates), so polling with an interval of less than
-60 seconds is not normally needed.
+Note that Box buffers enterprise events for ~60 seconds when using `admin_logs` stream type, before making them available 
+to the `/events` API (to ensure that events are delivered in-order and without duplicates), so polling with an interval
+of less than 60 seconds is not normally needed with this event type. When using `admin_logs_streaming` you can set pooling 
+interval to 12 seconds.
 
-If you pass `pollingInterval = 0`, then the stream will not use polling, but will end when all of the currently
+If you pass `pollingInterval = 0`, then the stream will not use polling, but will end when all the currently
 available events have been delivered.
 
 ```js
 client.events.getEnterpriseEventStream({
-        startDate: '2016-01-01T00:00:00-08:00',
-        endDate: '2017-01-01T00:00:00-08:00',
-        pollingInterval: 0
-    }, function(err, stream) {
-	
-    if (err) { // Handle error }
-
-    stream.on('end', function() {
-        // Reached the end of the stream.
-    });
-});
+  startDate: '2016-01-01T00:00:00-08:00',
+  endDate: '2017-01-01T00:00:00-08:00',
+  pollingInterval: 0
+}, callback);
 ```
 
 You can also filter the event stream to only receive specific event types.  The set of enterprise event types
