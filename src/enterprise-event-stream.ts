@@ -156,7 +156,7 @@ class EnterpriseEventStream extends Readable {
 	fetchEvents(callback: Function) {
 		const self = this,
 			params: {
-				stream_type?: string;
+				stream_type?: 'admin_logs' | 'admin_logs_streaming';
 				stream_position?: string;
 				created_after?: string;
 				created_before?: string;
