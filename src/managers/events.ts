@@ -192,7 +192,7 @@ class Events {
 	 */
 	get(options?: {
 		[key: string]: any;
-		stream_type?: 'admin_logs' | 'admin_logs_streaming',
+		stream_type?: string,
 		created_after?: string,
 		created_before?: string,
 		event_type?: string,
