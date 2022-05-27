@@ -211,7 +211,7 @@ class BoxClient {
 	sharedItems: any;
 	metadata: any;
 	collections: any;
-	events: any;
+	events: Events;
 	search: any;
 	tasks: any;
 	trash: any;
