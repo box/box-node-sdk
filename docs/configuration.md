@@ -2,6 +2,22 @@
 
 The `BoxSDKNode` is the base object used to configure [client](./client.md).
 
+## Configure Proxy 
+
+To set up your proxy, add your proxy settings to the `BoxSDK` object as shown below. You must include the proxy url, which should contain the `protocol`, `url`, and `port`, which in the case below are `http`, `sample.proxyurl.com` and `80` respectively. While the port, username and password are optional, the protocol and url are required. If your proxy does not require authentication, you can set the username and password to null or omit the parameters completely. The supported proxy protocols are `http`, `https`, `socks`, `socks4`, `socks4a`, `socks5`, `socks5h`, `pac+data`, `pac+file`, `pac+ftp`, `pac+http` and `pac+https`.
+
+```javascript
+let sdk = new BoxSDK({
+    clientID: 'YOUR-CLIENT-ID',
+    clientSecret: 'YOUR-CLIENT_SECRET',
+    proxy: {
+        url: 'http://sample.proxyurl.com:80',
+        username: 'sample-username',
+        password: 'sample-password',
+    }
+});
+```
+
 ## Configure how client retries calls and handles timeouts
 
 You can confugure how many retries, how long to wait between retries or upload timeout:
