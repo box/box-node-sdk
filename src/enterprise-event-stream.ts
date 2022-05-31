@@ -20,6 +20,7 @@ type Options = {
 	eventTypeFilter?: EventType[];
 	pollingInterval?: number;
 	chunkSize?: number;
+	streamType?: 'admin_logs' | 'admin_logs_streaming';
 };
 
 type EventType = string /* FIXME */;
@@ -31,6 +32,7 @@ type EventType = string /* FIXME */;
 const DEFAULT_OPTIONS = Object.freeze({
 	pollingInterval: 60, // seconds
 	chunkSize: 500,
+	streamType: 'admin_logs'
 });
 
 // ------------------------------------------------------------------------------
@@ -81,6 +83,7 @@ class EnterpriseEventStream extends Readable {
 
 		// Handle the case where the caller passes streamPosition = 0 instead of streamPosition = '0'.
 		if (
+			this._options.streamType === 'admin_logs' &&
 			!this._options.startDate &&
 			!this._options.streamPosition &&
 			(this._options.streamPosition as any) !== 0
@@ -153,14 +156,14 @@ class EnterpriseEventStream extends Readable {
 	fetchEvents(callback: Function) {
 		const self = this,
 			params: {
-				stream_type?: string;
+				stream_type?: 'admin_logs' | 'admin_logs_streaming';
 				stream_position?: string;
 				created_after?: string;
 				created_before?: string;
 				event_type?: string;
 				limit?: number;
 			} = {
-				stream_type: 'admin_logs',
+				stream_type: this._options.streamType
 			};
 
 		// Use the current stream position.
@@ -169,11 +172,11 @@ class EnterpriseEventStream extends Readable {
 			params.stream_position = this._streamPosition;
 		}
 
-		if (this._options.startDate) {
+		if (this._options.streamType === 'admin_logs' && this._options.startDate) {
 			params.created_after = this._options.startDate;
 		}
 
-		if (this._options.endDate) {
+		if (this._options.streamType === 'admin_logs' && this._options.endDate) {
 			params.created_before = this._options.endDate;
 		}
 
