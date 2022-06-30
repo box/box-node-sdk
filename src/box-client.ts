@@ -30,6 +30,7 @@ import Trash from './managers/trash';
 import Users from './managers/users';
 import WebLinks from './managers/web-links';
 import Webhooks from './managers/webhooks';
+import FileRequestsManager from "./managers/file-requests-manager";
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -204,6 +205,7 @@ class BoxClient {
 
 	users: any;
 	files: Files;
+	fileRequests: FileRequestsManager;
 	folders: Folders;
 	comments: any;
 	collaborations: any;
@@ -276,6 +278,7 @@ class BoxClient {
 		// Attach API Resource Managers
 		this.users = new Users(this);
 		this.files = new Files(this);
+		this.fileRequests = new FileRequestsManager(this);
 		this.folders = new Folders(this);
 		this.comments = new Comments(this);
 		this.collaborations = new Collaborations(this);

@@ -1,0 +1,27 @@
+{
+  "folder": {
+	"id": "157979815641",
+	"type": "folder",
+	"name": "Folder with reqes",
+	"etag": "0",
+	"sequence_id": "0"
+  },
+  "created_by": {
+	"id": "18188499134",
+	"type": "user",
+	"name": "Test",
+	"login": "someone@somewhere.com"
+  },
+  "id": "2484517969",
+  "type": "file_request",
+  "title": "Submit files",
+  "description": "",
+  "etag": "1656573853000",
+  "is_email_required": true,
+  "is_description_required": false,
+  "expires_at": "2022-07-30T15:00:00-07:00",
+  "url": "/f/5131693291084d9f9f39954e56172513",
+  "created_at": "2022-06-30T00:22:59-07:00",
+  "updated_at": "2022-06-30T00:24:13-07:00",
+  "status": "active"
+}
