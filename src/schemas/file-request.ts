@@ -4,7 +4,7 @@ import {UserMini} from "./user-mini";
 export interface FileRequest {
 	id: string;
 	type: 'file_request';
-	title: 'Submit files';
+	title: string;
 	description: string;
 	etag: string;
 	is_email_required: boolean;

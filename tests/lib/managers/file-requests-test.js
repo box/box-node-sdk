@@ -38,6 +38,8 @@ function getFixture(fixture) {
 // Tests
 // ------------------------------------------------------------------------------
 describe('FileRequests', () => {
+	const fileRequestId = '234567';
+
 	before(() => {
 		// Enable Mockery
 		mockery.enable({
@@ -62,7 +64,6 @@ describe('FileRequests', () => {
 		mockery.disable();
 	});
 	it('get by id', async() => {
-		const fileRequestId = '234567';
 		const fixture = getFixture('file-requests/get_file_requests_id_200');
 		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 		sandbox
@@ -72,5 +73,13 @@ describe('FileRequests', () => {
 			.returns(Promise.resolve(fixture));
 		const response = await fileRequests.getById(fileRequestId);
 		assert.strictEqual(response.folder, fixture.folder);
+	});
+	it('delete', async() => {
+		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+		sandbox
+			.mock(boxClientFake)
+			.expects('del')
+			.withArgs(`${BASE_PATH}/${fileRequestId}`);
+		await fileRequests.delete(fileRequestId);
 	});
 });

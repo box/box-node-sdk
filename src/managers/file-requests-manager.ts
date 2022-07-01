@@ -10,9 +10,26 @@ class FileRequestsManager {
 		this.client = client;
 	}
 
+	/**
+	 * Gets File Request by ID.
+	 * @param fileRequestId File Request ID
+	 * @returns {Promise<schemas.FileRequest>} Promise with FileRequest details
+	 */
 	getById(fileRequestId: string): Promise<schemas.FileRequest> {
 		const apiPath = urlPath('file_requests', fileRequestId);
 		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath
+		);
+	}
+
+	/**
+	 * Delete File Request.
+	 * @param fileRequestId File Request ID
+	 * @returns {Promise<void>} A promise resolving to nothing
+	 */
+	delete(fileRequestId: string): Promise<schemas.FileRequest> {
+		const apiPath = urlPath('file_requests', fileRequestId);
+		return this.client.wrapWithDefaultHandler(this.client.del)(
 			apiPath
 		);
 	}
