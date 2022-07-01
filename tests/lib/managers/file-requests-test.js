@@ -34,12 +34,12 @@ function getFixture(fixture) {
 		path.resolve(__dirname, `../../fixtures/endpoints/${fixture}.json`)
 	));
 }
+
 // ------------------------------------------------------------------------------
 // Tests
 // ------------------------------------------------------------------------------
 describe('FileRequests', () => {
 	const fileRequestId = '234567';
-
 	before(() => {
 		// Enable Mockery
 		mockery.enable({
@@ -72,7 +72,7 @@ describe('FileRequests', () => {
 			.withArgs(`${BASE_PATH}/${fileRequestId}`)
 			.returns(Promise.resolve(fixture));
 		const response = await fileRequests.getById(fileRequestId);
-		assert.strictEqual(response.folder, fixture.folder);
+		assert.strictEqual(response, fixture);
 	});
 	it('delete', async() => {
 		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
@@ -81,5 +81,16 @@ describe('FileRequests', () => {
 			.expects('del')
 			.withArgs(`${BASE_PATH}/${fileRequestId}`);
 		await fileRequests.delete(fileRequestId);
+	});
+	it('copy existing file request', async() => {
+		const fixture = getFixture('file-requests/get_file_requests_id_200');
+		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+		sandbox
+			.mock(boxClientFake)
+			.expects('post')
+			.withArgs(`${BASE_PATH}/${fileRequestId}/copy`)
+			.returns(Promise.resolve(fixture));
+		const response = await fileRequests.copy(fileRequestId, {folder: {id: '1234', type: 'folder'}});
+		assert.strictEqual(response, fixture);
 	});
 });
