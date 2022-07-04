@@ -93,4 +93,36 @@ describe('FileRequests', () => {
 		const response = await fileRequests.copy(fileRequestId, {folder: {id: '1234', type: 'folder'}});
 		assert.strictEqual(response, fixture);
 	});
+	it('update existing file request', async() => {
+		const fixture = getFixture('file-requests/get_file_requests_id_200');
+		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+		const updateRequest = {
+			title: 'Updated title'
+		};
+		sandbox
+			.mock(boxClientFake)
+			.expects('put')
+			.withArgs(`${BASE_PATH}/${fileRequestId}`, {body: updateRequest})
+			.returns(Promise.resolve(fixture));
+		const response = await fileRequests.update(fileRequestId, updateRequest);
+		assert.strictEqual(response, fixture);
+	});
+	it('update existing file request with version checking', async() => {
+		const fixture = getFixture('file-requests/get_file_requests_id_200');
+		sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+		const updateRequest = {
+			title: 'Updated title'
+		};
+		const etag = '2345678765432';
+		sandbox
+			.mock(boxClientFake)
+			.expects('put')
+			.withArgs(`${BASE_PATH}/${fileRequestId}`, {
+				body: updateRequest,
+				headers: {'if-match': etag}
+			})
+			.returns(Promise.resolve(fixture));
+		const response = await fileRequests.update(fileRequestId, updateRequest, etag);
+		assert.strictEqual(response, fixture);
+	});
 });

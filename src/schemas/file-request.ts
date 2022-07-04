@@ -21,7 +21,7 @@ export interface FileRequest {
 	folder: FolderMini;
 }
 
-export interface FileRequestCopyRequest {
+export interface FileRequestCopyBody {
 	folder: {
 		id: string;
 		type: 'folder';
@@ -32,4 +32,13 @@ export interface FileRequestCopyRequest {
 	is_description_required?: boolean;
 	is_email_required?: boolean;
 	status?: FileRequestStatus;
+}
+
+export interface FileRequestUpdateBody {
+	description?: string;
+	expires_at?: string;
+	is_description_required?: boolean;
+	is_email_required?: boolean;
+	status?: FileRequestStatus;
+	title?: string;
 }
