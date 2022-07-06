@@ -11,3 +11,5 @@ export * from './sign-request-signer-input.generated';
 export * from './sign-request-signer.generated';
 export * from './sign-request.generated';
 export * from './sign-requests.generated';
+export * from './file-request';
+export * from './user-mini';
