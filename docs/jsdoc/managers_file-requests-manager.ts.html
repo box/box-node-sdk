@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Interface: SignRequestSigner</title>
+    <title>JSDoc: Source: managers/file-requests-manager.ts</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,323 +17,120 @@
 
 <div id="main">
 
-    <h1 class="page-title">Interface: SignRequestSigner</h1>
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>SignRequestSigner</h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Signer fields for GET Sign Request response
-
-The schema for a Signer in a GET Sign Request request body</div>
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schemas_sign-request-signer.generated.ts.html">schemas/sign-request-signer.generated.ts</a>, <a href="schemas_sign-request-signer.generated.ts.html#line4">line 4</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="embed_url"><span class="type-signature"></span>embed_url<span class="type-signature"> :string</span></h4>
-
-
-
-
-<div class="description">
-    URL to direct a signer to for signing
-Example: https://example.com
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schemas_sign-request-signer.generated.ts.html">schemas/sign-request-signer.generated.ts</a>, <a href="schemas_sign-request-signer.generated.ts.html#line23">line 23</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="has_viewed_document"><span class="type-signature"></span>has_viewed_document<span class="type-signature"> :boolean</span></h4>
-
-
-
-
-<div class="description">
-    Set to `true` if the signer views the document
-Example: true
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">boolean</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schemas_sign-request-signer.generated.ts.html">schemas/sign-request-signer.generated.ts</a>, <a href="schemas_sign-request-signer.generated.ts.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="signer_decision"><span class="type-signature"></span>signer_decision<span class="type-signature"> :object</span></h4>
-
-
-
-
-<div class="description">
-    Final decision made by the signer
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schemas_sign-request-signer.generated.ts.html">schemas/sign-request-signer.generated.ts</a>, <a href="schemas_sign-request-signer.generated.ts.html#line17">line 17</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">Source: managers/file-requests-manager.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import BoxClient from "../box-client";
+import {FileRequest, FileRequestCopyBody, FileRequestUpdateBody} from "../schemas";
+import urlPath from "../util/url-path";
+
+class FileRequestsManager {
+	client: BoxClient;
+
+	constructor(client: BoxClient) {
+		// Attach the client, for making API calls
+		this.client = client;
+	}
+
+	/**
+	 * Gets File Request by ID.
+	 * @param {string} fileRequestId File Request ID
+	 * @param {Function} [callback] passed the user info if it was acquired successfully
+	 * @returns {Promise&lt;FileRequest>} a promise with FileRequest details
+	 */
+	getById(fileRequestId: string, callback?: Function): Promise&lt;FileRequest> {
+		const apiPath = urlPath('file_requests', fileRequestId);
+		return this.client.wrapWithDefaultHandler(this.client.get)(
+			apiPath,
+			callback
+		);
+	}
+
+	/**
+	 * Delete File Request.
+	 * @param {string} fileRequestId File Request ID
+	 * @param {Function} [callback] passed the user info if it was acquired successfully
+	 * @returns {Promise&lt;void>} Returns a promise resolving to nothing
+	 */
+	delete(fileRequestId: string, callback?: Function): Promise&lt;FileRequest> {
+		const apiPath = urlPath('file_requests', fileRequestId);
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			callback
+		);
+	}
+
+	/**
+	 * Copies existing FileRequest to new folder
+	 * @param {string} fileRequestIdToCopy ID of file request to copy
+	 * @param copyRequest copy request details
+	 * @param {string} copyRequest.folder.id ID of folder to which file request will be copied
+	 * @param {string} copyRequest.folder.type type of folder. Value is always 'folder'
+	 * @param {string} [copyRequest.title] new title of file request
+	 * @param {string} [copyRequest.description] new description of file request
+	 * @param {string} [copyRequest.expires_at] new date when file request expires
+	 * @param {boolean} [copyRequest.is_description_required] is file request submitter required to provide a description
+	 *   of the files they are submitting
+	 * @param {boolean} [copyRequest.is_email_required] is file request submitter required to provide their email address
+	 * @param {string} [copyRequest.status] new status of file request
+	 * @param {Function} [callback] passed the user info if it was acquired successfully
+	 * @returns {Promise&lt;FileRequest>} Returns a promise with FileRequest details
+	 */
+	copy(fileRequestIdToCopy: string, copyRequest: FileRequestCopyBody, callback?: Function): Promise&lt;FileRequest> {
+		const apiPath = urlPath('file_requests', fileRequestIdToCopy, 'copy');
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			{body: copyRequest},
+			callback
+		);
+	}
+
+	/**
+	 * Update existing file request
+	 * @param {string} fileRequestId ID of file request
+	 * @param {string} fileRequestChange change of file request
+	 * @param {string} [fileRequestChange.description] new description of file request
+	 * @param {string} [fileRequestChange.expires_at] new date when file request expires
+	 * @param {boolean} [fileRequestChange.is_description_required] is file request submitter required to provide a
+	 *   description of the files they are submitting
+	 * @param {boolean} [fileRequestChange.is_email_required] is file request submitter required to provide their
+	 *   email address
+	 * @param {string} [fileRequestChange.status] new status of file request
+	 * @param {string} [fileRequestChange.title] new title of file request
+	 * @param {string} [originalRequestEtag] pass in the item's last observed etag value into this header and
+	 *   the endpoint will fail with a 412 Precondition Failed if it has changed since.
+	 * @param {Function} callback passed the user info if it was acquired successfully
+	 * @returns {Promise&lt;FileRequest>} Returns a promise with FileRequest details
+	 */
+	update(
+		fileRequestId: string,
+		fileRequestChange: FileRequestUpdateBody,
+		originalRequestEtag?: string,
+		callback?: Function
+	): Promise&lt;FileRequest> {
+		const apiPath = urlPath('file_requests', fileRequestId);
+		let params: any = {body: fileRequestChange};
+		if(originalRequestEtag) {
+			params = {...params, headers: {"if-match": originalRequestEtag}};
+		}
+		return this.client.wrapWithDefaultHandler(this.client.put)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+}
+
+export = FileRequestsManager;
+</code></pre>
+        </article>
+    </section>
 
 
 

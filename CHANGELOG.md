@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/box/box-node-sdk/compare/v2.3.0...v2.4.0) (2022-07-13)
+
+
+### New Features and Enhancements
+
+* Added support for file requests ([#742](https://github.com/box/box-node-sdk/issues/742)) ([30b2e76](https://github.com/box/box-node-sdk/commit/30b2e767c6c3af68e1463cc801914f9889dc593c))
+* Added support of `admin_logs_streaming` stream type ([#740](https://github.com/box/box-node-sdk/issues/740)) ([406950a](https://github.com/box/box-node-sdk/commit/406950a03af54a022427e0532e889a61e0d25152))
+
+### Bug Fixes
+
+* properly handle client errors in streams ([#736](https://github.com/box/box-node-sdk/issues/736)) ([12378d6](https://github.com/box/box-node-sdk/commit/12378d6755c2e3cddcb79439cdcbbe8e1e61df13))
+
 ## [2.3.0](https://github.com/box/box-node-sdk/compare/v2.2.0...v2.3.0) (2022-04-28)
 
 
