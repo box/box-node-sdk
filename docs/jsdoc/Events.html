@@ -210,6 +210,18 @@
 
 API Endpoint: '/events'
 Method: GET
+
+To get events from admin events stream you have to pick stream_type from `admin_logs` or `admin_logs_streaming`.
+The `admin_logs` stream emphasis is on completeness over latency,
+which means that Box will deliver admin events in chronological order and without duplicates,
+but with higher latency. You can specify start and end time/dates.
+
+To monitor recent events that have been generated within Box across the enterprise use
+`admin_logs_streaming` as stream type. The emphasis for this feed is on low latency rather than chronological
+accuracy, which means that Box may return events more than once and out of chronological order.
+Events are returned via the API around 12 seconds after they are processed by Box
+(the 12 seconds buffer ensures that new events are not written after your cursor position).
+Only two weeks of events are available via this feed, and you cannot set start and end time/dates.
 </div>
 
 
@@ -273,7 +285,234 @@ Method: GET
 
             
 
-            <td class="description last">Additional options for the request. Can be left null in most cases.</td>
+            <td class="description last">Additional options for the request. Can be left null in most cases.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>stream_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">From which stream events should be selected.
+	Possible values are `admin_logs` and `admin_logs_streaming`</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>created_after</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The date to start from in ISO-8601 timestamp format: '2001-01-01T00:00:00-08:00'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>created_before</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The date to end at in ISO-8601 timestamp format: '2001-01-01T00:00:00-08:00'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>event_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">String of event types to return coma separated: for example 'DOWNLOAD,UPLOAD'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of events to fetch per call</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stream_position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The stream position to start from (pass '0' for all past events)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -347,7 +586,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line158">line 158</a>
+        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line177">line 177</a>
     </li></ul></dd>
     
 
@@ -594,6 +833,20 @@ Pass 'startDate' to start from a specific time.
 Pass 'streamPosition' to start from a previous stream position, or '0' for all available past events (~1 year).
 Once the stream catches up to the current time, it will begin polling every 'pollingInterval' seconds.
 If 'pollingInterval' = 0, then the stream will end when it catches up to the current time (no polling).
+
+By default, stream pools `admin_logs` for events. The emphasis for this stream is on completeness over latency,
+which means that Box will deliver admin events in chronological order and without duplicates,
+but with higher latency. You can specify start and end time/dates.
+
+To monitor recent events that have been generated within Box across the enterprise use
+`admin_logs_streaming` as stream type. The emphasis for this feed is on low latency rather than chronological
+accuracy, which means that Box may return events more than once and out of chronological order.
+Events are returned via the API around 12 seconds after they are processed by Box
+(the 12 seconds buffer ensures that new events are not written after your cursor position).
+Only two weeks of events are available via this feed, and you cannot set start and end time/dates.
+
+This method will only work with an API connection for an enterprise admin account
+or service account with a manage enterprise properties.
 </div>
 
 
@@ -910,6 +1163,44 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>streamType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">From which stream events should be selected.
+	Possible values are `admin_logs` and `admin_logs_streaming`</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -987,7 +1278,7 @@ If 'pollingInterval' = 0, then the stream will end when it catches up to the cur
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line243">line 243</a>
+        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line282">line 282</a>
     </li></ul></dd>
     
 
@@ -1374,7 +1665,7 @@ Method: OPTIONS
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line204">line 204</a>
+        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line227">line 227</a>
     </li></ul></dd>
     
 
@@ -1548,7 +1839,7 @@ Method: OPTIONS
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line174">line 174</a>
+        <a href="managers_events.ts.html">managers/events.ts</a>, <a href="managers_events.ts.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -1622,7 +1913,7 @@ Method: OPTIONS
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Apr 28 2022 01:44:54 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jul 13 2022 05:25:41 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
