@@ -269,7 +269,8 @@ class Users {
 	 * Method: POST
 	 * 
 	 * @param {string} userID The ID of the user whose avatar should be set
-	 * @param {string|Buffer|ReadStream} avatarStream A stream over the bytes of the avatar image
+	 * @param {string|Buffer|ReadStream} avatar - the content of the file. It can be a string, a Buffer, or a read stream
+	 * (like that returned by fs.createReadStream()).
 	 * @param {Function} [callback] Passed dictionary of picture urls if successful
 	 * @returns {Promise<Object>} A promise resolving to the picture urls
 	 */
