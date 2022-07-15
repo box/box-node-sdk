@@ -4917,6 +4917,48 @@ describe('Endpoint', () => {
 				});
 			});
 		});
+		describe('setAvatar()', () => {
+			it('should make POST request for setting user avatar and resolve with urls', done => {
+				var userID = '44444',
+					testFilePath = path.resolve(__dirname, './fixtures/1.png'),
+					pngStream = fs.createReadStream(testFilePath),
+					expectedReturn = {
+						pic_urls: {
+							small: 'https://app.box.com/index.php?rm=pic_storage_auth&pic=small',
+							large: 'https://app.box.com/index.php?rm=pic_storage_auth&pic=large',
+							preview: 'https://app.box.com/index.php?rm=pic_storage_auth&pic=preview',
+						}
+					};
+				apiMock
+					.post(`/2.0/users/${userID}/avatar`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, expectedReturn);
+				basicClient.users.setAvatar(userID, pngStream).then(urls => {
+					assert.deepEqual(urls, expectedReturn);
+					done();
+				});
+			});
+		});
+		describe('deleteAvatar()', () => {
+			it('should make DELETE request for remove user avatar and resolve with empty reponse', done => {
+				var userID = '44444';
+				apiMock
+					.delete(`/2.0/users/${userID}/avatar`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(204);
+				basicClient.users.deleteAvatar(userID, (error, result) => {
+					assert.ifError(error);
+					assert.isUndefined(result);
+					done();
+				});
+			});
+		});
 	});
 	describe('Enterprise', () => {
 		describe('getUsers()', () => {

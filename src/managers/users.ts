@@ -281,7 +281,11 @@ class Users {
 				}
 			};
 		
-		return this.client.post(apiPath, params).asCallback(callback);
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
 	}
 
 	/**
