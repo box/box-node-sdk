@@ -6,10 +6,11 @@ Users represent an individual's account on Box.
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Get User's Information](#get-users-information)
 - [Get the Current User's Information](#get-the-current-users-information)
 - [Get User Avatar](#get-user-avatar)
+- [Set User Avatar](#set-user-avatar)
+- [Delete User Avatar](#delete-user-avatar)
 - [Update User](#update-user)
 - [Delete User](#delete-user)
 - [Get Email Aliases](#get-email-aliases)
@@ -107,6 +108,32 @@ client.users.getAvatar('22222')
             // read avatar image bytes
         });
     });
+```
+
+Set User Avatar
+---------------
+
+Calling [`users.setAvatar(userID, avatar, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#setAvatar) will set user's avatar with the input file.
+
+<!-- sample post_users_id_avatar -->
+```js
+const fs = require('fs');
+var readStream = fs.createReadStream('image.jpg');
+client.users.setAvatar('22222', readStream, result => {
+    // read avatar urls
+});
+```
+
+Delete User Avatar
+---------------
+
+Calling [`users.deleteAvatar(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#deleteAvatar) to delete user's avatar photo.
+
+<!-- sample delete_users_id_avatar -->
+```js
+client.users.deleteAvatar('22222', () => {
+    console.log('User avatar deleted!'); 
+});
 ```
 
 Update User
