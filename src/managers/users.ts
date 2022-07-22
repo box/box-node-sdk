@@ -8,6 +8,7 @@
 
 import BoxClient from '../box-client';
 import urlPath from '../util/url-path';
+import { Readable } from 'stream';
 
 // ------------------------------------------------------------------------------
 // Private
@@ -259,6 +260,54 @@ class Users {
 			};
 
 		return this.client.get(apiPath, params).asCallback(callback);
+	}
+
+	/**
+	 * Set the user's avatar image.
+	 * 
+	 * API Endpoint: '/users/:userID/avatar'
+	 * Method: POST
+	 * 
+	 * @param {string} userID The ID of the user whose avatar should be set
+	 * @param {string|Buffer|ReadStream} avatar - the content of the file. It can be a string, a Buffer, or a read stream
+	 * (like that returned by fs.createReadStream()).
+	 * @param {Function} [callback] Passed dictionary of picture urls if successful
+	 * @returns {Promise<Object>} A promise resolving to the picture urls
+	 */
+	setAvatar(userID: string, avatar: string | Buffer | Readable, callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, userID, 'avatar'),
+			params = {
+				formData: {
+					pic: avatar,
+				}
+			};
+		
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+
+	/**
+	 * Delete the user's avatar image.
+	 * 
+	 * API Endpoint: '/users/:userID/avatar'
+	 * Method: DELETE
+	 * 
+	 * @param {string} userID The ID of the user whose avatar should be deleted
+	 * @param {Function} [callback] Passed nothing if successful
+	 * @returns {Promise<void>} A promise resolving to nothing
+	 */
+	deleteAvatar(userID: string, callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, userID, 'avatar'),
+			params = {};
+			
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			params,
+			callback
+		);
 	}
 
 	// @NOTE(fschott) 2014-05-06: Still need to implement get, edit, create, etc.
