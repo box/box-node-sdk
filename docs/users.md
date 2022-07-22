@@ -127,7 +127,7 @@ client.users.setAvatar('22222', readStream).then(result => {
 Delete User Avatar
 ---------------
 
-Calling [`users.deleteAvatar(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#deleteAvatar) to delete user's avatar photo.
+Calling [`users.deleteAvatar(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#deleteAvatar) will delete the user's avatar.
 
 <!-- sample delete_users_id_avatar -->
 ```js
