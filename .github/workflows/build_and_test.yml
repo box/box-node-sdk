@@ -1,7 +1,7 @@
 name: build-and-test
 on:
-  pull_request_target:
-    types: [ opened, synchronize ]
+  pull_request:
+    types: [opened, synchronize]
     branches:
       - main
   push:
