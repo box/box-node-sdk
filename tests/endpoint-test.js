@@ -4936,7 +4936,8 @@ describe('Endpoint', () => {
 						return true;
 					})
 					.reply(200, expectedReturn);
-				basicClient.users.setAvatar(userID, pngStream).then(urls => {
+				basicClient.users.setAvatar(userID, pngStream, (error, urls) => {
+					assert.ifError(error);
 					assert.deepEqual(urls, expectedReturn);
 					done();
 				});
