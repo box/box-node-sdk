@@ -374,7 +374,7 @@ class TokenManager {
 	 * @returns {Promise<TokenInfo>} Promise resolving to the token info
 	 */
 	getTokensJWTGrant(type: string, id: string, options?: TokenRequestOptions) {
-		if (!this.config.appAuth.keyID) {
+		if (!this.config.appAuth || !this.config.appAuth.keyID) {
 			return Promise.reject(
 				new Error('Must provide app auth configuration to use JWT Grant')
 			);
