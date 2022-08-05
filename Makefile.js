@@ -49,7 +49,6 @@ function release(type) {
 //------------------------------------------------------------------------------
 
 var MOCHA_BINARY = './node_modules/.bin/_mocha',
-	COVERALLS_BINARY = './node_modules/.bin/coveralls',
 
 	// Directories
 	JS_DIR = './src/',
