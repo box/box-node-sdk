@@ -102,11 +102,6 @@ target.test = function() {
 	}
 };
 
-target.coveralls = function() {
-	target.test();
-	nodeCLI.exec(COVERALLS_BINARY, '--service=github', '< ./coverage/lcov.info');
-}
-
 target.docs = function() {
 	echo('Generating documentation');
 	nodeCLI.exec('jsdoc', '-r', '-c ./jsdoc.json', '-d ./docs/jsdoc ', JS_DIR);
