@@ -23,6 +23,7 @@
   "main": "./lib/box-node-sdk.js",
   "scripts": {
     "test": "node Makefile.js",
+    "coveralls": "node Makefile.js coveralls",
     "jest": "jest",
     "build": "node Makefile.js build",
     "codegen": "ts-node codegen/codegen.tsx",
@@ -59,7 +60,7 @@
     "@types/uuid": "^8.3.0",
     "better-docs": "^2.3.2",
     "chai": "^4.2.0",
-    "coveralls": "^3.1.0",
+    "coveralls": "^3.1.1",
     "doctoc": "^2.0.1",
     "eslint": "^4.19.1",
     "eslint-plugin-node": "^6.0.1",

@@ -49,6 +49,7 @@ function release(type) {
 //------------------------------------------------------------------------------
 
 var MOCHA_BINARY = './node_modules/.bin/_mocha',
+	COVERALLS_BINARY = './node_modules/.bin/coveralls',
 
 	// Directories
 	JS_DIR = './src/',
@@ -75,7 +76,6 @@ target.build = function() {
 	return code;
 };
 
-
 target.lint = function() {
 
 	var code = 0;
@@ -101,6 +101,11 @@ target.test = function() {
 		exit(code);
 	}
 };
+
+target.coveralls = function() {
+	target.test();
+	nodeCLI.exec(COVERALLS_BINARY, '--service=github', '< ./coverage/lcov.info');
+}
 
 target.docs = function() {
 	echo('Generating documentation');

@@ -28,6 +28,8 @@ jobs:
         run: npm run lint
       - name: Build and test
         run: npm run test
+      - name: Coveralls
+        run: npm run coveralls
 # Coveralls report is broken
 #      - name: Coveralls Parallel
 #        uses: coverallsapp/github-action@master
