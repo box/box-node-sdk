@@ -28,10 +28,10 @@ jobs:
         run: npm run lint
       - name: Build and test
         run: npm run test
-      - name: Send coverage report to Coveralls
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run coveralls
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 # Coveralls report is broken
 #      - name: Coveralls Parallel
 #        uses: coverallsapp/github-action@master
