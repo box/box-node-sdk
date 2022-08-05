@@ -1,5 +1,12 @@
 name: build-and-test
-on: ["push", "pull_request"]
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+  push:
+    branches:
+      - main
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -26,13 +33,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: run-node-${{ matrix.node }}
-          parallel: true
-  finish:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
+
