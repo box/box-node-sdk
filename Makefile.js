@@ -75,7 +75,6 @@ target.build = function() {
 	return code;
 };
 
-
 target.lint = function() {
 
 	var code = 0;

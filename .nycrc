@@ -8,10 +8,7 @@
         "html"
     ],
     "check-coverage": true,
-    "lines": 98,
-    "statements": 98,
-    "functions": 98,
-    "branches": 92,
     "report-dir": "./coverage",
+    "exclude-after-remap": false,
     "all": true
 }
