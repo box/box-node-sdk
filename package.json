@@ -1,6 +1,7 @@
 {
   "name": "box-node-sdk",
 	
+	
   "author": "Box <oss@box.com>",
   "version": "2.4.0",
   "description": "Official SDK for Box Plaform APIs",
