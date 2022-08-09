@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/box/box-node-sdk/compare/v2.4.0...v2.5.0) (2022-08-09)
+
+
+### New Features and Enhancements
+
+* Added support update and remove user avatar ([#744](https://github.com/box/box-node-sdk/issues/744)) ([aaf6175](https://github.com/box/box-node-sdk/commit/aaf617528de5c61e19cfb25e28fe77c01532b9fa))
+
+### Bug Fixes
+
+* Fix error while generate token using oauth ([#750](https://github.com/box/box-node-sdk/issues/750)) ([f826291](https://github.com/box/box-node-sdk/commit/f82629108a1af6c4d160de1976fd01fdf0d8dde3)), closes [#286](https://github.com/box/box-node-sdk/issues/286)
+* Fix lint error in test file ([#747](https://github.com/box/box-node-sdk/issues/747)) ([3b1e10d](https://github.com/box/box-node-sdk/commit/3b1e10d206aa88a8bf99989bb7ff85776a9864a4))
+
 ## [2.4.0](https://github.com/box/box-node-sdk/compare/v2.3.0...v2.4.0) (2022-07-13)
 
 
