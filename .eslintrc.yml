@@ -16,6 +16,7 @@ plugins:
     - promise
     - unicorn
     - node
+    - jest
 
 extends:
     - 'eslint:recommended'

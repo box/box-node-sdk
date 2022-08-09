@@ -56,7 +56,7 @@ var MOCHA_BINARY = './node_modules/.bin/_mocha',
 	// Files
 	JS_FILES = find(JS_DIR).filter(fileType('js')).join(" "),
 	JSON_FILES = find('config/').filter(fileType('json')).join(" ") + ' .eslintrc',
-	TEST_FILES = find('tests/').filter(fileType('js')).join(" ");
+	TEST_FILES = find('tests/').filter(fileType('js')).filter(file=>!file.includes("intergration_test/")).join(" ");
 
 //------------------------------------------------------------------------------
 // Tasks
