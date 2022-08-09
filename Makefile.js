@@ -23,7 +23,7 @@ var nodeCLI = require('shelljs-nodecli');
  * @private
  */
 function fileType(extension) {
-	return function(filename) {
+	return function (filename) {
 		return filename.substring(filename.lastIndexOf('.') + 1) === extension;
 	};
 }
@@ -49,24 +49,26 @@ function release(type) {
 //------------------------------------------------------------------------------
 
 var MOCHA_BINARY = './node_modules/.bin/_mocha',
-
 	// Directories
 	JS_DIR = './src/',
-
 	// Files
-	JS_FILES = find(JS_DIR).filter(fileType('js')).join(" "),
-	JSON_FILES = find('config/').filter(fileType('json')).join(" ") + ' .eslintrc',
-	TEST_FILES = find('tests/').filter(fileType('js')).filter(file=>!file.includes("intergration_test/")).join(" ");
+	JS_FILES = find(JS_DIR).filter(fileType('js')).join(' '),
+	JSON_FILES =
+		find('config/').filter(fileType('json')).join(' ') + ' .eslintrc',
+	TEST_FILES = find('tests/')
+		.filter(fileType('js'))
+		.filter((file) => !file.includes('integration_test/'))
+		.join(' ');
 
 //------------------------------------------------------------------------------
 // Tasks
 //------------------------------------------------------------------------------
 
-target.all = function() {
+target.all = function () {
 	target.test();
 };
 
-target.build = function() {
+target.build = function () {
 	var code = 0;
 
 	echo('Compiling TypeScript code');
@@ -75,15 +77,19 @@ target.build = function() {
 	return code;
 };
 
-target.lint = function() {
-
+target.lint = function () {
 	var code = 0;
 
 	echo('Validating JSON Files');
 	code += nodeCLI.exec('jsonlint', '-q', '-c', JSON_FILES).code;
 
 	echo('Validating package.json');
-	code += nodeCLI.exec('jsonlint', 'package.json', '-q', '-V ./config/package.schema.json').code;
+	code += nodeCLI.exec(
+		'jsonlint',
+		'package.json',
+		'-q',
+		'-V ./config/package.schema.json'
+	).code;
 
 	echo('Validating JavaScript files');
 	code += nodeCLI.exec('eslint', '--fix', ...JS_FILES, './tests').code;
@@ -91,34 +97,48 @@ target.lint = function() {
 	return code;
 };
 
-target.test = function() {
+target.test = function () {
 	var code = target.build();
 	code += target.lint();
-	code += nodeCLI.exec('nyc', MOCHA_BINARY, '-c', '-R spec', '--exit', TEST_FILES).code;
+	code += nodeCLI.exec(
+		'nyc',
+		MOCHA_BINARY,
+		'-c',
+		'-R spec',
+		'--exit',
+		TEST_FILES
+	).code;
 
 	if (code) {
 		exit(code);
 	}
 };
 
-target.docs = function() {
+target.docs = function () {
 	echo('Generating documentation');
 	nodeCLI.exec('jsdoc', '-r', '-c ./jsdoc.json', '-d ./docs/jsdoc ', JS_DIR);
 };
 
-target.docsDev = function() {
+target.docsDev = function () {
 	echo('Generating dev documentation');
-	nodeCLI.exec('jsdoc', '-p', '-r', '-c ./jsdoc.json', '-d ./docs/jsdoc-dev ', JS_DIR);
+	nodeCLI.exec(
+		'jsdoc',
+		'-p',
+		'-r',
+		'-c ./jsdoc.json',
+		'-d ./docs/jsdoc-dev ',
+		JS_DIR
+	);
 };
 
-target.patch = function() {
+target.patch = function () {
 	release('patch');
 };
 
-target.minor = function() {
+target.minor = function () {
 	release('minor');
 };
 
-target.major = function() {
+target.major = function () {
 	release('major');
 };
