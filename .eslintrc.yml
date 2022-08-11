@@ -6,6 +6,10 @@ env:
     es6: true
     jest/globals: true
 
+settings:
+    jest:
+        version: 27
+
 parserOptions:
     sourceType: script
 
