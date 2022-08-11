@@ -4,7 +4,7 @@
 const BoxSDK = require('box-node-sdk');
 
 const testConfig = require('./test-config.json');
-const JWT_FILE_PATH_ENV_NAME = 'JWT_FILE_PATH';
+const JWT_CONFIG_ENV_NAME = 'JWT_CONFIG';
 
 function getJwtConfigFromFile() {
 	let jwtFilePath = testConfig.jwt_file_path;
@@ -16,19 +16,19 @@ function getJwtConfigFromFile() {
 }
 
 function getJwtConfigFromEnv() {
-	let jwtFilePath = process.env[JWT_FILE_PATH_ENV_NAME];
-	if (!jwtFilePath) {
+	let jwtConfigBase64 = process.env[JWT_CONFIG_ENV_NAME];
+	if (!jwtConfigBase64) {
 		return null;
 	}
-	const jwtConfig = require(jwtFilePath);
-	return jwtConfig;
+	const jwtConfig = (Buffer.from(jwtConfigBase64, 'base64')).toString('utf8');
+	return JSON.parse(jwtConfig);
 }
 
 function getJwtConfig() {
 	let jwtConfig = getJwtConfigFromFile() || getJwtConfigFromEnv();
 	if (!jwtConfig) {
 		throw new Error(
-			`JWT config cannot be loaded. Missing environment variable: ${JWT_FILE_PATH_ENV_NAME} or JWT config path.`
+			`JWT config cannot be loaded. Missing environment variable: ${JWT_CONFIG_ENV_NAME} or JWT config path in test-config.json file.`
 		);
 	}
 	return jwtConfig;
