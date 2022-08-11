@@ -257,6 +257,7 @@ Box API, you can post to the [Box Developer Forum](https://community.box.com/t5/
 1. Run `npm test` to ensure everything is working.
 1. Make the changes you want in the `lib/` directory.  Be sure to add corresponding tests
 in the `tests/` directory!
+1. Run the unit tests by command `npm run test` and integration test as instructed [here](./tests/integration_test/README.md).
 1. Create a pull request with your changes — we'll review it and help you get it merged.
 
 For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
