@@ -1,16 +1,15 @@
 'use strict';
 
-const { CLIENT } = require('../context');
 const utils = require('../lib/utils');
 
-const BoxTestUser = async() => {
-	let user = await CLIENT.enterprise.addUser(utils.randomEmail(), utils.randomName());
+async function createBoxTestUser(appClient) {
+	let user = await appClient.enterprise.addAppUser(utils.randomName());
 	user.dispose = async function() {
-		await CLIENT.users.delete(user.id, {force: true});
+		await appClient.users.delete(user.id, {force: true});
 	};
 	return user;
-};
+}
 
 module.exports = {
-	BoxTestUser
+	createBoxTestUser
 };

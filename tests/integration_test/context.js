@@ -1,6 +1,8 @@
 'use strict';
 
+/* eslint-disable node/no-missing-require */
 const BoxSDK = require('box-node-sdk');
+
 const testConfig = require('./test-config.json');
 const JWT_FILE_PATH_ENV_NAME = 'JWT_FILE_PATH';
 
@@ -32,13 +34,20 @@ function getJwtConfig() {
 	return jwtConfig;
 }
 
-function getClient() {
+function getAppClient() {
 	let jwtConfig = getJwtConfig();
 	let sdk = BoxSDK.getPreconfiguredInstance(jwtConfig);
 	let client = sdk.getAppAuthClient('enterprise');
 	return client;
 }
 
+function getUserClient(userID) {
+	let client = getAppClient();
+	client.asUser(userID);
+	return client;
+}
+
 module.exports = {
-	CLIENT: getClient(),
+	getAppClient,
+	getUserClient,
 };

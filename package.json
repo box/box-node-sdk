@@ -23,7 +23,7 @@
   "main": "./lib/box-node-sdk.js",
   "scripts": {
     "test": "node Makefile.js",
-    "jest": "jest --verbose",
+    "jest": "jest",
     "build": "node Makefile.js build",
     "codegen": "ts-node codegen/codegen.tsx",
     "lint": "node Makefile.js lint",

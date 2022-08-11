@@ -28,8 +28,8 @@ module.exports = {
 
 	// An array of regexp pattern strings used to skip coverage collection
 	coveragePathIgnorePatterns: [
-	  "/node_modules/",
-	  "/tests/"
+		'/node_modules/',
+		'/tests/'
 	],
 
 	// Indicates which provider should be used to instrument code for coverage
@@ -37,10 +37,10 @@ module.exports = {
 
 	// A list of reporter names that Jest uses when writing coverage reports
 	coverageReporters: [
-	  'json',
-	  'text',
-	  'lcov',
-	  'clover'
+		'json',
+		'text',
+		'lcov',
+		'clover'
 	],
 
 	// An object that configures minimum threshold enforcement for coverage results
@@ -68,23 +68,21 @@ module.exports = {
 	// maxWorkers: "50%",
 
 	// An array of directory names to be searched recursively up from the requiring module's location
-	moduleDirectories: [
-	  "node_modules"
-	],
+	moduleDirectories: ['node_modules'],
 
 	// An array of file extensions your modules use
 	moduleFileExtensions: [
-	  "js",
-	  "jsx",
-	  "ts",
-	  "tsx",
-	  "json",
-	  "node"
+		'js',
+		'jsx',
+		'ts',
+		'tsx',
+		'json',
+		'node'
 	],
 
 	// A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
 	moduleNameMapper: {
-		"^box-node-sdk$": "<rootDir>/lib/box-node-sdk",
+		'^box-node-sdk$': '<rootDir>/lib/box-node-sdk',
 	},
 
 	// An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -186,11 +184,14 @@ module.exports = {
 	// unmockedModulePathPatterns: undefined,
 
 	// Indicates whether each individual test should be reported during the run
-	// verbose: undefined,
+	verbose: true,
 
 	// An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
 	// watchPathIgnorePatterns: [],
 
 	// Whether to use watchman for file crawling
 	// watchman: true,
+
+	// Tiemout of a test in milliseconds
+	testTimeout: 60000,
 };
