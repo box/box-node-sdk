@@ -1,3 +1,4 @@
 {
-    "jwt_file_path": null
+    "jwt_file_path": null,
+    "admin_user_id": null
 }
