@@ -9,7 +9,7 @@ const { createBoxTestFolder } = require('../objects/box-test-folder');
 const { createBoxTestUser } = require('../objects/box-test-user');
 const { createBoxTestMetadataTemplate } = require('../objects/box-test-metadata-template');
 const { createBoxTestMetadataCascadePolicies } = require('../objects/box-test-metadata-cascade-policies');
-const { deleteFilePermanently, deleteFolderPermanently, deleteWeblinkPermanently } = require('../lib/utils');
+const { deleteFilePermanently, deleteWeblinkPermanently } = require('../lib/utils');
 const context = {};
 
 beforeAll(async() => {
@@ -279,14 +279,14 @@ test('test add and remove collection', async() => {
 
 test('test move folder', async() => {
 	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
-	let newFolder = await context.client.folders.create(context.folder.id, 'newFolder');
+	let newFolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	try {
 		await context.client.folders.move(subfolder.id, newFolder.id);
 		let movedFolder = await context.client.folders.get(subfolder.id);
 		expect(movedFolder.parent.id).toBe(newFolder.id);
 	} finally {
 		await subfolder.dispose();
-		await deleteFolderPermanently(context.client, newFolder.id);
+		await newFolder.dispose();
 	}
 });
 
