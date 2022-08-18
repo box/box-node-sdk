@@ -188,19 +188,19 @@ test('test get shared link', async() => {
 	}
 });
 
-// test('test create weblink', async() => {
-// 	let weblink = await context.client.weblinks.create('https://www.box.com', context.folder.id, {
-// 		name: 'Box Website',
-// 		description: 'Box Website weblink'
-// 	});
-// 	try {
-// 		expect(weblink).toBeDefined();
-// 		expect(weblink.url).toBe('https://www.box.com');
-// 		expect(weblink.parent.id).toBe(context.folder.id);
-// 	} finally {
-// 		await deleteWeblinkPermanently(context.client, weblink.id);
-// 	}
-// });
+test('test create weblink', async() => {
+	let weblink = await context.client.weblinks.create('https://www.box.com', context.folder.id, {
+		name: 'Box Website',
+		description: 'Box Website weblink'
+	});
+	try {
+		expect(weblink).toBeDefined();
+		expect(weblink.url).toBe('https://www.box.com');
+		expect(weblink.parent.id).toBe(context.folder.id);
+	} finally {
+		await deleteWeblinkPermanently(context.client, weblink.id);
+	}
+});
 
 test('test delete folder', async() => {
 	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
