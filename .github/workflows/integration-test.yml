@@ -25,5 +25,5 @@ jobs:
         run: npm run jest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JWT_CONFIG_BASE_64: ${{ secrets.JWT_CONFIG }}
+          JWT_CONFIG: ${{ secrets.JWT_CONFIG }}
           ADMIN_USER_ID: ${{ secrets.ADMIN_USER_ID }}
