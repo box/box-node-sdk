@@ -108,19 +108,19 @@ test('test upload stream to folder', async() => {
 });
 
 test('test create subfolder', async() => {
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	try {
 		expect(subfolder).toBeDefined();
 		expect(subfolder.type).toBe('folder');
 		expect(subfolder.parent.id).toBe(context.folder.id);
 	} finally {
-		await context.client.folders.delete(subfolder.id);
+		await subfolder.dispose();
 	}
 });
 
 test('test add collaborator', async() => {
 	let testUser = await createBoxTestUser(context.appClient);
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	try {
 		let result = await context.client.collaborations.createWithUserID(testUser.id, subfolder.id, context.client.collaborationRoles.EDITOR);
 		expect(result).toBeDefined();
@@ -129,14 +129,14 @@ test('test add collaborator', async() => {
 		expect(collaborations.entries.length).toBe(1);
 		expect(collaborations.entries[0].accessible_by.id).toBe(testUser.id);
 	} finally {
-		await deleteFolderPermanently(context.client, subfolder.id);
+		await subfolder.dispose();
 		await testUser.dispose();
 	}
 });
 
 test('test invite collaborator using email', async() => {
 	let testUser = await createBoxTestUser(context.appClient);
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	try {
 		let result = await context.client.collaborations.createWithUserEmail(testUser.login, subfolder.id, context.client.collaborationRoles.EDITOR);
 		expect(result).toBeDefined();
@@ -145,13 +145,13 @@ test('test invite collaborator using email', async() => {
 		expect(collaborations.entries.length).toBe(1);
 		expect(collaborations.entries[0].accessible_by.login).toBe(testUser.login);
 	} finally {
-		await deleteFolderPermanently(context.client, subfolder.id);
+		await subfolder.dispose();
 	}
 });
 
 test('test invite collaborator using nonexist email provided', async() => {
 	let nonexistUserEmail = 'non-existant-user-email@box.com';
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	try {
 		let result = await context.client.collaborations.createWithUserEmail(nonexistUserEmail, subfolder.id, context.client.collaborationRoles.EDITOR);
 		expect(result).toBeDefined();
@@ -160,14 +160,14 @@ test('test invite collaborator using nonexist email provided', async() => {
 		expect(collaborations.entries.length).toBe(1);
 		expect(collaborations.entries[0].invite_email).toBe(nonexistUserEmail);
 	} finally {
-		await deleteFolderPermanently(context.client, subfolder.id);
+		await subfolder.dispose();
 	}
 });
 
 test('test get shared link', async() => {
 	let testUser = await createBoxTestUser(context.appClient);
 	let testClient = getUserClient(testUser.id);
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	try {
 		await context.client.collaborations.createWithUserID(testUser.id, subfolder.id, context.client.collaborationRoles.EDITOR);
 		await context.client.folders.update(subfolder.id, {
@@ -183,7 +183,7 @@ test('test get shared link', async() => {
 		expect(sharedLink.shared_link).toBeDefined();
 		expect(sharedLink.shared_link.url).toBeDefined();
 	} finally {
-		await deleteFolderPermanently(context.client, subfolder.id);
+		await subfolder.dispose();
 		await testUser.dispose();
 	}
 });
@@ -203,7 +203,7 @@ test('test create weblink', async() => {
 });
 
 test('test delete folder', async() => {
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	await context.client.folders.delete(subfolder.id);
 	try {
 		await context.client.folders.get(subfolder.id);
@@ -215,7 +215,7 @@ test('test delete folder', async() => {
 
 test('test cascade and get metadata cascade policies', async() => {
 	let metadataTemplate = await createBoxTestMetadataTemplate(context.appClient, 'test_template');
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	let cascadePolicy = await createBoxTestMetadataCascadePolicies(context.client, subfolder.id, metadataTemplate.templateKey);
 	try {
 		let policies = await context.client.metadata.getCascadePolicies(subfolder.id);
@@ -224,12 +224,12 @@ test('test cascade and get metadata cascade policies', async() => {
 	} finally {
 		await cascadePolicy.dispose();
 		await metadataTemplate.dispose();
-		await deleteFolderPermanently(context.client, subfolder.id);
+		await subfolder.dispose();
 	}
 });
 
 test('test create and get lock', async() => {
-	let subfolder = await context.client.folders.create(context.folder.id, 'subfolder');
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	let lock = await context.client.folders.lock(subfolder.id);
 	try {
 		expect(lock).toBeDefined();
@@ -250,6 +250,96 @@ test('test create and get lock', async() => {
 		}
 	} finally {
 		await context.client.folders.deleteLock(lock.id);
-		await deleteFolderPermanently(context.client, subfolder.id);
+		await subfolder.dispose();
+	}
+});
+
+test('test add and remove collection', async() => {
+	let collections = await context.client.collections.getAll();
+	let collection = collections.entries[0];
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
+	try {
+		await context.client.folders.addToCollection(subfolder.id, collection.id);
+		let items = await context.client.collections.getItems(collection.id);
+		expect(items).toBeDefined();
+		let entries = items.entries;
+		items = Object.keys(entries).map(key => entries[key].id);
+		expect(items).toContain(subfolder.id);
+
+		await context.client.folders.removeFromCollection(subfolder.id, collection.id);
+		items = await context.client.collections.getItems(collection.id);
+		expect(items).toBeDefined();
+		entries = items.entries;
+		items = Object.keys(entries).map(key => entries[key].id);
+		expect(items).not.toContain(subfolder.id);
+	} finally {
+		await subfolder.dispose();
+	}
+});
+
+test('test move folder', async() => {
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
+	let newFolder = await context.client.folders.create(context.folder.id, 'newFolder');
+	try {
+		await context.client.folders.move(subfolder.id, newFolder.id);
+		let movedFolder = await context.client.folders.get(subfolder.id);
+		expect(movedFolder.parent.id).toBe(newFolder.id);
+	} finally {
+		await subfolder.dispose();
+		await deleteFolderPermanently(context.client, newFolder.id);
+	}
+});
+
+test('test folder metadata', async() => {
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
+	let metadataTemplate = await createBoxTestMetadataTemplate(context.appClient, 'test_template');
+	try {
+		let metadatas = await context.client.folders.getAllMetadata(subfolder.id);
+		let count = metadatas.entries.length;
+		await context.client.folders.setMetadata(subfolder.id, context.client.metadata.scopes.ENTERPRISE, metadataTemplate.templateKey, {});
+		metadatas = await context.client.folders.getAllMetadata(subfolder.id);
+		expect(metadatas.entries.length).toBe(count + 1);
+		await context.client.folders.deleteMetadata(subfolder.id, context.client.metadata.scopes.ENTERPRISE, metadataTemplate.templateKey);
+		metadatas = await context.client.folders.getAllMetadata(subfolder.id);
+		expect(metadatas.entries.length).toBe(count);
+	} finally {
+		await subfolder.dispose();
+		await metadataTemplate.dispose();
+	}
+});
+
+test('test trash folder', async() => {
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
+	try {
+		await context.client.folders.delete(subfolder.id);
+		let trashedFolders = await context.client.folders.getTrashedFolder(subfolder.id);
+		expect(trashedFolders.id).toBe(subfolder.id);
+		expect(trashedFolders.trashed_at).toBeDefined();
+		expect(trashedFolders.item_status).toBe('trashed');
+
+		await context.client.folders.restoreFromTrash(subfolder.id);
+		let restoredFolder = await context.client.folders.get(subfolder.id);
+		expect(restoredFolder.item_status).toBe('active');
+	} finally {
+		await subfolder.dispose();
+	}
+});
+
+test('test watermark folder', async() => {
+	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
+	try {
+		await context.client.folders.applyWatermark(subfolder.id);
+		let watermark = await context.client.folders.getWatermark(subfolder.id);
+		expect(watermark.created_at).toBeDefined();
+		expect(watermark.modified_at).toBeDefined();
+		await context.client.folders.removeWatermark(subfolder.id);
+		try {
+			await context.client.folders.getWatermark(subfolder.id);
+		} catch (err) {
+			expect(err).toBeDefined();
+			expect(err.statusCode).toBe(404);
+		}
+	} finally {
+		await subfolder.dispose();
 	}
 });
