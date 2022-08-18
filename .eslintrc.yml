@@ -4,6 +4,11 @@ root: true
 env:
     node: true
     es6: true
+    jest/globals: true
+
+settings:
+    jest:
+        version: 27
 
 parserOptions:
     sourceType: script
@@ -16,6 +21,7 @@ plugins:
     - promise
     - unicorn
     - node
+    - jest
 
 extends:
     - 'eslint:recommended'
