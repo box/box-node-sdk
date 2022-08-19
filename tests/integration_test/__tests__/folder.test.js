@@ -150,7 +150,7 @@ test('test invite collaborator using email', async() => {
 });
 
 test('test invite collaborator using nonexist email provided', async() => {
-	let nonexistUserEmail = 'non-existant-user-email@box.com';
+	let nonexistUserEmail = 'non-existant-user-email@boxdemo.com';
 	let subfolder = await createBoxTestFolder(context.client, null, context.folder.id);
 	try {
 		let result = await context.client.collaborations.createWithUserEmail(nonexistUserEmail, subfolder.id, context.client.collaborationRoles.EDITOR);
@@ -210,6 +210,8 @@ test('test delete folder', async() => {
 	} catch (err) {
 		expect(err).toBeDefined();
 		expect(err.statusCode).toBe(404);
+	} finally {
+		await context.client.folders.deletePermanently(subfolder.id);
 	}
 });
 
