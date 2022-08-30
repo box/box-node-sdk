@@ -26,7 +26,7 @@ afterAll(async() => {
 });
 
 test('test sign request', async() => {
-	let file = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'));
+	let file = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank.pdf', context.folder.id);
 	try {
 		const sr = await context.client.signRequests.create({
 			signers: [
