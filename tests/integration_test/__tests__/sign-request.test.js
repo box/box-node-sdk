@@ -51,6 +51,7 @@ test('test sign request', async() => {
 			redirect_url: 'https://www.box.com/redirect_url',
 			declined_redirect_url: 'https://www.box.com/declined_redirect_url',
 		});
+		expect(file.id).toBe('0');
 		expect(sr.id).toBeDefined();
 		expect(sr.redirect_url).toBe('https://www.box.com/redirect_url');
 		expect(sr.declined_redirect_url).toBe('https://www.box.com/declined_redirect_url');
@@ -75,7 +76,6 @@ test('test sign request', async() => {
 			sign_request_id: sr.id
 		});
 		expect(sr2.id).toBe(sr.id);
-		expect(file.id).toBe('0');
 		sr2 = await context.client.signRequests.cancelById({
 			sign_request_id: sr.id
 		});
