@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const Promise = require('bluebird');
 const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
 const { createBoxTestUser } = require('../objects/box-test-user');
