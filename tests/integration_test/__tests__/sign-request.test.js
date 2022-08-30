@@ -76,25 +76,6 @@ test('test sign request', async() => {
 			sign_request_id: sr.id
 		});
 		expect(sr2.id).toBe(sr.id);
-		// Wait for sign request finish converting
-		// eslint-disable-next-line promise/avoid-new
-		await new Promise((resolve, reject) => {
-			let counter = 0;
-			let interval = setInterval(async() => {
-				let sr3 = await context.client.signRequests.getById({
-					sign_request_id: sr.id
-				});
-				if (sr3.sign_files.files[0].status !== 'converting') {
-					clearInterval(interval);
-					resolve();
-				}
-				counter += 1;
-				if (counter > 10) {
-					clearInterval(interval);
-					reject(new Error('Timeout waiting for sign request to finish converting'));
-				}
-			}, 1000);
-		});
 		sr2 = await context.client.signRequests.cancelById({
 			sign_request_id: sr.id
 		});
