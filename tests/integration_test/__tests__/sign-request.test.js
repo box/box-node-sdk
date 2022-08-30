@@ -5,7 +5,6 @@ const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
 const { createBoxTestUser, clearUserContent } = require('../objects/box-test-user');
 const { createBoxTestFile } = require('../objects/box-test-file');
-const { assert } = require('console');
 const context = {};
 
 beforeAll(async() => {
@@ -30,7 +29,6 @@ afterAll(async() => {
 test('test sign request', async() => {
 	let file = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank.pdf', context.folder.id);
 	try {
-		expect(file.id).toBe('0');
 		const sr = await context.client.signRequests.create({
 			signers: [
 				{
@@ -73,11 +71,11 @@ test('test sign request', async() => {
 		expect(sr.source_files.length).toBe(1);
 		expect(sr.sign_files.files).toBeDefined();
 		expect(sr.sign_files.files.length).toBe(1);
-
 		let sr2 = await context.client.signRequests.getById({
 			sign_request_id: sr.id
 		});
 		expect(sr2.id).toBe(sr.id);
+		expect(file.id).toBe('0');
 		sr2 = await context.client.signRequests.cancelById({
 			sign_request_id: sr.id
 		});
