@@ -44,7 +44,8 @@ class SignRequestsManager {
 	/**
 	 * List sign requests
 	 *
-	 * Gets sign requests created by a user.
+	 * Gets sign requests created by a user. If the `sign_files` and/or
+	 * `parent_folder` are deleted, the sign request will not return in the list.
 	 * @param {object} [options] Options for the request
 	 * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
 	 * @param {number} [options.limit] The maximum number of items to return per page.
