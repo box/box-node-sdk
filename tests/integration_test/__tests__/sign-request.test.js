@@ -3,7 +3,7 @@
 const path = require('path');
 const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
-const { createBoxTestUser } = require('../objects/box-test-user');
+const { createBoxTestUser, clearUserContent } = require('../objects/box-test-user');
 const { createBoxTestFile } = require('../objects/box-test-file');
 const context = {};
 
@@ -20,6 +20,7 @@ beforeAll(async() => {
 
 afterAll(async() => {
 	await context.folder.dispose();
+	await clearUserContent(context.client);
 	await context.user.dispose();
 	context.folder = null;
 	context.user = null;
