@@ -5,6 +5,7 @@ const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
 const { createBoxTestUser, clearUserContent } = require('../objects/box-test-user');
 const { createBoxTestFile } = require('../objects/box-test-file');
+const { assert } = require('console');
 const context = {};
 
 beforeAll(async() => {
@@ -29,6 +30,7 @@ afterAll(async() => {
 test('test sign request', async() => {
 	let file = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank.pdf', context.folder.id);
 	try {
+		expect(file.id).toBe('0');
 		const sr = await context.client.signRequests.create({
 			signers: [
 				{
