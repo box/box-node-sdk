@@ -24,11 +24,7 @@ async function clearUserContent(client) {
 	for (let item of trashed.entries) {
 		if (item.type === 'file') {
 			await client.files.deletePermanently(item.id, {force: true});
-		}
-	}
-	trashed = await client.trash.get();
-	for (let item of trashed.entries) {
-		if (item.type === 'folder') {
+		} else if (item.type === 'folder') {
 			await client.folders.deletePermanently(item.id, {force: true});
 		}
 	}
