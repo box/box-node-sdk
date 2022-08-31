@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const { getAppClient, getUserClient } = require('../context');
 const { createLocalLargeFile, createLocalFile, removeLocalFile } = require('../objects/box-local-file');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
-const { createBoxTestUser } = require('../objects/box-test-user');
+const { createBoxTestUser, clearUserContent } = require('../objects/box-test-user');
 const { createBoxTestMetadataTemplate } = require('../objects/box-test-metadata-template');
 const { createBoxTestMetadataCascadePolicies } = require('../objects/box-test-metadata-cascade-policies');
 const { deleteFilePermanently, deleteWeblinkPermanently } = require('../lib/utils');
@@ -25,6 +25,7 @@ beforeAll(async() => {
 
 afterAll(async() => {
 	await context.folder.dispose();
+	await clearUserContent(context.client);
 	await context.user.dispose();
 	context.folder = null;
 	context.user = null;

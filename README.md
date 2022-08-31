@@ -260,6 +260,8 @@ in the `tests/` directory!
 1. Run the unit tests by command `npm run test` and integration test as instructed [here](./tests/integration_test/README.md).
 1. Create a pull request with your changes — we'll review it and help you get it merged.
 
+Currently, the  **Sign Request**  module is generated automatically from OpenAPI specs. To re-generate this module, download the latest version of Box OpenAPI specs [here](https://raw.githubusercontent.com/box/box-openapi/en/openapi.json), save it to the root directory and run  `npm run codegen`.
+
 For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
 ## Changelog

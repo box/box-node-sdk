@@ -11,10 +11,10 @@ export interface FileVersionBase {
 	 * The unique identifier that represent a file version.
 	 * Example: 12345
 	 */
-	id?: string;
+	id: string;
 	/**
 	 * `file_version`
 	 * Example: file_version
 	 */
-	type?: 'file_version';
+	type: 'file_version';
 }

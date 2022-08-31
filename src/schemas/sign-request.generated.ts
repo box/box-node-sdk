@@ -18,7 +18,7 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 	 * Sign request ID
 	 * Example: 12345
 	 */
-	id: string;
+	id?: string;
 	/**
 	 * This URL is returned if `is_document_preparation_needed` is
 	 * set to `true` in the request. It is used to prepare the sign request
@@ -28,7 +28,7 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 	prepare_url?: string;
 	/**
 	 * Reference to a file that holds a log of all signer activity for
-	 * the request
+	 * the request. `Null` if the signing log is deleted.
 	 */
 	signing_log?: schemas.FileMini;
 	/**
@@ -45,7 +45,9 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 		| 'declined'
 		| 'error_converting'
 		| 'error_sending'
-		| 'expired';
+		| 'expired'
+		| 'downloaded'
+		| 'signed and downloaded';
 	/**
 	 * List of files that will be signed, which are copies of the original
 	 * source files. A new version of these files are created as signers sign

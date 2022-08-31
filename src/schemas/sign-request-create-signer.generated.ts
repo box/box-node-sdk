@@ -21,7 +21,7 @@ export interface SignRequestCreateSigner {
 	role?: 'signer' | 'approver' | 'final_copy_reader';
 	/**
 	 * Used in combination with an embed URL for a sender. After the
-	 * sender signs, they will be redirected to the next `in_person` signer.
+	 * sender signs, they are redirected to the next `in_person` signer.
 	 * Example: true
 	 */
 	is_in_person?: boolean;
@@ -36,4 +36,34 @@ export interface SignRequestCreateSigner {
 	 * Example: 1234
 	 */
 	embed_url_external_user_id?: string;
+	/**
+	 * The URL that a signer will be redirected
+	 * to after signing a document. Defining this URL
+	 * overrides default or global redirect URL
+	 * settings for a specific signer.
+	 * If no declined redirect URL is specified,
+	 * this URL will be used for decline actions as well.
+	 * Example: https://example.com
+	 */
+	redirect_url?: string;
+	/**
+	 * The URL that a signer will be redirect
+	 * to after declining to sign a document.
+	 * Defining this URL overrides default or global
+	 * declined redirect URL settings for a specific signer.
+	 * Example: https://declined-example.com
+	 */
+	declined_redirect_url?: string;
+	/**
+	 * If set, this phone number is be used to verify the signer
+	 * via two factor authentication before they are able to sign the document.
+	 * Example: 6314578901
+	 */
+	verification_phone_number?: string;
+	/**
+	 * If set, the signer is required to enter the password before they are able
+	 * to sign a document. This field is write only.
+	 * Example: SecretPassword123
+	 */
+	password?: string;
 }
