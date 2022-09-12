@@ -208,7 +208,7 @@ class BoxClient {
 	fileRequests: FileRequestsManager;
 	folders: Folders;
 	comments: any;
-	collaborations: any;
+	collaborations: Collaborations;
 	groups: any;
 	sharedItems: any;
 	metadata: any;
