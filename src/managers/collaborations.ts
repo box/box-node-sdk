@@ -216,9 +216,9 @@ class Collaborations {
 			};
 		}
 
-		// if(typeof options.is_access_only === 'boolean') {
-		// 	params.body.is_access_only = options.is_access_only;
-		// }
+		if(typeof options.is_access_only === 'boolean') {
+			params.body.is_access_only = options.is_access_only;
+		}
 
 		return this.client.wrapWithDefaultHandler(this.client.post)(
 			BASE_PATH,

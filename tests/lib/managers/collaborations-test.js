@@ -6,19 +6,19 @@
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var sinon = require('sinon'),
+const sinon = require('sinon'),
 	mockery = require('mockery'),
 	assert = require('chai').assert,
 	Promise = require('bluebird'),
 	leche = require('leche');
 
-var BoxClient = require('../../../lib/box-client');
+const BoxClient = require('../../../lib/box-client');
 
 
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
-var sandbox = sinon.createSandbox(),
+let sandbox = sinon.createSandbox(),
 	boxClientFake = leche.fake(BoxClient.prototype),
 	Collaborations,
 	collaborations,
@@ -34,9 +34,9 @@ var sandbox = sinon.createSandbox(),
 // Tests
 // ------------------------------------------------------------------------------
 
-describe('Collaborations', function() {
+describe('Collaborations', () => {
 
-	before(function() {
+	before(() => {
 		// Enable Mockery
 		mockery.enable({ useCleanCache: true });
 		// Register Mocks
@@ -44,26 +44,27 @@ describe('Collaborations', function() {
 		mockery.registerAllowable(MODULE_FILE_PATH);
 	});
 
-	beforeEach(function() {
+	beforeEach(() => {
 		testParamsWithBody = {body: testBody};
 		testParamsWithQs = {qs: testQS};
 		// Setup File Under Test
+		// eslint-disable-next-line global-require
 		Collaborations = require(MODULE_FILE_PATH);
 		collaborations = new Collaborations(boxClientFake);
 	});
 
-	afterEach(function() {
+	afterEach(() => {
 		sandbox.verifyAndRestore();
 		mockery.resetCache();
 	});
 
-	after(function() {
+	after(() => {
 		mockery.deregisterAll();
 		mockery.disable();
 	});
 
-	describe('get()', function() {
-		it('should make GET request to get collaboration info when called', function() {
+	describe('get()', () => {
+		it('should make GET request to get collaboration info when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaborations/1234', testParamsWithQs)
@@ -71,7 +72,7 @@ describe('Collaborations', function() {
 			collaborations.get(COLLABORATION_ID, testQS);
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve());
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -80,22 +81,32 @@ describe('Collaborations', function() {
 			collaborations.get(COLLABORATION_ID, testQS);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborations.get(COLLABORATION_ID, testQS, function(err, data) {
+			collaborations.get(COLLABORATION_ID, testQS, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
 				done();
 			});
+
+
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should get selected fields', () => {
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('get')
+				.withArgs('/collaborations/1234', {qs: {fields: 'id,is_access_only'}})
+				.returns(Promise.resolve());
+			collaborations.get(COLLABORATION_ID, {fields: 'id,is_access_only'});
+		});
 
-			var response = {};
+		it('should return promise resolving to results when called', () => {
+
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborations.get(COLLABORATION_ID, testQS)
@@ -103,23 +114,23 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('getPending()', function() {
-		var pendingQS,
+	describe('getPending()', () => {
+		let pendingQS,
 			expectedParams;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			pendingQS = {status: 'pending'};
 			expectedParams = {qs: pendingQS};
 		});
 
-		it('should make GET request to get all pending collaborations when called', function() {
+		it('should make GET request to get all pending collaborations when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('get')
 				.withArgs('/collaborations', expectedParams);
 			collaborations.getPending();
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'get');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -128,12 +139,12 @@ describe('Collaborations', function() {
 			collaborations.getPending();
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').yieldsAsync(null, response);
-			collaborations.getPending(function(err, data) {
+			collaborations.getPending((err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -141,9 +152,9 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return collaborations.getPending()
@@ -151,15 +162,15 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('update()', function() {
-		it('should make PUT request to update collaboration info when called', function() {
+	describe('update()', () => {
+		it('should make PUT request to update collaboration info when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/collaborations/1234', testParamsWithBody);
 			collaborations.update(COLLABORATION_ID, testBody);
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'put');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -168,12 +179,12 @@ describe('Collaborations', function() {
 			collaborations.update(COLLABORATION_ID, testBody);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			collaborations.update(COLLABORATION_ID, testBody, function(err, data) {
+			collaborations.update(COLLABORATION_ID, testBody, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -181,9 +192,9 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
 			return collaborations.update(COLLABORATION_ID, testBody)
@@ -191,11 +202,11 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('respondToPending()', function() {
-		var newStatus,
+	describe('respondToPending()', () => {
+		let newStatus,
 			expectedParams;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			newStatus = 'accepted';
 			expectedParams = {
 				body: {
@@ -204,14 +215,14 @@ describe('Collaborations', function() {
 			};
 		});
 
-		it('should make PUT request to update collaboration status when called', function() {
+		it('should make PUT request to update collaboration status when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('put')
 				.withArgs('/collaborations/1234', expectedParams);
 			collaborations.respondToPending(COLLABORATION_ID, newStatus);
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'put');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -220,12 +231,12 @@ describe('Collaborations', function() {
 			collaborations.respondToPending(COLLABORATION_ID, newStatus);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'put').yieldsAsync(null, response);
-			collaborations.respondToPending(COLLABORATION_ID, newStatus, function(err, data) {
+			collaborations.respondToPending(COLLABORATION_ID, newStatus, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -233,9 +244,9 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'put').returns(Promise.resolve(response));
 			return collaborations.respondToPending(COLLABORATION_ID, newStatus)
@@ -243,15 +254,15 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('create()', function() {
+	describe('create()', () => {
 
-		var itemID,
+		let itemID,
 			newCollabItem,
 			newCollabAccessibleBy,
 			newCollabRole,
 			expectedParams;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			itemID = '2345';
 			newCollabRole = 'SOME_ROLE';
 			newCollabItem = {
@@ -271,7 +282,7 @@ describe('Collaborations', function() {
 			};
 		});
 
-		it('should make POST request to create a new collaboration when called', function() {
+		it('should make POST request to create a new collaboration when called', () => {
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
@@ -279,7 +290,7 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole);
 		});
 
-		it('should create collaboration on file when passed the correct type option', function() {
+		it('should create collaboration on file when passed the correct type option', () => {
 
 			expectedParams.body.item.type = 'file';
 
@@ -289,7 +300,7 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {type: 'file'});
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -298,7 +309,7 @@ describe('Collaborations', function() {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true,
 				can_view_path: true
@@ -310,7 +321,7 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional false parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = false;
@@ -319,7 +330,7 @@ describe('Collaborations', function() {
 				notify: false
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: false,
 				can_view_path: false
@@ -331,12 +342,12 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
 
-			var params = {
+			const params = {
 				type: 'file',
 				can_view_path: true
 			};
@@ -347,14 +358,14 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+		it('should create collaboration on file when passed the correct type option with notify parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.qs = {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true
 			};
@@ -365,7 +376,22 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should create collaboration with access only collaboration parameter', () => {
+
+			expectedParams.body.item.type = 'file';
+			expectedParams.body.is_access_only = true;
+
+			const params = {
+				type: 'file',
+				is_access_only: true
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/collaborations', expectedParams);
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, params);
+		});
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'post');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -374,12 +400,12 @@ describe('Collaborations', function() {
 			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {type: 'file'}, function(err, data) {
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, {type: 'file'}, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -387,12 +413,12 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
+		it('should pass results to callback when callback is present and options is omitted', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, function(err, data) {
+			collaborations.create(newCollabAccessibleBy, itemID, newCollabRole, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -400,9 +426,9 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
 			return collaborations.create(newCollabAccessibleBy, itemID, newCollabRole)
@@ -410,16 +436,16 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('createWithUserID()', function() {
+	describe('createWithUserID()', () => {
 
-		var itemID,
+		let itemID,
 			userID,
 			newCollabItem,
 			newCollabRole,
 			expectedAccessibleBy,
 			expectedParams;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			itemID = '2345';
 			userID = 'SOME_USER_ID';
 			newCollabRole = 'SOME_ROLE';
@@ -440,14 +466,14 @@ describe('Collaborations', function() {
 			};
 		});
 
-		it('should make POST request to create a new collaboration with the proper accessible_by property when called', function() {
+		it('should make POST request to create a new collaboration with the proper accessible_by property when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/collaborations', expectedParams);
 			collaborations.createWithUserID(userID, itemID, newCollabRole);
 		});
 
-		it('should create collaboration on file when passed the correct type option', function() {
+		it('should create collaboration on file when passed the correct type option', () => {
 
 			expectedParams.body.item.type = 'file';
 
@@ -457,7 +483,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole, {type: 'file'});
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'post');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -466,12 +492,12 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserID(userID, itemID, newCollabRole, {type: 'file'}, function(err, data) {
+			collaborations.createWithUserID(userID, itemID, newCollabRole, {type: 'file'}, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -479,12 +505,12 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
+		it('should pass results to callback when callback is present and options is omitted', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserID(userID, itemID, newCollabRole, function(err, data) {
+			collaborations.createWithUserID(userID, itemID, newCollabRole, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -492,7 +518,7 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -501,7 +527,7 @@ describe('Collaborations', function() {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true,
 				can_view_path: true
@@ -513,7 +539,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional false parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = false;
@@ -522,7 +548,7 @@ describe('Collaborations', function() {
 				notify: false
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: false,
 				can_view_path: false
@@ -534,14 +560,14 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+		it('should create collaboration on file when passed the correct type option with notify parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.qs = {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true
 			};
@@ -552,12 +578,12 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
 
-			var params = {
+			const params = {
 				type: 'file',
 				can_view_path: true
 			};
@@ -568,9 +594,9 @@ describe('Collaborations', function() {
 			collaborations.createWithUserID(userID, itemID, newCollabRole, params);
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
 			return collaborations.createWithUserID(userID, itemID, newCollabRole)
@@ -578,16 +604,16 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('createWithUserEmail()', function() {
+	describe('createWithUserEmail()', () => {
 
-		var itemID,
+		let itemID,
 			userEmail,
 			newCollabItem,
 			newCollabRole,
 			expectedAccessibleBy,
 			expectedParams;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			itemID = '2345';
 			userEmail = 'SOME_USER@gmail.com';
 			newCollabRole = 'SOME_ROLE';
@@ -608,14 +634,14 @@ describe('Collaborations', function() {
 			};
 		});
 
-		it('should make POST request to create a new collaboration with the proper accessible_by property when called', function() {
+		it('should make POST request to create a new collaboration with the proper accessible_by property when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/collaborations', expectedParams);
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole);
 		});
 
-		it('should create collaboration on file when passed the correct type option', function() {
+		it('should create collaboration on file when passed the correct type option', () => {
 
 			expectedParams.body.item.type = 'file';
 
@@ -625,7 +651,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {type: 'file'});
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -634,7 +660,7 @@ describe('Collaborations', function() {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true,
 				can_view_path: true
@@ -646,7 +672,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional false parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = false;
@@ -655,7 +681,7 @@ describe('Collaborations', function() {
 				notify: false
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: false,
 				can_view_path: false
@@ -667,14 +693,14 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+		it('should create collaboration on file when passed the correct type option with notify parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.qs = {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true
 			};
@@ -685,12 +711,12 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
 
-			var params = {
+			const params = {
 				type: 'file',
 				can_view_path: true
 			};
@@ -701,7 +727,7 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, params);
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'post');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -710,12 +736,12 @@ describe('Collaborations', function() {
 			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {type: 'file'}, function(err, data) {
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, {type: 'file'}, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -723,12 +749,12 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
+		it('should pass results to callback when callback is present and options is omitted', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, function(err, data) {
+			collaborations.createWithUserEmail(userEmail, itemID, newCollabRole, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -736,9 +762,9 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
 			return collaborations.createWithUserEmail(userEmail, itemID, newCollabRole)
@@ -746,16 +772,16 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('createWithGroupID()', function() {
+	describe('createWithGroupID()', () => {
 
-		var itemID,
+		let itemID,
 			groupID,
 			newCollabItem,
 			newCollabRole,
 			expectedAccessibleBy,
 			expectedParams;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			itemID = '2345';
 			groupID = 'SOME_GROUP_ID';
 			newCollabRole = 'SOME_ROLE';
@@ -776,14 +802,14 @@ describe('Collaborations', function() {
 			};
 		});
 
-		it('should make POST request to create a new collaboration with the proper accessible_by property when called', function() {
+		it('should make POST request to create a new collaboration with the proper accessible_by property when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/collaborations', expectedParams);
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole);
 		});
 
-		it('should create collaboration on file when passed the correct type option', function() {
+		it('should create collaboration on file when passed the correct type option', () => {
 
 			expectedParams.body.item.type = 'file';
 
@@ -793,7 +819,7 @@ describe('Collaborations', function() {
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {type: 'file'});
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'post');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -802,12 +828,12 @@ describe('Collaborations', function() {
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {type: 'file'}, function(err, data) {
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, {type: 'file'}, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -815,12 +841,12 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should pass results to callback when callback is present and options is omitted', function(done) {
+		it('should pass results to callback when callback is present and options is omitted', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			collaborations.createWithGroupID(groupID, itemID, newCollabRole, function(err, data) {
+			collaborations.createWithGroupID(groupID, itemID, newCollabRole, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -828,16 +854,16 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
 			return collaborations.createWithGroupID(groupID, itemID, newCollabRole)
 				.then(data => assert.equal(data, response));
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional true parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional true parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
@@ -846,7 +872,7 @@ describe('Collaborations', function() {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true,
 				can_view_path: true
@@ -858,7 +884,7 @@ describe('Collaborations', function() {
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with additional false parameters', function() {
+		it('should create collaboration on file when passed the correct type option with additional false parameters', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = false;
@@ -867,7 +893,7 @@ describe('Collaborations', function() {
 				notify: false
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: false,
 				can_view_path: false
@@ -879,7 +905,7 @@ describe('Collaborations', function() {
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with notify parameter', function() {
+		it('should create collaboration on file when passed the correct type option with notify parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 
@@ -887,7 +913,7 @@ describe('Collaborations', function() {
 				notify: true
 			};
 
-			var params = {
+			const params = {
 				type: 'file',
 				notify: true
 			};
@@ -898,12 +924,12 @@ describe('Collaborations', function() {
 			collaborations.createWithGroupID(groupID, itemID, newCollabRole, params);
 		});
 
-		it('should create collaboration on file when passed the correct type option with can_view_path parameter', function() {
+		it('should create collaboration on file when passed the correct type option with can_view_path parameter', () => {
 
 			expectedParams.body.item.type = 'file';
 			expectedParams.body.can_view_path = true;
 
-			var params = {
+			const params = {
 				type: 'file',
 				can_view_path: true
 			};
@@ -915,15 +941,15 @@ describe('Collaborations', function() {
 		});
 	});
 
-	describe('delete()', function() {
-		it('should make DELETE request to update collaboration info when called', function() {
+	describe('delete()', () => {
+		it('should make DELETE request to update collaboration info when called', () => {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('del')
 				.withArgs('/collaborations/1234', null);
 			collaborations.delete(COLLABORATION_ID);
 		});
 
-		it('should wrap with default handler when called', function() {
+		it('should wrap with default handler when called', () => {
 
 			sandbox.stub(boxClientFake, 'del');
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
@@ -932,12 +958,12 @@ describe('Collaborations', function() {
 			collaborations.delete(COLLABORATION_ID);
 		});
 
-		it('should pass results to callback when callback is present', function(done) {
+		it('should pass results to callback when callback is present', done => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
-			collaborations.delete(COLLABORATION_ID, function(err, data) {
+			collaborations.delete(COLLABORATION_ID, (err, data) => {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -945,9 +971,9 @@ describe('Collaborations', function() {
 			});
 		});
 
-		it('should return promise resolving to results when called', function() {
+		it('should return promise resolving to results when called', () => {
 
-			var response = {};
+			const response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
 			return collaborations.delete(COLLABORATION_ID)
