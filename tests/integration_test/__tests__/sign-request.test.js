@@ -86,3 +86,72 @@ test('test sign request', async() => {
 		await file.dispose();
 	}
 });
+
+test('test sign request webhook', async() => {
+	let file = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank.pdf', context.folder.id);
+	try {
+		const sr = await context.client.signRequests.create({
+			signers: [
+				{
+					email: 'sdk_integration_test@boxdemo.com',
+					role: 'signer',
+				}
+			],
+			source_files: [
+				{
+					type: 'file',
+					id: file.id,
+				}
+			],
+			parent_folder: {
+				id: context.folder.id,
+				type: 'folder',
+			},
+		});
+		expect(sr.id).toBeDefined();
+		expect(sr.sign_files.files).toBeDefined();
+
+		// Create a webhook for the sign request
+		let signFileId = sr.sign_files.files[0].id;
+		let webhook = await context.client.webhooks.create(
+			signFileId,
+			context.client.itemTypes.FILE,
+			'https://example.com/sign_webhook',
+			[
+				context.client.webhooks.triggerTypes.SIGN_REQUEST.COMPLETED,
+				context.client.webhooks.triggerTypes.SIGN_REQUEST.DECLINED,
+				context.client.webhooks.triggerTypes.SIGN_REQUEST.EXPIRED,
+			]
+		);
+		expect(webhook.id).toBeDefined();
+		expect(webhook.target.id).toBe(signFileId);
+		expect(webhook.address).toBe('https://example.com/sign_webhook');
+		expect(webhook.triggers.length).toBe(3);
+
+		webhook = await context.client.webhooks.update(
+			webhook.id,
+			{
+				address: 'https://example.com/sign_webhook_updated',
+				triggers: [
+					context.client.webhooks.triggerTypes.SIGN_REQUEST.COMPLETED,
+					context.client.webhooks.triggerTypes.SIGN_REQUEST.EXPIRED,
+				]
+			}
+		);
+		expect(webhook.id).toBeDefined();
+		expect(webhook.address).toBe('https://example.com/sign_webhook_updated');
+		expect(webhook.triggers.length).toBe(2);
+
+		webhook = await context.client.webhooks.get(webhook.id);
+		expect(webhook.id).toBeDefined();
+
+		await context.client.webhooks.delete(webhook.id);
+		try {
+			await context.client.webhooks.get(webhook.id);
+		} catch (err) {
+			expect(err.statusCode).toBe(404);
+		}
+	} finally {
+		await file.dispose();
+	}
+});
