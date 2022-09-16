@@ -111,7 +111,8 @@ export interface Collaboration {
 	 */
 	status?: CollaborationStatus;
 	/**
-	 * Indicates separate access from interest by hiding collaborated items from the "All Files" page and the ALF stream.
+	 * WARN: Feature not yet available.
+	 * Indicates separate access from interest by hiding collaborated items from the "All Files" page.
 	 * This feature is going to be released in Q4. Watch our [announcements](https://developer.box.com/changelog/)
 	 * to learn about its availability.
 	 */
