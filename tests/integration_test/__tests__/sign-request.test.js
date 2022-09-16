@@ -151,6 +151,9 @@ test('test sign request webhook', async() => {
 		} catch (err) {
 			expect(err.statusCode).toBe(404);
 		}
+		await context.client.signRequests.cancelById({
+			sign_request_id: sr.id
+		});
 	} finally {
 		await file.dispose();
 	}
