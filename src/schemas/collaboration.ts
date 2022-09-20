@@ -112,7 +112,8 @@ export interface Collaboration {
 	status?: CollaborationStatus;
 	/**
 	 * WARN: Feature not yet available.
-	 * Indicates separate access from interest by hiding collaborated items from the "All Files" page.
+	 * Do not display collaborated items on collaborator's All Files Pages and suppress notifications
+	 * sent to collaborators regarding access-only content.
 	 * This feature is going to be released in Q4. Watch our [announcements](https://developer.box.com/changelog/)
 	 * to learn about its availability.
 	 */

@@ -165,9 +165,10 @@ class Collaborations {
 	 * @param {boolean} [options.notify] - Determines if the user or group will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
 	 * @param {boolean} [options.is_access_only] - WARN: Feature not yet available.
-	 *  Enables separate access from interest by hiding collaborated items
-	 * 	from the "All Files" page. This feature is going to be released in Q4. Watch our
-	 * 	[announcements](https://developer.box.com/changelog/) to learn about its availability.
+	 *   Do not display collaborated items on collaborator's All Files Pages
+	 *   and suppress notifications sent to collaborators regarding access-only content.
+	 *   This feature is going to be released in Q4. Watch our
+	 * 	 [announcements](https://developer.box.com/changelog/) to learn about its availability.
 	 * @param {Function} [callback] - Called with the new collaboration if successful
 	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the created collaboration object
 	 */
