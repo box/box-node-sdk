@@ -3,7 +3,6 @@
 const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
 const { createBoxTestUser, clearUserContent } = require('../objects/box-test-user');
-const { createBoxTestSignRequest } = require('../objects/box-test-sign-request');
 const context = {};
 
 beforeAll(async() => {
