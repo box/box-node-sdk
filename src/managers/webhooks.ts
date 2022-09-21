@@ -63,6 +63,10 @@ enum WebhookTriggerType {
 	SHARED_LINK_DELETED = 'SHARED_LINK.DELETED',
 	SHARED_LINK_CREATED = 'SHARED_LINK.CREATED',
 	SHARED_LINK_UPDATED = 'SHARED_LINK.UPDATED',
+
+	SIGN_REQUEST_COMPLETED = 'SIGN_REQUEST.COMPLETED',
+	SIGN_REQUEST_DECLINED = 'SIGN_REQUEST.DECLINED',
+	SIGN_REQUEST_EXPIRED = 'SIGN_REQUEST.EXPIRED',	
 }
 
 // -----------------------------------------------------------------------------
@@ -291,7 +295,8 @@ class Webhooks {
 		| 'FOLDER'
 		| 'WEBHOOK'
 		| 'COLLABORATION'
-		| 'SHARED_LINK',
+		| 'SHARED_LINK'
+		| 'SIGN_REQUEST',
 		Record<string, WebhookTriggerType>
 	>;
 	validateMessage!: typeof Webhooks.validateMessage;
@@ -507,6 +512,11 @@ Webhooks.prototype.triggerTypes = {
 		CREATED: WebhookTriggerType.SHARED_LINK_CREATED,
 		UPDATED: WebhookTriggerType.SHARED_LINK_UPDATED,
 	},
+	SIGN_REQUEST: {
+		COMPLETED: WebhookTriggerType.SIGN_REQUEST_COMPLETED,
+		DECLINED: WebhookTriggerType.SIGN_REQUEST_DECLINED,
+		EXPIRED: WebhookTriggerType.SIGN_REQUEST_EXPIRED,
+	}
 };
 
 Webhooks.prototype.validateMessage = Webhooks.validateMessage;
