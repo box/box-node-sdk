@@ -9,7 +9,7 @@
 import BoxClient from '../box-client';
 import urlPath from '../util/url-path';
 import errors from '../util/errors';
-import * as schemas from "../schemas";
+import {Collaborations} from "../schemas";
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -152,7 +152,7 @@ class Folders {
 		folderID: string,
 		options?: Record<string, any>,
 		callback?: Function
-	): Promise<schemas.Collaborations> {
+	): Promise<Collaborations> {
 		var params = {
 			qs: options,
 		};

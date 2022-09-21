@@ -8,7 +8,13 @@
 
 import BoxClient from "../box-client";
 import urlPath from "../util/url-path";
-import * as schemas from "../schemas";
+import {
+	Collaboration,
+	CollaborationAccesibleBy,
+	CollaborationRole,
+	CollaborationStatus,
+	CollaborationUpdate
+} from "../schemas";
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -48,13 +54,13 @@ class Collaborations {
 	 * @param {string} collaborationID - Box ID of the collaboration being requested
 	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
 	 * @param {Function} [callback] - Passed the collaboration information if it was acquired successfully
-	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the collaboration object
 	 */
 	get(
 		collaborationID: string,
 		options?: Record<string, any>,
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		const params = {
 			qs: options
 		};
@@ -73,9 +79,9 @@ class Collaborations {
 	 * Method: GET
 	 *
 	 * @param {Function} [callback] - Called with a collection of pending collaborations if successful
-	 * @returns {Promise<schemas.Collaborations>} A promise resolving to the collection of pending collaborations
+	 * @returns {Promise<Collaborations>} A promise resolving to the collection of pending collaborations
 	 */
-	getPending(callback?: Function): Promise<schemas.Collaborations> {
+	getPending(callback?: Function): Promise<Collaborations> {
 		const params = {
 			qs: {
 				status: "pending"
@@ -90,9 +96,9 @@ class Collaborations {
 
 	private updateInternal(
 		collaborationID: string,
-		updates: schemas.CollaborationUpdate | { status: schemas.CollaborationStatus },
+		updates: CollaborationUpdate | { status: CollaborationStatus },
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		const params = {
 			body: updates
 		};
@@ -112,15 +118,15 @@ class Collaborations {
 	 * Method: PUT
 	 *
 	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {schemas.CollaborationUpdate} updates - Fields of the collaboration to be updated
+	 * @param {CollaborationUpdate} updates - Fields of the collaboration to be updated
 	 * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
-	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the updated collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the updated collaboration object
 	 */
 	update(
 		collaborationID: string,
-		updates: schemas.CollaborationUpdate,
+		updates: CollaborationUpdate,
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		return this.updateInternal(collaborationID, updates, callback);
 	}
 
@@ -131,15 +137,15 @@ class Collaborations {
 	 * Method: PUT
 	 *
 	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {schemas.CollaborationStatus} newStatus - The new collaboration status ('accepted'/'rejected')
+	 * @param {CollaborationStatus} newStatus - The new collaboration status ('accepted'/'rejected')
 	 * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
-	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the accepted collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the accepted collaboration object
 	 */
 	respondToPending(
 		collaborationID: string,
-		newStatus: schemas.CollaborationStatus,
+		newStatus: CollaborationStatus,
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		return this.updateInternal(
 			collaborationID,
 			{
@@ -157,9 +163,9 @@ class Collaborations {
 	 * API Endpoint: '/collaborations
 	 * Method: POST
 	 *
-	 * @param {schemas.CollaborationAccesibleBy} accessibleBy - The accessible_by object expected by the API
+	 * @param {CollaborationAccesibleBy} accessibleBy - The accessible_by object expected by the API
 	 * @param {string} itemID - Box ID of the item to which the user should be invited
-	 * @param {schemas.CollaborationRole} role - The role which the invited collaborator should have
+	 * @param {CollaborationRole} role - The role which the invited collaborator should have
 	 * @param {Object} [options] - Optional parameters for the collaboration
 	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
 	 * @param {boolean} [options.notify] - Determines if the user or group will receive email notifications
@@ -170,12 +176,12 @@ class Collaborations {
 	 *   This feature is going to be released in Q4. Watch our
 	 * 	 [announcements](https://developer.box.com/changelog/) to learn about its availability.
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	create(
-		accessibleBy: schemas.CollaborationAccesibleBy,
+		accessibleBy: CollaborationAccesibleBy,
 		itemID: string,
-		role: schemas.CollaborationRole,
+		role: CollaborationRole,
 		options?:
 			| {
 			type?: ItemType;
@@ -185,7 +191,7 @@ class Collaborations {
 		}
 			| Function,
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		const defaultOptions = {
 			type: "folder"
 		};
@@ -240,18 +246,18 @@ class Collaborations {
 	 *
 	 * @param {int} userID - The ID of the user you'll invite as a collaborator
 	 * @param {string} itemID - Box ID of the item to which the user should be invited
-	 * @param {schemas.CollaborationRole} role - The role which the invited collaborator should have
+	 * @param {CollaborationRole} role - The role which the invited collaborator should have
 	 * @param {Object} [options] - Optional parameters for the collaboration
 	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
 	 * @param {boolean} [options.notify] - Determines if the user will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithUserID(
 		userID: number,
 		itemID: string,
-		role: schemas.CollaborationRole,
+		role: CollaborationRole,
 		options?:
 			| {
 			type?: ItemType;
@@ -260,13 +266,13 @@ class Collaborations {
 		}
 			| Function,
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		if (typeof options === "function") {
 			callback = options;
 			options = {};
 		}
 
-		const accessibleBy: schemas.CollaborationAccesibleBy = {
+		const accessibleBy: CollaborationAccesibleBy = {
 			type: "user",
 			id: `${userID}`
 		};
@@ -281,18 +287,18 @@ class Collaborations {
 	 *
 	 * @param {string} email - The collaborator's email address
 	 * @param {string} itemID - Box ID of the item to which the user should be invited
-	 * @param {schemas.CollaborationRole} role - The role which the invited collaborator should have
+	 * @param {CollaborationRole} role - The role which the invited collaborator should have
 	 * @param {Object} [options] - Optional parameters for the collaboration
 	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
 	 * @param {boolean} [options.notify] - Determines if the user will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithUserEmail(
 		email: string,
 		itemID: string,
-		role: schemas.CollaborationRole,
+		role: CollaborationRole,
 		options?:
 			| {
 			type?: ItemType;
@@ -301,13 +307,13 @@ class Collaborations {
 		}
 			| Function,
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		if (typeof options === "function") {
 			callback = options;
 			options = {};
 		}
 
-		const accessibleBy: schemas.CollaborationAccesibleBy = {
+		const accessibleBy: CollaborationAccesibleBy = {
 			type: "user",
 			login: email
 		};
@@ -322,18 +328,18 @@ class Collaborations {
 	 *
 	 * @param {int} groupID - The ID of the group you'll invite as a collaborator
 	 * @param {string} itemID - Box ID of the item to which the group should be invited
-	 * @param {schemas.CollaborationRole} role - The role which the invited collaborator should have
+	 * @param {CollaborationRole} role - The role which the invited collaborator should have
 	 * @param {Object} [options] - Optional parameters for the collaboration
 	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
 	 * @param {boolean} [options.notify] - Determines if the group will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<schemas.Collaboration>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithGroupID(
 		groupID: number,
 		itemID: string,
-		role: schemas.CollaborationRole,
+		role: CollaborationRole,
 		options?:
 			| {
 			type?: ItemType;
@@ -342,13 +348,13 @@ class Collaborations {
 		}
 			| Function,
 		callback?: Function
-	): Promise<schemas.Collaboration> {
+	): Promise<Collaboration> {
 		if (typeof options === "function") {
 			callback = options;
 			options = {};
 		}
 
-		const accessibleBy: schemas.CollaborationAccesibleBy = {
+		const accessibleBy: CollaborationAccesibleBy = {
 			type: "group",
 			id: `${groupID}`
 		};

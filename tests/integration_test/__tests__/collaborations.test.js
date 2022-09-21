@@ -24,8 +24,7 @@ describe('Collaborations manager', () => {
 	});
 
 	it('creates and removes collaboration', async() => {
-		let collaboration;
-		collaboration = await context.client.collaborations.create(
+		let collaboration = await context.client.collaborations.create(
 			{
 				type: 'user',
 				id: context.collaborator.id
