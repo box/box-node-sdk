@@ -25,8 +25,8 @@ afterAll(async() => {
 	context.user = null;
 });
 
-test('test create delete webhook', async() => {
-	const webhook = await context.client.webhooks.create(
+test('test webhook', async() => {
+	let webhook = await context.client.webhooks.create(
 		context.folder.id,
 		context.client.itemTypes.FOLDER,
 		'https://example.com/sign_webhook',
@@ -36,6 +36,20 @@ test('test create delete webhook', async() => {
 	expect(webhook.address).toBe('https://example.com/sign_webhook');
 	expect(webhook.triggers.length).toBe(1);
 	expect(webhook.triggers[0]).toBe('FILE.UPLOADED');
+
+	webhook = await context.client.webhooks.update(
+		webhook.id,
+		{
+			address: 'https://example.com/sign_webhook_updated',
+			triggers: [context.client.webhooks.triggerTypes.FILE.DELETED]
+		}
+	);
+	expect(webhook.id).toBeDefined();
+	expect(webhook.address).toBe('https://example.com/sign_webhook_updated');
+	expect(webhook.triggers.length).toBe(2);
+
+	webhook = await context.client.webhooks.get(webhook.id);
+	expect(webhook.id).toBeDefined();
 
 	await context.client.webhooks.delete(webhook.id);
 	try {
