@@ -44,11 +44,12 @@ test('test webhook', async() => {
 		}
 	);
 	expect(webhook.id).toBeDefined();
-	expect(webhook.address).toBe('https://example.com/sign_webhook_updated');
-	expect(webhook.triggers.length).toBe(1);
 
 	webhook = await context.client.webhooks.get(webhook.id);
 	expect(webhook.id).toBeDefined();
+	expect(webhook.address).toBe('https://example.com/sign_webhook_updated');
+	expect(webhook.triggers.length).toBe(1);
+	expect(webhook.triggers[0]).toBe('FILE.DELETED');
 
 	await context.client.webhooks.delete(webhook.id);
 	try {
