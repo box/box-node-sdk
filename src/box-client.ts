@@ -222,7 +222,7 @@ class BoxClient {
 	weblinks: any;
 	retentionPolicies: any;
 	devicePins: any;
-	webhooks: any;
+	webhooks: Webhooks;
 	recentItems: any;
 	collaborationAllowlist: any;
 	termsOfService: any;
