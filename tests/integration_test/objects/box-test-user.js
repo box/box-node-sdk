@@ -2,6 +2,7 @@
 
 const utils = require('../lib/utils');
 
+// eslint-disable-next-line require-jsdoc
 async function createBoxTestUser(appClient) {
 	let user = await appClient.enterprise.addAppUser(utils.randomName());
 	user.dispose = async function() {
@@ -10,6 +11,7 @@ async function createBoxTestUser(appClient) {
 	return user;
 }
 
+// eslint-disable-next-line require-jsdoc
 async function clearUserContent(client) {
 	let items = await client.folders.get(0, {limit: 1000});
 	/* eslint-disable no-await-in-loop */

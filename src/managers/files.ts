@@ -14,6 +14,7 @@ import urlTemplate from 'url-template';
 import BoxClient from '../box-client';
 import errors from '../util/errors';
 import urlPath from '../util/url-path';
+import * as schemas from "../schemas";
 
 const ChunkedUploader = require('../chunked-uploader');
 
@@ -1847,7 +1848,7 @@ class Files {
 	 * @param {int} [options.offset] - Paging parameter for the collaborations collection
 	 * @param {string} [options.fields] - Comma-separated list of fields to return on the collaboration objects
 	 * @param {Function} [callback] - Passed the collaborations if successful, error otherwise
-	 * @returns {Promise<Object>} A promise resolving to the collection of collaborations on the file
+	 * @returns {Promise<schemas.Collaborations>} A promise resolving to the collection of collaborations on the file
 	 */
 	getCollaborations(
 		fileID: string,
@@ -1857,7 +1858,7 @@ class Files {
 			fields?: string;
 		},
 		callback?: Function
-	) {
+	): Promise<schemas.Collaborations> {
 		var params = {
 			qs: options,
 		};

@@ -6,15 +6,17 @@ const BoxSDK = require('box-node-sdk');
 const testConfig = require('./test-config.json');
 const JWT_CONFIG_ENV_NAME = 'JWT_CONFIG';
 
+// eslint-disable-next-line require-jsdoc
 function getJwtConfigFromFile() {
 	let jwtFilePath = testConfig.jwt_file_path;
 	if (!jwtFilePath) {
 		return null;
 	}
-	const jwtConfig = require(jwtFilePath);
-	return jwtConfig;
+	// eslint-disable-next-line global-require
+	return require(jwtFilePath);
 }
 
+// eslint-disable-next-line require-jsdoc
 function getJwtConfigFromEnv() {
 	let jwtConfigBase64 = process.env[JWT_CONFIG_ENV_NAME];
 	if (!jwtConfigBase64) {
@@ -24,6 +26,7 @@ function getJwtConfigFromEnv() {
 	return JSON.parse(jwtConfig);
 }
 
+// eslint-disable-next-line require-jsdoc
 function getJwtConfig() {
 	let jwtConfig = getJwtConfigFromFile() || getJwtConfigFromEnv();
 	if (!jwtConfig) {
@@ -34,13 +37,14 @@ function getJwtConfig() {
 	return jwtConfig;
 }
 
+// eslint-disable-next-line require-jsdoc
 function getAppClient() {
 	let jwtConfig = getJwtConfig();
 	let sdk = BoxSDK.getPreconfiguredInstance(jwtConfig);
-	let client = sdk.getAppAuthClient('enterprise');
-	return client;
+	return sdk.getAppAuthClient('enterprise');
 }
 
+// eslint-disable-next-line require-jsdoc
 function getUserClient(userID) {
 	let client = getAppClient();
 	client.asUser(userID);

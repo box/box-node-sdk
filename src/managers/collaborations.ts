@@ -6,20 +6,26 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-import BoxClient from '../box-client';
-import urlPath from '../util/url-path';
+import BoxClient from "../box-client";
+import urlPath from "../util/url-path";
+import {
+	Collaboration,
+	CollaborationAccesibleBy,
+	CollaborationRole,
+	CollaborationStatus,
+	CollaborationUpdate
+} from "../schemas";
 
 // -----------------------------------------------------------------------------
 // Typedefs
 // -----------------------------------------------------------------------------
 
-type CollaborationRole = any /* FIXME */;
-type ItemType = 'folder' | string /* FIXME */;
+type ItemType = "file" | "folder";
 
 // ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
-const BASE_PATH = '/collaborations';
+const BASE_PATH = "/collaborations";
 
 // ------------------------------------------------------------------------------
 // Public
@@ -48,17 +54,17 @@ class Collaborations {
 	 * @param {string} collaborationID - Box ID of the collaboration being requested
 	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
 	 * @param {Function} [callback] - Passed the collaboration information if it was acquired successfully
-	 * @returns {Promise<Object>} A promise resolving to the collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the collaboration object
 	 */
 	get(
 		collaborationID: string,
 		options?: Record<string, any>,
 		callback?: Function
-	) {
-		var params = {
-			qs: options,
+	): Promise<Collaboration> {
+		const params = {
+			qs: options
 		};
-		var apiPath = urlPath(BASE_PATH, collaborationID);
+		const apiPath = urlPath(BASE_PATH, collaborationID);
 		return this.client.wrapWithDefaultHandler(this.client.get)(
 			apiPath,
 			params,
@@ -73,16 +79,33 @@ class Collaborations {
 	 * Method: GET
 	 *
 	 * @param {Function} [callback] - Called with a collection of pending collaborations if successful
-	 * @returns {Promise<Object>} A promise resolving to the collection of pending collaborations
+	 * @returns {Promise<Collaborations>} A promise resolving to the collection of pending collaborations
 	 */
-	getPending(callback?: Function) {
-		var params = {
+	getPending(callback?: Function): Promise<Collaborations> {
+		const params = {
 			qs: {
-				status: 'pending',
-			},
+				status: "pending"
+			}
 		};
 		return this.client.wrapWithDefaultHandler(this.client.get)(
 			BASE_PATH,
+			params,
+			callback
+		);
+	}
+
+	private updateInternal(
+		collaborationID: string,
+		updates: CollaborationUpdate | { status: CollaborationStatus },
+		callback?: Function
+	): Promise<Collaboration> {
+		const params = {
+			body: updates
+		};
+
+		const apiPath = urlPath(BASE_PATH, collaborationID);
+		return this.client.wrapWithDefaultHandler(this.client.put)(
+			apiPath,
 			params,
 			callback
 		);
@@ -95,25 +118,16 @@ class Collaborations {
 	 * Method: PUT
 	 *
 	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {Object} updates - Fields of the collaboration to be updated
+	 * @param {CollaborationUpdate} updates - Fields of the collaboration to be updated
 	 * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
-	 * @returns {Promise<Object>} A promise resolving to the updated collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the updated collaboration object
 	 */
 	update(
 		collaborationID: string,
-		updates: Record<string, any>,
+		updates: CollaborationUpdate,
 		callback?: Function
-	) {
-		var params = {
-			body: updates,
-		};
-
-		var apiPath = urlPath(BASE_PATH, collaborationID);
-		return this.client.wrapWithDefaultHandler(this.client.put)(
-			apiPath,
-			params,
-			callback
-		);
+	): Promise<Collaboration> {
+		return this.updateInternal(collaborationID, updates, callback);
 	}
 
 	/**
@@ -123,19 +137,21 @@ class Collaborations {
 	 * Method: PUT
 	 *
 	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {string} newStatus - The new collaboration status ('accepted'/'rejected')
+	 * @param {CollaborationStatus} newStatus - The new collaboration status ('accepted'/'rejected')
 	 * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
-	 * @returns {Promise<Object>} A promise resolving to the accepted collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the accepted collaboration object
 	 */
 	respondToPending(
 		collaborationID: string,
-		newStatus: string,
+		newStatus: CollaborationStatus,
 		callback?: Function
-	) {
-		var options = {
-			status: newStatus,
-		};
-		return this.update(collaborationID, options, callback);
+	): Promise<Collaboration> {
+		return this.updateInternal(
+			collaborationID,
+			{
+				status: newStatus
+			},
+			callback);
 	}
 
 	/**
@@ -147,62 +163,72 @@ class Collaborations {
 	 * API Endpoint: '/collaborations
 	 * Method: POST
 	 *
-	 * @param {Object} accessibleBy - The accessible_by object expected by the API
+	 * @param {CollaborationAccesibleBy} accessibleBy - The accessible_by object expected by the API
 	 * @param {string} itemID - Box ID of the item to which the user should be invited
 	 * @param {CollaborationRole} role - The role which the invited collaborator should have
 	 * @param {Object} [options] - Optional parameters for the collaboration
 	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
 	 * @param {boolean} [options.notify] - Determines if the user or group will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
+	 * @param {boolean} [options.is_access_only] - WARN: Feature not yet available.
+	 *   Do not display collaborated items on collaborator's All Files Pages
+	 *   and suppress notifications sent to collaborators regarding access-only content.
+	 *   This feature is going to be released in Q4. Watch our
+	 * 	 [announcements](https://developer.box.com/changelog/) to learn about its availability.
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<Object>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	create(
-		accessibleBy: Record<string, any>,
+		accessibleBy: CollaborationAccesibleBy,
 		itemID: string,
 		role: CollaborationRole,
 		options?:
 			| {
-					type?: ItemType;
-					notify?: boolean;
-					can_view_path?: boolean;
-			  }
+			type?: ItemType;
+			notify?: boolean;
+			can_view_path?: boolean;
+			is_access_only?: boolean;
+		}
 			| Function,
 		callback?: Function
-	) {
-		var defaultOptions = {
-			type: 'folder',
+	): Promise<Collaboration> {
+		const defaultOptions = {
+			type: "folder"
 		};
 
-		if (typeof options === 'function') {
+		if (typeof options === "function") {
 			callback = options;
 			options = {};
 		}
 
 		options = Object.assign({}, defaultOptions, options);
 
-		var params: {
+		const params: {
 			body: Record<string, any>;
 			qs?: Record<string, any>;
 		} = {
 			body: {
 				item: {
 					type: options.type,
-					id: itemID,
+					id: itemID
 				},
 				accessible_by: accessibleBy,
-				role,
-			},
+				role
+			}
 		};
 
-		if (typeof options.can_view_path === 'boolean') {
+		if (typeof options.can_view_path === "boolean") {
 			params.body.can_view_path = options.can_view_path;
 		}
 
-		if (typeof options.notify === 'boolean') {
+		if (typeof options.notify === "boolean") {
 			params.qs = {
-				notify: options.notify,
+				notify: options.notify
 			};
+		}
+
+		if(typeof options.is_access_only === 'boolean') {
+			params.body.is_access_only = options.is_access_only;
 		}
 
 		return this.client.wrapWithDefaultHandler(this.client.post)(
@@ -226,7 +252,7 @@ class Collaborations {
 	 * @param {boolean} [options.notify] - Determines if the user will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<Object>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithUserID(
 		userID: number,
@@ -234,21 +260,21 @@ class Collaborations {
 		role: CollaborationRole,
 		options?:
 			| {
-					type?: ItemType;
-					notify?: boolean;
-					can_view_path?: boolean;
-			  }
+			type?: ItemType;
+			notify?: boolean;
+			can_view_path?: boolean;
+		}
 			| Function,
 		callback?: Function
-	) {
-		if (typeof options === 'function') {
+	): Promise<Collaboration> {
+		if (typeof options === "function") {
 			callback = options;
 			options = {};
 		}
 
-		var accessibleBy = {
-			type: 'user',
-			id: userID,
+		const accessibleBy: CollaborationAccesibleBy = {
+			type: "user",
+			id: `${userID}`
 		};
 		return this.create(accessibleBy, itemID, role, options, callback);
 	}
@@ -267,7 +293,7 @@ class Collaborations {
 	 * @param {boolean} [options.notify] - Determines if the user will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<Object>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithUserEmail(
 		email: string,
@@ -275,21 +301,21 @@ class Collaborations {
 		role: CollaborationRole,
 		options?:
 			| {
-					type?: ItemType;
-					notify?: boolean;
-					can_view_path?: boolean;
-			  }
+			type?: ItemType;
+			notify?: boolean;
+			can_view_path?: boolean;
+		}
 			| Function,
 		callback?: Function
-	) {
-		if (typeof options === 'function') {
+	): Promise<Collaboration> {
+		if (typeof options === "function") {
 			callback = options;
 			options = {};
 		}
 
-		var accessibleBy = {
-			type: 'user',
-			login: email,
+		const accessibleBy: CollaborationAccesibleBy = {
+			type: "user",
+			login: email
 		};
 		return this.create(accessibleBy, itemID, role, options, callback);
 	}
@@ -308,7 +334,7 @@ class Collaborations {
 	 * @param {boolean} [options.notify] - Determines if the group will receive email notifications
 	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
 	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise<Object>} A promise resolving to the created collaboration object
+	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithGroupID(
 		groupID: number,
@@ -316,21 +342,21 @@ class Collaborations {
 		role: CollaborationRole,
 		options?:
 			| {
-					type?: ItemType;
-					notify?: boolean;
-					can_view_path?: boolean;
-			  }
+			type?: ItemType;
+			notify?: boolean;
+			can_view_path?: boolean;
+		}
 			| Function,
 		callback?: Function
-	) {
-		if (typeof options === 'function') {
+	): Promise<Collaboration> {
+		if (typeof options === "function") {
 			callback = options;
 			options = {};
 		}
 
-		var accessibleBy = {
-			type: 'group',
-			id: groupID,
+		const accessibleBy: CollaborationAccesibleBy = {
+			type: "group",
+			id: `${groupID}`
 		};
 		return this.create(accessibleBy, itemID, role, options, callback);
 	}
@@ -345,8 +371,8 @@ class Collaborations {
 	 * @param {Function} [callback] - Empty response body passed if successful.
 	 * @returns {Promise<void>} A promise resolving to nothing
 	 */
-	delete(collaborationID: string, callback?: Function) {
-		var apiPath = urlPath(BASE_PATH, collaborationID);
+	delete(collaborationID: string, callback?: Function): Promise<void> {
+		const apiPath = urlPath(BASE_PATH, collaborationID);
 		return this.client.wrapWithDefaultHandler(this.client.del)(
 			apiPath,
 			null,

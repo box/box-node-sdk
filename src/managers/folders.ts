@@ -9,6 +9,7 @@
 import BoxClient from '../box-client';
 import urlPath from '../util/url-path';
 import errors from '../util/errors';
+import {Collaborations} from "../schemas";
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -145,13 +146,13 @@ class Folders {
 	 * @param {string} folderID - Box ID of the folder being requested
 	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
 	 * @param {Function} [callback] - Passed the folder information if it was acquired successfully
-	 * @returns {Promise<Object>} A promise resolving to the collection of collaborations
+	 * @returns {Promise<schemas.Collaborations>} A promise resolving to the collection of collaborations
 	 */
 	getCollaborations(
 		folderID: string,
 		options?: Record<string, any>,
 		callback?: Function
-	) {
+	): Promise<Collaborations> {
 		var params = {
 			qs: options,
 		};
