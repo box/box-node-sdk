@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/box/box-node-sdk/compare/v2.5.0...v2.6.0) (2022-09-23)
+
+
+### New Features and Enhancements
+
+* Add `content_type`, `redirect_url` field to Sign Request ([#758](https://github.com/box/box-node-sdk/issues/758)) ([8abb9b6](https://github.com/box/box-node-sdk/commit/8abb9b602b13cd72c6c8de549d19756ae147b403))
+* Add sign request webhook ([#760](https://github.com/box/box-node-sdk/issues/760)) ([e92d1ab](https://github.com/box/box-node-sdk/commit/e92d1abee5faf58166f4892d7b2e6bc3c6480ac6))
+* Added support for Access Only Collaboration  ([#759](https://github.com/box/box-node-sdk/issues/759)) ([dd8261f](https://github.com/box/box-node-sdk/commit/dd8261f970c207854058c3ed86ccabf9bec05ea8))
+
 ## [2.5.0](https://github.com/box/box-node-sdk/compare/v2.4.0...v2.5.0) (2022-08-09)
 
 

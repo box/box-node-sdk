@@ -216,7 +216,7 @@
     
 
     
-    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(accessibleBy, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(accessibleBy, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Collaboration>}</span></h4>
     
 
     
@@ -274,7 +274,7 @@ Method: POST
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">CollaborationAccesibleBy</span>
 
 
             
@@ -527,6 +527,47 @@ Method: POST
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>is_access_only</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">WARN: Feature not yet available.
+  Do not display collaborated items on collaborator's All Files Pages
+  and suppress notifications sent to collaborators regarding access-only content.
+  This feature is going to be released in Q4. Watch our
+	 [announcements](https://developer.box.com/changelog/) to learn about its availability.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -604,7 +645,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line110">line 110</a>
+        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line117">line 117</a>
     </li></ul></dd>
     
 
@@ -644,7 +685,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;Collaboration></span>
 
 
     </dd>
@@ -662,7 +703,7 @@ Method: POST
     
 
     
-    <h4 class="name" id="createWithGroupID"><span class="type-signature"></span>createWithGroupID<span class="signature">(groupID, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="createWithGroupID"><span class="type-signature"></span>createWithGroupID<span class="signature">(groupID, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Collaboration>}</span></h4>
     
 
     
@@ -1047,7 +1088,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line209">line 209</a>
+        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line219">line 219</a>
     </li></ul></dd>
     
 
@@ -1087,7 +1128,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;Collaboration></span>
 
 
     </dd>
@@ -1105,7 +1146,7 @@ Method: POST
     
 
     
-    <h4 class="name" id="createWithUserEmail"><span class="type-signature"></span>createWithUserEmail<span class="signature">(email, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="createWithUserEmail"><span class="type-signature"></span>createWithUserEmail<span class="signature">(email, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Collaboration>}</span></h4>
     
 
     
@@ -1490,7 +1531,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line182">line 182</a>
+        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -1530,7 +1571,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;Collaboration></span>
 
 
     </dd>
@@ -1548,7 +1589,7 @@ Method: POST
     
 
     
-    <h4 class="name" id="createWithUserID"><span class="type-signature"></span>createWithUserID<span class="signature">(userID, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="createWithUserID"><span class="type-signature"></span>createWithUserID<span class="signature">(userID, itemID, role, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Collaboration>}</span></h4>
     
 
     
@@ -1933,7 +1974,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line155">line 155</a>
+        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -1973,7 +2014,7 @@ Method: POST
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;Collaboration></span>
 
 
     </dd>
@@ -2138,7 +2179,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line230">line 230</a>
+        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line240">line 240</a>
     </li></ul></dd>
     
 
@@ -2196,7 +2237,7 @@ Method: DELETE
     
 
     
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(collaborationID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(collaborationID, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Collaboration>}</span></h4>
     
 
     
@@ -2416,7 +2457,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;Collaboration></span>
 
 
     </dd>
@@ -2434,7 +2475,7 @@ Method: GET
     
 
     
-    <h4 class="name" id="getPending"><span class="type-signature"></span>getPending<span class="signature">(callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="getPending"><span class="type-signature"></span>getPending<span class="signature">(callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="Collaborations.html">Collaborations</a>>}</span></h4>
     
 
     
@@ -2590,7 +2631,7 @@ Method: GET
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;<a href="Collaborations.html">Collaborations</a>></span>
 
 
     </dd>
@@ -2608,7 +2649,7 @@ Method: GET
     
 
     
-    <h4 class="name" id="respondToPending"><span class="type-signature"></span>respondToPending<span class="signature">(collaborationID, newStatus, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="respondToPending"><span class="type-signature"></span>respondToPending<span class="signature">(collaborationID, newStatus, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Collaboration>}</span></h4>
     
 
     
@@ -2694,7 +2735,7 @@ Method: PUT
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">CollaborationStatus</span>
 
 
             
@@ -2786,7 +2827,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line85">line 85</a>
+        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -2826,7 +2867,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;Collaboration></span>
 
 
     </dd>
@@ -2844,7 +2885,7 @@ Method: PUT
     
 
     
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(collaborationID, updates, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(collaborationID, updates, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Collaboration>}</span></h4>
     
 
     
@@ -2930,7 +2971,7 @@ Method: PUT
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">CollaborationUpdate</span>
 
 
             
@@ -3022,7 +3063,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line67">line 67</a>
+        <a href="managers_collaborations.ts.html">managers/collaborations.ts</a>, <a href="managers_collaborations.ts.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -3062,7 +3103,7 @@ Method: PUT
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;Collaboration></span>
 
 
     </dd>
@@ -3096,7 +3137,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Aug 09 2022 03:04:23 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Sep 23 2022 07:52:21 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

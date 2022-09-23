@@ -107,6 +107,82 @@ The schema for a Signer in a POST Sign Request request body</div>
 
         
             
+<h4 class="name" id="declined_redirect_url"><span class="type-signature"></span>declined_redirect_url<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    The URL that a signer will be redirect
+to after declining to sign a document.
+Defining this URL overrides default or global
+declined redirect URL settings for a specific signer.
+Example: https://declined-example.com
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_sign-request-create-signer.generated.ts.html">schemas/sign-request-create-signer.generated.ts</a>, <a href="schemas_sign-request-create-signer.generated.ts.html#line62">line 62</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="email"><span class="type-signature"></span>email<span class="type-signature"> :string</span></h4>
 
 
@@ -261,7 +337,7 @@ Example: 1234
 
 <div class="description">
     Used in combination with an embed URL for a sender. After the
-sender signs, they will be redirected to the next `in_person` signer.
+sender signs, they are redirected to the next `in_person` signer.
 Example: true
 </div>
 
@@ -401,6 +477,158 @@ Example: 2
 
         
             
+<h4 class="name" id="password"><span class="type-signature"></span>password<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    If set, the signer is required to enter the password before they are able
+to sign a document. This field is write only.
+Example: SecretPassword123
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_sign-request-create-signer.generated.ts.html">schemas/sign-request-create-signer.generated.ts</a>, <a href="schemas_sign-request-create-signer.generated.ts.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="redirect_url"><span class="type-signature"></span>redirect_url<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    The URL that a signer will be redirected
+to after signing a document. Defining this URL
+overrides default or global redirect URL
+settings for a specific signer.
+If no declined redirect URL is specified,
+this URL will be used for decline actions as well.
+Example: https://example.com
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_sign-request-create-signer.generated.ts.html">schemas/sign-request-create-signer.generated.ts</a>, <a href="schemas_sign-request-create-signer.generated.ts.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="role"><span class="type-signature"></span>role<span class="type-signature"> :'signer'|'approver'|'final_copy_reader'</span></h4>
 
 
@@ -487,6 +715,80 @@ Example: signer
 
 
         
+            
+<h4 class="name" id="verification_phone_number"><span class="type-signature"></span>verification_phone_number<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    If set, this phone number is be used to verify the signer
+via two factor authentication before they are able to sign the document.
+Example: 6314578901
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_sign-request-create-signer.generated.ts.html">schemas/sign-request-create-signer.generated.ts</a>, <a href="schemas_sign-request-create-signer.generated.ts.html#line72">line 72</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
     
 
     
@@ -510,7 +812,7 @@ Example: signer
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Aug 09 2022 03:04:23 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Sep 23 2022 07:52:21 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
