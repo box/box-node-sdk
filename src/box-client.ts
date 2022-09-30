@@ -361,40 +361,40 @@ class BoxClient {
 		} else {
 			//Check that tokens are fresh, update if tokens are expired or soon-to-be expired
 
-			//params.headers = this._createHeadersForRequest(params.headers, 'TOKEN');
-			//return this._requestManager.makeRequest(params);
-			promise = this._session
-				.getAccessToken(this._tokenOptions)
-				.then((accessToken: string) => {
-					params.headers = this._createHeadersForRequest(
-						params.headers,
-						accessToken
-					);
+			params.headers = this._createHeadersForRequest(params.headers, 'token');
+			return this._requestManager.makeRequest(params);
+			// promise = this._session
+			// 	.getAccessToken(this._tokenOptions)
+			// 	.then((accessToken: string) => {
+			// 		params.headers = this._createHeadersForRequest(
+			// 			params.headers,
+			// 			accessToken
+			// 		);
 
-					if (params.streaming) {
-						// streaming is specific to the SDK, so delete it from params before continuing
-						delete params.streaming;
-						var responseStream =
-							this._requestManager.makeStreamingRequest(params);
-						// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
-						// due to expired access token
-						responseStream.on('response', (response: any /* FIXME */) => {
-							if (isUnauthorizedDueToExpiredAccessToken(response)) {
-								var expiredTokensError = errors.buildAuthError(response);
+			// 		if (params.streaming) {
+			// 			// streaming is specific to the SDK, so delete it from params before continuing
+			// 			delete params.streaming;
+			// 			var responseStream =
+			// 				this._requestManager.makeStreamingRequest(params);
+			// 			// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
+			// 			// due to expired access token
+			// 			responseStream.on('response', (response: any /* FIXME */) => {
+			// 				if (isUnauthorizedDueToExpiredAccessToken(response)) {
+			// 					var expiredTokensError = errors.buildAuthError(response);
 
-								// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
-								if (this._session.handleExpiredTokensError) {
-									this._session.handleExpiredTokensError(expiredTokensError);
-								}
-							}
-						});
+			// 					// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
+			// 					if (this._session.handleExpiredTokensError) {
+			// 						this._session.handleExpiredTokensError(expiredTokensError);
+			// 					}
+			// 				}
+			// 			});
 
-						return responseStream;
-					}
+			// 			return responseStream;
+			// 		}
 
-					// Make the request to Box, and perform standard response handling
-					return this._requestManager.makeRequest(params);
-				});
+			// 		// Make the request to Box, and perform standard response handling
+			// 		return this._requestManager.makeRequest(params);
+			// 	});
 			//return this._requestManager.makeRequest(params);
 		}
 
