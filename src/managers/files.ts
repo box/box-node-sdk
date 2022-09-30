@@ -12,9 +12,12 @@ import httpStatusCodes from 'http-status';
 import { Readable, Writable } from 'stream';
 import urlTemplate from 'url-template';
 import BoxClient from '../box-client';
+import * as schemas from '../schemas';
 import errors from '../util/errors';
 import urlPath from '../util/url-path';
-import * as schemas from "../schemas";
+var fetch = require('node-fetch');
+var fs = require('fs-extra');
+var FormData = require('form-data');
 
 const ChunkedUploader = require('../chunked-uploader');
 
@@ -65,16 +68,16 @@ type FileSharedLinkPermissions = {
 	/**
 	 * If the shared link allows only to view files. This can only be set when access is set to open or company.
 	 */
-	can_view?: true,
+	can_view?: true;
 	/**
 	 * If the shared link allows only to download files. This can only be set when access is set to open or company.
 	 */
-	can_download?: boolean,
+	can_download?: boolean;
 	/**
 	 * If the shared link allows only to edit files. This can only be set when access is set to open or company.
 	 */
-	can_edit?: boolean,
-}
+	can_edit?: boolean;
+};
 
 type FileSharedLink = {
 	/**
@@ -85,18 +88,18 @@ type FileSharedLink = {
 	 * To create a shared link with this default setting pass the shared_link object with no access field.
 	 * To remove access and change its value to default one pass the shared_link object with null value access field.
 	 */
-	access?: FileSharedLinkAccess,
+	access?: FileSharedLinkAccess;
 	/**
 	 * The password required to access the shared link. Set the password to null to remove it.
 	 * A password can only be set when access is set to open.
 	 */
-	password?: string | null,
+	password?: string | null;
 	/**
 	 * The timestamp at which this shared link will expire. This field can only be set by users with paid accounts.
 	 * The value must be greater than the current date and time.
 	 * Example value: '2012-12-12T10:53:43-08:00'
 	 */
-	unshared_at?: string | null,
+	unshared_at?: string | null;
 	/**
 	 * Defines a custom vanity name to use in the shared link URL, for example vanity_name: "my-shared-link" will
 	 * produce a shared link of "https://app.box.com/v/my-shared-link".
@@ -104,12 +107,12 @@ type FileSharedLink = {
 	 * Custom URLs should not be used when sharing sensitive content as vanity URLs are a lot easier to guess
 	 * than regular shared links.
 	 */
-	vanity_name?: string | null,
+	vanity_name?: string | null;
 	/**
 	 * Defines what actions are allowed on a shared link.
 	 */
-	permissions?: FileSharedLinkPermissions
-}
+	permissions?: FileSharedLinkPermissions;
+};
 
 // -----------------------------------------------------------------------------
 // Private
@@ -782,7 +785,7 @@ class Files {
 	uploadFile(
 		parentFolderID: string,
 		filename: string,
-		content: string | Buffer | Readable,
+		content: string | Buffer | Readable | any,
 		options?:
 			| {
 					content_created_at?: string;
@@ -800,23 +803,14 @@ class Files {
 		}
 
 		var formOptions: Record<string, any> = {};
-		if (options && options.hasOwnProperty('content_length')) {
-			formOptions.knownLength = options.content_length;
-			// Delete content_length from options so it's not added to the attributes of the form
-			delete options.content_length;
-		}
 
-		var apiPath = urlPath(BASE_PATH, '/content'),
-			multipartFormData = {
-				attributes: createFileMetadataFormData(
-					parentFolderID,
-					filename,
-					options
-				),
-				content: createFileContentFormData(content, formOptions),
-			};
+		var apiPath = urlPath(BASE_PATH, '/content');
+		var multipartFormData = {
+			attributes: createFileMetadataFormData(parentFolderID, filename, options),
+			content: createFileContentFormData(content, formOptions),
+		};
 
-		return this.client.wrapWithDefaultHandler(this.client.upload)(
+		return this.client.wrapWithDefaultHandler(this.client.uploadFetch)(
 			apiPath,
 			null,
 			multipartFormData,
@@ -1632,17 +1626,17 @@ class Files {
 				offset,
 			};
 
-			return this.getUploadSessionParts(sessionID, pagingOptions).then((
-				data: any /* FIXME */
-			) => {
-				fetchedParts = fetchedParts.concat(data.entries);
+			return this.getUploadSessionParts(sessionID, pagingOptions).then(
+				(data: any /* FIXME */) => {
+					fetchedParts = fetchedParts.concat(data.entries);
 
-				if (data.offset + data.entries.length >= data.total_count) {
-					return Promise.resolve(fetchedParts);
+					if (data.offset + data.entries.length >= data.total_count) {
+						return Promise.resolve(fetchedParts);
+					}
+
+					return fetchParts(offset + data.limit, fetchedParts);
 				}
-
-				return fetchParts(offset + data.limit, fetchedParts);
-			});
+			);
 		};
 
 		return (userParts ? Promise.resolve(userParts) : fetchParts(0, []))
@@ -1997,14 +1991,14 @@ class Files {
 						throw new Error('Representation had error status');
 					case 'none':
 					case 'pending':
-						return pollRepresentationInfo(this.client, repInfo.info.url).then((
-							info: any /* FIXME */
-						) => {
-							if (info.status.state === 'error') {
-								throw new Error('Representation had error status');
+						return pollRepresentationInfo(this.client, repInfo.info.url).then(
+							(info: any /* FIXME */) => {
+								if (info.status.state === 'error') {
+									throw new Error('Representation had error status');
+								}
+								return info.content.url_template;
 							}
-							return info.content.url_template;
-						});
+						);
 					default:
 						throw new Error(
 							`Unknown representation status: ${repInfo.status.state}`

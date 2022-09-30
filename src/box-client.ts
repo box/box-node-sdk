@@ -13,6 +13,7 @@ import Comments from './managers/comments';
 import DevicePins from './managers/device-pins';
 import Enterprise from './managers/enterprise';
 import Events from './managers/events';
+import FileRequestsManager from './managers/file-requests-manager';
 import Files from './managers/files';
 import Folders from './managers/folders';
 import Groups from './managers/groups';
@@ -30,7 +31,7 @@ import Trash from './managers/trash';
 import Users from './managers/users';
 import WebLinks from './managers/web-links';
 import Webhooks from './managers/webhooks';
-import FileRequestsManager from "./managers/file-requests-manager";
+var FormData = require('form-data');
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -350,6 +351,7 @@ class BoxClient {
 	 */
 	_makeRequest(params: any /* FIXME */, callback?: Function) {
 		var promise;
+		//return this._requestManager.makeRequest(params);
 
 		if (this._batch) {
 			// eslint-disable-next-line promise/avoid-new
@@ -357,7 +359,10 @@ class BoxClient {
 				this._batch.push({ params, resolve, reject });
 			});
 		} else {
-			// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
+			//Check that tokens are fresh, update if tokens are expired or soon-to-be expired
+
+			//params.headers = this._createHeadersForRequest(params.headers, 'TOKEN');
+			//return this._requestManager.makeRequest(params);
 			promise = this._session
 				.getAccessToken(this._tokenOptions)
 				.then((accessToken: string) => {
@@ -390,6 +395,7 @@ class BoxClient {
 					// Make the request to Box, and perform standard response handling
 					return this._requestManager.makeRequest(params);
 				});
+			//return this._requestManager.makeRequest(params);
 		}
 
 		return promise
@@ -621,6 +627,23 @@ class BoxClient {
 		path: string,
 		params: object | null,
 		formData: object | null,
+		callback: Function
+	) {
+		var defaults = {
+			method: 'POST',
+		};
+		var newParams = merge(defaults, params || {});
+		newParams.url = getFullURL(this._uploadBaseURL, path);
+		newParams.formData = formData;
+		newParams.timeout = this._uploadRequestTimeoutMS;
+
+		return this._makeRequest(newParams, callback);
+	}
+
+	uploadFetch(
+		path: string,
+		params: object | null,
+		formData: FormData | any,
 		callback: Function
 	) {
 		var defaults = {

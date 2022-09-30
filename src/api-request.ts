@@ -16,6 +16,9 @@ import httpStatusCodes from 'http-status';
 import request from 'request';
 import Config from './util/config';
 import getRetryTimeout from './util/exponential-backoff';
+var fetch = require('node-fetch');
+var fs = require('fs-extra');
+var FormData = require('form-data');
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -248,29 +251,67 @@ class APIRequest {
 	execute(callback?: APIRequestCallback) {
 		this._callback = callback || this._callback;
 
-		// Initiate an async- or stream-based request, based on the presence of the callback.
-		if (this._callback) {
-			// Start the request timer immediately before executing the async request
-			if (!asyncRequestTimer) {
-				asyncRequestTimer = process.hrtime();
-			}
-			this.request = request(
-				this.config.request,
-				this._handleResponse.bind(this)
+		var url = this.config.request['url'];
+
+		if (url == 'https://upload.box.com/api/2.0/files/content') {
+			var formData = new FormData();
+			formData.append(
+				'file',
+				this.config.request.formData.content.value,
+				this.config.request.formData.attributes.name
 			);
+			var formDataObj = JSON.parse(this.config.request.formData.attributes);
+			var attributes = {
+				name: formDataObj.name,
+				parent: {
+					id: formDataObj.parent.id,
+				},
+			};
+			formData.append('attributes', JSON.stringify(attributes));
+
+			console.log('UPLOAD USING NODE-FETCH');
+
+			this.request = fetch(url, {
+				headers: this.config.request['headers'],
+				//headers: { Authorization: 'Bearer token' },
+				method: this.config.request['method'],
+				body: formData,
+			})
+				.then((res: any) => {
+					console.log(res);
+					//this._handleResponse(null, res);
+				})
+				.catch((err: any) => {
+					console.log(err);
+					//this._handleResponse(err, {});
+				});
+			console.log('AFTER UPLOAD');
+			return;
 		} else {
-			this.request = request(this.config.request);
-			this.stream = this.request;
-			this.stream.on('error', (err) => {
-				this.eventBus.emit('response', err);
-			});
-			this.stream.on('response', (response) => {
-				if (isClientErrorResponse(response)) {
-					this.eventBus.emit('response', createErrorForResponse(response));
-					return;
+			if (this._callback) {
+				// Initiate an async- or stream-based request, based on the presence of the callback.
+				// Start the request timer immediately before executing the async request
+				if (!asyncRequestTimer) {
+					asyncRequestTimer = process.hrtime();
 				}
-				this.eventBus.emit('response', null, response);
-			});
+				this.request = request(
+					this.config.request,
+					this._handleResponse.bind(this)
+				);
+			} else {
+				this.request = request(this.config.request);
+				this.stream = this.request;
+				this.stream.on('error', (err) => {
+					this.eventBus.emit('response', err);
+				});
+				this.stream.on('response', (response) => {
+					if (isClientErrorResponse(response)) {
+						this.eventBus.emit('response', createErrorForResponse(response));
+						return;
+					}
+					this.eventBus.emit('response', null, response);
+				});
+			}
 		}
 	}
 
