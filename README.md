@@ -6,9 +6,7 @@ Box Node.js SDK
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
-A Node.js interface to the [Box Content API](https://developers.box.com/docs/).
-
-Getting Started Docs: https://developer.box.com/guides/tooling/sdks/node/
+A Node.js interface to the [Box Content API](https://developer.box.com/reference/).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -32,7 +30,7 @@ Getting Started Docs: https://developer.box.com/guides/tooling/sdks/node/
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
-
+Node SDK Installation [details](https://developer.box.com/guides/tooling/sdks/node/).
 
 ```
 npm install --save box-node-sdk
