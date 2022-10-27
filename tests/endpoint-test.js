@@ -2041,7 +2041,7 @@ describe('Endpoint', () => {
 			});
 		});
 		describe('deletePermanently()', () => {
-			it('should make GET call to delete file in trash', () => {
+			it('should make DELETE call to delete file in trash', () => {
 				var fileID = '11111';
 				apiMock
 					.delete(`/2.0/files/${fileID}/trash`)
@@ -4242,6 +4242,7 @@ describe('Endpoint', () => {
 				var policyName = 'Financial Records',
 					policyType = 'finite',
 					retentionLength = 365,
+					retentionType = 'non_modifiable',
 					dispositionAction = 'remove_retention',
 					fixture = getFixture(
 						'retention-policies/post_retention_policies_201'
@@ -4251,6 +4252,7 @@ describe('Endpoint', () => {
 					policy_type: policyType,
 					retention_length: retentionLength,
 					disposition_action: dispositionAction,
+					retention_type: retentionType,
 				};
 				apiMock
 					.post('/2.0/retention_policies', expectedBody)
@@ -4265,6 +4267,7 @@ describe('Endpoint', () => {
 					.reply(201, fixture);
 				var options = {
 					retention_length: retentionLength,
+					retention_type: retentionType,
 				};
 				return basicClient.retentionPolicies
 					.create(policyName, policyType, dispositionAction, options)
@@ -4297,11 +4300,15 @@ describe('Endpoint', () => {
 			it('should make PUT call to update policy', () => {
 				var policyID = '11111',
 					name = 'Retained Financial Records',
+					retentionLength = 365,
+					type = 'non_modifiable',
 					fixture = getFixture(
 						'retention-policies/put_retention_policies_id_200'
 					);
 				var expectedBody = {
 					policy_name: name,
+					retention_length: retentionLength,
+					retention_type: type,
 				};
 				apiMock
 					.put(`/2.0/retention_policies/${policyID}`, expectedBody)
@@ -4314,8 +4321,14 @@ describe('Endpoint', () => {
 						return true;
 					})
 					.reply(200, fixture);
+
+				var options = {
+					policy_name: name,
+					retention_length: retentionLength,
+					retention_type: type
+				};
 				return basicClient.retentionPolicies
-					.update(policyID, {policy_name: name})
+					.update(policyID, options)
 					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
 			});
 		});
@@ -4415,6 +4428,25 @@ describe('Endpoint', () => {
 					.getAssignments(policyID)
 					.then(assignments => assert.deepEqual(assignments, JSON.parse(fixture))
 					);
+			});
+		});
+		describe('deleteAssignment()', () => {
+			it('should make DELETE call to delete assignment', () => {
+				var assignmentID = '12345';
+				apiMock
+					.delete(`/2.0/retention_policy_assignments/${assignmentID}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+				return basicClient.retentionPolicies
+					.deleteAssignment(assignmentID)
+					.then(result => assert.isUndefined(result));
 			});
 		});
 		describe('getAllFileVersionRetentions()', () => {
@@ -4617,7 +4649,7 @@ describe('Endpoint', () => {
 			});
 		});
 		describe('delete()', () => {
-			it('should make PUT call to update task', () => {
+			it('should make DELETE call to delete task', () => {
 				var taskID = '11111';
 				apiMock
 					.delete(`/2.0/tasks/${taskID}`)
@@ -4767,7 +4799,7 @@ describe('Endpoint', () => {
 			});
 		});
 		describe('deleteAssignment()', () => {
-			it('should make GET call to retrieve task assignments', () => {
+			it('should make DELETE call to delete task assignments', () => {
 				var assignmentID = '12345';
 				apiMock
 					.delete(`/2.0/task_assignments/${assignmentID}`)
