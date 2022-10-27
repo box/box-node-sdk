@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/box/box-node-sdk/compare/v2.6.0...v2.7.0) (2022-10-27)
+
+
+### New Features and Enhancements
+
+* Add support for modifiable retention policies & enable deleting retention policy assignment ([#769](https://github.com/box/box-node-sdk/issues/769)) ([5e8c776](https://github.com/box/box-node-sdk/commit/5e8c776fc94e9dcf313cc15c96e42fbffaf36b74))
+
 ## [2.6.0](https://github.com/box/box-node-sdk/compare/v2.5.0...v2.6.0) (2022-09-23)
 
 
