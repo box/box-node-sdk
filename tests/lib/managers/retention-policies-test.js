@@ -79,11 +79,12 @@ describe('RetentionPolicies', function() {
 
 			expectedParams.body.retention_length = 30;
 			expectedParams.body.policy_type = 'finite';
+			expectedParams.body.retention_type = 'modifiable';
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/retention_policies', expectedParams);
-			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30});
+			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30, retention_type: 'modifiable'});
 		});
 
 		it('should wrap with default handler when called', function() {
@@ -92,7 +93,7 @@ describe('RetentionPolicies', function() {
 			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
 				.withArgs(boxClientFake.post)
 				.returnsArg(0);
-			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30});
+			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30, retention_type: 'modifiable'});
 		});
 
 		it('should pass results to callback when callback is present', function(done) {
@@ -100,7 +101,7 @@ describe('RetentionPolicies', function() {
 			var response = {};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'post').yieldsAsync(null, response);
-			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30}, function(err, data) {
+			retentionPolicies.create(POLICY_NAME, 'finite', DISPOSITION_ACTION, {retention_length: 30, retention_type: 'modifiable'}, function(err, data) {
 
 				assert.ifError(err);
 				assert.equal(data, response);
@@ -168,7 +169,10 @@ describe('RetentionPolicies', function() {
 
 		beforeEach(function() {
 
-			options = {retention_length: 60};
+			options = {
+				retention_length: 60,
+				retention_type: 'non_modifiable'
+			};
 		});
 
 		it('should make PUT request to update policy info when called', function() {
@@ -425,6 +429,50 @@ describe('RetentionPolicies', function() {
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
 			return retentionPolicies.getAssignment(ASSIGNMENT_ID)
+				.then(data => assert.equal(data, response));
+		});
+	});
+
+	describe('deleteAssignment()', function() {
+
+		const ASSIGNMENT_ID = '876345';
+
+		it('should make DELETE request to remove assignment', function() {
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('del')
+				.withArgs(`/retention_policy_assignments/${ASSIGNMENT_ID}`);
+			retentionPolicies.deleteAssignment(ASSIGNMENT_ID);
+		});
+
+		it('should wrap with default handler when called', function() {
+
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve());
+			sandbox.mock(boxClientFake).expects('wrapWithDefaultHandler')
+				.withArgs(boxClientFake.del)
+				.returnsArg(0);
+			retentionPolicies.deleteAssignment(ASSIGNMENT_ID);
+		});
+
+		it('should pass results to callback when callback is present', function(done) {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').yieldsAsync(null, response);
+			retentionPolicies.deleteAssignment(ASSIGNMENT_ID, function(err, data) {
+
+				assert.ifError(err);
+				assert.equal(data, response);
+				done();
+			});
+		});
+
+		it('should return promise resolving to results when called', function() {
+
+			var response = {};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'del').returns(Promise.resolve(response));
+			return retentionPolicies.deleteAssignment(ASSIGNMENT_ID)
 				.then(data => assert.equal(data, response));
 		});
 	});

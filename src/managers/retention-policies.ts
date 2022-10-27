@@ -24,6 +24,27 @@ enum RetentionPolicyType {
 }
 
 /**
+ * Enum of valid retention types.
+ * @readonly
+ * @enum {RetentionType}
+ */
+ enum RetentionType {
+	 /**
+	  * You can modify the retention policy. For example, you can add or remove folders,
+	  * shorten or lengthen the policy duration, or delete the assignment.
+	  * Use this type if your retention policy is not related to any regulatory purposes.
+	  */
+	MODIFIABLE = 'modifiable',
+	 /**
+	  * You can modify the retention policy only in a limited way: add a folder, lengthen the duration,
+	  * retire the policy, change the disposition action or notification settings.
+	  * You cannot perform other actions, such as deleting the assignment or shortening the policy duration.
+	  * Use this type to ensure compliance with regulatory retention policies.
+	  */
+	NON_MODIFIABLE = 'non_modifiable',
+}
+
+/**
  * Enum of valid retention policy disposition actions, which specify what should
  * be done when the retention period is over
  * @readonly
@@ -100,6 +121,7 @@ class RetentionPolicies {
 	 * @param {RetentionPolicyDispositionAction} action - The disposition action for the new policy
 	 * @param {Object} [options] - Additional parameters
 	 * @param {int} [options.retention_length] - For finite policies, the number of days to retain the content
+	 * @param {RetentionType} [options.retention_type] - The type of retention for the new policy
 	 * @param {Function} [callback] - Passed the new policy information if it was acquired successfully, error otherwise
 	 * @returns {Promise<Object>} A promise resolving to the new policy object
 	 */
@@ -109,6 +131,7 @@ class RetentionPolicies {
 		action: RetentionPolicyDispositionAction,
 		options?: {
 			retention_length?: number;
+			retention_type?: RetentionType;
 		},
 		callback?: Function
 	) {
@@ -164,6 +187,8 @@ class RetentionPolicies {
 	 * @param {Object} updates - The information to be updated
 	 * @param {string} [updates.policy_name] - The name of the retention policy
 	 * @param {RetentionPolicyDispositionAction} [updates.disposition_action] - The disposition action for the updated policy
+	 * @param {int} [updates.retention_length] - For finite policies, the number of days to retain the content
+	 * @param {RetentionType} [updates.retention_type] - The type of retention. The only possible value here is non_modifiable. You can convert a modifiable policy to non_modifiable, but not the other way around.
 	 * @param {string} [updates.status] - Used to retire a retention policy if status is set to retired
 	 * @param {Function} [callback] - Passed the updated policy information if it was acquired successfully, error otherwise
 	 * @returns {Promise<Object>} A promise resolving to the updated policy object
@@ -173,6 +198,8 @@ class RetentionPolicies {
 		updates: {
 			policy_name?: string;
 			disposition_action?: RetentionPolicyDispositionAction;
+			retention_length?: number;
+			retention_type?: RetentionType;
 			status?: string;
 		},
 		callback?: Function
@@ -329,6 +356,26 @@ class RetentionPolicies {
 		return this.client.wrapWithDefaultHandler(this.client.get)(
 			apiPath,
 			params,
+			callback
+		);
+	}
+
+	/**
+	 * Delete a specific policy assignment.
+	 *
+	 * API Endpoint: '/retention_policy_assignments/:assignmentID'
+	 * Method: DELETE
+	 *
+	 * @param {string} assignmentID - The Box ID of the policy assignment object to delete
+	 * @param {Function} [callback] - Empty response body passed if successful.
+	 * @returns {Promise<void>} A promise resolving to nothing
+	 */
+	deleteAssignment(assignmentID: string, callback?: Function) {
+		var apiPath = urlPath(ASSIGNMENTS_PATH, assignmentID)
+
+		return this.client.wrapWithDefaultHandler(this.client.del)(
+			apiPath,
+			null,
 			callback
 		);
 	}
