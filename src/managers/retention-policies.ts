@@ -28,19 +28,19 @@ enum RetentionPolicyType {
  * @readonly
  * @enum {RetentionType}
  */
- enum RetentionType {
-	 /**
-	  * You can modify the retention policy. For example, you can add or remove folders,
-	  * shorten or lengthen the policy duration, or delete the assignment.
-	  * Use this type if your retention policy is not related to any regulatory purposes.
-	  */
+enum RetentionType {
+	/**
+	 * You can modify the retention policy. For example, you can add or remove folders,
+	 * shorten or lengthen the policy duration, or delete the assignment.
+	 * Use this type if your retention policy is not related to any regulatory purposes.
+	 */
 	MODIFIABLE = 'modifiable',
-	 /**
-	  * You can modify the retention policy only in a limited way: add a folder, lengthen the duration,
-	  * retire the policy, change the disposition action or notification settings.
-	  * You cannot perform other actions, such as deleting the assignment or shortening the policy duration.
-	  * Use this type to ensure compliance with regulatory retention policies.
-	  */
+	/**
+	 * You can modify the retention policy only in a limited way: add a folder, lengthen the duration,
+	 * retire the policy, change the disposition action or notification settings.
+	 * You cannot perform other actions, such as deleting the assignment or shortening the policy duration.
+	 * Use this type to ensure compliance with regulatory retention policies.
+	 */
 	NON_MODIFIABLE = 'non_modifiable',
 }
 
@@ -105,6 +105,7 @@ class RetentionPolicies {
 	policyTypes!: typeof RetentionPolicyType;
 	dispositionActions!: typeof RetentionPolicyDispositionAction;
 	assignmentTypes!: typeof RetentionPolicyAssignmentType;
+	retentionTypes!: typeof RetentionType;
 
 	constructor(client: BoxClient) {
 		this.client = client;
@@ -557,5 +558,12 @@ RetentionPolicies.prototype.dispositionActions =
  * @enum {RetentionPolicyAssignmentType}
  */
 RetentionPolicies.prototype.assignmentTypes = RetentionPolicyAssignmentType;
+
+/**
+ * Enum of valid retention types. Could be either modifiable or non-modifiable.
+ * @readonly
+ * @enum {RetentionType}
+ */
+RetentionPolicies.prototype.retentionTypes = RetentionType;
 
 export = RetentionPolicies;
