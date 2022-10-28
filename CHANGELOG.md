@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.1](https://github.com/box/box-node-sdk/compare/v2.7.0...v2.7.1) (2022-10-28)
+
+
+### Bug Fixes
+
+* Export missing `RetentionType` ([#774](https://github.com/box/box-node-sdk/issues/774)) ([7e6b244](https://github.com/box/box-node-sdk/commit/7e6b244ba63d363ecc921be570140c9e1ed1d032))
+
 ## [2.7.0](https://github.com/box/box-node-sdk/compare/v2.6.0...v2.7.0) (2022-10-27)
 
 
