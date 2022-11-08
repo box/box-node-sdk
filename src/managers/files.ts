@@ -460,6 +460,12 @@ class Files {
 			delete updates.etag;
 		}
 
+		if (updates && updates.shared_link) {
+			params.qs = {
+				fields: 'shared_link',
+			};
+		}
+
 		var apiPath = urlPath(BASE_PATH, fileID);
 		return this.client.wrapWithDefaultHandler(this.client.put)(
 			apiPath,

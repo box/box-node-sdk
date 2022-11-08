@@ -271,6 +271,12 @@ class Folders {
 			delete updates.etag;
 		}
 
+		if (updates && updates.shared_link) {
+			params.qs = {
+				fields: 'shared_link',
+			};
+		}
+
 		var apiPath = urlPath(BASE_PATH, folderID);
 		return this.client.wrapWithDefaultHandler(this.client.put)(
 			apiPath,
