@@ -1081,7 +1081,7 @@ describe('Endpoint', () => {
 				};
 				const fixture = getFixture('files/put_files_shared_link_200');
 				apiMock
-					.put(`/2.0/files/${fileID}`, updates)
+					.put(`/2.0/files/${fileID}?fields=shared_link`, updates)
 					.matchHeader('Authorization', authHeader => {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
