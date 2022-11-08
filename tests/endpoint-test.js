@@ -1081,6 +1081,48 @@ describe('Endpoint', () => {
 				};
 				const fixture = getFixture('files/put_files_shared_link_200');
 				apiMock
+					.put(`/2.0/files/${fileID}`, updates)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+				basicClient.files.update(
+					fileID,
+					{
+						shared_link: {
+							access: 'open',
+							password: 'do-not-use-this-password',
+							unshared_at: '2022-12-12T10:53:43-08:00',
+							permissions: {
+								can_edit: true
+							}
+						}
+					},
+					(err, data) => {
+						assert.isNull(err);
+						assert.deepEqual(data, JSON.parse(fixture));
+						done();
+					});
+			});
+			it('should create a shared link with custom return params', done => {
+				const fileID = '1234567890';
+				const updates = {
+					shared_link: {
+						access: 'open',
+						password: 'do-not-use-this-password',
+						unshared_at: '2022-12-12T10:53:43-08:00',
+						permissions: {
+							can_edit: true
+						}
+					}
+				};
+				const fixture = getFixture('files/put_files_shared_link_custom_params_200');
+				apiMock
 					.put(`/2.0/files/${fileID}?fields=shared_link`, updates)
 					.matchHeader('Authorization', authHeader => {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
