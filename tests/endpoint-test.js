@@ -1101,7 +1101,8 @@ describe('Endpoint', () => {
 							permissions: {
 								can_edit: true
 							}
-						}
+						},
+						fields: 'shared_link'
 					},
 					(err, data) => {
 						assert.isNull(err);
