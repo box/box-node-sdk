@@ -81,6 +81,7 @@ function getUserClient(userID) {
 	return client;
 }
 
+// eslint-disable-next-line require-jsdoc
 function getAdminClient() {
 	let jwtConfig = getJwtConfig();
 	let sdk = BoxSDK.getPreconfiguredInstance(jwtConfig);
