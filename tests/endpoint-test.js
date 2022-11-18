@@ -913,6 +913,26 @@ describe('Endpoint', () => {
 					done();
 				});
 			});
+			it('should get disposition timestamp', done => {
+				var fileID = '1234567890',
+					fixture = getFixture('files/get_files_disposition_at_200');
+				apiMock
+					.get(`/2.0/files/${fileID}?fields=disposition_at`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+				basicClient.files.get(fileID, {fields: 'disposition_at'}, (err, data) => {
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+					done();
+				});
+			});
 		});
 		describe('getDownloadURL()', () => {
 			it('should make correct request and correctly parse response when API call is successful', done => {
@@ -1145,6 +1165,35 @@ describe('Endpoint', () => {
 							}
 						},
 						fields: 'shared_link'
+					},
+					(err, data) => {
+						assert.isNull(err);
+						assert.deepEqual(data, JSON.parse(fixture));
+						done();
+					});
+			});
+			it('should extend the retention policy expiration date for the file', done => {
+				const fileID = '1234567890';
+				const updates = {
+					disposition_at: '2023-12-12T10:53:43-08:00',
+				};
+				const fixture = getFixture('files/put_files_disposition_at_custom_params_200');
+				apiMock
+					.put(`/2.0/files/${fileID}?fields=disposition_at`, updates)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+				basicClient.files.update(
+					fileID,
+					{
+						disposition_at: '2023-12-12T10:53:43-08:00',
+						fields: 'disposition_at'
 					},
 					(err, data) => {
 						assert.isNull(err);
