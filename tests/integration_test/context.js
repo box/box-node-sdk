@@ -5,7 +5,6 @@ const BoxSDK = require('box-node-sdk');
 
 const testConfig = require('./test-config.json');
 const JWT_CONFIG_ENV_NAME = 'JWT_CONFIG';
-const ADMIN_USER_ID_ENV_NAME = 'ADMIN_USER_ID';
 
 // eslint-disable-next-line require-jsdoc
 function getJwtConfigFromFile() {
@@ -28,24 +27,6 @@ function getJwtConfigFromEnv() {
 }
 
 // eslint-disable-next-line require-jsdoc
-function getAdminIdFromFile() {
-	let adminId = testConfig.admin_user_id;
-	if (!adminId) {
-		return null;
-	}
-	return adminId;
-}
-
-// eslint-disable-next-line require-jsdoc
-function getAdminIdFromEnv() {
-	let adminId = process.env[ADMIN_USER_ID_ENV_NAME];
-	if (!adminId) {
-		return null;
-	}
-	return adminId;
-}
-
-// eslint-disable-next-line require-jsdoc
 function getJwtConfig() {
 	let jwtConfig = getJwtConfigFromFile() || getJwtConfigFromEnv();
 	if (!jwtConfig) {
@@ -54,17 +35,6 @@ function getJwtConfig() {
 		);
 	}
 	return jwtConfig;
-}
-
-// eslint-disable-next-line require-jsdoc
-function getAdminUserId() {
-	let adminId = getAdminIdFromFile() || getAdminIdFromEnv();
-	if (!adminId) {
-		throw new Error(
-			`Admin user ID cannot be loaded. Missing environment variable: ${ADMIN_USER_ID_ENV_NAME} or admin user ID in test-config.json file.`
-		);
-	}
-	return adminId;
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -81,15 +51,7 @@ function getUserClient(userID) {
 	return client;
 }
 
-// eslint-disable-next-line require-jsdoc
-function getAdminClient() {
-	let jwtConfig = getJwtConfig();
-	let sdk = BoxSDK.getPreconfiguredInstance(jwtConfig);
-	return sdk.getAppAuthClient('user', getAdminUserId());
-}
-
 module.exports = {
 	getAppClient,
 	getUserClient,
-	getAdminClient,
 };
