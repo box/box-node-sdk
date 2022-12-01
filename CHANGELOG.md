@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.2](https://github.com/box/box-node-sdk/compare/v2.7.1...v2.7.2) (2022-11-10)
+
+
+### Bug Fixes
+
+* Add `fields` query parameter to file and folder update ([#776](https://github.com/box/box-node-sdk/issues/776)) ([a327deb](https://github.com/box/box-node-sdk/commit/a327debc83d98a4190a5a16cf848417ea5714db9))
+
+### [2.7.1](https://github.com/box/box-node-sdk/compare/v2.7.0...v2.7.1) (2022-10-28)
+
+
+### Bug Fixes
+
+* Export missing `RetentionType` ([#774](https://github.com/box/box-node-sdk/issues/774)) ([7e6b244](https://github.com/box/box-node-sdk/commit/7e6b244ba63d363ecc921be570140c9e1ed1d032))
+
+## [2.7.0](https://github.com/box/box-node-sdk/compare/v2.6.0...v2.7.0) (2022-10-27)
+
+
+### New Features and Enhancements
+
+* Add support for modifiable retention policies & enable deleting retention policy assignment ([#769](https://github.com/box/box-node-sdk/issues/769)) ([5e8c776](https://github.com/box/box-node-sdk/commit/5e8c776fc94e9dcf313cc15c96e42fbffaf36b74))
+
 ## [2.6.0](https://github.com/box/box-node-sdk/compare/v2.5.0...v2.6.0) (2022-09-23)
 
 

@@ -248,6 +248,7 @@ class Folders {
 	 * @param {string} folderID - The Box ID of the folder being requested
 	 * @param {Object} updates - Folder fields to update
 	 * @param {string} [updates.etag] Only update the folder if the ETag matches
+	 * @param {string} [updates.fields] Comma-separated list of fields to return
 	 * @param {Function} [callback] - Passed the updated folder information if it was acquired successfully
 	 * @returns {Promise<Object>} A promise resolving to the updated folder object
 	 */
@@ -257,6 +258,7 @@ class Folders {
 			[key: string]: any;
 			etag?: string;
 			shared_link?: FolderSharedLink;
+			fields?: string;
 		},
 		callback?: Function
 	) {
@@ -269,6 +271,13 @@ class Folders {
 				'If-Match': updates.etag,
 			};
 			delete updates.etag;
+		}
+
+		if (updates && updates.fields) {
+			params.qs = {
+				fields: updates.fields,
+			};
+			delete updates.fields;
 		}
 
 		var apiPath = urlPath(BASE_PATH, folderID);

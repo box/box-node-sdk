@@ -440,6 +440,7 @@ class Files {
 	 * @param {string} fileID - Box ID of the file being requested
 	 * @param {Object} updates - File fields to update
 	 * @param {string} [updates.etag] Only apply the updates if the file etag matches
+	 * @param {string} [updates.fields] Comma-separated list of fields to return
 	 * @param {Function} [callback] - Passed the updated file information if it was acquired successfully
 	 * @returns {Promise<Object>} A promise resolving to the update file object
 	 */
@@ -449,6 +450,7 @@ class Files {
 			[key: string]: any;
 			etag?: string;
 			shared_link?: FileSharedLink;
+			fields?: string;
 		},
 		callback?: Function
 	) {
@@ -461,6 +463,13 @@ class Files {
 				'If-Match': updates.etag,
 			};
 			delete updates.etag;
+		}
+
+		if (updates && updates.fields) {
+			params.qs = {
+				fields: updates.fields,
+			};
+			delete updates.fields;
 		}
 
 		var apiPath = urlPath(BASE_PATH, fileID);
