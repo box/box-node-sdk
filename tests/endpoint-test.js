@@ -913,6 +913,26 @@ describe('Endpoint', () => {
 					done();
 				});
 			});
+			it('should get disposition timestamp', done => {
+				var fileID = '1234567890',
+					fixture = getFixture('files/get_files_disposition_at_200');
+				apiMock
+					.get(`/2.0/files/${fileID}?fields=disposition_at`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+				basicClient.files.get(fileID, {fields: 'disposition_at'}, (err, data) => {
+					assert.isNull(err);
+					assert.deepEqual(data, JSON.parse(fixture));
+					done();
+				});
+			});
 		});
 		describe('getDownloadURL()', () => {
 			it('should make correct request and correctly parse response when API call is successful', done => {
@@ -1102,6 +1122,78 @@ describe('Endpoint', () => {
 								can_edit: true
 							}
 						}
+					},
+					(err, data) => {
+						assert.isNull(err);
+						assert.deepEqual(data, JSON.parse(fixture));
+						done();
+					});
+			});
+			it('should create a shared link with custom return params', done => {
+				const fileID = '1234567890';
+				const updates = {
+					shared_link: {
+						access: 'open',
+						password: 'do-not-use-this-password',
+						unshared_at: '2022-12-12T10:53:43-08:00',
+						permissions: {
+							can_edit: true
+						}
+					}
+				};
+				const fixture = getFixture('files/put_files_shared_link_custom_params_200');
+				apiMock
+					.put(`/2.0/files/${fileID}?fields=shared_link`, updates)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+				basicClient.files.update(
+					fileID,
+					{
+						shared_link: {
+							access: 'open',
+							password: 'do-not-use-this-password',
+							unshared_at: '2022-12-12T10:53:43-08:00',
+							permissions: {
+								can_edit: true
+							}
+						},
+						fields: 'shared_link'
+					},
+					(err, data) => {
+						assert.isNull(err);
+						assert.deepEqual(data, JSON.parse(fixture));
+						done();
+					});
+			});
+			it('should extend the retention policy expiration date for the file', done => {
+				const fileID = '1234567890';
+				const updates = {
+					disposition_at: '2023-12-12T10:53:43-08:00',
+				};
+				const fixture = getFixture('files/put_files_disposition_at_custom_params_200');
+				apiMock
+					.put(`/2.0/files/${fileID}?fields=disposition_at`, updates)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, fixture);
+				basicClient.files.update(
+					fileID,
+					{
+						disposition_at: '2023-12-12T10:53:43-08:00',
+						fields: 'disposition_at'
 					},
 					(err, data) => {
 						assert.isNull(err);
@@ -2041,7 +2133,7 @@ describe('Endpoint', () => {
 			});
 		});
 		describe('deletePermanently()', () => {
-			it('should make GET call to delete file in trash', () => {
+			it('should make DELETE call to delete file in trash', () => {
 				var fileID = '11111';
 				apiMock
 					.delete(`/2.0/files/${fileID}/trash`)
@@ -4242,6 +4334,7 @@ describe('Endpoint', () => {
 				var policyName = 'Financial Records',
 					policyType = 'finite',
 					retentionLength = 365,
+					retentionType = 'non_modifiable',
 					dispositionAction = 'remove_retention',
 					fixture = getFixture(
 						'retention-policies/post_retention_policies_201'
@@ -4251,6 +4344,7 @@ describe('Endpoint', () => {
 					policy_type: policyType,
 					retention_length: retentionLength,
 					disposition_action: dispositionAction,
+					retention_type: retentionType,
 				};
 				apiMock
 					.post('/2.0/retention_policies', expectedBody)
@@ -4265,6 +4359,7 @@ describe('Endpoint', () => {
 					.reply(201, fixture);
 				var options = {
 					retention_length: retentionLength,
+					retention_type: retentionType,
 				};
 				return basicClient.retentionPolicies
 					.create(policyName, policyType, dispositionAction, options)
@@ -4297,11 +4392,15 @@ describe('Endpoint', () => {
 			it('should make PUT call to update policy', () => {
 				var policyID = '11111',
 					name = 'Retained Financial Records',
+					retentionLength = 365,
+					type = 'non_modifiable',
 					fixture = getFixture(
 						'retention-policies/put_retention_policies_id_200'
 					);
 				var expectedBody = {
 					policy_name: name,
+					retention_length: retentionLength,
+					retention_type: type,
 				};
 				apiMock
 					.put(`/2.0/retention_policies/${policyID}`, expectedBody)
@@ -4314,8 +4413,14 @@ describe('Endpoint', () => {
 						return true;
 					})
 					.reply(200, fixture);
+
+				var options = {
+					policy_name: name,
+					retention_length: retentionLength,
+					retention_type: type
+				};
 				return basicClient.retentionPolicies
-					.update(policyID, {policy_name: name})
+					.update(policyID, options)
 					.then(policy => assert.deepEqual(policy, JSON.parse(fixture)));
 			});
 		});
@@ -4415,6 +4520,25 @@ describe('Endpoint', () => {
 					.getAssignments(policyID)
 					.then(assignments => assert.deepEqual(assignments, JSON.parse(fixture))
 					);
+			});
+		});
+		describe('deleteAssignment()', () => {
+			it('should make DELETE call to delete assignment', () => {
+				var assignmentID = '12345';
+				apiMock
+					.delete(`/2.0/retention_policy_assignments/${assignmentID}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(204);
+				return basicClient.retentionPolicies
+					.deleteAssignment(assignmentID)
+					.then(result => assert.isUndefined(result));
 			});
 		});
 		describe('getAllFileVersionRetentions()', () => {
@@ -4617,7 +4741,7 @@ describe('Endpoint', () => {
 			});
 		});
 		describe('delete()', () => {
-			it('should make PUT call to update task', () => {
+			it('should make DELETE call to delete task', () => {
 				var taskID = '11111';
 				apiMock
 					.delete(`/2.0/tasks/${taskID}`)
@@ -4767,7 +4891,7 @@ describe('Endpoint', () => {
 			});
 		});
 		describe('deleteAssignment()', () => {
-			it('should make GET call to retrieve task assignments', () => {
+			it('should make DELETE call to delete task assignments', () => {
 				var assignmentID = '12345';
 				apiMock
 					.delete(`/2.0/task_assignments/${assignmentID}`)

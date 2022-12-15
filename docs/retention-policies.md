@@ -15,6 +15,7 @@ policies scope enabled for your API key via your application management console.
 - [Get Retention Policy Assignments](#get-retention-policy-assignments)
 - [Assign Retention Policy](#assign-retention-policy)
 - [Get Retention Policy Assignment](#get-retention-policy-assignment)
+- [Delete Retention Policy Assignment](#delete-retention-policy-assignment)
 - [Get File Version Retention](#get-file-version-retention)
 - [Get File Version Retentions](#get-file-version-retentions)
 
@@ -40,6 +41,7 @@ client.retentionPolicies.create(
 		policy_name: 'Tax Documents',
 		policy_type: 'indefinite',
 		retention_length: 'indefinite',
+		retention_type: 'modifiable',
 		disposition_action: 'remove_retention',
 		can_owner_extend_retention: false,
 		status: 'active',
@@ -73,6 +75,7 @@ client.retentionPolicies.get('123456789').then((policy) => {
 			policy_name: 'Tax Documents',
 			policy_type: 'indefinite',
 			retention_length: 'indefinite',
+			retention_type: 'modifiable',
 			disposition_action: 'remove_retention',
 			can_owner_extend_retention: false,
 			status: 'active',
@@ -107,6 +110,7 @@ client.retentionPolicies
 			policy_name: 'Tax Documents',
 			policy_type: 'indefinite',
 			retention_length: 'indefinite',
+			retention_type: 'modifiable',
 			disposition_action: 'remove_retention',
 			can_owner_extend_retention: false,
 			status: 'retired',
@@ -272,6 +276,21 @@ client.retentionPolicies.getAssignment('12345').then((assignment) => {
 			assigned_at: '2015-07-20T14:28:09-07:00' }
 		*/
 });
+```
+
+## Delete Retention Policy Assignment
+
+To delete a retention policy assignment, call the
+[`retentionPolicies.deleteAssignment(assignmentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#deleteAssignment)
+method.
+
+<!-- sample delete_retention_policy_assignments_id -->
+
+```js
+client.retentionPolicies.deleteAssignment('12345')
+	.then(() => {
+		// deletion succeeded — no value returned
+	});
 ```
 
 ## Get File Version Retention
