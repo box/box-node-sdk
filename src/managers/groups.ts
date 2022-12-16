@@ -392,6 +392,32 @@ class Groups {
 			callback
 		);
 	}
+
+
+	/**
+	 * Validates the roles and permissions of the group,
+	 * and creates asynchronous jobs to terminate the group's sessions.
+	 * 
+	 * API Endpoint: '/groups/:groupID/terminate_sessions'
+	 * Method: POST
+	 * 
+	 * @param {string[]} groupIDs A list of group IDs
+	 * @returns {Promise<Object>} A promise resolving a message about the request status.
+	 */
+	 terminateSessionByGroupIDs(groupIDs: string[], callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, 'terminate_sessions'),
+			params = {
+				body: {
+					group_ids: groupIDs
+				}
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		)
+	}
 }
 
 /**

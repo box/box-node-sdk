@@ -310,10 +310,55 @@ class Users {
 		);
 	}
 
-	// @NOTE(fschott) 2014-05-06: Still need to implement get, edit, create, etc.
-	//  The problem is that they are only available to enterprise admins, so we'll
-	//  first need to figure out how we want to handle access to those methods.
-	//  Remove this comment once we have.
+	/**
+	 * Validates the roles and permissions of the user, 
+	 * and creates asynchronous jobs to terminate the user's sessions.
+	 * 
+	 * API Endpoint: '/users/terminate_sessions'
+	 * Method: POST
+	 * 
+	 * @param {string[]} userIDs The ID of the user whose sessions should be terminated
+	 * @returns {Promise<Object>} A promise resolving a message about the request status.
+	 */
+	terminateSessionByUserIDs(userIDs: string[], callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, 'terminate_sessions'),
+			params ={
+				body: {
+					user_ids: userIDs
+				}
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		)
+	}
+
+	/**
+	 * Validate the roles and permissions of the user,
+	 * and creates asynchronous jobs to terminate the user's sessions.
+	 * 
+	 * API Endpoint: '/users/terminate_sessions'
+	 * Method: POST
+	 * 
+	 * @param {string[]} userLogins The logins of the user whose sessions should be terminated
+	 * @returns {Promise<Object>} A promise resolving a message about the request status.
+	 */
+	terminateSessionByUserLogins(userLogins: string[], callback?: Function) {
+		var apiPath = urlPath(BASE_PATH, 'terminate_sessions'),
+			params = {
+				body: {
+					user_logins: userLogins
+				}
+			};
+
+		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		)
+	}
 }
 
 /** @const {string} */

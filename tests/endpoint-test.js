@@ -3344,6 +3344,36 @@ describe('Endpoint', () => {
 					.then(collabs => assert.deepEqual(collabs, JSON.parse(fixture)));
 			});
 		});
+		describe('terminateSessionByGroupIDs()', () => {
+			it('should make POST call to terminate sessions by group IDs', done => {
+				const groupIDs = [
+					'11111',
+					'22222'
+				];
+				const expectedReturn = {
+					message: 'Request is successful, please check the admin events for the status of the job'
+				};
+				apiMock
+					.post('/2.0/groups/terminate_sessions', {
+						group_ids: groupIDs
+					})
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(200, expectedReturn);
+				basicClient.groups
+					.terminateSessionByGroupIDs(groupIDs, (err, result) => {
+						assert.ifError(err);
+						assert.deepEqual(result, expectedReturn);
+						done();
+					});
+			});
+		});
 	});
 	describe('Legal Holds', () => {
 		describe('create()', () => {
@@ -5080,6 +5110,56 @@ describe('Endpoint', () => {
 				basicClient.users.deleteAvatar(userID, (error, result) => {
 					assert.ifError(error);
 					assert.isUndefined(result);
+					done();
+				});
+			});
+		});
+		describe('terminateSessionByUserIDs()', () => {
+			it('should make POST request to terminate sessions by user IDs and resolve with message', done => {
+				const userIDs = [
+					'12345',
+					'67890'
+				];
+				const expectedReturn = {
+					message: 'Request is successful, please check the admin events for the status of the job'
+				};
+				apiMock
+					.post('/2.0/users/terminate_sessions', {
+						user_ids: userIDs
+					})
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, expectedReturn);
+				basicClient.users.terminateSessionByUserIDs(userIDs, (error, result) => {
+					assert.ifError(error);
+					assert.deepEqual(result, expectedReturn);
+					done();
+				});
+			});
+		});
+		describe('terminateSessionByUserLogins()', () => {
+			it('should make POST request to terminate sessions by user logins and resolve with message', done => {
+				const userLogins = [
+					'user@example.com',
+					'user2@example.com'
+				];
+				const expectedReturn = {
+					message: 'Request is successful, please check the admin events for the status of the job'
+				};
+				apiMock
+					.post('/2.0/users/terminate_sessions', {
+						user_logins: userLogins
+					})
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, expectedReturn);
+				basicClient.users.terminateSessionByUserLogins(userLogins, (error, result) => {
+					assert.ifError(error);
+					assert.deepEqual(result, expectedReturn);
 					done();
 				});
 			});
