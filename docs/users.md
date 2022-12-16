@@ -289,3 +289,28 @@ client.users.removeEmailAlias(userID, aliasID)
         // removal successful — no value returned
     });
 ```
+
+Terminate users session
+----------------------
+
+To terminate user's sessions call the [`users.terminateSessionByUserIDs(userIDs, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#terminateSessionByUserIDs) or `users.terminateSessionByUserLogins(userLogins, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#terminateSessionByUserLogins) method.
+
+<!-- sample post_users_terminate_sessions -->
+```js
+var userIDs = ['33333', '44444'];
+var userLogins = ['user1@example.com', 'user2@example.com'];
+
+client.users.terminateSessionByUserIDs(userIDs)
+    .then((result) => {
+        /* result -> {
+            message: "Request is successful, please check the admin events for the status of the job" }
+        */
+    });
+
+client.users.terminateSessionByUserLogins(userLogins)
+    .then((result) => {
+        /* result -> {
+            message: "Request is successful, please check the admin events for the status of the job" }
+        */
+    });
+```

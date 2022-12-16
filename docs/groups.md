@@ -379,3 +379,21 @@ client.groups.getCollaborations('11111')
 		*/
 	});
 ```
+
+Terminate user group session
+----------------------------
+
+To terminate a user's session for a group, call the
+[`groups.terminateSessionByGroupIDs(groupID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#terminateSessionByGroupIDs) method.
+
+<!-- sample post_groups_terminate_sessions -->
+```js
+var groupIDs = '11111';
+
+client.groups.terminateSessionByGroupIDs(groupIDs)
+	.then((result) => {
+		/* result -> {
+			message: 'Request is successful, please check the admin events for the status of the job'
+		} */ 
+	});
+```
