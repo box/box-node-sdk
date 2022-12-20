@@ -357,7 +357,7 @@ client.retentionPolicies
 To retrieve information about files under retention, call the
 [`retentionPolicies.getFilesUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFilesUnderRetentionForAssignment) method.
 
-<!-- sample get_files_under_retention -->
+<!-- sample get_retention_policy_assignments_id_files_under_retention -->
 
 ```js
 client.retentionPolicies
@@ -389,7 +389,7 @@ client.retentionPolicies
 To retrieve information about files under retention, call the
 [`retentionPolicies.getFileVersionUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFileVersionUnderRetentionForAssignment) method.
 
-<!-- sample get_files_under_retention -->
+<!-- sample get_retention_policy_assignments_id_file_versions_under_retention -->
 
 ```js
 client.retentionPolicies
