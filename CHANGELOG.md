@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/box/box-node-sdk/compare/v2.7.2...v2.8.0) (2022-12-21)
+
+
+### New Features and Enhancements
+
+* Session termination ([#782](https://github.com/box/box-node-sdk/issues/782)) ([7fb56c6](https://github.com/box/box-node-sdk/commit/7fb56c625f8eb03e6a5354b67a0debfd9e4ad7c8))
+
 ### [2.7.2](https://github.com/box/box-node-sdk/compare/v2.7.1...v2.7.2) (2022-11-10)
 
 
