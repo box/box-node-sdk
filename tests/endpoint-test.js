@@ -3365,7 +3365,7 @@ describe('Endpoint', () => {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(202, expectedReturn);
+					.reply(201, expectedReturn);
 				basicClient.groups
 					.terminateSession(groupIDs, (err, result) => {
 						assert.ifError(err);
@@ -5136,7 +5136,7 @@ describe('Endpoint', () => {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
-					.reply(202, expectedReturn);
+					.reply(201, expectedReturn);
 				basicClient.users.terminateSession({user_ids: userIDs, user_logins: userLogins}, (error, result) => {
 					assert.ifError(error);
 					assert.deepEqual(result, expectedReturn);
