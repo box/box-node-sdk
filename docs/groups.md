@@ -388,7 +388,7 @@ To terminate a user's session for a group, call the
 
 <!-- sample post_groups_terminate_sessions -->
 ```js
-var groupIDs = '11111';
+var groupIDs = ['11111', '22222'];
 
 client.groups.terminateSessionByGroupIDs(groupIDs)
 	.then((result) => {
