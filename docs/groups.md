@@ -380,10 +380,10 @@ client.groups.getCollaborations('11111')
 	});
 ```
 
-Terminate user group session
+Terminate user groups session
 ----------------------------
 
-To terminate a user's session for a group, call the
+To terminate a user's session for groups, call the
 [`groups.terminateSession(groupIDs, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#terminateSession) method.
 
 <!-- sample post_groups_terminate_sessions -->
