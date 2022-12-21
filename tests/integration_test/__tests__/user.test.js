@@ -22,13 +22,17 @@ afterAll(async() => {
 });
 
 test('test session termination with user ID', async() => {
-	let result = await context.appClient.users.terminateSessionByUserIDs([context.user.id]);
+	let result = await context.appClient.users.terminateSession({
+		user_ids: [context.user.id]
+	});
 	expect(result).toBeDefined();
 	expect(result.message).toBeDefined();
 });
 
 test('test session termination with user login', async() => {
-	let result = await context.appClient.users.terminateSessionByUserLogins([context.user.login]);
+	let result = await context.appClient.users.terminateSession({
+		user_logins: [context.user.login]
+	});
 	expect(result).toBeDefined();
 	expect(result.message).toBeDefined();
 });

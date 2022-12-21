@@ -30,6 +30,6 @@ test('test session termination with group ID', async() => {
 		role: context.client.groups.userRoles.MEMBER,
 	});
 
-	let result = await context.appClient.groups.terminateSessionByGroupIDs([context.group.id]);
+	let result = await context.appClient.groups.terminateSession([context.group.id]);
 	expect(result).toBeDefined();
 });
