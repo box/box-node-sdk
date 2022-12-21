@@ -293,7 +293,7 @@ client.users.removeEmailAlias(userID, aliasID)
 Terminate users session
 ----------------------
 
-To terminate user's sessions call the [`users.terminateSessionByUserIDs(userIDs, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#terminateSessionByUserIDs) or `users.terminateSessionByUserLogins(userLogins, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#terminateSessionByUserLogins) method.
+To terminate user's sessions call the [`users.terminateSession(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#terminateSession) method.
 
 <!-- sample post_users_terminate_sessions -->
 ```js

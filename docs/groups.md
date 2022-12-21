@@ -384,13 +384,13 @@ Terminate user group session
 ----------------------------
 
 To terminate a user's session for a group, call the
-[`groups.terminateSessionByGroupIDs(groupID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#terminateSessionByGroupIDs) method.
+[`groups.terminateSession(groupID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#terminateSession) method.
 
 <!-- sample post_groups_terminate_sessions -->
 ```js
 var groupIDs = ['11111', '22222'];
 
-client.groups.terminateSessionByGroupIDs(groupIDs)
+client.groups.terminateSession(groupIDs)
 	.then((result) => {
 		/* result -> {
 			message: 'Request is successful, please check the admin events for the status of the job'
