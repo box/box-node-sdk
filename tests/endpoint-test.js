@@ -3344,7 +3344,7 @@ describe('Endpoint', () => {
 					.then(collabs => assert.deepEqual(collabs, JSON.parse(fixture)));
 			});
 		});
-		describe('terminateSessionByGroupIDs()', () => {
+		describe('terminateSession()', () => {
 			it('should make POST call to terminate sessions by group IDs', done => {
 				const groupIDs = [
 					'11111',
@@ -3365,9 +3365,9 @@ describe('Endpoint', () => {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(200, expectedReturn);
+					.reply(202, expectedReturn);
 				basicClient.groups
-					.terminateSessionByGroupIDs(groupIDs, (err, result) => {
+					.terminateSession(groupIDs, (err, result) => {
 						assert.ifError(err);
 						assert.deepEqual(result, expectedReturn);
 						done();
@@ -5114,33 +5114,12 @@ describe('Endpoint', () => {
 				});
 			});
 		});
-		describe('terminateSessionByUserIDs()', () => {
+		describe('terminateSession()', () => {
 			it('should make POST request to terminate sessions by user IDs and resolve with message', done => {
 				const userIDs = [
 					'12345',
 					'67890'
 				];
-				const expectedReturn = {
-					message: 'Request is successful, please check the admin events for the status of the job'
-				};
-				apiMock
-					.post('/2.0/users/terminate_sessions', {
-						user_ids: userIDs
-					})
-					.matchHeader('Authorization', authHeader => {
-						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
-						return true;
-					})
-					.reply(200, expectedReturn);
-				basicClient.users.terminateSessionByUserIDs(userIDs, (error, result) => {
-					assert.ifError(error);
-					assert.deepEqual(result, expectedReturn);
-					done();
-				});
-			});
-		});
-		describe('terminateSessionByUserLogins()', () => {
-			it('should make POST request to terminate sessions by user logins and resolve with message', done => {
 				const userLogins = [
 					'user@example.com',
 					'user2@example.com'
@@ -5150,14 +5129,15 @@ describe('Endpoint', () => {
 				};
 				apiMock
 					.post('/2.0/users/terminate_sessions', {
+						user_ids: userIDs,
 						user_logins: userLogins
 					})
 					.matchHeader('Authorization', authHeader => {
 						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
 						return true;
 					})
-					.reply(200, expectedReturn);
-				basicClient.users.terminateSessionByUserLogins(userLogins, (error, result) => {
+					.reply(202, expectedReturn);
+				basicClient.users.terminateSession({user_ids: userIDs, user_logins: userLogins}, (error, result) => {
 					assert.ifError(error);
 					assert.deepEqual(result, expectedReturn);
 					done();

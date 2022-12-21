@@ -156,9 +156,11 @@ class Users {
 	addEmailAlias(
 		userID: string,
 		email: string,
-		options?: {
-			is_confirmed?: boolean;
-		} | Function,
+		options?:
+			| {
+					is_confirmed?: boolean;
+			  }
+			| Function,
 		callback?: Function
 	) {
 		options = options || {};
@@ -264,24 +266,28 @@ class Users {
 
 	/**
 	 * Set the user's avatar image.
-	 * 
+	 *
 	 * API Endpoint: '/users/:userID/avatar'
 	 * Method: POST
-	 * 
+	 *
 	 * @param {string} userID The ID of the user whose avatar should be set
 	 * @param {string|Buffer|ReadStream} avatar - the content of the file. It can be a string, a Buffer, or a read stream
 	 * (like that returned by fs.createReadStream()).
 	 * @param {Function} [callback] Passed dictionary of picture urls if successful
 	 * @returns {Promise<Object>} A promise resolving to the picture urls
 	 */
-	setAvatar(userID: string, avatar: string | Buffer | Readable, callback?: Function) {
+	setAvatar(
+		userID: string,
+		avatar: string | Buffer | Readable,
+		callback?: Function
+	) {
 		var apiPath = urlPath(BASE_PATH, userID, 'avatar'),
 			params = {
 				formData: {
 					pic: avatar,
-				}
+				},
 			};
-		
+
 		return this.client.wrapWithDefaultHandler(this.client.post)(
 			apiPath,
 			params,
@@ -291,10 +297,10 @@ class Users {
 
 	/**
 	 * Delete the user's avatar image.
-	 * 
+	 *
 	 * API Endpoint: '/users/:userID/avatar'
 	 * Method: DELETE
-	 * 
+	 *
 	 * @param {string} userID The ID of the user whose avatar should be deleted
 	 * @param {Function} [callback] Passed nothing if successful
 	 * @returns {Promise<void>} A promise resolving to nothing
@@ -302,7 +308,7 @@ class Users {
 	deleteAvatar(userID: string, callback?: Function) {
 		var apiPath = urlPath(BASE_PATH, userID, 'avatar'),
 			params = {};
-			
+
 		return this.client.wrapWithDefaultHandler(this.client.del)(
 			apiPath,
 			params,
@@ -311,53 +317,32 @@ class Users {
 	}
 
 	/**
-	 * Validates the roles and permissions of the user, 
+	 * Validates the roles and permissions of the user,
 	 * and creates asynchronous jobs to terminate the user's sessions.
-	 * 
+	 *
 	 * API Endpoint: '/users/terminate_sessions'
 	 * Method: POST
-	 * 
-	 * @param {string[]} userIDs The ID of the user whose sessions should be terminated
+	 *
+	 * @param {Object} options - The user IDs or logins to terminate sessions
+	 * @param {string[]} [options.userIDs] - The user IDs to terminate sessions
+	 * @param {string[]} [options.userLogins] - The user logins to terminate sessions
 	 * @returns {Promise<Object>} A promise resolving a message about the request status.
 	 */
-	terminateSessionByUserIDs(userIDs: string[], callback?: Function) {
-		var apiPath = urlPath(BASE_PATH, 'terminate_sessions'),
-			params ={
-				body: {
-					user_ids: userIDs
-				}
-			};
-
-		return this.client.wrapWithDefaultHandler(this.client.post)(
-			apiPath,
-			params,
-			callback
-		)
-	}
-
-	/**
-	 * Validate the roles and permissions of the user,
-	 * and creates asynchronous jobs to terminate the user's sessions.
-	 * 
-	 * API Endpoint: '/users/terminate_sessions'
-	 * Method: POST
-	 * 
-	 * @param {string[]} userLogins The logins of the user whose sessions should be terminated
-	 * @returns {Promise<Object>} A promise resolving a message about the request status.
-	 */
-	terminateSessionByUserLogins(userLogins: string[], callback?: Function) {
+	terminateSession(options: {
+			userIDs?: string[],
+			userLogins?: string[],
+		},
+		callback?: Function
+	) {
 		var apiPath = urlPath(BASE_PATH, 'terminate_sessions'),
 			params = {
-				body: {
-					user_logins: userLogins
-				}
+				body: options
 			};
-
 		return this.client.wrapWithDefaultHandler(this.client.post)(
 			apiPath,
 			params,
 			callback
-		)
+		);
 	}
 }
 
