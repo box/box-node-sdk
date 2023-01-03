@@ -85,10 +85,11 @@ class APIRequestManager {
 		// available before we can pipe it to the pass-through stream.
 		// If the stream is undefined, then the request failed and we should
 		// propagate the error.
-		if (!stream) 
-			return undefined;
-		stream.pipe(passThrough);
-		return passThrough;
+		if (stream) {
+			stream.pipe(passThrough);
+			return passThrough;
+		}
+		return stream;
 	}
 }
 
