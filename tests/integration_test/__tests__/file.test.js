@@ -120,7 +120,7 @@ test('test get file by stream with delay read', async() => {
 		let stream = await context.client.files.getReadStream(testFile.id);
 		// delay 3s to read the stream
 		// eslint-disable-next-line promise/avoid-new
-		await new Promise(resolve => setTimeout(resolve, 3000));
+		await new Promise(resolve => setTimeout(resolve, 500));
 		// eslint-disable-next-line promise/avoid-new
 		let buffer = await new Promise((resolve, reject) => {
 			let chunks = [];

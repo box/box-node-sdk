@@ -74,7 +74,6 @@ class APIRequestManager {
 		var requestConfig = this.config.extend({
 			request: options,
 		});
-		var passThrough = new PassThrough();
 
 		// Make the request
 		var apiRequest = new APIRequest(requestConfig, this.eventBus);
@@ -86,6 +85,7 @@ class APIRequestManager {
 		// If the stream is undefined, then the request failed and we should
 		// propagate the error.
 		if (stream) {
+			var passThrough = new PassThrough();
 			stream.pipe(passThrough);
 			return passThrough;
 		}
