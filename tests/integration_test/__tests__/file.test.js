@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const { Promise } = require('bluebird');
 const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFile } = require('../objects/box-test-file');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
@@ -87,5 +88,54 @@ test('test get file with custom dispostion time', async() => {
 		}
 		await testRetentionPolicy.dispose();
 		await testFolder.dispose();
+	}
+});
+
+test('test get file by stream', async() => {
+	let testFile = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'));
+	try {
+		let stream = await context.client.files.getReadStream(testFile.id);
+		// eslint-disable-next-line promise/avoid-new
+		let buffer = await new Promise((resolve, reject) => {
+			let chunks = [];
+			stream.on('data', chunk => {
+				chunks.push(chunk);
+			});
+			stream.on('end', () => {
+				resolve(Buffer.concat(chunks));
+			});
+			stream.on('error', error => {
+				reject(error);
+			});
+		});
+		expect(buffer.length).toBe(testFile.size);
+	} finally {
+		await testFile.dispose();
+	}
+});
+
+test('test get file by stream with delay read', async() => {
+	let testFile = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'));
+	try {
+		let stream = await context.client.files.getReadStream(testFile.id);
+		// delay 3s to read the stream
+		// eslint-disable-next-line promise/avoid-new
+		await new Promise(resolve => setTimeout(resolve, 3000));
+		// eslint-disable-next-line promise/avoid-new
+		let buffer = await new Promise((resolve, reject) => {
+			let chunks = [];
+			stream.on('data', chunk => {
+				chunks.push(chunk);
+			});
+			stream.on('end', () => {
+				resolve(Buffer.concat(chunks));
+			});
+			stream.on('error', error => {
+				reject(error);
+			});
+		});
+		expect(buffer.length).toBe(testFile.size);
+	} finally {
+		await testFile.dispose();
 	}
 });

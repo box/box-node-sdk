@@ -533,7 +533,7 @@ describe('APIRequest', function() {
 		});
 
 		it('should return the response stream created by request when called', function() {
-			var expectedStream = new Stream();
+			var expectedStream = new Stream.PassThrough();
 			requestStub.returns(expectedStream);
 			apiRequest.execute();
 			var stream = apiRequest.getResponseStream();
