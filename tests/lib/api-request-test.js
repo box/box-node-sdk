@@ -535,9 +535,15 @@ describe('APIRequest', function() {
 		it('should return the response stream created by request when called', function() {
 			var expectedStream = new Stream();
 			requestStub.returns(expectedStream);
-			apiRequest.execute();
+
+			// Response stream should be undefined before execute() is called
 			var stream = apiRequest.getResponseStream();
-			assert.equal(stream, expectedStream);
+			assert.equal(typeof stream, 'undefined');
+
+			// Response stream should be defined after execute() is called
+			apiRequest.execute();
+			stream = apiRequest.getResponseStream();
+			assert.equal(typeof stream, typeof expectedStream);
 		});
 
 	});

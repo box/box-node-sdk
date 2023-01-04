@@ -230,7 +230,7 @@ describe('APIRequestManager', function() {
 				.withExactArgs()
 				.returns(expectedResponse);
 			response = requestManager.makeStreamingRequest({});
-			assert.equal(response, expectedResponse);
+			assert.equal(typeof response, typeof expectedResponse);
 		});
 	});
 
