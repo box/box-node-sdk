@@ -2,8 +2,6 @@
  * @fileoverview Tests for Box API Request
  */
 
-/* global describe, it, before, beforeEach, after, afterEach */
-
 'use strict';
 
 // ------------------------------------------------------------------------------

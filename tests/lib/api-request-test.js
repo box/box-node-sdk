@@ -2,9 +2,6 @@
  * @fileoverview Tests for Box API Request
  */
 
-/* eslint no-new: 0 */
-/* global describe, it, before, beforeEach, after, afterEach */
-
 'use strict';
 
 // ------------------------------------------------------------------------------
@@ -89,6 +86,7 @@ describe('APIRequest', function() {
 
 		it('should throw when no config object is passed to constructor', function() {
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new APIRequest('Not a config');
 			});
 		});
@@ -100,6 +98,7 @@ describe('APIRequest', function() {
 
 		it('should throw when invalid event bus is passed to constructor', function() {
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new APIRequest(config, 'not an event emitter');
 			});
 		});

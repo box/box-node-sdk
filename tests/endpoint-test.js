@@ -1524,8 +1524,10 @@ describe('Endpoint', () => {
 						'files/get_files_id_representations_multiple_200'
 					),
 					repsObj = JSON.parse(repsFixtureMultiple),
+					/* eslint-disable node/no-deprecated-api */
 					repPDFURL = url.parse(repsObj.representations.entries[1].info.url)
 						.pathname,
+					/* eslint-disable node/no-deprecated-api */
 					repTextURL = url.parse(repsObj.representations.entries[2].info.url)
 						.pathname,
 					repFixturePDFPending = getFixture(
@@ -1606,6 +1608,7 @@ describe('Endpoint', () => {
 						'files/get_files_id_representations_png_200'
 					),
 					repsObj = JSON.parse(repsFixture),
+					/* eslint-disable node/no-deprecated-api */
 					repInfoURL = url.parse(repsObj.representations.entries[0].info.url)
 						.pathname,
 					repPendingFixture = getFixture(
@@ -1659,6 +1662,7 @@ describe('Endpoint', () => {
 						'files/get_files_id_representations_png_200'
 					),
 					repsObj = JSON.parse(repsFixture),
+					/* eslint-disable node/no-deprecated-api */
 					repInfoURL = url.parse(repsObj.representations.entries[0].info.url)
 						.pathname,
 					repPendingFixture = getFixture(
@@ -1668,6 +1672,7 @@ describe('Endpoint', () => {
 						'files/get_representation_info_success_200'
 					),
 					repInfo = JSON.parse(repSuccessFixture),
+					/* eslint-disable node/no-deprecated-api */
 					contentURL = url.parse(repInfo.content.url_template),
 					contentDomain = `${contentURL.protocol}//${contentURL.host}`,
 					contentPath = decodeURIComponent(contentURL.pathname),
