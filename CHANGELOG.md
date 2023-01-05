@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.1](https://github.com/box/box-node-sdk/compare/v2.8.0...v2.8.1) (2023-01-05)
+
+
+### Bug Fixes
+
+* Fix `getReadStream` delay reading ([#790](https://github.com/box/box-node-sdk/issues/790)) ([6bfc1ee](https://github.com/box/box-node-sdk/commit/6bfc1eebeb9a31606ff96127eeb1ad03d2f13d9c))
+
 ## [2.8.0](https://github.com/box/box-node-sdk/compare/v2.7.2...v2.8.0) (2022-12-21)
 
 
