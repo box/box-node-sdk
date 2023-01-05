@@ -37,7 +37,7 @@
     "@types/bluebird": "^3.5.35",
     "@types/node": "^15.3.1",
     "ajv": "^6.12.3",
-    "bluebird": "^3.7.1",
+    "bluebird": "^3.7.2",
     "http-status": "^1.4.1",
     "jsonwebtoken": "^8.5.1",
     "merge-options": "^1.0.1",
@@ -59,14 +59,14 @@
     "@types/uuid": "^8.3.0",
     "better-docs": "^2.3.2",
     "chai": "^4.2.0",
-    "doctoc": "^2.0.1",
-    "eslint": "^4.19.1",
+    "doctoc": "^2.2.1",
+    "eslint": "^6.8.0",
     "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-unicorn": "^4.0.3",
     "istanbul": "^0.4.3",
-    "jest": "^27.3.0",
+    "jest": "^27.5.1",
     "jsdoc": "^3.6.3",
     "jsonlint": "^1.6.3",
     "jsonlint2": "^1.7.1",
@@ -75,7 +75,6 @@
     "mocha": "^6.0.0",
     "mockery": "^2.1.0",
     "nock": "^9.6.1",
-    "npm-force-resolutions": "0.0.3",
     "npm-upgrade": "^3.0.0",
     "nyc": "^14.0.0",
     "prettier": "^2.3.2",
@@ -83,16 +82,12 @@
     "shelljs-nodecli": "^0.1.1",
     "sinon": "^7.5.0",
     "standard-version": "^9.3.2",
-    "ts-jest": "^27.0.7",
+    "ts-jest": "^27.1.4",
     "ts-node": "^10.2.0",
     "typescript": "^4.2.4"
   },
   "files": [
     "config",
     "lib"
-  ],
-  "resolutions": {
-    "handlebars": "4.5.3",
-    "minimist": "1.2.5"
-  }
+  ]
 }

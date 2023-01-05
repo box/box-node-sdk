@@ -2,8 +2,6 @@
  * @fileoverview Tests for URL Path Builder
  */
 
-/* global describe, it, before, beforeEach, after, afterEach */
-
 'use strict';
 
 // ------------------------------------------------------------------------------

@@ -2,8 +2,6 @@
  * @fileoverview Tests for Config
  */
 
-/* eslint no-new: 0 */
-/* global describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
@@ -40,6 +38,7 @@ describe('Config', function() {
 		it('should throw when client ID is not passed', function() {
 
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new Config({
 					clientID: null
 				});
@@ -59,6 +58,7 @@ describe('Config', function() {
 		it('should throw when passed params would override instance method', function() {
 
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new Config({
 					clientID: 'id',
 					clientSecret: 'secret',
@@ -179,6 +179,7 @@ describe('Config', function() {
 			it('should throw when passed invalid app auth config data', function() {
 
 				assert.throws(function() {
+					/* eslint-disable no-new */
 					new Config({
 						clientID: 'id',
 						clientSecret: 'secret',
