@@ -274,7 +274,9 @@ class TermsOfService {
 				if (response.statusCode !== 200) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
-				return response.body.entries[0];
+				return response.body.entries.length != 0
+					? response.body.entries[0]
+					: {};
 			})
 			.asCallback(callback);
 	}
@@ -350,18 +352,20 @@ class TermsOfService {
 			.post(apiPath, params)
 			.then((response: any /* FIXME */) => {
 				switch (response.statusCode) {
-					// 200 - A user status has been successfully created on terms of service
+					// 200/201 - A user status has been successfully updated/created on terms of service
 					// return the terms of service user status object
 					case httpStatusCodes.OK:
+					case httpStatusCodes.CREATED:
 						return response.body;
 
 					// 409 - Conflict
 					// Terms of Service already exists. Update the existing terms of service object
 					case httpStatusCodes.CONFLICT:
 						var getOptions = Object.assign({ fields: 'id' }, options);
-						return this.getUserStatus(termsOfServicesID, getOptions).then((
-							userStatus: any /* FIXME */
-						) => this.updateUserStatus(userStatus.id, isAccepted));
+						return this.getUserStatus(termsOfServicesID, getOptions).then(
+							(userStatus: any /* FIXME */) =>
+								this.updateUserStatus(userStatus.id, isAccepted)
+						);
 
 					default:
 						throw errors.buildUnexpectedResponseError(response);
