@@ -60,37 +60,30 @@ async function uploadFile(client, folderId, path) {
 	expect(preflight).toBeDefined();
 	var stream = fs.createReadStream(path);
 	if (stats.size < CHUNKED_UPLOAD_MINIMUM) {
-		console.log(`Uploading ${path} with normal upload`);
 		const result = await client.files.uploadFile(folderId, filename, stream);
 		expect(result.entries).toBeDefined();
 		expect(result.entries.length).toBe(1);
 		return result.entries[0];
 	}
-	console.log(`Uploading ${path} with chunked upload`);
 	/* eslint-disable promise/avoid-new */
 	return new Promise((resolve, reject) => {
 		client.files
 			.getChunkedUploader(folderId, stats.size, filename, stream)
 			.then(chunkedUploader => {
 				chunkedUploader.on('error', err => {
-					console.log(`Error uploading ${path}: ${err}`);
 					reject(err);
 				});
 				chunkedUploader.on('chunkUploaded', part => {
-					console.log(`Chunk ${part.part.part_id} uploaded for ${path}`);
 					expect(part.part.part_id).toBeDefined();
 				});
 				chunkedUploader.on('uploadComplete', file => {
-					console.log(`Upload complete for ${path}`);
 					expect(file.entries).toBeDefined();
 					expect(file.entries.length).toBe(1);
 					resolve(file.entries[0]);
 				});
-				console.log(`Starting upload for ${path}`);
 				chunkedUploader.start();
 			})
 			.catch(err => {
-				console.log(`Error uploading ${path}: ${err}`);
 				reject(err);
 			});
 	});
@@ -107,7 +100,6 @@ async function uploadFolderTree(client, folderId, path) {
 		} else {
 			await uploadFile(client, folderId, itemPath)
 				.then(file => {
-					console.log(`Uploaded file ${file.name} (${file.id})`);
 					const hash = crypto
 						.createHash('sha1')
 						.update(fs.readFileSync(itemPath))
@@ -120,7 +112,6 @@ async function uploadFolderTree(client, folderId, path) {
 					}
 				})
 				.catch(err => {
-					console.log(`Error while uploading file: ${err}`);
 					throw err;
 				});
 		}
