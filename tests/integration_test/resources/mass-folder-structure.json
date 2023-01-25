@@ -1,0 +1,82 @@
+[
+    {
+        "type": "folder",
+        "name": "folder1",
+        "items": [
+            {
+                "type": "folder",
+                "name": "folder2",
+                "items": [
+                    {
+                        "type": "file",
+                        "name": "file1.data",
+                        "size": 1000
+                    },
+                    {
+                        "type": "file",
+                        "name": "file2.data",
+                        "size": 2000
+                    }
+                ]
+            },
+            {
+                "type": "folder",
+                "name": "folder3",
+                "items": [
+                    {
+                        "type": "file",
+                        "name": "file1.data",
+                        "size": 300000
+                    },
+                    {
+                        "type": "file",
+                        "name": "file2.data",
+                        "size": 500000
+                    }
+                ]
+            },
+            {
+                "type": "folder",
+                "name": "folder4",
+                "items": [
+                    {
+                        "type": "file",
+                        "name": "file1.data",
+                        "size": 1000000
+                    },
+                    {
+                        "type": "file",
+                        "name": "file2.data",
+                        "size": 5000000
+                    },
+                    {
+                        "type": "folder",
+                        "name": "folder5",
+                        "items": [
+                            {
+                                "type": "file",
+                                "name": "file1.dat",
+                                "size": 100000000
+                            },
+                            {
+                                "type": "file",
+                                "name": "file2.file",
+                                "size": 500000000
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "file",
+                "name": "file3.dat",
+                "size": 100000000
+            },
+            {
+                "type": "file",
+                "name": "file4.dat",
+                "size": 2147483000
+            }
+        ]
+    }
+]

@@ -328,8 +328,8 @@ rules:
         - after
 ### PROMISES
     promise/no-nesting: off
-    # We use Bluebird promises only for consistency/interface
-    promise/no-native: error
+    # Disable as Promise already suppported in native NodeJS
+    # promise/no-native: error
     promise/no-promise-in-callback: error
     promise/no-callback-in-promise: error
     promise/avoid-new: error
