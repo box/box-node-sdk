@@ -332,7 +332,7 @@ rules:
     # promise/no-native: error
     promise/no-promise-in-callback: error
     promise/no-callback-in-promise: error
-    promise/avoid-new: error
+    # promise/avoid-new: error
     promise/no-return-in-finally: error
 
 ### UNICORN
