@@ -274,9 +274,7 @@ class TermsOfService {
 				if (response.statusCode !== 200) {
 					throw errors.buildUnexpectedResponseError(response);
 				}
-				return response.body.entries.length != 0
-					? response.body.entries[0]
-					: {};
+				return response.body.entries[0] ?? {};
 			})
 			.asCallback(callback);
 	}
