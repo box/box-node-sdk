@@ -573,6 +573,24 @@ describe('TermsOfService', function() {
 			});
 		});
 
+		it('should return a promise resolving to empty object when a empty terms of service status response is returned', function() {
+			var response = {
+				statusCode: 200,
+				body: {
+					total_count: 0,
+					entries: [],
+				},
+			};
+			sandbox.stub(boxClientFake, 'get').returns(Promise.resolve(response));
+			return termsOfService.getUserStatus(TERMS_OF_SERVICE_ID)
+				.then(termsOfServiceUserStatusObject => {
+					assert.isTrue(
+						Object.keys(termsOfServiceUserStatusObject).length === 0,
+						'empty terms of service user status object is returned'
+					);
+				});
+		});
+
 		it('should return a promise resolving to requested terms of service user status object when a 200 response is returned', function() {
 			var response = {
 				statusCode: 200,
@@ -807,6 +825,19 @@ describe('TermsOfService', function() {
 		it('should return a promise resolving to created terms of service user status object when a 200 response is returned', function() {
 			var response = {
 				statusCode: 200,
+				body: {}
+			};
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.stub(boxClientFake, 'post').returns(Promise.resolve(response));
+			return termsOfService.setUserStatus(TERMS_OF_SERVICE_ID, true, options)
+				.then(termsOfServiceUserStatusObject => {
+					assert.strictEqual(termsOfServiceUserStatusObject, response.body, 'terms of service user status object is returned');
+				});
+		});
+
+		it('should return a promise resolving to created terms of service user status object when a 201 response is returned', function() {
+			var response = {
+				statusCode: 201,
 				body: {}
 			};
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
