@@ -11,27 +11,24 @@ const {
 	createBoxTestUser,
 	clearUserContent,
 } = require('../objects/box-test-user');
-const context = {};
+
+let appClient, user, userClient, folder;
 
 const CHUNKED_UPLOAD_MINIMUM = 20000000;
 
 beforeAll(async() => {
-	let appClient = getAppClient();
-	let user = await createBoxTestUser(appClient);
-	let userClient = getUserClient(user.id);
-	let folder = await createBoxTestFolder(userClient);
-	context.user = user;
-	context.appClient = appClient;
-	context.client = userClient;
-	context.folder = folder;
+	appClient = getAppClient();
+	user = await createBoxTestUser(appClient);
+	userClient = getUserClient(user.id);
+	folder = await createBoxTestFolder(userClient);
 });
 
 afterAll(async() => {
-	await context.folder.dispose();
-	await clearUserContent(context.client);
-	await context.user.dispose();
-	context.folder = null;
-	context.user = null;
+	await folder.dispose();
+	await clearUserContent(userClient);
+	await user.dispose();
+	folder = null;
+	user = null;
 });
 
 function writeToStream(bytesToWrite, stream) {
@@ -98,8 +95,8 @@ async function uploadFolderTree(client, folderId, path) {
 		const stats = fs.statSync(itemPath);
 		/* eslint-disable no-await-in-loop */
 		if (stats.isDirectory()) {
-			const folder = await client.folders.create(folderId, item);
-			await uploadFolderTree(client, folder.id, itemPath);
+			const newFolder = await client.folders.create(folderId, item);
+			await uploadFolderTree(client, newFolder.id, itemPath);
 		} else {
 			let file = await uploadFile(client, folderId, itemPath);
 			const hash = crypto
@@ -117,7 +114,7 @@ async function uploadFolderTree(client, folderId, path) {
 jest.setTimeout(3600000);
 // Skip this long-running test by default, to avoid running it in CI
 // to run this test, replace 'skip' with 'only' and run normally
-test.skip('test massive folder upload', async() => {
+test.only('test massive folder upload', async() => {
 	const folderName = `./${utils.randomName()}`;
 	if (!fs.statSync(folderName, { throwIfNoEntry: false })) {
 		fs.mkdirSync(folderName);
@@ -129,7 +126,7 @@ test.skip('test massive folder upload', async() => {
 	try {
 		const folderStructure = JSON.parse(fs.readFileSync(folderPath));
 		await createFolderTree(folderName, folderStructure);
-		await uploadFolderTree(context.client, context.folder.id, folderName);
+		await uploadFolderTree(userClient, folder.id, folderName);
 	} finally {
 		fs.rmSync(folderName, { recursive: true, force: true });
 	}
