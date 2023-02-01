@@ -114,7 +114,7 @@ async function uploadFolderTree(client, folderId, path) {
 jest.setTimeout(3600000);
 // Skip this long-running test by default, to avoid running it in CI
 // to run this test, replace 'skip' with 'only' and run normally
-test.only('test massive folder upload', async() => {
+test.skip('test massive folder upload', async() => {
 	const folderName = `./${utils.randomName()}`;
 	if (!fs.statSync(folderName, { throwIfNoEntry: false })) {
 		fs.mkdirSync(folderName);
