@@ -18,7 +18,7 @@
     "sdk"
   ],
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 12.0.0"
   },
   "main": "./lib/box-node-sdk.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "ajv": "^6.12.3",
     "bluebird": "^3.7.2",
     "http-status": "^1.4.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "merge-options": "^1.0.1",
     "promise-queue": "^2.2.3",
     "proxy-agent": "^5.0.0",
@@ -57,7 +57,7 @@
     "@types/shelljs": "^0.8.9",
     "@types/url-template": "^2.0.28",
     "@types/uuid": "^8.3.0",
-    "better-docs": "^2.3.2",
+    "better-docs": "^2.7.2",
     "chai": "^4.2.0",
     "doctoc": "^2.2.1",
     "eslint": "^6.8.0",
@@ -72,7 +72,7 @@
     "jsonlint2": "^1.7.1",
     "leche": "^2.3.0",
     "lodash": "^4.17.21",
-    "mocha": "^6.0.0",
+    "mocha": "^10.2.0",
     "mockery": "^2.1.0",
     "nock": "^9.6.1",
     "npm-upgrade": "^3.0.0",
