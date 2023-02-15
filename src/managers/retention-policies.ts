@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------------
 import BoxClient from '../box-client';
 import urlPath from '../util/url-path';
+import {UserMini} from "../schemas";
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -131,6 +132,10 @@ class RetentionPolicies {
 		type: RetentionPolicyType,
 		action: RetentionPolicyDispositionAction,
 		options?: {
+			are_owners_notified? : boolean;
+			can_owner_extend_retention?: boolean;
+			custom_notification_recipients?: UserMini[];
+			description?: string;
 			retention_length?: number;
 			retention_type?: RetentionType;
 		},
@@ -199,6 +204,10 @@ class RetentionPolicies {
 		updates: {
 			policy_name?: string;
 			disposition_action?: RetentionPolicyDispositionAction;
+			are_owners_notified? : boolean;
+			can_owner_extend_retention?: boolean;
+			custom_notification_recipients?: UserMini[];
+			description?: string;
 			retention_length?: number;
 			retention_type?: RetentionType;
 			status?: string;
@@ -302,6 +311,7 @@ class RetentionPolicies {
 		options?:
 			| {
 					filter_fields?: MetadataFilterField[];
+					start_date_field?: string;
 			  }
 			| Function
 			| null,
