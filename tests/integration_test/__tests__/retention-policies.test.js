@@ -1,6 +1,6 @@
 'use strict';
 const {getAppClient} = require('../context');
-const {createBoxTestFolder} = require('../objects/box-test-folder');
+const {createBoxTestMetadataTemplate} = require('../objects/box-test-metadata-template');
 const {createBoxTestRetentionPolicy} = require('../objects/box-test-retention-policy');
 const utils = require('../lib/utils');
 const context = {};
