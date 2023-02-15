@@ -73,27 +73,27 @@ test('test retention policy', async() => {
 }, 180000);
 
 test('test retention policy assignment', async() => {
-	let testFolder = await createBoxTestFolder(context.appClient);
+	let metadataTemplate = await createBoxTestMetadataTemplate(context.appClient);
 	let testRetentionPolicy = await createBoxTestRetentionPolicy(context.appClient);
 	try {
 		let assignment = await context.appClient.retentionPolicies.assign(
 			testRetentionPolicy.id,
-			'folder',
-			testFolder.id,
+			'metadata_template',
+			metadataTemplate.id,
 			{
 				start_date_field: 'upload_date'
 			},
 		);
 		expect(assignment.retention_policy.policy_id).toBe(testRetentionPolicy.policy_id);
-		expect(assignment.assigned_to.type).toBe('folder');
-		expect(assignment.assigned_to.id).toBe(testFolder.id);
-		expect(assignment.assigned_to.start_date_field).toBe('upload_date');
+		expect(assignment.assigned_to.type).toBe('metadata_template');
+		expect(assignment.assigned_to.id).toBe(metadataTemplate.id);
+		expect(assignment.start_date_field).toBe('upload_date');
 
 		assignment = await context.appClient.retentionPolicies.getAssignment(assignment.id);
 		expect(assignment.retention_policy.policy_id).toBe(testRetentionPolicy.policy_id);
-		expect(assignment.assigned_to.type).toBe('folder');
-		expect(assignment.assigned_to.id).toBe(testFolder.id);
-		expect(assignment.assigned_to.start_date_field).toBe('upload_date');
+		expect(assignment.assigned_to.type).toBe('metadata_template');
+		expect(assignment.assigned_to.id).toBe(metadataTemplate.id);
+		expect(assignment.start_date_field).toBe('upload_date');
 
 		await context.appClient.retentionPolicies.deleteAssignment(assignment.id);
 		try {
@@ -103,6 +103,6 @@ test('test retention policy assignment', async() => {
 		}
 	} finally {
 		await testRetentionPolicy.dispose();
-		await testFolder.dispose();
+		await metadataTemplate.dispose();
 	}
 }, 180000);
