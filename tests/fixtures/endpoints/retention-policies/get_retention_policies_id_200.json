@@ -5,6 +5,7 @@
     "policy_type": "finite",
     "retention_length": "365",
     "retention_type": "modifiable",
+    "description": "Policy to retain all reports for at least one year",
     "disposition_action": "remove_retention",
     "can_owner_extend_retention": false,
     "status": "active",
