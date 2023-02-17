@@ -309,7 +309,7 @@ class RetentionPolicies {
 	 * @param {string} assignID - The Box ID of the object to assign the retention policy to
 	 * @param {Object} [options] - Optional parameters for the request
 	 * @param {MetadataFilterField[]} [options.filter_fields] - Metadata fields to filter against, if assigning to a metadata template
-	 * @param {string} [options.start_date_field] - The Metadata field which will be used to specify the start date for the retention policy
+	 * @param {string} [options.start_date_field] - Id of Metadata field which will be used to specify the start date for the retention policy, or set this to "upload_date" as value to use the date when the file was uploaded to Box
 	 * @param {Function} [callback] - Passed the new assignment object if successful, error otherwise
 	 * @returns {Promise<Object>} A promise resolving to the created assignment object
 	 */
