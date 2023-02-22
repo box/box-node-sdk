@@ -237,7 +237,7 @@ We highly recommend upgrading to the latest SDK major release at the earliest co
 
 | Version | Supported Environments | State     | First Release | EOL/Terminated |
 |---------|------------------------|-----------|---------------|----------------|
-| 2       | Node.js >= 8 and <= 14 | Supported | 29 Sep 2021   | TBD            |
+| 2       | Node.js >= 12 and <= 16| Supported | 29 Sep 2021   | TBD            |
 | 1       |                        | EOL       | 28 Mar 2019   | 29 Sep 2021    |
 
 ## Questions, Bugs, and Feature Requests?
@@ -266,6 +266,10 @@ For more information, please see [the Contribution guidelines](./CONTRIBUTING.md
 
 
 See [CHANGELOG.md](./CHANGELOG.md).
+
+## Upgrades
+
+You can read about how to migrate to the new version [here](./docs/upgrade/).
 
 ## Documentation
 
