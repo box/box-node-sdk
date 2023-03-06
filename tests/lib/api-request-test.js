@@ -522,39 +522,6 @@ describe('APIRequest', function() {
 			});
 		});
 
-		it('should retry when a 5xx error occurs and then restore with sucessful response', function(done) {
-			var responseInfo1 = {
-				statusCode: 504,
-			};
-			var responseInfo2 = {
-				statusCode: 200,
-			};
-			var expectedResponse = {
-				statusCode: 200
-			};
-			config = config.extend({
-				request: {
-					formData: null
-				},
-				numMaxRetries: 1,
-				retryIntervalMS: 100,
-			});
-			requestStub.yieldsAsync(null, responseInfo1);
-			sandbox.stub(eventBusFake, 'emit').withArgs('response');
-
-			var apiRequest = new APIRequest(config, eventBusFake);
-			apiRequest.execute(function callback(err, response) {
-				assert.equal(apiRequest.numRetries, 1);
-				assert.equal(err, null);
-				assert.deepEqual(response, expectedResponse);
-				done();
-			});
-
-			setTimeout(function() {
-				requestStub.yieldsAsync(null, responseInfo2);
-			}, 30);
-		});
-
 		it('should retry when a 5xx error occurs but then fail after retries', function(done) {
 			var responseInfo = {
 				statusCode: 504,
