@@ -537,7 +537,7 @@ describe('APIRequest', function() {
 					formData: null
 				},
 				numMaxRetries: 1,
-				retryIntervalMS: 100,
+        retryIntervalMS: 100,
 			});
 			requestStub.yieldsAsync(null, responseInfo1);
 			sandbox.stub(eventBusFake, 'emit').withArgs('response');
