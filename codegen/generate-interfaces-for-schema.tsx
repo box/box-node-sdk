@@ -49,7 +49,7 @@ export async function generateInterfacesForSchema({
 
 	// write index for schemas with exports
 	await writeNodesToFile({
-		fullPath: path.join(schemasDirPath, 'index.ts'),
+		fullPath: path.join(schemasDirPath, 'index.generated.ts'),
 		nodes: indexExports,
 	});
 }

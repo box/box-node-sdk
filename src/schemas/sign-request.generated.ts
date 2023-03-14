@@ -4,7 +4,7 @@ import * as schemas from '.';
  *
  * A Sign Request Object
  */
-export interface SignRequest extends schemas.SignRequestCreateRequest {
+export interface SignRequest extends schemas.SignRequestBase {
 	/**
 	 * object type
 	 * Example: sign-request
@@ -13,7 +13,12 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 	/**
 	 * Array of signers for the sign request
 	 */
-	signers: schemas.SignRequestSigner[];
+	signers?: schemas.SignRequestSigner[];
+	/**
+	 * Force a specific color for the signature (blue, black, or red).
+	 * Example: blue
+	 */
+	signature_color?: string;
 	/**
 	 * Sign request ID
 	 * Example: 12345
@@ -28,7 +33,7 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 	prepare_url?: string;
 	/**
 	 * Reference to a file that holds a log of all signer activity for
-	 * the request. `Null` if the signing log is deleted.
+	 * the request
 	 */
 	signing_log?: schemas.FileMini;
 	/**
@@ -45,9 +50,7 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 		| 'declined'
 		| 'error_converting'
 		| 'error_sending'
-		| 'expired'
-		| 'downloaded'
-		| 'signed and downloaded';
+		| 'expired';
 	/**
 	 * List of files that will be signed, which are copies of the original
 	 * source files. A new version of these files are created as signers sign
@@ -59,4 +62,8 @@ export interface SignRequest extends schemas.SignRequestCreateRequest {
 	 * Example: 2021-04-26T08:12:13.982Z
 	 */
 	auto_expire_at?: string;
+	/**
+	 * List of files to create a signing document from. Only the ID and type fields are required for each file. The array will be empty if the `source_files` are deleted.
+	 */
+	source_files?: schemas.FileMini[];
 }
