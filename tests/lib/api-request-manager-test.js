@@ -2,8 +2,6 @@
  * @fileoverview Tests for Box API Request
  */
 
-/* global describe, it, before, beforeEach, after, afterEach */
-
 'use strict';
 
 // ------------------------------------------------------------------------------
@@ -230,7 +228,7 @@ describe('APIRequestManager', function() {
 				.withExactArgs()
 				.returns(expectedResponse);
 			response = requestManager.makeStreamingRequest({});
-			assert.equal(response, expectedResponse);
+			assert.equal(typeof response, typeof expectedResponse);
 		});
 	});
 

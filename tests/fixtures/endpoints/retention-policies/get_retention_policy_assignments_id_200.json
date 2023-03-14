@@ -17,5 +17,6 @@
         "name": "Test User",
         "login": "testuser@example.com"
     },
-    "assigned_at": "2018-04-25T20:19:16-07:00"
+    "assigned_at": "2018-04-25T20:19:16-07:00",
+    "start_date_field": "upload_date"
 }

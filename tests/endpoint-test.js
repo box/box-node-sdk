@@ -1524,8 +1524,10 @@ describe('Endpoint', () => {
 						'files/get_files_id_representations_multiple_200'
 					),
 					repsObj = JSON.parse(repsFixtureMultiple),
+					/* eslint-disable node/no-deprecated-api */
 					repPDFURL = url.parse(repsObj.representations.entries[1].info.url)
 						.pathname,
+					/* eslint-disable node/no-deprecated-api */
 					repTextURL = url.parse(repsObj.representations.entries[2].info.url)
 						.pathname,
 					repFixturePDFPending = getFixture(
@@ -1606,6 +1608,7 @@ describe('Endpoint', () => {
 						'files/get_files_id_representations_png_200'
 					),
 					repsObj = JSON.parse(repsFixture),
+					/* eslint-disable node/no-deprecated-api */
 					repInfoURL = url.parse(repsObj.representations.entries[0].info.url)
 						.pathname,
 					repPendingFixture = getFixture(
@@ -1659,6 +1662,7 @@ describe('Endpoint', () => {
 						'files/get_files_id_representations_png_200'
 					),
 					repsObj = JSON.parse(repsFixture),
+					/* eslint-disable node/no-deprecated-api */
 					repInfoURL = url.parse(repsObj.representations.entries[0].info.url)
 						.pathname,
 					repPendingFixture = getFixture(
@@ -1668,6 +1672,7 @@ describe('Endpoint', () => {
 						'files/get_representation_info_success_200'
 					),
 					repInfo = JSON.parse(repSuccessFixture),
+					/* eslint-disable node/no-deprecated-api */
 					contentURL = url.parse(repInfo.content.url_template),
 					contentDomain = `${contentURL.protocol}//${contentURL.host}`,
 					contentPath = decodeURIComponent(contentURL.pathname),
@@ -3342,6 +3347,36 @@ describe('Endpoint', () => {
 				return basicClient.groups
 					.getCollaborations(groupID)
 					.then(collabs => assert.deepEqual(collabs, JSON.parse(fixture)));
+			});
+		});
+		describe('terminateSession()', () => {
+			it('should make POST call to terminate sessions by group IDs', done => {
+				const groupIDs = [
+					'11111',
+					'22222'
+				];
+				const expectedReturn = {
+					message: 'Request is successful, please check the admin events for the status of the job'
+				};
+				apiMock
+					.post('/2.0/groups/terminate_sessions', {
+						group_ids: groupIDs
+					})
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.matchHeader('User-Agent', uaHeader => {
+						assert.include(uaHeader, 'Box Node.js SDK v');
+						return true;
+					})
+					.reply(201, expectedReturn);
+				basicClient.groups
+					.terminateSession(groupIDs, (err, result) => {
+						assert.ifError(err);
+						assert.deepEqual(result, expectedReturn);
+						done();
+					});
 			});
 		});
 	});
@@ -5080,6 +5115,36 @@ describe('Endpoint', () => {
 				basicClient.users.deleteAvatar(userID, (error, result) => {
 					assert.ifError(error);
 					assert.isUndefined(result);
+					done();
+				});
+			});
+		});
+		describe('terminateSession()', () => {
+			it('should make POST request to terminate sessions by user IDs and resolve with message', done => {
+				const userIDs = [
+					'12345',
+					'67890'
+				];
+				const userLogins = [
+					'user@example.com',
+					'user2@example.com'
+				];
+				const expectedReturn = {
+					message: 'Request is successful, please check the admin events for the status of the job'
+				};
+				apiMock
+					.post('/2.0/users/terminate_sessions', {
+						user_ids: userIDs,
+						user_logins: userLogins
+					})
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, expectedReturn);
+				basicClient.users.terminateSession({user_ids: userIDs, user_logins: userLogins}, (error, result) => {
+					assert.ifError(error);
+					assert.deepEqual(result, expectedReturn);
 					done();
 				});
 			});

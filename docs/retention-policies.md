@@ -42,6 +42,7 @@ client.retentionPolicies.create(
 		policy_type: 'indefinite',
 		retention_length: 'indefinite',
 		retention_type: 'modifiable',
+		description: 'Policy to retain all reports',
 		disposition_action: 'remove_retention',
 		can_owner_extend_retention: false,
 		status: 'active',
@@ -76,6 +77,7 @@ client.retentionPolicies.get('123456789').then((policy) => {
 			policy_type: 'indefinite',
 			retention_length: 'indefinite',
 			retention_type: 'modifiable',
+			description: 'Policy to retain all reports',
 			disposition_action: 'remove_retention',
 			can_owner_extend_retention: false,
 			status: 'active',
@@ -111,6 +113,7 @@ client.retentionPolicies
 			policy_type: 'indefinite',
 			retention_length: 'indefinite',
 			retention_type: 'modifiable',
+			description: 'Policy to retain all reports',
 			disposition_action: 'remove_retention',
 			can_owner_extend_retention: false,
 			status: 'retired',
@@ -245,7 +248,8 @@ client.retentionPolicies
 				id: '33333',
 				name: 'Example User',
 				login: 'user@example.com' },
-			assigned_at: '2015-07-20T14:28:09-07:00' }
+			assigned_at: '2015-07-20T14:28:09-07:00',
+			start_date_field: 'upload_date' }
 		*/
 	});
 ```
@@ -357,7 +361,7 @@ client.retentionPolicies
 To retrieve information about files under retention, call the
 [`retentionPolicies.getFilesUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFilesUnderRetentionForAssignment) method.
 
-<!-- sample get_files_under_retention -->
+<!-- sample get_retention_policy_assignments_id_files_under_retention -->
 
 ```js
 client.retentionPolicies
@@ -389,7 +393,7 @@ client.retentionPolicies
 To retrieve information about files under retention, call the
 [`retentionPolicies.getFileVersionUnderRetentionForAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/RetentionPolicies.html#getFileVersionUnderRetentionForAssignment) method.
 
-<!-- sample get_files_under_retention -->
+<!-- sample get_retention_policy_assignments_id_file_versions_under_retention -->
 
 ```js
 client.retentionPolicies

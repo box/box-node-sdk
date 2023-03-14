@@ -9,6 +9,8 @@
 import { Promise } from 'bluebird';
 import { EventEmitter } from 'events';
 import errors from './util/errors';
+import { PassThrough } from 'stream';
+import request from 'request';
 
 const APIRequest = require('./api-request');
 
@@ -76,7 +78,18 @@ class APIRequestManager {
 		// Make the request
 		var apiRequest = new APIRequest(requestConfig, this.eventBus);
 		apiRequest.execute();
-		return apiRequest.getResponseStream();
+		var stream = apiRequest.getResponseStream();
+
+		// The request is asynchronous, so we need to wait for the stream to be
+		// available before we can pipe it to the pass-through stream.
+		// If the stream is undefined, then the request failed and we should
+		// propagate the error.
+		if (stream) {
+			var passThrough = new PassThrough();
+			stream.pipe(passThrough);
+			return passThrough;
+		}
+		return stream;
 	}
 }
 

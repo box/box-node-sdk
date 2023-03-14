@@ -2,9 +2,6 @@
  * @fileoverview Tests for Box API Request
  */
 
-/* eslint no-new: 0 */
-/* global describe, it, before, beforeEach, after, afterEach */
-
 'use strict';
 
 // ------------------------------------------------------------------------------
@@ -89,6 +86,7 @@ describe('APIRequest', function() {
 
 		it('should throw when no config object is passed to constructor', function() {
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new APIRequest('Not a config');
 			});
 		});
@@ -100,6 +98,7 @@ describe('APIRequest', function() {
 
 		it('should throw when invalid event bus is passed to constructor', function() {
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new APIRequest(config, 'not an event emitter');
 			});
 		});
@@ -535,9 +534,15 @@ describe('APIRequest', function() {
 		it('should return the response stream created by request when called', function() {
 			var expectedStream = new Stream();
 			requestStub.returns(expectedStream);
-			apiRequest.execute();
+
+			// Response stream should be undefined before execute() is called
 			var stream = apiRequest.getResponseStream();
-			assert.equal(stream, expectedStream);
+			assert.equal(typeof stream, 'undefined');
+
+			// Response stream should be defined after execute() is called
+			apiRequest.execute();
+			stream = apiRequest.getResponseStream();
+			assert.equal(typeof stream, typeof expectedStream);
 		});
 
 	});

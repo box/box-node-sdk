@@ -1,8 +1,6 @@
 /**
  * @fileoverview Tests for Basic Box API Session.
  */
-/* eslint no-new: 0 */
-/* global describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
@@ -84,17 +82,20 @@ describe('PersistentAPISession', function() {
 
 		it('should throw an exception when not given any tokenInfo', function() {
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new PersistentAPISession({ bogus: 'data' });
 			});
 		});
 
 		it('should throw an exception when given an invalid tokenInfo', function() {
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new PersistentAPISession(null);
 			});
 			assert.throws(function() {
 				var invalidTokenInfo = Object.create(testTokenInfo);
 				invalidTokenInfo.refreshToken = undefined;
+				/* eslint-disable no-new */
 				new PersistentAPISession(invalidTokenInfo);
 			});
 		});
@@ -108,9 +109,11 @@ describe('PersistentAPISession', function() {
 			};
 
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new PersistentAPISession(testTokenInfo, tokenStoreMissingGet);
 			});
 			assert.throws(function() {
+				/* eslint-disable no-new */
 				new PersistentAPISession(testTokenInfo, tokenStoreMissingSet);
 			});
 		});
