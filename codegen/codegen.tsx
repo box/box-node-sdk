@@ -1,6 +1,6 @@
 import * as path from 'path';
 import shell from 'shelljs';
-import { generateManagerClasses } from './generate-manager-class';
+import { generateManagerClasses } from './generate-manager-classes';
 
 (async () => {
 	try {
