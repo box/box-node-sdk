@@ -371,7 +371,7 @@ class BoxClient {
 				}
 			})
 			.catch((err: any) => {
-				if(callback) {
+				if (callback) {
 					callback(err);
 				} else {
 					Promise.reject(err);
@@ -671,6 +671,7 @@ class BoxClient {
 		var self = this;
 		return function wrappedClientMethod(/* arguments */) {
 			// Check if the last argument is a callback
+			const args = arguments;
 			var lastArg = arguments[arguments.length - 1],
 				callback;
 			if (typeof lastArg === 'function') {
@@ -680,8 +681,8 @@ class BoxClient {
 
 			var ret = method.apply(self, arguments);
 
-			if (ret instanceof Promise) {
-				ret = ret.then((response) => {
+			return ret
+				.then((response: any) => {
 					if (
 						response.statusCode >= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[0] &&
 						response.statusCode <= HTTP_STATUS_CODE_SUCCESS_BLOCK_RANGE[1]
@@ -695,14 +696,6 @@ class BoxClient {
 
 					throw errors.buildUnexpectedResponseError(response);
 				});
-			}
-
-			// if (callback) {
-			// 	// If the callback will handle any errors, don't worry about the promise
-			// 	ret.suppressUnhandledRejections();
-			// }
-
-			return ret;
 		};
 	}
 

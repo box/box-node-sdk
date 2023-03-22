@@ -7,9 +7,7 @@
 // ------------------------------------------------------------------------------
 
 import {EventEmitter} from 'events';
-import errors from './util/errors';
 import {PassThrough} from 'stream';
-import Promise from "bluebird";
 
 const APIRequest = require('./api-request');
 
@@ -59,12 +57,12 @@ class APIRequestManager {
 		var apiRequest = new APIRequest(requestConfig, this.eventBus);
 		return new Promise((resolve, reject) => {
 			apiRequest.execute((err: any, response: any) => {
-				if(err) {
-					// was
-					// errors.unwrapAndThrow(err)
+				if (err) {
+					// was errors.unwrapAndThrow(err)
 					reject(err);
+				} else {
+					resolve(response);
 				}
-				resolve(response.body);
 			})
 		})
 	}

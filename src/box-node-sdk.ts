@@ -377,7 +377,8 @@ class BoxSDKNode extends EventEmitter {
 				authorizationCode,
 				options as any /* FIXME */
 			)
-			.asCallback(callback);
+			.then((r) => callback(null, r))
+			.catch((err) => callback(err));
 	}
 
 	/**
@@ -400,7 +401,8 @@ class BoxSDKNode extends EventEmitter {
 
 		return this.tokenManager
 			.getTokensRefreshGrant(refreshToken, options as any /* FIXME */)
-			.asCallback(callback);
+			.then((r) => callback(null, r))
+			.catch((err) => callback(err));
 	}
 
 	/**
@@ -430,7 +432,8 @@ class BoxSDKNode extends EventEmitter {
 
 		return this.tokenManager
 			.getTokensJWTGrant('enterprise', enterpriseID, options as any /* FIXME */)
-			.asCallback(callback);
+			.then((r) => callback(null, r))
+			.catch((err) => callback(err));
 	}
 
 	/**
@@ -452,7 +455,8 @@ class BoxSDKNode extends EventEmitter {
 
 		return this.tokenManager
 			.getTokensJWTGrant('user', userID, options as any /* FIXME */)
-			.asCallback(callback);
+			.then((r) => callback(null, r))
+			.catch((err) => callback(err));
 	}
 
 	/**
@@ -475,7 +479,8 @@ class BoxSDKNode extends EventEmitter {
 
 		return this.tokenManager
 			.revokeTokens(token, options as any /* FIXME */)
-			.asCallback(callback);
+			.then((r) => callback(null, r))
+			.catch((err) => callback(err));
 	}
 }
 
