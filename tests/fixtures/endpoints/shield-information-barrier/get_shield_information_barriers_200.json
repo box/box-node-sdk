@@ -1,0 +1,30 @@
+{
+    "next_marker": null,
+    "limit": 1000,
+    "entries": [
+        {
+            "id": 123,
+            "type": "shield_information_barrier",
+            "created_at": "2020-06-26T18:44:45.869Z",
+            "created_by": {
+              "id": 11446498,
+              "type": "user"
+            },
+            "enabled_at": "2020-07-26T18:44:45.869Z",
+            "enabled_by": {
+              "id": 11446498,
+              "type": "user"
+            },
+            "enterprise": {
+              "id": 1910967,
+              "type": "enterprise"
+            },
+            "status": "draft",
+            "updated_at": "2020-07-26T18:44:45.869Z",
+            "updated_by": {
+              "id": 11446498,
+              "type": "user"
+            }
+          }
+    ]
+}

@@ -5660,4 +5660,86 @@ describe('Endpoint', () => {
 			});
 		});
 	});
+	describe('Shield information barriers', () => {
+		describe('getById()', () => {
+			it('should make GET request for shield information barrier with spcified ID and return correct response when API call succeeds ', () => {
+				var shieldInformationBarrierId = '123',
+					fixture = getFixture('shield-information-barrier/get_shield_information_barrier_id_200');
+				apiMock
+					.get('/2.0/shield_information_barriers/123')
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.shieldInformationBarriers
+					.getById({
+						shield_information_barrier_id: shieldInformationBarrierId,
+					})
+					// eslint-disable-next-line promise/always-return
+					.then(shieldInformationBarrier => {
+						assert.deepEqual(shieldInformationBarrier, JSON.parse(fixture));
+					});
+			});
+		});
+		describe('getAll()', () => {
+			it('should make GET request for shield information barriers and return correct response when API call succeeds', () => {
+				var fixture = getFixture('shield-information-barrier/get_shield_information_barriers_200');
+				apiMock
+					.get('/2.0/shield_information_barriers')
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.shieldInformationBarriers.getAll()
+					// eslint-disable-next-line promise/always-return
+					.then(shieldInformationBarriers => {
+						assert.deepEqual(shieldInformationBarriers, JSON.parse(fixture));
+					});
+			});
+		});
+		describe('create()', () => {
+			it('should make POST request for shield information barrier and return correct response when API call succeeds', () => {
+				var fixture = getFixture('shield-information-barrier/post_shield_information_barriers_201');
+				apiMock
+					.post('/2.0/shield_information_barriers', {
+						enterprise: {
+							type: 'enterprise',
+							id: '12345',
+						}
+					})
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, fixture);
+				return basicClient.shieldInformationBarriers.create({
+					enterprise: {
+						type: 'enterprise',
+						id: '12345',
+					}
+				});
+			});
+		});
+		describe('changeStatusById()', () => {
+			it('should make POST request for shield information barrier status and return correct response when API call succeeds', () => {
+				var fixture = getFixture('shield-information-barrier/post_shield_information_barriers_id_status_200');
+				apiMock
+					.post('/2.0/shield_information_barriers/change_status', {
+						id: '123',
+						status: 'pending'
+					})
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.shieldInformationBarriers.changeStatusById({
+					id: '123',
+					status: 'pending'
+				});
+			});
+		});
+	});
 });

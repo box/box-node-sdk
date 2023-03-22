@@ -1,6 +1,6 @@
 import * as path from 'path';
 import shell from 'shelljs';
-import { generateManagerClass } from './generate-manager-class';
+import { generateManagerClasses } from './generate-manager-classes';
 
 (async () => {
 	try {
@@ -10,35 +10,63 @@ import { generateManagerClass } from './generate-manager-class';
 		shell.rm(...generatedFilePaths);
 
 		const spec = require('../openapi.json');
-		await generateManagerClass({
-			name: 'SignRequestsManager', // avoid name clash with SignRequests schema
-			comment:
-				'Simple manager for interacting with all Sign Requests endpoints and actions.',
-			relativePath: '../src/managers/sign-requests.generated.ts',
-			spec,
-			operations: [
+		await generateManagerClasses(
+			[
 				{
-					name: 'getById',
-					operationId: 'get_sign_requests_id',
+					name: 'SignRequestsManager', // avoid name clash with SignRequests schema
+					comment:
+						'Simple manager for interacting with all Sign Requests endpoints and actions.',
+					relativePath: '../src/managers/sign-requests.generated.ts',
+					operations: [
+						{
+							name: 'getById',
+							operationId: 'get_sign_requests_id',
+						},
+						{
+							name: 'getAll',
+							operationId: 'get_sign_requests',
+						},
+						{
+							name: 'create',
+							operationId: 'post_sign_requests',
+						},
+						{
+							name: 'cancelById',
+							operationId: 'post_sign_requests_id_cancel',
+						},
+						{
+							name: 'resendById',
+							operationId: 'post_sign_requests_id_resend',
+						},
+					],
 				},
 				{
-					name: 'getAll',
-					operationId: 'get_sign_requests',
-				},
-				{
-					name: 'create',
-					operationId: 'post_sign_requests',
-				},
-				{
-					name: 'cancelById',
-					operationId: 'post_sign_requests_id_cancel',
-				},
-				{
-					name: 'resendById',
-					operationId: 'post_sign_requests_id_resend',
+					name: 'ShieldInformationBarrierManager',
+					comment: '',
+					relativePath:
+						'../src/managers/shield-information-barriers.generated.ts',
+					operations: [
+						{
+							name: 'getById',
+							operationId: 'get_shield_information_barriers_id',
+						},
+						{
+							name: 'getAll',
+							operationId: 'get_shield_information_barriers',
+						},
+						{
+							name: 'create',
+							operationId: 'post_shield_information_barriers',
+						},
+						{
+							name: 'changeStatusById',
+							operationId: 'post_shield_information_barriers_change_status',
+						},
+					],
 				},
 			],
-		});
+			spec
+		);
 	} catch (e) {
 		console.error(e);
 	}
