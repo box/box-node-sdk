@@ -7,7 +7,6 @@
 // ------------------------------------------------------------------------------
 
 import assert from 'assert';
-import { Promise } from 'bluebird';
 import errors from '../util/errors';
 
 // ------------------------------------------------------------------------------
@@ -86,7 +85,8 @@ class AppAuthSession {
 				isObjectValidTokenStore(tokenStore),
 				'Token store provided is improperly formatted. Methods required: read(), write(), clear().'
 			);
-			this._tokenStore = Promise.promisifyAll(tokenStore);
+			// this._tokenStore = Promise.promisifyAll(tokenStore);
+			this._tokenStore = tokenStore;
 		}
 
 		// The TokenInfo object for this app auth session
@@ -114,8 +114,7 @@ class AppAuthSession {
 					this._tokenInfo = tokenInfo;
 
 					if (this._tokenStore) {
-						return this._tokenStore
-							.writeAsync(tokenInfo)
+						return new Promise((resolve) => resolve(this._tokenStore.write(tokenInfo)))
 							.then(() => tokenInfo.accessToken);
 					}
 
@@ -147,17 +146,18 @@ class AppAuthSession {
 
 		// If we're initializing the client and have a token store, try reading from it
 		if (!this._tokenInfo && this._tokenStore) {
-			return this._tokenStore.readAsync().then((tokenInfo: TokenInfo) => {
-				if (
-					!this._tokenManager.isAccessTokenValid(tokenInfo, expirationBuffer)
-				) {
-					// Token store contains expired tokens, refresh
-					return this._refreshAppAuthAccessToken(options);
-				}
+			return new Promise((resolve) => resolve(this._tokenStore.read()))
+				.then((tokenInfo: TokenInfo) => {
+					if (
+						!this._tokenManager.isAccessTokenValid(tokenInfo, expirationBuffer)
+					) {
+						// Token store contains expired tokens, refresh
+						return this._refreshAppAuthAccessToken(options);
+					}
 
-				this._tokenInfo = tokenInfo;
-				return tokenInfo.accessToken;
-			});
+					this._tokenInfo = tokenInfo;
+					return tokenInfo.accessToken;
+				});
 		}
 
 		// If the current token is not fresh, get a new token. All incoming
@@ -210,7 +210,7 @@ class AppAuthSession {
 	}
 
 	/**
-	 * Handle an an "Expired Tokens" Error. If our tokens are expired, we need to clear the token
+	 * Handle an "Expired Tokens" Error. If our tokens are expired, we need to clear the token
 	 * store (if present) before continuing.
 	 *
 	 * @param {Errors~ExpiredTokensError} err An "expired tokens" error including information
@@ -226,8 +226,7 @@ class AppAuthSession {
 
 		// If a token store is available, clear the store and throw either error
 		// eslint-disable-next-line promise/no-promise-in-callback
-		return this._tokenStore
-			.clearAsync()
+		return new Promise((resolve) => resolve(this._tokenStore.clear()))
 			.catch((e: any) => errors.unwrapAndThrow(e))
 			.then(() => {
 				throw err;

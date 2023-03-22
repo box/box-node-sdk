@@ -411,7 +411,7 @@ class TokenManager {
 		};
 		// Start the request timer immediately before executing the async request
 		asyncRequestTimer = process.hrtime();
-		return this.getTokens(params, options).catch((err) =>
+		return this.getTokens(params, options).catch((err: any) =>
 			this.retryJWTGrant(claims, jwtOptions, keyParams, params, options, err, 0)
 		);
 	}
@@ -497,7 +497,7 @@ class TokenManager {
 			return Promise.delay(retryTimeoutinSeconds).then(() => {
 				// Start the request timer immediately before executing the async request
 				asyncRequestTimer = process.hrtime();
-				return this.getTokens(params, options).catch((err) =>
+				return this.getTokens(params, options).catch((err: any) =>
 					this.retryJWTGrant(
 						claims,
 						jwtOptions,

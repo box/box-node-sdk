@@ -2,7 +2,6 @@
  * @fileoverview Box API Client
  */
 
-import { Promise } from 'bluebird';
 // ------------------------------------------------------------------------------
 // API Resource Managers
 // ------------------------------------------------------------------------------
@@ -138,40 +137,6 @@ function getFullURL(defaultBasePath: string, url: string) {
 }
 
 /**
- * Create a valid request object for the Batch API from a standard request
- * params object
- * @param {Object} params The request params
- * @returns {Object} The batch API request object
- * @private
- */
-function formatRequestForBatch(params: Record<string, string | object>) {
-	var relativePath = (params.url as string).replace(/^http.*?\/\d\.\d\//, '/');
-
-	return {
-		method: params.method,
-		relative_url:
-			relativePath + (params.qs ? `?${qs.stringify(params.qs)}` : ''),
-		body: params.body,
-		headers: params.headers,
-	};
-}
-
-/**
- * Format a Batch API response object into a standard request response
- * for use in response handling
- * @param {Object} response The batch API response object
- * @returns {Object} The standard response object
- * @private
- */
-function formatResponseForBatch(response: any /* FIXME */) {
-	return {
-		statusCode: response.status,
-		headers: response.headers,
-		body: response.response,
-	};
-}
-
-/**
  * Construct the X-Box-UA header to send analytics identifiers
  * @param {Object} [client] Analytics client information
  * @returns {string} The header value
@@ -228,8 +193,6 @@ class BoxClient {
 	termsOfService: any;
 	storagePolicies: any;
 	signRequests: SignRequests;
-
-	_batch: any;
 
 	/* prototype properties assigned below the class declaration */
 	collaborationRoles!: Record<string, CollaborationRole>;
@@ -301,12 +264,6 @@ class BoxClient {
 		this.termsOfService = new TermsOfService(this);
 		this.storagePolicies = new StoragePolicies(this);
 		this.signRequests = new SignRequests(this);
-
-		// Legacy insensitive language
-		this.collaborationWhitelist = this.collaborationAllowlist;
-
-		// Array of requests when in batch mode, null otherwise
-		this._batch = null;
 	}
 
 	/**
@@ -351,46 +308,39 @@ class BoxClient {
 	_makeRequest(params: any /* FIXME */, callback?: Function) {
 		var promise;
 
-		if (this._batch) {
-			// eslint-disable-next-line promise/avoid-new
-			promise = new Promise((resolve, reject) => {
-				this._batch.push({ params, resolve, reject });
-			});
-		} else {
-			// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
-			promise = this._session
-				.getAccessToken(this._tokenOptions)
-				.then((accessToken: string) => {
-					params.headers = this._createHeadersForRequest(
-						params.headers,
-						accessToken
-					);
+		// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
+		promise = this._session
+			.getAccessToken(this._tokenOptions)
+			.then((accessToken: string) => {
+				params.headers = this._createHeadersForRequest(
+					params.headers,
+					accessToken
+				);
 
-					if (params.streaming) {
-						// streaming is specific to the SDK, so delete it from params before continuing
-						delete params.streaming;
-						var responseStream =
-							this._requestManager.makeStreamingRequest(params);
-						// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
-						// due to expired access token
-						responseStream.on('response', (response: any /* FIXME */) => {
-							if (isUnauthorizedDueToExpiredAccessToken(response)) {
-								var expiredTokensError = errors.buildAuthError(response);
+				if (params.streaming) {
+					// streaming is specific to the SDK, so delete it from params before continuing
+					delete params.streaming;
+					var responseStream =
+						this._requestManager.makeStreamingRequest(params);
+					// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
+					// due to expired access token
+					responseStream.on('response', (response: any /* FIXME */) => {
+						if (isUnauthorizedDueToExpiredAccessToken(response)) {
+							var expiredTokensError = errors.buildAuthError(response);
 
-								// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
-								if (this._session.handleExpiredTokensError) {
-									this._session.handleExpiredTokensError(expiredTokensError);
-								}
+							// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
+							if (this._session.handleExpiredTokensError) {
+								this._session.handleExpiredTokensError(expiredTokensError);
 							}
-						});
+						}
+					});
 
-						return responseStream;
-					}
+					return responseStream;
+				}
 
-					// Make the request to Box, and perform standard response handling
-					return this._requestManager.makeRequest(params);
-				});
-		}
+				// Make the request to Box, and perform standard response handling
+				return this._requestManager.makeRequest(params);
+			});
 
 		return promise
 			.then((response: any /* FIXME */) => {
@@ -413,7 +363,20 @@ class BoxClient {
 
 				return response;
 			})
-			.asCallback(callback);
+			.then((r: any) => {
+				if (callback) {
+					r ? callback(null, r) : callback();
+				} else {
+					return Promise.resolve(r);
+				}
+			})
+			.catch((err: any) => {
+				if(callback) {
+					callback(err);
+				} else {
+					Promise.reject(err);
+				}
+			});
 	}
 
 	/**
@@ -444,7 +407,7 @@ class BoxClient {
 
 		this.setCustomHeader(HEADER_XFF, validIPs);
 
-		this._tokenOptions = { ip: validIPs };
+		this._tokenOptions = {ip: validIPs};
 	}
 
 	/**
@@ -497,7 +460,9 @@ class BoxClient {
 	 * @returns {Promise} A promise resolving when the client's access token is revoked
 	 */
 	revokeTokens(callback: Function) {
-		return this._session.revokeTokens(this._tokenOptions).asCallback(callback);
+		return this._session.revokeTokens(this._tokenOptions)
+			.then((d: any) => callback ? d ? callback(null, d) : callback() : d)
+			.catch((err: any) => callback ? callback(err, null) : err);
 	}
 
 	/**
@@ -523,13 +488,14 @@ class BoxClient {
 		}
 
 		var opts = Object.assign(
-			{ tokenRequestOptions: this._tokenOptions || null },
+			{tokenRequestOptions: this._tokenOptions || null},
 			options
 		);
 
 		return this._session
 			.exchangeToken(scopes, resource, opts)
-			.asCallback(callback);
+			.then((d: any) => callback ? callback(null, d) : d)
+			.catch((e: any) => callback ? callback(e, null) : e);
 	}
 
 	/**
@@ -635,67 +601,6 @@ class BoxClient {
 	}
 
 	/**
-	 * Puts the client into batch mode, which will queue calls instead of
-	 * immediately making the API request.
-	 *
-	 * DEPRECATED: Batch API is not supported and should not be used; make calls in parallel instead.
-	 *
-	 * @returns {BoxClient} Current client object
-	 */
-	batch = util.deprecate(function (this: BoxClient) {
-		/* eslint-disable no-invalid-this */
-		this._batch = [];
-		return this;
-		/* eslint-enable no-invalid-this */
-	}, 'Batch API is not supported and should not be used; make calls in parallel instead.');
-
-	/**
-	 * Executes a batch of requests.
-	 *
-	 * DEPRECATED: Batch API is not supported and should not be used; make calls in parallel instead.
-	 *
-	 * @returns {Promise<Object>} Promise resolving to the collection of batch responses
-	 */
-	batchExec = util.deprecate(function (this: BoxClient, callback: Function) {
-		/* eslint-disable no-invalid-this */
-		if (!this._batch) {
-			return Promise.reject(
-				new Error('Must start a batch before executing')
-			).asCallback(callback);
-		}
-
-		var params = {
-			body: {
-				requests: this._batch.map((batchReq: any /* FIXME */) =>
-					formatRequestForBatch(batchReq.params)
-				),
-			},
-		};
-
-		var batch: any[] = this._batch;
-		this._batch = null;
-		return this.post('/batch', params)
-			.then((res: any /* FIXME */) => {
-				var responses: any[] = res.body.responses;
-
-				responses
-					.map((x) => formatResponseForBatch(x))
-					.forEach((response, index) => {
-						batch[index].resolve(response);
-					});
-
-				return res.body;
-			})
-			.catch((err: any) => {
-				batch.forEach((req) => req.reject(err));
-
-				throw err;
-			})
-			.asCallback(callback);
-		/* eslint-enable no-invalid-this */
-	}, 'Batch API is not supported and should not be used; make calls in parallel instead.');
-
-	/**
 	 * Build the 'BoxApi' Header used for authenticating access to a shared item
 	 *
 	 * @param {string} url The shared link url
@@ -792,10 +697,10 @@ class BoxClient {
 				});
 			}
 
-			if (callback) {
-				// If the callback will handle any errors, don't worry about the promise
-				ret.suppressUnhandledRejections();
-			}
+			// if (callback) {
+			// 	// If the callback will handle any errors, don't worry about the promise
+			// 	ret.suppressUnhandledRejections();
+			// }
 
 			return ret;
 		};
@@ -863,9 +768,9 @@ BoxClient.prototype.itemTypes = {
  * @type {AccessLevel}
  */
 BoxClient.prototype.accessLevels = {
-	OPEN: { access: 'open' },
-	COLLABORATORS: { access: 'collaborators' },
-	COMPANY: { access: 'company' },
+	OPEN: {access: 'open'},
+	COLLABORATORS: {access: 'collaborators'},
+	COMPANY: {access: 'company'},
 	DEFAULT: {},
 	DISABLED: null,
 };

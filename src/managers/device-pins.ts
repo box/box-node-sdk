@@ -120,7 +120,9 @@ class DevicePins {
 					params
 				);
 			})
-			.asCallback(callback);
+			.then((r: any) => {
+				return callback ? callback(null, r) : r;
+			})
 	}
 }
 

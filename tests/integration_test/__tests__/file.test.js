@@ -48,6 +48,21 @@ test('test get file information', async() => {
 	}
 });
 
+test('test get file information with callback', async() => {
+	let testFile = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'));
+	try {
+		// eslint-disable-next-line handle-callback-err
+		context.client.files.get(testFile.id, {}, (error, file) => {
+			expect(file.id).toBe(testFile.id);
+			expect(file.type).toBe('file');
+			expect(file.name).toBe(testFile.name);
+			expect(file.size).toBe(testFile.size);
+		});
+	} finally {
+		await testFile.dispose();
+	}
+});
+
 test('test get file with custom fields', async() => {
 	let testFile = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'));
 	try {

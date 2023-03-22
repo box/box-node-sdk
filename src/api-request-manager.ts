@@ -6,11 +6,10 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-import { Promise } from 'bluebird';
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
 import errors from './util/errors';
-import { PassThrough } from 'stream';
-import request from 'request';
+import {PassThrough} from 'stream';
+import Promise from "bluebird";
 
 const APIRequest = require('./api-request');
 
@@ -58,9 +57,16 @@ class APIRequestManager {
 
 		// Make the request
 		var apiRequest = new APIRequest(requestConfig, this.eventBus);
-		return Promise.fromCallback((callback) =>
-			apiRequest.execute(callback)
-		).catch((err) => errors.unwrapAndThrow(err));
+		return new Promise((resolve, reject) => {
+			apiRequest.execute((err: any, response: any) => {
+				if(err) {
+					// was
+					// errors.unwrapAndThrow(err)
+					reject(err);
+				}
+				resolve(response.body);
+			})
+		})
 	}
 
 	/**

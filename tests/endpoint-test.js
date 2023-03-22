@@ -14,7 +14,6 @@ var assert = require('chai').assert,
 	url = require('url'),
 	crypto = require('crypto'),
 	path = require('path'),
-	Promise = require('bluebird'),
 	{Stream, Readable} = require('stream');
 
 /**
