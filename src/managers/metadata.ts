@@ -381,7 +381,6 @@ class Metadata {
 
 	/**
 	 * Query Box items by their metadata.
-	 * internal analysis engine determines which existing index will satisfy the query.
 	 *
 	 * API Endpoint: '/metadata_queries/execute_read'
 	 * Method: POST
