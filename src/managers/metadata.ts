@@ -411,10 +411,8 @@ class Metadata {
 			ancestor_folder_id: ancestorFolderId,
 		};
 
-		const { ...newOptions } = options ?? {};
-
 		var params = {
-			body: merge(body, newOptions),
+			body: merge(body, options || {}),
 		};
 
 		return this.client.wrapWithDefaultHandler(this.client.post)(
