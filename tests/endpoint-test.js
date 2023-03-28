@@ -4206,7 +4206,6 @@ describe('Endpoint', () => {
 					query,
 					query_params: queryParams,
 					ancestor_folder_id: ancestorFolderId,
-					use_index: useIndex,
 					order_by: orderBy,
 					limit,
 				};
@@ -4225,7 +4224,6 @@ describe('Endpoint', () => {
 					query,
 					query_params: queryParams,
 					ancestor_folder_id: ancestorFolderId,
-					use_index: useIndex,
 					order_by: orderBy,
 					limit,
 				};
@@ -4260,7 +4258,6 @@ describe('Endpoint', () => {
 					query,
 					query_params: queryParams,
 					ancestor_folder_id: ancestorFolderId,
-					use_index: useIndex,
 					order_by: orderBy,
 					limit,
 				};
@@ -4269,7 +4266,6 @@ describe('Endpoint', () => {
 					query,
 					query_params: queryParams,
 					ancestor_folder_id: ancestorFolderId,
-					use_index: useIndex,
 					order_by: orderBy,
 					limit,
 					marker,
@@ -4300,7 +4296,6 @@ describe('Endpoint', () => {
 					query,
 					query_params: queryParams,
 					ancestor_folder_id: ancestorFolderId,
-					use_index: useIndex,
 					order_by: orderBy,
 					limit,
 				};
