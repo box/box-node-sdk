@@ -356,6 +356,7 @@ describe('APIRequest', function() {
 
 			var apiRequest = new APIRequest(config, eventBusFake);
 			apiRequest.execute(function callback() {
+				assert.equal(apiRequest.numRetries, 1);
 				done();
 			});
 			// Tick clock 30ms, past the retry interval
@@ -521,6 +522,31 @@ describe('APIRequest', function() {
 			});
 		});
 
+		it('should retry when a 5xx error occurs but then fail after retries', function(done) {
+			var responseInfo = {
+				statusCode: 504,
+				request: {}
+			};
+			var expectedError = new Error('504 - Gateway Time-out');
+			config = config.extend({
+				request: {
+					formData: null
+				},
+				numMaxRetries: 3,
+				retryIntervalMS: 10,
+			});
+			requestStub.yieldsAsync(null, responseInfo);
+			sandbox.stub(eventBusFake, 'emit').withArgs('response');
+
+			var apiRequest = new APIRequest(config, eventBusFake);
+			apiRequest.execute(function callback(err, response) {
+				assert.equal(apiRequest.numRetries, 3);
+				assert.notEqual(err, null);
+				assert.equal(err.message, expectedError.message);
+				assert.equal(response, null);
+				done();
+			});
+		});
 	});
 
 	describe('getResponseStream()', function() {
