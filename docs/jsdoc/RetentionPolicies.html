@@ -264,7 +264,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line351">line 351</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line360">line 360</a>
     </li></ul></dd>
     
 
@@ -337,7 +337,7 @@ be done when the retention period is over
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line344">line 344</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line353">line 353</a>
     </li></ul></dd>
     
 
@@ -410,7 +410,7 @@ remain in effect.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line337">line 337</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line346">line 346</a>
     </li></ul></dd>
     
 
@@ -482,7 +482,7 @@ remain in effect.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line357">line 357</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line366">line 366</a>
     </li></ul></dd>
     
 
@@ -736,6 +736,39 @@ Method: POST
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>start_date_field</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Id of Metadata field which will be used to specify the start date for the retention policy, or set this to "upload_date" as value to use the date when the file was uploaded to Box</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -813,7 +846,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line194">line 194</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -1067,6 +1100,138 @@ Method: POST
 
         <tr>
             
+                <td class="name"><code>are_owners_notified</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Whether or not owner and co-owners of a file are notified when the policy nears expiration</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>can_owner_extend_retention</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Whether or not the owner of a file will be allowed to extend the retention</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>custom_notification_recipients</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;UserMini></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A list of users notified when the retention policy duration is about to end</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The additional text description of the retention policy</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>retention_length</code></td>
             
 
@@ -1207,7 +1372,7 @@ Method: POST
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line93">line 93</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -1412,7 +1577,7 @@ Method: DELETE
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line239">line 239</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line248">line 248</a>
     </li></ul></dd>
     
 
@@ -1650,7 +1815,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line115">line 115</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line119">line 119</a>
     </li></ul></dd>
     
 
@@ -1984,7 +2149,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line156">line 156</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -2485,7 +2650,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line282">line 282</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line291">line 291</a>
     </li></ul></dd>
     
 
@@ -2723,7 +2888,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line223">line 223</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line232">line 232</a>
     </li></ul></dd>
     
 
@@ -3022,7 +3187,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line174">line 174</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line182">line 182</a>
     </li></ul></dd>
     
 
@@ -3356,7 +3521,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line303">line 303</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line312">line 312</a>
     </li></ul></dd>
     
 
@@ -3596,7 +3761,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line256">line 256</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -3930,7 +4095,7 @@ Method: GET
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line324">line 324</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line333">line 333</a>
     </li></ul></dd>
     
 
@@ -4186,6 +4351,138 @@ Method: PUT
 
         <tr>
             
+                <td class="name"><code>are_owners_notified</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Whether or not owner and co-owners of a file are notified when the policy nears expiration</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>can_owner_extend_retention</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Whether or not the owner of a file will be allowed to extend the retention</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>custom_notification_recipients</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;UserMini></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A list of users notified when the retention policy duration is about to end</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The additional text description of the retention policy</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>retention_length</code></td>
             
 
@@ -4359,7 +4656,7 @@ Method: PUT
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line137">line 137</a>
+        <a href="managers_retention-policies.ts.html">managers/retention-policies.ts</a>, <a href="managers_retention-policies.ts.html#line145">line 145</a>
     </li></ul></dd>
     
 
@@ -4433,7 +4730,7 @@ Method: PUT
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Jan 05 2023 04:21:14 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Apr 19 2023 03:27:01 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
