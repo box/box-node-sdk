@@ -5,6 +5,8 @@ export * from './file-version-base.generated';
 export * from './file-version-mini.generated';
 export * from './folder-base.generated';
 export * from './folder-mini.generated';
+export * from './shield-information-barrier-base.generated';
+export * from './shield-information-barrier-segment.generated';
 export * from './shield-information-barrier.generated';
 export * from './sign-request-base.generated';
 export * from './sign-request-create-request.generated';

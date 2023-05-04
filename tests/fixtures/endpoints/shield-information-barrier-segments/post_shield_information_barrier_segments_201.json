@@ -1,0 +1,20 @@
+{
+  "id": "11446498",
+  "type": "shield_information_barrier_segment",
+  "created_at": "2020-06-26T18:44:45.869Z",
+  "created_by": {
+	"id": "11446498",
+	"type": "user"
+  },
+  "description": "Corporate division that engages in advisory_based financial transactions on behalf of individuals, corporations, and governments.",
+  "name": "Investment Banking",
+  "shield_information_barrier": {
+	"id": "11446498",
+	"type": "shield_information_barrier"
+  },
+  "updated_at": "2020-07-26T18:44:45.869Z",
+  "updated_by": {
+	"id": "11446498",
+	"type": "user"
+  }
+}

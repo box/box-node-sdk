@@ -32,6 +32,7 @@ import WebLinks from './managers/web-links';
 import Webhooks from './managers/webhooks';
 import FileRequestsManager from "./managers/file-requests-manager";
 import ShieldInformationBarriers from "./managers/shield-information-barriers.generated";
+import ShieldInformationBarrierSegments from "./managers/shield-information-barrier-segments.generated";
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -230,6 +231,7 @@ class BoxClient {
 	storagePolicies: any;
 	signRequests: SignRequests;
 	shieldInformationBarriers: ShieldInformationBarriers;
+	shieldInformationBarrierSegments: ShieldInformationBarrierSegments;
 
 	_batch: any;
 
@@ -304,6 +306,7 @@ class BoxClient {
 		this.storagePolicies = new StoragePolicies(this);
 		this.signRequests = new SignRequests(this);
 		this.shieldInformationBarriers = new ShieldInformationBarriers(this);
+		this.shieldInformationBarrierSegments = new ShieldInformationBarrierSegments(this);
 
 		// Legacy insensitive language
 		this.collaborationWhitelist = this.collaborationAllowlist;
