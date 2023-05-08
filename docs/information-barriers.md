@@ -16,7 +16,7 @@
 
 ## Get shield information barrier with specified ID
 
-Get shield information barrier based on provided ID by [`shieldInformationBarriers.getById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/ShieldInformationBarrierManager.html#getById)
+Get shield information barrier based on provided ID by [`shieldInformationBarriers.getById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/ShieldInformationBarrierManager.html#getById)
 method.
 
 <!-- sample get_shield_information_barriers_id -->
@@ -32,7 +32,7 @@ console.log(
 
 ## Get all shield information barriers
 
-Retrieves a list of shield information barrier objects for the enterprise of JWT by [`shieldInformationBarriers.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/ShieldInformationBarrierManager.html#getAll)
+Retrieves a list of shield information barrier objects for the enterprise of JWT by [`shieldInformationBarriers.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/ShieldInformationBarrierManager.html#getAll)
 method.
 
 <!-- sample get_shield_information_barriers -->
@@ -42,9 +42,10 @@ const result = await client.shieldInformationBarriers.getAll();
 console.log(`There are ${result.entries.length} shield information barriers`);
 ```
 
+
 ## Update shield information barrier status
 
-Change status of shield information barrier with the specified ID. [`shieldInformationBarriers.changeStatusById(body, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/ShieldInformationBarrierManager.html#changeStatusById)
+Change status of shield information barrier with the specified ID. [`shieldInformationBarriers.changeStatusById(body, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/ShieldInformationBarrierManager.html#changeStatusById)
 method.
 
 <!-- sample post_shield_information_barriers_change_status -->
@@ -61,7 +62,7 @@ console.log(
 
 ## Create shield information barrier
 
-Creates a shield information barrier to separate individuals/groups within the same firm and prevents confidential information passing between them.[`shieldInformationBarriers.create(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/ShieldInformationBarrierManager.html#create)
+Creates a shield information barrier to separate individuals/groups within the same firm and prevents confidential information passing between them.[`shieldInformationBarriers.create(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/ShieldInformationBarrierManager.html#create)
 method.
 
 <!-- sample post_shield_information_barriers -->
