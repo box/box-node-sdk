@@ -96,7 +96,7 @@ import { generateManagerClasses } from './generate-manager-classes';
 					name: 'ShieldInformationBarrierSegmentMembersManager',
 					comment: '',
 					relativePath:
-						'../src/managers/shield-information-barrier-segments.generated.ts',
+						'../src/managers/shield-information-barrier-segment-members.generated.ts',
 					operations: [
 						{
 							name: 'getById',
