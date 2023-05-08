@@ -1,3 +1,4 @@
+'use strict';
 const {getEnterpriseId} = require('../context');
 
 const getOrCreateBoxTestInformationBarrier = async adminClient => {

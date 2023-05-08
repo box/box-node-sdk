@@ -1,13 +1,13 @@
 'use strict';
 
+const utils = require('../lib/utils');
 const {getAdminClient} = require('../context');
 const {getOrCreateBoxTestInformationBarrier} = require('../objects/box-test-information-barrier');
-const utils = require('../lib/utils');
 const context = {};
 
-beforeAll(() => {
-	context.adminClient = getAdminClient();
-	context.client = context.adminClient;
+beforeAll(async() => {
+	context.client = getAdminClient();
+	context.barrier = await getOrCreateBoxTestInformationBarrier(context.client);
 });
 
 test('test information barrier segment', async() => {
@@ -17,12 +17,10 @@ test('test information barrier segment', async() => {
 	let barrierSegmentDescUpdated = 'sample description updated';
 	let barrierSegment;
 
-	const barrier = await getOrCreateBoxTestInformationBarrier(context.client);
-
 	barrierSegment = await context.client.shieldInformationBarrierSegments.create({
 		name: barrierSegmentName,
 		description: barrierSegmentDesc,
-		shield_information_barrier: barrier,
+		shield_information_barrier: context.barrier,
 	});
 	expect(barrierSegment.id).toBeDefined();
 	expect(barrierSegment.name).toBe(barrierSegmentName);
@@ -46,8 +44,9 @@ test('test information barrier segment', async() => {
 		shield_information_barrier_segment_id: barrierSegment.id
 	});
 
-	const allSegments = await context.client.shieldInformationBarrierSegments.getAll({
-		shield_information_barrier_id: barrier.id
+	const barrierSegments = await context.client.shieldInformationBarrierSegments.getAll({
+		shield_information_barrier_id: context.barrier.id
 	});
-	expect(allSegments.entries.length).toBe(0);
+	expect(barrierSegments.entries).toBeDefined();
+	expect(barrierSegments.entries.find(item => item.id === barrierSegment.id)).toBeUndefined();
 });
