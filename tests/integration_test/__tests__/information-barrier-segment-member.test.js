@@ -44,6 +44,5 @@ test('test information barrier segment member', async() => {
 	const barrierSegmentMembers = await context.client.shieldInformationBarrierSegmentMembers.getAll({
 		shield_information_barrier_segment_id: context.barrierSegment.id
 	});
-	expect(barrierSegmentMembers.entries).toBeDefined();
-	expect(barrierSegmentMembers.entries.find(item => item.id === barrierSegmentMember.id)).toBeUndefined();
+	expect(barrierSegmentMembers.entries.length).toBe(0);
 });

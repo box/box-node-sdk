@@ -34,6 +34,8 @@ import FileRequestsManager from "./managers/file-requests-manager";
 import ShieldInformationBarriers from "./managers/shield-information-barriers.generated";
 import ShieldInformationBarrierSegments from "./managers/shield-information-barrier-segments.generated";
 import ShieldInformationBarrierSegmentMembers from "./managers/shield-information-barrier-segment-members.generated";
+import ShieldInformationBarrierSegmentRestrictions from "./managers/shield-information-barrier-segment-restrictions.generated";
+import ShieldInformationBarrierReports from "./managers/shield-information-barrier-reports.generated";
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -234,6 +236,8 @@ class BoxClient {
 	shieldInformationBarriers: ShieldInformationBarriers;
 	shieldInformationBarrierSegments: ShieldInformationBarrierSegments;
 	shieldInformationBarrierSegmentMembers: ShieldInformationBarrierSegmentMembers;
+	shieldInformationBarrierSegmentRestrictions: ShieldInformationBarrierSegmentRestrictions;
+	shieldInformationBarrierReports: ShieldInformationBarrierReports;
 
 	_batch: any;
 
@@ -310,7 +314,8 @@ class BoxClient {
 		this.shieldInformationBarriers = new ShieldInformationBarriers(this);
 		this.shieldInformationBarrierSegments = new ShieldInformationBarrierSegments(this);
 		this.shieldInformationBarrierSegmentMembers = new ShieldInformationBarrierSegmentMembers(this);
-
+		this.shieldInformationBarrierSegmentRestrictions = new ShieldInformationBarrierSegmentRestrictions(this);
+		this.shieldInformationBarrierReports = new ShieldInformationBarrierReports(this);
 		// Legacy insensitive language
 		this.collaborationWhitelist = this.collaborationAllowlist;
 
