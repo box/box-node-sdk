@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/box/box-node-sdk/compare/v2.8.1...v2.9.0) (2023-04-19)
+
+
+### New Features and Enhancements
+
+* New fields in `retention-policy` and `retention-policy-assignment` ([#803](https://github.com/box/box-node-sdk/issues/803)) ([f14ba84](https://github.com/box/box-node-sdk/commit/f14ba84013985513854ad396581d085d1d4f0255))
+
+### Bug Fixes
+
+* return empty object when `tos` status is not present ([#797](https://github.com/box/box-node-sdk/issues/797)) ([12fd9b0](https://github.com/box/box-node-sdk/commit/12fd9b053707471722f53cd1760c8cf59451fe8d))
+
 ### [2.8.1](https://github.com/box/box-node-sdk/compare/v2.8.0...v2.8.1) (2023-01-05)
 
 
