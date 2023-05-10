@@ -5694,8 +5694,8 @@ describe('Endpoint', () => {
 					.reply(200, fixture);
 				return basicClient.shieldInformationBarriers.getAll()
 					// eslint-disable-next-line promise/always-return
-					.then(shieldInformationBarrierSegments => {
-						assert.deepEqual(shieldInformationBarrierSegments, JSON.parse(fixture));
+					.then(shieldInformationBarriers => {
+						assert.deepEqual(shieldInformationBarriers, JSON.parse(fixture));
 					});
 			});
 		});
