@@ -55,6 +55,14 @@ export interface SignRequestCreateSigner {
 	 */
 	declined_redirect_url?: string;
 	/**
+	 * If set to true, signer will need to login to a Box account
+	 * before signing the request. If the signer does not have
+	 * an existing account, they will have an option to create
+	 * a free Box account.
+	 * Example: true
+	 */
+	login_required?: boolean;
+	/**
 	 * If set, this phone number is be used to verify the signer
 	 * via two factor authentication before they are able to sign the document.
 	 * Example: 6314578901
