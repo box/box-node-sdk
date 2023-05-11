@@ -142,7 +142,7 @@ class SignRequestsManager {
 	 * @param {object} options Options for the request
 	 * @param {string} options.sign_request_id The ID of the sign request
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
-	 * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+	 * @returns {Promise<void>} A promise resolving to the result or rejecting with an error
 	 */
 	resendById(
 		options: {
@@ -152,7 +152,7 @@ class SignRequestsManager {
 			readonly sign_request_id: string;
 		},
 		callback?: Function
-	): Promise<object> {
+	): Promise<void> {
 		const { sign_request_id: signRequestId, ...queryParams } = options,
 			apiPath = urlPath('sign_requests', signRequestId, 'resend'),
 			params = {
