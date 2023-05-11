@@ -5694,8 +5694,8 @@ describe('Endpoint', () => {
 					.reply(200, fixture);
 				return basicClient.shieldInformationBarriers.getAll()
 					// eslint-disable-next-line promise/always-return
-					.then(shieldInformationBarrierSegments => {
-						assert.deepEqual(shieldInformationBarrierSegments, JSON.parse(fixture));
+					.then(shieldInformationBarriers => {
+						assert.deepEqual(shieldInformationBarriers, JSON.parse(fixture));
 					});
 			});
 		});
@@ -5915,6 +5915,150 @@ describe('Endpoint', () => {
 				return basicClient.shieldInformationBarrierSegmentMembers.deleteById({
 					shield_information_barrier_segment_member_id: '123'
 				});
+			});
+		});
+	});
+	describe('Shield information barrier segment restrictions', () => {
+		describe('getById()', () => {
+			it('should make GET request for shield information barrier segment restriction with spcified ID and return correct response when API call succeeds', () => {
+				var shieldInformationBarrierSegmentRestrictionId = '11446498';
+				var fixture = getFixture('shield-information-barrier-segment-restrictions/get_shield_information_barrier_segment_restrictions_id_200');
+				apiMock
+					.get(`/2.0/shield_information_barrier_segment_restrictions/${shieldInformationBarrierSegmentRestrictionId}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.shieldInformationBarrierSegmentRestrictions
+					.getById({
+						shield_information_barrier_segment_restriction_id: shieldInformationBarrierSegmentRestrictionId,
+					})
+					// eslint-disable-next-line promise/always-return
+					.then(shieldInformationBarrierSegmentRestriction => {
+						assert.deepEqual(shieldInformationBarrierSegmentRestriction, JSON.parse(fixture));
+					});
+			});
+		});
+		describe('getAll()', () => {
+			it('should make GET request for shield information barrier segment restrictions and return correct response when API call succeeds', () => {
+				var shieldInformationBarrierSegmentId = '432554';
+				var fixture = getFixture('shield-information-barrier-segment-restrictions/get_shield_information_barrier_segment_restrictions_200');
+				apiMock
+					.get(`/2.0/shield_information_barrier_segment_restrictions?shield_information_barrier_segment_id=${shieldInformationBarrierSegmentId}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.shieldInformationBarrierSegmentRestrictions.getAll({
+					shield_information_barrier_segment_id: shieldInformationBarrierSegmentId
+				})
+				// eslint-disable-next-line promise/always-return
+					.then(shieldInformationBarrierSegmentRestrictions => {
+						assert.deepEqual(shieldInformationBarrierSegmentRestrictions, JSON.parse(fixture));
+					});
+			});
+		});
+		describe('create()', () => {
+			it('should make POST request for shield information barrier segment restriction and return correct response when API call succeeds', () => {
+				var barrierSegmentRestrictionPostData = {
+					type: 'shield_information_barrier_segment_restriction',
+					shield_information_barrier_segment: {
+						type: 'shield_information_barrier_segment',
+						id: '1910967'
+					},
+					restricted_segment: {
+						type: 'shield_information_barrier_segment',
+						id: '1910968'
+					}
+				};
+				var fixture = getFixture('shield-information-barrier-segment-restrictions/post_shield_information_barrier_segment_restrictions_201');
+				apiMock
+					.post('/2.0/shield_information_barrier_segment_restrictions', barrierSegmentRestrictionPostData)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, fixture);
+				return basicClient.shieldInformationBarrierSegmentRestrictions.create(barrierSegmentRestrictionPostData);
+			});
+		});
+		describe('deleteById()', () => {
+			it('should make DELETE request to delete shield information barrier segment restriction and return empty response API call succeeds', () => {
+				var shieldInformationBarrierSegmentRestrictionId = '11446498';
+				apiMock
+					.delete(`/2.0/shield_information_barrier_segment_restrictions/${shieldInformationBarrierSegmentRestrictionId}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(204);
+				return basicClient.shieldInformationBarrierSegmentRestrictions.deleteById({
+					shield_information_barrier_segment_restriction_id: shieldInformationBarrierSegmentRestrictionId
+				});
+			});
+		});
+	});
+	describe('Shield information barrier reports', () => {
+		describe('getById()', () => {
+			it('should make GET request for shield information barrier report with spcified ID and return correct response when API call succeeds', () => {
+				var shieldInformationBarrierReportId = '11446498';
+				var fixture = getFixture('shield-information-barrier-reports/get_shield_information_barrier_reports_id_200');
+				apiMock
+					.get(`/2.0/shield_information_barrier_reports/${shieldInformationBarrierReportId}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.shieldInformationBarrierReports
+					.getById({
+						shield_information_barrier_report_id: shieldInformationBarrierReportId,
+					})
+					// eslint-disable-next-line promise/always-return
+					.then(shieldInformationBarrierReport => {
+						assert.deepEqual(shieldInformationBarrierReport, JSON.parse(fixture));
+					});
+			});
+		});
+		describe('getAll()', () => {
+			it('should make GET request for shield information barrier reports and return correct response when API call succeeds', () => {
+				var shieldInformationBarrierId = '123';
+				var fixture = getFixture('shield-information-barrier-reports/get_shield_information_barrier_reports_200');
+				apiMock
+					.get(`/2.0/shield_information_barrier_reports?shield_information_barrier_id=${shieldInformationBarrierId}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.shieldInformationBarrierReports.getAll({
+					shield_information_barrier_id: shieldInformationBarrierId
+				})
+					// eslint-disable-next-line promise/always-return
+					.then(shieldInformationBarrierReports => {
+						assert.deepEqual(shieldInformationBarrierReports, JSON.parse(fixture));
+					});
+			});
+		});
+		describe('create()', () => {
+			it('should make POST request for shield information barrier report and return correct response when API call succeeds', () => {
+				var barrierSegmentReportPostData = {
+					shield_information_barrier: {
+						id: '123',
+						type: 'shield_information_barrier'
+					}
+				};
+				var fixture = getFixture('shield-information-barrier-reports/post_shield_information_barrier_reports_201');
+				apiMock
+					.post('/2.0/shield_information_barrier_reports', barrierSegmentReportPostData)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, fixture);
+				return basicClient.shieldInformationBarrierReports.create(barrierSegmentReportPostData);
 			});
 		});
 	});
