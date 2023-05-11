@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### New Features and Enhancements
 
 * Added support for ethical wall API ([#822](https://github.com/box/box-node-sdk/issues/822)) ([4814af3](https://github.com/box/box-node-sdk/commit/4814af35c1741fbfe3fa03f8f0412ade8b38dfcc))
+* Added `name` and `signature_color` fields to `SignRequest` and `SignRequestCreateRequest` types and `login_required` field to `SignRequestCreateSigner` type ([#822](https://github.com/box/box-node-sdk/issues/822)) ([4814af3](https://github.com/box/box-node-sdk/commit/4814af35c1741fbfe3fa03f8f0412ade8b38dfcc))
 
 ## [2.9.0](https://github.com/box/box-node-sdk/compare/v2.8.1...v2.9.0) (2023-04-19)
 
