@@ -64,6 +64,58 @@ import { generateManagerClasses } from './generate-manager-classes';
 						},
 					],
 				},
+				{
+					name: 'ShieldInformationBarrierSegmentsManager',
+					comment: '',
+					relativePath:
+						'../src/managers/shield-information-barrier-segments.generated.ts',
+					operations: [
+						{
+							name: 'getById',
+							operationId: 'get_shield_information_barrier_segments_id',
+						},
+						{
+							name: 'getAll',
+							operationId: 'get_shield_information_barrier_segments',
+						},
+						{
+							name: 'create',
+							operationId: 'post_shield_information_barrier_segments',
+						},
+						{
+							name: 'update',
+							operationId: 'put_shield_information_barrier_segments_id',
+						},
+						{
+							name: 'deleteById',
+							operationId: 'delete_shield_information_barrier_segments_id',
+						},
+					],
+				},
+				{
+					name: 'ShieldInformationBarrierSegmentMembersManager',
+					comment: '',
+					relativePath:
+						'../src/managers/shield-information-barrier-segment-members.generated.ts',
+					operations: [
+						{
+							name: 'getById',
+							operationId: 'get_shield_information_barrier_segment_members_id',
+						},
+						{
+							name: 'getAll',
+							operationId: 'get_shield_information_barrier_segment_members',
+						},
+						{
+							name: 'create',
+							operationId: 'post_shield_information_barrier_segment_members',
+						},
+						{
+							name: 'deleteById',
+							operationId: 'delete_shield_information_barrier_segment_members_id',
+						},
+					],
+				},
 			],
 			spec
 		);

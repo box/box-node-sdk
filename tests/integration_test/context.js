@@ -89,8 +89,14 @@ function getAdminClient() {
 	return getUserClient(adminUserId);
 }
 
+// eslint-disable-next-line require-jsdoc
+function getEnterpriseId() {
+	return getJwtConfig().enterpriseID;
+}
+
 module.exports = {
 	getAppClient,
 	getUserClient,
-	getAdminClient
+	getAdminClient,
+	getEnterpriseId,
 };
