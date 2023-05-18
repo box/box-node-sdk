@@ -237,9 +237,6 @@ class BoxClient {
 	accessLevels!: Record<string, AccessLevel>;
 	CURRENT_USER_ID!: string;
 
-	/** @deprecated */
-	collaborationWhitelist: any;
-
 	/**
 	 * The BoxClient can make API calls on behalf of a valid API Session. It is responsible
 	 * for formatting the requests and handling the response. Its goal is to deliver
@@ -301,9 +298,6 @@ class BoxClient {
 		this.termsOfService = new TermsOfService(this);
 		this.storagePolicies = new StoragePolicies(this);
 		this.signRequests = new SignRequests(this);
-
-		// Legacy insensitive language
-		this.collaborationWhitelist = this.collaborationAllowlist;
 
 		// Array of requests when in batch mode, null otherwise
 		this._batch = null;

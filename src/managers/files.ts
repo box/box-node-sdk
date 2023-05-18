@@ -343,65 +343,6 @@ class Files {
 	}
 
 	/**
-	 * Requests a Thumbnail for a given file.
-	 *
-	 * API Endpoint: '/files/:fileID/thumbnail.png'
-	 * Method: GET
-	 * Special Expected Responses:
-	 *   200 OK - Thumbnail available. Returns a thumbnail file.
-	 *   202 ACCEPTED - Thumbnail isn't available yet. Returns a `location` URL for a generic placeholder thumbnail.
-	 *   302 FOUND - Unable to generate thumbnail. Returns a `location` URL for a generic placeholder thumbnail.
-	 *
-	 * @param {string} fileID - Box ID of the file being requested
-	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
-	 * @param {Function} [callback] - Passed the thumbnail file or the URL to a placeholder thumbnail if successful.
-	 * @returns {Promise<Object>} A promise resolving to the thumbnail information
-	 * @deprecated use getRepresentationContent() instead
-	 */
-	getThumbnail(
-		fileID: string,
-		options?: Record<string, any>,
-		callback?: Function
-	) {
-		var params = {
-			qs: options,
-			json: false,
-		};
-
-		var apiPath = urlPath(BASE_PATH, fileID, '/thumbnail.png');
-
-		// Handle Special API Response
-		return this.client
-			.get(apiPath, params)
-			.then((response: any /* FIXME */) => {
-				switch (response.statusCode) {
-					// 202 - Thumbnail will be generated, but is not ready yet
-					// 302 - Thumbnail can not be generated
-					// return the url for a thumbnail placeholder
-					case httpStatusCodes.ACCEPTED:
-					case httpStatusCodes.FOUND:
-						return {
-							statusCode: response.statusCode,
-							location: response.headers.location,
-						};
-
-					// 200 - Thumbnail image recieved
-					// return the thumbnail file
-					case httpStatusCodes.OK:
-						return {
-							statusCode: response.statusCode,
-							file: response.body,
-						};
-
-					// Unexpected Response
-					default:
-						throw errors.buildUnexpectedResponseError(response);
-				}
-			})
-			.asCallback(callback);
-	}
-
-	/**
 	 * Gets the comments on a file.
 	 *
 	 * API Endpoint: '/files/:fileID/comments'
@@ -1895,7 +1836,7 @@ class Files {
 	 */
 	getRepresentationInfo(
 		fileID: string,
-		representationType: FileRepresentationType,
+		representationType: FileRepresentationType | string,
 		options?:
 			| {
 					generateRepresentations?: boolean;
@@ -1977,7 +1918,7 @@ class Files {
 	 */
 	getRepresentationContent(
 		fileID: string,
-		representationType: FileRepresentationType,
+		representationType: FileRepresentationType | string,
 		options?: {
 			assetPath?: string;
 		},
@@ -1997,6 +1938,11 @@ class Files {
 						'Could not get information for requested representation'
 					);
 				}
+				if (!options?.assetPath && repInfo.properties?.paged == 'true') {
+					options!.assetPath = `1.${repInfo.representation}`;
+				}
+				console.log('repInfo', JSON.parse(JSON.stringify(repInfo)));
+				console.log('options', options);
 
 				switch (repInfo.status.state) {
 					case 'success':
