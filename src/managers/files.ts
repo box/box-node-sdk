@@ -1938,11 +1938,12 @@ class Files {
 						'Could not get information for requested representation'
 					);
 				}
+
+				// If the representation is paged, we need to specify which page to get the content for
+				// If the assetPath is not specified, we default to the first pages
 				if (!options?.assetPath && repInfo.properties?.paged == 'true') {
 					options!.assetPath = `1.${repInfo.representation}`;
 				}
-				console.log('repInfo', JSON.parse(JSON.stringify(repInfo)));
-				console.log('options', options);
 
 				switch (repInfo.status.state) {
 					case 'success':
