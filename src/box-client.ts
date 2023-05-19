@@ -629,67 +629,6 @@ class BoxClient {
 	}
 
 	/**
-	 * Puts the client into batch mode, which will queue calls instead of
-	 * immediately making the API request.
-	 *
-	 * DEPRECATED: Batch API is not supported and should not be used; make calls in parallel instead.
-	 *
-	 * @returns {BoxClient} Current client object
-	 */
-	batch = util.deprecate(function (this: BoxClient) {
-		/* eslint-disable no-invalid-this */
-		this._batch = [];
-		return this;
-		/* eslint-enable no-invalid-this */
-	}, 'Batch API is not supported and should not be used; make calls in parallel instead.');
-
-	/**
-	 * Executes a batch of requests.
-	 *
-	 * DEPRECATED: Batch API is not supported and should not be used; make calls in parallel instead.
-	 *
-	 * @returns {Promise<Object>} Promise resolving to the collection of batch responses
-	 */
-	batchExec = util.deprecate(function (this: BoxClient, callback: Function) {
-		/* eslint-disable no-invalid-this */
-		if (!this._batch) {
-			return Promise.reject(
-				new Error('Must start a batch before executing')
-			).asCallback(callback);
-		}
-
-		var params = {
-			body: {
-				requests: this._batch.map((batchReq: any /* FIXME */) =>
-					formatRequestForBatch(batchReq.params)
-				),
-			},
-		};
-
-		var batch: any[] = this._batch;
-		this._batch = null;
-		return this.post('/batch', params)
-			.then((res: any /* FIXME */) => {
-				var responses: any[] = res.body.responses;
-
-				responses
-					.map((x) => formatResponseForBatch(x))
-					.forEach((response, index) => {
-						batch[index].resolve(response);
-					});
-
-				return res.body;
-			})
-			.catch((err: any) => {
-				batch.forEach((req) => req.reject(err));
-
-				throw err;
-			})
-			.asCallback(callback);
-		/* eslint-enable no-invalid-this */
-	}, 'Batch API is not supported and should not be used; make calls in parallel instead.');
-
-	/**
 	 * Build the 'BoxApi' Header used for authenticating access to a shared item
 	 *
 	 * @param {string} url The shared link url

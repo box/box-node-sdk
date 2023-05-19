@@ -4164,7 +4164,6 @@ describe('Endpoint', () => {
 						arg: 100,
 					},
 					ancestorFolderId = '5555',
-					useIndex = 'amountAsc',
 					orderBy = [
 						{
 							field_key: 'amount',
@@ -4213,7 +4212,6 @@ describe('Endpoint', () => {
 						arg: 100,
 					},
 					ancestorFolderId = '5555',
-					useIndex = 'amountAsc',
 					orderBy = [
 						{
 							field_key: 'amount',

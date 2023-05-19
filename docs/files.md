@@ -36,7 +36,6 @@ file's contents, upload new versions, and perform other common file operations
     - [Get information about Shared Link Permissions Options](#get-information-about-shared-link-permissions-options)
     - [Remove a Shared Link](#remove-a-shared-link)
     - [Promote Version](#promote-version)
-    - [Get Thumbnail](#get-thumbnail-deprecated)
     - [Get Embed Link](#get-embed-link)
     - [Lock a File](#lock-a-file)
     - [Unlock a File](#unlock-a-file)

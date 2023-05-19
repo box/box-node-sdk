@@ -50,8 +50,7 @@ describe('AppAuthSession', function() {
 		config = new Config({
 			clientID: 'cID123',
 			clientSecret: 'cSecret456',
-			expiredBufferMS: 30000,
-			staleBufferMS: 120000,
+			expiredBufferMS: 120000,
 			appAuth: {
 				keyID: TEST_KEY_ID,
 				privateKey: TEST_PRIVATE_KEY,

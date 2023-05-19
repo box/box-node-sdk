@@ -1,1 +1,0 @@
-Please see [Collaboration Allowlist](collaboration-allowlist.md).
