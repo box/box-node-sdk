@@ -30,7 +30,7 @@ import Trash from './managers/trash';
 import Users from './managers/users';
 import WebLinks from './managers/web-links';
 import Webhooks from './managers/webhooks';
-import FileRequestsManager from "./managers/file-requests-manager";
+import FileRequestsManager from './managers/file-requests-manager';
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -138,40 +138,6 @@ function getFullURL(defaultBasePath: string, url: string) {
 }
 
 /**
- * Create a valid request object for the Batch API from a standard request
- * params object
- * @param {Object} params The request params
- * @returns {Object} The batch API request object
- * @private
- */
-function formatRequestForBatch(params: Record<string, string | object>) {
-	var relativePath = (params.url as string).replace(/^http.*?\/\d\.\d\//, '/');
-
-	return {
-		method: params.method,
-		relative_url:
-			relativePath + (params.qs ? `?${qs.stringify(params.qs)}` : ''),
-		body: params.body,
-		headers: params.headers,
-	};
-}
-
-/**
- * Format a Batch API response object into a standard request response
- * for use in response handling
- * @param {Object} response The batch API response object
- * @returns {Object} The standard response object
- * @private
- */
-function formatResponseForBatch(response: any /* FIXME */) {
-	return {
-		statusCode: response.status,
-		headers: response.headers,
-		body: response.response,
-	};
-}
-
-/**
  * Construct the X-Box-UA header to send analytics identifiers
  * @param {Object} [client] Analytics client information
  * @returns {string} The header value
@@ -228,8 +194,6 @@ class BoxClient {
 	termsOfService: any;
 	storagePolicies: any;
 	signRequests: SignRequests;
-
-	_batch: any;
 
 	/* prototype properties assigned below the class declaration */
 	collaborationRoles!: Record<string, CollaborationRole>;
@@ -298,9 +262,6 @@ class BoxClient {
 		this.termsOfService = new TermsOfService(this);
 		this.storagePolicies = new StoragePolicies(this);
 		this.signRequests = new SignRequests(this);
-
-		// Array of requests when in batch mode, null otherwise
-		this._batch = null;
 	}
 
 	/**
@@ -343,48 +304,38 @@ class BoxClient {
 	 * @private
 	 */
 	_makeRequest(params: any /* FIXME */, callback?: Function) {
-		var promise;
+		var promise = this._session
+			.getAccessToken(this._tokenOptions)
+			.then((accessToken: string) => {
+				params.headers = this._createHeadersForRequest(
+					params.headers,
+					accessToken
+				);
 
-		if (this._batch) {
-			// eslint-disable-next-line promise/avoid-new
-			promise = new Promise((resolve, reject) => {
-				this._batch.push({ params, resolve, reject });
-			});
-		} else {
-			// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
-			promise = this._session
-				.getAccessToken(this._tokenOptions)
-				.then((accessToken: string) => {
-					params.headers = this._createHeadersForRequest(
-						params.headers,
-						accessToken
-					);
+				if (params.streaming) {
+					// streaming is specific to the SDK, so delete it from params before continuing
+					delete params.streaming;
+					var responseStream =
+						this._requestManager.makeStreamingRequest(params);
+					// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
+					// due to expired access token
+					responseStream.on('response', (response: any /* FIXME */) => {
+						if (isUnauthorizedDueToExpiredAccessToken(response)) {
+							var expiredTokensError = errors.buildAuthError(response);
 
-					if (params.streaming) {
-						// streaming is specific to the SDK, so delete it from params before continuing
-						delete params.streaming;
-						var responseStream =
-							this._requestManager.makeStreamingRequest(params);
-						// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
-						// due to expired access token
-						responseStream.on('response', (response: any /* FIXME */) => {
-							if (isUnauthorizedDueToExpiredAccessToken(response)) {
-								var expiredTokensError = errors.buildAuthError(response);
-
-								// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
-								if (this._session.handleExpiredTokensError) {
-									this._session.handleExpiredTokensError(expiredTokensError);
-								}
+							// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
+							if (this._session.handleExpiredTokensError) {
+								this._session.handleExpiredTokensError(expiredTokensError);
 							}
-						});
+						}
+					});
 
-						return responseStream;
-					}
+					return responseStream;
+				}
 
-					// Make the request to Box, and perform standard response handling
-					return this._requestManager.makeRequest(params);
-				});
-		}
+				// Make the request to Box, and perform standard response handling
+				return this._requestManager.makeRequest(params);
+			});
 
 		return promise
 			.then((response: any /* FIXME */) => {
