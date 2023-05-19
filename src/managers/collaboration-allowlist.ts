@@ -45,11 +45,6 @@ class CollaborationAllowlist {
 	client: BoxClient;
 	directions!: Record<string, string>;
 
-	/** @deprecated */
-	getWhitelistedDomain: any;
-	/** @deprecated */
-	getAllWhitelistedDomains: any;
-
 	constructor(client: BoxClient) {
 		this.client = client;
 	}
@@ -269,12 +264,6 @@ class CollaborationAllowlist {
 		);
 	}
 }
-
-// Legacy insensitive language
-CollaborationAllowlist.prototype.getWhitelistedDomain =
-	CollaborationAllowlist.prototype.getAllowlistedDomain;
-CollaborationAllowlist.prototype.getAllWhitelistedDomains =
-	CollaborationAllowlist.prototype.getAllAllowlistedDomains;
 
 /**
  * Enum of valid collaboration allowlist directions

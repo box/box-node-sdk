@@ -26,7 +26,7 @@ Add a Domain to Collaboration Allowlist
 
 You can allowlist a certain domain to allow collaboration with that domain for your
 enterprise by calling
-[`collaborationAllowlist.addDomain(domain, direction, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationWhitelist.html#addDomain).
+[`collaborationAllowlist.addDomain(domain, direction, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#addDomain).
 
 The `direction` parameter determines the level of restriction on which way the collaboration flows. Set to `inbound` will allow users outside of our enterprise to collaboration with content inside your enterprise. Set to `outbound` will allow users inside your enterprise to collaboration with content owned by someone outside your enterprise. Set to `both` will allow both `inbound` and `outbound`.
 
@@ -40,7 +40,7 @@ Get a Allowlisted Domain's Information
 
 Information about a specific collaboration allowlist record, which shows
 the domain that is allowlisted, can be retrieved by calling
-[`collaborationAllowlist.getAllowlistedDomain(domainID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationWhitelist.html#getAllowlistedDomain).
+[`collaborationAllowlist.getAllowlistedDomain(domainID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getAllowlistedDomain).
 
 <!-- sample get_collaboration_whitelist_entries_id -->
 ```js
@@ -51,7 +51,7 @@ Get Allowlisted Domains for an Enterprise
 -----------------------------------------
 
 You can retrieve a collection of allowlisted domains for an enterprise with
-[`collaborationAllowlist.getAllAllowlistedDomains(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationWhitelist.html#getAllAllowlistedDomains).
+[`collaborationAllowlist.getAllAllowlistedDomains(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getAllAllowlistedDomains).
 
 <!-- sample get_collaboration_whitelist_entries -->
 ```js
@@ -72,7 +72,7 @@ Remove a Domain from Collaboration Allowlist
 --------------------------------------------
 
 You can remove a domain from the collaboration allowlist with
-[`collaborationAllowlist.removeDomain(domainID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationWhitelist.html#removeDomain).
+[`collaborationAllowlist.removeDomain(domainID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#removeDomain).
 
 <!-- sample delete_collaboration_whitelist_entries_id -->
 ```js
@@ -95,7 +95,7 @@ Get an Exempt User's Information
 --------------------------------
 
 To retrieve information about a specific user exemption record, you can use
-[`collaborationAllowlist.getExemption(exemptionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationWhitelist.html#getExemption).
+[`collaborationAllowlist.getExemption(exemptionID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getExemption).
 
 <!-- sample get_collaboration_whitelist_exempt_targets_id -->
 ```js
@@ -107,7 +107,7 @@ Get All Exempt Users for an Enterprise
 
 To retrieve a collection of users who are exempt from the collaboration allowlist
 for an enterprise, call
-[`collaborationAllowlist.getAllExemptions(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationWhitelist.html#getAllExemptions).
+[`collaborationAllowlist.getAllExemptions(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#getAllExemptions).
 
 <!-- sample get_collaboration_whitelist_exempt_targets -->
 ```js
@@ -128,7 +128,7 @@ Remove a User Exemption from the Collaboration Allowlist
 
 To remove a user exemption from collaboration allowlist and make that user
 subject to allowlist restrictions again, you can call
-[`collaborationAllowlist.removeExemption(exemptionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationWhitelist.html#removeExemption).
+[`collaborationAllowlist.removeExemption(exemptionID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/CollaborationAllowlist.html#removeExemption).
 
 <!-- sample delete_collaboration_whitelist_exempt_targets_id -->
 ```js

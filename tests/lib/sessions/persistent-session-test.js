@@ -29,8 +29,7 @@ var sandbox = sinon.createSandbox(),
 var config = {
 		clientID: 'cID123',
 		clientSecret: 'cSecret456',
-		expiredBufferMS: 30000,
-		staleBufferMS: 120000
+		expiredBufferMS: 120000,
 	},
 	testTokenInfo = {
 		accessToken: 'at',

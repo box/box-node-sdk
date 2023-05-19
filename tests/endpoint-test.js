@@ -1015,34 +1015,6 @@ describe('Endpoint', () => {
 				});
 			});
 		});
-		describe('getThumbnail()', () => {
-			it('should make correct request and correctly parse response when API call is successful', done => {
-				var fileID = '1234567890',
-					thumbnailURL =
-						'https://cdn01.boxcdn.net/_assets/thumbs/27x30/image/png-IDjzTN.gif';
-				apiMock
-					.get(`/2.0/files/${fileID}/thumbnail.png`)
-					.matchHeader('Authorization', authHeader => {
-						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
-						return true;
-					})
-					.matchHeader('User-Agent', uaHeader => {
-						assert.include(uaHeader, 'Box Node.js SDK v');
-						return true;
-					})
-					.reply(202, '', {
-						Location: thumbnailURL,
-					});
-				basicClient.files.getThumbnail(fileID, null, (err, data) => {
-					assert.isNull(err);
-					assert.deepEqual(data, {
-						statusCode: 202,
-						location: thumbnailURL,
-					});
-					done();
-				});
-			});
-		});
 		describe('getComments()', () => {
 			it('should make correct request and correctly parse response when API call is successful', done => {
 				var fileID = '1234567890',
@@ -4192,7 +4164,6 @@ describe('Endpoint', () => {
 						arg: 100,
 					},
 					ancestorFolderId = '5555',
-					useIndex = 'amountAsc',
 					orderBy = [
 						{
 							field_key: 'amount',
@@ -4241,7 +4212,6 @@ describe('Endpoint', () => {
 						arg: 100,
 					},
 					ancestorFolderId = '5555',
-					useIndex = 'amountAsc',
 					orderBy = [
 						{
 							field_key: 'amount',

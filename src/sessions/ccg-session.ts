@@ -96,10 +96,7 @@ class CCGSession {
 	getAccessToken(options?: TokenRequestOptions) {
 		// If the current token is no longer fresh, get a new token. All incoming
 		// requests will be held until a fresh token is retrieved.
-		var expirationBuffer = Math.max(
-			this._config.expiredBufferMS,
-			this._config.staleBufferMS
-		);
+		var expirationBuffer = this._config.expiredBufferMS;
 		if (
 			!this._tokenInfo ||
 			!this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)
