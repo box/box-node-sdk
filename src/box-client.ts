@@ -277,8 +277,6 @@ class BoxClient {
 		this.shieldInformationBarrierSegmentMembers = new ShieldInformationBarrierSegmentMembers(this);
 		this.shieldInformationBarrierSegmentRestrictions = new ShieldInformationBarrierSegmentRestrictions(this);
 		this.shieldInformationBarrierReports = new ShieldInformationBarrierReports(this);
-		// Legacy insensitive language
-		this.collaborationWhitelist = this.collaborationAllowlist;
 	}
 
 	/**
