@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------------
 import BoxClient from '../box-client';
 import urlPath from '../util/url-path';
+import {UserMini} from "../schemas";
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -121,6 +122,10 @@ class RetentionPolicies {
 	 * @param {RetentionPolicyType} type - The type of policy to create
 	 * @param {RetentionPolicyDispositionAction} action - The disposition action for the new policy
 	 * @param {Object} [options] - Additional parameters
+	 * @param {boolean} [options.are_owners_notified] - Whether or not owner and co-owners of a file are notified when the policy nears expiration
+	 * @param {boolean} [options.can_owner_extend_retention] - Whether or not the owner of a file will be allowed to extend the retention
+	 * @param {UserMini[]} [options.custom_notification_recipients] - A list of users notified when the retention policy duration is about to end
+	 * @param {string} [options.description] - The additional text description of the retention policy
 	 * @param {int} [options.retention_length] - For finite policies, the number of days to retain the content
 	 * @param {RetentionType} [options.retention_type] - The type of retention for the new policy
 	 * @param {Function} [callback] - Passed the new policy information if it was acquired successfully, error otherwise
@@ -131,6 +136,10 @@ class RetentionPolicies {
 		type: RetentionPolicyType,
 		action: RetentionPolicyDispositionAction,
 		options?: {
+			are_owners_notified? : boolean;
+			can_owner_extend_retention?: boolean;
+			custom_notification_recipients?: UserMini[];
+			description?: string;
 			retention_length?: number;
 			retention_type?: RetentionType;
 		},
@@ -188,6 +197,10 @@ class RetentionPolicies {
 	 * @param {Object} updates - The information to be updated
 	 * @param {string} [updates.policy_name] - The name of the retention policy
 	 * @param {RetentionPolicyDispositionAction} [updates.disposition_action] - The disposition action for the updated policy
+	 * @param {boolean} [updates.are_owners_notified] - Whether or not owner and co-owners of a file are notified when the policy nears expiration
+	 * @param {boolean} [updates.can_owner_extend_retention] - Whether or not the owner of a file will be allowed to extend the retention
+	 * @param {UserMini[]} [updates.custom_notification_recipients] - A list of users notified when the retention policy duration is about to end
+	 * @param {string} [updates.description] - The additional text description of the retention policy
 	 * @param {int} [updates.retention_length] - For finite policies, the number of days to retain the content
 	 * @param {RetentionType} [updates.retention_type] - The type of retention. The only possible value here is non_modifiable. You can convert a modifiable policy to non_modifiable, but not the other way around.
 	 * @param {string} [updates.status] - Used to retire a retention policy if status is set to retired
@@ -199,6 +212,10 @@ class RetentionPolicies {
 		updates: {
 			policy_name?: string;
 			disposition_action?: RetentionPolicyDispositionAction;
+			are_owners_notified? : boolean;
+			can_owner_extend_retention?: boolean;
+			custom_notification_recipients?: UserMini[];
+			description?: string;
 			retention_length?: number;
 			retention_type?: RetentionType;
 			status?: string;
@@ -292,6 +309,7 @@ class RetentionPolicies {
 	 * @param {string} assignID - The Box ID of the object to assign the retention policy to
 	 * @param {Object} [options] - Optional parameters for the request
 	 * @param {MetadataFilterField[]} [options.filter_fields] - Metadata fields to filter against, if assigning to a metadata template
+	 * @param {string} [options.start_date_field] - Id of Metadata field which will be used to specify the start date for the retention policy, or set this to "upload_date" as value to use the date when the file was uploaded to Box
 	 * @param {Function} [callback] - Passed the new assignment object if successful, error otherwise
 	 * @returns {Promise<Object>} A promise resolving to the created assignment object
 	 */
@@ -302,6 +320,7 @@ class RetentionPolicies {
 		options?:
 			| {
 					filter_fields?: MetadataFilterField[];
+					start_date_field?: string;
 			  }
 			| Function
 			| null,

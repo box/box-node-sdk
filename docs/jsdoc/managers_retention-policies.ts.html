@@ -35,6 +35,7 @@
 // -----------------------------------------------------------------------------
 import BoxClient from '../box-client';
 import urlPath from '../util/url-path';
+import {UserMini} from "../schemas";
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -149,6 +150,10 @@ class RetentionPolicies {
 	 * @param {RetentionPolicyType} type - The type of policy to create
 	 * @param {RetentionPolicyDispositionAction} action - The disposition action for the new policy
 	 * @param {Object} [options] - Additional parameters
+	 * @param {boolean} [options.are_owners_notified] - Whether or not owner and co-owners of a file are notified when the policy nears expiration
+	 * @param {boolean} [options.can_owner_extend_retention] - Whether or not the owner of a file will be allowed to extend the retention
+	 * @param {UserMini[]} [options.custom_notification_recipients] - A list of users notified when the retention policy duration is about to end
+	 * @param {string} [options.description] - The additional text description of the retention policy
 	 * @param {int} [options.retention_length] - For finite policies, the number of days to retain the content
 	 * @param {RetentionType} [options.retention_type] - The type of retention for the new policy
 	 * @param {Function} [callback] - Passed the new policy information if it was acquired successfully, error otherwise
@@ -159,6 +164,10 @@ class RetentionPolicies {
 		type: RetentionPolicyType,
 		action: RetentionPolicyDispositionAction,
 		options?: {
+			are_owners_notified? : boolean;
+			can_owner_extend_retention?: boolean;
+			custom_notification_recipients?: UserMini[];
+			description?: string;
 			retention_length?: number;
 			retention_type?: RetentionType;
 		},
@@ -216,6 +225,10 @@ class RetentionPolicies {
 	 * @param {Object} updates - The information to be updated
 	 * @param {string} [updates.policy_name] - The name of the retention policy
 	 * @param {RetentionPolicyDispositionAction} [updates.disposition_action] - The disposition action for the updated policy
+	 * @param {boolean} [updates.are_owners_notified] - Whether or not owner and co-owners of a file are notified when the policy nears expiration
+	 * @param {boolean} [updates.can_owner_extend_retention] - Whether or not the owner of a file will be allowed to extend the retention
+	 * @param {UserMini[]} [updates.custom_notification_recipients] - A list of users notified when the retention policy duration is about to end
+	 * @param {string} [updates.description] - The additional text description of the retention policy
 	 * @param {int} [updates.retention_length] - For finite policies, the number of days to retain the content
 	 * @param {RetentionType} [updates.retention_type] - The type of retention. The only possible value here is non_modifiable. You can convert a modifiable policy to non_modifiable, but not the other way around.
 	 * @param {string} [updates.status] - Used to retire a retention policy if status is set to retired
@@ -227,6 +240,10 @@ class RetentionPolicies {
 		updates: {
 			policy_name?: string;
 			disposition_action?: RetentionPolicyDispositionAction;
+			are_owners_notified? : boolean;
+			can_owner_extend_retention?: boolean;
+			custom_notification_recipients?: UserMini[];
+			description?: string;
 			retention_length?: number;
 			retention_type?: RetentionType;
 			status?: string;
@@ -320,6 +337,7 @@ class RetentionPolicies {
 	 * @param {string} assignID - The Box ID of the object to assign the retention policy to
 	 * @param {Object} [options] - Optional parameters for the request
 	 * @param {MetadataFilterField[]} [options.filter_fields] - Metadata fields to filter against, if assigning to a metadata template
+	 * @param {string} [options.start_date_field] - Id of Metadata field which will be used to specify the start date for the retention policy, or set this to "upload_date" as value to use the date when the file was uploaded to Box
 	 * @param {Function} [callback] - Passed the new assignment object if successful, error otherwise
 	 * @returns {Promise&lt;Object>} A promise resolving to the created assignment object
 	 */
@@ -330,6 +348,7 @@ class RetentionPolicies {
 		options?:
 			| {
 					filter_fields?: MetadataFilterField[];
+					start_date_field?: string;
 			  }
 			| Function
 			| null,
@@ -605,13 +624,13 @@ export = RetentionPolicies;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Jan 05 2023 04:21:13 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu May 11 2023 06:02:58 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

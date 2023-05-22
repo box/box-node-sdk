@@ -49,13 +49,14 @@ export function createMethodForOperation({
 	)?.content?.['application/json']?.schema;
 	const returnType = (
 		<TypeReferenceNode typeName={<Identifier text="Promise" />}>
-			{returnTypeSchema
+			{
+				returnTypeSchema
 				? createTypeNodeForSchema({
 						spec,
 						interfaces,
 						schema: returnTypeSchema,
 				  })
-				: ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword)}
+				: ts.factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)}
 		</TypeReferenceNode>
 	);
 
@@ -260,7 +261,7 @@ export function createMethodForOperation({
 													name="client"
 												/>
 											}
-											name={verb}
+											name={verb === 'delete' ? 'del' : verb}
 										/>,
 									]}
 								/>

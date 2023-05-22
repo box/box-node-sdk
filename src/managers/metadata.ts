@@ -42,12 +42,14 @@ type MetadataEnumOption = {
  * @property {MetadataFieldType} type The type of the field
  * @property {string} key The programmatic name of the field
  * @property {string} displayName The display name of the field
+ * @property {boolean} hidden Whether this field is hidden in the UI for the user and can only be set through the API instead
  * @property {MetadataEnumOption[]} [options] For enum fields, the options
  */
 type MetadataTemplateField = {
 	type: MetadataFieldType;
 	key: string;
 	displayName: string;
+	hidden: boolean;
 	options?: MetadataEnumOption[];
 };
 

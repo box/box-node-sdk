@@ -17,7 +17,7 @@
 
 ## Get sign request by ID
 
-Gets a sign request by ID [`signRequests.getById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#getById)
+Gets a sign request by ID [`signRequests.getById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SignRequestsManager.html#getById)
 method.
 
 <!-- sample get_sign_requests_id -->
@@ -33,7 +33,7 @@ console.log(
 
 ## List sign requests
 
-Gets sign requests created by a user [`signRequests.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#getAll)
+Gets sign requests created by a user [`signRequests.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SignRequestsManager.html#getAll)
 method.
 
 <!-- sample get_sign_requests -->
@@ -45,7 +45,7 @@ console.log(`There are ${result.count} sign requests`);
 
 ## Create sign request
 
-Creates a sign request. This involves preparing a document for signing and sending the sign request to signers. [`signRequests.create(body, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#create)
+Creates a sign request. This involves preparing a document for signing and sending the sign request to signers. [`signRequests.create(body, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SignRequestsManager.html#create)
 method.
 
 <!-- sample post_sign_requests -->
@@ -74,7 +74,7 @@ console.log(`Created a new sign request id ${signRequest.id}`);
 
 ## Cancel sign request
 
-Cancels a sign request [`signRequests.cancelById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#cancelById)
+Cancels a sign request [`signRequests.cancelById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SignRequestsManager.html#cancelById)
 method.
 
 <!-- sample post_sign_requests_id_cancel -->
@@ -88,7 +88,7 @@ console.log(`Sign request id ${sr.id} cancelled`);
 
 ## Resend sign request
 
-Resends a sign request email to all outstanding signers [`signRequests.resendById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/jsdoc/SignRequestsManager.html#resendById)
+Resends a sign request email to all outstanding signers [`signRequests.resendById(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SignRequestsManager.html#resendById)
 method.
 
 <!-- sample post_sign_requests_id_resend -->

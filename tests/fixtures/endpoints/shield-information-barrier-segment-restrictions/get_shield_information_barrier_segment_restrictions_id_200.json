@@ -1,0 +1,26 @@
+{
+  "id": "11446498",
+  "type": "shield_information_barrier_segment_restriction",
+  "created_at": "2020-06-26T18:44:45.869Z",
+  "created_by": {
+	"id": "11446498",
+	"type": "user"
+  },
+  "restricted_segment": {
+	"id": "1910967",
+	"type": "shield_information_barrier_segment"
+  },
+  "shield_information_barrier": {
+	"id": "11446498",
+	"type": "shield_information_barrier"
+  },
+  "shield_information_barrier_segment": {
+	"id": "1910967",
+	"type": "shield_information_barrier_segment"
+  },
+  "updated_at": "2020-07-26T18:44:45.869Z",
+  "updated_by": {
+	"id": "11446498",
+	"type": "user"
+  }
+}
