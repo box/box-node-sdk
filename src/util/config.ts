@@ -90,7 +90,6 @@ var defaults = {
 	numMaxRetries: 5,
 	retryStrategy: null,
 	expiredBufferMS: 180000,
-	staleBufferMS: 0, // DEPRECATED -- token expiration buffer will be max(expiredBufferMS, staleBufferMS)
 	appAuth: undefined,
 	iterators: false,
 	enterpriseID: undefined,

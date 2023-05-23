@@ -225,10 +225,7 @@ class PersistentSession {
 	 */
 	getAccessToken(options?: TokenRequestOptions) {
 		// If our tokens are not fresh, we need to refresh them
-		const expirationBuffer = Math.max(
-			this._config.expiredBufferMS,
-			this._config.staleBufferMS
-		);
+		const expirationBuffer = this._config.expiredBufferMS;
 		if (
 			!this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)
 		) {

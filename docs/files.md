@@ -36,7 +36,6 @@ file's contents, upload new versions, and perform other common file operations
     - [Get information about Shared Link Permissions Options](#get-information-about-shared-link-permissions-options)
     - [Remove a Shared Link](#remove-a-shared-link)
     - [Promote Version](#promote-version)
-    - [Get Thumbnail](#get-thumbnail-deprecated)
     - [Get Embed Link](#get-embed-link)
     - [Lock a File](#lock-a-file)
     - [Unlock a File](#unlock-a-file)
@@ -1184,27 +1183,6 @@ client.files.promoteVersion(fileID, versionID)
 				name: 'Eddard Stark',
 				login: 'ned@winterfell.example.com' } }
 		*/
-	});
-```
-
-## Get Thumbnail (deprecated)
-
-This method has been deprecated. Use [Get Representation Content](#get-representation-content) instead.
-
-A thumbnail for a file can be retrieved by calling
-[`files.getThumbnail(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getThumbnail).
-
-<!-- sample get_files_id_thumbnail_id -->
-```js
-client.files.getThumbnail('12345')
-	.then(thumbnailInfo => {
-		if (thumbnailInfo.location) {
-			// fetch thumbnail from location URL
-		} else if (thumbnailInfo.file) {
-			// use response.file Buffer contents as thumbnail
-		} else {
-			// no thumbnail available
-		}
 	});
 ```
 

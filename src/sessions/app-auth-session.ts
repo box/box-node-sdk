@@ -140,10 +140,7 @@ class AppAuthSession {
 	 * @returns {Promise<string>} Promise resolving to the access token
 	 */
 	getAccessToken(options?: TokenRequestOptions) {
-		var expirationBuffer = Math.max(
-			this._config.expiredBufferMS,
-			this._config.staleBufferMS
-		);
+		var expirationBuffer = this._config.expiredBufferMS;
 
 		// If we're initializing the client and have a token store, try reading from it
 		if (!this._tokenInfo && this._tokenStore) {

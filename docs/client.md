@@ -16,7 +16,6 @@ client are described in the [Authentication documentation](authentication.md).
   - [PUT](#put)
   - [DELETE](#delete)
   - [OPTIONS](#options)
-- [Batch API (deprecated)](#batch-api-deprecated)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -146,65 +145,5 @@ client.options('/files/content', null, function(err, response) {
     }
 
     console.log(response.body);
-});
-```
-
-Batch API (deprecated)
----------
-
-The client allows calls to be batched so that they will be sent over the network
-as a single request, processed by the API, and sent back as a single response containing the results of all batched
-calls.  The individual calls in a batch can still be handled normally, or you can operate on the entire batch response:
-
-> __NOTE:__ Batch API does not support upload or download requests.
-
-```js
-client.batch();
-
-client.folders.get('0', null, function(err, folder) { // call not made immediately
-    // handle the response for folder 0
-});
-client.files.get('1234', null, function(err, file) { // call not made immediately
-    // handle the response for file 1234
-});
-
-client.batchExec(); // make the batch call
-```
-
-__OR__
-
-```js
-client.batch();
-
-client.folders.get('0') // call not made immediately
-client.files.get('1234') // call not made immediately
-
-client.batchExec(function(err, results) { // make the batch call
-
-    if (err) {
-        // handle error
-    }
-
-    console.log(results); // Outputs:
-    /*
-        {
-            responses: [
-                {
-                    status: 200,
-                    headers: {},
-                    response: {
-                        ... folder 0 data
-                    }
-                },
-                {
-                    status: 200,
-                    headers: {},
-                    response: {
-                        ... file 1234 data
-                    }
-                }
-            ]
-        }
-    */
 });
 ```

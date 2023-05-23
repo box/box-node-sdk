@@ -31,8 +31,7 @@ let sandbox = sinon.createSandbox(),
 	config = {
 		clientID: 'cID123',
 		clientSecret: 'cSecret456',
-		expiredBufferMS: 30000,
-		staleBufferMS: 120000
+		expiredBufferMS: 120000,
 	},
 	MODULE_FILE_PATH = '../../../lib/sessions/ccg-session';
 
