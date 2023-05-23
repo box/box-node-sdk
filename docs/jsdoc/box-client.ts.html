@@ -171,40 +171,6 @@ function getFullURL(defaultBasePath: string, url: string) {
 }
 
 /**
- * Create a valid request object for the Batch API from a standard request
- * params object
- * @param {Object} params The request params
- * @returns {Object} The batch API request object
- * @private
- */
-function formatRequestForBatch(params: Record&lt;string, string | object>) {
-	var relativePath = (params.url as string).replace(/^http.*?\/\d\.\d\//, '/');
-
-	return {
-		method: params.method,
-		relative_url:
-			relativePath + (params.qs ? `?${qs.stringify(params.qs)}` : ''),
-		body: params.body,
-		headers: params.headers,
-	};
-}
-
-/**
- * Format a Batch API response object into a standard request response
- * for use in response handling
- * @param {Object} response The batch API response object
- * @returns {Object} The standard response object
- * @private
- */
-function formatResponseForBatch(response: any /* FIXME */) {
-	return {
-		statusCode: response.status,
-		headers: response.headers,
-		body: response.response,
-	};
-}
-
-/**
  * Construct the X-Box-UA header to send analytics identifiers
  * @param {Object} [client] Analytics client information
  * @returns {string} The header value
@@ -267,16 +233,11 @@ class BoxClient {
 	shieldInformationBarrierSegmentRestrictions: ShieldInformationBarrierSegmentRestrictions;
 	shieldInformationBarrierReports: ShieldInformationBarrierReports;
 
-	_batch: any;
-
 	/* prototype properties assigned below the class declaration */
 	collaborationRoles!: Record&lt;string, CollaborationRole>;
 	itemTypes!: Record&lt;string, ItemType>;
 	accessLevels!: Record&lt;string, AccessLevel>;
 	CURRENT_USER_ID!: string;
-
-	/** @deprecated */
-	collaborationWhitelist: any;
 
 	/**
 	 * The BoxClient can make API calls on behalf of a valid API Session. It is responsible
@@ -344,11 +305,6 @@ class BoxClient {
 		this.shieldInformationBarrierSegmentMembers = new ShieldInformationBarrierSegmentMembers(this);
 		this.shieldInformationBarrierSegmentRestrictions = new ShieldInformationBarrierSegmentRestrictions(this);
 		this.shieldInformationBarrierReports = new ShieldInformationBarrierReports(this);
-		// Legacy insensitive language
-		this.collaborationWhitelist = this.collaborationAllowlist;
-
-		// Array of requests when in batch mode, null otherwise
-		this._batch = null;
 	}
 
 	/**
@@ -391,48 +347,38 @@ class BoxClient {
 	 * @private
 	 */
 	_makeRequest(params: any /* FIXME */, callback?: Function) {
-		var promise;
+		var promise = this._session
+			.getAccessToken(this._tokenOptions)
+			.then((accessToken: string) => {
+				params.headers = this._createHeadersForRequest(
+					params.headers,
+					accessToken
+				);
 
-		if (this._batch) {
-			// eslint-disable-next-line promise/avoid-new
-			promise = new Promise((resolve, reject) => {
-				this._batch.push({ params, resolve, reject });
-			});
-		} else {
-			// Check that tokens are fresh, update if tokens are expired or soon-to-be expired
-			promise = this._session
-				.getAccessToken(this._tokenOptions)
-				.then((accessToken: string) => {
-					params.headers = this._createHeadersForRequest(
-						params.headers,
-						accessToken
-					);
+				if (params.streaming) {
+					// streaming is specific to the SDK, so delete it from params before continuing
+					delete params.streaming;
+					var responseStream =
+						this._requestManager.makeStreamingRequest(params);
+					// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
+					// due to expired access token
+					responseStream.on('response', (response: any /* FIXME */) => {
+						if (isUnauthorizedDueToExpiredAccessToken(response)) {
+							var expiredTokensError = errors.buildAuthError(response);
 
-					if (params.streaming) {
-						// streaming is specific to the SDK, so delete it from params before continuing
-						delete params.streaming;
-						var responseStream =
-							this._requestManager.makeStreamingRequest(params);
-						// Listen to 'response' event, so we can cleanup the token store in case when the request is unauthorized
-						// due to expired access token
-						responseStream.on('response', (response: any /* FIXME */) => {
-							if (isUnauthorizedDueToExpiredAccessToken(response)) {
-								var expiredTokensError = errors.buildAuthError(response);
-
-								// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
-								if (this._session.handleExpiredTokensError) {
-									this._session.handleExpiredTokensError(expiredTokensError);
-								}
+							// Give the session a chance to handle the error (ex: a persistent session will clear the token store)
+							if (this._session.handleExpiredTokensError) {
+								this._session.handleExpiredTokensError(expiredTokensError);
 							}
-						});
+						}
+					});
 
-						return responseStream;
-					}
+					return responseStream;
+				}
 
-					// Make the request to Box, and perform standard response handling
-					return this._requestManager.makeRequest(params);
-				});
-		}
+				// Make the request to Box, and perform standard response handling
+				return this._requestManager.makeRequest(params);
+			});
 
 		return promise
 			.then((response: any /* FIXME */) => {
@@ -677,67 +623,6 @@ class BoxClient {
 	}
 
 	/**
-	 * Puts the client into batch mode, which will queue calls instead of
-	 * immediately making the API request.
-	 *
-	 * DEPRECATED: Batch API is not supported and should not be used; make calls in parallel instead.
-	 *
-	 * @returns {BoxClient} Current client object
-	 */
-	batch = util.deprecate(function (this: BoxClient) {
-		/* eslint-disable no-invalid-this */
-		this._batch = [];
-		return this;
-		/* eslint-enable no-invalid-this */
-	}, 'Batch API is not supported and should not be used; make calls in parallel instead.');
-
-	/**
-	 * Executes a batch of requests.
-	 *
-	 * DEPRECATED: Batch API is not supported and should not be used; make calls in parallel instead.
-	 *
-	 * @returns {Promise&lt;Object>} Promise resolving to the collection of batch responses
-	 */
-	batchExec = util.deprecate(function (this: BoxClient, callback: Function) {
-		/* eslint-disable no-invalid-this */
-		if (!this._batch) {
-			return Promise.reject(
-				new Error('Must start a batch before executing')
-			).asCallback(callback);
-		}
-
-		var params = {
-			body: {
-				requests: this._batch.map((batchReq: any /* FIXME */) =>
-					formatRequestForBatch(batchReq.params)
-				),
-			},
-		};
-
-		var batch: any[] = this._batch;
-		this._batch = null;
-		return this.post('/batch', params)
-			.then((res: any /* FIXME */) => {
-				var responses: any[] = res.body.responses;
-
-				responses
-					.map((x) => formatResponseForBatch(x))
-					.forEach((response, index) => {
-						batch[index].resolve(response);
-					});
-
-				return res.body;
-			})
-			.catch((err: any) => {
-				batch.forEach((req) => req.reject(err));
-
-				throw err;
-			})
-			.asCallback(callback);
-		/* eslint-enable no-invalid-this */
-	}, 'Batch API is not supported and should not be used; make calls in parallel instead.');
-
-	/**
 	 * Build the 'BoxApi' Header used for authenticating access to a shared item
 	 *
 	 * @param {string} url The shared link url
@@ -934,13 +819,13 @@ export = BoxClient;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu May 11 2023 06:02:58 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Tue May 23 2023 02:09:35 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

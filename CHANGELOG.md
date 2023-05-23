@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/box/box-node-sdk/compare/v2.10.0...v3.0.0) (2023-05-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump dependencies and remove deprecated methods and classes (#828)
+
+### Bug Fixes
+
+* bump dependencies and remove deprecated methods and classes ([#828](https://github.com/box/box-node-sdk/issues/828)) ([d274203](https://github.com/box/box-node-sdk/commit/d2742032d59bab07dc2c783e84f3350b5373a3b9))
+
 ## [2.10.0](https://github.com/box/box-node-sdk/compare/v2.9.0...v2.10.0) (2023-05-11)
 
 
