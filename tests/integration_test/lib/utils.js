@@ -1,10 +1,10 @@
 'use strict';
 
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
-const randomName = () => uuid.v4();
+const randomName = () => uuidv4();
 
-const randomEmail = () => `${uuid.v4()}@box.com`;
+const randomEmail = () => `${uuidv4()}@box.com`;
 
 const deleteFilePermanently = async(client, fileID) => {
 	await client.files.delete(fileID);
