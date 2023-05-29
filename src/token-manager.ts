@@ -9,7 +9,7 @@
 import Promise from 'bluebird';
 import httpStatusCodes from 'http-status';
 import jwt from 'jsonwebtoken';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import APIRequestManager from './api-request-manager';
 import errors from './util/errors';
 import getRetryTimeout from './util/exponential-backoff';
@@ -389,7 +389,7 @@ class TokenManager {
 			audience: BOX_JWT_AUDIENCE,
 			subject: id,
 			issuer: this.config.clientID,
-			jwtid: uuid.v4(),
+			jwtid: uuidv4(),
 			noTimestamp: !this.config.appAuth.verifyTimestamp,
 			keyid: this.config.appAuth.keyID,
 		};
@@ -486,7 +486,7 @@ class TokenManager {
 			}
 			// Add length of retry timeout to current expiration time to calculate the expiration time for the JTI claim.
 			claims.exp = Math.ceil(time + this.config.appAuth.expirationTime + retryTimeoutinSeconds);
-			jwtOptions.jwtid = uuid.v4();
+			jwtOptions.jwtid = uuidv4();
 
 			try {
 				params.assertion = jwt.sign(claims, keyParams, jwtOptions);
@@ -576,7 +576,7 @@ class TokenManager {
 				algorithm: 'none',
 				expiresIn: '1m',
 				noTimestamp: true,
-				jwtid: uuid.v4(),
+				jwtid: uuidv4(),
 			};
 
 			var token;

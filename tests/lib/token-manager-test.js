@@ -49,7 +49,13 @@ describe('token-manager', function() {
 		// Setup Dependencies
 		requestManagerFake = leche.fake(APIRequestManager.prototype);
 		jwtFake = leche.fake(jwt);
-		uuidFake = leche.fake(uuid);
+
+		// From uuid@7 uses `Object.defineProperty` to export the v4 function, which
+		// causes the function is not able to be stubbed out by sinon. We need to
+		// create a fake function that can be stubbed out.
+		uuidFake = {
+			v4: () => uuid.v4()
+		};
 
 		config = new Config({
 			clientID: BOX_CLIENT_ID,
@@ -440,7 +446,6 @@ describe('token-manager', function() {
 		});
 
 		it('should create JWT assertion with correct parameters when called', function() {
-
 			sandbox.useFakeTimers(100000);
 
 			sandbox.stub(uuidFake, 'v4').returns(TEST_JTI);
