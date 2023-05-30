@@ -1,8 +1,9 @@
 # Integration mappings
 
-The Box for Slack integration mappings can be used to set Box as the Custom Files Store for Slack.
-It is well suited for situations in which a particular Slack channel already has a corresponding folder in Box and allows to map it for uploads instead of using the automatically created folder within the default structure.
+With integration mappings, you can manage where content from partner apps is stored in Box.
 
+It is well suited for situations in which a particular Slack channel already has a corresponding folder in Box and allows to map it for uploads instead of using the automatically created folder within the default structure.
+For more details on Slack mapping please see the [Box as the Content Layer for Slack](https://support.box.com/hc/en-us/articles/4415585987859-Box-as-the-Content-Layer-for-Slack).
 <!-- TODO autogenerate description -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -42,6 +43,11 @@ On the other hand, if you want to get the mapping that is mapped to specific Sla
 
 ```js
 const integrationMappings = await client.integrationMappings.getSlackIntegrationMappings({partner_item_id: 'C12378991223'});
+```
+
+If you want however to get all manually created mappings, you should pass the `is_manually_created` parameter set to true, like this:
+```js
+const integrationMappings = await client.integrationMappings.getSlackIntegrationMappings({is_manually_created: true});
 ```
 
 ## Create Slack integration mapping
