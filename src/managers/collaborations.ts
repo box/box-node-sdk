@@ -244,7 +244,7 @@ class Collaborations {
 	 * API Endpoint: '/collaborations
 	 * Method: POST
 	 *
-	 * @param {int} userID - The ID of the user you'll invite as a collaborator
+	 * @param {int | string} userID - The ID of the user you'll invite as a collaborator
 	 * @param {string} itemID - Box ID of the item to which the user should be invited
 	 * @param {CollaborationRole} role - The role which the invited collaborator should have
 	 * @param {Object} [options] - Optional parameters for the collaboration
@@ -255,7 +255,7 @@ class Collaborations {
 	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithUserID(
-		userID: number,
+		userID: number | string,
 		itemID: string,
 		role: CollaborationRole,
 		options?:
@@ -326,7 +326,7 @@ class Collaborations {
 	 * API Endpoint: '/collaborations
 	 * Method: POST
 	 *
-	 * @param {int} groupID - The ID of the group you'll invite as a collaborator
+	 * @param {int | string} groupID - The ID of the group you'll invite as a collaborator
 	 * @param {string} itemID - Box ID of the item to which the group should be invited
 	 * @param {CollaborationRole} role - The role which the invited collaborator should have
 	 * @param {Object} [options] - Optional parameters for the collaboration
@@ -337,7 +337,7 @@ class Collaborations {
 	 * @returns {Promise<Collaboration>} A promise resolving to the created collaboration object
 	 */
 	createWithGroupID(
-		groupID: number,
+		groupID: number | string,
 		itemID: string,
 		role: CollaborationRole,
 		options?:
