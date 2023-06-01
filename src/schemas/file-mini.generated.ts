@@ -22,7 +22,7 @@ export interface FileMini extends schemas.FileBase {
 	 * fetched resource.
 	 * Example: 3
 	 */
-	sequence_id: string;
+	sequence_id?: string;
 	/**
 	 * The name of the file
 	 * Example: Contract.pdf
@@ -33,7 +33,7 @@ export interface FileMini extends schemas.FileBase {
 	 * of a file on Box with a local file.
 	 * Example: 85136C79CBF9FE36BB9D05D0639C70C265C18D37
 	 */
-	sha1: string;
+	sha1?: string;
 	/**
 	 * The information about the current version of the file.
 	 */

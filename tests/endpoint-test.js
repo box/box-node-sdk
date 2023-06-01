@@ -6027,4 +6027,89 @@ describe('Endpoint', () => {
 			});
 		});
 	});
+	describe('Integration mappings', () => {
+		describe('getSlackIntegrationMappings()', () => {
+			it('should make GET request for Slack integration mappings and return correct response when API call succeeds', () => {
+				var fixture = getFixture('integration-mappings/get_integration_mappings_slack_200');
+				apiMock
+					.get('/2.0/integration_mappings/slack')
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.integrationMappings
+					.getSlackIntegrationMappings()
+					// eslint-disable-next-line promise/always-return
+					.then(slackIntegrationMappings => {
+						assert.deepEqual(slackIntegrationMappings, JSON.parse(fixture));
+					});
+			});
+		});
+		describe('createSlackIntegrationMapping()', () => {
+			it('should make POST request to create Slack integration mapping and return correct response when API call succeeds', () => {
+				var integrationMappingSlackCreateRequest = {
+					partner_item: {
+						type: 'channel',
+						id: 'C12378991223',
+						slack_org_id: 'E1234567',
+						slack_workspace_id: 'T12352314'
+					},
+					box_item: {
+						id: '12345',
+						type: 'folder',
+					}
+				};
+				var fixture = getFixture('integration-mappings/post_integration_mappings_slack_200');
+				apiMock
+					.post('/2.0/integration_mappings/slack', integrationMappingSlackCreateRequest)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(201, fixture);
+				return basicClient.integrationMappings.createSlackIntegrationMapping(integrationMappingSlackCreateRequest);
+			});
+		});
+		describe('update()', () => {
+			it('should make PUT request to update Slack integration mapping and return correct response when API call succeeds', () => {
+				var integrationMappingId = '12345';
+				var integrationMappingUpdateData = {
+					box_item: {
+						id: '12345',
+						type: 'folder'
+					},
+					options: {
+						is_access_management_disabled: true
+					}
+				};
+				var fixture = getFixture('integration-mappings/put_integration_mappings_slack_id_200');
+				apiMock
+					.put(`/2.0/integration_mappings/slack/${integrationMappingId}`, integrationMappingUpdateData)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(200, fixture);
+				return basicClient.integrationMappings.updateSlackIntegrationMapping(integrationMappingUpdateData, {
+					integration_mapping_id: integrationMappingId
+				});
+			});
+		});
+		describe('deleteSlackIntegrationMappingById()', () => {
+			it('should make DELETE request to delete Slack integration mapping and return empty response API call succeeds', () => {
+				var integrationMappingId = '12345';
+				apiMock
+					.delete(`/2.0/integration_mappings/slack/${integrationMappingId}`)
+					.matchHeader('Authorization', authHeader => {
+						assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+						return true;
+					})
+					.reply(204);
+				return basicClient.integrationMappings.deleteSlackIntegrationMappingById({
+					integration_mapping_id: integrationMappingId
+				});
+			});
+		});
+	});
 });
