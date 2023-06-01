@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/box/box-node-sdk/compare/v3.0.0...v3.1.0) (2023-06-01)
+
+
+### New Features and Enhancements
+
+* Added support for integration mappings API ([#831](https://github.com/box/box-node-sdk/issues/831)) ([c057a9e](https://github.com/box/box-node-sdk/commit/c057a9ebb1b572e8524c615a97279848c57e2d92))
+* Added support for integration mappings API ([#831](https://github.com/box/box-node-sdk/issues/831)) ([a525327](https://github.com/box/box-node-sdk/commit/a525327c1362628a0ffdb36cb4bf3346ca0e0153))
+
+### Bug Fixes
+
+* Correct types of `userId` and `groupId` for creating collaboration ([#833](https://github.com/box/box-node-sdk/issues/833)) ([f803ff8](https://github.com/box/box-node-sdk/commit/f803ff82330fd78a8dc4875452a21aab54686b2e)), closes [#832](https://github.com/box/box-node-sdk/issues/832)
+
 ## [3.0.0](https://github.com/box/box-node-sdk/compare/v2.10.0...v3.0.0) (2023-05-23)
 
 The most important change in this release is **dropping support for Node versions below 12** and changing the **support environments from Node 12 to Node 16**.
