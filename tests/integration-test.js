@@ -16,6 +16,7 @@ var assert = require('chai').assert,
 	fs = require('fs'),
 	path = require('path'),
 	crypto = require('crypto'),
+	request = require('request'),
 	jwt = require('jsonwebtoken');
 
 describe('Box Node SDK', function() {
@@ -1488,6 +1489,118 @@ describe('Box Node SDK', function() {
 			.then(data => {
 				assert.deepEqual(data, file);
 			});
+	});
+
+	it('should correctly upload stream from request module when using chunked uploader', function(done) {
+
+		// This test takes a while to run due to all the bytes being shuffled around,
+		// bumping up the timeout so we don't see flaky behavior if it runs long
+		// eslint-disable-next-line no-invalid-this
+		this.timeout(8000);
+
+		var filePath = path.resolve(__dirname, './fixtures/test.pdf');
+		var uploadSessionID = 'o8qc3n58q73b95ywort2q3t';
+		var partCounter = 0;
+		var partSize = 8388608;
+		var bytesUploaded = 0;
+
+		// eslint-disable-next-line no-sync
+		var fileSize = fs.statSync(filePath).size;
+		var numParts = Math.ceil(fileSize / partSize);
+		var fileName = 'test.pdf';
+
+		var fileResponse = {
+			total_count: 1,
+			entries: [
+				{
+					type: 'file',
+					id: '12348765',
+					name: fileName,
+					size: fileSize
+				}
+			]
+		};
+
+		nock('https://www.example.com')
+			.get('/test-file.pdf')
+			.replyWithFile(200, filePath);
+
+		nock('https://upload.box.com').post('/api/2.0/files/upload_sessions')
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(201, {
+				total_parts: numParts,
+				part_size: partSize,
+				session_endpoints: {
+					list_parts: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/parts',
+					commit: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/commit',
+					log_event: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E/log',
+					upload_part: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E',
+					status: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E',
+					abort: 'https://upload.box.com/api/2.0/files/upload-session/07C4B58DF2D79928A787CCB99A5FF37E'
+				},
+				session_expires_at: '2017-04-25T05:30:23Z',
+				id: uploadSessionID,
+				type: 'upload_session',
+				num_parts_processed: 0
+			})
+			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`)
+			.times(numParts)
+			.reply(200, (uri, requestBody) => {
+				console.log('requestBody', requestBody.length);
+				// requestBody is a hex-encoded string, need to decode to get raw length
+				var rawRequestBody = new Buffer(requestBody, 'hex');
+				bytesUploaded += rawRequestBody.length;
+				var partID = `${partCounter}`;
+				var response = {
+					part: {
+						part_id: `${partCounter}`,
+						offset: partCounter * partSize,
+						size: rawRequestBody.length,
+						sha1: crypto.createHash('sha1').update(partID)
+							.digest('base64')
+					}
+				};
+				partCounter += 1;
+				return response;
+			})
+			.post(`/api/2.0/files/upload_sessions/${uploadSessionID}/commit`)
+			.matchHeader('Authorization', function(authHeader) {
+				assert.equal(authHeader, `Bearer ${TEST_ACCESS_TOKEN}`);
+				return true;
+			})
+			.reply(201, fileResponse);
+
+		var sdk = new BoxSDK({
+			clientID: TEST_CLIENT_ID,
+			clientSecret: TEST_CLIENT_SECRET
+		});
+		var client = sdk.getBasicClient(TEST_ACCESS_TOKEN);
+
+		/* eslint-disable promise/no-callback-in-promise */
+		request.get('https://www.example.com/test-file.pdf').on('response', responseStream => {
+
+			client.files.getChunkedUploader('1234', fileSize, fileName, responseStream)
+				.then(uploader => {
+
+					uploader.on('uploadComplete', file => {
+						assert.deepEqual(file, fileResponse);
+						assert.equal(bytesUploaded, fileSize);
+						done();
+					});
+
+					uploader.on('error', err => done(err));
+					uploader.on('chunkError', err => done(err));
+
+					uploader.start();
+				})
+				.catch(err => {
+					done(err);
+				});
+		});
+		/* eslint-enable promise/no-callback-in-promise */
 	});
 
 	it('should correctly reconfigure SDK instance', function() {
