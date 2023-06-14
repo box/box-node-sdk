@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@types/bluebird": "^3.5.35",
-    "@types/node": "^15.3.1",
+    "@types/node": "^20.3.1",
     "ajv": "^6.12.3",
     "bluebird": "^3.7.2",
     "http-status": "^1.4.1",
