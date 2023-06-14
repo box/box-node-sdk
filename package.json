@@ -89,5 +89,10 @@
   "files": [
     "config",
     "lib"
-  ]
+  ],
+  "overrides": {
+    "leche": {
+      "mocha": "^10.2.0"
+    }
+  }
 }
