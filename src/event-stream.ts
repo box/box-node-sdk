@@ -348,7 +348,7 @@ if (typeof Readable.prototype.destroy !== 'function') {
 	 * @returns {void}
 	 * @public
 	 */
-	EventStream.prototype.destroy = function (error?: Error | undefined /* FIXME */) {
+	EventStream.prototype.destroy = function (error?: Error | undefined) {
 		if (!this.destroyed) {
 			process.nextTick(() => {
 				this.emit('close');
