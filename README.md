@@ -6,7 +6,7 @@ Box Node.js SDK
 ===============
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/box/box-node-sdk.svg)](https://greenkeeper.io/)
-![Platform](https://img.shields.io/badge/node-12--16-blue)
+![Platform](https://img.shields.io/badge/node-12--20-blue)
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
