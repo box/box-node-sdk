@@ -1548,7 +1548,7 @@ describe('Box Node SDK', function() {
 			})
 			.put(`/api/2.0/files/upload_sessions/${uploadSessionID}`)
 			.times(numParts)
-			.reply((uri, requestBody) => {
+			.reply(200, (uri, requestBody) => {
 				// requestBody is a hex-encoded string, need to decode to get raw length
 				var rawRequestBody = new Buffer(requestBody, 'hex');
 				bytesUploaded += rawRequestBody.length;

@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@types/bluebird": "^3.5.35",
-    "@types/node": "^15.3.1",
+    "@types/node": "^18.15.3",
     "ajv": "^6.12.3",
     "bluebird": "^3.7.2",
     "http-status": "^1.4.1",
@@ -74,7 +74,7 @@
     "lodash": "^4.17.21",
     "mocha": "^10.2.0",
     "mockery": "^2.1.0",
-    "nock": "^9.6.1",
+    "nock": "^13.3.1",
     "npm-upgrade": "^3.0.0",
     "nyc": "^14.0.0",
     "prettier": "^2.3.2",
@@ -89,5 +89,10 @@
   "files": [
     "config",
     "lib"
-  ]
+  ],
+  "overrides": {
+    "leche": {
+      "mocha": "^10.2.0"
+    }
+  }
 }

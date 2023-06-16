@@ -348,7 +348,7 @@ if (typeof Readable.prototype.destroy !== 'function') {
 	 * @returns {void}
 	 * @public
 	 */
-	EventStream.prototype.destroy = function () {
+	EventStream.prototype.destroy = function (error?: Error | undefined) {
 		if (!this.destroyed) {
 			process.nextTick(() => {
 				this.emit('close');
@@ -356,6 +356,7 @@ if (typeof Readable.prototype.destroy !== 'function') {
 			this.destroyed = true;
 			this._destroy();
 		}
+		return this;
 	};
 }
 

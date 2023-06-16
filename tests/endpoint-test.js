@@ -3075,7 +3075,7 @@ describe('Endpoint', () => {
 						assert.include(uaHeader, 'Box Node.js SDK v');
 						return true;
 					})
-					.reply(204, null);
+					.reply(204, undefined);
 				return basicClient.folders
 					.deleteLock(folderLockID)
 					.then(result => assert.isUndefined(result));
