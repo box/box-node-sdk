@@ -48,6 +48,8 @@ console.log(`There are ${result.count} sign requests`);
 Creates a sign request. This involves preparing a document for signing and sending the sign request to signers. [`signRequests.create(body, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SignRequestsManager.html#create)
 method.
 
+The list of source files is currently limited to ten files. Only the ID and type fields are required for each file.
+
 <!-- sample post_sign_requests -->
 
 ```js
