@@ -27,7 +27,8 @@ afterAll(async() => {
 });
 
 test('test sign request', async() => {
-	let file = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank.pdf', context.folder.id);
+	let file1 = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank_sign_1.pdf', context.folder.id);
+	let file2 = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank_sign_2.pdf', context.folder.id);
 	try {
 		const sr = await context.client.signRequests.create({
 			signers: [
@@ -41,7 +42,11 @@ test('test sign request', async() => {
 			source_files: [
 				{
 					type: 'file',
-					id: file.id,
+					id: file1.id,
+				},
+				{
+					type: 'file',
+					id: file2.id,
 				}
 			],
 			parent_folder: {
@@ -68,9 +73,9 @@ test('test sign request', async() => {
 			}
 		}
 		expect(sr.source_files).toBeDefined();
-		expect(sr.source_files.length).toBe(1);
+		expect(sr.source_files.length).toBe(2);
 		expect(sr.sign_files.files).toBeDefined();
-		expect(sr.sign_files.files.length).toBe(1);
+		expect(sr.sign_files.files.length).toBe(2);
 		let sr2 = await context.client.signRequests.getById({
 			sign_request_id: sr.id
 		});
@@ -83,6 +88,7 @@ test('test sign request', async() => {
 		});
 		expect(sr2.status).toBe('cancelled');
 	} finally {
-		await file.dispose();
+		await file1.dispose();
+		await file2.dispose();
 	}
 });
