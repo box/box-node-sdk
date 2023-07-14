@@ -536,7 +536,7 @@ describe('Box Node SDK', function() {
 			userName = 'Pnin',
 			algorithm = 'RS256',
 			keyID = 'ltf64zjk',
-			passphrase = 'Test secret key';
+			passphrase = '2b1817bae9cc60a734cd83643dd93159';
 
 		// @NOTE(mwiller) 2016-04-12: This is an actual generated RSA key, so the key
 		//   parameters are actually meaningful and will cause the test to fail if
@@ -606,7 +606,7 @@ describe('Box Node SDK', function() {
 			userName = 'Pnin',
 			algorithm = 'RS256',
 			keyID = 'ltf64zjk',
-			passphrase = 'Test secret key',
+			passphrase = '2b1817bae9cc60a734cd83643dd93159',
 			tokenStoreFake = leche.create([
 				'read',
 				'write',
@@ -693,7 +693,7 @@ describe('Box Node SDK', function() {
 		var userID = '34876458977987',
 			algorithm = 'RS256',
 			keyID = 'ltf64zjk',
-			passphrase = 'Test secret key',
+			passphrase = '2b1817bae9cc60a734cd83643dd93159',
 			scopes = [
 				'item_preview',
 				'item_read'
