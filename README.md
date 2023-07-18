@@ -169,7 +169,7 @@ managers by the type of object they interact with.
 
 For example:
 ```js
-// Get the user opject for the current user
+// Get the user object for the current user
 client.users.get(client.CURRENT_USER_ID)
 	.then(currentUser => { /* ... */ })
 	.catch(error => { /* handle any errors */ });
