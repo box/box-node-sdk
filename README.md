@@ -23,12 +23,15 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
   - [App Auth Client](#app-auth-client)
 - [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
   - [Constructing API Calls Manually](#constructing-api-calls-manually)
+- [FIPS 140-2 Compliance](#fips-140-2-compliance)
 - [Versions](#versions)
   - [Supported Version](#supported-version)
   - [Version schedule](#version-schedule)
 - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
 - [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
 - [Changelog](#changelog)
+- [Upgrades](#upgrades)
+- [Documentation](#documentation)
 - [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
