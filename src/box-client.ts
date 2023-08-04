@@ -37,6 +37,7 @@ import ShieldInformationBarrierSegmentMembers from "./managers/shield-informatio
 import ShieldInformationBarrierSegmentRestrictions from "./managers/shield-information-barrier-segment-restrictions.generated";
 import ShieldInformationBarrierReports from "./managers/shield-information-barrier-reports.generated";
 import IntegrationMappings from "./managers/integration-mappings";
+import Ai from "./managers/ai";
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -206,6 +207,7 @@ class BoxClient {
 	shieldInformationBarrierSegmentRestrictions: ShieldInformationBarrierSegmentRestrictions;
 	shieldInformationBarrierReports: ShieldInformationBarrierReports;
 	integrationMappings: IntegrationMappings;
+	ai: Ai
 
 	/* prototype properties assigned below the class declaration */
 	collaborationRoles!: Record<string, CollaborationRole>;
@@ -280,6 +282,7 @@ class BoxClient {
 		this.shieldInformationBarrierSegmentRestrictions = new ShieldInformationBarrierSegmentRestrictions(this);
 		this.shieldInformationBarrierReports = new ShieldInformationBarrierReports(this);
 		this.integrationMappings = new IntegrationMappings(this);
+		this.ai = new Ai(this);
 	}
 
 	/**
