@@ -26,4 +26,8 @@ export * from './sign-request-signer-input.generated';
 export * from './sign-request-signer.generated';
 export * from './sign-request.generated';
 export * from './sign-requests.generated';
+export * from './sign-template.generated';
+export * from './sign-templates.generated';
+export * from './template-signer-input.generated';
+export * from './template-signer.generated';
 export * from './user-base.generated';

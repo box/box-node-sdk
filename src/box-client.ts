@@ -23,6 +23,7 @@ import RetentionPolicies from './managers/retention-policies';
 import Search from './managers/search';
 import SharedItems from './managers/shared-items';
 import SignRequests from './managers/sign-requests.generated';
+import SignTemplates from './managers/sign-templates.generated';
 import StoragePolicies from './managers/storage-policies';
 import Tasks from './managers/tasks';
 import TermsOfService from './managers/terms-of-service';
@@ -200,6 +201,7 @@ class BoxClient {
 	termsOfService: any;
 	storagePolicies: any;
 	signRequests: SignRequests;
+	signTemplates: SignTemplates;
 	shieldInformationBarriers: ShieldInformationBarriers;
 	shieldInformationBarrierSegments: ShieldInformationBarrierSegments;
 	shieldInformationBarrierSegmentMembers: ShieldInformationBarrierSegmentMembers;
@@ -274,6 +276,7 @@ class BoxClient {
 		this.termsOfService = new TermsOfService(this);
 		this.storagePolicies = new StoragePolicies(this);
 		this.signRequests = new SignRequests(this);
+		this.signTemplates = new SignTemplates(this);
 		this.shieldInformationBarriers = new ShieldInformationBarriers(this);
 		this.shieldInformationBarrierSegments = new ShieldInformationBarrierSegments(this);
 		this.shieldInformationBarrierSegmentMembers = new ShieldInformationBarrierSegmentMembers(this);

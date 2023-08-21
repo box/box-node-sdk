@@ -20,4 +20,14 @@ export interface SignRequestSigner extends schemas.SignRequestCreateSigner {
 	 * Example: https://example.com
 	 */
 	embed_url?: string;
+	/**
+	 * This URL is specifically designed for
+	 * signing documents within an HTML `iframe` tag.
+	 * It will be returned in the response
+	 * only if the `embed_url_external_user_id`
+	 * parameter was passed in the
+	 * `create sign request` call.
+	 * Example: https://app.box.com/embed/sign/document/gfhr4222-a331-494b-808b-79bc7f3992a3/f14d7098-a331-494b-808b-79bc7f3992a4
+	 */
+	iframeable_embed_url?: string;
 }

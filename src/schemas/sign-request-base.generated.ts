@@ -1,6 +1,6 @@
 import * as schemas from '.';
 /**
- * Create a sign request
+ * Sign Request (Base)
  *
  * A request to create a sign request object
  */
@@ -57,7 +57,7 @@ export interface SignRequestBase {
 	 */
 	prefill_tags?: schemas.SignRequestPrefillTag[];
 	/**
-	 * Number of days after which this request will automatically expire if not completed.
+	 * Set the number of days after which the created signature request will automatically expire if not completed. By default, we do not apply any expiration date on signature requests, and the signature request does not expire.
 	 * Example: 2
 	 */
 	days_valid?: number;
@@ -71,4 +71,9 @@ export interface SignRequestBase {
 	 * Example: true
 	 */
 	is_phone_verification_required_to_view?: boolean;
+	/**
+	 * When a signature request is created from a template this field will indicate the id of that template.
+	 * Example: 123075213-af2c8822-3ef2-4952-8557-52d69c2fe9cb
+	 */
+	template_id?: string;
 }
