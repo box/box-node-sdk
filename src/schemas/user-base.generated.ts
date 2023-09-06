@@ -10,7 +10,7 @@ export interface UserBase {
 	 * The unique identifier for this user
 	 * Example: 11446498
 	 */
-	id?: string;
+	id: string;
 	/**
 	 * `user`
 	 * Example: user

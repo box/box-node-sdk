@@ -6,15 +6,15 @@ import * as schemas from '.';
  */
 export interface SignTemplate {
 	/**
-	 * Template identifier.
-	 * Example: 4206996024-14944f75-c34b-478a-95a1-264b1ff80d35
-	 */
-	id?: string;
-	/**
 	 * object type
 	 * Example: sign-template
 	 */
 	type?: 'sign-template';
+	/**
+	 * Template identifier.
+	 * Example: 4206996024-14944f75-c34b-478a-95a1-264b1ff80d35
+	 */
+	id?: string;
 	/**
 	 * The name of the template.
 	 * Example: Official contract
