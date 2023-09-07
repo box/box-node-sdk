@@ -41,6 +41,22 @@ import { generateManagerClasses } from './generate-manager-classes';
 					],
 				},
 				{
+					name: 'SignTemplatesManager',
+					comment:
+						'Simple manager for interacting with all Sign Templates endpoints and actions.',
+					relativePath: '../src/managers/sign-templates.generated.ts',
+					operations: [
+						{
+							name: 'getById',
+							operationId: 'get_sign_templates_id',
+						},
+						{
+							name: 'getAll',
+							operationId: 'get_sign_templates',
+						},
+					],
+				},
+				{
 					name: 'ShieldInformationBarrierManager',
 					comment: '',
 					relativePath:

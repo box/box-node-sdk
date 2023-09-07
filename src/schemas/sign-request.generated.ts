@@ -11,6 +11,10 @@ export interface SignRequest extends schemas.SignRequestBase {
 	 */
 	type?: 'sign-request';
 	/**
+	 * List of files to create a signing document from. This is currently limited to ten files. Only the ID and type fields are required for each file.
+	 */
+	source_files?: schemas.FileBase[];
+	/**
 	 * Array of signers for the sign request
 	 */
 	signers?: schemas.SignRequestSigner[];
@@ -50,7 +54,9 @@ export interface SignRequest extends schemas.SignRequestBase {
 		| 'declined'
 		| 'error_converting'
 		| 'error_sending'
-		| 'expired';
+		| 'expired'
+		| 'finalizing'
+		| 'error_finalizing';
 	/**
 	 * List of files that will be signed, which are copies of the original
 	 * source files. A new version of these files are created as signers sign
@@ -62,8 +68,4 @@ export interface SignRequest extends schemas.SignRequestBase {
 	 * Example: 2021-04-26T08:12:13.982Z
 	 */
 	auto_expire_at?: string;
-	/**
-	 * List of files to create a signing document from. Only the ID and type fields are required for each file. The array will be empty if the `source_files` are deleted.
-	 */
-	source_files?: schemas.FileMini[];
 }

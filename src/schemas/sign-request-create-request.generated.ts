@@ -6,17 +6,9 @@ import * as schemas from '.';
  */
 export interface SignRequestCreateRequest extends schemas.SignRequestBase {
 	/**
-	 * List of files to create a signing document from. This is currently
-	 * limited to 10 files. Only the ID and type fields are required
-	 * for each file. The array will be empty if the `source_files`
-	 * are deleted.
+	 * List of files to create a signing document from. This is currently limited to ten files. Only the ID and type fields are required for each file.
 	 */
-	source_files?: schemas.FileMini[];
-	/**
-	 * Force a specific signature color (blue, black, or red).
-	 * Example: blue
-	 */
-	signature_color?: 'blue' | 'black' | 'red';
+	source_files?: schemas.FileBase[];
 	/**
 	 * Array of signers for the sign request. 35 is the
 	 * max number of signers permitted.

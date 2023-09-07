@@ -23,5 +23,8 @@ export interface SignRequests {
 	 * Example: 1000
 	 */
 	prev_marker?: number;
+	/**
+	 * A list of sign requests
+	 */
 	entries?: schemas.SignRequest[];
 }
