@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/box/box-node-sdk/compare/v3.1.1...v3.2.0) (2023-09-07)
+
+
+### New Features and Enhancements
+
+* Support sign template ([#848](https://github.com/box/box-node-sdk/issues/848)) ([18d3413](https://github.com/box/box-node-sdk/commit/18d3413afeddf43c62dfd0caf1279e61c99b6b83))
+
 ### [3.1.1](https://github.com/box/box-node-sdk/compare/v3.1.0...v3.1.1) (2023-07-19)
 
 
