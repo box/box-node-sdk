@@ -21,10 +21,10 @@ method.
 
 ```js
 const sr = await client.signTemplates.getById({
-	sign_request_id: 12345,
+	template_id: 12345,
 });
 console.log(
-	`Sign request id ${sr.id} contains ${sr.source_files.length} files`
+	`Sign template id ${sr.id} contains ${sr.source_files.length} files`
 );
 ```
 
