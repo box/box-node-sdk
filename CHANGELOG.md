@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://github.com/box/box-node-sdk/compare/v3.2.0...v3.2.1) (2023-10-06)
+
+
+### Bug Fixes
+
+* Overrides tough-cookie dependency ([#852](https://github.com/box/box-node-sdk/issues/852)) ([99df873](https://github.com/box/box-node-sdk/commit/99df873e1a1dad4a0073d53b4ed57c0eeb859401))
+
 ## [3.2.0](https://github.com/box/box-node-sdk/compare/v3.1.1...v3.2.0) (2023-09-07)
 
 
