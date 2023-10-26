@@ -369,8 +369,8 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	getTokensAuthorizationCodeGrant(
 		authorizationCode: string,
-		options: TokenRequestOptions | null,
-		callback: Function
+		options?: TokenRequestOptions | null,
+		callback?: Function
 	) {
 		return this.tokenManager
 			.getTokensAuthorizationCodeGrant(
@@ -390,8 +390,8 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	getTokensRefreshGrant(
 		refreshToken: string,
-		options: TokenRequestOptions | Function | null,
-		callback: Function
+		options?: TokenRequestOptions | Function | null,
+		callback?: Function
 	) {
 		if (typeof options === 'function') {
 			callback = options;
@@ -412,8 +412,8 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	getEnterpriseAppAuthTokens(
 		enterpriseID: string,
-		options: TokenRequestOptions | Function | null,
-		callback: Function
+		options?: TokenRequestOptions | Function | null,
+		callback?: Function
 	) {
 		if (typeof options === 'function') {
 			callback = options;
@@ -442,8 +442,8 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	getAppUserTokens(
 		userID: string,
-		options: TokenRequestOptions | Function | null,
-		callback: Function
+		options?: TokenRequestOptions | Function | null,
+		callback?: Function
 	) {
 		if (typeof options === 'function') {
 			callback = options;
@@ -465,8 +465,8 @@ class BoxSDKNode extends EventEmitter {
 	 */
 	revokeTokens(
 		token: string,
-		options: TokenRequestOptions | Function | null,
-		callback: Function
+		options?: TokenRequestOptions | Function | null,
+		callback?: Function
 	) {
 		if (typeof options === 'function') {
 			callback = options;
