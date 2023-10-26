@@ -10,7 +10,6 @@ import { Promise } from 'bluebird';
 import { EventEmitter } from 'events';
 import errors from './util/errors';
 import { PassThrough } from 'stream';
-import request from 'request';
 
 const APIRequest = require('./api-request');
 
