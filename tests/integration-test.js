@@ -16,7 +16,7 @@ var assert = require('chai').assert,
 	fs = require('fs'),
 	path = require('path'),
 	crypto = require('crypto'),
-	request = require('request'),
+	request = require('@cypress/request'),
 	jwt = require('jsonwebtoken');
 
 describe('Box Node SDK', function() {

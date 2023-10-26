@@ -34,6 +34,7 @@
     "changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
   },
   "dependencies": {
+    "@cypress/request": "^3.0.1",
     "@types/bluebird": "^3.5.35",
     "@types/node": "^18.15.3",
     "ajv": "^6.12.3",
@@ -43,7 +44,6 @@
     "merge-options": "^1.0.1",
     "promise-queue": "^2.2.3",
     "proxy-agent": "^6.3.0",
-    "request": "^2.88.0",
     "url-template": "^2.0.8",
     "uuid": "^9.0.0"
   },
@@ -53,7 +53,6 @@
     "@types/lodash": "^4.14.172",
     "@types/prettier": "^2.3.2",
     "@types/promise-queue": "^2.2.0",
-    "@types/request": "^2.48.5",
     "@types/shelljs": "^0.8.9",
     "@types/url-template": "^2.0.28",
     "@types/uuid": "^9.0.1",

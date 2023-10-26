@@ -13,9 +13,10 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
 import httpStatusCodes from 'http-status';
-import request from 'request';
 import Config from './util/config';
 import getRetryTimeout from './util/exponential-backoff';
+
+const request = require('@cypress/request');
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -218,8 +219,8 @@ class APIRequest {
 	isRetryable: boolean;
 
 	_callback?: APIRequestCallback;
-	request?: request.Request;
-	stream?: request.Request;
+	request?: any; // request.Request;
+	stream?: any; // request.Request;
 	numRetries?: number;
 
 	constructor(config: Config, eventBus: EventEmitter) {
@@ -261,10 +262,10 @@ class APIRequest {
 		} else {
 			this.request = request(this.config.request);
 			this.stream = this.request;
-			this.stream.on('error', (err) => {
+			this.stream.on('error', (err: any) => {
 				this.eventBus.emit('response', err);
 			});
-			this.stream.on('response', (response) => {
+			this.stream.on('response', (response: any) => {
 				if (isClientErrorResponse(response)) {
 					this.eventBus.emit('response', createErrorForResponse(response));
 					return;
