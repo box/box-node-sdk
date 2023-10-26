@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/box/box-node-sdk/compare/v3.2.1...v3.3.0) (2023-10-26)
+
+
+### New Features and Enhancements
+
+* Replace `request` library with `@cypress/request` ([#860](https://github.com/box/box-node-sdk/issues/860)) ([d365ae8](https://github.com/box/box-node-sdk/commit/d365ae8368c549ecdceb7dd5b928904fd3c58978))
+
+### Bug Fixes
+
+* mark auth funs callbacks as optional ([#858](https://github.com/box/box-node-sdk/issues/858)) ([55f22fe](https://github.com/box/box-node-sdk/commit/55f22fec7d7d35e487f3fb51bc9bbd3e848842ab))
+
 ### [3.2.1](https://github.com/box/box-node-sdk/compare/v3.2.0...v3.2.1) (2023-10-06)
 
 
