@@ -87,11 +87,5 @@
   "files": [
     "config",
     "lib"
-  ],
-  "overrides": {
-    "leche": {
-      "mocha": "^10.2.0"
-    },
-    "tough-cookie": "^4.1.3"
-  }
+  ]
 }
