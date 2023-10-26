@@ -63,7 +63,7 @@ describe('APIRequest', function() {
 
 		// Setup Mockery
 		mockery.enable({ warnOnUnregistered: false });
-		mockery.registerMock('request', requestStub);
+		mockery.registerMock('@cypress/request', requestStub);
 
 		// Setup File Under Test
 		mockery.registerAllowable(MODULE_UNDER_TEST_PATH, true);
