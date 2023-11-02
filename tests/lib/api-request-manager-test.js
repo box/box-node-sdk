@@ -228,6 +228,21 @@ describe('APIRequestManager', function() {
 				.withExactArgs()
 				.returns(expectedResponse);
 			response = requestManager.makeStreamingRequest({});
+			assert.instanceOf(response, Stream.PassThrough);
+			assert.equal(typeof response, typeof expectedResponse);
+		});
+
+		it('should return the Stream directly when `disableStreamPassthrough` is true', function() {
+			var requestManager = new APIRequestManager(config, eventBusFake),
+				expectedResponse = new Stream(),
+				response;
+
+			sandbox.stub(apiRequestFake, 'execute');
+			sandbox.mock(apiRequestFake).expects('getResponseStream')
+				.withExactArgs()
+				.returns(expectedResponse);
+			response = requestManager.makeStreamingRequest({ disableStreamPassthrough: true });
+			assert.notInstanceOf(response, Stream.PassThrough);
 			assert.equal(typeof response, typeof expectedResponse);
 		});
 	});
