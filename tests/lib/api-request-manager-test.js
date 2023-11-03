@@ -232,7 +232,7 @@ describe('APIRequestManager', function() {
 			assert.equal(typeof response, typeof expectedResponse);
 		});
 
-		it('should return the Stream directly when `disableStreamPassthrough` is true', function() {
+		it('should return the Stream directly when `disableStreamPassThrough` is true', function() {
 			var requestManager = new APIRequestManager(config, eventBusFake),
 				expectedResponse = new Stream(),
 				response;
@@ -241,7 +241,7 @@ describe('APIRequestManager', function() {
 			sandbox.mock(apiRequestFake).expects('getResponseStream')
 				.withExactArgs()
 				.returns(expectedResponse);
-			response = requestManager.makeStreamingRequest({ disableStreamPassthrough: true });
+			response = requestManager.makeStreamingRequest({ disableStreamPassThrough: true });
 			assert.notInstanceOf(response, Stream.PassThrough);
 			assert.equal(typeof response, typeof expectedResponse);
 		});

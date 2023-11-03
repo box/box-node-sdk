@@ -94,6 +94,7 @@ var defaults = {
 	iterators: false,
 	enterpriseID: undefined,
 	analyticsClient: null,
+	disableStreamPassThrough: false,
 	proxy: {
 		url: null,
 		username: null,

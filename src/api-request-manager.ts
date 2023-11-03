@@ -83,7 +83,11 @@ class APIRequestManager {
 		// available before we can pipe it to the pass-through stream.
 		// If the stream is undefined, then the request failed and we should
 		// propagate the error.
-		if (stream && options.disableStreamPassthrough !== true) {
+		if (
+			stream &&
+			requestConfig.disableStreamPassThrough !== true &&
+			!options.disableStreamPassThrough
+		) {
 			var passThrough = new PassThrough();
 			stream.pipe(passThrough);
 			return passThrough;
