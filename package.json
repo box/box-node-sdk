@@ -1,7 +1,7 @@
 {
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "description": "Official SDK for Box Plaform APIs",
   "license": "Apache-2.0",
   "repository": {
@@ -74,7 +74,6 @@
     "mocha": "^10.2.0",
     "mockery": "^2.1.0",
     "nock": "^13.3.1",
-    "npm-upgrade": "^3.0.0",
     "nyc": "^14.0.0",
     "prettier": "^2.3.2",
     "shelljs": "^0.8.5",
@@ -88,11 +87,5 @@
   "files": [
     "config",
     "lib"
-  ],
-  "overrides": {
-    "leche": {
-      "mocha": "^10.2.0"
-    },
-    "tough-cookie": "^4.1.3"
-  }
+  ]
 }
