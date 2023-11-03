@@ -86,7 +86,7 @@ class APIRequestManager {
 		if (
 			stream &&
 			requestConfig.disableStreamPassThrough !== true &&
-			!options.disableStreamPassThrough
+			options.disableStreamPassThrough !== true
 		) {
 			var passThrough = new PassThrough();
 			stream.pipe(passThrough);
