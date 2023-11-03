@@ -53,6 +53,17 @@ sdk.configure({
 });
 ```
 
+## Disable stream PassThrough for streaming responses
+
+By default the SDK uses `PassThrough` stream to handle streaming responses. It helps to support delayed reading of the response body, but in some cases it can cause memory leaks or not fully works. To disable `PassThrough` stream use the `disableStreamPassThrough` method:
+
+```javascript
+sdk = BoxSDKNode.getPreconfiguredInstance(APP_SETTINGS);
+sdk.configure({
+    disableStreamPassThrough: true
+});
+```
+
 ## Configure Base URL
 
 The Base Url is the URL that is used by the SDK to access Box. The default base URL are already defined
