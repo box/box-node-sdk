@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/box/box-node-sdk/compare/v3.3.0...v3.4.0) (2023-11-03)
+
+
+### New Features and Enhancements
+
+* Add request option to skip `PassThrough` ([#863](https://github.com/box/box-node-sdk/issues/863)) ([726db45](https://github.com/box/box-node-sdk/commit/726db45cfbb992e545fe2865283df63c898656ac))
+
 ## [3.3.0](https://github.com/box/box-node-sdk/compare/v3.2.1...v3.3.0) (2023-10-26)
 
 
