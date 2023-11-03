@@ -199,7 +199,7 @@ function updateRequestAgent(
 		Required<Pick<UserConfigurationOptions, 'proxy'>>
 ) {
 	if (params.proxy.url) {
-		const ProxyAgent = require('proxy-agent');
+		const ProxyAgent = require('proxy-agent').ProxyAgent;
 		params.request.agentClass = ProxyAgent;
 		params.request.agentOptions = Object.assign(
 			{},
