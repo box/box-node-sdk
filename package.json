@@ -1,7 +1,7 @@
 {
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "Official SDK for Box Plaform APIs",
   "license": "Apache-2.0",
   "repository": {
@@ -18,7 +18,7 @@
     "sdk"
   ],
   "engines": {
-    "node": ">= 12.0.0"
+    "node": ">= 14.0.0"
   },
   "main": "./lib/box-node-sdk.js",
   "scripts": {
@@ -43,7 +43,7 @@
     "jsonwebtoken": "^9.0.2",
     "merge-options": "^1.0.1",
     "promise-queue": "^2.2.3",
-    "proxy-agent": "^6.3.0",
+    "proxy-agent": "^6.3.1",
     "url-template": "^2.0.8",
     "uuid": "^9.0.0"
   },

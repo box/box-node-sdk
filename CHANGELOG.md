@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.4.1](https://github.com/box/box-node-sdk/compare/v3.4.0...v3.4.1) (2023-11-03)
+
+
+### Bug Fixes
+
+* Update `proxy-agent` usage, drop support Node 12 ([#865](https://github.com/box/box-node-sdk/issues/865)) ([e229d3f](https://github.com/box/box-node-sdk/commit/e229d3f93de350c00768528a1c0d3a6ecfc697a9))
+
 ## [3.4.0](https://github.com/box/box-node-sdk/compare/v3.3.0...v3.4.0) (2023-11-03)
 
 

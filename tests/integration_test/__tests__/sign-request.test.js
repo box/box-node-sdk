@@ -91,4 +91,4 @@ test('test sign request', async() => {
 		await file1.dispose();
 		await file2.dispose();
 	}
-});
+}, 120000);
