@@ -199,8 +199,7 @@ function updateRequestAgent(
 		Required<Pick<UserConfigurationOptions, 'proxy'>>
 ) {
 	if (params.proxy.url) {
-		const urlParams = url.parse(params.proxy.url);
-		let proxyUrl = urlParams.href;
+		let proxyUrl = params.proxy.url;
 		if (params.proxy.username && params.proxy.password) {
 			proxyUrl = proxyUrl.replace('://', `://${params.proxy.username}:`);
 		}
