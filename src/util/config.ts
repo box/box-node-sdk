@@ -201,7 +201,7 @@ function updateRequestAgent(
 	if (params.proxy.url) {
 		let proxyUrl = params.proxy.url;
 		if (params.proxy.username && params.proxy.password) {
-			proxyUrl = proxyUrl.replace('://', `://${params.proxy.username}:`);
+			proxyUrl = proxyUrl.replace('://', `://${params.proxy.username}:${params.proxy.password}@`);
 		}
 
 		const ProxyAgent = require('proxy-agent').ProxyAgent;
