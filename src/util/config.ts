@@ -199,18 +199,19 @@ function updateRequestAgent(
 		Required<Pick<UserConfigurationOptions, 'proxy'>>
 ) {
 	if (params.proxy.url) {
+		let proxyUrl = params.proxy.url;
+		if (params.proxy.username && params.proxy.password) {
+			proxyUrl = proxyUrl.replace('://', `://${params.proxy.username}:${params.proxy.password}@`);
+		}
+
 		const ProxyAgent = require('proxy-agent').ProxyAgent;
 		params.request.agentClass = ProxyAgent;
-		params.request.agentOptions = Object.assign(
-			{},
+		params.request.agentOptions = Object.assign({}, 
 			params.request.agentOptions,
-			url.parse(params.proxy.url)
+			{
+				getProxyForUrl: (url: string) => proxyUrl
+			}
 		);
-		if (params.proxy.username && params.proxy.password) {
-			Object.assign(params.request.agentOptions, {
-				auth: `${params.proxy.username}:${params.proxy.password}`,
-			});
-		}
 	}
 }
 
