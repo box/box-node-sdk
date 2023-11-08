@@ -209,9 +209,7 @@ function updateRequestAgent(
 		params.request.agentOptions = Object.assign({}, 
 			params.request.agentOptions,
 			{
-				getProxyForUrl: (url: string) => {
-					return proxyUrl;
-				}
+				getProxyForUrl: (url: string) => proxyUrl
 			}
 		);
 	}
