@@ -139,38 +139,6 @@ client.metadata.updateTemplate('enterprise', 'securityClassification-6VMVochwUWo
 	});
 ```
 
-Delete a classification
------------------------
-
-To remove an existing classification, call the
-[`metadata.updateTemplate(scope, template, operations, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#updateTemplate)
-method with the an operation to remove the existing classification from the metadata template. 
-
-<!-- sample put_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema delete -->
-```js
-var operations = [{
-  op: "removeEnumOption",
-  fieldKey: "Box__Security__Classification__Key",
-  enumOptionKey: "Sensitive"
-}];
-client.metadata.updateTemplate('enterprise', 'securityClassification-6VMVochwUWo', operations)
-	.then(template => {
-		// the updated classification template
-	});
-```
-
-Delete all classifications
---------------------------
-
-To remove all classifications in an enterprise, call the
-[`metadata.deleteTemplate(scope, template, callback)`](http://opensoure.box.com/box-node-sdk/Metadata.html#deleteTemplate)
-method with the an name of the classification metadata template. 
-
-<!-- sample delete_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema -->
-```js
-client.metadata.deleteTemplate('enterprise', 'securityClassification-6VMVochwUWo', callback);
-```
-
 Add classification to file
 --------------------------
 
