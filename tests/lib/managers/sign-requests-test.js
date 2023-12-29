@@ -93,6 +93,7 @@ describe('SignRequests', () => {
 						type: 'folder',
 						id: '1234567890',
 					},
+					signer_group_id: '1234567890',
 				},
 				testQS,
 			],
