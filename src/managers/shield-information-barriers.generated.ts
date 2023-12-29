@@ -14,7 +14,7 @@ class ShieldInformationBarrierManager {
 	/**
 	 * Get shield information barrier with specified ID
 	 *
-	 * Get shield information barrier based on provided ID..
+	 * Get shield information barrier based on provided ID.
 	 * @param {object} options Options for the request
 	 * @param {string} options.shield_information_barrier_id The ID of the shield information barrier.
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
@@ -52,18 +52,16 @@ class ShieldInformationBarrierManager {
 	 * Retrieves a list of shield information barrier objects
 	 * for the enterprise of JWT.
 	 * @param {object} [options] Options for the request
-	 * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
+	 * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination.
 	 * @param {number} [options.limit] The maximum number of items to return per page.
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
-	 * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+	 * @returns {Promise<schemas.ShieldInformationBarriers>} A promise resolving to the result or rejecting with an error
 	 */
 	getAll(
 		options?: {
 			/**
 			 * Defines the position marker at which to begin returning results. This is
 			 * used when paginating using marker-based pagination.
-			 *
-			 * This requires `usemarker` to be set to `true`.
 			 */
 			readonly marker?: string;
 			/**
@@ -72,7 +70,7 @@ class ShieldInformationBarrierManager {
 			readonly limit?: number;
 		},
 		callback?: Function
-	): Promise<object> {
+	): Promise<schemas.ShieldInformationBarriers> {
 		const { ...queryParams } = options,
 			apiPath = urlPath('shield_information_barriers'),
 			params = {
@@ -90,13 +88,13 @@ class ShieldInformationBarrierManager {
 	 * Creates a shield information barrier to
 	 * separate individuals/groups within the same
 	 * firm and prevents confidential information passing between them.
-	 * @param {schemas.ShieldInformationBarrier} body
+	 * @param {object} body
 	 * @param {object} [options] Options for the request
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
 	 * @returns {Promise<schemas.ShieldInformationBarrier>} A promise resolving to the result or rejecting with an error
 	 */
 	create(
-		body: schemas.ShieldInformationBarrier,
+		body: object,
 		options?: {},
 		callback?: Function
 	): Promise<schemas.ShieldInformationBarrier> {

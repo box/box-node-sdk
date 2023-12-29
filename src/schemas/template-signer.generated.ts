@@ -33,4 +33,11 @@ export interface TemplateSigner {
 	 * Example: 2
 	 */
 	order?: number;
+	/**
+	 * If set, signers who have the same group ID will be assigned to the same input.
+	 * A signer group is expected to have more than one signer. When a group contains fewer than two signers,
+	 * it will be converted to a single signer and the group will be removed.
+	 * Example: cd4ff89-8fc1-42cf-8b29-1890dedd26d7
+	 */
+	signer_group_id?: string;
 }

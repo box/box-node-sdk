@@ -23,7 +23,7 @@ export interface SignRequestPrefillTag {
 	checkbox_value?: boolean;
 	/**
 	 * Date prefill value
-	 * Example: 2021-04-26T08:12:13.982Z
+	 * Example: 2021-04-26
 	 */
 	date_value?: string;
 }

@@ -9,7 +9,14 @@ export interface TemplateSignerInput extends schemas.SignRequestPrefillTag {
 	 * Type of input
 	 * Example: text
 	 */
-	type?: 'signature' | 'date' | 'text' | 'checkbox' | 'radio' | 'dropdown';
+	type?:
+		| 'signature'
+		| 'date'
+		| 'text'
+		| 'checkbox'
+		| 'attachment'
+		| 'radio'
+		| 'dropdown';
 	/**
 	 * Content type of input
 	 * Example: text
@@ -63,4 +70,9 @@ export interface TemplateSignerInput extends schemas.SignRequestPrefillTag {
 	 * The size of the input.
 	 */
 	dimensions?: object;
+	/**
+	 * The label field is used especially for text, attachment, radio, and checkbox type inputs.
+	 * Example: Legal name
+	 */
+	label?: string;
 }

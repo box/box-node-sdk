@@ -49,13 +49,13 @@ class ShieldInformationBarrierReportsManager {
 	/**
 	 * List shield information barrier reports
 	 *
-	 * Lists shield information barrier reports with specific IDs.
+	 * Lists shield information barrier reports.
 	 * @param {object} options Options for the request
 	 * @param {string} options.shield_information_barrier_id The ID of the shield information barrier.
 	 * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
 	 * @param {number} [options.limit] The maximum number of items to return per page.
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
-	 * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+	 * @returns {Promise<schemas.ShieldInformationBarrierReports>} A promise resolving to the result or rejecting with an error
 	 */
 	getAll(
 		options: {
@@ -76,7 +76,7 @@ class ShieldInformationBarrierReportsManager {
 			readonly limit?: number;
 		},
 		callback?: Function
-	): Promise<object> {
+	): Promise<schemas.ShieldInformationBarrierReports> {
 		const { ...queryParams } = options,
 			apiPath = urlPath('shield_information_barrier_reports'),
 			params = {
