@@ -92,3 +92,55 @@ test('test sign request', async() => {
 		await file2.dispose();
 	}
 }, 120000);
+
+test('test sign request with signer group', async() => {
+	let file = await createBoxTestFile(context.client, path.join(__dirname, '../resources/blank.pdf'), 'blank_sign_1.pdf', context.folder.id);
+	let signerGroup = 'signer_group_id';
+	try {
+		const sr = await context.client.signRequests.create({
+			signers: [
+				{
+					email: 'sdk_integration_test@boxdemo.com',
+					role: 'signer',
+					signer_group_id: signerGroup,
+				},
+				{
+					email: 'sdk_integration_test+user1@boxdemo.com',
+					role: 'signer',
+					signer_group_id: signerGroup,
+				}
+			],
+			source_files: [
+				{
+					type: 'file',
+					id: file.id,
+				},
+			],
+			parent_folder: {
+				id: context.folder.id,
+				type: 'folder',
+			},
+		});
+		expect(sr.signers.length).toBe(3); // Include 2 signers + 1 final copy reader
+		let signerGroupId = null;
+		for (let signer of sr.signers) {
+			if (signer.role === 'signer') {
+				if (signerGroupId === null) {
+					signerGroupId = signer.signer_group_id;
+				}
+				expect(signer.signer_group_id).toBe(signerGroupId);
+			} else if (signer.role === 'final_copy_reader') {
+				expect(signer.email).toBe(context.user.login.toLowerCase());
+			}
+		}
+		let sr2 = await context.client.signRequests.cancelById({
+			sign_request_id: sr.id
+		});
+		sr2 = await context.client.signRequests.getById({
+			sign_request_id: sr.id
+		});
+		expect(sr2.status).toBe('cancelled');
+	} finally {
+		await file.dispose();
+	}
+}, 120000);

@@ -94,7 +94,12 @@ class ShieldInformationBarrierManager {
 	 * @returns {Promise<schemas.ShieldInformationBarrier>} A promise resolving to the result or rejecting with an error
 	 */
 	create(
-		body: object,
+		body: {
+			enterprise: {
+				type: string;
+				id: string;
+			};
+		},
 		options?: {},
 		callback?: Function
 	): Promise<schemas.ShieldInformationBarrier> {
@@ -120,7 +125,10 @@ class ShieldInformationBarrierManager {
 	 * @returns {Promise<schemas.ShieldInformationBarrier>} A promise resolving to the result or rejecting with an error
 	 */
 	changeStatusById(
-		body: object,
+		body: {
+			id: string;
+			status: string;
+		},
 		options?: {},
 		callback?: Function
 	): Promise<schemas.ShieldInformationBarrier> {
