@@ -9,25 +9,27 @@ export interface SignRequestSignerInput extends schemas.SignRequestPrefillTag {
 	 * Type of input
 	 * Example: text
 	 */
-	type?: 'signature' | 'date' | 'text' | 'checkbox';
+	type?: 'signature' | 'date' | 'text' | 'checkbox' | 'radio' | 'dropdown';
 	/**
 	 * Content type of input
 	 * Example: signature
 	 */
 	content_type?:
+		| 'signature'
 		| 'initial'
 		| 'stamp'
-		| 'signature'
-		| 'company'
-		| 'title'
-		| 'email'
+		| 'date'
+		| 'checkbox'
+		| 'text'
 		| 'full_name'
 		| 'first_name'
 		| 'last_name'
-		| 'text'
-		| 'date'
-		| 'checkbox'
-		| 'attachment';
+		| 'company'
+		| 'title'
+		| 'email'
+		| 'attachment'
+		| 'radio'
+		| 'dropdown';
 	/**
 	 * Index of page that the input is on
 	 * Example: 4

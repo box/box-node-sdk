@@ -1,11 +1,11 @@
 import * as schemas from '.';
 /**
- * Box Sign
+ * List of Shield Information Barrier Segments
  *
  * The part of an API response that describes marker
  * based pagination
  */
-export interface SignRequests {
+export interface ShieldInformationBarrierSegments {
 	/**
 	 * The limit that was used for these entries. This will be the same as the
 	 * `limit` query parameter unless that value exceeded the maximum value
@@ -19,7 +19,8 @@ export interface SignRequests {
 	 */
 	next_marker?: string;
 	/**
-	 * A list of sign requests
+	 * A list of shield information barrier
+	 * segments
 	 */
-	entries?: schemas.SignRequest[];
+	entries?: schemas.ShieldInformationBarrierSegment[];
 }
