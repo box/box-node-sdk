@@ -14,6 +14,7 @@ const createBoxTestRetentionPolicy = async(appClient, policyName = null) => {
 		{
 			retention_length: 1,
 			retention_type: 'modifiable',
+			can_owner_extend_retention: true,
 		},
 	);
 
