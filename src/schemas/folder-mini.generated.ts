@@ -7,11 +7,6 @@ import * as schemas from '.';
  */
 export interface FolderMini extends schemas.FolderBase {
 	/**
-	 * The name of the folder.
-	 * Example: Contracts
-	 */
-	name?: string;
-	/**
 	 * A numeric identifier that represents the most recent user event
 	 * that has been applied to this item.
 	 *
@@ -28,4 +23,9 @@ export interface FolderMini extends schemas.FolderBase {
 	 * Example: 3
 	 */
 	sequence_id?: string;
+	/**
+	 * The name of the folder.
+	 * Example: Contracts
+	 */
+	name?: string;
 }

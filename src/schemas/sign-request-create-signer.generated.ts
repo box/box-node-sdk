@@ -6,10 +6,11 @@ import * as schemas from '.';
  */
 export interface SignRequestCreateSigner {
 	/**
-	 * Email address of the signer
+	 * Email address of the signer.
+	 * The email address of the signer is required when making signature requests, except when using templates that are configured to include emails.
 	 * Example: example@gmail.com
 	 */
-	email: string;
+	email?: string;
 	/**
 	 * Defines the role of the signer in the sign request. A `signer`
 	 * must sign the document and an `approver` must approve the document. A
@@ -74,4 +75,11 @@ export interface SignRequestCreateSigner {
 	 * Example: SecretPassword123
 	 */
 	password?: string;
+	/**
+	 * If set, signers who have the same group ID will be assigned to the same input.
+	 * A signer group is expected to have more than one signer. When a group contains fewer than two signers,
+	 * it will be converted to a single signer and the group will be removed.
+	 * Example: cd4ff89-8fc1-42cf-8b29-1890dedd26d7
+	 */
+	signer_group_id?: string;
 }

@@ -57,7 +57,7 @@ class ShieldInformationBarrierSegmentsManager {
 	 * @param {string} [options.marker] Defines the position marker at which to begin returning results. This is used when paginating using marker-based pagination. This requires `usemarker` to be set to `true`.
 	 * @param {number} [options.limit] The maximum number of items to return per page.
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
-	 * @returns {Promise<object>} A promise resolving to the result or rejecting with an error
+	 * @returns {Promise<schemas.ShieldInformationBarrierSegments>} A promise resolving to the result or rejecting with an error
 	 */
 	getAll(
 		options: {
@@ -78,7 +78,7 @@ class ShieldInformationBarrierSegmentsManager {
 			readonly limit?: number;
 		},
 		callback?: Function
-	): Promise<object> {
+	): Promise<schemas.ShieldInformationBarrierSegments> {
 		const { ...queryParams } = options,
 			apiPath = urlPath('shield_information_barrier_segments'),
 			params = {

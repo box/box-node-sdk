@@ -10,8 +10,12 @@ export interface SignRequestCreateRequest extends schemas.SignRequestBase {
 	 */
 	source_files?: schemas.FileBase[];
 	/**
-	 * Array of signers for the sign request. 35 is the
-	 * max number of signers permitted.
+	 * Force a specific color for the signature (blue, black, or red)
+	 * Example: blue
+	 */
+	signature_color?: 'blue' | 'black' | 'red';
+	/**
+	 * Array of signers for the sign request. 35 is the max number of signers permitted.
 	 */
 	signers: schemas.SignRequestCreateSigner[];
 }
