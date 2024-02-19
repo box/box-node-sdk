@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.5.0](https://github.com/box/box-node-sdk/compare/v3.4.2...v3.5.0) (2024-02-19)
+
+
+### New Features and Enhancements
+
+* Sign request group ([#870](https://github.com/box/box-node-sdk/issues/870)) ([11bf5d2](https://github.com/box/box-node-sdk/commit/11bf5d2db7e0cefc669aab99c8b65c632289ac46))
+
+### Bug Fixes
+
+* Bumped proxy-agent to 6.4.0 ([#874](https://github.com/box/box-node-sdk/issues/874)) ([55a8a0b](https://github.com/box/box-node-sdk/commit/55a8a0baebe151f4107fdbec0a1022e9534f88a4))
+* Remove delete classification ([#869](https://github.com/box/box-node-sdk/issues/869)) ([22384ab](https://github.com/box/box-node-sdk/commit/22384abc3abbc35800cbcdea7c7eb9a452cc4859))
+
 ### [3.4.2](https://github.com/box/box-node-sdk/compare/v3.4.1...v3.4.2) (2023-11-08)
 
 
