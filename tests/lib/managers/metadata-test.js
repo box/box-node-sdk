@@ -334,4 +334,35 @@ describe('Metadata', function() {
 				.then(data => assert.equal(data, response));
 		});
 	});
+
+	describe('query()', function() {
+		it('should make POST request to search the API when called', function() {
+			var from = 'enterprise_987654321.someTemplate';
+			var ancestorFolderId = '0';
+			var options = {
+				query: 'value >= :amount',
+				query_params: {amount: '100'},
+				limit: 10,
+				marker: 'vwxyz',
+				order_by: [
+					{
+						"field_key": "value",
+						"direction": "asc"
+					}
+				]
+			};
+
+			var expectedParams = {
+				body: {
+					ancestor_folder_id: ancestorFolderId,
+					from: from,
+					...options
+				},
+			};
+
+			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
+			sandbox.mock(boxClientFake).expects('post').withArgs('/metadata_queries/execute_read', expectedParams);
+			metadata.query(from, ancestorFolderId, options);
+		});
+	});
 });
