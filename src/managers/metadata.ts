@@ -391,9 +391,11 @@ class Metadata {
 	 * @param {string} ancestorFolderId - The folder_id to which to restrain the query
 	 * @param {Object} [options] - Optional parameters
 	 * @param {string} [options.query] - The logical expression of the query
-	 * @param {Object} [options.query_parameters] - Required if query present. The arguments for the query
+	 * @param {Object} [options.query_params] - Required if query present. The arguments for the query
 	 * @param {Object} [options.order_by] - The field_key(s) to order on and the corresponding direction(s)
 	 * @param {Array} [options.fields] - An array of fields to return
+	 * @param {int} [options.limit=100] - The number of results to return for a single request
+	 * @param {string} [options.marker] - Pagination marker
 	 * @param {Function} [callback] - Passed a collection of items and their associated metadata
 	 * @returns {Promise<void>} Promise resolving to a collection of items and their associated metadata
 	 */
@@ -402,9 +404,11 @@ class Metadata {
 		ancestorFolderId: string,
 		options?: {
 			query?: string;
-			query_parameters?: Record<string, any>;
-			order_by: Record<string, any>;
+			query_params?: Record<string, any>;
+			order_by?: Record<string, any>;
 			fields?: string[];
+			limit?: number;
+			marker?: string;
 		},
 		callback?: Function
 	) {
