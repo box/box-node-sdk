@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.5.1](https://github.com/box/box-node-sdk/compare/v3.5.0...v3.5.1) (2024-05-02)
+
+
+### Bug Fixes
+
+* Fix `options` parameter in metadata query method ([#878](https://github.com/box/box-node-sdk/issues/878)) ([7943420](https://github.com/box/box-node-sdk/commit/79434209c572cd77c329d6008cda9837a9dba411))
+
 ## [3.5.0](https://github.com/box/box-node-sdk/compare/v3.4.2...v3.5.0) (2024-02-19)
 
 
