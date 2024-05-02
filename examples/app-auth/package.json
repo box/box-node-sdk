@@ -12,7 +12,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "body-parser": "^1.15.0",
-    "box-node-sdk": "^3.5.0",
+    "box-node-sdk": "^3.5.1",
     "express": "^4.13.4",
     "express-formidable": "^0.1.2",
     "express-handlebars": "^3.0.0",
