@@ -6,7 +6,7 @@
 
 This version of the Box Node SDK is under maintenance mode, and will be deprecated soon, only critical security updates and bug fixes will be provided. We recommend using the new version Box Typescript SDK, which can be found at [box/box-typescript-sdk-gen](https://github.com/box/box-typescript-sdk-gen)
 
-From this Box Node SDK, you can find the migration guide [here](https://github.com/box/box-typescript-sdk-gen/blob/main/migration-guide.md). If you have any questions, please create an issue in the new repository or reach out to [Box Developer Support](https://developer.box.com/support/).
+You can find the migration guide [here](https://github.com/box/box-typescript-sdk-gen/blob/main/migration-guide.md) for transitioning from Box Node SDK to the new `box-typescript-sdk-gen` package. If you have any questions, please create an issue in the new repository or reach out to [Box Developer Support](https://developer.box.com/support/).
 
 Box Node.js SDK
 ===============
