@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.6.0](https://github.com/box/box-node-sdk/compare/v3.5.1...v3.6.0) (2024-05-20)
+
+
+### New Features and Enhancements
+
+* Transition to stable status ([#880](https://github.com/box/box-node-sdk/issues/880)) ([ae996ea](https://github.com/box/box-node-sdk/commit/ae996eafd9e34de99119a7780384b90758908313))
+
 ### [3.5.1](https://github.com/box/box-node-sdk/compare/v3.5.0...v3.5.1) (2024-05-02)
 
 
