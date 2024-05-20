@@ -2,12 +2,18 @@
   <img src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" alt= “box-dev-logo” width="30%" height="50%">
 </p>
 
+# Deprecation notice
+
+This version of the Box Node SDK is under maintenance mode, and will be deprecated soon, only critical security updates and bug fixes will be provided. We recommend using the new version Box Typescript SDK, which can be found at [box/box-typescript-sdk-gen](https://github.com/box/box-typescript-sdk-gen)
+
+You can find the migration guide [here](https://github.com/box/box-typescript-sdk-gen/blob/main/migration-guide.md) for transitioning from Box Node SDK to the new `box-typescript-sdk-gen` package. If you have any questions, please create an issue in the new repository or reach out to [Box Developer Support](https://developer.box.com/support/).
+
 Box Node.js SDK
 ===============
 
 [![Known Vulnerabilities](https://snyk.io/test/github/box/box-node-sdk/badge.svg)](https://snyk.io/test/github/box/box-node-sdk)
 ![Platform](https://img.shields.io/badge/node-14--20-blue)
-[![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
+[![Project Status](http://opensource.box.com/badges/stable.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
 A Node.js interface to the [Box Content API](https://developer.box.com/reference/).
