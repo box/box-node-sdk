@@ -34,9 +34,9 @@ export interface TemplateSigner {
 	 */
 	order?: number;
 	/**
-	 * If set, signers who have the same group ID will be assigned to the same input.
-	 * A signer group is expected to have more than one signer. When a group contains fewer than two signers,
-	 * it will be converted to a single signer and the group will be removed.
+	 * If provided, this value points signers that are assigned the same inputs and belongs to same signer group.
+	 * A signer group is not a Box Group. It is an entity that belongs to the template itself and can only be used
+	 * within Box Sign requests created from it.
 	 * Example: cd4ff89-8fc1-42cf-8b29-1890dedd26d7
 	 */
 	signer_group_id?: string;

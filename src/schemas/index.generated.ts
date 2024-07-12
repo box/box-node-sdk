@@ -1,3 +1,6 @@
+export * from './ai-ask.generated';
+export * from './ai-response.generated';
+export * from './ai-text-gen.generated';
 export * from './enterprise-base.generated';
 export * from './file-base.generated';
 export * from './file-mini.generated';

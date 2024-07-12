@@ -1,13 +1,13 @@
 import * as schemas from '.';
 /**
- * Sign Request Prefill Tag
+ * Sign request prefill tag
  *
  * Prefill tags are used to prefill placeholders with signer input data. Only
  * one value field can be included.
  */
 export interface SignRequestPrefillTag {
 	/**
-	 * This references the ID of a specific tag contained in a file of the sign request.
+	 * This references the ID of a specific tag contained in a file of the signature request.
 	 * Example: 1234
 	 */
 	document_tag_id?: string;

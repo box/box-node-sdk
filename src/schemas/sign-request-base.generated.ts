@@ -1,17 +1,17 @@
 import * as schemas from '.';
 /**
- * Sign Request (Base)
+ * Box Sign request (Base)
  *
- * A request to create a sign request object
+ * A standard representation of a signature request object.
  */
 export interface SignRequestBase {
 	/**
-	 * Indicates if the sender should receive a `prepare_url` in the response to complete document preparation via UI.
+	 * Indicates if the sender should receive a `prepare_url` in the response to complete document preparation using the UI.
 	 * Example: true
 	 */
 	is_document_preparation_needed?: boolean;
 	/**
-	 * When specified, signature request will be redirected to this url when a document is signed.
+	 * When specified, the signature request will be redirected to this url when a document is signed.
 	 * Example: https://www.example.com
 	 */
 	redirect_url?: string;
@@ -42,18 +42,12 @@ export interface SignRequestBase {
 	 */
 	are_reminders_enabled?: boolean;
 	/**
-	 * The destination folder to place final, signed document and signing
-	 * log. Only `ID` and `type` fields are required. The root folder,
-	 * folder ID `0`, cannot be used.
-	 */
-	parent_folder: schemas.FolderMini;
-	/**
-	 * Name of the sign request.
+	 * Name of the signature request.
 	 * Example: name
 	 */
 	name?: string;
 	/**
-	 * When a document contains sign related tags in the content, you can prefill them using this `prefill_tags` by referencing the 'id' of the tag as the `external_id` field of the prefill tag.
+	 * When a document contains sign-related tags in the content, you can prefill them using this `prefill_tags` by referencing the 'id' of the tag as the `external_id` field of the prefill tag.
 	 */
 	prefill_tags?: schemas.SignRequestPrefillTag[];
 	/**
@@ -76,4 +70,9 @@ export interface SignRequestBase {
 	 * Example: 123075213-af2c8822-3ef2-4952-8557-52d69c2fe9cb
 	 */
 	template_id?: string;
+	/**
+	 * Used as an optional system name to appear in the signature log next to the signers who have been assigned the `embed_url_external_id`.
+	 * Example: Box
+	 */
+	external_system_name?: string;
 }

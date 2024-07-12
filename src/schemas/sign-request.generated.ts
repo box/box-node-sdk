@@ -1,8 +1,8 @@
 import * as schemas from '.';
 /**
- * Sign Request
+ * Box Sign request
  *
- * A Sign Request Object
+ * A Box Sign request object.
  */
 export interface SignRequest extends schemas.SignRequestBase {
 	/**
@@ -15,7 +15,7 @@ export interface SignRequest extends schemas.SignRequestBase {
 	 */
 	source_files?: schemas.FileBase[];
 	/**
-	 * Array of signers for the sign request
+	 * Array of signers for the signature request.
 	 */
 	signers?: schemas.SignRequestSigner[];
 	/**
@@ -24,24 +24,27 @@ export interface SignRequest extends schemas.SignRequestBase {
 	 */
 	signature_color?: string;
 	/**
-	 * Sign request ID
+	 * Box Sign request ID.
 	 * Example: 12345
 	 */
 	id?: string;
 	/**
 	 * This URL is returned if `is_document_preparation_needed` is
-	 * set to `true` in the request. It is used to prepare the sign request
-	 * via UI. The sign request is not sent until preparation is complete.
+	 * set to `true` in the request. The parameter is used to prepare
+	 * the signature request
+	 * using the UI. The signature request is not
+	 * sent until the preparation
+	 * phase is complete.
 	 * Example: https://prepareurl.com
 	 */
 	prepare_url?: string;
 	/**
 	 * Reference to a file that holds a log of all signer activity for
-	 * the request
+	 * the request.
 	 */
 	signing_log?: schemas.FileMini;
 	/**
-	 * Describes the status of the sign request
+	 * Describes the status of the signature request.
 	 * Example: converting
 	 */
 	status?:
@@ -68,4 +71,14 @@ export interface SignRequest extends schemas.SignRequestBase {
 	 * Example: 2021-04-26T08:12:13.982Z
 	 */
 	auto_expire_at?: string;
+	/**
+	 * The destination folder to place final, signed document and signing
+	 * log.
+	 *
+	 * When this value was not passed in when the signature request was
+	 * created, then we will use a default folder which is either the parent
+	 * folder of the first source file in the payload if we have the permission
+	 * to upload to that folder or a folder called "My Sign Requests".
+	 */
+	parent_folder?: schemas.FolderMini;
 }

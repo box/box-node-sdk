@@ -1,8 +1,9 @@
 import * as schemas from '.';
 /**
- * Signer fields for Create Sign Request
+ * Signer fields used to create a Box Sign request object.
  *
- * The schema for a Signer in a POST Sign Request request body
+ * The schema for a Signer object used in
+ * for creating a Box Sign request object.
  */
 export interface SignRequestCreateSigner {
 	/**
@@ -12,7 +13,7 @@ export interface SignRequestCreateSigner {
 	 */
 	email?: string;
 	/**
-	 * Defines the role of the signer in the sign request. A `signer`
+	 * Defines the role of the signer in the signature request. A `signer`
 	 * must sign the document and an `approver` must approve the document. A
 	 * `final_copy_reader` only receives the final signed document and signing
 	 * log.
@@ -56,16 +57,18 @@ export interface SignRequestCreateSigner {
 	 */
 	declined_redirect_url?: string;
 	/**
-	 * If set to true, signer will need to login to a Box account
+	 * If set to true, the signer will need to log in to a Box account
 	 * before signing the request. If the signer does not have
-	 * an existing account, they will have an option to create
-	 * a free Box account.
+	 * an existing account, they will have the option to create
+	 * a free Box account. Cannot be selected in combination with
+	 * `verification_phone_number`.
 	 * Example: true
 	 */
 	login_required?: boolean;
 	/**
-	 * If set, this phone number is be used to verify the signer
-	 * via two factor authentication before they are able to sign the document.
+	 * If set, this phone number will be used to verify the signer
+	 * via two-factor authentication before they are able to sign the document.
+	 * Cannot be selected in combination with `login_required`.
 	 * Example: 6314578901
 	 */
 	verification_phone_number?: string;
@@ -76,10 +79,18 @@ export interface SignRequestCreateSigner {
 	 */
 	password?: string;
 	/**
-	 * If set, signers who have the same group ID will be assigned to the same input.
-	 * A signer group is expected to have more than one signer. When a group contains fewer than two signers,
-	 * it will be converted to a single signer and the group will be removed.
+	 * If set, signers who have the same value will be assigned to the same input and to the same signer group.
+	 * A signer group is not a Box Group. It is an entity that belongs to a Sign Request and can only be
+	 * used/accessed within this Sign Request. A signer group is expected to have more than one signer.
+	 * If the provided value is only used for one signer, this value will be ignored and request will be handled
+	 * as it was intended for an individual signer. The value provided can be any string and only used to
+	 * determine which signers belongs to same group. A successful response will provide a generated UUID value
+	 * instead for signers in the same signer group.
 	 * Example: cd4ff89-8fc1-42cf-8b29-1890dedd26d7
 	 */
 	signer_group_id?: string;
+	/**
+	 * If true, no emails about the sign request will be sent
+	 */
+	suppress_notifications?: boolean;
 }

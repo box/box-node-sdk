@@ -1,6 +1,6 @@
 import * as schemas from '.';
 /**
- * Box Sign
+ * Box Sign requests
  *
  * The part of an API response that describes marker
  * based pagination
@@ -19,7 +19,7 @@ export interface SignRequests {
 	 */
 	next_marker?: string;
 	/**
-	 * A list of sign requests
+	 * A list of Box Sign requests.
 	 */
 	entries?: schemas.SignRequest[];
 }
