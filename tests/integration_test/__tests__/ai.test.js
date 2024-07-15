@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const uuid = require('uuid');
 const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFile } = require('../objects/box-test-file');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
@@ -33,7 +34,7 @@ test('test AI send ask', async() => {
 	const file = await createBoxTestFile(
 		context.client,
 		path.join(__dirname, '../resources/blank.pdf'),
-		'blank.pdf',
+		`${uuid.v4()}.pdf`,
 		context.folder.id
 	);
 	const response = await context.client.ai.ask({
@@ -56,7 +57,7 @@ test('test AI text gen', async() => {
 	const file = await createBoxTestFile(
 		context.client,
 		path.join(__dirname, '../resources/blank.pdf'),
-		'blank.pdf',
+		`${uuid.v4()}.pdf`,
 		context.folder.id
 	);
 	const dialogueHistory = [
