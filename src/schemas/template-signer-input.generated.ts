@@ -75,4 +75,9 @@ export interface TemplateSignerInput extends schemas.SignRequestPrefillTag {
 	 * Example: Legal name
 	 */
 	label?: string;
+	/**
+	 * Whether this input was defined as read-only(immutable by signers) or not
+	 * Example: true
+	 */
+	read_only?: boolean;
 }

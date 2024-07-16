@@ -35,4 +35,9 @@ export interface SignRequestSignerInput extends schemas.SignRequestPrefillTag {
 	 * Example: 4
 	 */
 	page_index: number;
+	/**
+	 * Whether this input was defined as read-only(immutable by signers) or not
+	 * Example: true
+	 */
+	read_only?: boolean;
 }

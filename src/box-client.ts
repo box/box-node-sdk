@@ -6,6 +6,7 @@ import { Promise } from 'bluebird';
 // ------------------------------------------------------------------------------
 // API Resource Managers
 // ------------------------------------------------------------------------------
+import AI from './managers/ai.generated';
 import CollaborationAllowlist from './managers/collaboration-allowlist';
 import Collaborations from './managers/collaborations';
 import Collections from './managers/collections';
@@ -176,6 +177,7 @@ class BoxClient {
 	_analyticsClient: any;
 	_tokenOptions: any;
 
+	ai: AI;
 	users: any;
 	files: Files;
 	fileRequests: FileRequestsManager;
@@ -251,6 +253,7 @@ class BoxClient {
 		this._analyticsClient = config.analyticsClient;
 
 		// Attach API Resource Managers
+		this.ai = new AI(this);
 		this.users = new Users(this);
 		this.files = new Files(this);
 		this.fileRequests = new FileRequestsManager(this);

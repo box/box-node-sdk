@@ -346,8 +346,8 @@ describe('Metadata', function() {
 				marker: 'vwxyz',
 				order_by: [
 					{
-						"field_key": "value",
-						"direction": "asc"
+						field_key: 'value',
+						direction: 'asc'
 					}
 				]
 			};
@@ -355,13 +355,14 @@ describe('Metadata', function() {
 			var expectedParams = {
 				body: {
 					ancestor_folder_id: ancestorFolderId,
-					from: from,
+					from,
 					...options
 				},
 			};
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
-			sandbox.mock(boxClientFake).expects('post').withArgs('/metadata_queries/execute_read', expectedParams);
+			sandbox.mock(boxClientFake).expects('post')
+				.withArgs('/metadata_queries/execute_read', expectedParams);
 			metadata.query(from, ancestorFolderId, options);
 		});
 	});

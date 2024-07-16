@@ -176,6 +176,21 @@ import { generateManagerClasses } from './generate-manager-classes';
 						},
 					],
 				},
+				{
+					name: 'AIManager',
+					comment: '',
+					relativePath: '../src/managers/ai.generated.ts',
+					operations: [
+						{
+							name: 'ask',
+							operationId: 'post_ai_ask',
+						},
+						{
+							name: 'textGen',
+							operationId: 'post_ai_text_gen',
+						}
+					]
+				}
 			],
 			spec
 		);
