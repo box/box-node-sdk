@@ -783,13 +783,15 @@ describe('Files', function() {
 		it('should make POST request to copy the folder with optional parameters when passed', function() {
 
 			var name = 'rename on copy';
+			var version = '1';
 
 			expectedParams.body.name = name;
+			expectedParams.body.version = version;
 
 			sandbox.stub(boxClientFake, 'wrapWithDefaultHandler').returnsArg(0);
 			sandbox.mock(boxClientFake).expects('post')
 				.withArgs('/files/1234/copy', expectedParams);
-			files.copy(FILE_ID, NEW_PARENT_ID, {name});
+			files.copy(FILE_ID, NEW_PARENT_ID, {name, version});
 		});
 
 		it('should wrap with default handler when called', function() {

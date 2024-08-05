@@ -766,6 +766,12 @@ target folder.
 client.files.copy('12345', '0', {name: 'Renamed file.png'}, callback);
 ```
 
+You can specify specific file version to copy by passing optional `version` parameter.
+
+```js
+client.files.copy('12345', '0', {version: '1'}, callback);
+```
+
 ## Delete a File
 
 Calling the
