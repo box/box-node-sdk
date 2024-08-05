@@ -12,9 +12,9 @@ import httpStatusCodes from 'http-status';
 import { Readable, Writable } from 'stream';
 import urlTemplate from 'url-template';
 import BoxClient from '../box-client';
+import * as schemas from "../schemas";
 import errors from '../util/errors';
 import urlPath from '../util/url-path';
-import * as schemas from "../schemas";
 
 const ChunkedUploader = require('../chunked-uploader');
 
@@ -512,6 +512,7 @@ class Files {
 	 * @param {string} newParentID - The Box ID for the new parent folder. '0' to copy to All Files.
 	 * @param {Object} [options] - Optional parameters for the copy operation, can be left null in most cases
 	 * @param {string} [options.name] - A new name to use if there is an identically-named item in the new parent folder
+	 * @param {string} [options.version] - An optional ID of the specific file version to copy
 	 * @param {Function} [callback] - passed the new file info if call was successful
 	 * @returns {Promise<Object>} A promise resolving to the new file object
 	 */
@@ -521,6 +522,7 @@ class Files {
 		options?:
 			| {
 					name?: string;
+					version?: string;
 			  }
 			| Function,
 		callback?: Function
