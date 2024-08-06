@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.7.1](https://github.com/box/box-node-sdk/compare/v3.7.0...v3.7.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* add version to copy file options annotation ([#885](https://github.com/box/box-node-sdk/issues/885)) ([4f9312c](https://github.com/box/box-node-sdk/commit/4f9312c63138f8cf8e0a9e46a9e1345172dbdc6b))
+
 ## [3.7.0](https://github.com/box/box-node-sdk/compare/v3.6.0...v3.7.0) (2024-07-16)
 
 
