@@ -188,6 +188,10 @@ import { generateManagerClasses } from './generate-manager-classes';
 						{
 							name: 'textGen',
 							operationId: 'post_ai_text_gen',
+						},
+						{
+							name: 'getDefaultAiAgent',
+							operationId: 'get_ai_agent_default',
 						}
 					]
 				}

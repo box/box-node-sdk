@@ -18,13 +18,13 @@ class AIManager {
 	 * @param {schemas.AiAsk} body
 	 * @param {object} [options] Options for the request
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
-	 * @returns {Promise<schemas.AiResponse>} A promise resolving to the result or rejecting with an error
+	 * @returns {Promise<schemas.AiResponseFull>} A promise resolving to the result or rejecting with an error
 	 */
 	ask(
 		body: schemas.AiAsk,
 		options?: {},
 		callback?: Function
-	): Promise<schemas.AiResponse> {
+	): Promise<schemas.AiResponseFull> {
 		const { ...queryParams } = options,
 			apiPath = urlPath('ai', 'ask'),
 			params = {
@@ -58,6 +58,46 @@ class AIManager {
 				body: body,
 			};
 		return this.client.wrapWithDefaultHandler(this.client.post)(
+			apiPath,
+			params,
+			callback
+		);
+	}
+	/**
+	 * Get AI agent default configuration
+	 *
+	 * Get the AI agent default config
+	 * @param {object} options Options for the request
+	 * @param {"ask" | "text_gen"} options.mode The mode to filter the agent config to return.
+	 * @param {string} [options.language] The ISO language code to return the agent config for. If the language is not supported the default agent config is returned.
+	 * @param {string} [options.model] The model to return the default agent config for.
+	 * @param {Function} [callback] Passed the result if successful, error otherwise
+	 * @returns {Promise<schemas.AiAgentAsk>} A promise resolving to the result or rejecting with an error
+	 */
+	getDefaultAiAgent(
+		options: {
+			/**
+			 * The mode to filter the agent config to return.
+			 */
+			readonly mode: 'ask' | 'text_gen';
+			/**
+			 * The ISO language code to return the agent config for.
+			 * If the language is not supported the default agent config is returned.
+			 */
+			readonly language?: string;
+			/**
+			 * The model to return the default agent config for.
+			 */
+			readonly model?: string;
+		},
+		callback?: Function
+	): Promise<schemas.AiAgentAsk> {
+		const { ...queryParams } = options,
+			apiPath = urlPath('ai_agent_default'),
+			params = {
+				qs: queryParams,
+			};
+		return this.client.wrapWithDefaultHandler(this.client.get)(
 			apiPath,
 			params,
 			callback

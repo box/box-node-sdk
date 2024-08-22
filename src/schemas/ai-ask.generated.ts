@@ -1,8 +1,8 @@
 import * as schemas from '.';
 /**
- * AI Ask Request
+ * AI ask request
  *
- * AI Ask request object
+ * AI ask request object
  */
 export interface AiAsk {
 	/**
@@ -27,4 +27,14 @@ export interface AiAsk {
 		type?: string;
 		content?: string;
 	}[];
+	/**
+	 * The history of prompts and answers previously passed to the LLM. This provides additional context to the LLM in generating the response.
+	 */
+	dialogue_history?: schemas.AiDialogueHistory[];
+	/**
+	 * A flag to indicate whether citations should be returned.
+	 * Example: true
+	 */
+	include_citations?: boolean;
+	ai_agent?: schemas.AiAgentAsk;
 }
