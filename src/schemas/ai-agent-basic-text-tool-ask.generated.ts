@@ -30,5 +30,5 @@ export interface AiAgentBasicTextToolAsk {
 	/**
 	 * The parameters for the LLM endpoint specific to OpenAI / Google models.
 	 */
-	llm_endpoint_params?: schemas.AiLlmEndpointParamsOpenAi;
+	llm_endpoint_params?: schemas.AiLlmEndpointParamsOpenAi | schemas.AiLlmEndpointParamsGoogle;
 }

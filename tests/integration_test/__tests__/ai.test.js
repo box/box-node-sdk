@@ -47,6 +47,12 @@ test('test AI send ask', async() => {
 				content: 'The sun rises in the east',
 			},
 		],
+		ai_agent: {
+			type: 'ai_agent_ask',
+			basic_text_multi: {
+				model: 'openai__gpt_3_5_turbo'
+			}
+		}
 	});
 
 	expect(response).toBeDefined();
@@ -83,8 +89,25 @@ test('test AI text gen', async() => {
 			},
 		],
 		dialogue_history: dialogueHistory,
+		ai_agent: {
+			type: 'ai_agent_ask',
+			basic_text_multi: {
+				model: 'openai__gpt_3_5_turbo'
+			}
+		}
 	});
 
 	expect(response).toBeDefined();
 	expect(response.answer.toLowerCase().indexOf('api')).toBeGreaterThan(-1);
+});
+
+
+test('test AI get default agent', async() => {
+	const agent = await context.client.ai.getDefaultAiAgent({
+		mode: 'text_gen',
+		language: 'en',
+		model: 'openai__gpt_3_5_turbo'
+	});
+	expect(agent.type).toBe('ai_agent_text_gen');
+	expect(agent.basic_gen.model).toBe('openai__gpt_3_5_turbo');
 });

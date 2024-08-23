@@ -72,7 +72,7 @@ class AIManager {
 	 * @param {string} [options.language] The ISO language code to return the agent config for. If the language is not supported the default agent config is returned.
 	 * @param {string} [options.model] The model to return the default agent config for.
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
-	 * @returns {Promise<schemas.AiAgentAsk>} A promise resolving to the result or rejecting with an error
+	 * @returns {Promise<schemas.AiAgentAsk | schemas.AiAgentTextGen>} A promise resolving to the result or rejecting with an error
 	 */
 	getDefaultAiAgent(
 		options: {
@@ -91,7 +91,7 @@ class AIManager {
 			readonly model?: string;
 		},
 		callback?: Function
-	): Promise<schemas.AiAgentAsk> {
+	): Promise<schemas.AiAgentAsk | schemas.AiAgentTextGen> {
 		const { ...queryParams } = options,
 			apiPath = urlPath('ai_agent_default'),
 			params = {

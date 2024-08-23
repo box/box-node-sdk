@@ -8,6 +8,7 @@ export * from './ai-ask.generated';
 export * from './ai-citation.generated';
 export * from './ai-dialogue-history.generated';
 export * from './ai-llm-endpoint-params-open-ai.generated';
+export * from './ai-llm-endpoint-params-google.generated';
 export * from './ai-response-full.generated';
 export * from './ai-response.generated';
 export * from './ai-text-gen.generated';
