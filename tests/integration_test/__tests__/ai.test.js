@@ -90,9 +90,9 @@ test('test AI text gen', async() => {
 		],
 		dialogue_history: dialogueHistory,
 		ai_agent: {
-			type: 'ai_agent_ask',
-			basic_text_multi: {
-				model: 'openai__gpt_3_5_turbo'
+			type: 'ai_agent_text_gen',
+			basic_gen: {
+				model: 'openai__gpt_3_5_turbo_16k'
 			}
 		}
 	});
