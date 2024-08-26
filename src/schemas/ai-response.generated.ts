@@ -1,6 +1,6 @@
 import * as schemas from '.';
 /**
- * AI Response
+ * AI response
  *
  * AI response
  */

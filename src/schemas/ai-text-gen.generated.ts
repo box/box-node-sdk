@@ -1,8 +1,8 @@
 import * as schemas from '.';
 /**
- * AI Text Gen Request
+ * AI text gen request
  *
- * AI Text Gen Request object
+ * AI text gen request object
  */
 export interface AiTextGen {
 	/**
@@ -25,9 +25,6 @@ export interface AiTextGen {
 	/**
 	 * The history of prompts and answers previously passed to the LLM. This provides additional context to the LLM in generating the response.
 	 */
-	dialogue_history?: {
-		answer?: string;
-		created_at?: string;
-		prompt?: string;
-	}[];
+	dialogue_history?: schemas.AiDialogueHistory[];
+	ai_agent?: schemas.AiAgentTextGen;
 }
