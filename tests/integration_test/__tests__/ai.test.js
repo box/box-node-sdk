@@ -103,7 +103,7 @@ test('test AI text gen', async() => {
 
 
 test('test AI get default agent', async() => {
-	const agent = await context.client.ai.getDefaultAiAgent({
+	const agent = await context.client.ai.getAiAgentDefaultConfig({
 		mode: 'text_gen',
 		language: 'en',
 		model: 'openai__gpt_3_5_turbo'

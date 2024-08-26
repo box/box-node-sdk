@@ -74,7 +74,7 @@ class AIManager {
 	 * @param {Function} [callback] Passed the result if successful, error otherwise
 	 * @returns {Promise<schemas.AiAgentAsk | schemas.AiAgentTextGen>} A promise resolving to the result or rejecting with an error
 	 */
-	getDefaultAiAgent(
+	getAiAgentDefaultConfig(
 		options: {
 			/**
 			 * The mode to filter the agent config to return.

@@ -88,11 +88,11 @@ client.ai.textGen(
  Get AI agent default configuration
 ------------------------
 
-To get an AI agent default configuration call the [ai.getDefaultAiAgent(options?, callback?)](http://opensource.box.com/box-node-sdk/jsdoc/AIManager.html#getDefaultAiAgent) method. The `mode` parameter filters the agent configuration to be returned. It can be either `ask` or `text_gen`. The `language` parameter specifies the ISO language code to return the agent config for. If the language is not supported, the default agent configuration is returned. The `model` parameter specifies the model for which the default agent configuration should be returned.
+To get an AI agent default configuration call the [ai.getAiAgentDefaultConfig(options?, callback?)](http://opensource.box.com/box-node-sdk/jsdoc/AIManager.html#getAiAgentDefaultConfig) method. The `mode` parameter filters the agent configuration to be returned. It can be either `ask` or `text_gen`. The `language` parameter specifies the ISO language code to return the agent config for. If the language is not supported, the default agent configuration is returned. The `model` parameter specifies the model for which the default agent configuration should be returned.
 
 <!-- sample get_ai_agent_default -->
 ```js
-client.ai.getDefaultAiAgent({
+client.ai.getAiAgentDefaultConfig({
     mode: 'ask',
     language: 'en',
     model:'openai__gpt_3_5_turbo'

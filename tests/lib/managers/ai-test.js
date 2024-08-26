@@ -140,7 +140,7 @@ describe('AI', function() {
 		});
 	});
 
-	describe('getDefaultAiAgent()', function() {
+	describe('getAiAgentDefaultConfig()', function() {
 		const agent = {
 			type: 'ai_agent_ask',
 			basic_text: {
@@ -236,7 +236,7 @@ describe('AI', function() {
 				.expects('get')
 				.withArgs('/ai_agent_default', expected_params)
 				.returns(Promise.resolve(agent));
-			return aimodule.getDefaultAiAgent({
+			return aimodule.getAiAgentDefaultConfig({
 				mode: 'ask',
 				language: 'en',
 				model: 'openai__gpt_3_5_turbo',

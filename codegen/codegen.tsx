@@ -190,7 +190,7 @@ import { generateManagerClasses } from './generate-manager-classes';
 							operationId: 'post_ai_text_gen',
 						},
 						{
-							name: 'getDefaultAiAgent',
+							name: 'getAiAgentDefaultConfig',
 							operationId: 'get_ai_agent_default',
 						}
 					]
