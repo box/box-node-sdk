@@ -71,7 +71,7 @@
     "jsonlint2": "^1.7.1",
     "leche": "^2.3.0",
     "lodash": "^4.17.21",
-    "mocha": "^10.2.0",
+    "mocha": "^6.2.3",
     "mockery": "^2.1.0",
     "nock": "^13.3.1",
     "nyc": "^14.0.0",
@@ -82,7 +82,7 @@
     "standard-version": "^9.3.2",
     "ts-jest": "^28.0.8",
     "ts-node": "^10.2.0",
-    "typescript": "4.2.4"
+    "typescript": "4.3.5"
   },
   "files": [
     "config",
