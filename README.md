@@ -12,7 +12,7 @@ Box Node.js SDK
 ===============
 
 [![Known Vulnerabilities](https://snyk.io/test/github/box/box-node-sdk/badge.svg)](https://snyk.io/test/github/box/box-node-sdk)
-![Platform](https://img.shields.io/badge/node-14--20-blue)
+![Platform](https://img.shields.io/badge/node-18--22-blue)
 [![Project Status](http://opensource.box.com/badges/stable.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
@@ -21,24 +21,26 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Creating API Clients](#creating-api-clients)
-  - [Basic Client](#basic-client)
-  - [Persistent Client](#persistent-client)
-  - [App Auth Client](#app-auth-client)
-- [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
-  - [Constructing API Calls Manually](#constructing-api-calls-manually)
-- [FIPS 140-2 Compliance](#fips-140-2-compliance)
-- [Versions](#versions)
-  - [Supported Version](#supported-version)
-  - [Version schedule](#version-schedule)
-- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
-- [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
-- [Changelog](#changelog)
-- [Upgrades](#upgrades)
-- [Documentation](#documentation)
-- [Copyright and License](#copyright-and-license)
+- [Deprecation notice](#deprecation-notice)
+- [Box Node.js SDK](#box-nodejs-sdk)
+	- [Installation](#installation)
+	- [Getting Started](#getting-started)
+	- [Creating API Clients](#creating-api-clients)
+		- [Basic Client](#basic-client)
+		- [Persistent Client](#persistent-client)
+		- [App Auth Client](#app-auth-client)
+	- [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
+		- [Constructing API Calls Manually](#constructing-api-calls-manually)
+	- [FIPS 140-2 Compliance](#fips-140-2-compliance)
+	- [Versions](#versions)
+		- [Supported Version](#supported-version)
+		- [Version schedule](#version-schedule)
+	- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
+	- [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
+	- [Changelog](#changelog)
+	- [Upgrades](#upgrades)
+	- [Documentation](#documentation)
+	- [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -259,7 +261,7 @@ We highly recommend upgrading to the latest SDK major release at the earliest co
 
 | Version | Supported Environments | State     | First Release | EOL/Terminated |
 |---------|------------------------|-----------|---------------|----------------|
-| 3       | Node.js >= 14 and <= 20| Supported | 23 May 2023   | TBD            |
+| 3       | Node.js >= 18 and <= 22| Supported | 23 May 2023   | TBD            |
 | 2       | Node.js >= 8 and <= 14 | Maintained | 29 Sep 2021   | 23 Jul 2023    |
 | 1       |                        | EOL       | 28 Mar 2019   | 29 Sep 2021    |
 
