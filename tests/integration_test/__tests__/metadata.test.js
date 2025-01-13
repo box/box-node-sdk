@@ -58,12 +58,10 @@ test('test metadata search', async() => {
 			const searchResults = await context.appClient.metadata.query(searchForm, ancestorFolderId, queryOptions);
 			// Sometimes, despite correctly sent metadata, the search does not return files because they probably haven't been properly indexed yet
 			expect(searchResults.entries.length).toBeGreaterThanOrEqual(0);
-		}
-		finally {
+		} finally {
 			await file.dispose();
 		}
-	}
-	finally {
+	} finally {
 		await context.appClient.metadata.deleteTemplate('enterprise', metadataTemplate.templateKey);
 	}
 }, 120000);
