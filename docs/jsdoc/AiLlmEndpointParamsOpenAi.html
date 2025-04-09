@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Interface: AiLlmEndpointParamsOpenAi</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Interface: AiLlmEndpointParamsOpenAi</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>AiLlmEndpointParamsOpenAi</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">AI LLM endpoint params OpenAI
+
+AI LLM endpoint params OpenAI object.</div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html">schemas/ai-llm-endpoint-params-open-ai.generated.ts</a>, <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="frequency_penalty"><span class="type-signature"></span>frequency_penalty<span class="type-signature"> :number</span></h4>
+
+
+
+
+<div class="description">
+    Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the
+text so far, decreasing the model's likelihood to repeat the same line verbatim.
+Example: 1.5
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html">schemas/ai-llm-endpoint-params-open-ai.generated.ts</a>, <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="presence_penalty"><span class="type-signature"></span>presence_penalty<span class="type-signature"> :number</span></h4>
+
+
+
+
+<div class="description">
+    Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far,
+increasing the model's likelihood to talk about new topics.
+Example: 1.5
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html">schemas/ai-llm-endpoint-params-open-ai.generated.ts</a>, <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    Up to 4 sequences where the API will stop generating further tokens.
+Example: <|im_end|>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html">schemas/ai-llm-endpoint-params-open-ai.generated.ts</a>, <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="temperature"><span class="type-signature"></span>temperature<span class="type-signature"> :number</span></h4>
+
+
+
+
+<div class="description">
+    What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random,
+while lower values like 0.2 will make it more focused and deterministic.
+We generally recommend altering this or `top_p` but not both.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html">schemas/ai-llm-endpoint-params-open-ai.generated.ts</a>, <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="top_p"><span class="type-signature"></span>top_p<span class="type-signature"> :number</span></h4>
+
+
+
+
+<div class="description">
+    An alternative to sampling with temperature, called nucleus sampling, where the model considers the results
+of the tokens with `top_p` probability mass. So 0.1 means only the tokens comprising the top 10% probability
+mass are considered. We generally recommend altering this or temperature but not both.
+Example: 1
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html">schemas/ai-llm-endpoint-params-open-ai.generated.ts</a>, <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"> :'openai_params'</span></h4>
+
+
+
+
+<div class="description">
+    The type of the AI LLM endpoint params object for OpenAI.
+This parameter is **required**.
+Example: openai_params
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">'openai_params'</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html">schemas/ai-llm-endpoint-params-open-ai.generated.ts</a>, <a href="schemas_ai-llm-endpoint-params-open-ai.generated.ts.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Apr 09 2025 11:35:28 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
