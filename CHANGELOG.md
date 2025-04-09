@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0](https://github.com/box/box-node-sdk/compare/v3.7.1...v3.8.0) (2025-04-09)
+
+
+### New Features and Enhancements
+
+* Support AI agent ([#887](https://github.com/box/box-node-sdk/issues/887)) ([5b109ad](https://github.com/box/box-node-sdk/commit/5b109adbd506510fc83b1c90af13b063ddefab37))
+
 ### [3.7.1](https://github.com/box/box-node-sdk/compare/v3.7.0...v3.7.1) (2024-08-06)
 
 
