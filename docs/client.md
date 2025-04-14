@@ -74,7 +74,7 @@ method with the URL of the endpoint and the request params.
 ```js
 var params = {
     body: {
-        name: 'My New Folder'
+        name: 'My New Folder',
         parent: {
             id: '0'
         }
