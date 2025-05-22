@@ -149,4 +149,4 @@ class CCGSession {
  * @module box-node-sdk/lib/sessions/ccg-session
  * @see {@Link CCGSession}
  */
-export = CCGSession;
+export default CCGSession;

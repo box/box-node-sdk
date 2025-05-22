@@ -2,7 +2,7 @@
  * @fileoverview Configuration Object
  */
 
-import assert = require('assert');
+import assert from 'assert';
 import * as https from 'https';
 import * as url from 'url';
 import { Readable } from 'stream';
@@ -301,4 +301,4 @@ class Config {
  * @module box-node-sdk/lib/util/config
  * @see {@Link Config}
  */
-export = Config;
+export default Config;

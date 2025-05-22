@@ -178,4 +178,4 @@ class IntegrationMappingsManager {
 		);
 	}
 }
-export = IntegrationMappingsManager;
+export default IntegrationMappingsManager;

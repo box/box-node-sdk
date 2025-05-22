@@ -146,4 +146,4 @@ class Search {
  */
 Search.prototype.scopes = SearchScope;
 
-export = Search;
+export default Search;

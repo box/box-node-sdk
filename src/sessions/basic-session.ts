@@ -92,4 +92,4 @@ class BasicSession {
  * @module box-node-sdk/lib/sessions/basic-session
  * @see {@Link BasicSession}
  */
-export = BasicSession;
+export default BasicSession;

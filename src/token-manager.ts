@@ -635,4 +635,4 @@ class TokenManager {
  *
  * @module box-node-sdk/lib/token-manager
  */
-export = TokenManager;
+export default TokenManager;

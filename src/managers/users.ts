@@ -353,4 +353,4 @@ Users.prototype.CURRENT_USER_ID = CURRENT_USER_ID;
  * @module box-node-sdk/lib/managers/users
  * @see {@Link Users}
  */
-export = Users;
+export default Users;

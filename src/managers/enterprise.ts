@@ -293,4 +293,4 @@ Enterprise.prototype.userTypes = EnterpriseUserType;
 Enterprise.prototype.userStatuses = EnterpriseUserStatus;
 Enterprise.prototype.userRoles = EnterpriseRole;
 
-export = Enterprise;
+export default Enterprise;

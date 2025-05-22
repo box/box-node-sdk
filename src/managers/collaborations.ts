@@ -385,4 +385,4 @@ class Collaborations {
  * @module box-node-sdk/lib/managers/collaborations
  * @see {@Link Collaborations}
  */
-export = Collaborations;
+export default Collaborations;

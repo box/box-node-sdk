@@ -2068,4 +2068,4 @@ Files.prototype.representation = FileRepresentationType;
  * @module box-node-sdk/lib/managers/files
  * @see {@Link Files}
  */
-export = Files;
+export default Files;

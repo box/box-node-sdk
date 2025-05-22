@@ -236,4 +236,4 @@ class AppAuthSession {
  * @module box-node-sdk/lib/sessions/app-auth-session
  * @see {@Link AppAuthSession}
  */
-export = AppAuthSession;
+export default AppAuthSession;

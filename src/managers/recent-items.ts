@@ -70,4 +70,4 @@ class RecentItems {
  * @module box-node-sdk/lib/managers/recent-items
  * @see {@Link RecentItems}
  */
-export = RecentItems;
+export default RecentItems;

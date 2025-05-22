@@ -124,4 +124,4 @@ class DevicePins {
 	}
 }
 
-export = DevicePins;
+export default DevicePins;

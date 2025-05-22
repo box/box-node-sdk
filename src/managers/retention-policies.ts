@@ -585,4 +585,4 @@ RetentionPolicies.prototype.assignmentTypes = RetentionPolicyAssignmentType;
  */
 RetentionPolicies.prototype.retentionTypes = RetentionType;
 
-export = RetentionPolicies;
+export default RetentionPolicies;

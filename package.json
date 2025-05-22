@@ -1,96 +1,124 @@
 {
-  "name": "box-node-sdk",
-  "author": "Box <oss@box.com>",
-  "version": "3.8.0",
-  "description": "Official SDK for Box Plaform APIs",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/box/box-node-sdk.git"
-  },
-  "keywords": [
-    "box",
-    "platform",
-    "api",
-    "apis",
-    "upload",
-    "download",
-    "sdk"
-  ],
-  "engines": {
-    "node": ">= 14.0.0"
-  },
-  "main": "./lib/box-node-sdk.js",
-  "scripts": {
-    "test": "node Makefile.js",
-    "jest": "npm run build && jest",
-    "build": "node Makefile.js build",
-    "codegen": "ts-node codegen/codegen.tsx",
-    "lint": "node Makefile.js lint",
-    "docs": "node Makefile.js docs",
-    "docs-dev": "node Makefile.js docsDev",
-    "doctoc": "doctoc docs",
-    "deps": "npm prune && npm install",
-    "changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
-  },
-  "dependencies": {
-    "@cypress/request": "^3.0.1",
-    "@types/bluebird": "^3.5.35",
-    "@types/node": "^18.15.3",
-    "ajv": "^6.12.3",
-    "bluebird": "^3.7.2",
-    "http-status": "^1.4.1",
-    "jsonwebtoken": "^9.0.2",
-    "merge-options": "^1.0.1",
-    "promise-queue": "^2.2.3",
-    "proxy-agent": "^6.4.0",
-    "url-template": "^2.0.8",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^28.1.1",
-    "@types/jsonwebtoken": "^8.5.1",
-    "@types/lodash": "^4.14.172",
-    "@types/prettier": "^2.3.2",
-    "@types/promise-queue": "^2.2.0",
-    "@types/shelljs": "^0.8.9",
-    "@types/url-template": "^2.0.28",
-    "@types/uuid": "^9.0.1",
-    "better-docs": "^2.7.2",
-    "chai": "^4.2.0",
-    "doctoc": "^2.2.1",
-    "eslint": "^6.8.0",
-    "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-unicorn": "^4.0.3",
-    "istanbul": "^0.4.3",
-    "jest": "^28.1.3",
-    "jsdoc": "^4.0.4",
-    "jsonlint": "^1.6.3",
-    "jsonlint2": "^1.7.1",
-    "leche": "^2.3.0",
-    "lodash": "^4.17.21",
-    "mocha": "^10.2.0",
-    "mockery": "^2.1.0",
-    "nock": "^13.3.1",
-    "nyc": "^14.0.0",
-    "prettier": "^2.3.2",
-    "shelljs": "^0.8.5",
-    "shelljs-nodecli": "^0.1.1",
-    "sinon": "^7.5.0",
-    "standard-version": "^9.3.2",
-    "ts-jest": "^28.0.8",
-    "ts-node": "^10.2.0",
-    "typescript": "^4.2.4"
-  },
+	"name": "box-node-sdk",
+	"author": "Box <oss@box.com>",
+	"version": "3.8.0",
+	"description": "Official SDK for Box Plaform APIs",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/box/box-node-sdk.git"
+	},
+	"keywords": [
+		"box",
+		"platform",
+		"api",
+		"apis",
+		"upload",
+		"download",
+		"sdk"
+	],
+	"engines": {
+		"node": ">= 14.0.0"
+	},
+	"main": "./lib/box-node-sdk.js",
+	"browser": {
+		"./lib/esm/next-gen/internal/utilsNode.js": "./lib/esm/next-gen/internal/utilsBrowser.js",
+		"./src/next-gen/internal/utilsNode.ts": "./src/next-gen/internal/utilsBrowser.ts"
+	},
+	"exports": {
+		".": {
+			"import": "./lib/esm/box-node-sdk.js",
+			"require": "./lib/cjs/box-node-sdk.js",
+			"types": "./lib/types/box-node-sdk.d.ts"
+		},
+		"./next-gen": {
+			"import": "./lib/esm/next-gen/index.js",
+			"require": "./lib/cjs/next-gen/index.js",
+			"types": "./lib/types/next-gen/index.d.ts"
+		},
+		"./next-gen/*": {
+			"import": "./lib/esm/next-gen/*.js",
+			"require": "./lib/cjs/next-gen/*.js",
+			"types": "./lib/types/next-gen/*.d.ts"
+		}
+	},
+	"scripts": {
+		"test": "node Makefile.js",
+		"jest": "npm run build && jest",
+		"build": "node Makefile.js build",
+		"codegen": "ts-node codegen/codegen.tsx",
+		"lint": "node Makefile.js lint",
+		"docs": "node Makefile.js docs",
+		"docs-dev": "node Makefile.js docsDev",
+		"doctoc": "doctoc docs",
+		"deps": "npm prune && npm install",
+		"changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run"
+	},
+	"dependencies": {
+		"@cypress/request": "^3.0.1",
+		"@types/bluebird": "^3.5.35",
+		"@types/node": "^18.15.3",
+		"ajv": "^6.12.3",
+		"bluebird": "^3.7.2",
+		"buffer": "^6.0.3",
+		"form-data": "^4.0.0",
+		"hash-wasm": "^4.12.0",
+		"http-status": "^1.4.1",
+		"jose": "^5.2.2",
+		"jsonwebtoken": "^9.0.2",
+		"merge-options": "^1.0.1",
+		"node-fetch": "^2.6.3",
+		"promise-queue": "^2.2.3",
+		"proxy-agent": "^6.4.0",
+		"tslib": "^2.6.2",
+		"url-template": "^2.0.8",
+		"uuid": "^9.0.0"
+	},
+	"devDependencies": {
+		"@types/jest": "^28.1.1",
+		"@types/jsonwebtoken": "^8.5.1",
+		"@types/lodash": "^4.14.172",
+		"@types/node-fetch": "^2.6.12",
+		"@types/prettier": "^2.3.2",
+		"@types/promise-queue": "^2.2.0",
+		"@types/shelljs": "^0.8.9",
+		"@types/url-template": "^2.0.28",
+		"@types/uuid": "^9.0.1",
+		"better-docs": "^2.7.2",
+		"chai": "^4.2.0",
+		"doctoc": "^2.2.1",
+		"eslint": "^6.8.0",
+		"eslint-plugin-jest": "^23.20.0",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-promise": "^4.3.1",
+		"eslint-plugin-unicorn": "^4.0.3",
+		"istanbul": "^0.4.3",
+		"jest": "^28.1.3",
+		"jsdoc": "^4.0.4",
+		"jsonlint": "^1.6.3",
+		"jsonlint2": "^1.7.1",
+		"leche": "^2.3.0",
+		"lodash": "^4.17.21",
+		"mocha": "^10.2.0",
+		"mockery": "^2.1.0",
+		"nock": "^13.3.1",
+		"nyc": "^14.0.0",
+		"prettier": "^2.3.2",
+		"shelljs": "^0.8.5",
+		"shelljs-nodecli": "^0.1.1",
+		"sinon": "^7.5.0",
+		"standard-version": "^9.3.2",
+		"ts-jest": "^28.0.8",
+		"ts-node": "^10.2.0",
+		"typescript": "^4.2.4"
+	},
 	"overrides": {
-    "leche": {
-      "mocha": ">=1.18"
-    }
-  },
-  "files": [
-    "config",
-    "lib"
-  ]
+		"leche": {
+			"mocha": ">=1.18"
+		}
+	},
+	"files": [
+		"config",
+		"lib"
+	]
 }

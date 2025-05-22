@@ -388,4 +388,4 @@ class LegalHoldPolicies {
  */
 LegalHoldPolicies.prototype.assignmentTypes = LegalHoldPolicyAssignmentType;
 
-export = LegalHoldPolicies;
+export default LegalHoldPolicies;

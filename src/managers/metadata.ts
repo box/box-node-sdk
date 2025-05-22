@@ -450,4 +450,4 @@ Metadata.prototype.cascadeResolution = Object.freeze({
  */
 Metadata.prototype.fieldTypes = MetadataFieldType;
 
-export = Metadata;
+export default Metadata;

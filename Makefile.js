@@ -1,20 +1,20 @@
 /**
  * @fileoverview Build file
  */
-/*global target, exec, echo, find*/
-
+/* global target, exec, echo, find*/
+// eslint-disable-next-line unicorn/filename-case
 'use strict';
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // Requirements
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
 require('shelljs/make');
 var nodeCLI = require('shelljs-nodecli');
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // Helpers
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
 /**
  * Generates a function that matches files with a particular extension.
@@ -23,7 +23,7 @@ var nodeCLI = require('shelljs-nodecli');
  * @private
  */
 function fileType(extension) {
-	return function (filename) {
+	return function(filename) {
 		return filename.substring(filename.lastIndexOf('.') + 1) === extension;
 	};
 }
@@ -35,7 +35,7 @@ function fileType(extension) {
  */
 function release(type) {
 	target.test();
-	exec('npm version ' + type);
+	exec(`npm version ${type}`);
 
 	exec('git add package.json');
 	exec('git commit --amend --no-edit');
@@ -44,40 +44,44 @@ function release(type) {
 	exec('git push origin main --tags');
 }
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // Data
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
 var MOCHA_BINARY = './node_modules/.bin/_mocha',
 	// Directories
 	JS_DIR = './src/',
 	// Files
-	JS_FILES = find(JS_DIR).filter(fileType('js')).join(' '),
+	JS_FILES = find(JS_DIR).filter(fileType('js'))
+		.join(' '),
 	JSON_FILES =
-		find('config/').filter(fileType('json')).join(' ') + ' .eslintrc',
+		`${find('config/').filter(fileType('json'))
+			.join(' ')} .eslintrc`,
 	TEST_FILES = find('tests/')
 		.filter(fileType('js'))
-		.filter((file) => !file.includes('integration_test/'))
+		.filter(file => !file.includes('integration_test/'))
 		.join(' ');
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // Tasks
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-target.all = function () {
+target.all = function() {
 	target.test();
 };
 
-target.build = function () {
+target.build = function() {
 	var code = 0;
 
-	echo('Compiling TypeScript code');
-	code += nodeCLI.exec('./node_modules/.bin/tsc').code;
+	echo('Compiling TypeScript code for CJS');
+	code += nodeCLI.exec('./node_modules/.bin/tsc', '-p', 'tsconfig.cjs.json').code;
+	echo('Compiling TypeScript code for ESM');
+	code += nodeCLI.exec('./node_modules/.bin/tsc', '-p', 'tsconfig.esm.json').code;
 
 	return code;
 };
 
-target.lint = function () {
+target.lint = function() {
 	var code = 0;
 
 	echo('Validating JSON Files');
@@ -97,7 +101,7 @@ target.lint = function () {
 	return code;
 };
 
-target.test = function () {
+target.test = function() {
 	var code = target.build();
 	code += target.lint();
 	code += nodeCLI.exec(
@@ -114,12 +118,12 @@ target.test = function () {
 	}
 };
 
-target.docs = function () {
+target.docs = function() {
 	echo('Generating documentation');
 	nodeCLI.exec('jsdoc', '-r', '-c ./jsdoc.json', '-d ./docs/jsdoc ', JS_DIR);
 };
 
-target.docsDev = function () {
+target.docsDev = function() {
 	echo('Generating dev documentation');
 	nodeCLI.exec(
 		'jsdoc',
@@ -131,14 +135,14 @@ target.docsDev = function () {
 	);
 };
 
-target.patch = function () {
+target.patch = function() {
 	release('patch');
 };
 
-target.minor = function () {
+target.minor = function() {
 	release('minor');
 };
 
-target.major = function () {
+target.major = function() {
 	release('major');
 };

@@ -250,4 +250,4 @@ class StoragePolicies {
 	}
 }
 
-export = StoragePolicies;
+export default StoragePolicies;

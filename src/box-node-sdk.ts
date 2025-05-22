@@ -8,10 +8,10 @@
 
 import { EventEmitter } from 'events';
 import * as qs from 'querystring';
-import CCGAPISession = require('./sessions/ccg-session');
-import APIRequestManager = require('./api-request-manager');
-import BoxClient = require('./box-client');
-import TokenManager = require('./token-manager');
+import CCGAPISession from './sessions/ccg-session';
+import APIRequestManager from './api-request-manager';
+import BoxClient from './box-client';
+import TokenManager from './token-manager';
 
 const Config = require('./util/config'),
 	BasicAPISession = require('./sessions/basic-session'),
@@ -490,4 +490,4 @@ BoxSDKNode.prototype.collaborationRoles =
 BoxSDKNode.prototype.CURRENT_USER_ID = BoxClient.prototype.CURRENT_USER_ID;
 
 /** @module box-node-sdk/lib/box-node-sdk */
-export = BoxSDKNode;
+export default BoxSDKNode;

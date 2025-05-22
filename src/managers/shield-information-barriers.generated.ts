@@ -145,4 +145,4 @@ class ShieldInformationBarrierManager {
 		);
 	}
 }
-export = ShieldInformationBarrierManager;
+export default ShieldInformationBarrierManager;

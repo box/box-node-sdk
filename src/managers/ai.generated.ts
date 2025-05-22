@@ -104,4 +104,4 @@ class AIManager {
 		);
 	}
 }
-export = AIManager;
+export default AIManager;

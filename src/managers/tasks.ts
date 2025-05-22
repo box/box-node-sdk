@@ -353,4 +353,4 @@ class Tasks {
  */
 Tasks.prototype.resolutionStates = TaskResolutionState;
 
-export = Tasks;
+export default Tasks;

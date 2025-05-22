@@ -66,4 +66,4 @@ class Trash {
 	}
 }
 
-export = Trash;
+export default Trash;

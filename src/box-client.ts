@@ -789,4 +789,4 @@ BoxClient.prototype.CURRENT_USER_ID = Users.prototype.CURRENT_USER_ID;
  * @module box-node-sdk/lib/box-client
  * @see {@Link BoxClient}
  */
-export = BoxClient;
+export default BoxClient;

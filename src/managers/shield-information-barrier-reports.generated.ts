@@ -115,4 +115,4 @@ class ShieldInformationBarrierReportsManager {
 		);
 	}
 }
-export = ShieldInformationBarrierReportsManager;
+export default ShieldInformationBarrierReportsManager;

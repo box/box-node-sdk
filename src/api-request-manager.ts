@@ -100,4 +100,4 @@ class APIRequestManager {
  * @module box-node-sdk/lib/api-request-manager
  * @see {@Link APIRequestManager}
  */
-export = APIRequestManager;
+export default APIRequestManager;

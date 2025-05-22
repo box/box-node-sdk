@@ -272,4 +272,4 @@ class EnterpriseEventStream extends Readable {
 	}
 }
 
-export = EnterpriseEventStream;
+export default EnterpriseEventStream;

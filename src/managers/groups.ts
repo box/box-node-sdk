@@ -433,4 +433,4 @@ Groups.prototype.accessLevels = GroupAccessLevel;
  */
 Groups.prototype.userRoles = GroupUserRole;
 
-export = Groups;
+export default Groups;
