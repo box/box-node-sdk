@@ -20,7 +20,7 @@
 	"engines": {
 		"node": ">= 14.0.0"
 	},
-	"main": "./lib/box-node-sdk.js",
+	"main": "./lib/cjs/box-node-sdk.js",
 	"browser": {
 		"./lib/esm/next-gen/internal/utilsNode.js": "./lib/esm/next-gen/internal/utilsBrowser.js",
 		"./src/next-gen/internal/utilsNode.ts": "./src/next-gen/internal/utilsBrowser.ts"
