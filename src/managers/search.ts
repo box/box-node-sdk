@@ -103,7 +103,7 @@ class Search {
 			content_types?: string;
 			type?: string;
 			trash_content?: string;
-			mdfilters?: SearchMetadataFilter[];
+			mdfilters?: SearchMetadataFilter[] | string;
 			include_recent_shared_links?: boolean;
 			fields?: string;
 			limit?: number;
@@ -114,7 +114,9 @@ class Search {
 		callback?: Function
 	) {
 		var apiPath = urlPath(API_PATHS_SEARCH),
-			qs = options || ({} as Record<string, any>);
+			qs: typeof options & {
+				query?: string;
+			}= options || ({} as Record<string, any>);
 
 		qs.query = searchString;
 

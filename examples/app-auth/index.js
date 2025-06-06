@@ -1,3 +1,5 @@
+'use strict';
+
 // -----------------------------------------------------------------------------
 // Requirements
 // -----------------------------------------------------------------------------
@@ -29,6 +31,7 @@ var app = express(),
 		clientSecret: CLIENT_SECRET,
 		appAuth: {
 			keyID: PUBLIC_KEY_ID,
+			/* eslint-disable-next-line no-sync */
 			privateKey: fs.readFileSync(path.resolve(__dirname, PRIVATE_KEY_PATH)),
 			passphrase: PRIVATE_KEY_PASSPHRASE
 		}
@@ -61,7 +64,7 @@ app.use(session({
 // For this sample app, we trust that as long as the user's email has been set
 // in the session, that they have been properly authenticated and we can create
 // an SDK client for them
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
 	if (req.session.email) {
 		res.locals.email = req.session.email;
 		req.sdk = sdk.getAppAuthClient('user', req.session.userID);
@@ -69,7 +72,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
 
 	if (req.session.email) {
 		// The user is logged in, send them to their files page
@@ -80,11 +83,11 @@ app.get('/', function(req, res) {
 	}
 });
 
-app.get('/login', function(req, res) {
+app.get('/login', (req, res) => {
 	res.render('login');
 });
 
-app.post('/login', function(req, res) {
+app.post('/login', (req, res) => {
 
 	var email = req.body.email;
 
@@ -97,11 +100,11 @@ app.post('/login', function(req, res) {
 	// Since we use the Box name field to hold the email address that the user
 	// registered with, this should give us the correct user object, if they've already
 	// signed up.
-	adminAPIClient.get('/users', requestParams, adminAPIClient.defaultResponseHandler(function(err, data) {
+	adminAPIClient.get('/users', requestParams, adminAPIClient.defaultResponseHandler((err, data) => {
 
 		if (err) {
 			res.render('login', {
-				error: 'An error occurred during login - ' + err.message,
+				error: `An error occurred during login - ${err.message}`,
 				errorDetails: util.inspect(err)
 			});
 			return;
@@ -125,11 +128,11 @@ app.post('/login', function(req, res) {
 	}));
 });
 
-app.get('/signup', function(req, res) {
+app.get('/signup', (req, res) => {
 	res.render('signup');
 });
 
-app.post('/signup', function(req, res) {
+app.post('/signup', (req, res) => {
 	var requestParams = {
 		body: {
 			name: req.body.email,
@@ -139,11 +142,11 @@ app.post('/signup', function(req, res) {
 	// Create a new Box user record for this user, using the name field to hold the
 	// email address they registered with.  This allows us to use Box to keep track
 	// of all our users, so we don't need a separate database for this sample app
-	adminAPIClient.post('/users', requestParams, adminAPIClient.defaultResponseHandler(function(err, data) {
+	adminAPIClient.post('/users', requestParams, adminAPIClient.defaultResponseHandler((err, data) => {
 
 		if (err) {
 			res.render('signup', {
-				error: 'An error occurred during signup - ' + err.message,
+				error: `An error occurred during signup - ${err.message}`,
 				errorDetails: util.inspect(err)
 			});
 			return;
@@ -156,7 +159,7 @@ app.post('/signup', function(req, res) {
 	}));
 });
 
-app.get('/files', function(req, res) {
+app.get('/files', (req, res) => {
 
 	// Guard to make sure the user is logged in
 	if (!req.sdk) {
@@ -166,19 +169,19 @@ app.get('/files', function(req, res) {
 
 	// Get the user's files in their root folder.  Box uses folder ID "0" to
 	// represent the user's root folder, where we'll be putting all their files.
-	req.sdk.folders.getItems('0', null, function(err, data) {
+	req.sdk.folders.getItems('0', null, (err, data) => {
 
 		res.render('files', {
 			error: err,
 			errorDetails: util.inspect(err),
-			files: data ? data.entries: []
+			files: data ? data.entries : []
 		});
 	});
 });
 
 // The upload endpoint requires the multipart middleware to parse out the upload
 // form body, which writes the uploaded file to disk at a temporary location
-app.post('/upload', multipart(), function(req, res) {
+app.post('/upload', multipart(), (req, res) => {
 
 	// Guard to make sure the user is logged in
 	if (!req.sdk) {
@@ -189,16 +192,20 @@ app.post('/upload', multipart(), function(req, res) {
 	// Get a read stream to the file that the user uploaded
 	var fileStream = fs.createReadStream(req.body.file.path);
 	// Make an API call to upload the user's file to Box
-	req.sdk.files.uploadFile('0', req.body.file.name, fileStream, function(err, data) {
+	req.sdk.files.uploadFile('0', req.body.file.name, fileStream, (err, data) => {
+		if (err) {
+			throw err;
+		}
 
+		console.log(`File "${data.name}" uploaded successfully with ID ${data.id}`);
 		// Once the upload completes, delete the temporary file from disk
-		fs.unlink(req.body.file.path, function() {});
+		fs.unlink(req.body.file.path, () => {});
 
 		res.redirect('/files');
 	});
 });
 
-app.get('/download/:id', function(req, res) {
+app.get('/download/:id', (req, res) => {
 
 	// Guard to make sure the user is logged in
 	if (!req.sdk) {
@@ -207,7 +214,7 @@ app.get('/download/:id', function(req, res) {
 	}
 
 	// API call to get the temporary download URL for the user's file
-	req.sdk.files.getDownloadURL(req.params.id, null, function(err, url) {
+	req.sdk.files.getDownloadURL(req.params.id, null, (err, url) => {
 
 		if (err) {
 			res.redirect('/files');
@@ -220,7 +227,7 @@ app.get('/download/:id', function(req, res) {
 	});
 });
 
-app.get('/preview/:id', function(req, res) {
+app.get('/preview/:id', (req, res) => {
 
 	// Guard to make sure the user is logged in
 	if (!req.sdk) {
@@ -230,7 +237,7 @@ app.get('/preview/:id', function(req, res) {
 
 	// The Box file object has a field called "expiring_embed_link", which can
 	// be used to embed a preview of the file.  We'll fetch this field only.
-	req.sdk.files.get(req.params.id, {fields: 'expiring_embed_link'}, function(err, data) {
+	req.sdk.files.get(req.params.id, {fields: 'expiring_embed_link'}, (err, data) => {
 
 		if (err) {
 			res.redirect('/files');
@@ -240,10 +247,10 @@ app.get('/preview/:id', function(req, res) {
 		res.render('preview', {
 			file: data
 		});
-	})
+	});
 });
 
-app.get('/thumbnail/:id', function(req, res) {
+app.get('/thumbnail/:id', (req, res) => {
 
 	// Guard to make sure the user is logged in
 	if (!req.sdk) {
@@ -253,7 +260,7 @@ app.get('/thumbnail/:id', function(req, res) {
 
 	// API call to get the thumbnail for a file.  This can return either the
 	// specific thumbnail image or a URL pointing to a placeholder thumbnail.
-	req.sdk.files.getRepresentationInfo(req.params.id, req.sdk.files.FileRepresentationType.THUMBNAIL, {}, function(err, data) {
+	req.sdk.files.getRepresentationInfo(req.params.id, req.sdk.files.FileRepresentationType.THUMBNAIL, {}, (err, data) => {
 
 		if (err) {
 			res.status(err.statusCode || 500).json(err);
@@ -273,13 +280,13 @@ app.get('/thumbnail/:id', function(req, res) {
 	});
 });
 
-app.get('/logout', function(req, res) {
+app.get('/logout', (req, res) => {
 
 	// To log the user out, we can simply destroy their session
-	req.session.destroy(function() {
+	req.session.destroy(() => {
 		res.redirect('/');
 	});
-})
+});
 
 app.listen(3000);
 console.log('Server started!');
