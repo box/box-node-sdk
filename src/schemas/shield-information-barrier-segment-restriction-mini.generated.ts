@@ -7,15 +7,15 @@ import * as schemas from '.';
  * the shield information barrier
  */
 export interface ShieldInformationBarrierSegmentRestrictionMini
-	extends schemas.ShieldInformationBarrierSegmentRestrictionBase {
-	/**
-	 * The `type` and `id` of the
-	 * requested shield information barrier segment.
-	 */
-	shield_information_barrier_segment: object;
-	/**
-	 * The `type` and `id` of the
-	 * restricted shield information barrier segment.
-	 */
-	restricted_segment: object;
+  extends schemas.ShieldInformationBarrierSegmentRestrictionBase {
+  /**
+   * The `type` and `id` of the
+   * requested shield information barrier segment.
+   */
+  shield_information_barrier_segment: object;
+  /**
+   * The `type` and `id` of the
+   * restricted shield information barrier segment.
+   */
+  restricted_segment: object;
 }

@@ -1,5 +1,5 @@
 {
-    "type": "storage_policy",
-    "id": "123",
-    "name": "AWS"
+  "type": "storage_policy",
+  "id": "123",
+  "name": "AWS"
 }

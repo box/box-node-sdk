@@ -1,16 +1,16 @@
 {
   "folder": {
-	"id": "157979815641",
-	"type": "folder",
-	"name": "Folder with reqes",
-	"etag": "0",
-	"sequence_id": "0"
+    "id": "157979815641",
+    "type": "folder",
+    "name": "Folder with reqes",
+    "etag": "0",
+    "sequence_id": "0"
   },
   "created_by": {
-	"id": "18188499134",
-	"type": "user",
-	"name": "Test",
-	"login": "someone@somewhere.com"
+    "id": "18188499134",
+    "type": "user",
+    "name": "Test",
+    "login": "someone@somewhere.com"
   },
   "id": "2484517969",
   "type": "file_request",

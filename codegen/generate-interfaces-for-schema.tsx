@@ -13,43 +13,43 @@ tsx;
 const SCHEMAS_RELATIVE_PATH = '../src/schemas';
 
 export async function generateInterfacesForSchema({
-	spec,
-	interfaces,
+  spec,
+  interfaces,
 }: {
-	spec: OpenAPI;
-	interfaces: Record<string, ts.Node[]>;
+  spec: OpenAPI;
+  interfaces: Record<string, ts.Node[]>;
 }) {
-	const schemasDirPath = path.join(__dirname, SCHEMAS_RELATIVE_PATH);
-	// make sure the target directory exisits
-	await fs.mkdir(schemasDirPath, { recursive: true });
+  const schemasDirPath = path.join(__dirname, SCHEMAS_RELATIVE_PATH);
+  // make sure the target directory exisits
+  await fs.mkdir(schemasDirPath, { recursive: true });
 
-	const generatedExports: string[] = [];
+  const generatedExports: string[] = [];
 
-	for (const name of Object.keys(interfaces)) {
-		const schema = spec.components?.schemas?.[name];
-		if (!schema) {
-			throw new Error(`Missing schema ${name} in the OpenAPI spec`);
-		}
+  for (const name of Object.keys(interfaces)) {
+    const schema = spec.components?.schemas?.[name];
+    if (!schema) {
+      throw new Error(`Missing schema ${name} in the OpenAPI spec`);
+    }
 
-		const { text: interfaceName } = getIdentifierForSchemaName(name);
-		const baseFileName = `${kebabCase(interfaceName)}.generated`;
-		const fileName = `${baseFileName}.ts`;
+    const { text: interfaceName } = getIdentifierForSchemaName(name);
+    const baseFileName = `${kebabCase(interfaceName)}.generated`;
+    const fileName = `${baseFileName}.ts`;
 
-		await writeNodesToFile({
-			fullPath: path.join(schemasDirPath, fileName),
-			nodes: interfaces[name],
-		});
+    await writeNodesToFile({
+      fullPath: path.join(schemasDirPath, fileName),
+      nodes: interfaces[name],
+    });
 
-		generatedExports.push(`./${baseFileName}`);
-	}
+    generatedExports.push(`./${baseFileName}`);
+  }
 
-	const indexExports = sortBy(generatedExports).map((filePath) => (
-		<ExportDeclaration moduleSpecifier={<StringLiteral text={filePath} />} />
-	));
+  const indexExports = sortBy(generatedExports).map((filePath) => (
+    <ExportDeclaration moduleSpecifier={<StringLiteral text={filePath} />} />
+  ));
 
-	// write index for schemas with exports
-	await writeNodesToFile({
-		fullPath: path.join(schemasDirPath, 'index.generated.ts'),
-		nodes: indexExports,
-	});
+  // write index for schemas with exports
+  await writeNodesToFile({
+    fullPath: path.join(schemasDirPath, 'index.generated.ts'),
+    nodes: indexExports,
+  });
 }

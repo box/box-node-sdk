@@ -7,15 +7,15 @@ import * as schemas from '.';
  * the shield information barrier
  */
 export interface ShieldInformationBarrierSegmentRestrictionBase {
-	/**
-	 * Shield information barrier segment restriction
-	 * Example: shield_information_barrier_segment_restriction
-	 */
-	type?: 'shield_information_barrier_segment_restriction';
-	/**
-	 * The unique identifier for the
-	 * shield information barrier segment restriction.
-	 * Example: 11446498
-	 */
-	id?: string;
+  /**
+   * Shield information barrier segment restriction
+   * Example: shield_information_barrier_segment_restriction
+   */
+  type?: 'shield_information_barrier_segment_restriction';
+  /**
+   * The unique identifier for the
+   * shield information barrier segment restriction.
+   * Example: 11446498
+   */
+  id?: string;
 }

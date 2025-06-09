@@ -16,8 +16,8 @@ This project adheres to the [Box Open Code of Conduct](http://opensource.box.com
 
 ## How to contribute
 
-* **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
-* **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
+- **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
+- **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
 
 ## Pull request best practices
 
@@ -74,14 +74,14 @@ The rules for commit types are:
 
 In most cases, commits will be a `feat` or `fix`. Make sure to include the `!` in the title if there are non-backwards-compatible changes in the commit.
 
-| Commit message                                                                                                                                          | Release type       | New version |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------- |
-| `feat!: remove old files endpoints`                                                                                                                     | Major ("breaking") | `X+1.0.0`   |
-| `feat: add new file upload endpoint`                                                                                                                    | Minor ("feature")  | `X.Y+1.0`   |
-| `fix: file streaming during download`                                                                                                                   | Patch ("fix")      | `X.Y.Z+1`   |
-| `docs: document files api`                                                                                                                              | No release         | `X.Y.Z`     |
-| `chore: remove commented code from file upload`                                                                                                         | No release         | `X.Y.Z`     |
-| `refactor: rename a variable (invisible change)`                                                                                                        | No release         | `X.Y.Z`     |
+| Commit message                                   | Release type       | New version |
+| ------------------------------------------------ | ------------------ | ----------- |
+| `feat!: remove old files endpoints`              | Major ("breaking") | `X+1.0.0`   |
+| `feat: add new file upload endpoint`             | Minor ("feature")  | `X.Y+1.0`   |
+| `fix: file streaming during download`            | Patch ("fix")      | `X.Y.Z+1`   |
+| `docs: document files api`                       | No release         | `X.Y.Z`     |
+| `chore: remove commented code from file upload`  | No release         | `X.Y.Z`     |
+| `refactor: rename a variable (invisible change)` | No release         | `X.Y.Z`     |
 
 ### Step 6: Rebase
 

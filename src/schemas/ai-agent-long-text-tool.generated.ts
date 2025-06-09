@@ -5,6 +5,6 @@ import * as schemas from '.';
  * AI agent tool used to to handle longer text.
  */
 export interface AiAgentLongTextTool
-	extends schemas.AiAgentBasicTextToolTextGen {
-	embeddings?: object;
+  extends schemas.AiAgentBasicTextToolTextGen {
+  embeddings?: object;
 }

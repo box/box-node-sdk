@@ -5,5 +5,5 @@ import * as schemas from '.';
  * A shield information barrier reference for requests and responses
  */
 export interface ShieldInformationBarrierReference {
-	shield_information_barrier?: schemas.ShieldInformationBarrierBase;
+  shield_information_barrier?: schemas.ShieldInformationBarrierBase;
 }

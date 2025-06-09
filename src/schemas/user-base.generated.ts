@@ -6,14 +6,14 @@ import * as schemas from '.';
  * nested within another resource.
  */
 export interface UserBase {
-	/**
-	 * The unique identifier for this user
-	 * Example: 11446498
-	 */
-	id: string;
-	/**
-	 * `user`
-	 * Example: user
-	 */
-	type: 'user';
+  /**
+   * The unique identifier for this user
+   * Example: 11446498
+   */
+  id: string;
+  /**
+   * `user`
+   * Example: user
+   */
+  type: 'user';
 }
