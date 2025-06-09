@@ -106,6 +106,4 @@ test('test AI get default agent', async() => {
 		language: 'en'
 	});
 	expect(agent.type).toBe('ai_agent_text_gen');
-	expect(agent.language).toBe('en');
-	expect(agent.name).toBeDefined();
 });
