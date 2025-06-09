@@ -37,6 +37,10 @@ test('test AI send ask', async() => {
 		`${uuid.v4()}.pdf`,
 		context.folder.id
 	);
+	const agent = await context.client.ai.getAiAgentDefaultConfig({
+		mode: 'ask'
+	});
+	expect(agent.type).toBe('ai_agent_ask');
 	const response = await context.client.ai.ask({
 		mode: 'multiple_item_qa',
 		prompt: 'Which direction sun rises?',
@@ -47,12 +51,7 @@ test('test AI send ask', async() => {
 				content: 'The sun rises in the east',
 			},
 		],
-		ai_agent: {
-			type: 'ai_agent_ask',
-			basic_text_multi: {
-				model: 'openai__gpt_3_5_turbo'
-			}
-		}
+		ai_agent: agent,
 	});
 
 	expect(response).toBeDefined();
@@ -80,6 +79,10 @@ test('test AI text gen', async() => {
 			created_at: '2013-12-12T11:20:43-08:00',
 		},
 	];
+	const agent = await context.client.ai.getAiAgentDefaultConfig({
+		mode: 'text_gen',
+	});
+	expect(agent.type).toBe('ai_agent_text_gen');
 	const response = await context.client.ai.textGen({
 		prompt: 'What is public API?',
 		items: [
@@ -89,12 +92,7 @@ test('test AI text gen', async() => {
 			},
 		],
 		dialogue_history: dialogueHistory,
-		ai_agent: {
-			type: 'ai_agent_text_gen',
-			basic_gen: {
-				model: 'openai__gpt_3_5_turbo_16k'
-			}
-		}
+		ai_agent: agent,
 	});
 
 	expect(response).toBeDefined();
@@ -105,9 +103,9 @@ test('test AI text gen', async() => {
 test('test AI get default agent', async() => {
 	const agent = await context.client.ai.getAiAgentDefaultConfig({
 		mode: 'text_gen',
-		language: 'en',
-		model: 'openai__gpt_3_5_turbo'
+		language: 'en'
 	});
 	expect(agent.type).toBe('ai_agent_text_gen');
-	expect(agent.basic_gen.model).toBe('openai__gpt_3_5_turbo');
+	expect(agent.language).toBe('en');
+	expect(agent.name).toBeDefined();
 });
