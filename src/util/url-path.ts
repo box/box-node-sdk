@@ -19,7 +19,7 @@ const PATTERN = /\/\.+/;
  * @private
  */
 function trimSlashes(segment: string) {
-	return segment.replace(/^\/|\/$/g, '');
+  return segment.replace(/^\/|\/$/g, '');
 }
 
 // ------------------------------------------------------------------------------
@@ -38,18 +38,18 @@ function trimSlashes(segment: string) {
  * @returns {string} Return a valid URL path comprised of the given path segments
  */
 export = function urlPath(...args: any[]) {
-	const path = args
-		.map((x) => String(x))
-		.map((x) => {
-			var trimmedX = trimSlashes(x);
-			if (PATTERN.test(trimmedX)) {
-				throw new Error(
-					`An invalid path parameter exists in ${trimmedX}. Relative path parameters cannot be passed.`
-				);
-			}
-			return trimmedX;
-		})
-		.map((x) => encodeURIComponent(x))
-		.join('/');
-	return `/${path}`;
+  const path = args
+    .map((x) => String(x))
+    .map((x) => {
+      var trimmedX = trimSlashes(x);
+      if (PATTERN.test(trimmedX)) {
+        throw new Error(
+          `An invalid path parameter exists in ${trimmedX}. Relative path parameters cannot be passed.`
+        );
+      }
+      return trimmedX;
+    })
+    .map((x) => encodeURIComponent(x))
+    .join('/');
+  return `/${path}`;
 };

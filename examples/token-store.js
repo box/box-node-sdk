@@ -13,41 +13,39 @@ var store = new Map();
  * @constructor
  */
 function TokenStore(userID) {
-
-	this.userID = userID;
+  this.userID = userID;
 }
 
 TokenStore.prototype = {
+  /**
+   * Read the user's tokens from the store
+   * @param {Function} callback Passed the user's tokens
+   * @returns {void}
+   */
+  read: function (callback) {
+    callback(null, store.get(this.userID));
+  },
 
-	/**
-	 * Read the user's tokens from the store
-	 * @param {Function} callback Passed the user's tokens
-	 * @returns {void}
-	 */
-	read: function(callback) {
-		callback(null, store.get(this.userID));
-	},
+  /**
+   * Write the user's tokens to the store
+   * @param {Object} tokenInfo The user's token info
+   * @param {Function} callback The callback
+   * @returns {void}
+   */
+  write: function (tokenInfo, callback) {
+    store.set(this.userID, tokenInfo);
+    callback();
+  },
 
-	/**
-	 * Write the user's tokens to the store
-	 * @param {Object} tokenInfo The user's token info
-	 * @param {Function} callback The callback
-	 * @returns {void}
-	 */
-	write: function(tokenInfo, callback) {
-		store.set(this.userID, tokenInfo);
-		callback();
-	},
-
-	/**
-	 * Clears the user's tokens from the store
-	 * @param {Function} callback The callback
-	 * @returns {void}
-	 */
-	clear: function(callback) {
-		store.delete(this.userID);
-		callback();
-	}
+  /**
+   * Clears the user's tokens from the store
+   * @param {Function} callback The callback
+   * @returns {void}
+   */
+  clear: function (callback) {
+    store.delete(this.userID);
+    callback();
+  },
 };
 
 module.exports = TokenStore;

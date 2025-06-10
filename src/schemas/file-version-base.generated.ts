@@ -7,14 +7,14 @@ import * as schemas from '.';
  * parameter.
  */
 export interface FileVersionBase {
-	/**
-	 * The unique identifier that represent a file version.
-	 * Example: 12345
-	 */
-	id: string;
-	/**
-	 * `file_version`
-	 * Example: file_version
-	 */
-	type: 'file_version';
+  /**
+   * The unique identifier that represent a file version.
+   * Example: 12345
+   */
+  id: string;
+  /**
+   * `file_version`
+   * Example: file_version
+   */
+  type: 'file_version';
 }

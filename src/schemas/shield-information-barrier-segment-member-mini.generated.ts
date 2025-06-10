@@ -6,9 +6,9 @@ import * as schemas from '.';
  * shield information barrier segment member object
  */
 export interface ShieldInformationBarrierSegmentMemberMini
-	extends schemas.ShieldInformationBarrierSegmentMemberBase {
-	/**
-	 * The `type` and `id` of the requested shield information barrier segment member.
-	 */
-	user?: schemas.UserBase;
+  extends schemas.ShieldInformationBarrierSegmentMemberBase {
+  /**
+   * The `type` and `id` of the requested shield information barrier segment member.
+   */
+  user?: schemas.UserBase;
 }

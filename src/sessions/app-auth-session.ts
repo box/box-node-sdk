@@ -33,7 +33,7 @@ type TokenRequestOptions = any /* FIXME */;
  * @private
  */
 function isObjectValidTokenStore(obj: Record<string, any>) {
-	return Boolean(obj && obj.read && obj.write && obj.clear);
+  return Boolean(obj && obj.read && obj.write && obj.clear);
 }
 
 // ------------------------------------------------------------------------------
@@ -60,176 +60,176 @@ function isObjectValidTokenStore(obj: Record<string, any>) {
  * @constructor
  */
 class AppAuthSession {
-	_type: string;
-	_id: string;
-	_config: Config;
-	_tokenManager: TokenManager;
-	_tokenStore: TokenStore | null;
-	_tokenInfo: TokenInfo;
-	_refreshPromise: Promise<any> | null;
+  _type: string;
+  _id: string;
+  _config: Config;
+  _tokenManager: TokenManager;
+  _tokenStore: TokenStore | null;
+  _tokenInfo: TokenInfo;
+  _refreshPromise: Promise<any> | null;
 
-	constructor(
-		type: string,
-		id: string,
-		config: Config,
-		tokenManager: TokenManager,
-		tokenStore?: TokenStore
-	) {
-		this._type = type;
-		this._id = id;
-		this._config = config;
-		this._tokenManager = tokenManager;
+  constructor(
+    type: string,
+    id: string,
+    config: Config,
+    tokenManager: TokenManager,
+    tokenStore?: TokenStore
+  ) {
+    this._type = type;
+    this._id = id;
+    this._config = config;
+    this._tokenManager = tokenManager;
 
-		// If tokenStore was provided, set the persistent data & current store operations
-		if (tokenStore) {
-			assert(
-				isObjectValidTokenStore(tokenStore),
-				'Token store provided is improperly formatted. Methods required: read(), write(), clear().'
-			);
-			this._tokenStore = Promise.promisifyAll(tokenStore);
-		}
+    // If tokenStore was provided, set the persistent data & current store operations
+    if (tokenStore) {
+      assert(
+        isObjectValidTokenStore(tokenStore),
+        'Token store provided is improperly formatted. Methods required: read(), write(), clear().'
+      );
+      this._tokenStore = Promise.promisifyAll(tokenStore);
+    }
 
-		// The TokenInfo object for this app auth session
-		this._tokenInfo = null;
+    // The TokenInfo object for this app auth session
+    this._tokenInfo = null;
 
-		// Indicates if tokens are currently being refreshed
-		this._refreshPromise = null;
-	}
+    // Indicates if tokens are currently being refreshed
+    this._refreshPromise = null;
+  }
 
-	/**
-	 * Initiate a refresh of the app auth access tokens. New tokens should be passed
-	 * to the caller, and then cached for later use.
-	 *
-	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
-	 * @returns {Promise<string>} Promise resolving to the access token
-	 * @private
-	 */
-	_refreshAppAuthAccessToken(options?: TokenRequestOptions) {
-		// If tokens aren't already being refreshed, start the refresh
-		if (!this._refreshPromise) {
-			this._refreshPromise = this._tokenManager
-				.getTokensJWTGrant(this._type, this._id, options)
-				.then((tokenInfo: TokenInfo) => {
-					// Set new token info and propagate the new access token
-					this._tokenInfo = tokenInfo;
+  /**
+   * Initiate a refresh of the app auth access tokens. New tokens should be passed
+   * to the caller, and then cached for later use.
+   *
+   * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+   * @returns {Promise<string>} Promise resolving to the access token
+   * @private
+   */
+  _refreshAppAuthAccessToken(options?: TokenRequestOptions) {
+    // If tokens aren't already being refreshed, start the refresh
+    if (!this._refreshPromise) {
+      this._refreshPromise = this._tokenManager
+        .getTokensJWTGrant(this._type, this._id, options)
+        .then((tokenInfo: TokenInfo) => {
+          // Set new token info and propagate the new access token
+          this._tokenInfo = tokenInfo;
 
-					if (this._tokenStore) {
-						return this._tokenStore
-							.writeAsync(tokenInfo)
-							.then(() => tokenInfo.accessToken);
-					}
+          if (this._tokenStore) {
+            return this._tokenStore
+              .writeAsync(tokenInfo)
+              .then(() => tokenInfo.accessToken);
+          }
 
-					return tokenInfo.accessToken;
-				})
-				.finally(() => {
-					// Refresh complete, clear promise
-					this._refreshPromise = null;
-				});
-		}
+          return tokenInfo.accessToken;
+        })
+        .finally(() => {
+          // Refresh complete, clear promise
+          this._refreshPromise = null;
+        });
+    }
 
-		return this._refreshPromise;
-	}
+    return this._refreshPromise;
+  }
 
-	/**
-	 * Produces a valid, app auth access token.
-	 * Performs a refresh before returning if the current token is expired. If the current
-	 * token is considered stale but still valid, return the current token but initiate a
-	 * new refresh in the background.
-	 *
-	 * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
-	 * @returns {Promise<string>} Promise resolving to the access token
-	 */
-	getAccessToken(options?: TokenRequestOptions) {
-		var expirationBuffer = this._config.expiredBufferMS;
+  /**
+   * Produces a valid, app auth access token.
+   * Performs a refresh before returning if the current token is expired. If the current
+   * token is considered stale but still valid, return the current token but initiate a
+   * new refresh in the background.
+   *
+   * @param {TokenRequestOptions} [options] - Sets optional behavior for the token grant
+   * @returns {Promise<string>} Promise resolving to the access token
+   */
+  getAccessToken(options?: TokenRequestOptions) {
+    var expirationBuffer = this._config.expiredBufferMS;
 
-		// If we're initializing the client and have a token store, try reading from it
-		if (!this._tokenInfo && this._tokenStore) {
-			return this._tokenStore.readAsync().then((tokenInfo: TokenInfo) => {
-				if (
-					!this._tokenManager.isAccessTokenValid(tokenInfo, expirationBuffer)
-				) {
-					// Token store contains expired tokens, refresh
-					return this._refreshAppAuthAccessToken(options);
-				}
+    // If we're initializing the client and have a token store, try reading from it
+    if (!this._tokenInfo && this._tokenStore) {
+      return this._tokenStore.readAsync().then((tokenInfo: TokenInfo) => {
+        if (
+          !this._tokenManager.isAccessTokenValid(tokenInfo, expirationBuffer)
+        ) {
+          // Token store contains expired tokens, refresh
+          return this._refreshAppAuthAccessToken(options);
+        }
 
-				this._tokenInfo = tokenInfo;
-				return tokenInfo.accessToken;
-			});
-		}
+        this._tokenInfo = tokenInfo;
+        return tokenInfo.accessToken;
+      });
+    }
 
-		// If the current token is not fresh, get a new token. All incoming
-		// requests will be held until a fresh token is retrieved.
-		if (
-			!this._tokenInfo ||
-			!this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)
-		) {
-			return this._refreshAppAuthAccessToken(options);
-		}
+    // If the current token is not fresh, get a new token. All incoming
+    // requests will be held until a fresh token is retrieved.
+    if (
+      !this._tokenInfo ||
+      !this._tokenManager.isAccessTokenValid(this._tokenInfo, expirationBuffer)
+    ) {
+      return this._refreshAppAuthAccessToken(options);
+    }
 
-		// Your token is not currently stale! Return the current access token.
-		return Promise.resolve(this._tokenInfo.accessToken);
-	}
+    // Your token is not currently stale! Return the current access token.
+    return Promise.resolve(this._tokenInfo.accessToken);
+  }
 
-	/**
-	 * Revokes the app auth token used by this session, and clears the saved tokenInfo.
-	 *
-	 * @param {TokenRequestOptions} [options]- Sets optional behavior for the token grant
-	 * @returns {Promise} Promise resolving if the revoke succeeds
-	 */
-	revokeTokens(options: TokenRequestOptions) {
-		// The current app auth token is revoked (but a new one will be created automatically as needed).
-		var tokenInfo = this._tokenInfo || {},
-			accessToken = tokenInfo.accessToken;
-		this._tokenInfo = null;
-		return this._tokenManager.revokeTokens(accessToken, options);
-	}
+  /**
+   * Revokes the app auth token used by this session, and clears the saved tokenInfo.
+   *
+   * @param {TokenRequestOptions} [options]- Sets optional behavior for the token grant
+   * @returns {Promise} Promise resolving if the revoke succeeds
+   */
+  revokeTokens(options: TokenRequestOptions) {
+    // The current app auth token is revoked (but a new one will be created automatically as needed).
+    var tokenInfo = this._tokenInfo || {},
+      accessToken = tokenInfo.accessToken;
+    this._tokenInfo = null;
+    return this._tokenManager.revokeTokens(accessToken, options);
+  }
 
-	/**
-	 * Exchange the client access token for one with lower scope
-	 * @param {string|string[]} scopes The scope(s) requested for the new token
-	 * @param {string} [resource] The absolute URL of an API resource to scope the new token to
-	 * @param {Object} [options] - Optional parameters
-	 * @param {TokenRequestOptions} [options.tokenRequestOptions] - Sets optional behavior for the token grant
-	 * @param {ActorParams} [options.actor] - Optional actor parameters for creating annotator tokens
-	 * @returns {Promise<TokenInfo>} Promise resolving to the new token info
-	 */
-	exchangeToken(
-		scopes: string | string[],
-		resource?: string,
-		options?: {
-			tokenRequestOptions?: TokenRequestOptions;
-			actor?: any /* FIXME */;
-		}
-	) {
-		return this.getAccessToken(options).then((accessToken: string) =>
-			this._tokenManager.exchangeToken(accessToken, scopes, resource, options)
-		);
-	}
+  /**
+   * Exchange the client access token for one with lower scope
+   * @param {string|string[]} scopes The scope(s) requested for the new token
+   * @param {string} [resource] The absolute URL of an API resource to scope the new token to
+   * @param {Object} [options] - Optional parameters
+   * @param {TokenRequestOptions} [options.tokenRequestOptions] - Sets optional behavior for the token grant
+   * @param {ActorParams} [options.actor] - Optional actor parameters for creating annotator tokens
+   * @returns {Promise<TokenInfo>} Promise resolving to the new token info
+   */
+  exchangeToken(
+    scopes: string | string[],
+    resource?: string,
+    options?: {
+      tokenRequestOptions?: TokenRequestOptions;
+      actor?: any /* FIXME */;
+    }
+  ) {
+    return this.getAccessToken(options).then((accessToken: string) =>
+      this._tokenManager.exchangeToken(accessToken, scopes, resource, options)
+    );
+  }
 
-	/**
-	 * Handle an an "Expired Tokens" Error. If our tokens are expired, we need to clear the token
-	 * store (if present) before continuing.
-	 *
-	 * @param {Errors~ExpiredTokensError} err An "expired tokens" error including information
-	 *  about the request/response.
-	 * @returns {Promise<Error>} Promise resolving to an error.  This will
-	 *  usually be the original response error, but could an error from trying to access the
-	 *  token store as well.
-	 */
-	handleExpiredTokensError(err: any /* FIXME */) {
-		if (!this._tokenStore) {
-			return Promise.resolve(err);
-		}
+  /**
+   * Handle an an "Expired Tokens" Error. If our tokens are expired, we need to clear the token
+   * store (if present) before continuing.
+   *
+   * @param {Errors~ExpiredTokensError} err An "expired tokens" error including information
+   *  about the request/response.
+   * @returns {Promise<Error>} Promise resolving to an error.  This will
+   *  usually be the original response error, but could an error from trying to access the
+   *  token store as well.
+   */
+  handleExpiredTokensError(err: any /* FIXME */) {
+    if (!this._tokenStore) {
+      return Promise.resolve(err);
+    }
 
-		// If a token store is available, clear the store and throw either error
-		// eslint-disable-next-line promise/no-promise-in-callback
-		return this._tokenStore
-			.clearAsync()
-			.catch((e: any) => errors.unwrapAndThrow(e))
-			.then(() => {
-				throw err;
-			});
-	}
+    // If a token store is available, clear the store and throw either error
+    // eslint-disable-next-line promise/no-promise-in-callback
+    return this._tokenStore
+      .clearAsync()
+      .catch((e: any) => errors.unwrapAndThrow(e))
+      .then(() => {
+        throw err;
+      });
+  }
 }
 
 /**

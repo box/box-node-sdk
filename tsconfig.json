@@ -1,15 +1,17 @@
 {
-	"compilerOptions": {
-		"target": "es5",
-		"module": "commonjs",
-		"outDir": "lib",
-		"strict": true,
-		"esModuleInterop": true,
-		"allowJs": true,
-		"sourceMap": true,
-		"declaration": true,
-		"forceConsistentCasingInFileNames": true
-	},
-	"include": ["src/**/*"],
-	"exclude": ["node_modules", "**/*.spec.ts"]
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "lib",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

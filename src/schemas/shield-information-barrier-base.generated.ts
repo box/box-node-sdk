@@ -6,14 +6,14 @@ import * as schemas from '.';
  * shield information barrier object
  */
 export interface ShieldInformationBarrierBase {
-	/**
-	 * The unique identifier for the shield information barrier
-	 * Example: 11446498
-	 */
-	id?: string;
-	/**
-	 * The type of the shield information barrier
-	 * Example: shield_information_barrier
-	 */
-	type?: 'shield_information_barrier';
+  /**
+   * The unique identifier for the shield information barrier
+   * Example: 11446498
+   */
+  id?: string;
+  /**
+   * The type of the shield information barrier
+   * Example: shield_information_barrier
+   */
+  type?: 'shield_information_barrier';
 }

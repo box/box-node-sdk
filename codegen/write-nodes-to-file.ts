@@ -6,28 +6,28 @@ import * as ts from 'typescript';
 const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 
 export async function writeNodesToFile({
-	fullPath,
-	nodes,
-	languageVersion = ts.ScriptTarget.Latest,
+  fullPath,
+  nodes,
+  languageVersion = ts.ScriptTarget.Latest,
 }: {
-	fullPath: string;
-	nodes: readonly ts.Node[];
-	languageVersion?: ts.ScriptTarget;
+  fullPath: string;
+  nodes: readonly ts.Node[];
+  languageVersion?: ts.ScriptTarget;
 }) {
-	const fileName = path.basename(fullPath);
-	const source = printer.printList(
-		ts.ListFormat.MultiLine,
-		ts.factory.createNodeArray(nodes),
-		ts.createSourceFile(fileName, '', languageVersion)
-	);
+  const fileName = path.basename(fullPath);
+  const source = printer.printList(
+    ts.ListFormat.MultiLine,
+    ts.factory.createNodeArray(nodes),
+    ts.createSourceFile(fileName, '', languageVersion)
+  );
 
-	const prettierConfig = await prettier.resolveConfig(fullPath);
-	if (!prettierConfig) {
-		throw new Error(`Coundn't locate prettier config for file ${fullPath}`);
-	}
+  const prettierConfig = await prettier.resolveConfig(fullPath);
+  if (!prettierConfig) {
+    throw new Error(`Coundn't locate prettier config for file ${fullPath}`);
+  }
 
-	await fs.writeFile(
-		fullPath,
-		prettier.format(source, { parser: 'typescript', ...prettierConfig })
-	);
+  await fs.writeFile(
+    fullPath,
+    await prettier.format(source, { parser: 'typescript', ...prettierConfig })
+  );
 }

@@ -6,5 +6,5 @@ import * as schemas from '.';
  * file is located and any errors when generating the report.
  */
 export interface ShieldInformationBarrierReportDetails {
-	details?: object;
+  details?: object;
 }

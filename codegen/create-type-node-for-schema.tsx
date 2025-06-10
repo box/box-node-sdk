@@ -1,9 +1,9 @@
 import * as ts from 'typescript';
 import {
-	isOpenAPIReference,
-	OpenAPI,
-	OpenAPIReference,
-	OpenAPISchema,
+  isOpenAPIReference,
+  OpenAPI,
+  OpenAPIReference,
+  OpenAPISchema,
 } from './openapi';
 import * as tsx from './tsx';
 import { Identifier, Null, TypeReferenceNode } from './tsx';
@@ -11,76 +11,76 @@ import { compressSchema, getIdentifierForSchemaRef } from './utils';
 tsx;
 
 export function createTypeNodeForSchema({
-	spec,
-	interfaces,
-	schema,
+  spec,
+  interfaces,
+  schema,
 }: {
-	spec: OpenAPI;
-	interfaces: Record<string, ts.Node[]>;
-	schema: OpenAPISchema | OpenAPIReference;
+  spec: OpenAPI;
+  interfaces: Record<string, ts.Node[]>;
+  schema: OpenAPISchema | OpenAPIReference;
 }): ts.TypeNode {
-	compressSchema(schema);
+  compressSchema(schema);
 
-	if (isOpenAPIReference(schema)) {
-		return (
-			<TypeReferenceNode
-				typeName={ts.factory.createQualifiedName(
-					<Identifier text="schemas" />,
-					getIdentifierForSchemaRef({ spec, interfaces, ref: schema.$ref })
-				)}
-			/>
-		);
-	}
+  if (isOpenAPIReference(schema)) {
+    return (
+      <TypeReferenceNode
+        typeName={ts.factory.createQualifiedName(
+          <Identifier text="schemas" />,
+          getIdentifierForSchemaRef({ spec, interfaces, ref: schema.$ref })
+        )}
+      />
+    );
+  }
 
-	const { enum: schemaEnum } = schema;
-	if (schemaEnum) {
-		return ts.factory.createUnionTypeNode(
-			schemaEnum
-				.map((enumVal) => {
-					switch (typeof enumVal) {
-						case 'string':
-							return ts.factory.createStringLiteral(enumVal);
+  const { enum: schemaEnum } = schema;
+  if (schemaEnum) {
+    return ts.factory.createUnionTypeNode(
+      schemaEnum
+        .map((enumVal) => {
+          switch (typeof enumVal) {
+            case 'string':
+              return ts.factory.createStringLiteral(enumVal);
 
-						case 'number':
-							return ts.factory.createNumericLiteral(enumVal);
+            case 'number':
+              return ts.factory.createNumericLiteral(enumVal);
 
-						default:
-							throw new Error(
-								`Invalid enum value: ${schemaEnum}. Expecting string or number`
-							);
-					}
-				})
-				.map((literal) => ts.factory.createLiteralTypeNode(literal))
-		);
-	}
+            default:
+              throw new Error(
+                `Invalid enum value: ${schemaEnum}. Expecting string or number`
+              );
+          }
+        })
+        .map((literal) => ts.factory.createLiteralTypeNode(literal))
+    );
+  }
 
-	const { type } = schema;
-	switch (type) {
-		case 'string':
-			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
+  const { type } = schema;
+  switch (type) {
+    case 'string':
+      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
 
-		case 'number':
-		case 'integer':
-			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword);
+    case 'number':
+    case 'integer':
+      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword);
 
-		case 'object':
-			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword);
+    case 'object':
+      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword);
 
-		case 'boolean':
-			return ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword);
+    case 'boolean':
+      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword);
 
-		case 'null':
-			return ts.factory.createLiteralTypeNode(<Null />);
+    case 'null':
+      return ts.factory.createLiteralTypeNode(<Null />);
 
-		case 'array':
-			const { items } = schema;
-			if (!items) {
-				throw new Error(`Missing items for type array in the schema`);
-			}
-			return ts.factory.createArrayTypeNode(
-				createTypeNodeForSchema({ spec, interfaces, schema: items })
-			);
-		default:
-			throw new Error(`Invalid schema type: ${type}`);
-	}
+    case 'array':
+      const { items } = schema;
+      if (!items) {
+        throw new Error(`Missing items for type array in the schema`);
+      }
+      return ts.factory.createArrayTypeNode(
+        createTypeNodeForSchema({ spec, interfaces, schema: items })
+      );
+    default:
+      throw new Error(`Invalid schema type: ${type}`);
+  }
 }

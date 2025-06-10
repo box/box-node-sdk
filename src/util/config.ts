@@ -11,7 +11,7 @@ import { Readable } from 'stream';
 // Requirements
 // ------------------------------------------------------------------------------
 const merge = require('merge-options'),
-	sdkVersion = require('../../package.json').version;
+  sdkVersion = require('../../package.json').version;
 
 // ------------------------------------------------------------------------------
 // Private
@@ -30,12 +30,12 @@ const nodeVersion = process.version;
  * @property {boolean} [verifyTimestamp=false] Whether the timestamp when the auth token is created should be validated
  */
 type AppAuthConfig = {
-	keyID: string;
-	privateKey: string | Buffer;
-	passphrase: string;
-	algorithm: 'RS256' | 'RS384' | 'RS512';
-	expirationTime: number;
-	verifyTimestamp: boolean;
+  keyID: string;
+  privateKey: string | Buffer;
+  passphrase: string;
+  algorithm: 'RS256' | 'RS384' | 'RS512';
+  expirationTime: number;
+  verifyTimestamp: boolean;
 };
 
 /**
@@ -56,75 +56,75 @@ type AppAuthConfig = {
  * @property {?AppAuthConfig} appAuth Optional configuration for App Auth
  */
 type UserConfigurationOptions = {
-	clientID: string;
-	clientSecret: string;
-	apiRootURL: string;
-	uploadAPIRootURL: string;
-	authorizeRootURL: string;
-	uploadRequestTimeoutMS: number;
-	retryIntervalMS: number;
-	numMaxRetries: number;
-	expiredBufferMS: number;
-	request: {
-		agentClass: any /* FIXME */;
-		agentOptions: any /* FIXME */;
-		strictSSL: boolean;
-	};
-	appAuth?: AppAuthConfig;
-	proxy?: {
-		url: string;
-		username: string;
-		password: string;
-	};
+  clientID: string;
+  clientSecret: string;
+  apiRootURL: string;
+  uploadAPIRootURL: string;
+  authorizeRootURL: string;
+  uploadRequestTimeoutMS: number;
+  retryIntervalMS: number;
+  numMaxRetries: number;
+  expiredBufferMS: number;
+  request: {
+    agentClass: any /* FIXME */;
+    agentOptions: any /* FIXME */;
+    strictSSL: boolean;
+  };
+  appAuth?: AppAuthConfig;
+  proxy?: {
+    url: string;
+    username: string;
+    password: string;
+  };
 };
 
 var defaults = {
-	clientID: null,
-	clientSecret: null,
-	apiRootURL: 'https://api.box.com',
-	uploadAPIRootURL: 'https://upload.box.com/api',
-	authorizeRootURL: 'https://account.box.com/api',
-	apiVersion: '2.0',
-	uploadRequestTimeoutMS: 60000,
-	retryIntervalMS: 2000,
-	numMaxRetries: 5,
-	retryStrategy: null,
-	expiredBufferMS: 180000,
-	appAuth: undefined,
-	iterators: false,
-	enterpriseID: undefined,
-	analyticsClient: null,
-	disableStreamPassThrough: false,
-	proxy: {
-		url: null,
-		username: null,
-		password: null,
-	},
-	request: {
-		// By default, require API SSL cert to be valid
-		strictSSL: true,
-		// Use an agent with keep-alive enabled to avoid performing SSL handshake per connection
-		agentClass: https.Agent,
-		agentOptions: {
-			keepAlive: true,
-		},
-		// Encode requests as JSON. Encode the response as well if JSON is returned.
-		json: true,
-		// Do not encode the response as a string, since the response could be a file. return Buffers instead.
-		encoding: null,
-		// A redirect is usually information we want to handle, so don't automatically follow
-		followRedirect: false,
-		// By default, we attach a version-specific user-agent string to SDK requests
-		headers: {
-			'User-Agent': `Box Node.js SDK v${sdkVersion} (Node ${nodeVersion})`,
-		},
-	},
+  clientID: null,
+  clientSecret: null,
+  apiRootURL: 'https://api.box.com',
+  uploadAPIRootURL: 'https://upload.box.com/api',
+  authorizeRootURL: 'https://account.box.com/api',
+  apiVersion: '2.0',
+  uploadRequestTimeoutMS: 60000,
+  retryIntervalMS: 2000,
+  numMaxRetries: 5,
+  retryStrategy: null,
+  expiredBufferMS: 180000,
+  appAuth: undefined,
+  iterators: false,
+  enterpriseID: undefined,
+  analyticsClient: null,
+  disableStreamPassThrough: false,
+  proxy: {
+    url: null,
+    username: null,
+    password: null,
+  },
+  request: {
+    // By default, require API SSL cert to be valid
+    strictSSL: true,
+    // Use an agent with keep-alive enabled to avoid performing SSL handshake per connection
+    agentClass: https.Agent,
+    agentOptions: {
+      keepAlive: true,
+    },
+    // Encode requests as JSON. Encode the response as well if JSON is returned.
+    json: true,
+    // Do not encode the response as a string, since the response could be a file. return Buffers instead.
+    encoding: null,
+    // A redirect is usually information we want to handle, so don't automatically follow
+    followRedirect: false,
+    // By default, we attach a version-specific user-agent string to SDK requests
+    headers: {
+      'User-Agent': `Box Node.js SDK v${sdkVersion} (Node ${nodeVersion})`,
+    },
+  },
 };
 
 var appAuthDefaults = {
-	algorithm: 'RS256',
-	expirationTime: 30,
-	verifyTimestamp: false,
+  algorithm: 'RS256',
+  expirationTime: 30,
+  verifyTimestamp: false,
 };
 
 /**
@@ -135,15 +135,15 @@ var appAuthDefaults = {
  * @private
  */
 function validateBasicParams(params: UserConfigurationOptions) {
-	// Assert that the given params valid, and that required values are present
-	assert(
-		typeof params.clientID === 'string',
-		'"clientID" must be set via init() before using the SDK.'
-	);
-	assert(
-		typeof params.clientSecret === 'string',
-		'"clientSecret" must be set via init() before using the SDK.'
-	);
+  // Assert that the given params valid, and that required values are present
+  assert(
+    typeof params.clientID === 'string',
+    '"clientID" must be set via init() before using the SDK.'
+  );
+  assert(
+    typeof params.clientSecret === 'string',
+    '"clientSecret" must be set via init() before using the SDK.'
+  );
 }
 
 /**
@@ -154,38 +154,38 @@ function validateBasicParams(params: UserConfigurationOptions) {
  * @private
  */
 function validateAppAuthParams(appAuth: AppAuthConfig) {
-	assert(
-		typeof appAuth.keyID === 'string',
-		'Key ID must be provided in app auth params'
-	);
-	assert(
-		typeof appAuth.privateKey === 'string' ||
-			appAuth.privateKey instanceof Buffer,
-		'Private key must be provided in app auth params'
-	);
-	assert(
-		typeof appAuth.passphrase === 'string' && appAuth.passphrase.length > 0,
-		'Passphrase must be provided in app auth params'
-	);
+  assert(
+    typeof appAuth.keyID === 'string',
+    'Key ID must be provided in app auth params'
+  );
+  assert(
+    typeof appAuth.privateKey === 'string' ||
+      appAuth.privateKey instanceof Buffer,
+    'Private key must be provided in app auth params'
+  );
+  assert(
+    typeof appAuth.passphrase === 'string' && appAuth.passphrase.length > 0,
+    'Passphrase must be provided in app auth params'
+  );
 
-	var validAlgorithms = ['RS256', 'RS384', 'RS512'];
-	if (typeof appAuth.algorithm !== 'undefined') {
-		assert(
-			validAlgorithms.indexOf(appAuth.algorithm) > -1,
-			`Algorithm in app auth params must be one of: ${validAlgorithms.join(
-				', '
-			)}`
-		);
-	}
+  var validAlgorithms = ['RS256', 'RS384', 'RS512'];
+  if (typeof appAuth.algorithm !== 'undefined') {
+    assert(
+      validAlgorithms.indexOf(appAuth.algorithm) > -1,
+      `Algorithm in app auth params must be one of: ${validAlgorithms.join(
+        ', '
+      )}`
+    );
+  }
 
-	if (typeof appAuth.expirationTime !== 'undefined') {
-		assert(
-			Number.isInteger(appAuth.expirationTime) &&
-				appAuth.expirationTime > 0 &&
-				appAuth.expirationTime <= 60,
-			'Valid token expiration time (0 - 60) must be provided in app auth params'
-		);
-	}
+  if (typeof appAuth.expirationTime !== 'undefined') {
+    assert(
+      Number.isInteger(appAuth.expirationTime) &&
+        appAuth.expirationTime > 0 &&
+        appAuth.expirationTime <= 60,
+      'Valid token expiration time (0 - 60) must be provided in app auth params'
+    );
+  }
 }
 
 /**
@@ -195,24 +195,28 @@ function validateAppAuthParams(appAuth: AppAuthConfig) {
  * @private
  */
 function updateRequestAgent(
-	params: UserConfigurationOptions &
-		Required<Pick<UserConfigurationOptions, 'proxy'>>
+  params: UserConfigurationOptions &
+    Required<Pick<UserConfigurationOptions, 'proxy'>>
 ) {
-	if (params.proxy.url) {
-		let proxyUrl = params.proxy.url;
-		if (params.proxy.username && params.proxy.password) {
-			proxyUrl = proxyUrl.replace('://', `://${params.proxy.username}:${params.proxy.password}@`);
-		}
+  if (params.proxy.url) {
+    let proxyUrl = params.proxy.url;
+    if (params.proxy.username && params.proxy.password) {
+      proxyUrl = proxyUrl.replace(
+        '://',
+        `://${params.proxy.username}:${params.proxy.password}@`
+      );
+    }
 
-		const ProxyAgent = require('proxy-agent').ProxyAgent;
-		params.request.agentClass = ProxyAgent;
-		params.request.agentOptions = Object.assign({}, 
-			params.request.agentOptions,
-			{
-				getProxyForUrl: (url: string) => proxyUrl
-			}
-		);
-	}
+    const ProxyAgent = require('proxy-agent').ProxyAgent;
+    params.request.agentClass = ProxyAgent;
+    params.request.agentOptions = Object.assign(
+      {},
+      params.request.agentOptions,
+      {
+        getProxyForUrl: (url: string) => proxyUrl,
+      }
+    );
+  }
 }
 
 /**
@@ -222,24 +226,24 @@ function updateRequestAgent(
  * @returns {Object} The frozen object
  */
 function deepFreezeWithRequest(obj: any) {
-	Object.freeze(obj);
+  Object.freeze(obj);
 
-	Object.getOwnPropertyNames(obj).forEach(function (name) {
-		const prop = obj[name];
+  Object.getOwnPropertyNames(obj).forEach(function (name) {
+    const prop = obj[name];
 
-		if (
-			prop !== null &&
-			typeof prop === 'object' &&
-			obj.hasOwnProperty(name) &&
-			!Object.isFrozen(prop) &&
-			!(prop instanceof Buffer) &&
-			!(prop instanceof Readable)
-		) {
-			deepFreezeWithRequest(obj[name]);
-		}
-	});
+    if (
+      prop !== null &&
+      typeof prop === 'object' &&
+      obj.hasOwnProperty(name) &&
+      !Object.isFrozen(prop) &&
+      !(prop instanceof Buffer) &&
+      !(prop instanceof Readable)
+    ) {
+      deepFreezeWithRequest(obj[name]);
+    }
+  });
 
-	return obj;
+  return obj;
 }
 
 // ------------------------------------------------------------------------------
@@ -256,45 +260,45 @@ function deepFreezeWithRequest(obj: any) {
  * @constructor
  */
 class Config {
-	_params: Required<UserConfigurationOptions>;
-	[key: string]: any;
+  _params: Required<UserConfigurationOptions>;
+  [key: string]: any;
 
-	constructor(params: UserConfigurationOptions) {
-		validateBasicParams(params);
-		if (typeof params.appAuth === 'object') {
-			validateAppAuthParams(params.appAuth);
-			params.appAuth = merge({}, appAuthDefaults, params.appAuth);
-		}
+  constructor(params: UserConfigurationOptions) {
+    validateBasicParams(params);
+    if (typeof params.appAuth === 'object') {
+      validateAppAuthParams(params.appAuth);
+      params.appAuth = merge({}, appAuthDefaults, params.appAuth);
+    }
 
-		// Ensure that we don't accidentally assign over Config methods
-		assert(
-			!params.hasOwnProperty('extend'),
-			'Config params may not override Config methods'
-		);
-		assert(
-			!params.hasOwnProperty('_params'),
-			'Config params may not override Config methods'
-		);
+    // Ensure that we don't accidentally assign over Config methods
+    assert(
+      !params.hasOwnProperty('extend'),
+      'Config params may not override Config methods'
+    );
+    assert(
+      !params.hasOwnProperty('_params'),
+      'Config params may not override Config methods'
+    );
 
-		// Set the given params or default value if params property is missing
-		this._params = merge(defaults, params);
-		updateRequestAgent(this._params);
-		Object.assign(this, this._params);
-		// Freeze the object so that configuration options cannot be modified
-		deepFreezeWithRequest(this);
-	}
+    // Set the given params or default value if params property is missing
+    this._params = merge(defaults, params);
+    updateRequestAgent(this._params);
+    Object.assign(this, this._params);
+    // Freeze the object so that configuration options cannot be modified
+    deepFreezeWithRequest(this);
+  }
 
-	/**
-	 * Extend the current config into a new config with new params overriding old ones
-	 * @param {UserConfigurationOptions} params The override options
-	 * @returns {Config} The extended configuration
-	 */
-	extend(params: UserConfigurationOptions) {
-		var newParams = merge({}, this._params, params);
-		delete newParams.extend;
-		delete newParams._params;
-		return new Config(newParams);
-	}
+  /**
+   * Extend the current config into a new config with new params overriding old ones
+   * @param {UserConfigurationOptions} params The override options
+   * @returns {Config} The extended configuration
+   */
+  extend(params: UserConfigurationOptions) {
+    var newParams = merge({}, this._params, params);
+    delete newParams.extend;
+    delete newParams._params;
+    return new Config(newParams);
+  }
 }
 
 /**

@@ -6,14 +6,14 @@ import * as schemas from '.';
  * nested within another resource.
  */
 export interface EnterpriseBase {
-	/**
-	 * The unique identifier for this enterprise
-	 * Example: 1910967
-	 */
-	id?: string;
-	/**
-	 * `enterprise`
-	 * Example: enterprise
-	 */
-	type?: 'enterprise';
+  /**
+   * The unique identifier for this enterprise
+   * Example: 1910967
+   */
+  id?: string;
+  /**
+   * `enterprise`
+   * Example: enterprise
+   */
+  type?: 'enterprise';
 }

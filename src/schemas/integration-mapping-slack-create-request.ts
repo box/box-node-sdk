@@ -6,7 +6,7 @@ import * as schemas from '.';
  * Slack Integration Mapping object
  */
 export interface IntegrationMappingSlackCreateRequest {
-	partner_item: schemas.IntegrationMappingPartnerItemSlack;
-	box_item: schemas.IntegrationMappingBoxItemSlack;
-	options?: schemas.IntegrationMappingSlackOptions;
+  partner_item: schemas.IntegrationMappingPartnerItemSlack;
+  box_item: schemas.IntegrationMappingBoxItemSlack;
+  options?: schemas.IntegrationMappingSlackOptions;
 }

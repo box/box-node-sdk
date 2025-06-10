@@ -1,0 +1,18 @@
+{
+  "name": "codegen",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "tsc",
+    "codegen": "ts-node codegen.tsx"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.17",
+    "@types/node": "^24.0.0",
+    "@types/shelljs": "^0.8.16",
+    "lodash": "^4.17.21",
+    "prettier": "^3.5.3",
+    "shelljs": "^0.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "4.2.4"
+  }
+}
