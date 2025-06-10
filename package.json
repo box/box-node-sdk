@@ -21,10 +21,18 @@
     "node": ">= 14.0.0"
   },
   "main": "./lib/box-node-sdk.js",
+  "module": "./lib-esm/box-node-sdk.js",
+  "exports": {
+    ".": {
+      "import": "./lib-esm/box-node-sdk.js",
+      "require": "./lib/box-node-sdk.js"
+    }
+  },
   "scripts": {
     "test": "npm run build && nyc mocha",
     "jest": "npm run build && jest",
     "build": "tsc",
+    "build:esm": "tsc --project tsconfig.esm.json",
     "codegen": "cd codegen && npm run codegen",
     "docs": "jsdoc -p -r -c ./jsdoc.json -d ./docs/jsdoc ./src/",
     "doctoc": "doctoc docs",
@@ -82,6 +90,7 @@
   },
   "files": [
     "config",
-    "lib"
+    "lib",
+    "lib-esm"
   ]
 }
