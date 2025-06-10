@@ -50,16 +50,14 @@ export function BindingElement({
   );
 }
 
-export function Block({
-  statements,
-  multiLine,
-  children,
-}: {
-  statements?: readonly ts.Statement[];
-  multiLine?: boolean;
-  children?: readonly ts.Statement[];
-}): ts.Block {
-  return ts.factory.createBlock(statements || children || [], multiLine);
+export function Block(
+  {
+    statements,
+    multiLine,
+  }: { statements?: readonly ts.Statement[]; multiLine?: boolean },
+  ...children: readonly ts.Statement[]
+): ts.Block {
+  return ts.factory.createBlock(statements || children, multiLine);
 }
 
 export function CallExpression({
@@ -78,22 +76,26 @@ export function CallExpression({
   );
 }
 
-export function ClassDeclaration({
-  modifiers,
-  name,
-  typeParameters,
-  heritageClauses,
-  members,
-  children = [],
-}: {
-  modifiers?: readonly ts.Modifier[];
-  name?: string | ts.Identifier;
-  typeParameters?: readonly ts.TypeParameterDeclaration[];
-  heritageClauses?: readonly ts.HeritageClause[];
-  members?: readonly ts.ClassElement[];
-  children?: readonly ts.ClassElement[];
-}): ts.ClassDeclaration {
+export function ClassDeclaration(
+  {
+    decorators,
+    modifiers,
+    name,
+    typeParameters,
+    heritageClauses,
+    members,
+  }: {
+    decorators?: readonly ts.Decorator[];
+    modifiers?: readonly ts.Modifier[];
+    name?: string | ts.Identifier;
+    typeParameters?: readonly ts.TypeParameterDeclaration[];
+    heritageClauses?: readonly ts.HeritageClause[];
+    members?: readonly ts.ClassElement[];
+  },
+  ...children: readonly ts.ClassElement[]
+): ts.ClassDeclaration {
   return ts.factory.createClassDeclaration(
+    decorators,
     modifiers,
     name,
     typeParameters,
@@ -104,6 +106,7 @@ export function ClassDeclaration({
 
 export function ConstructorDeclaration(
   {
+    decorators,
     modifiers,
     parameters = [],
     body,
@@ -116,6 +119,7 @@ export function ConstructorDeclaration(
   child?: ts.Block
 ): ts.ConstructorDeclaration {
   return ts.factory.createConstructorDeclaration(
+    decorators,
     modifiers,
     parameters,
     body || child
@@ -123,6 +127,7 @@ export function ConstructorDeclaration(
 }
 
 export function ExportAssignment({
+  decorators,
   modifiers,
   isExportEquals,
   expression,
@@ -133,6 +138,7 @@ export function ExportAssignment({
   expression: ts.Expression;
 }): ts.ExportAssignment {
   return ts.factory.createExportAssignment(
+    decorators,
     modifiers,
     isExportEquals,
     expression
@@ -140,17 +146,20 @@ export function ExportAssignment({
 }
 
 export function ExportDeclaration({
+  decorators,
   modifiers,
   isTypeOnly = false,
   exportClause,
   moduleSpecifier,
 }: {
+  decorators?: readonly ts.Decorator[];
   modifiers?: readonly ts.Modifier[];
   isTypeOnly?: boolean;
   exportClause?: ts.NamedExportBindings;
   moduleSpecifier?: ts.Expression;
 }): ts.ExportDeclaration {
   return ts.factory.createExportDeclaration(
+    decorators,
     modifiers,
     isTypeOnly,
     exportClause,
@@ -159,15 +168,13 @@ export function ExportDeclaration({
 }
 
 export function ExportSpecifier({
-  isTypeOnly = false,
   propertyName,
   name,
 }: {
-  isTypeOnly?: boolean;
   propertyName?: string | ts.Identifier;
   name: string | ts.Identifier;
 }): ts.ExportSpecifier {
-  return ts.factory.createExportSpecifier(isTypeOnly, propertyName, name);
+  return ts.factory.createExportSpecifier(propertyName, name);
 }
 
 export function ExpressionStatement(
@@ -198,37 +205,44 @@ export function ImportClause({
 }
 
 export function ImportDeclaration({
+  decorators,
   modifiers,
   importClause,
   moduleSpecifier,
 }: {
+  decorators?: readonly ts.Decorator[];
   modifiers?: readonly ts.Modifier[];
   importClause?: ts.ImportClause;
   moduleSpecifier: ts.Expression;
 }): ts.ImportDeclaration {
   return ts.factory.createImportDeclaration(
+    decorators,
     modifiers,
     importClause,
     moduleSpecifier
   );
 }
 
-export function InterfaceDeclaration({
-  modifiers,
-  name,
-  typeParameters,
-  heritageClauses,
-  members,
-  children = [],
-}: {
-  modifiers?: readonly ts.Modifier[];
-  name: string | ts.Identifier;
-  typeParameters?: readonly ts.TypeParameterDeclaration[];
-  heritageClauses?: readonly ts.HeritageClause[];
-  members?: readonly ts.TypeElement[];
-  children?: ts.TypeElement[];
-}): ts.InterfaceDeclaration {
+export function InterfaceDeclaration(
+  {
+    decorators,
+    modifiers,
+    name,
+    typeParameters,
+    heritageClauses,
+    members,
+  }: {
+    decorators?: readonly ts.Decorator[];
+    modifiers?: readonly ts.Modifier[];
+    name: string | ts.Identifier;
+    typeParameters?: readonly ts.TypeParameterDeclaration[];
+    heritageClauses?: readonly ts.HeritageClause[];
+    members?: readonly ts.TypeElement[];
+  },
+  ...children: ts.TypeElement[]
+): ts.InterfaceDeclaration {
   return ts.factory.createInterfaceDeclaration(
+    decorators,
     modifiers,
     name,
     typeParameters,
@@ -237,15 +251,16 @@ export function InterfaceDeclaration({
   );
 }
 
-export function JSDocComment({
-  comment,
-  tags,
-  children = [],
-}: {
-  comment?: string;
-  tags?: readonly ts.JSDocTag[];
-  children?: ts.JSDocTag[];
-}): ts.JSDoc {
+export function JSDocComment(
+  {
+    comment,
+    tags,
+  }: {
+    comment?: string;
+    tags?: readonly ts.JSDocTag[];
+  },
+  ...children: ts.JSDocTag[]
+): ts.JSDoc {
   return ts.factory.createJSDocComment(
     comment,
     tags || children.flat().filter(Boolean)
@@ -289,28 +304,32 @@ export function JSDocReturnTag({
   return ts.factory.createJSDocReturnTag(tagName, typeExpression, comment);
 }
 
-export function MethodDeclaration({
-  child,
-  modifiers,
-  asteriskToken,
-  name,
-  questionToken,
-  typeParameters,
-  parameters,
-  type,
-  body,
-}: {
-  modifiers?: readonly ts.Modifier[];
-  asteriskToken?: ts.AsteriskToken;
-  name: string | ts.PropertyName;
-  questionToken?: boolean;
-  typeParameters?: readonly ts.TypeParameterDeclaration[];
-  parameters: readonly ts.ParameterDeclaration[];
-  type?: ts.TypeNode;
-  body?: ts.Block;
-  child?: ts.Block;
-}): ts.MethodDeclaration {
+export function MethodDeclaration(
+  {
+    decorators,
+    modifiers,
+    asteriskToken,
+    name,
+    questionToken,
+    typeParameters,
+    parameters,
+    type,
+    body,
+  }: {
+    decorators?: readonly ts.Decorator[];
+    modifiers?: readonly ts.Modifier[];
+    asteriskToken?: ts.AsteriskToken;
+    name: string | ts.PropertyName;
+    questionToken?: boolean;
+    typeParameters?: readonly ts.TypeParameterDeclaration[];
+    parameters: readonly ts.ParameterDeclaration[];
+    type?: ts.TypeNode;
+    body?: ts.Block;
+  },
+  child?: ts.Block
+): ts.MethodDeclaration {
   return ts.factory.createMethodDeclaration(
+    decorators,
     modifiers,
     asteriskToken,
     name,
@@ -350,22 +369,24 @@ export function ObjectBindingPattern(
   );
 }
 
-export function ObjectLiteralExpression({
-  children,
-  properties,
-  multiLine,
-}: {
-  properties?: readonly ts.ObjectLiteralElementLike[];
-  multiLine?: boolean;
-  children?: readonly ts.ObjectLiteralElementLike[];
-}): ts.ObjectLiteralExpression {
+export function ObjectLiteralExpression(
+  {
+    properties,
+    multiLine,
+  }: {
+    properties?: readonly ts.ObjectLiteralElementLike[];
+    multiLine?: boolean;
+  },
+  ...children: readonly ts.ObjectLiteralElementLike[]
+): ts.ObjectLiteralExpression {
   return ts.factory.createObjectLiteralExpression(
-    (properties || children || []).flat().filter(Boolean),
+    (properties || children).flat().filter(Boolean),
     multiLine
   );
 }
 
 export function ParameterDeclaration({
+  decorators,
   modifiers,
   dotDotDotToken,
   name,
@@ -373,6 +394,7 @@ export function ParameterDeclaration({
   type,
   initializer,
 }: {
+  decorators?: readonly ts.Decorator[];
   modifiers?: readonly ts.Modifier[];
   dotDotDotToken?: ts.DotDotDotToken;
   name: string | ts.BindingName;
@@ -381,6 +403,7 @@ export function ParameterDeclaration({
   initializer?: ts.Expression;
 }): ts.ParameterDeclaration {
   return ts.factory.createParameterDeclaration(
+    decorators,
     modifiers,
     dotDotDotToken,
     name,
@@ -411,12 +434,14 @@ export function PropertyAssignment({
 }
 
 export function PropertyDeclaration({
+  decorators,
   modifiers,
   name,
   questionOrExclamationToken,
   type,
   initializer,
 }: {
+  decorators?: readonly ts.Decorator[];
   modifiers?: readonly ts.Modifier[];
   name: string | ts.PropertyName;
   questionOrExclamationToken?: ts.QuestionToken | ts.ExclamationToken;
@@ -424,6 +449,7 @@ export function PropertyDeclaration({
   initializer?: ts.Expression;
 }): ts.PropertyDeclaration {
   return ts.factory.createPropertyDeclaration(
+    decorators,
     modifiers,
     name,
     questionOrExclamationToken,
@@ -530,19 +556,20 @@ export function VariableDeclaration({
   );
 }
 
-export function VariableStatement({
-  modifiers = [],
-  declarations,
-  flags,
-  children,
-}: {
-  modifiers?: readonly ts.Modifier[];
-  declarations?: readonly ts.VariableDeclaration[];
-  flags?: ts.NodeFlags;
-  children?: readonly ts.VariableDeclaration[];
-}): ts.VariableStatement {
+export function VariableStatement(
+  {
+    modifiers,
+    declarations,
+    flags,
+  }: {
+    modifiers?: readonly ts.Modifier[];
+    declarations?: readonly ts.VariableDeclaration[];
+    flags?: ts.NodeFlags;
+  },
+  ...children: readonly ts.VariableDeclaration[]
+): ts.VariableStatement {
   const declarationList = ts.factory.createVariableDeclarationList(
-    declarations || children || [],
+    declarations || children,
     flags
   );
   return ts.factory.createVariableStatement(modifiers, declarationList);

@@ -25,7 +25,7 @@
     "test": "npm run build && nyc mocha",
     "jest": "npm run build && jest",
     "build": "tsc",
-    "codegen": "ts-node codegen/codegen.tsx",
+    "codegen": "cd codegen && npm run codegen",
     "docs": "jsdoc -p -r -c ./jsdoc.json -d ./docs/jsdoc ./src/",
     "doctoc": "doctoc docs",
     "deps": "npm prune && npm install",

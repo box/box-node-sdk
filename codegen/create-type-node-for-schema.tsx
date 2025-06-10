@@ -26,11 +26,7 @@ export function createTypeNodeForSchema({
       <TypeReferenceNode
         typeName={ts.factory.createQualifiedName(
           <Identifier text="schemas" />,
-          getIdentifierForSchemaRef({
-            spec,
-            interfaces,
-            ref: schema.$ref,
-          })
+          getIdentifierForSchemaRef({ spec, interfaces, ref: schema.$ref })
         )}
       />
     );

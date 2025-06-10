@@ -120,7 +120,6 @@ export function createInterfaceForSchema({
             <ImportClause
               namedBindings={ts.factory.createNamedImports([
                 ts.factory.createImportSpecifier(
-                  false,
                   undefined,
                   <Identifier text="Serializable" />
                 ),
@@ -218,102 +217,90 @@ export function createInterfaceForSchema({
                         type={<TypeReferenceNode typeName={id} />}
                       />,
                     ]}
-                    body={
-                      <Block multiLine>
-                        <ReturnStatement
-                          expression={
-                            <ObjectLiteralExpression multiLine>
-                              {Object.entries(properties).map(
-                                ([key, property]) => {
-                                  compressSchema(property);
+                  >
+                    <Block multiLine>
+                      <ReturnStatement>
+                        <ObjectLiteralExpression multiLine>
+                          {Object.entries(properties).map(([key, property]) => {
+                            compressSchema(property);
 
-                                  const propAccessExpr: ts.PropertyAccessExpression =
-                                    (
-                                      <PropertyAccessExpression
-                                        expression={valueId}
-                                        name={convertPropName(key)}
-                                      />
-                                    );
+                            const propAccessExpr: ts.PropertyAccessExpression =
+                              (
+                                <PropertyAccessExpression
+                                  expression={valueId}
+                                  name={convertPropName(key)}
+                                />
+                              );
 
-                                  if (isOpenAPIReference(property)) {
-                                    return (
-                                      <PropAssignmentCall
-                                        key={key}
-                                        name="serialize"
-                                        schemaId={getIdentifierForSchemaRef({
-                                          spec,
-                                          interfaces,
-                                          ref: property.$ref,
-                                        })}
-                                        argumentsArray={[propAccessExpr]}
-                                      />
-                                    );
-                                  }
+                            if (isOpenAPIReference(property)) {
+                              return (
+                                <PropAssignmentCall
+                                  key={key}
+                                  name="serialize"
+                                  schemaId={getIdentifierForSchemaRef({
+                                    spec,
+                                    interfaces,
+                                    ref: property.$ref,
+                                  })}
+                                  argumentsArray={[propAccessExpr]}
+                                />
+                              );
+                            }
 
-                                  const { type } = property;
+                            const { type } = property;
 
-                                  if (!type) {
-                                    console.log(
-                                      `Missing type for ${key}`,
-                                      property
-                                    );
-                                    return;
-                                  }
-                                  switch (type) {
-                                    case 'string':
-                                    case 'number':
-                                    case 'integer':
-                                    case 'boolean':
-                                      return (
-                                        <PropertyAssignment
-                                          name={key}
-                                          initializer={propAccessExpr}
-                                        />
-                                      );
+                            if (!type) {
+                              console.log(`Missing type for ${key}`, property);
+                              return;
+                            }
+                            switch (type) {
+                              case 'string':
+                              case 'number':
+                              case 'integer':
+                              case 'boolean':
+                                return (
+                                  <PropertyAssignment
+                                    name={key}
+                                    initializer={propAccessExpr}
+                                  />
+                                );
 
-                                    case 'array':
-                                      const { items } = property;
-                                      if (!items) {
-                                        throw new Error(
-                                          `Missing items for type array in the schema`
-                                        );
-                                      }
-                                      if (isOpenAPIReference(items)) {
-                                        return (
-                                          <PropAssignmentCall
-                                            key={key}
-                                            name="serializeArray"
-                                            schemaId={getIdentifierForSchemaRef(
-                                              {
-                                                spec,
-                                                interfaces,
-                                                ref: items.$ref,
-                                              }
-                                            )}
-                                            argumentsArray={[propAccessExpr]}
-                                          />
-                                        );
-                                      }
-
-                                      throw new Error(
-                                        `Type ${items.type} not supported in array property ${key}`
-                                      );
-
-                                    case 'object':
-                                    case 'null':
-                                    default:
-                                      throw new Error(
-                                        `Invalid schema type: ${type}`
-                                      );
-                                  }
+                              case 'array':
+                                const { items } = property;
+                                if (!items) {
+                                  throw new Error(
+                                    `Missing items for type array in the schema`
+                                  );
                                 }
-                              )}
-                            </ObjectLiteralExpression>
-                          }
-                        />
-                      </Block>
-                    }
-                  />
+                                if (isOpenAPIReference(items)) {
+                                  return (
+                                    <PropAssignmentCall
+                                      key={key}
+                                      name="serializeArray"
+                                      schemaId={getIdentifierForSchemaRef({
+                                        spec,
+                                        interfaces,
+                                        ref: items.$ref,
+                                      })}
+                                      argumentsArray={[propAccessExpr]}
+                                    />
+                                  );
+                                }
+
+                                throw new Error(
+                                  `Type ${items.type} not supported in array property ${key}`
+                                );
+
+                              case 'object':
+                              case 'null':
+                              default:
+                                throw new Error(`Invalid schema type: ${type}`);
+                            }
+                          })}
+                        </ObjectLiteralExpression>
+                      </ReturnStatement>
+                    </Block>
+                  </MethodDeclaration>
                   <MethodDeclaration
                     name="deserialize"
                     parameters={[
@@ -325,102 +312,90 @@ export function createInterfaceForSchema({
                       />,
                     ]}
                     type={<TypeReferenceNode typeName={id} />}
-                    body={
-                      <Block multiLine>
-                        <ReturnStatement
-                          expression={
-                            <ObjectLiteralExpression multiLine>
-                              {Object.entries(properties).map(
-                                ([key, property]) => {
-                                  compressSchema(property);
+                  >
+                    <Block multiLine>
+                      <ReturnStatement>
+                        <ObjectLiteralExpression multiLine>
+                          {Object.entries(properties).map(([key, property]) => {
+                            compressSchema(property);
 
-                                  const propAccessExpr: ts.PropertyAccessExpression =
-                                    (
-                                      <PropertyAccessExpression
-                                        expression={dataId}
-                                        name={key}
-                                      />
-                                    );
+                            const propAccessExpr: ts.PropertyAccessExpression =
+                              (
+                                <PropertyAccessExpression
+                                  expression={dataId}
+                                  name={key}
+                                />
+                              );
 
-                                  if (isOpenAPIReference(property)) {
-                                    return (
-                                      <PropAssignmentCall
-                                        key={convertPropName(key)}
-                                        name="deserialize"
-                                        schemaId={getIdentifierForSchemaRef({
-                                          spec,
-                                          interfaces,
-                                          ref: property.$ref,
-                                        })}
-                                        argumentsArray={[propAccessExpr]}
-                                      />
-                                    );
-                                  }
+                            if (isOpenAPIReference(property)) {
+                              return (
+                                <PropAssignmentCall
+                                  key={convertPropName(key)}
+                                  name="deserialize"
+                                  schemaId={getIdentifierForSchemaRef({
+                                    spec,
+                                    interfaces,
+                                    ref: property.$ref,
+                                  })}
+                                  argumentsArray={[propAccessExpr]}
+                                />
+                              );
+                            }
 
-                                  const { type } = property;
+                            const { type } = property;
 
-                                  if (!type) {
-                                    console.log(
-                                      `Missing type for ${key}`,
-                                      property
-                                    );
-                                    return;
-                                  }
-                                  switch (type) {
-                                    case 'string':
-                                    case 'number':
-                                    case 'integer':
-                                    case 'boolean':
-                                      return (
-                                        <PropertyAssignment
-                                          name={convertPropName(key)}
-                                          initializer={propAccessExpr}
-                                        />
-                                      );
+                            if (!type) {
+                              console.log(`Missing type for ${key}`, property);
+                              return;
+                            }
+                            switch (type) {
+                              case 'string':
+                              case 'number':
+                              case 'integer':
+                              case 'boolean':
+                                return (
+                                  <PropertyAssignment
+                                    name={convertPropName(key)}
+                                    initializer={propAccessExpr}
+                                  />
+                                );
 
-                                    case 'array':
-                                      const { items } = property;
-                                      if (!items) {
-                                        throw new Error(
-                                          `Missing items for type array in the schema`
-                                        );
-                                      }
-                                      if (isOpenAPIReference(items)) {
-                                        return (
-                                          <PropAssignmentCall
-                                            key={convertPropName(key)}
-                                            name="deserializeArray"
-                                            schemaId={getIdentifierForSchemaRef(
-                                              {
-                                                spec,
-                                                interfaces,
-                                                ref: items.$ref,
-                                              }
-                                            )}
-                                            argumentsArray={[propAccessExpr]}
-                                          />
-                                        );
-                                      }
-
-                                      throw new Error(
-                                        `Type ${items.type} not supported in array property ${key}`
-                                      );
-
-                                    case 'object':
-                                    case 'null':
-                                    default:
-                                      throw new Error(
-                                        `Invalid schema type: ${type}`
-                                      );
-                                  }
+                              case 'array':
+                                const { items } = property;
+                                if (!items) {
+                                  throw new Error(
+                                    `Missing items for type array in the schema`
+                                  );
                                 }
-                              )}
-                            </ObjectLiteralExpression>
-                          }
-                        />
-                      </Block>
-                    }
-                  />
+                                if (isOpenAPIReference(items)) {
+                                  return (
+                                    <PropAssignmentCall
+                                      key={convertPropName(key)}
+                                      name="deserializeArray"
+                                      schemaId={getIdentifierForSchemaRef({
+                                        spec,
+                                        interfaces,
+                                        ref: items.$ref,
+                                      })}
+                                      argumentsArray={[propAccessExpr]}
+                                    />
+                                  );
+                                }
+
+                                throw new Error(
+                                  `Type ${items.type} not supported in array property ${key}`
+                                );
+
+                              case 'object':
+                              case 'null':
+                              default:
+                                throw new Error(`Invalid schema type: ${type}`);
+                            }
+                          })}
+                        </ObjectLiteralExpression>
+                      </ReturnStatement>
+                    </Block>
+                  </MethodDeclaration>
                 </ObjectLiteralExpression>,
               ]
             )}

@@ -1,0 +1,11 @@
+{
+  "name": "codegen",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "tsc",
+    "codegen": "ts-node codegen.tsx"
+  },
+  "devDependencies": {
+    "typescript": "4.2.4"
+  }
+}

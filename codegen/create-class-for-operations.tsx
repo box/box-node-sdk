@@ -60,21 +60,20 @@ export function createClassForOperations({
               type={<TypeReferenceNode typeName="BoxClient" />}
             />,
           ]}
-          body={
-            <Block multiLine>
-              <BinaryExpression
-                left={
-                  <PropertyAccessExpression
-                    expression={<This />}
-                    name={clientId}
-                  />
-                }
-                operator={ts.factory.createToken(ts.SyntaxKind.EqualsToken)}
-                right={clientId}
-              />
-            </Block>
-          }
-        />
+        >
+          <Block multiLine>
+            <BinaryExpression
+              left={
+                <PropertyAccessExpression
+                  expression={<This />}
+                  name={clientId}
+                />
+              }
+              operator={ts.factory.createToken(ts.SyntaxKind.EqualsToken)}
+              right={clientId}
+            />
+          </Block>
+        </ConstructorDeclaration>
         {operations
           .map(({ operationId, name }) => {
             for (const [pathKey, pathItem] of Object.entries(spec.paths)) {
