@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.1](https://github.com/box/box-node-sdk/compare/v3.8.0...v3.8.1) (2025-06-11)
+
+
+### Bug Fixes
+
+* Use constant-time comparison for HMAC signatures ([#893](https://github.com/box/box-node-sdk/issues/893)) ([d819efe](https://github.com/box/box-node-sdk/commit/d819efe663a59fce53412fbe153a76dd346d4536))
+
 ## [3.8.0](https://github.com/box/box-node-sdk/compare/v3.7.1...v3.8.0) (2025-04-09)
 
 

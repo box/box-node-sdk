@@ -66,10 +66,10 @@ const request = require('@cypress/request');
  *  if no response body is sent.
  */
 type APIRequestResponseObject = {
-	request: APIRequestRequestObject;
-	statusCode: number;
-	headers: Record&lt;string, string>;
-	body?: object | Buffer | string;
+  request: APIRequestRequestObject;
+  statusCode: number;
+  headers: Record&lt;string, string>;
+  body?: object | Buffer | string;
 };
 
 // @NOTE(fschott) 08-19-2014: We cannot return the request/response objects directly because they contain loads of extra
@@ -86,9 +86,9 @@ type APIRequestResponseObject = {
  */
 
 type APIRequestRequestObject = {
-	uri: Record&lt;string, any>;
-	method: string;
-	headers: Record&lt;string, string>;
+  uri: Record&lt;string, any>;
+  method: string;
+  headers: Record&lt;string, string>;
 };
 
 /**
@@ -103,10 +103,10 @@ type APIRequestRequestObject = {
  */
 
 type APIRequestError = {
-	request: APIRequestRequestObject;
-	response?: APIRequestResponseObject;
-	statusCode?: number;
-	maxRetriesExceeded?: boolean;
+  request: APIRequestRequestObject;
+  response?: APIRequestResponseObject;
+  statusCode?: number;
+  maxRetriesExceeded?: boolean;
 };
 
 /**
@@ -120,8 +120,8 @@ type APIRequestError = {
  * @param {APIRequest~ResponseObject} response The response returned by an APIRequestManager request
  */
 type APIRequestCallback = (
-	err?: APIRequestError | null,
-	response?: APIRequestResponseObject
+  err?: APIRequestError | null,
+  response?: APIRequestResponseObject
 ) => void;
 
 // ------------------------------------------------------------------------------
@@ -152,49 +152,49 @@ retryableStatusCodes[httpStatusCodes.TOO_MANY_REQUESTS] = true;
  * @private
  */
 function isTemporaryError(response: APIRequestResponseObject) {
-	var statusCode = response.statusCode;
+  var statusCode = response.statusCode;
 
-	// An API error is a temporary/transient if it returns a 5xx HTTP Status, with the exception of the 507 status.
-	// The API returns a 507 error when the user has run out of account space, in which case, it should be treated
-	// as a permanent, non-retryable error.
-	if (
-		statusCode !== httpStatusCodes.INSUFFICIENT_STORAGE &amp;&amp;
-		statusCode >= HTTP_STATUS_CODE_SERVER_ERROR_BLOCK_RANGE[0] &amp;&amp;
-		statusCode &lt;= HTTP_STATUS_CODE_SERVER_ERROR_BLOCK_RANGE[1]
-	) {
-		return true;
-	}
+  // An API error is a temporary/transient if it returns a 5xx HTTP Status, with the exception of the 507 status.
+  // The API returns a 507 error when the user has run out of account space, in which case, it should be treated
+  // as a permanent, non-retryable error.
+  if (
+    statusCode !== httpStatusCodes.INSUFFICIENT_STORAGE &amp;&amp;
+    statusCode >= HTTP_STATUS_CODE_SERVER_ERROR_BLOCK_RANGE[0] &amp;&amp;
+    statusCode &lt;= HTTP_STATUS_CODE_SERVER_ERROR_BLOCK_RANGE[1]
+  ) {
+    return true;
+  }
 
-	// An API error is a temporary/transient error if it returns a HTTP Status that indicates it is a temporary,
-	if (retryableStatusCodes[statusCode]) {
-		return true;
-	}
+  // An API error is a temporary/transient error if it returns a HTTP Status that indicates it is a temporary,
+  if (retryableStatusCodes[statusCode]) {
+    return true;
+  }
 
-	return false;
+  return false;
 }
 
 function isClientErrorResponse(response: { statusCode: number }) {
-	if (!response || typeof response !== 'object') {
-		throw new Error(
-			`Expecting response to be an object, got: ${String(response)}`
-		);
-	}
-	const { statusCode } = response;
-	if (typeof statusCode !== 'number') {
-		throw new Error(
-			`Expecting status code of response to be a number, got: ${String(
-				statusCode
-			)}`
-		);
-	}
-	return 400 &lt;= statusCode &amp;&amp; statusCode &lt; 500;
+  if (!response || typeof response !== 'object') {
+    throw new Error(
+      `Expecting response to be an object, got: ${String(response)}`
+    );
+  }
+  const { statusCode } = response;
+  if (typeof statusCode !== 'number') {
+    throw new Error(
+      `Expecting status code of response to be a number, got: ${String(
+        statusCode
+      )}`
+    );
+  }
+  return 400 &lt;= statusCode &amp;&amp; statusCode &lt; 500;
 }
 
 function createErrorForResponse(response: { statusCode: number }): Error {
-	var errorMessage = `${response.statusCode} - ${
-		(httpStatusCodes as any)[response.statusCode]
-	}`;
-	return new Error(errorMessage);
+  var errorMessage = `${response.statusCode} - ${
+    (httpStatusCodes as any)[response.statusCode]
+  }`;
+  return new Error(errorMessage);
 }
 
 /**
@@ -204,7 +204,7 @@ function createErrorForResponse(response: { statusCode: number }): Error {
  * @private
  */
 function isRequestRetryable(options: Record&lt;string, any>) {
-	return !options.formData;
+  return !options.formData;
 }
 
 /**
@@ -218,14 +218,14 @@ function isRequestRetryable(options: Record&lt;string, any>) {
  * @private
  */
 function cleanSensitiveHeaders(requestObj: APIRequestRequestObject) {
-	if (requestObj.headers) {
-		if (requestObj.headers.BoxApi) {
-			requestObj.headers.BoxApi = REMOVED_HEADER_MESSAGE;
-		}
-		if (requestObj.headers.Authorization) {
-			requestObj.headers.Authorization = REMOVED_HEADER_MESSAGE;
-		}
-	}
+  if (requestObj.headers) {
+    if (requestObj.headers.BoxApi) {
+      requestObj.headers.BoxApi = REMOVED_HEADER_MESSAGE;
+    }
+    if (requestObj.headers.Authorization) {
+      requestObj.headers.Authorization = REMOVED_HEADER_MESSAGE;
+    }
+  }
 }
 
 // ------------------------------------------------------------------------------
@@ -242,209 +242,209 @@ function cleanSensitiveHeaders(requestObj: APIRequestRequestObject) {
  * @constructor
  */
 class APIRequest {
-	config: Config;
-	eventBus: EventEmitter;
-	isRetryable: boolean;
+  config: Config;
+  eventBus: EventEmitter;
+  isRetryable: boolean;
 
-	_callback?: APIRequestCallback;
-	request?: any; // request.Request;
-	stream?: any; // request.Request;
-	numRetries?: number;
+  _callback?: APIRequestCallback;
+  request?: any; // request.Request;
+  stream?: any; // request.Request;
+  numRetries?: number;
 
-	constructor(config: Config, eventBus: EventEmitter) {
-		assert(
-			config instanceof Config,
-			'Config must be passed to APIRequest constructor'
-		);
-		assert(
-			eventBus instanceof EventEmitter,
-			'Valid event bus must be passed to APIRequest constructor'
-		);
-		this.config = config;
-		this.eventBus = eventBus;
-		this.isRetryable = isRequestRetryable(config.request);
-	}
+  constructor(config: Config, eventBus: EventEmitter) {
+    assert(
+      config instanceof Config,
+      'Config must be passed to APIRequest constructor'
+    );
+    assert(
+      eventBus instanceof EventEmitter,
+      'Valid event bus must be passed to APIRequest constructor'
+    );
+    this.config = config;
+    this.eventBus = eventBus;
+    this.isRetryable = isRequestRetryable(config.request);
+  }
 
-	/**
-	 * Executes the request with the given options. If a callback is provided, we'll
-	 * handle the response via callbacks. Otherwise, the response will be streamed to
-	 * via the stream property. You can access this stream with the getResponseStream()
-	 * method.
-	 *
-	 * @param {APIRequest~Callback} [callback] Callback for handling the response
-	 * @returns {void}
-	 */
-	execute(callback?: APIRequestCallback) {
-		this._callback = callback || this._callback;
+  /**
+   * Executes the request with the given options. If a callback is provided, we'll
+   * handle the response via callbacks. Otherwise, the response will be streamed to
+   * via the stream property. You can access this stream with the getResponseStream()
+   * method.
+   *
+   * @param {APIRequest~Callback} [callback] Callback for handling the response
+   * @returns {void}
+   */
+  execute(callback?: APIRequestCallback) {
+    this._callback = callback || this._callback;
 
-		// Initiate an async- or stream-based request, based on the presence of the callback.
-		if (this._callback) {
-			// Start the request timer immediately before executing the async request
-			if (!asyncRequestTimer) {
-				asyncRequestTimer = process.hrtime();
-			}
-			this.request = request(
-				this.config.request,
-				this._handleResponse.bind(this)
-			);
-		} else {
-			this.request = request(this.config.request);
-			this.stream = this.request;
-			this.stream.on('error', (err: any) => {
-				this.eventBus.emit('response', err);
-			});
-			this.stream.on('response', (response: any) => {
-				if (isClientErrorResponse(response)) {
-					this.eventBus.emit('response', createErrorForResponse(response));
-					return;
-				}
-				this.eventBus.emit('response', null, response);
-			});
-		}
-	}
+    // Initiate an async- or stream-based request, based on the presence of the callback.
+    if (this._callback) {
+      // Start the request timer immediately before executing the async request
+      if (!asyncRequestTimer) {
+        asyncRequestTimer = process.hrtime();
+      }
+      this.request = request(
+        this.config.request,
+        this._handleResponse.bind(this)
+      );
+    } else {
+      this.request = request(this.config.request);
+      this.stream = this.request;
+      this.stream.on('error', (err: any) => {
+        this.eventBus.emit('response', err);
+      });
+      this.stream.on('response', (response: any) => {
+        if (isClientErrorResponse(response)) {
+          this.eventBus.emit('response', createErrorForResponse(response));
+          return;
+        }
+        this.eventBus.emit('response', null, response);
+      });
+    }
+  }
 
-	/**
-	 * Return the response read stream for a request. This will be undefined until
-	 * a stream-based request has been started.
-	 *
-	 * @returns {?ReadableStream} The response stream
-	 */
-	getResponseStream() {
-		return this.stream;
-	}
+  /**
+   * Return the response read stream for a request. This will be undefined until
+   * a stream-based request has been started.
+   *
+   * @returns {?ReadableStream} The response stream
+   */
+  getResponseStream() {
+    return this.stream;
+  }
 
-	/**
-	 * Handle the request response in the callback case.
-	 *
-	 * @param {?Error} err An error, if one occurred
-	 * @param {Object} [response] The full response object, returned by the request module.
-	 *  Contains information about the request &amp; response, including the response body itself.
-	 * @returns {void}
-	 * @private
-	 */
-	_handleResponse(err?: any /* FIXME */, response?: any /* FIXME */) {
-		// Clean sensitive headers here to prevent the user from accidentily using/logging them in prod
-		cleanSensitiveHeaders(this.request!);
+  /**
+   * Handle the request response in the callback case.
+   *
+   * @param {?Error} err An error, if one occurred
+   * @param {Object} [response] The full response object, returned by the request module.
+   *  Contains information about the request &amp; response, including the response body itself.
+   * @returns {void}
+   * @private
+   */
+  _handleResponse(err?: any /* FIXME */, response?: any /* FIXME */) {
+    // Clean sensitive headers here to prevent the user from accidentily using/logging them in prod
+    cleanSensitiveHeaders(this.request!);
 
-		// If the API connected successfully but responded with a temporary error (like a 5xx code,
-		// a rate limited response, etc.) then this is considered an error as well.
-		if (!err &amp;&amp; isTemporaryError(response)) {
-			err = createErrorForResponse(response);
-		}
+    // If the API connected successfully but responded with a temporary error (like a 5xx code,
+    // a rate limited response, etc.) then this is considered an error as well.
+    if (!err &amp;&amp; isTemporaryError(response)) {
+      err = createErrorForResponse(response);
+    }
 
-		if (err) {
-			// Attach request &amp; response information to the error object
-			err.request = this.request;
-			if (response) {
-				err.response = response;
-				err.statusCode = response.statusCode;
-			}
+    if (err) {
+      // Attach request &amp; response information to the error object
+      err.request = this.request;
+      if (response) {
+        err.response = response;
+        err.statusCode = response.statusCode;
+      }
 
-			// Have the SDK emit the error response
-			this.eventBus.emit('response', err);
+      // Have the SDK emit the error response
+      this.eventBus.emit('response', err);
 
-			var isJWT = false;
-			if (
-				this.config.request.hasOwnProperty('form') &amp;&amp;
-				this.config.request.form.hasOwnProperty('grant_type') &amp;&amp;
-				this.config.request.form.grant_type ===
-					'urn:ietf:params:oauth:grant-type:jwt-bearer'
-			) {
-				isJWT = true;
-			}
-			// If our APIRequest instance is retryable, attempt a retry. Otherwise, finish and propagate the error. Doesn't retry when the request is for JWT authentication, since that is handled in retryJWTGrant.
-			if (this.isRetryable &amp;&amp; !isJWT) {
-				this._retry(err);
-			} else {
-				this._finish(err);
-			}
+      var isJWT = false;
+      if (
+        this.config.request.hasOwnProperty('form') &amp;&amp;
+        this.config.request.form.hasOwnProperty('grant_type') &amp;&amp;
+        this.config.request.form.grant_type ===
+          'urn:ietf:params:oauth:grant-type:jwt-bearer'
+      ) {
+        isJWT = true;
+      }
+      // If our APIRequest instance is retryable, attempt a retry. Otherwise, finish and propagate the error. Doesn't retry when the request is for JWT authentication, since that is handled in retryJWTGrant.
+      if (this.isRetryable &amp;&amp; !isJWT) {
+        this._retry(err);
+      } else {
+        this._finish(err);
+      }
 
-			return;
-		}
+      return;
+    }
 
-		// If the request was successful, emit &amp; propagate the response!
-		this.eventBus.emit('response', null, response);
-		this._finish(null, response);
-	}
+    // If the request was successful, emit &amp; propagate the response!
+    this.eventBus.emit('response', null, response);
+    this._finish(null, response);
+  }
 
-	/**
-	 * Attempt a retry. If the request hasn't exceeded it's maximum number of retries,
-	 * re-execute the request (after the retry interval). Otherwise, propagate a new error.
-	 *
-	 * @param {?Error} err An error, if one occurred
-	 * @returns {void}
-	 * @private
-	 */
-	_retry(err?: any /* FIXME */) {
-		this.numRetries = this.numRetries || 0;
+  /**
+   * Attempt a retry. If the request hasn't exceeded it's maximum number of retries,
+   * re-execute the request (after the retry interval). Otherwise, propagate a new error.
+   *
+   * @param {?Error} err An error, if one occurred
+   * @returns {void}
+   * @private
+   */
+  _retry(err?: any /* FIXME */) {
+    this.numRetries = this.numRetries || 0;
 
-		if (this.numRetries &lt; this.config.numMaxRetries) {
-			var retryTimeout;
-			this.numRetries += 1;
-			// If the retry strategy is defined, then use it to determine the time (in ms) until the next retry or to
-			// propagate an error to the user.
-			if (this.config.retryStrategy) {
-				// Get the total elapsed time so far since the request was executed
-				var totalElapsedTime = process.hrtime(asyncRequestTimer);
-				var totalElapsedTimeMS =
-					totalElapsedTime[0] * 1000 + totalElapsedTime[1] / 1000000;
-				var retryOptions = {
-					error: err,
-					numRetryAttempts: this.numRetries,
-					numMaxRetries: this.config.numMaxRetries,
-					retryIntervalMS: this.config.retryIntervalMS,
-					totalElapsedTimeMS,
-				};
+    if (this.numRetries &lt; this.config.numMaxRetries) {
+      var retryTimeout;
+      this.numRetries += 1;
+      // If the retry strategy is defined, then use it to determine the time (in ms) until the next retry or to
+      // propagate an error to the user.
+      if (this.config.retryStrategy) {
+        // Get the total elapsed time so far since the request was executed
+        var totalElapsedTime = process.hrtime(asyncRequestTimer);
+        var totalElapsedTimeMS =
+          totalElapsedTime[0] * 1000 + totalElapsedTime[1] / 1000000;
+        var retryOptions = {
+          error: err,
+          numRetryAttempts: this.numRetries,
+          numMaxRetries: this.config.numMaxRetries,
+          retryIntervalMS: this.config.retryIntervalMS,
+          totalElapsedTimeMS,
+        };
 
-				retryTimeout = this.config.retryStrategy(retryOptions);
+        retryTimeout = this.config.retryStrategy(retryOptions);
 
-				// If the retry strategy doesn't return a number/time in ms, then propagate the response error to the user.
-				// However, if the retry strategy returns its own error, this will be propagated to the user instead.
-				if (typeof retryTimeout !== 'number') {
-					if (retryTimeout instanceof Error) {
-						err = retryTimeout;
-					}
-					this._finish(err);
-					return;
-				}
-			} else if (
-				err.hasOwnProperty('response') &amp;&amp;
-				err.response.hasOwnProperty('headers') &amp;&amp;
-				err.response.headers.hasOwnProperty('retry-after')
-			) {
-				retryTimeout = err.response.headers['retry-after'] * 1000;
-			} else {
-				retryTimeout = getRetryTimeout(
-					this.numRetries,
-					this.config.retryIntervalMS
-				);
-			}
-			setTimeout(this.execute.bind(this), retryTimeout);
-		} else {
-			err.maxRetriesExceeded = true;
-			this._finish(err);
-		}
-	}
+        // If the retry strategy doesn't return a number/time in ms, then propagate the response error to the user.
+        // However, if the retry strategy returns its own error, this will be propagated to the user instead.
+        if (typeof retryTimeout !== 'number') {
+          if (retryTimeout instanceof Error) {
+            err = retryTimeout;
+          }
+          this._finish(err);
+          return;
+        }
+      } else if (
+        err.hasOwnProperty('response') &amp;&amp;
+        err.response.hasOwnProperty('headers') &amp;&amp;
+        err.response.headers.hasOwnProperty('retry-after')
+      ) {
+        retryTimeout = err.response.headers['retry-after'] * 1000;
+      } else {
+        retryTimeout = getRetryTimeout(
+          this.numRetries,
+          this.config.retryIntervalMS
+        );
+      }
+      setTimeout(this.execute.bind(this), retryTimeout);
+    } else {
+      err.maxRetriesExceeded = true;
+      this._finish(err);
+    }
+  }
 
-	/**
-	 * Propagate the response to the provided callback.
-	 *
-	 * @param {?Error} err An error, if one occurred
-	 * @param {APIRequest~ResponseObject} response Information about the request &amp; response
-	 * @returns {void}
-	 * @private
-	 */
-	_finish(err?: any, response?: APIRequestResponseObject) {
-		var callback = this._callback!;
-		process.nextTick(() => {
-			if (err) {
-				callback(err);
-				return;
-			}
+  /**
+   * Propagate the response to the provided callback.
+   *
+   * @param {?Error} err An error, if one occurred
+   * @param {APIRequest~ResponseObject} response Information about the request &amp; response
+   * @returns {void}
+   * @private
+   */
+  _finish(err?: any, response?: APIRequestResponseObject) {
+    var callback = this._callback!;
+    process.nextTick(() => {
+      if (err) {
+        callback(err);
+        return;
+      }
 
-			callback(null, response);
-		});
-	}
+      callback(null, response);
+    });
+  }
 }
 
 /**
@@ -462,13 +462,13 @@ export = APIRequest;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="Request.html">Request</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="WebLinks.html">WebLinks</a></li><li><a href="Webhooks.html">Webhooks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#buildAuthorizationHeader">buildAuthorizationHeader</a></li><li><a href="global.html#cleanSensitiveHeaders">cleanSensitiveHeaders</a></li><li><a href="global.html#compareSignatures">compareSignatures</a></li><li><a href="global.html#computeSignature">computeSignature</a></li><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#createFileContentFormData">createFileContentFormData</a></li><li><a href="global.html#createFileMetadataFormData">createFileMetadataFormData</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#getFullURL">getFullURL</a></li><li><a href="global.html#getTokensFromGrantResponse">getTokensFromGrantResponse</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#isObjectValidTokenInfo">isObjectValidTokenInfo</a></li><li><a href="global.html#isObjectValidTokenStore">isObjectValidTokenStore</a></li><li><a href="global.html#isRequestRetryable">isRequestRetryable</a></li><li><a href="global.html#isTemporaryError">isTemporaryError</a></li><li><a href="global.html#isUnauthorizedDueToExpiredAccessToken">isUnauthorizedDueToExpiredAccessToken</a></li><li><a href="global.html#isValidCodeOrToken">isValidCodeOrToken</a></li><li><a href="global.html#isValidTokenResponse">isValidTokenResponse</a></li><li><a href="global.html#jsonStringifyWithEscapedUnicode">jsonStringifyWithEscapedUnicode</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#trimSlashes">trimSlashes</a></li><li><a href="global.html#updateRequestAgent">updateRequestAgent</a></li><li><a href="global.html#validateAppAuthParams">validateAppAuthParams</a></li><li><a href="global.html#validateBasicParams">validateBasicParams</a></li><li><a href="global.html#validateDeliveryTimestamp">validateDeliveryTimestamp</a></li><li><a href="global.html#validateSignature">validateSignature</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Apr 09 2025 11:35:28 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jun 11 2025 05:00:30 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

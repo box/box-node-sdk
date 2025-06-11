@@ -46,9 +46,9 @@ import urlPath from '../util/url-path';
  * @typedef {string} CollaborationAllowlistDirection Determines the type of restriction for allowlisting for a domain
  */
 enum CollaborationAllowlistDirection {
-	INBOUND = 'inbound',
-	OUTBOUND = 'outbound',
-	BOTH = 'both',
+  INBOUND = 'inbound',
+  OUTBOUND = 'outbound',
+  BOTH = 'both',
 }
 
 // ------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ enum CollaborationAllowlistDirection {
 // ------------------------------------------------------------------------------
 
 const BASE_PATH = '/collaboration_whitelist_entries',
-	TARGET_ENTRY_PATH = '/collaboration_whitelist_exempt_targets';
+  TARGET_ENTRY_PATH = '/collaboration_whitelist_exempt_targets';
 
 // ------------------------------------------------------------------------------
 // Public
@@ -70,227 +70,227 @@ const BASE_PATH = '/collaboration_whitelist_entries',
  * @returns {void}
  */
 class CollaborationAllowlist {
-	client: BoxClient;
-	directions!: Record&lt;string, string>;
+  client: BoxClient;
+  directions!: Record&lt;string, string>;
 
-	constructor(client: BoxClient) {
-		this.client = client;
-	}
+  constructor(client: BoxClient) {
+    this.client = client;
+  }
 
-	/**
-	 * Add a domain to the enterprise's allowlist.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_entries'
-	 * Method: POST
-	 *
-	 * @param {string} domain - The domain to be added to the allowlist
-	 * @param {CollaborationAllowlistDirection} direction - Inbound refers to collaboration actions within an enterprise. Outbound
-	 *                                                      refers to collaboration actions external to an enterprise. Both refers to
-	 *                                                      collaboration actions taken within and external to an enterprise
-	 * @param {Function} [callback] - Passed the collaboration allowlist information if it was created successfully
-	 * @returns {Promise&lt;Object>} A promise resolve to the collaboration allowlist object
-	 */
-	addDomain(
-		domain: string,
-		direction: CollaborationAllowlistDirection,
-		callback?: Function
-	) {
-		var params = {
-			body: {
-				domain,
-				direction,
-			},
-		};
+  /**
+   * Add a domain to the enterprise's allowlist.
+   *
+   * API Endpoint: '/collaboration_whitelist_entries'
+   * Method: POST
+   *
+   * @param {string} domain - The domain to be added to the allowlist
+   * @param {CollaborationAllowlistDirection} direction - Inbound refers to collaboration actions within an enterprise. Outbound
+   *                                                      refers to collaboration actions external to an enterprise. Both refers to
+   *                                                      collaboration actions taken within and external to an enterprise
+   * @param {Function} [callback] - Passed the collaboration allowlist information if it was created successfully
+   * @returns {Promise&lt;Object>} A promise resolve to the collaboration allowlist object
+   */
+  addDomain(
+    domain: string,
+    direction: CollaborationAllowlistDirection,
+    callback?: Function
+  ) {
+    var params = {
+      body: {
+        domain,
+        direction,
+      },
+    };
 
-		var apiPath = urlPath(BASE_PATH);
-		return this.client.wrapWithDefaultHandler(this.client.post)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+    var apiPath = urlPath(BASE_PATH);
+    return this.client.wrapWithDefaultHandler(this.client.post)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Requests a collaboration allowlist entry with a given ID.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_entries/:domainID'
-	 * Method: GET
-	 *
-	 * @param {string} domainID - Box ID of the collaboration allowlist being requested
-	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
-	 * @param {Function} [callback] - Passed the collaboration allowlist information if it was acquired successfully
-	 * @returns {Promise&lt;Object>} A promise resolving to the collaboration allowlist object
-	 */
-	getAllowlistedDomain(
-		domainID: string,
-		options?: Record&lt;string, any>,
-		callback?: Function
-	) {
-		var params = { qs: options };
+  /**
+   * Requests a collaboration allowlist entry with a given ID.
+   *
+   * API Endpoint: '/collaboration_whitelist_entries/:domainID'
+   * Method: GET
+   *
+   * @param {string} domainID - Box ID of the collaboration allowlist being requested
+   * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+   * @param {Function} [callback] - Passed the collaboration allowlist information if it was acquired successfully
+   * @returns {Promise&lt;Object>} A promise resolving to the collaboration allowlist object
+   */
+  getAllowlistedDomain(
+    domainID: string,
+    options?: Record&lt;string, any>,
+    callback?: Function
+  ) {
+    var params = { qs: options };
 
-		var apiPath = urlPath(BASE_PATH, domainID);
-		return this.client.wrapWithDefaultHandler(this.client.get)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+    var apiPath = urlPath(BASE_PATH, domainID);
+    return this.client.wrapWithDefaultHandler(this.client.get)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Requests all collaboration allowlist entries within an enterprise.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_entries'
-	 * Method: GET
-	 *
-	 * @param {Object} [options] - Additional options. Can be left null in most cases.
-	 * @param {int} [options.limit] - The number of collaboration allowlists to retrieve
-	 * @param {string} [options.marker] - Paging marker, retrieve records starting at this position in the list. Left blank to start at the beginning.
-	 * @param {Function} [callback] - Passed a list of collaboration allowlists if successful, error otherwise
-	 * @returns {Promise&lt;Object>} A promise resolving to the collection of collaboration allowlists
-	 */
-	getAllAllowlistedDomains(
-		options?: {
-			limit?: number;
-			marker?: string;
-		},
-		callback?: Function
-	) {
-		var params = {
-			qs: options,
-		};
+  /**
+   * Requests all collaboration allowlist entries within an enterprise.
+   *
+   * API Endpoint: '/collaboration_whitelist_entries'
+   * Method: GET
+   *
+   * @param {Object} [options] - Additional options. Can be left null in most cases.
+   * @param {int} [options.limit] - The number of collaboration allowlists to retrieve
+   * @param {string} [options.marker] - Paging marker, retrieve records starting at this position in the list. Left blank to start at the beginning.
+   * @param {Function} [callback] - Passed a list of collaboration allowlists if successful, error otherwise
+   * @returns {Promise&lt;Object>} A promise resolving to the collection of collaboration allowlists
+   */
+  getAllAllowlistedDomains(
+    options?: {
+      limit?: number;
+      marker?: string;
+    },
+    callback?: Function
+  ) {
+    var params = {
+      qs: options,
+    };
 
-		var apiPath = urlPath(BASE_PATH);
-		return this.client.wrapWithDefaultHandler(this.client.get)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+    var apiPath = urlPath(BASE_PATH);
+    return this.client.wrapWithDefaultHandler(this.client.get)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Delete a given collaboration allowlist entry.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_entries/:domainID'
-	 * Method: DELETE
-	 *
-	 * @param {string} domainID - Box ID of the collaboration allowlist being requested
-	 * @param {Function} [callback] - Empty response body passed if successful.
-	 * @returns {Promise&lt;void>} A promise resolving to nothing
-	 */
-	removeDomain(domainID: string, callback?: Function) {
-		var apiPath = urlPath(BASE_PATH, domainID);
-		return this.client.wrapWithDefaultHandler(this.client.del)(
-			apiPath,
-			null,
-			callback
-		);
-	}
+  /**
+   * Delete a given collaboration allowlist entry.
+   *
+   * API Endpoint: '/collaboration_whitelist_entries/:domainID'
+   * Method: DELETE
+   *
+   * @param {string} domainID - Box ID of the collaboration allowlist being requested
+   * @param {Function} [callback] - Empty response body passed if successful.
+   * @returns {Promise&lt;void>} A promise resolving to nothing
+   */
+  removeDomain(domainID: string, callback?: Function) {
+    var apiPath = urlPath(BASE_PATH, domainID);
+    return this.client.wrapWithDefaultHandler(this.client.del)(
+      apiPath,
+      null,
+      callback
+    );
+  }
 
-	/**
-	 * Adds a Box User to the exempt target list.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_exempt_targets'
-	 * Method: GET
-	 *
-	 * @param {string} userID - The ID of the Box User to be added to the allowlist
-	 * @param {Function} [callback] - Passed a collaboration allowlist for user if successful, error otherwise
-	 * @returns {Promise&lt;Object>} A promise resolving to a user collaboration allowlist
-	 */
-	addExemption(userID: string, callback?: Function) {
-		var params = {
-			body: {
-				user: {
-					id: userID,
-					type: 'user',
-				},
-			},
-		};
+  /**
+   * Adds a Box User to the exempt target list.
+   *
+   * API Endpoint: '/collaboration_whitelist_exempt_targets'
+   * Method: GET
+   *
+   * @param {string} userID - The ID of the Box User to be added to the allowlist
+   * @param {Function} [callback] - Passed a collaboration allowlist for user if successful, error otherwise
+   * @returns {Promise&lt;Object>} A promise resolving to a user collaboration allowlist
+   */
+  addExemption(userID: string, callback?: Function) {
+    var params = {
+      body: {
+        user: {
+          id: userID,
+          type: 'user',
+        },
+      },
+    };
 
-		var apiPath = urlPath(TARGET_ENTRY_PATH);
-		return this.client.wrapWithDefaultHandler(this.client.post)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+    var apiPath = urlPath(TARGET_ENTRY_PATH);
+    return this.client.wrapWithDefaultHandler(this.client.post)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Retrieves information about a collaboration allowlist for user by allowlist ID.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_exempt_targets/:exemptionID'
-	 * Method: GET
-	 *
-	 * @param {string} exemptionID - The ID of the collaboration allowlist
-	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
-	 * @param {Function} [callback] - Passed the collaboration allowlist information for a user if it was acquired successfully
-	 * @returns {Promise&lt;Object>} A promise resolving to the collaboration allowlist object
-	 */
-	getExemption(
-		exemptionID: string,
-		options?: Record&lt;string, any>,
-		callback?: Function
-	) {
-		var params = {
-			qs: options,
-		};
+  /**
+   * Retrieves information about a collaboration allowlist for user by allowlist ID.
+   *
+   * API Endpoint: '/collaboration_whitelist_exempt_targets/:exemptionID'
+   * Method: GET
+   *
+   * @param {string} exemptionID - The ID of the collaboration allowlist
+   * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+   * @param {Function} [callback] - Passed the collaboration allowlist information for a user if it was acquired successfully
+   * @returns {Promise&lt;Object>} A promise resolving to the collaboration allowlist object
+   */
+  getExemption(
+    exemptionID: string,
+    options?: Record&lt;string, any>,
+    callback?: Function
+  ) {
+    var params = {
+      qs: options,
+    };
 
-		var apiPath = urlPath(TARGET_ENTRY_PATH, exemptionID);
-		return this.client.wrapWithDefaultHandler(this.client.get)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+    var apiPath = urlPath(TARGET_ENTRY_PATH, exemptionID);
+    return this.client.wrapWithDefaultHandler(this.client.get)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Retrieve a list of all exemptions to an enterprise's collaboration allowlist.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_exempt_targets'
-	 * Method: GET
-	 *
-	 * @param {Object} [options] - Additional options. Can be left null in most cases.
-	 * @param {int} [options.limit] - The number of user collaboration allowlists to retrieve
-	 * @param {string} [options.marker] - Paging marker, retrieve records starting at this position in the list. Left blank to start at the beginning.
-	 * @param {Function} [callback] - Passed a list of user collaboration allowlists if successful, error otherwise
-	 * @returns {Promise&lt;Object>} A promise resolving to the collection of user collaboration allowlists
-	 */
-	getAllExemptions(
-		options?: {
-			limit?: number;
-			marker?: string;
-		},
-		callback?: Function
-	) {
-		var params = {
-			qs: options,
-		};
+  /**
+   * Retrieve a list of all exemptions to an enterprise's collaboration allowlist.
+   *
+   * API Endpoint: '/collaboration_whitelist_exempt_targets'
+   * Method: GET
+   *
+   * @param {Object} [options] - Additional options. Can be left null in most cases.
+   * @param {int} [options.limit] - The number of user collaboration allowlists to retrieve
+   * @param {string} [options.marker] - Paging marker, retrieve records starting at this position in the list. Left blank to start at the beginning.
+   * @param {Function} [callback] - Passed a list of user collaboration allowlists if successful, error otherwise
+   * @returns {Promise&lt;Object>} A promise resolving to the collection of user collaboration allowlists
+   */
+  getAllExemptions(
+    options?: {
+      limit?: number;
+      marker?: string;
+    },
+    callback?: Function
+  ) {
+    var params = {
+      qs: options,
+    };
 
-		var apiPath = urlPath(TARGET_ENTRY_PATH);
-		return this.client.wrapWithDefaultHandler(this.client.get)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+    var apiPath = urlPath(TARGET_ENTRY_PATH);
+    return this.client.wrapWithDefaultHandler(this.client.get)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Delete a given user collaboration allowlist.
-	 *
-	 * API Endpoint: '/collaboration_whitelist_exempt_targets/:exemptionID'
-	 * Method: DELETE
-	 *
-	 * @param {string} exemptionID - Box ID of the user collaboration allowlist being requested
-	 * @param {Function} [callback] - Empty response body passed if successful.
-	 * @returns {Promise&lt;void>} A promise resolving to nothing
-	 */
-	removeExemption(exemptionID: string, callback?: Function) {
-		var apiPath = urlPath(TARGET_ENTRY_PATH, exemptionID);
-		return this.client.wrapWithDefaultHandler(this.client.del)(
-			apiPath,
-			null,
-			callback
-		);
-	}
+  /**
+   * Delete a given user collaboration allowlist.
+   *
+   * API Endpoint: '/collaboration_whitelist_exempt_targets/:exemptionID'
+   * Method: DELETE
+   *
+   * @param {string} exemptionID - Box ID of the user collaboration allowlist being requested
+   * @param {Function} [callback] - Empty response body passed if successful.
+   * @returns {Promise&lt;void>} A promise resolving to nothing
+   */
+  removeExemption(exemptionID: string, callback?: Function) {
+    var apiPath = urlPath(TARGET_ENTRY_PATH, exemptionID);
+    return this.client.wrapWithDefaultHandler(this.client.del)(
+      apiPath,
+      null,
+      callback
+    );
+  }
 }
 
 /**
@@ -316,13 +316,13 @@ export = CollaborationAllowlist;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="Request.html">Request</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="WebLinks.html">WebLinks</a></li><li><a href="Webhooks.html">Webhooks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#buildAuthorizationHeader">buildAuthorizationHeader</a></li><li><a href="global.html#cleanSensitiveHeaders">cleanSensitiveHeaders</a></li><li><a href="global.html#compareSignatures">compareSignatures</a></li><li><a href="global.html#computeSignature">computeSignature</a></li><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#createFileContentFormData">createFileContentFormData</a></li><li><a href="global.html#createFileMetadataFormData">createFileMetadataFormData</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#getFullURL">getFullURL</a></li><li><a href="global.html#getTokensFromGrantResponse">getTokensFromGrantResponse</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#isObjectValidTokenInfo">isObjectValidTokenInfo</a></li><li><a href="global.html#isObjectValidTokenStore">isObjectValidTokenStore</a></li><li><a href="global.html#isRequestRetryable">isRequestRetryable</a></li><li><a href="global.html#isTemporaryError">isTemporaryError</a></li><li><a href="global.html#isUnauthorizedDueToExpiredAccessToken">isUnauthorizedDueToExpiredAccessToken</a></li><li><a href="global.html#isValidCodeOrToken">isValidCodeOrToken</a></li><li><a href="global.html#isValidTokenResponse">isValidTokenResponse</a></li><li><a href="global.html#jsonStringifyWithEscapedUnicode">jsonStringifyWithEscapedUnicode</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#trimSlashes">trimSlashes</a></li><li><a href="global.html#updateRequestAgent">updateRequestAgent</a></li><li><a href="global.html#validateAppAuthParams">validateAppAuthParams</a></li><li><a href="global.html#validateBasicParams">validateBasicParams</a></li><li><a href="global.html#validateDeliveryTimestamp">validateDeliveryTimestamp</a></li><li><a href="global.html#validateSignature">validateSignature</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Apr 09 2025 11:35:28 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jun 11 2025 05:00:30 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
