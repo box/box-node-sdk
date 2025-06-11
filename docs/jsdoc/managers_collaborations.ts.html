@@ -34,26 +34,26 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-import BoxClient from "../box-client";
-import urlPath from "../util/url-path";
+import BoxClient from '../box-client';
+import urlPath from '../util/url-path';
 import {
-	Collaboration,
-	CollaborationAccesibleBy,
-	CollaborationRole,
-	CollaborationStatus,
-	CollaborationUpdate
-} from "../schemas";
+  Collaboration,
+  CollaborationAccesibleBy,
+  CollaborationRole,
+  CollaborationStatus,
+  CollaborationUpdate,
+} from '../schemas';
 
 // -----------------------------------------------------------------------------
 // Typedefs
 // -----------------------------------------------------------------------------
 
-type ItemType = "file" | "folder";
+type ItemType = 'file' | 'folder';
 
 // ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
-const BASE_PATH = "/collaborations";
+const BASE_PATH = '/collaborations';
 
 // ------------------------------------------------------------------------------
 // Public
@@ -67,346 +67,347 @@ const BASE_PATH = "/collaborations";
  * @returns {void}
  */
 class Collaborations {
-	client: BoxClient;
+  client: BoxClient;
 
-	constructor(client: BoxClient) {
-		this.client = client;
-	}
+  constructor(client: BoxClient) {
+    this.client = client;
+  }
 
-	/**
-	 * Requests a collaboration object with a given ID.
-	 *
-	 * API Endpoint: '/collaborations/:collaborationID'
-	 * Method: GET
-	 *
-	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
-	 * @param {Function} [callback] - Passed the collaboration information if it was acquired successfully
-	 * @returns {Promise&lt;Collaboration>} A promise resolving to the collaboration object
-	 */
-	get(
-		collaborationID: string,
-		options?: Record&lt;string, any>,
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		const params = {
-			qs: options
-		};
-		const apiPath = urlPath(BASE_PATH, collaborationID);
-		return this.client.wrapWithDefaultHandler(this.client.get)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+  /**
+   * Requests a collaboration object with a given ID.
+   *
+   * API Endpoint: '/collaborations/:collaborationID'
+   * Method: GET
+   *
+   * @param {string} collaborationID - Box ID of the collaboration being requested
+   * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
+   * @param {Function} [callback] - Passed the collaboration information if it was acquired successfully
+   * @returns {Promise&lt;Collaboration>} A promise resolving to the collaboration object
+   */
+  get(
+    collaborationID: string,
+    options?: Record&lt;string, any>,
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    const params = {
+      qs: options,
+    };
+    const apiPath = urlPath(BASE_PATH, collaborationID);
+    return this.client.wrapWithDefaultHandler(this.client.get)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Gets a user's pending collaborations
-	 *
-	 * API Endpoint: '/collaborations'
-	 * Method: GET
-	 *
-	 * @param {Function} [callback] - Called with a collection of pending collaborations if successful
-	 * @returns {Promise&lt;Collaborations>} A promise resolving to the collection of pending collaborations
-	 */
-	getPending(callback?: Function): Promise&lt;Collaborations> {
-		const params = {
-			qs: {
-				status: "pending"
-			}
-		};
-		return this.client.wrapWithDefaultHandler(this.client.get)(
-			BASE_PATH,
-			params,
-			callback
-		);
-	}
+  /**
+   * Gets a user's pending collaborations
+   *
+   * API Endpoint: '/collaborations'
+   * Method: GET
+   *
+   * @param {Function} [callback] - Called with a collection of pending collaborations if successful
+   * @returns {Promise&lt;Collaborations>} A promise resolving to the collection of pending collaborations
+   */
+  getPending(callback?: Function): Promise&lt;Collaborations> {
+    const params = {
+      qs: {
+        status: 'pending',
+      },
+    };
+    return this.client.wrapWithDefaultHandler(this.client.get)(
+      BASE_PATH,
+      params,
+      callback
+    );
+  }
 
-	private updateInternal(
-		collaborationID: string,
-		updates: CollaborationUpdate | { status: CollaborationStatus },
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		const params = {
-			body: updates
-		};
+  private updateInternal(
+    collaborationID: string,
+    updates: CollaborationUpdate | { status: CollaborationStatus },
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    const params = {
+      body: updates,
+    };
 
-		const apiPath = urlPath(BASE_PATH, collaborationID);
-		return this.client.wrapWithDefaultHandler(this.client.put)(
-			apiPath,
-			params,
-			callback
-		);
-	}
+    const apiPath = urlPath(BASE_PATH, collaborationID);
+    return this.client.wrapWithDefaultHandler(this.client.put)(
+      apiPath,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Update some information about a given collaboration.
-	 *
-	 * API Endpoint: '/collaborations/:collaborationID'
-	 * Method: PUT
-	 *
-	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {CollaborationUpdate} updates - Fields of the collaboration to be updated
-	 * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
-	 * @returns {Promise&lt;Collaboration>} A promise resolving to the updated collaboration object
-	 */
-	update(
-		collaborationID: string,
-		updates: CollaborationUpdate,
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		return this.updateInternal(collaborationID, updates, callback);
-	}
+  /**
+   * Update some information about a given collaboration.
+   *
+   * API Endpoint: '/collaborations/:collaborationID'
+   * Method: PUT
+   *
+   * @param {string} collaborationID - Box ID of the collaboration being requested
+   * @param {CollaborationUpdate} updates - Fields of the collaboration to be updated
+   * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
+   * @returns {Promise&lt;Collaboration>} A promise resolving to the updated collaboration object
+   */
+  update(
+    collaborationID: string,
+    updates: CollaborationUpdate,
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    return this.updateInternal(collaborationID, updates, callback);
+  }
 
-	/**
-	 * Update the status of a pending collaboration.
-	 *
-	 * API Endpoint: '/collaborations/:collaborationID'
-	 * Method: PUT
-	 *
-	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {CollaborationStatus} newStatus - The new collaboration status ('accepted'/'rejected')
-	 * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
-	 * @returns {Promise&lt;Collaboration>} A promise resolving to the accepted collaboration object
-	 */
-	respondToPending(
-		collaborationID: string,
-		newStatus: CollaborationStatus,
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		return this.updateInternal(
-			collaborationID,
-			{
-				status: newStatus
-			},
-			callback);
-	}
+  /**
+   * Update the status of a pending collaboration.
+   *
+   * API Endpoint: '/collaborations/:collaborationID'
+   * Method: PUT
+   *
+   * @param {string} collaborationID - Box ID of the collaboration being requested
+   * @param {CollaborationStatus} newStatus - The new collaboration status ('accepted'/'rejected')
+   * @param {Function} [callback] - Passed the updated collaboration information if it was acquired successfully
+   * @returns {Promise&lt;Collaboration>} A promise resolving to the accepted collaboration object
+   */
+  respondToPending(
+    collaborationID: string,
+    newStatus: CollaborationStatus,
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    return this.updateInternal(
+      collaborationID,
+      {
+        status: newStatus,
+      },
+      callback
+    );
+  }
 
-	/**
-	 * Invite a collaborator to a folder. You'll have to create the 'accessible_by' input object
-	 * yourself, but the method allows for multiple types of collaborator invites. See
-	 * {@link http://developers.box.com/docs/#collaborations-add-a-collaboration} for formatting
-	 * help.
-	 *
-	 * API Endpoint: '/collaborations
-	 * Method: POST
-	 *
-	 * @param {CollaborationAccesibleBy} accessibleBy - The accessible_by object expected by the API
-	 * @param {string} itemID - Box ID of the item to which the user should be invited
-	 * @param {CollaborationRole} role - The role which the invited collaborator should have
-	 * @param {Object} [options] - Optional parameters for the collaboration
-	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
-	 * @param {boolean} [options.notify] - Determines if the user or group will receive email notifications
-	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
-	 * @param {boolean} [options.is_access_only] - WARN: Feature not yet available.
-	 *   Do not display collaborated items on collaborator's All Files Pages
-	 *   and suppress notifications sent to collaborators regarding access-only content.
-	 *   This feature is going to be released in Q4. Watch our
-	 * 	 [announcements](https://developer.box.com/changelog/) to learn about its availability.
-	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
-	 */
-	create(
-		accessibleBy: CollaborationAccesibleBy,
-		itemID: string,
-		role: CollaborationRole,
-		options?:
-			| {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-			is_access_only?: boolean;
-		}
-			| Function,
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		const defaultOptions = {
-			type: "folder"
-		};
+  /**
+   * Invite a collaborator to a folder. You'll have to create the 'accessible_by' input object
+   * yourself, but the method allows for multiple types of collaborator invites. See
+   * {@link http://developers.box.com/docs/#collaborations-add-a-collaboration} for formatting
+   * help.
+   *
+   * API Endpoint: '/collaborations
+   * Method: POST
+   *
+   * @param {CollaborationAccesibleBy} accessibleBy - The accessible_by object expected by the API
+   * @param {string} itemID - Box ID of the item to which the user should be invited
+   * @param {CollaborationRole} role - The role which the invited collaborator should have
+   * @param {Object} [options] - Optional parameters for the collaboration
+   * @param {ItemType} [options.type=folder] - Type of object to be collaborated
+   * @param {boolean} [options.notify] - Determines if the user or group will receive email notifications
+   * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
+   * @param {boolean} [options.is_access_only] - WARN: Feature not yet available.
+   *   Do not display collaborated items on collaborator's All Files Pages
+   *   and suppress notifications sent to collaborators regarding access-only content.
+   *   This feature is going to be released in Q4. Watch our
+   * 	 [announcements](https://developer.box.com/changelog/) to learn about its availability.
+   * @param {Function} [callback] - Called with the new collaboration if successful
+   * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
+   */
+  create(
+    accessibleBy: CollaborationAccesibleBy,
+    itemID: string,
+    role: CollaborationRole,
+    options?:
+      | {
+          type?: ItemType;
+          notify?: boolean;
+          can_view_path?: boolean;
+          is_access_only?: boolean;
+        }
+      | Function,
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    const defaultOptions = {
+      type: 'folder',
+    };
 
-		if (typeof options === "function") {
-			callback = options;
-			options = {};
-		}
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
 
-		options = Object.assign({}, defaultOptions, options);
+    options = Object.assign({}, defaultOptions, options);
 
-		const params: {
-			body: Record&lt;string, any>;
-			qs?: Record&lt;string, any>;
-		} = {
-			body: {
-				item: {
-					type: options.type,
-					id: itemID
-				},
-				accessible_by: accessibleBy,
-				role
-			}
-		};
+    const params: {
+      body: Record&lt;string, any>;
+      qs?: Record&lt;string, any>;
+    } = {
+      body: {
+        item: {
+          type: options.type,
+          id: itemID,
+        },
+        accessible_by: accessibleBy,
+        role,
+      },
+    };
 
-		if (typeof options.can_view_path === "boolean") {
-			params.body.can_view_path = options.can_view_path;
-		}
+    if (typeof options.can_view_path === 'boolean') {
+      params.body.can_view_path = options.can_view_path;
+    }
 
-		if (typeof options.notify === "boolean") {
-			params.qs = {
-				notify: options.notify
-			};
-		}
+    if (typeof options.notify === 'boolean') {
+      params.qs = {
+        notify: options.notify,
+      };
+    }
 
-		if(typeof options.is_access_only === 'boolean') {
-			params.body.is_access_only = options.is_access_only;
-		}
+    if (typeof options.is_access_only === 'boolean') {
+      params.body.is_access_only = options.is_access_only;
+    }
 
-		return this.client.wrapWithDefaultHandler(this.client.post)(
-			BASE_PATH,
-			params,
-			callback
-		);
-	}
+    return this.client.wrapWithDefaultHandler(this.client.post)(
+      BASE_PATH,
+      params,
+      callback
+    );
+  }
 
-	/**
-	 * Invite a user to collaborate on an item via their user ID.
-	 *
-	 * API Endpoint: '/collaborations
-	 * Method: POST
-	 *
-	 * @param {int | string} userID - The ID of the user you'll invite as a collaborator
-	 * @param {string} itemID - Box ID of the item to which the user should be invited
-	 * @param {CollaborationRole} role - The role which the invited collaborator should have
-	 * @param {Object} [options] - Optional parameters for the collaboration
-	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
-	 * @param {boolean} [options.notify] - Determines if the user will receive email notifications
-	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
-	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
-	 */
-	createWithUserID(
-		userID: number | string,
-		itemID: string,
-		role: CollaborationRole,
-		options?:
-			| {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-		}
-			| Function,
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		if (typeof options === "function") {
-			callback = options;
-			options = {};
-		}
+  /**
+   * Invite a user to collaborate on an item via their user ID.
+   *
+   * API Endpoint: '/collaborations
+   * Method: POST
+   *
+   * @param {int | string} userID - The ID of the user you'll invite as a collaborator
+   * @param {string} itemID - Box ID of the item to which the user should be invited
+   * @param {CollaborationRole} role - The role which the invited collaborator should have
+   * @param {Object} [options] - Optional parameters for the collaboration
+   * @param {ItemType} [options.type=folder] - Type of object to be collaborated
+   * @param {boolean} [options.notify] - Determines if the user will receive email notifications
+   * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
+   * @param {Function} [callback] - Called with the new collaboration if successful
+   * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
+   */
+  createWithUserID(
+    userID: number | string,
+    itemID: string,
+    role: CollaborationRole,
+    options?:
+      | {
+          type?: ItemType;
+          notify?: boolean;
+          can_view_path?: boolean;
+        }
+      | Function,
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
 
-		const accessibleBy: CollaborationAccesibleBy = {
-			type: "user",
-			id: `${userID}`
-		};
-		return this.create(accessibleBy, itemID, role, options, callback);
-	}
+    const accessibleBy: CollaborationAccesibleBy = {
+      type: 'user',
+      id: `${userID}`,
+    };
+    return this.create(accessibleBy, itemID, role, options, callback);
+  }
 
-	/**
-	 * Invite a user to collaborate on an item via their user login email address.
-	 *
-	 * API Endpoint: '/collaborations
-	 * Method: POST
-	 *
-	 * @param {string} email - The collaborator's email address
-	 * @param {string} itemID - Box ID of the item to which the user should be invited
-	 * @param {CollaborationRole} role - The role which the invited collaborator should have
-	 * @param {Object} [options] - Optional parameters for the collaboration
-	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
-	 * @param {boolean} [options.notify] - Determines if the user will receive email notifications
-	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
-	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
-	 */
-	createWithUserEmail(
-		email: string,
-		itemID: string,
-		role: CollaborationRole,
-		options?:
-			| {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-		}
-			| Function,
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		if (typeof options === "function") {
-			callback = options;
-			options = {};
-		}
+  /**
+   * Invite a user to collaborate on an item via their user login email address.
+   *
+   * API Endpoint: '/collaborations
+   * Method: POST
+   *
+   * @param {string} email - The collaborator's email address
+   * @param {string} itemID - Box ID of the item to which the user should be invited
+   * @param {CollaborationRole} role - The role which the invited collaborator should have
+   * @param {Object} [options] - Optional parameters for the collaboration
+   * @param {ItemType} [options.type=folder] - Type of object to be collaborated
+   * @param {boolean} [options.notify] - Determines if the user will receive email notifications
+   * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
+   * @param {Function} [callback] - Called with the new collaboration if successful
+   * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
+   */
+  createWithUserEmail(
+    email: string,
+    itemID: string,
+    role: CollaborationRole,
+    options?:
+      | {
+          type?: ItemType;
+          notify?: boolean;
+          can_view_path?: boolean;
+        }
+      | Function,
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
 
-		const accessibleBy: CollaborationAccesibleBy = {
-			type: "user",
-			login: email
-		};
-		return this.create(accessibleBy, itemID, role, options, callback);
-	}
+    const accessibleBy: CollaborationAccesibleBy = {
+      type: 'user',
+      login: email,
+    };
+    return this.create(accessibleBy, itemID, role, options, callback);
+  }
 
-	/**
-	 * Invite a group to collaborate on an item via their group ID.
-	 *
-	 * API Endpoint: '/collaborations
-	 * Method: POST
-	 *
-	 * @param {int | string} groupID - The ID of the group you'll invite as a collaborator
-	 * @param {string} itemID - Box ID of the item to which the group should be invited
-	 * @param {CollaborationRole} role - The role which the invited collaborator should have
-	 * @param {Object} [options] - Optional parameters for the collaboration
-	 * @param {ItemType} [options.type=folder] - Type of object to be collaborated
-	 * @param {boolean} [options.notify] - Determines if the group will receive email notifications
-	 * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
-	 * @param {Function} [callback] - Called with the new collaboration if successful
-	 * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
-	 */
-	createWithGroupID(
-		groupID: number | string,
-		itemID: string,
-		role: CollaborationRole,
-		options?:
-			| {
-			type?: ItemType;
-			notify?: boolean;
-			can_view_path?: boolean;
-		}
-			| Function,
-		callback?: Function
-	): Promise&lt;Collaboration> {
-		if (typeof options === "function") {
-			callback = options;
-			options = {};
-		}
+  /**
+   * Invite a group to collaborate on an item via their group ID.
+   *
+   * API Endpoint: '/collaborations
+   * Method: POST
+   *
+   * @param {int | string} groupID - The ID of the group you'll invite as a collaborator
+   * @param {string} itemID - Box ID of the item to which the group should be invited
+   * @param {CollaborationRole} role - The role which the invited collaborator should have
+   * @param {Object} [options] - Optional parameters for the collaboration
+   * @param {ItemType} [options.type=folder] - Type of object to be collaborated
+   * @param {boolean} [options.notify] - Determines if the group will receive email notifications
+   * @param {boolean} [options.can_view_path] - Whether view path collaboration feature is enabled or not
+   * @param {Function} [callback] - Called with the new collaboration if successful
+   * @returns {Promise&lt;Collaboration>} A promise resolving to the created collaboration object
+   */
+  createWithGroupID(
+    groupID: number | string,
+    itemID: string,
+    role: CollaborationRole,
+    options?:
+      | {
+          type?: ItemType;
+          notify?: boolean;
+          can_view_path?: boolean;
+        }
+      | Function,
+    callback?: Function
+  ): Promise&lt;Collaboration> {
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
 
-		const accessibleBy: CollaborationAccesibleBy = {
-			type: "group",
-			id: `${groupID}`
-		};
-		return this.create(accessibleBy, itemID, role, options, callback);
-	}
+    const accessibleBy: CollaborationAccesibleBy = {
+      type: 'group',
+      id: `${groupID}`,
+    };
+    return this.create(accessibleBy, itemID, role, options, callback);
+  }
 
-	/**
-	 * Delete a given collaboration.
-	 *
-	 * API Endpoint: '/collaborations/:collaborationID'
-	 * Method: DELETE
-	 *
-	 * @param {string} collaborationID - Box ID of the collaboration being requested
-	 * @param {Function} [callback] - Empty response body passed if successful.
-	 * @returns {Promise&lt;void>} A promise resolving to nothing
-	 */
-	delete(collaborationID: string, callback?: Function): Promise&lt;void> {
-		const apiPath = urlPath(BASE_PATH, collaborationID);
-		return this.client.wrapWithDefaultHandler(this.client.del)(
-			apiPath,
-			null,
-			callback
-		);
-	}
+  /**
+   * Delete a given collaboration.
+   *
+   * API Endpoint: '/collaborations/:collaborationID'
+   * Method: DELETE
+   *
+   * @param {string} collaborationID - Box ID of the collaboration being requested
+   * @param {Function} [callback] - Empty response body passed if successful.
+   * @returns {Promise&lt;void>} A promise resolving to nothing
+   */
+  delete(collaborationID: string, callback?: Function): Promise&lt;void> {
+    const apiPath = urlPath(BASE_PATH, collaborationID);
+    return this.client.wrapWithDefaultHandler(this.client.del)(
+      apiPath,
+      null,
+      callback
+    );
+  }
 }
 
 /**
@@ -424,13 +425,13 @@ export = Collaborations;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="Request.html">Request</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="WebLinks.html">WebLinks</a></li><li><a href="Webhooks.html">Webhooks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#buildAuthorizationHeader">buildAuthorizationHeader</a></li><li><a href="global.html#cleanSensitiveHeaders">cleanSensitiveHeaders</a></li><li><a href="global.html#compareSignatures">compareSignatures</a></li><li><a href="global.html#computeSignature">computeSignature</a></li><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#createFileContentFormData">createFileContentFormData</a></li><li><a href="global.html#createFileMetadataFormData">createFileMetadataFormData</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#getFullURL">getFullURL</a></li><li><a href="global.html#getTokensFromGrantResponse">getTokensFromGrantResponse</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#isObjectValidTokenInfo">isObjectValidTokenInfo</a></li><li><a href="global.html#isObjectValidTokenStore">isObjectValidTokenStore</a></li><li><a href="global.html#isRequestRetryable">isRequestRetryable</a></li><li><a href="global.html#isTemporaryError">isTemporaryError</a></li><li><a href="global.html#isUnauthorizedDueToExpiredAccessToken">isUnauthorizedDueToExpiredAccessToken</a></li><li><a href="global.html#isValidCodeOrToken">isValidCodeOrToken</a></li><li><a href="global.html#isValidTokenResponse">isValidTokenResponse</a></li><li><a href="global.html#jsonStringifyWithEscapedUnicode">jsonStringifyWithEscapedUnicode</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#trimSlashes">trimSlashes</a></li><li><a href="global.html#updateRequestAgent">updateRequestAgent</a></li><li><a href="global.html#validateAppAuthParams">validateAppAuthParams</a></li><li><a href="global.html#validateBasicParams">validateBasicParams</a></li><li><a href="global.html#validateDeliveryTimestamp">validateDeliveryTimestamp</a></li><li><a href="global.html#validateSignature">validateSignature</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Apr 09 2025 11:35:28 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jun 11 2025 05:00:30 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

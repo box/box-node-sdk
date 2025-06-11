@@ -39,7 +39,7 @@ import { Readable } from 'stream';
 // Requirements
 // ------------------------------------------------------------------------------
 const merge = require('merge-options'),
-	sdkVersion = require('../../package.json').version;
+  sdkVersion = require('../../package.json').version;
 
 // ------------------------------------------------------------------------------
 // Private
@@ -58,12 +58,12 @@ const nodeVersion = process.version;
  * @property {boolean} [verifyTimestamp=false] Whether the timestamp when the auth token is created should be validated
  */
 type AppAuthConfig = {
-	keyID: string;
-	privateKey: string | Buffer;
-	passphrase: string;
-	algorithm: 'RS256' | 'RS384' | 'RS512';
-	expirationTime: number;
-	verifyTimestamp: boolean;
+  keyID: string;
+  privateKey: string | Buffer;
+  passphrase: string;
+  algorithm: 'RS256' | 'RS384' | 'RS512';
+  expirationTime: number;
+  verifyTimestamp: boolean;
 };
 
 /**
@@ -84,75 +84,75 @@ type AppAuthConfig = {
  * @property {?AppAuthConfig} appAuth Optional configuration for App Auth
  */
 type UserConfigurationOptions = {
-	clientID: string;
-	clientSecret: string;
-	apiRootURL: string;
-	uploadAPIRootURL: string;
-	authorizeRootURL: string;
-	uploadRequestTimeoutMS: number;
-	retryIntervalMS: number;
-	numMaxRetries: number;
-	expiredBufferMS: number;
-	request: {
-		agentClass: any /* FIXME */;
-		agentOptions: any /* FIXME */;
-		strictSSL: boolean;
-	};
-	appAuth?: AppAuthConfig;
-	proxy?: {
-		url: string;
-		username: string;
-		password: string;
-	};
+  clientID: string;
+  clientSecret: string;
+  apiRootURL: string;
+  uploadAPIRootURL: string;
+  authorizeRootURL: string;
+  uploadRequestTimeoutMS: number;
+  retryIntervalMS: number;
+  numMaxRetries: number;
+  expiredBufferMS: number;
+  request: {
+    agentClass: any /* FIXME */;
+    agentOptions: any /* FIXME */;
+    strictSSL: boolean;
+  };
+  appAuth?: AppAuthConfig;
+  proxy?: {
+    url: string;
+    username: string;
+    password: string;
+  };
 };
 
 var defaults = {
-	clientID: null,
-	clientSecret: null,
-	apiRootURL: 'https://api.box.com',
-	uploadAPIRootURL: 'https://upload.box.com/api',
-	authorizeRootURL: 'https://account.box.com/api',
-	apiVersion: '2.0',
-	uploadRequestTimeoutMS: 60000,
-	retryIntervalMS: 2000,
-	numMaxRetries: 5,
-	retryStrategy: null,
-	expiredBufferMS: 180000,
-	appAuth: undefined,
-	iterators: false,
-	enterpriseID: undefined,
-	analyticsClient: null,
-	disableStreamPassThrough: false,
-	proxy: {
-		url: null,
-		username: null,
-		password: null,
-	},
-	request: {
-		// By default, require API SSL cert to be valid
-		strictSSL: true,
-		// Use an agent with keep-alive enabled to avoid performing SSL handshake per connection
-		agentClass: https.Agent,
-		agentOptions: {
-			keepAlive: true,
-		},
-		// Encode requests as JSON. Encode the response as well if JSON is returned.
-		json: true,
-		// Do not encode the response as a string, since the response could be a file. return Buffers instead.
-		encoding: null,
-		// A redirect is usually information we want to handle, so don't automatically follow
-		followRedirect: false,
-		// By default, we attach a version-specific user-agent string to SDK requests
-		headers: {
-			'User-Agent': `Box Node.js SDK v${sdkVersion} (Node ${nodeVersion})`,
-		},
-	},
+  clientID: null,
+  clientSecret: null,
+  apiRootURL: 'https://api.box.com',
+  uploadAPIRootURL: 'https://upload.box.com/api',
+  authorizeRootURL: 'https://account.box.com/api',
+  apiVersion: '2.0',
+  uploadRequestTimeoutMS: 60000,
+  retryIntervalMS: 2000,
+  numMaxRetries: 5,
+  retryStrategy: null,
+  expiredBufferMS: 180000,
+  appAuth: undefined,
+  iterators: false,
+  enterpriseID: undefined,
+  analyticsClient: null,
+  disableStreamPassThrough: false,
+  proxy: {
+    url: null,
+    username: null,
+    password: null,
+  },
+  request: {
+    // By default, require API SSL cert to be valid
+    strictSSL: true,
+    // Use an agent with keep-alive enabled to avoid performing SSL handshake per connection
+    agentClass: https.Agent,
+    agentOptions: {
+      keepAlive: true,
+    },
+    // Encode requests as JSON. Encode the response as well if JSON is returned.
+    json: true,
+    // Do not encode the response as a string, since the response could be a file. return Buffers instead.
+    encoding: null,
+    // A redirect is usually information we want to handle, so don't automatically follow
+    followRedirect: false,
+    // By default, we attach a version-specific user-agent string to SDK requests
+    headers: {
+      'User-Agent': `Box Node.js SDK v${sdkVersion} (Node ${nodeVersion})`,
+    },
+  },
 };
 
 var appAuthDefaults = {
-	algorithm: 'RS256',
-	expirationTime: 30,
-	verifyTimestamp: false,
+  algorithm: 'RS256',
+  expirationTime: 30,
+  verifyTimestamp: false,
 };
 
 /**
@@ -163,15 +163,15 @@ var appAuthDefaults = {
  * @private
  */
 function validateBasicParams(params: UserConfigurationOptions) {
-	// Assert that the given params valid, and that required values are present
-	assert(
-		typeof params.clientID === 'string',
-		'"clientID" must be set via init() before using the SDK.'
-	);
-	assert(
-		typeof params.clientSecret === 'string',
-		'"clientSecret" must be set via init() before using the SDK.'
-	);
+  // Assert that the given params valid, and that required values are present
+  assert(
+    typeof params.clientID === 'string',
+    '"clientID" must be set via init() before using the SDK.'
+  );
+  assert(
+    typeof params.clientSecret === 'string',
+    '"clientSecret" must be set via init() before using the SDK.'
+  );
 }
 
 /**
@@ -182,38 +182,38 @@ function validateBasicParams(params: UserConfigurationOptions) {
  * @private
  */
 function validateAppAuthParams(appAuth: AppAuthConfig) {
-	assert(
-		typeof appAuth.keyID === 'string',
-		'Key ID must be provided in app auth params'
-	);
-	assert(
-		typeof appAuth.privateKey === 'string' ||
-			appAuth.privateKey instanceof Buffer,
-		'Private key must be provided in app auth params'
-	);
-	assert(
-		typeof appAuth.passphrase === 'string' &amp;&amp; appAuth.passphrase.length > 0,
-		'Passphrase must be provided in app auth params'
-	);
+  assert(
+    typeof appAuth.keyID === 'string',
+    'Key ID must be provided in app auth params'
+  );
+  assert(
+    typeof appAuth.privateKey === 'string' ||
+      appAuth.privateKey instanceof Buffer,
+    'Private key must be provided in app auth params'
+  );
+  assert(
+    typeof appAuth.passphrase === 'string' &amp;&amp; appAuth.passphrase.length > 0,
+    'Passphrase must be provided in app auth params'
+  );
 
-	var validAlgorithms = ['RS256', 'RS384', 'RS512'];
-	if (typeof appAuth.algorithm !== 'undefined') {
-		assert(
-			validAlgorithms.indexOf(appAuth.algorithm) > -1,
-			`Algorithm in app auth params must be one of: ${validAlgorithms.join(
-				', '
-			)}`
-		);
-	}
+  var validAlgorithms = ['RS256', 'RS384', 'RS512'];
+  if (typeof appAuth.algorithm !== 'undefined') {
+    assert(
+      validAlgorithms.indexOf(appAuth.algorithm) > -1,
+      `Algorithm in app auth params must be one of: ${validAlgorithms.join(
+        ', '
+      )}`
+    );
+  }
 
-	if (typeof appAuth.expirationTime !== 'undefined') {
-		assert(
-			Number.isInteger(appAuth.expirationTime) &amp;&amp;
-				appAuth.expirationTime > 0 &amp;&amp;
-				appAuth.expirationTime &lt;= 60,
-			'Valid token expiration time (0 - 60) must be provided in app auth params'
-		);
-	}
+  if (typeof appAuth.expirationTime !== 'undefined') {
+    assert(
+      Number.isInteger(appAuth.expirationTime) &amp;&amp;
+        appAuth.expirationTime > 0 &amp;&amp;
+        appAuth.expirationTime &lt;= 60,
+      'Valid token expiration time (0 - 60) must be provided in app auth params'
+    );
+  }
 }
 
 /**
@@ -223,24 +223,28 @@ function validateAppAuthParams(appAuth: AppAuthConfig) {
  * @private
  */
 function updateRequestAgent(
-	params: UserConfigurationOptions &amp;
-		Required&lt;Pick&lt;UserConfigurationOptions, 'proxy'>>
+  params: UserConfigurationOptions &amp;
+    Required&lt;Pick&lt;UserConfigurationOptions, 'proxy'>>
 ) {
-	if (params.proxy.url) {
-		let proxyUrl = params.proxy.url;
-		if (params.proxy.username &amp;&amp; params.proxy.password) {
-			proxyUrl = proxyUrl.replace('://', `://${params.proxy.username}:${params.proxy.password}@`);
-		}
+  if (params.proxy.url) {
+    let proxyUrl = params.proxy.url;
+    if (params.proxy.username &amp;&amp; params.proxy.password) {
+      proxyUrl = proxyUrl.replace(
+        '://',
+        `://${params.proxy.username}:${params.proxy.password}@`
+      );
+    }
 
-		const ProxyAgent = require('proxy-agent').ProxyAgent;
-		params.request.agentClass = ProxyAgent;
-		params.request.agentOptions = Object.assign({}, 
-			params.request.agentOptions,
-			{
-				getProxyForUrl: (url: string) => proxyUrl
-			}
-		);
-	}
+    const ProxyAgent = require('proxy-agent').ProxyAgent;
+    params.request.agentClass = ProxyAgent;
+    params.request.agentOptions = Object.assign(
+      {},
+      params.request.agentOptions,
+      {
+        getProxyForUrl: (url: string) => proxyUrl,
+      }
+    );
+  }
 }
 
 /**
@@ -250,24 +254,24 @@ function updateRequestAgent(
  * @returns {Object} The frozen object
  */
 function deepFreezeWithRequest(obj: any) {
-	Object.freeze(obj);
+  Object.freeze(obj);
 
-	Object.getOwnPropertyNames(obj).forEach(function (name) {
-		const prop = obj[name];
+  Object.getOwnPropertyNames(obj).forEach(function (name) {
+    const prop = obj[name];
 
-		if (
-			prop !== null &amp;&amp;
-			typeof prop === 'object' &amp;&amp;
-			obj.hasOwnProperty(name) &amp;&amp;
-			!Object.isFrozen(prop) &amp;&amp;
-			!(prop instanceof Buffer) &amp;&amp;
-			!(prop instanceof Readable)
-		) {
-			deepFreezeWithRequest(obj[name]);
-		}
-	});
+    if (
+      prop !== null &amp;&amp;
+      typeof prop === 'object' &amp;&amp;
+      obj.hasOwnProperty(name) &amp;&amp;
+      !Object.isFrozen(prop) &amp;&amp;
+      !(prop instanceof Buffer) &amp;&amp;
+      !(prop instanceof Readable)
+    ) {
+      deepFreezeWithRequest(obj[name]);
+    }
+  });
 
-	return obj;
+  return obj;
 }
 
 // ------------------------------------------------------------------------------
@@ -284,45 +288,45 @@ function deepFreezeWithRequest(obj: any) {
  * @constructor
  */
 class Config {
-	_params: Required&lt;UserConfigurationOptions>;
-	[key: string]: any;
+  _params: Required&lt;UserConfigurationOptions>;
+  [key: string]: any;
 
-	constructor(params: UserConfigurationOptions) {
-		validateBasicParams(params);
-		if (typeof params.appAuth === 'object') {
-			validateAppAuthParams(params.appAuth);
-			params.appAuth = merge({}, appAuthDefaults, params.appAuth);
-		}
+  constructor(params: UserConfigurationOptions) {
+    validateBasicParams(params);
+    if (typeof params.appAuth === 'object') {
+      validateAppAuthParams(params.appAuth);
+      params.appAuth = merge({}, appAuthDefaults, params.appAuth);
+    }
 
-		// Ensure that we don't accidentally assign over Config methods
-		assert(
-			!params.hasOwnProperty('extend'),
-			'Config params may not override Config methods'
-		);
-		assert(
-			!params.hasOwnProperty('_params'),
-			'Config params may not override Config methods'
-		);
+    // Ensure that we don't accidentally assign over Config methods
+    assert(
+      !params.hasOwnProperty('extend'),
+      'Config params may not override Config methods'
+    );
+    assert(
+      !params.hasOwnProperty('_params'),
+      'Config params may not override Config methods'
+    );
 
-		// Set the given params or default value if params property is missing
-		this._params = merge(defaults, params);
-		updateRequestAgent(this._params);
-		Object.assign(this, this._params);
-		// Freeze the object so that configuration options cannot be modified
-		deepFreezeWithRequest(this);
-	}
+    // Set the given params or default value if params property is missing
+    this._params = merge(defaults, params);
+    updateRequestAgent(this._params);
+    Object.assign(this, this._params);
+    // Freeze the object so that configuration options cannot be modified
+    deepFreezeWithRequest(this);
+  }
 
-	/**
-	 * Extend the current config into a new config with new params overriding old ones
-	 * @param {UserConfigurationOptions} params The override options
-	 * @returns {Config} The extended configuration
-	 */
-	extend(params: UserConfigurationOptions) {
-		var newParams = merge({}, this._params, params);
-		delete newParams.extend;
-		delete newParams._params;
-		return new Config(newParams);
-	}
+  /**
+   * Extend the current config into a new config with new params overriding old ones
+   * @param {UserConfigurationOptions} params The override options
+   * @returns {Config} The extended configuration
+   */
+  extend(params: UserConfigurationOptions) {
+    var newParams = merge({}, this._params, params);
+    delete newParams.extend;
+    delete newParams._params;
+    return new Config(newParams);
+  }
 }
 
 /**
@@ -340,13 +344,13 @@ export = Config;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="Webhooks.html">Webhooks</a></li><li><a href="WebLinks.html">WebLinks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AIManager.html">AIManager</a></li><li><a href="AIManager_AIManager.html">AIManager</a></li><li><a href="APIRequest.html">APIRequest</a></li><li><a href="APIRequestManager.html">APIRequestManager</a></li><li><a href="AppAuthSession.html">AppAuthSession</a></li><li><a href="BasicSession.html">BasicSession</a></li><li><a href="BoxClient.html">BoxClient</a></li><li><a href="BoxSDKNode.html">BoxSDKNode</a></li><li><a href="CCGSession.html">CCGSession</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Chunk_Chunk.html">Chunk</a></li><li><a href="ChunkedUploader.html">ChunkedUploader</a></li><li><a href="ChunkedUploader_ChunkedUploader.html">ChunkedUploader</a></li><li><a href="CollaborationAllowlist.html">CollaborationAllowlist</a></li><li><a href="Collaborations.html">Collaborations</a></li><li><a href="Collections.html">Collections</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Config.html">Config</a></li><li><a href="DevicePins.html">DevicePins</a></li><li><a href="Enterprise.html">Enterprise</a></li><li><a href="EnterpriseEventStream.html">EnterpriseEventStream</a></li><li><a href="EventStream.html">EventStream</a></li><li><a href="Events.html">Events</a></li><li><a href="Files.html">Files</a></li><li><a href="Folders.html">Folders</a></li><li><a href="Groups.html">Groups</a></li><li><a href="IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="IntegrationMappingsManager_IntegrationMappingsManager.html">IntegrationMappingsManager</a></li><li><a href="LegalHoldPolicies.html">LegalHoldPolicies</a></li><li><a href="Metadata.html">Metadata</a></li><li><a href="PagingIterator.html">PagingIterator</a></li><li><a href="PagingIterator_PagingIterator.html">PagingIterator</a></li><li><a href="PersistentSession.html">PersistentSession</a></li><li><a href="RecentItems.html">RecentItems</a></li><li><a href="Request.html">Request</a></li><li><a href="RetentionPolicies.html">RetentionPolicies</a></li><li><a href="Search.html">Search</a></li><li><a href="SharedItems.html">SharedItems</a></li><li><a href="ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierManager_ShieldInformationBarrierManager.html">ShieldInformationBarrierManager</a></li><li><a href="ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierReportsManager_ShieldInformationBarrierReportsManager.html">ShieldInformationBarrierReportsManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentMembersManager_ShieldInformationBarrierSegmentMembersManager.html">ShieldInformationBarrierSegmentMembersManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionsManager_ShieldInformationBarrierSegmentRestrictionsManager.html">ShieldInformationBarrierSegmentRestrictionsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="ShieldInformationBarrierSegmentsManager_ShieldInformationBarrierSegmentsManager.html">ShieldInformationBarrierSegmentsManager</a></li><li><a href="SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignRequestsManager_SignRequestsManager.html">SignRequestsManager</a></li><li><a href="SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="SignTemplatesManager_SignTemplatesManager.html">SignTemplatesManager</a></li><li><a href="StoragePolicies.html">StoragePolicies</a></li><li><a href="Tasks.html">Tasks</a></li><li><a href="TermsOfService.html">TermsOfService</a></li><li><a href="TokenManager.html">TokenManager</a></li><li><a href="Trash.html">Trash</a></li><li><a href="Users.html">Users</a></li><li><a href="WebLinks.html">WebLinks</a></li><li><a href="Webhooks.html">Webhooks</a></li></ul><h3>Interfaces</h3><ul><li><a href="AiAgentAsk.html">AiAgentAsk</a></li><li><a href="AiAgentBasicGenTool.html">AiAgentBasicGenTool</a></li><li><a href="AiAgentBasicTextToolAsk.html">AiAgentBasicTextToolAsk</a></li><li><a href="AiAgentBasicTextToolTextGen.html">AiAgentBasicTextToolTextGen</a></li><li><a href="AiAgentLongTextTool.html">AiAgentLongTextTool</a></li><li><a href="AiAgentTextGen.html">AiAgentTextGen</a></li><li><a href="AiAsk.html">AiAsk</a></li><li><a href="AiCitation.html">AiCitation</a></li><li><a href="AiDialogueHistory.html">AiDialogueHistory</a></li><li><a href="AiLlmEndpointParamsGoogle.html">AiLlmEndpointParamsGoogle</a></li><li><a href="AiLlmEndpointParamsOpenAi.html">AiLlmEndpointParamsOpenAi</a></li><li><a href="AiResponse.html">AiResponse</a></li><li><a href="AiResponseFull.html">AiResponseFull</a></li><li><a href="AiTextGen.html">AiTextGen</a></li><li><a href="EnterpriseBase.html">EnterpriseBase</a></li><li><a href="FileBase.html">FileBase</a></li><li><a href="FileMini.html">FileMini</a></li><li><a href="FileVersionBase.html">FileVersionBase</a></li><li><a href="FileVersionMini.html">FileVersionMini</a></li><li><a href="FolderBase.html">FolderBase</a></li><li><a href="FolderMini.html">FolderMini</a></li><li><a href="IntegrationMapping.html">IntegrationMapping</a></li><li><a href="IntegrationMappingBase.html">IntegrationMappingBase</a></li><li><a href="IntegrationMappingBoxItemSlack.html">IntegrationMappingBoxItemSlack</a></li><li><a href="IntegrationMappingPartnerItemSlack.html">IntegrationMappingPartnerItemSlack</a></li><li><a href="IntegrationMappingSlackCreateRequest.html">IntegrationMappingSlackCreateRequest</a></li><li><a href="IntegrationMappingSlackOptions.html">IntegrationMappingSlackOptions</a></li><li><a href="IntegrationMappings.html">IntegrationMappings</a></li><li><a href="ShieldInformationBarrier.html">ShieldInformationBarrier</a></li><li><a href="ShieldInformationBarrierBase.html">ShieldInformationBarrierBase</a></li><li><a href="ShieldInformationBarrierReference.html">ShieldInformationBarrierReference</a></li><li><a href="ShieldInformationBarrierReport.html">ShieldInformationBarrierReport</a></li><li><a href="ShieldInformationBarrierReportBase.html">ShieldInformationBarrierReportBase</a></li><li><a href="ShieldInformationBarrierReportDetails.html">ShieldInformationBarrierReportDetails</a></li><li><a href="ShieldInformationBarrierReports.html">ShieldInformationBarrierReports</a></li><li><a href="ShieldInformationBarrierSegment.html">ShieldInformationBarrierSegment</a></li><li><a href="ShieldInformationBarrierSegmentMember.html">ShieldInformationBarrierSegmentMember</a></li><li><a href="ShieldInformationBarrierSegmentMemberBase.html">ShieldInformationBarrierSegmentMemberBase</a></li><li><a href="ShieldInformationBarrierSegmentMemberMini.html">ShieldInformationBarrierSegmentMemberMini</a></li><li><a href="ShieldInformationBarrierSegmentMembers.html">ShieldInformationBarrierSegmentMembers</a></li><li><a href="ShieldInformationBarrierSegmentRestriction.html">ShieldInformationBarrierSegmentRestriction</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionBase.html">ShieldInformationBarrierSegmentRestrictionBase</a></li><li><a href="ShieldInformationBarrierSegmentRestrictionMini.html">ShieldInformationBarrierSegmentRestrictionMini</a></li><li><a href="ShieldInformationBarrierSegmentRestrictions.html">ShieldInformationBarrierSegmentRestrictions</a></li><li><a href="ShieldInformationBarrierSegments.html">ShieldInformationBarrierSegments</a></li><li><a href="ShieldInformationBarriers.html">ShieldInformationBarriers</a></li><li><a href="SignRequest.html">SignRequest</a></li><li><a href="SignRequestBase.html">SignRequestBase</a></li><li><a href="SignRequestCreateRequest.html">SignRequestCreateRequest</a></li><li><a href="SignRequestCreateSigner.html">SignRequestCreateSigner</a></li><li><a href="SignRequestPrefillTag.html">SignRequestPrefillTag</a></li><li><a href="SignRequestSigner.html">SignRequestSigner</a></li><li><a href="SignRequestSignerInput.html">SignRequestSignerInput</a></li><li><a href="SignRequests.html">SignRequests</a></li><li><a href="SignTemplate.html">SignTemplate</a></li><li><a href="SignTemplates.html">SignTemplates</a></li><li><a href="TemplateSigner.html">TemplateSigner</a></li><li><a href="TemplateSignerInput.html">TemplateSignerInput</a></li><li><a href="UserBase.html">UserBase</a></li><li><a href="UserIntegrationMappings.html">UserIntegrationMappings</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CURRENT_STREAM_POSITION">CURRENT_STREAM_POSITION</a></li><li><a href="global.html#EnterpriseRole">EnterpriseRole</a></li><li><a href="global.html#EnterpriseUserStatus">EnterpriseUserStatus</a></li><li><a href="global.html#EnterpriseUserType">EnterpriseUserType</a></li><li><a href="global.html#EventType">EventType</a></li><li><a href="global.html#FileRepresentationType">FileRepresentationType</a></li><li><a href="global.html#GroupAccessLevel">GroupAccessLevel</a></li><li><a href="global.html#GroupUserRole">GroupUserRole</a></li><li><a href="global.html#Hash">Hash</a></li><li><a href="global.html#LegalHoldPolicyAssignmentType">LegalHoldPolicyAssignmentType</a></li><li><a href="global.html#LockType">LockType</a></li><li><a href="global.html#MetadataFieldType">MetadataFieldType</a></li><li><a href="global.html#RetentionPolicyAssignmentType">RetentionPolicyAssignmentType</a></li><li><a href="global.html#RetentionPolicyDispositionAction">RetentionPolicyDispositionAction</a></li><li><a href="global.html#RetentionPolicyType">RetentionPolicyType</a></li><li><a href="global.html#RetentionType">RetentionType</a></li><li><a href="global.html#SearchScope">SearchScope</a></li><li><a href="global.html#TaskResolutionState">TaskResolutionState</a></li><li><a href="global.html#TermsOfServicesStatus">TermsOfServicesStatus</a></li><li><a href="global.html#TermsOfServicesType">TermsOfServicesType</a></li><li><a href="global.html#The">The</a></li><li><a href="global.html#buildAuthorizationHeader">buildAuthorizationHeader</a></li><li><a href="global.html#cleanSensitiveHeaders">cleanSensitiveHeaders</a></li><li><a href="global.html#compareSignatures">compareSignatures</a></li><li><a href="global.html#computeSignature">computeSignature</a></li><li><a href="global.html#constructBoxUAHeader">constructBoxUAHeader</a></li><li><a href="global.html#createFileContentFormData">createFileContentFormData</a></li><li><a href="global.html#createFileMetadataFormData">createFileMetadataFormData</a></li><li><a href="global.html#deepFreezeWithRequest">deepFreezeWithRequest</a></li><li><a href="global.html#getFullURL">getFullURL</a></li><li><a href="global.html#getTokensFromGrantResponse">getTokensFromGrantResponse</a></li><li><a href="global.html#grantTypes">grantTypes</a></li><li><a href="global.html#isJWTAuthErrorRetryable">isJWTAuthErrorRetryable</a></li><li><a href="global.html#isObjectValidTokenInfo">isObjectValidTokenInfo</a></li><li><a href="global.html#isObjectValidTokenStore">isObjectValidTokenStore</a></li><li><a href="global.html#isRequestRetryable">isRequestRetryable</a></li><li><a href="global.html#isTemporaryError">isTemporaryError</a></li><li><a href="global.html#isUnauthorizedDueToExpiredAccessToken">isUnauthorizedDueToExpiredAccessToken</a></li><li><a href="global.html#isValidCodeOrToken">isValidCodeOrToken</a></li><li><a href="global.html#isValidTokenResponse">isValidTokenResponse</a></li><li><a href="global.html#jsonStringifyWithEscapedUnicode">jsonStringifyWithEscapedUnicode</a></li><li><a href="global.html#pollRepresentationInfo">pollRepresentationInfo</a></li><li><a href="global.html#tokenPaths">tokenPaths</a></li><li><a href="global.html#trimSlashes">trimSlashes</a></li><li><a href="global.html#updateRequestAgent">updateRequestAgent</a></li><li><a href="global.html#validateAppAuthParams">validateAppAuthParams</a></li><li><a href="global.html#validateBasicParams">validateBasicParams</a></li><li><a href="global.html#validateDeliveryTimestamp">validateDeliveryTimestamp</a></li><li><a href="global.html#validateSignature">validateSignature</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Apr 09 2025 11:35:28 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jun 11 2025 05:00:30 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
