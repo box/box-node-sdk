@@ -13,5 +13,6 @@ docs/jsdoc-dev
 .nvmrc
 
 /lib/
+/lib-esm/
 
 /openapi.json
