@@ -138,7 +138,7 @@ function validateSignature(
 
   if (
     primarySignature &&
-    primarySignature === headers['box-signature-primary']
+    compareSignatures(primarySignature, headers['box-signature-primary'])
   ) {
     return true;
   }
@@ -151,12 +151,26 @@ function validateSignature(
 
   if (
     secondarySignature &&
-    secondarySignature === headers['box-signature-secondary']
+    compareSignatures(secondarySignature, headers['box-signature-secondary'])
   ) {
     return true;
   }
 
   return false;
+}
+
+/**
+ * Compare two signatures using a timing-safe comparison
+ * @param expectedSignature Expected signature in base64 format
+ * @param receivedSignature Received signature in base64 format
+ */
+function compareSignatures(
+  expectedSignature: string,
+  receivedSignature: string
+): boolean {
+  const expectedBuffer = Buffer.from(expectedSignature, 'base64');
+  const receivedBuffer = Buffer.from(receivedSignature, 'base64');
+  return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
 }
 
 /**
