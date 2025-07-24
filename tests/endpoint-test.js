@@ -1340,7 +1340,7 @@ describe('Endpoint', () => {
           .post('/2.0/files/content', (body) => {
             // Verify the multi-part form body
             var lines = body.split(/\r?\n/);
-            assert.match(lines[0], /^-+\d+$/);
+            assert.match(lines[0], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[1],
               'Content-Disposition: form-data; name="attributes"'
@@ -1350,14 +1350,14 @@ describe('Endpoint', () => {
             assert.propertyVal(attributes, 'name', filename);
             assert.propertyVal(attributes, 'description', fileDescription);
             assert.nestedPropertyVal(attributes, 'parent.id', folderID);
-            assert.match(lines[4], /^-+\d+$/);
+            assert.match(lines[4], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[5],
               'Content-Disposition: form-data; name="content"; filename="unused"'
             );
             assert.equal(lines[6], '');
             assert.equal(lines[7], fileContent);
-            assert.match(lines[8], /^-+\d+-+$/);
+            assert.match(lines[8], /^-+[a-f0-9]+-+$/);
             return true;
           })
           .matchHeader('Authorization', (authHeader) => {
@@ -1391,7 +1391,7 @@ describe('Endpoint', () => {
           .post('/2.0/files/content', (body) => {
             // Verify the multi-part form body
             var lines = body.split(/\r?\n/);
-            assert.match(lines[0], /^-+\d+$/);
+            assert.match(lines[0], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[1],
               'Content-Disposition: form-data; name="attributes"'
@@ -1401,14 +1401,14 @@ describe('Endpoint', () => {
             assert.propertyVal(attributes, 'name', filename);
             assert.propertyVal(attributes, 'description', fileDescription);
             assert.nestedPropertyVal(attributes, 'parent.id', folderID);
-            assert.match(lines[4], /^-+\d+$/);
+            assert.match(lines[4], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[5],
               'Content-Disposition: form-data; name="content"; filename="unused"'
             );
             assert.equal(lines[6], '');
             assert.equal(lines[7], fileContent);
-            assert.match(lines[8], /^-+\d+-+$/);
+            assert.match(lines[8], /^-+[a-f0-9]+-+$/);
             return true;
           })
           .matchHeader('Authorization', (authHeader) => {
@@ -1453,7 +1453,7 @@ describe('Endpoint', () => {
           .post('/2.0/files/content', (body) => {
             // Verify the multi-part form body
             var lines = body.split(/\r?\n/);
-            assert.match(lines[0], /^-+\d+$/);
+            assert.match(lines[0], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[1],
               'Content-Disposition: form-data; name="attributes"'
@@ -1463,7 +1463,7 @@ describe('Endpoint', () => {
             assert.propertyVal(attributes, 'name', filename);
             assert.propertyVal(attributes, 'description', fileDescription);
             assert.nestedPropertyVal(attributes, 'parent.id', folderID);
-            assert.match(lines[4], /^-+\d+$/);
+            assert.match(lines[4], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[5],
               'Content-Disposition: form-data; name="content"; filename="unused"'
@@ -1471,7 +1471,7 @@ describe('Endpoint', () => {
             assert.equal(lines[6], 'Content-Type: application/octet-stream');
             assert.equal(lines[7], '');
             assert.equal(lines[8], someContent);
-            assert.match(lines[9], /^-+\d+-+$/);
+            assert.match(lines[9], /^-+[a-f0-9]+-+$/);
             return true;
           })
           .matchHeader('Authorization', (authHeader) => {
@@ -1855,7 +1855,7 @@ describe('Endpoint', () => {
           .post(`/2.0/files/${fileID}/content`, (body) => {
             // Verify the multi-part form body
             var lines = body.split(/\r?\n/);
-            assert.match(lines[0], /^-+\d+$/);
+            assert.match(lines[0], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[1],
               'Content-Disposition: form-data; name="attributes"'
@@ -1864,14 +1864,14 @@ describe('Endpoint', () => {
             var attributes = JSON.parse(lines[3]);
             assert.propertyVal(attributes, 'name', name);
             assert.propertyVal(attributes, 'description', fileDescription);
-            assert.match(lines[4], /^-+\d+$/);
+            assert.match(lines[4], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[5],
               'Content-Disposition: form-data; name="content"; filename="unused"'
             );
             assert.equal(lines[6], '');
             assert.equal(lines[7], fileContent);
-            assert.match(lines[8], /^-+\d+-+$/);
+            assert.match(lines[8], /^-+[a-f0-9]+-+$/);
             return true;
           })
           .matchHeader('Authorization', (authHeader) => {
@@ -1900,7 +1900,7 @@ describe('Endpoint', () => {
           .post(`/2.0/files/${fileID}/content`, (body) => {
             // Verify the multi-part form body
             var lines = body.split(/\r?\n/);
-            assert.match(lines[0], /^-+\d+$/);
+            assert.match(lines[0], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[1],
               'Content-Disposition: form-data; name="attributes"'
@@ -1909,14 +1909,14 @@ describe('Endpoint', () => {
             var attributes = JSON.parse(lines[3]);
             assert.propertyVal(attributes, 'name', name);
             assert.propertyVal(attributes, 'description', fileDescription);
-            assert.match(lines[4], /^-+\d+$/);
+            assert.match(lines[4], /^-+[a-f0-9]+$/);
             assert.equal(
               lines[5],
               'Content-Disposition: form-data; name="content"; filename="unused"'
             );
             assert.equal(lines[6], '');
             assert.equal(lines[7], fileContent);
-            assert.match(lines[8], /^-+\d+-+$/);
+            assert.match(lines[8], /^-+[a-f0-9]+-+$/);
             return true;
           })
           .matchHeader('Authorization', (authHeader) => {
