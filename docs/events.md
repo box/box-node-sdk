@@ -1,239 +1,109 @@
-Events
-======
+# EventsManager
 
-The Box API supports two types of event streams -- one for the events specific to a particular user
- and one for all of the events in an enterprise.
+- [Get events long poll endpoint](#get-events-long-poll-endpoint)
+- [List user and enterprise events](#list-user-and-enterprise-events)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Get events long poll endpoint
 
+Returns a list of real-time servers that can be used for long-polling updates
+to the [event stream](#get-events).
 
-- [User Events](#user-events)
-  - [Listening to the EventStream](#listening-to-the-eventstream)
-  - [Deduplicating Events](#deduplicating-events)
-  - [Get the Current Stream Position](#get-the-current-stream-position)
-  - [Get Events](#get-events)
-- [Enterprise Events](#enterprise-events)
-  - [Listening to the Enterprise Event Stream](#listening-to-the-enterprise-event-stream)
-  - [Handling errors](#handling-errors)
-  - [Persisting the Stream State](#persisting-the-stream-state)
+Long polling is the concept where a HTTP request is kept open until the
+server sends a response, then repeating the process over and over to receive
+updated responses.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+Long polling the event stream can only be used for user events, not for
+enterprise events.
 
+To use long polling, first use this endpoint to retrieve a list of long poll
+URLs. Next, make a long poll request to any of the provided URLs.
 
-User Events
------------
+When an event occurs in monitored account a response with the value
+`new_change` will be sent. The response contains no other details as
+it only serves as a prompt to take further action such as sending a
+request to the [events endpoint](#get-events) with the last known
+`stream_position`.
 
-The Box API provides an events endpoint that utilizes long-polling to send
-events in real-time. The SDK provides an `EventStream` class (which implements
-[stream.Readable](https://nodejs.org/api/stream.html#stream_readable_streams)) that automatically
-handles long-polling and deduplicating events.
+After the server sends this response it closes the connection. You must now
+repeat the long poll process to begin listening for events again.
 
-* [Listening to the EventStream](#listening-to-the-eventstream)
-* [Get the Current Stream Position](#get-the-current-stream-position)
-* [Get Events](#get-events)
+If no events occur for a while and the connection times out you will
+receive a response with the value `reconnect`. When you receive this response
+you’ll make another call to this endpoint to restart the process.
 
-### Listening to the EventStream
+If you receive no events in `retry_timeout` seconds then you will need to
+make another request to the real-time server (one of the URLs in the response
+for this endpoint). This might be necessary due to network errors.
 
-When the `EventStream` is started, it will begin long-polling asynchronously.
-Events received from the API are then forwarded to any listeners.
+Finally, if you receive a `max_retries` error when making a request to the
+real-time server, you should start over by making a call to this endpoint
+first.
+
+This operation is performed by calling function `getEventsWithLongPolling`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/options-events/).
 
 <!-- sample options_events -->
-```js
-client.events.getEventStream(function(err, stream) {
-  if (err) {
-    // handle error
-  }
-  stream.on('data', function(event) {
-    // handle the event
-  });
-});
+
+```ts
+await client.events.getEventsWithLongPolling();
 ```
 
-By default, the stream will start at the current time.  You can start the stream
-at a past stream position by passing a position marker:
+### Arguments
 
-```js
-client.events.getEventStream('1408838928446360', function(err, stream) { /* ... */ });
-```
+- headersInput `GetEventsWithLongPollingHeadersInput`
+  - Headers of getEventsWithLongPolling method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
 
-When you're done listening for events, call `stream.pause()` to stop long-polling.
+### Returns
 
-### Deduplicating Events
+This function returns a value of type `RealtimeServers`.
 
-Since the Box API [may send duplicate events](https://developers.box.com/docs/#events), the `EventStream` will remember the last 5000 received events and automatically ignore them.
+Returns a paginated array of servers that can be used
+instead of the regular endpoints for long-polling events.
 
-### Get the Current Stream Position
+## List user and enterprise events
 
-It is possible to get the current stream position, which can later be used to
-fetch events from that point in time forward.
+Returns up to a year of past events for a given user
+or for the entire enterprise.
 
-```js
-client.events.getCurrentStreamPosition(callback);
-```
+By default this returns events for the authenticated user. To retrieve events
+for the entire enterprise, set the `stream_type` to `admin_logs_streaming`
+for live monitoring of new events, or `admin_logs` for querying across
+historical events. The user making the API call will
+need to have admin privileges, and the application will need to have the
+scope `manage enterprise properties` checked.
 
-### Get Events
+This operation is performed by calling function `getEvents`.
 
-To get the latest chunk of events, you can call
-[`events.get(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Events.html#get).
-
-```js
-client.events.get(null, callback);
-```
-
-You can also pass in a `stream_position` parameter to get events from a specific
-point in time:
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-events/).
 
 <!-- sample get_events -->
-```js
-client.events.get({stream_position: '1408838928446360'}, callback);
+
+```ts
+await client.events.getEvents();
 ```
 
-### Destroying the Stream
+### Arguments
 
-If you ever need to *stop* long-polling, use:
+- queryParams `GetEventsQueryParams`
+  - Query parameters of getEvents method
+- headersInput `GetEventsHeadersInput`
+  - Headers of getEvents method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
 
-<!-- sample options_events destroy -->
-```js
-client.events.destroy();
-```
+### Returns
 
-This *will not* cancel in-process network requests. It *will* ensure no further long-polling nor event fetching takes place.
+This function returns a value of type `Events`.
 
-Enterprise Events
------------------
+Returns a list of event objects.
 
-The Box API has an enterprise events endpoint that is available to admin users and service accounts.
-The SDK includes an `EnterpriseEventStream` class (which implements
-[stream.Readable](https://nodejs.org/api/stream.html#stream_readable_streams)) that automatically
-handles polling for events and delivering them to the application.
-
-* [Listening to the Enterprise Event Stream](#listening-to-the-enterprise-event-stream)
-* [Handling errors](#handling-errors)
-* [Get the Stream Position](#get-the-stream-position)
-
-### Listening to the Enterprise Event Stream
-
-When you attach a `'data'` event listener to an `EnterpriseEventStream`, it will begin fetching events from Box.
-Events received from the API are then forwarded to the listener.
-
-<!-- sample options_events enterprise -->
-```js
-client.events.getEnterpriseEventStream(function(err, stream) {
-  if (err) { 
-    // Handle error 
-  }
-  stream.on('data', function(event) {
-    // Handle the event
-  });
-});
-```
-
-To get events from admin events stream you have to pick stream_type from `admin_logs` or `admin_logs_streaming`.
-By default, the `admin_logs` stream is selected. Emphasis of this stream is on completeness over latency,
-which means that Box will deliver admin events in chronological order and without duplicates,
-but with higher latency. You can specify start and end time/dates.
-
-To monitor recent events that have been generated within Box across the enterprise use
-`admin_logs_streaming` as stream type. The emphasis for this feed is on low latency rather than chronological
-accuracy, which means that Box may return events more than once and out of chronological order.
-Events are returned via the API around 12 seconds after they are processed by Box
-(the 12 seconds buffer ensures that new events are not written after your cursor position).
-Only two weeks of events are available via this feed, and you cannot set start and end time/dates.
-
-Use `streamType` option to select stream type:
-```js
-client.events.getEnterpriseEventStream({
-  streamType: 'admin_logs_streaming'
-}, callback);
-```
-By default, the stream will start at the current time.  You can also start the stream
-from a specific date or from a previous stream position.  To start from the earliest available events (~1 year),
-pass `streamPosition = '0'`.  The stream will fetch all past events as quickly as your listener consumes them.
-Once the stream catches up to the current time, it will begin polling for new events every `pollingInterval` seconds
-(default = 60).
-
-```js
-client.events.getEnterpriseEventStream({
-  startDate: '2016-01-01T00:00:00-08:00',
-  pollingInterval: 60
-}, callback);
-```
-
-Note that Box buffers enterprise events for ~60 seconds when using `admin_logs` stream type, before making them available 
-to the `/events` API (to ensure that events are delivered in-order and without duplicates), so polling with an interval
-of less than 60 seconds is not normally needed with this event type. When using `admin_logs_streaming` you can set pooling 
-interval to 12 seconds.
-
-If you pass `pollingInterval = 0`, then the stream will not use polling, but will end when all the currently
-available events have been delivered.
-
-```js
-client.events.getEnterpriseEventStream({
-  startDate: '2016-01-01T00:00:00-08:00',
-  endDate: '2017-01-01T00:00:00-08:00',
-  pollingInterval: 0
-}, callback);
-```
-
-You can also filter the event stream to only receive specific event types.  The set of enterprise event types
-is available in `client.events.enterpriseEventTypes`.
-
-<!-- sample options_events enterprise_filter -->
-```js
-client.events.getEnterpriseEventStream({
-    eventTypeFilter: [client.events.enterpriseEventTypes.UPLOAD, client.events.enterpriseEventTypes.DOWNLOAD]
-}, callback);
-```
-
-Since `EnterpriseEventStream` implements [stream.Readable](https://nodejs.org/api/stream.html#stream_readable_streams),
-you can use the usual flow-control mechanisms on the stream:
-
-```js
-stream.pause();
-stream.resume();
-stream.isPaused();
-```
-
-You can also pipe the output to a [stream.Writable](https://nodejs.org/api/stream.html#stream_writable_streams) stream
-(it must be an "object mode" stream):
-
-```js
-stream.pipe(writableObjectModeStream);
-```
-
-### Handling errors
-
-If an API or network error occurs, the stream will ignore the error and continue polling at the usual rate until
-the connection can be re-established.  You can respond to errors with an `'error'` event listener:
-
-```js
-stream.on('error', function(err) {
-    // Handle the error.
-});
-```
-
-### Persisting the Stream State
-
-In many applications, you may need to persist the stream state so that you can resume processing events from the
-same point if your application is interrupted and restarted.  You can attach a `newStreamState` event listener
-to be notified each time the stream position changes.
-
-```js
-client.events.getEnterpriseEventStream(function(err, stream) {
-	
-    if (err) { // Handle error }
-
-    // Restore the stream state from the previous run.
-    stream.setStreamState(readState());
-
-    stream.on('newStreamState', function(streamState) {
-        // Persist the stream state each time the stream position changes.
-        writeState(streamState);
-    });
-
-    stream.on('data', function(event) {
-        // Handle the event.
-    });
-});
-```
+Events objects are returned in pages, with each page (chunk)
+including a list of event objects. The response includes a
+`chunk_size` parameter indicating how many events were returned in this
+chunk, as well as the next `stream_position` that can be
+queried.

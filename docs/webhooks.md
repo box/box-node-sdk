@@ -1,214 +1,194 @@
-Webhooks
-========
+# WebhooksManager
 
-A webhook object enables you to attach events triggers to Box files and folders. These
-event triggers monitor events on Box objects and notify your application, via HTTP
-requests to a URL of your choosing, when they occur.
+- [List all webhooks](#list-all-webhooks)
+- [Create webhook](#create-webhook)
+- [Get webhook](#get-webhook)
+- [Update webhook](#update-webhook)
+- [Remove webhook](#remove-webhook)
+- [Validate a webhook message](#validate-a-webhook-message)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## List all webhooks
 
+Returns all defined webhooks for the requesting application.
 
-- [Create a Webhook](#create-a-webhook)
-- [Get a Webhook's Information](#get-a-webhooks-information)
-- [Get all Webhooks Information](#get-all-webhooks-information)
-- [Update a Webhook](#update-a-webhook)
-- [Delete a Webhook](#delete-a-webhook)
-- [Validate a Webhook Message](#validate-a-webhook-message)
+This API only returns webhooks that are applied to files or folders that are
+owned by the authenticated user. This means that an admin can not see webhooks
+created by a service account unless the admin has access to those folders, and
+vice versa.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+This operation is performed by calling function `getWebhooks`.
 
-Create a Webhook
-----------------
-
-To attach a webhook to an item, call the
-[`webhooks.create(fileID, targetType, notificationURL, triggerTypes, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#create)
-method with the type and ID of the item, a URL to send notifications to, and a list
-of triggers.
-
-The notification URL must be a valid HTTPS URL that you specify when you create a
-webhook.
-
-The triggerTypes param is an array of strings. Available options are documented here:
-<https://developer.box.com/guides/webhooks/triggers/>
-
-<!-- sample post_webhooks -->
-```js
-// Attach a webhook that sends a notification to https://example.com/webhook when
-//   file 11111 is renamed or downloaded.
-client.webhooks.create(
-	'11111',
-	client.itemTypes.FILE,
-	'https://example.com/webhook',
-	[
-		client.webhooks.triggerTypes.FILE.RENAMED,
-		client.webhooks.triggerTypes.FILE.DOWNLOADED
-	])
-	.then(webhook => {
-		/* webhook -> {
-			id: '12345',
-			type: 'webhook',
-			target: { id: '11111', type: 'file' },
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2016-05-09T17:41:27-07:00',
-			address: 'https://example.com/webhook',
-			triggers: [ 'FILE.RENAMED', 'FILE.UPLOADED' ] }
-		*/
-	});
-```
-
-<!-- sample post_webhooks for_folder -->
-```js
-// Attach a webhook that sends a notification to https://example.com/webhook when
-//   files are uploaded or downloaded within folder 22222.
-client.webhooks.create(
-	'22222',
-	client.itemTypes.FOLDER,
-	'https://example.com/webhook',
-	[
-		client.webhooks.triggerTypes.FILE.UPLOADED,
-		client.webhooks.triggerTypes.FILE.DOWNLOADED
-	])
-	.then(webhook => {
-		/* webhook -> {
-			id: '1234',
-			type: 'webhook',
-			target: { id: '22222', type: 'folder' },
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2016-05-09T17:41:27-07:00',
-			address: 'https://example.com/webhook',
-			triggers: [ 'FILE.DOWNLOADED', 'FILE.UPLOADED' ] }
-		*/
-	});
-```
-
-Get a Webhook's Information
----------------------------
-
-Retrieve information about a specific webhook by calling
-[`webhooks.get(webhookID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#get)
-to retrieve a webhook by ID.
-
-<!-- sample get_webhooks_id -->
-```js
-client.webhooks.get('1234')
-	.then(webhook => {
-		/* webhook -> {
-			id: '1234',
-			type: 'webhook',
-			target: { id: '22222', type: 'folder' },
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2016-05-09T17:41:27-07:00',
-			address: 'https://example.com/webhook',
-			triggers: [ 'FILE.DOWNLOADED', 'FILE.UPLOADED' ] }
-		*/
-	});
-```
-
-Get all Webhooks Information
------------------------------
-
-Get a list of all webhooks for the requesting application and user by calling the
-[`webhooks.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#getAll)
-method.  The maximum limit per page of results is 200, Box uses the default limit of 100.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-webhooks/).
 
 <!-- sample get_webhooks -->
-```js
-client.webhooks.getAll()
-	.then(webhooks => {
-		/* webhooks -> {
-			next_marker: 'ZmlQZS0xLTE%3D',
-			entries: 
-			[ { id: '1234',
-				type: 'webhook',
-				target: { id: '22222', type: 'folder' } },
-				{ id: '5678',
-				type: 'webhook',
-				target: { id: '11111', type: 'file' } } ],
-			limit: 2 }
-		*/
-	});
+
+```ts
+await client.webhooks.getWebhooks();
 ```
 
-Update a Webhook
-----------------
+### Arguments
 
-Update a file or folder's webhook by calling
-[`webhooks.update(webhookID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#update)
-with the field you want to update as `updates.address` or `updates.trigger`.
+- queryParams `GetWebhooksQueryParams`
+  - Query parameters of getWebhooks method
+- headersInput `GetWebhooksHeadersInput`
+  - Headers of getWebhooks method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
+
+### Returns
+
+This function returns a value of type `Webhooks`.
+
+Returns a list of webhooks.
+
+## Create webhook
+
+Creates a webhook.
+
+This operation is performed by calling function `createWebhook`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-webhooks/).
+
+<!-- sample post_webhooks -->
+
+```ts
+await client.webhooks.createWebhook({
+  target: {
+    id: folder.id,
+    type: 'folder' as CreateWebhookRequestBodyTargetTypeField,
+  } satisfies CreateWebhookRequestBodyTargetField,
+  address: 'https://example.com/new-webhook',
+  triggers: ['FILE.UPLOADED' as CreateWebhookRequestBodyTriggersField],
+} satisfies CreateWebhookRequestBody);
+```
+
+### Arguments
+
+- requestBody `CreateWebhookRequestBody`
+  - Request body of createWebhook method
+- optionalsInput `CreateWebhookOptionalsInput`
+
+### Returns
+
+This function returns a value of type `Webhook`.
+
+Returns the new webhook object.
+
+## Get webhook
+
+Retrieves a specific webhook.
+
+This operation is performed by calling function `getWebhookById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-webhooks-id/).
+
+<!-- sample get_webhooks_id -->
+
+```ts
+await client.webhooks.getWebhookById(webhook.id!);
+```
+
+### Arguments
+
+- webhookId `string`
+  - The ID of the webhook. Example: "3321123"
+- optionalsInput `GetWebhookByIdOptionalsInput`
+
+### Returns
+
+This function returns a value of type `Webhook`.
+
+Returns a webhook object.
+
+## Update webhook
+
+Updates a webhook.
+
+This operation is performed by calling function `updateWebhookById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-webhooks-id/).
 
 <!-- sample put_webhooks_id -->
-```js
-client.webhooks.update('678901', {address: "https://example.com/webhooks/fileActions"})
-	.then(webhook => {
-		/* webhook -> {
-			id: '1234',
-			type: 'webhook',
-			target: { id: '22222', type: 'folder' },
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2016-05-09T17:41:27-07:00',
-			address: 'https://example.com/webhooks/fileActions',
-			triggers: [ 'FILE.DOWNLOADED', 'FILE.UPLOADED' ] }
-		*/
-	});
+
+```ts
+await client.webhooks.updateWebhookById(webhook.id!, {
+  requestBody: {
+    address: 'https://example.com/updated-webhook',
+  } satisfies UpdateWebhookByIdRequestBody,
+} satisfies UpdateWebhookByIdOptionalsInput);
 ```
 
-Delete a Webhook
-----------------
+### Arguments
 
-A file or folder's webhook can be removed by calling
-[`webhooks.delete(webhookID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#delete).
+- webhookId `string`
+  - The ID of the webhook. Example: "3321123"
+- optionalsInput `UpdateWebhookByIdOptionalsInput`
+
+### Returns
+
+This function returns a value of type `Webhook`.
+
+Returns the new webhook object.
+
+## Remove webhook
+
+Deletes a webhook.
+
+This operation is performed by calling function `deleteWebhookById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/delete-webhooks-id/).
 
 <!-- sample delete_webhooks_id -->
-```js
-client.webhooks.delete('1234')
-	.then(() => {
-		// deletion succeeded — no value returned
-	});
+
+```ts
+await client.webhooks.deleteWebhookById(webhook.id!);
 ```
 
-Validate a Webhook Message
---------------------------
+### Arguments
 
-When you receive a webhook message from Box, you should validate it by calling
-[`BoxSDK.validateWebhookMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`](http://opensource.box.com/box-node-sdk/jsdoc/Webhooks.html#.validateMessage),
-also available as `webhooks.validateMessage(body, headers, primarySignatureKey, secondarySignatureKey, maxMessageAge)`.
+- webhookId `string`
+  - The ID of the webhook. Example: "3321123"
+- optionalsInput `DeleteWebhookByIdOptionalsInput`
 
-<!-- sample x_webhooks validate_signatures -->
-```js
-const BoxSDK = require('box-node-sdk');
-let body = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt"}}',
-	headers = {
-		'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',
-		'box-delivery-timestamp': '2020-01-01T00:00:00-07:00',
-		'box-signature-algorithm': 'HmacSHA256',
-		'box-signature-primary': '6TfeAW3A1PASkgboxxA5yqHNKOwFyMWuEXny/FPD5hI=',
-		'box-signature-secondary': 'v+1CD1Jdo3muIcbpv5lxxgPglOqMfsNHPV899xWYydo=',
-		'box-signature-version': '1'
-	},
-	primaryKey = 'SamplePrimaryKey',
-	secondaryKey = 'SampleSecondaryKey';
+### Returns
 
-let isValid = BoxSDK.validateWebhookMessage(body, headers, primaryKey, secondaryKey);
-if (isValid) {
-	// message is valid, accept
-} else {
-	// message is NOT valid, reject
-}
+This function returns a value of type `undefined`.
+
+An empty response will be returned when the webhook
+was successfully deleted.
+
+## Validate a webhook message
+
+Validate a webhook message by verifying the signature and the delivery timestamp
+
+This operation is performed by calling function `validateMessage`.
+
+```ts
+await WebhooksManager.validateMessage(
+  body,
+  headersWithCorrectDatetime,
+  primaryKey,
+  { secondaryKey: secondaryKey } satisfies ValidateMessageOptionalsInput,
+);
 ```
+
+### Arguments
+
+- body `string`
+  - The request body of the webhook message
+- headers `{
+    readonly [key: string]: string;
+}`
+  - The headers of the webhook message
+- primaryKey `string`
+  - The primary signature to verify the message with
+- optionalsInput `ValidateMessageOptionalsInput`
+
+### Returns
+
+This function returns a value of type `boolean`.

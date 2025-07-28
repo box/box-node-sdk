@@ -1,119 +1,240 @@
-AI
-==
+# AiManager
 
-AI allows to send an intelligence request to supported large language models and returns an answer based on the provided prompt and items.
+- [Ask question](#ask-question)
+- [Generate text](#generate-text)
+- [Get AI agent default configuration](#get-ai-agent-default-configuration)
+- [Extract metadata (freeform)](#extract-metadata-freeform)
+- [Extract metadata (structured)](#extract-metadata-structured)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Ask question
 
-- [AI](#ai)
-  - [Send AI request](#send-ai-request)
-  - [Send AI text generation request](#send-ai-text-generation-request)
-  - [Get AI agent default configuration](#get-ai-agent-default-configuration)
+Sends an AI request to supported LLMs and returns an answer specifically focused on the user's question given the provided context.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+This operation is performed by calling function `createAiAsk`.
 
-Send AI request
-------------------------
-
-To send an AI request to the supported large language models, call the
-[`ai.ask(body, options?, callback?)`](http://opensource.box.com/box-node-sdk/jsdoc/AIManager.html#ask) method with the prompt and items. The `items` parameter is a list of items to be processed by the LLM, often files. The `prompt` provided by the client to be answered by the LLM. The prompt's length is limited to 10000 characters. The `mode`  specifies if this request is for a single or multiple items. If you select `single_item_qa` the items array can have one element only. Selecting `multiple_item_qa` allows you to provide up to 25 items.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-ai-ask/).
 
 <!-- sample post_ai_ask -->
-```js
-client.ai.ask(
+
+```ts
+await client.ai.createAiAsk({
+  mode: 'single_item_qa' as AiAskModeField,
+  prompt: 'which direction sun rises',
+  items: [
     {
-        prompt: 'What is the capital of France?',
-        items: [
-            {
-                type: 'file',
-                id: '12345'
-            }
-        ],
-        mode: 'single_item_qa'
-    })
-    .then(response => {
-        /* response -> {
-            "answer": "Paris",
-            "created_at": "2021-10-01T00:00:00Z",
-            "completion_reason": "done"
-        } */
-    });
+      id: fileToAsk.id,
+      type: 'file' as AiItemAskTypeField,
+      content: 'Sun rises in the East',
+    } satisfies AiItemAsk,
+  ],
+  aiAgent: aiAskAgentConfig,
+} satisfies AiAsk);
 ```
 
-NOTE: The AI endpoint may return a 412 status code if you use for your request a file which has just been updated to the box.
-It usually takes a few seconds for the file to be indexed and available for the AI endpoint.
+### Arguments
 
+- requestBody `AiAsk`
+  - Request body of createAiAsk method
+- optionalsInput `CreateAiAskOptionalsInput`
 
-Send AI text generation request
-------------------------
+### Returns
 
-To send an AI text generation request to the supported large language models, call the
-[`ai.textGen(body, options?, callback?)`](http://opensource.box.com/box-node-sdk/jsdoc/AIManager.html#textGen) method with the prompt, items and dialogue history. The `dialogue_history` parameter is history of prompts and answers previously passed to the LLM. This provides additional context to the LLM in generating the response. The `items` parameter is a list of items to be processed by the LLM, often files. The `prompt` provided by the client to be answered by the LLM. The prompt's length is limited to 10000 characters.
+This function returns a value of type `undefined | AiResponseFull`.
+
+A successful response including the answer from the LLM.No content is available to answer the question. This is returned when the request item is a hub, but content in the hubs is not indexed. To ensure content in the hub is indexed, make sure Box AI for Hubs in the Admin Console was enabled before hub creation.
+
+## Generate text
+
+Sends an AI request to supported Large Language Models (LLMs) and returns generated text based on the provided prompt.
+
+This operation is performed by calling function `createAiTextGen`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-ai-text-gen/).
 
 <!-- sample post_ai_text_gen -->
-```js
-client.ai.textGen(
+
+```ts
+await client.ai.createAiTextGen({
+  prompt: 'Parapharse the document.s',
+  items: [
+    new AiTextGenItemsField({
+      id: fileToAsk.id,
+      type: 'file' as AiTextGenItemsTypeField,
+      content:
+        'The Earth goes around the sun. Sun rises in the East in the morning.',
+    }),
+  ],
+  dialogueHistory: [
     {
-        prompt: 'What is the capital of France?',
-        items: [
-            {
-                type: 'file',
-                id: '12345'
-            }
-        ],
-        dialogue_history: [
-            {
-                prompt: 'What is the capital of France?',
-                answer: 'Paris',
-                created_at: '2021-10-01T00:00:00Z'
-            },
-            {
-                prompt: 'What is the capital of Germany?',
-                answer: 'Berlin',
-                created_at: '2021-10-01T00:00:00Z'
-            }
-        ]
-    })
-    .then(response => {
-        /* response -> {
-            "answer": "The capital of France is Paris.",
-            "created_at": "2021-10-01T00:00:00Z",
-            "completion_reason": "done"
-        } */
-    });
+      prompt: 'What does the earth go around?',
+      answer: 'The sun',
+      createdAt: dateTimeFromString('2021-01-01T00:00:00Z'),
+    } satisfies AiDialogueHistory,
+    {
+      prompt: 'On Earth, where does the sun rise?',
+      answer: 'East',
+      createdAt: dateTimeFromString('2021-01-01T00:00:00Z'),
+    } satisfies AiDialogueHistory,
+  ],
+  aiAgent: aiTextGenAgentConfig,
+} satisfies AiTextGen);
 ```
 
+### Arguments
 
- Get AI agent default configuration
-------------------------
+- requestBody `AiTextGen`
+  - Request body of createAiTextGen method
+- optionalsInput `CreateAiTextGenOptionalsInput`
 
-To get an AI agent default configuration call the [ai.getAiAgentDefaultConfig(options?, callback?)](http://opensource.box.com/box-node-sdk/jsdoc/AIManager.html#getAiAgentDefaultConfig) method. The `mode` parameter filters the agent configuration to be returned. It can be either `ask` or `text_gen`. The `language` parameter specifies the ISO language code to return the agent config for. If the language is not supported, the default agent configuration is returned. The `model` parameter specifies the model for which the default agent configuration should be returned.
+### Returns
+
+This function returns a value of type `AiResponse`.
+
+A successful response including the answer from the LLM.
+
+## Get AI agent default configuration
+
+Get the AI agent default config.
+
+This operation is performed by calling function `getAiAgentDefaultConfig`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-ai-agent-default/).
 
 <!-- sample get_ai_agent_default -->
-```js
-client.ai.getAiAgentDefaultConfig({
-    mode: 'ask',
-    language: 'en',
-    model:'openai__gpt_3_5_turbo'
-}).then(response => {
-    /* response -> {
-        "type": "ai_agent_ask",
-        "basic_text": {
-            "llm_endpoint_params": {
-            "type": "openai_params",
-            "frequency_penalty": 1.5,
-            "presence_penalty": 1.5,
-            "stop": "<|im_end|>",
-            "temperature": 0,
-            "top_p": 1
-            },
-            "model": "openai__gpt_3_5_turbo",
-            "num_tokens_for_completion": 8400,
-            "prompt_template": "It is `{current_date}`, and I have $8000 and want to spend a week in the Azores. What should I see?",
-            "system_message": "You are a helpful travel assistant specialized in budget travel"
-        },
-        ...
-    } */
-});
+
+```ts
+await client.ai.getAiAgentDefaultConfig({
+  mode: 'ask' as GetAiAgentDefaultConfigQueryParamsModeField,
+  language: 'en-US',
+} satisfies GetAiAgentDefaultConfigQueryParams);
 ```
+
+### Arguments
+
+- queryParams `GetAiAgentDefaultConfigQueryParams`
+  - Query parameters of getAiAgentDefaultConfig method
+- optionalsInput `GetAiAgentDefaultConfigOptionalsInput`
+
+### Returns
+
+This function returns a value of type `AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen`.
+
+A successful response including the default agent configuration.
+This response can be one of the following four objects:
+
+- AI agent for questions
+- AI agent for text generation
+- AI agent for freeform metadata extraction
+- AI agent for structured metadata extraction.
+  The response depends on the agent configuration requested in this endpoint.
+
+## Extract metadata (freeform)
+
+Sends an AI request to supported Large Language Models (LLMs) and extracts metadata in form of key-value pairs.
+In this request, both the prompt and the output can be freeform.
+Metadata template setup before sending the request is not required.
+
+This operation is performed by calling function `createAiExtract`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-ai-extract/).
+
+<!-- sample post_ai_extract -->
+
+```ts
+await client.ai.createAiExtract({
+  prompt: 'firstName, lastName, location, yearOfBirth, company',
+  items: [new AiItemBase({ id: file.id })],
+  aiAgent: agentIgnoringOverridingEmbeddingsModel,
+} satisfies AiExtract);
+```
+
+### Arguments
+
+- requestBody `AiExtract`
+  - Request body of createAiExtract method
+- optionalsInput `CreateAiExtractOptionalsInput`
+
+### Returns
+
+This function returns a value of type `AiResponse`.
+
+A response including the answer from the LLM.
+
+## Extract metadata (structured)
+
+Sends an AI request to supported Large Language Models (LLMs) and returns extracted metadata as a set of key-value pairs.
+For this request, you either need a metadata template or a list of fields you want to extract.
+Input is **either** a metadata template or a list of fields to ensure the structure.
+To learn more about creating templates, see [Creating metadata templates in the Admin Console](https://support.box.com/hc/en-us/articles/360044194033-Customizing-Metadata-Templates)
+or use the [metadata template API](g://metadata/templates/create).
+
+This operation is performed by calling function `createAiExtractStructured`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-ai-extract-structured/).
+
+<!-- sample post_ai_extract_structured -->
+
+```ts
+await client.ai.createAiExtractStructured({
+  fields: [
+    {
+      key: 'firstName',
+      displayName: 'First name',
+      description: 'Person first name',
+      prompt: 'What is the your first name?',
+      type: 'string',
+    } satisfies AiExtractStructuredFieldsField,
+    {
+      key: 'lastName',
+      displayName: 'Last name',
+      description: 'Person last name',
+      prompt: 'What is the your last name?',
+      type: 'string',
+    } satisfies AiExtractStructuredFieldsField,
+    {
+      key: 'dateOfBirth',
+      displayName: 'Birth date',
+      description: 'Person date of birth',
+      prompt: 'What is the date of your birth?',
+      type: 'date',
+    } satisfies AiExtractStructuredFieldsField,
+    {
+      key: 'age',
+      displayName: 'Age',
+      description: 'Person age',
+      prompt: 'How old are you?',
+      type: 'float',
+    } satisfies AiExtractStructuredFieldsField,
+    {
+      key: 'hobby',
+      displayName: 'Hobby',
+      description: 'Person hobby',
+      prompt: 'What is your hobby?',
+      type: 'multiSelect',
+      options: [
+        { key: 'guitar' } satisfies AiExtractStructuredFieldsOptionsField,
+        { key: 'books' } satisfies AiExtractStructuredFieldsOptionsField,
+      ],
+    } satisfies AiExtractStructuredFieldsField,
+  ],
+  items: [new AiItemBase({ id: file.id })],
+  aiAgent: agentIgnoringOverridingEmbeddingsModel,
+} satisfies AiExtractStructured);
+```
+
+### Arguments
+
+- requestBody `AiExtractStructured`
+  - Request body of createAiExtractStructured method
+- optionalsInput `CreateAiExtractStructuredOptionalsInput`
+
+### Returns
+
+This function returns a value of type `AiExtractStructuredResponse`.
+
+A successful response including the answer from the LLM.

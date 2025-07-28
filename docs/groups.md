@@ -1,399 +1,163 @@
-Groups
-======
+# GroupsManager
 
-Groups contain a set of users, and can be used in place of individual users in some
-operations, such as collaborations.
+- [List groups for enterprise](#list-groups-for-enterprise)
+- [Create group](#create-group)
+- [Get group](#get-group)
+- [Update group](#update-group)
+- [Remove group](#remove-group)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## List groups for enterprise
 
+Retrieves all of the groups for a given enterprise. The user
+must have admin permissions to inspect enterprise's groups.
 
-- [Create Group](#create-group)
-- [Get Group](#get-group)
-- [Update Group](#update-group)
-- [Delete Group](#delete-group)
-- [Add a User to a Group](#add-a-user-to-a-group)
-- [Get Membership](#get-membership)
-- [Get Group Memberships for a User](#get-group-memberships-for-a-user)
-- [Update Membership](#update-membership)
-- [Remove Membership](#remove-membership)
-- [Get Group Memberships](#get-group-memberships)
-- [Get Enterprise Groups](#get-enterprise-groups)
-- [Get Group Collaborations](#get-group-collaborations)
+This operation is performed by calling function `getGroups`.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-Get All Groups
---------------
-
-To get a list of all groups in the calling user's enterprise, call the
-[`groups.getAll(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getAll)
-method.  Note that this requires permission to view an enterprise's groups, which
-is reserved for enterprise administrators.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-groups/).
 
 <!-- sample get_groups -->
-```js
-client.groups.getAll()
-	.then(groups => {
-		/* groups -> {
-			total_count: 1,
-			entries: [ { type: 'group', id: '1786931', name: 'friends' } ],
-			limit: 100,
-			offset: 0 }
-		*/
-	});
+
+```ts
+await client.groups.getGroups();
 ```
 
-Create Group
-------------
+### Arguments
 
-To create a new group, call the
-[`groups.create(name, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#create)
-method.
+- queryParams `GetGroupsQueryParams`
+  - Query parameters of getGroups method
+- headersInput `GetGroupsHeadersInput`
+  - Headers of getGroups method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
+
+### Returns
+
+This function returns a value of type `Groups`.
+
+Returns a collection of group objects. If there are no groups, an
+empty collection will be returned.
+
+## Create group
+
+Creates a new group of users in an enterprise. Only users with admin
+permissions can create new groups.
+
+This operation is performed by calling function `createGroup`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-groups/).
 
 <!-- sample post_groups -->
-```js
-client.groups.create('My group', {description: 'An example group'})
-	.then(group => {
-		/* group -> {
-			type: 'group',
-			id: '119720',
-			name: 'Box Employees',
-			created_at: '2013-05-16T15:27:57-07:00',
-			modified_at: '2013-05-16T15:27:57-07:00' }
-		*/
-	});
+
+```ts
+await client.groups.createGroup({
+  name: groupName,
+  description: groupDescription,
+} satisfies CreateGroupRequestBody);
 ```
 
-Get Group
----------
+### Arguments
 
-To retrieve the information for a group, call the
-[`groups.get(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#get)
-method.
+- requestBody `CreateGroupRequestBody`
+  - Request body of createGroup method
+- optionalsInput `CreateGroupOptionalsInput`
+
+### Returns
+
+This function returns a value of type `GroupFull`.
+
+Returns the new group object.
+
+## Get group
+
+Retrieves information about a group. Only members of this
+group or users with admin-level permissions will be able to
+use this API.
+
+This operation is performed by calling function `getGroupById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-groups-id/).
 
 <!-- sample get_groups_id -->
-```js
-client.groups.get('11111')
-	.then(group => {
-		/* group -> {
-			type: 'group',
-			id: '11111',
-			name: 'Everyone',
-			created_at: '2014-09-15T13:15:35-07:00',
-			modified_at: '2014-09-15T13:15:35-07:00' }
-		*/
-	});
+
+```ts
+await client.groups.getGroupById(group.id, {
+  queryParams: {
+    fields: ['id', 'name', 'description', 'group_type'],
+  } satisfies GetGroupByIdQueryParams,
+} satisfies GetGroupByIdOptionalsInput);
 ```
 
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
+### Arguments
 
-```js
-client.groups.get('12345', {fields: 'name,description'})
-	.then(group => {
-		// ...
-	});
-```
+- groupId `string`
+  - The ID of the group. Example: "57645"
+- optionalsInput `GetGroupByIdOptionalsInput`
 
-Update Group
-------------
+### Returns
 
-To change the properties of a group object, call the
-[`groups.update(groupID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#update)
-method with `updates` being the set of properties to update.
+This function returns a value of type `GroupFull`.
+
+Returns the group object.
+
+## Update group
+
+Updates a specific group. Only admins of this
+group or users with admin-level permissions will be able to
+use this API.
+
+This operation is performed by calling function `updateGroupById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-groups-id/).
 
 <!-- sample put_groups_id -->
-```js
-client.groups.update('11111', {name: 'New group name'})
-	.then(group => {
-		/* group -> {
-			type: 'group',
-			id: '11111',
-			name: 'New group name',
-			created_at: '2014-09-15T13:15:35-07:00',
-			modified_at: '2014-09-16T13:15:35-07:00' }
-		*/	
-	});
+
+```ts
+await client.groups.updateGroupById(group.id, {
+  requestBody: { name: updatedGroupName } satisfies UpdateGroupByIdRequestBody,
+} satisfies UpdateGroupByIdOptionalsInput);
 ```
 
-Delete Group
-------------
+### Arguments
 
-To delete a group, call the
-[`groups.delete(groupID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#delete)
-method.
+- groupId `string`
+  - The ID of the group. Example: "57645"
+- optionalsInput `UpdateGroupByIdOptionalsInput`
+
+### Returns
+
+This function returns a value of type `GroupFull`.
+
+Returns the updated group object.
+
+## Remove group
+
+Permanently deletes a group. Only users with
+admin-level permissions will be able to use this API.
+
+This operation is performed by calling function `deleteGroupById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/delete-groups-id/).
 
 <!-- sample delete_groups_id -->
-```js
-client.groups.delete('11111')
-	.then(() => {
-		// deletion succeeded — no value returned
-	});
+
+```ts
+await client.groups.deleteGroupById(group.id);
 ```
 
-Add a User to a Group
----------------------
+### Arguments
 
-To add a user to a group, call the
-[`groups.addUser(groupID, userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#addUser)
-method.
+- groupId `string`
+  - The ID of the group. Example: "57645"
+- optionalsInput `DeleteGroupByIdOptionalsInput`
 
-<!-- sample post_group_memberships -->
-```js
-var groupID = '11111';
-var userID = '22222';
-client.groups.addUser(groupID, userID, {role: client.groups.userRoles.MEMBER})
-	.then(membership => {
-		/* membership -> {
-			type: 'group_membership',
-			id: '33333',
-			user: 
-			{ type: 'user',
-				id: '22222',
-				name: 'Alison Wonderland',
-				login: 'alice@example.com' },
-			group: { type: 'group', id: '11111', name: 'Employees' },
-			role: 'member',
-			configurable_permissions: 
-			{ can_run_reports: false,
-				can_instant_login: false,
-				can_create_accounts: false,
-				can_edit_accounts: false } }
-		*/
-	});
-```
+### Returns
 
-Get Membership
---------------
+This function returns a value of type `undefined`.
 
-To retrieve information about a specific membership record, which shows that a
-given user is in the group, call the
-[`groups.getMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getMembership)
-method.
-
-<!-- sample get_group_memberships_id -->
-```js
-client.groups.getMembership('33333')
-	.then(membership => {
-		/* membership -> {
-			type: 'group_membership',
-			id: '33333',
-			user: 
-			{ type: 'user',
-				id: '22222',
-				name: 'Alison Wonderland',
-				login: 'alice@example.com' },
-			group: { type: 'group', id: '11111', name: 'Employees' },
-			role: 'member',
-			configurable_permissions: 
-			{ can_run_reports: false,
-				can_instant_login: false,
-				can_create_accounts: false,
-				can_edit_accounts: false },
-			created_at: '2013-05-16T15:27:57-07:00',
-			modified_at: '2013-05-16T15:27:57-07:00' }
-		*/
-	});
-```
-
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
-
-```js
-client.groups.getMembership('33333', {fields: 'user,created_at'})
-	.then(membership => {
-		/* membership -> {
-			type: 'group_membership',
-			id: '33333',
-			user: 
-			{ type: 'user',
-				id: '22222',
-				name: 'Alison Wonderland',
-				login: 'alice@example.com' },
-			created_at: '2013-05-16T15:27:57-07:00'
-		*/
-	});
-```
-
-Get Group Memberships for a User
---------------------------------
-
-To get a list of groups to which a user belongs, call the
-[`users.getGroupMemberships(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getGroupMemberships)
-method.  Note that this method requires the calling user to have permission to
-view groups, which is restricted to enterprise administrators.
-
-
-<!-- sample get_users_id_memberships -->
-```js
-var userID = '22222';
-client.users.getGroupMemberships(userID)
-	.then(memberships => {
-		/* memberships -> {
-			total_count: 1,
-			entries: 
-			[ { type: 'group_membership',
-				id: '12345',
-				user: 
-					{ type: 'user',
-					id: '22222',
-					name: 'Alison Wonderland',
-					login: 'alice@example.com' },
-				group: { type: 'group', id: '11111', name: 'Employees' },
-				role: 'member' } ],
-			limit: 100,
-			offset: 0 }
-		*/
-	});
-```
-
-Update Membership
------------------
-
-To update a membership record, call the
-[`groups.updateMembership(membershipID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#updateMembership)
-method with `updates` being the properties to update.
-
-
-<!-- sample put_group_memberships_id -->
-```js
-// Promote a user to group admin
-client.groups.updateMembership('12345', {role: client.groups.userRoles.ADMIN})
-	.then(membership => {
-		/* membership -> {
-			type: 'group_membership',
-			id: '33333',
-			user: 
-			{ type: 'user',
-				id: '22222',
-				name: 'Alison Wonderland',
-				login: 'alice@example.com' },
-			group: { type: 'group', id: '11111', name: 'Employees' },
-			role: 'admin',
-			configurable_permissions: 
-			{ can_run_reports: false,
-				can_instant_login: false,
-				can_create_accounts: false,
-				can_edit_accounts: false },
-			created_at: '2013-05-16T15:27:57-07:00',
-			modified_at: '2013-05-16T15:27:57-07:00' }
-		*/
-	});
-```
-
-Remove Membership
------------------
-
-To remove a specific membership record, which removes a user from the group, call the
-[`groups.removeMembership(membershipID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#removeMembership)
-method with the ID of the membership record to remove.
-
-<!-- sample delete_group_memberships_id -->
-```js
-client.groups.removeMembership('33333')
-	.then(() => {
-		// removal succeeded — no value returned
-	});
-```
-
-Get Group Memberships
----------------------
-
-To get a list of all memberships to a group, call the
-[`groups.getMemberships(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getMemberships)
-method with the ID of the group to get the list of memberships for.
-
-<!-- sample get_groups_id_memberships -->
-```js
-client.groups.getMemberships('11111')
-	.then(memberships => {
-		/* memberships -> {
-			total_count: 2,
-			entries: 
-			[ { type: 'group_membership',
-				id: '44444',
-				user: 
-					{ type: 'user',
-					id: '22222',
-					name: 'Alice',
-					login: 'alice@example.com' },
-				group: { type: 'group', id: '11111', name: 'Employees' },
-				role: 'member' },
-				{ type: 'group_membership',
-				id: '55555',
-				user: 
-					{ type: 'user',
-					id: '66666',
-					name: 'White Rabbit',
-					login: 'rabbit@example.com' },
-				group: { type: 'group', id: '11111', name: 'Employees' },
-				role: 'member' } ],
-			offset: 0,
-			limit: 100 }
-
-		*/
-	});
-```
-
-Get Group Collaborations
-------------------------
-
-To get a list of collaborations for a group, which show which items the group has
-access to, call the
-[`groups.getCollaborations(groupID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#getCollaborations)
-method.
-
-<!-- sample get_groups_id_collaborations -->
-```js
-client.groups.getCollaborations('11111')
-	.then(collaborations => {
-		/* collaborations -> {
-			total_count: 1,
-			entries: 
-			[ { type: 'collaboration',
-				id: '22222',
-				created_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Example User',
-					login: 'user@example.com' },
-				created_at: '2013-11-14T16:16:20-08:00',
-				modified_at: '2013-11-14T16:16:20-08:00',
-				expires_at: null,
-				status: 'accepted',
-				accessible_by: 
-					{ type: 'group',
-					id: '11111',
-					name: 'Remote Employees' },
-				role: 'viewer',
-				acknowledged_at: '2013-11-14T16:16:20-08:00',
-				item: 
-					{ type: 'folder',
-					id: '44444',
-					sequence_id: '0',
-					etag: '0',
-					name: 'Documents' } } ],
-			offset: 0,
-			limit: 100 }
-		*/
-	});
-```
-
-Terminate user groups session
-----------------------------
-
-To terminate a user's session for groups, call the
-[`groups.terminateSession(groupIDs, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Groups.html#terminateSession) method.
-
-<!-- sample post_groups_terminate_sessions -->
-```js
-var groupIDs = ['11111', '22222'];
-
-client.groups.terminateSession(groupIDs)
-	.then((result) => {
-		/* result -> {
-			message: 'Request is successful, please check the admin events for the status of the job'
-		} */ 
-	});
-```
+A blank response is returned if the group was
+successfully deleted.
