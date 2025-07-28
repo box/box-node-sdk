@@ -1,101 +1,82 @@
 {
-  "name": "box-node-sdk",
+  "name": "box-typescript-sdk-gen",
   "author": "Box <oss@box.com>",
-  "version": "3.8.1",
-  "description": "Official SDK for Box Plaform APIs",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/box/box-node-sdk.git"
-  },
+  "version": "0.1.0",
+  "description": "Official Box TypeScript Generated SDK",
   "keywords": [
     "box",
-    "platform",
+    "sdk",
     "api",
-    "apis",
-    "upload",
-    "download",
-    "sdk"
+    "rest",
+    "boxsdk"
   ],
   "engines": {
-    "node": ">= 14.0.0"
+    "node": ">=16.0.0"
   },
-  "main": "./lib/box-node-sdk.js",
-  "module": "./lib-esm/box-node-sdk.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "browser": {
+    "./src/internal/utilsNode.ts": "./src/internal/utilsBrowser.ts",
+    "./lib/internal/utilsNode.js": "./lib/internal/utilsBrowser.js",
+    "./lib-esm/internal/utilsNode.js": "./lib-esm/internal/utilsBrowser.js"
+  },
+  "module": "./lib-esm/index.js",
   "exports": {
     ".": {
-      "import": "./lib-esm/box-node-sdk.js",
-      "require": "./lib/box-node-sdk.js"
+      "import": "./lib-esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
     },
     "./*": {
       "import": "./lib-esm/*.js",
-      "require": "./lib/*.js"
+      "require": "./lib/*.js",
+      "types": "./lib/*.d.ts"
     }
   },
+  "sideEffects": false,
   "scripts": {
-    "test": "npm run build && nyc mocha",
-    "jest": "npm run build && jest",
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --project tsconfig.json",
     "build:esm": "tsc --project tsconfig.esm.json",
-    "codegen": "cd codegen && npm run codegen",
-    "docs": "jsdoc -p -r -c ./jsdoc.json -d ./docs/jsdoc ./src/",
-    "doctoc": "doctoc docs",
-    "deps": "npm prune && npm install",
-    "changelog": "node node_modules/standard-version/bin/cli.js --skip.commit --skip.push --skip.tag --dry-run",
-    "prettier": "npx prettier --write ."
+    "postbuild": "rollup -c",
+    "start": "echo \"Error: no start specified\" && exit 1",
+    "test": "jest"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/box/box-typescript-sdk-gen.git"
   },
   "dependencies": {
-    "@cypress/request": "^3.0.1",
-    "@types/bluebird": "^3.5.35",
-    "@types/node": "^18.15.3",
-    "ajv": "^6.12.3",
-    "bluebird": "^3.7.2",
-    "http-status": "^1.4.1",
-    "jsonwebtoken": "^9.0.2",
-    "merge-options": "^3.0.4",
-    "promise-queue": "^2.2.3",
+    "buffer": "^6.0.3",
+    "form-data": "^4.0.0",
+    "hash-wasm": "^4.12.0",
+    "jose": "^5.2.2",
+    "node-fetch": "^2.6.3",
     "proxy-agent": "^6.4.0",
-    "url-template": "^2.0.8",
+    "tslib": "^2.6.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.14",
-    "@types/jsonwebtoken": "^8.5.1",
-    "@types/prettier": "^2.3.2",
-    "@types/promise-queue": "^2.2.0",
-    "@types/url-template": "^2.0.28",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/jest": "^29.5.1",
+    "@types/node": "*",
+    "@types/node-fetch": "2.6.3",
     "@types/uuid": "^9.0.1",
-    "better-docs": "^2.7.2",
-    "chai": "^4.2.0",
-    "doctoc": "^2.2.1",
-    "eslint": "^9.28.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-unicorn": "^4.0.3",
-    "jest": "^29.7.0",
-    "jsdoc": "^4.0.4",
-    "leche": "^2.3.0",
-    "mocha": "^10.8.2",
-    "mockery": "^2.1.0",
-    "nock": "^13.3.1",
-    "nyc": "^14.0.0",
-    "prettier": "^3.5.3",
-    "sinon": "^7.5.0",
-    "standard-version": "^9.3.2",
+    "jest": "^29.5.0",
     "ts-jest": "^29.1.0",
-    "typescript": "^5.8.2"
-  },
-  "overrides": {
-    "leche": {
-      "mocha": ">=1.18"
-    }
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "rollup": "^4.4.0"
   },
   "files": [
-    "config",
     "lib",
-    "lib-esm"
+    "lib-esm",
+    "src",
+    "README.md",
+    "LICENSE"
   ]
 }

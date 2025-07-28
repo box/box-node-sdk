@@ -1,311 +1,218 @@
-Users
-=====
+# UsersManager
 
-Users represent an individual's account on Box.
+- [List enterprise users](#list-enterprise-users)
+- [Create user](#create-user)
+- [Get current user](#get-current-user)
+- [Get user](#get-user)
+- [Update user](#update-user)
+- [Delete user](#delete-user)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## List enterprise users
 
-- [Get User's Information](#get-users-information)
-- [Get the Current User's Information](#get-the-current-users-information)
-- [Get User Avatar](#get-user-avatar)
-- [Set User Avatar](#set-user-avatar)
-- [Delete User Avatar](#delete-user-avatar)
-- [Update User](#update-user)
-- [Delete User](#delete-user)
-- [Get Email Aliases](#get-email-aliases)
-- [Add Email Alias](#add-email-alias)
-- [Delete Email Alias](#delete-email-alias)
+Returns a list of all users for the Enterprise along with their `user_id`,
+`public_name`, and `login`.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+The application and the authenticated user need to
+have the permission to look up users in the entire
+enterprise.
 
-Get User's Information
-----------------------
+This operation is performed by calling function `getUsers`.
 
-To get a user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#get) method.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-users/).
 
-<!-- sample get_users_id -->
-```js
-client.users.get('33333')
-    .then(user => {
-        /* user -> {
-            type: 'user',
-            id: '33333',
-            name: 'Example User',
-            login: 'user@example.com',
-            created_at: '2012-03-26T15:43:07-07:00',
-            modified_at: '2012-12-12T11:34:29-08:00',
-            language: 'en',
-            space_amount: 5368709120,
-            space_used: 2377016,
-            max_upload_size: 262144000,
-            status: 'active',
-            job_title: 'Employee',
-            phone: '5555555555',
-            address: '555 Office Drive',
-            avatar_url: 'https://app.box.com/api/avatar/deprecated' }
-        */
-    });
+<!-- sample get_users -->
+
+```ts
+await client.users.getUsers();
 ```
 
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
+### Arguments
 
-```js
-// Only get information about a few specific fields.
-client.users.get('123', {fields: 'name,login'})
-    .then(user => {
-        /* user -> {
-            type: 'user',
-            id: '33333',
-            name: 'Example User',
-            login: 'user@example.com' }
-        */
-    });
+- queryParams `GetUsersQueryParams`
+  - Query parameters of getUsers method
+- headersInput `GetUsersHeadersInput`
+  - Headers of getUsers method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
+
+### Returns
+
+This function returns a value of type `Users`.
+
+Returns all of the users in the enterprise.
+
+## Create user
+
+Creates a new managed user in an enterprise. This endpoint
+is only available to users and applications with the right
+admin permissions.
+
+This operation is performed by calling function `createUser`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-users/).
+
+<!-- sample post_users -->
+
+```ts
+await client.users.createUser({
+  name: userName,
+  login: userLogin,
+  isPlatformAccessOnly: true,
+} satisfies CreateUserRequestBody);
 ```
 
-Get the Current User's Information
-----------------------------------
+### Arguments
 
-To get the current user call the [`users.get(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#get) method with the `CURRENT_USER_ID` constant.
+- requestBody `CreateUserRequestBody`
+  - Request body of createUser method
+- optionalsInput `CreateUserOptionalsInput`
+
+### Returns
+
+This function returns a value of type `UserFull`.
+
+Returns a user object for the newly created user.
+
+## Get current user
+
+Retrieves information about the user who is currently authenticated.
+
+In the case of a client-side authenticated OAuth 2.0 application
+this will be the user who authorized the app.
+
+In the case of a JWT, server-side authenticated application
+this will be the service account that belongs to the application
+by default.
+
+Use the `As-User` header to change who this API call is made on behalf of.
+
+This operation is performed by calling function `getUserMe`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-users-me/).
 
 <!-- sample get_users_me -->
-```js
-client.users.get(client.CURRENT_USER_ID)
-	.then(currentUser => {
-		/* currentUser -> {
-            type: 'user',
-            id: '33333',
-            name: 'Example User',
-            login: 'user@example.com',
-            created_at: '2012-03-26T15:43:07-07:00',
-            modified_at: '2012-12-12T11:34:29-08:00',
-            language: 'en',
-            space_amount: 5368709120,
-            space_used: 2377016,
-            max_upload_size: 262144000,
-            status: 'active',
-            job_title: 'Employee',
-            phone: '5555555555',
-            address: '555 Office Drive',
-            avatar_url: 'https://app.box.com/api/avatar/deprecated' }
-        */
-	});
+
+```ts
+await client.users.getUserMe();
 ```
 
-Get User Avatar
----------------
+### Arguments
 
-Calling [`users.getAvatar(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getAvatar) will
-yield a `Readable` stream over the bytes of the user's avatar image.
+- queryParams `GetUserMeQueryParams`
+  - Query parameters of getUserMe method
+- headersInput `GetUserMeHeadersInput`
+  - Headers of getUserMe method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
 
-<!-- sample get_users_id_avatar -->
-```js
-client.users.getAvatar('22222')
-    .then(avatarImageStream => {
+### Returns
 
-        avatarImageStream.on('data', bytes => {
-            // read avatar image bytes
-        });
-    });
+This function returns a value of type `UserFull`.
+
+Returns a single user object.
+
+## Get user
+
+Retrieves information about a user in the enterprise.
+
+The application and the authenticated user need to
+have the permission to look up users in the entire
+enterprise.
+
+This endpoint also returns a limited set of information
+for external users who are collaborated on content
+owned by the enterprise for authenticated users with the
+right scopes. In this case, disallowed fields will return
+null instead.
+
+This operation is performed by calling function `getUserById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-users-id/).
+
+<!-- sample get_users_id -->
+
+```ts
+await client.users.getUserById(user.id);
 ```
 
-Set User Avatar
----------------
+### Arguments
 
-Calling [`users.setAvatar(userID, avatar, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#setAvatar) will set user's avatar with the input file.
+- userId `string`
+  - The ID of the user. Example: "12345"
+- optionalsInput `GetUserByIdOptionalsInput`
 
-<!-- sample post_users_id_avatar -->
-```js
-const fs = require('fs');
-var readStream = fs.createReadStream('image.jpg');
-client.users.setAvatar('22222', readStream).then(result => {
-    // read avatar urls
-});
-```
+### Returns
 
-Delete User Avatar
----------------
+This function returns a value of type `UserFull`.
 
-Calling [`users.deleteAvatar(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#deleteAvatar) will delete the user's avatar.
+Returns a single user object.
 
-<!-- sample delete_users_id_avatar -->
-```js
-client.users.deleteAvatar('22222', () => {
-    console.log('User avatar deleted!'); 
-});
-```
+Not all available fields are returned by default. Use the
+[fields](#param-fields) query parameter to explicitly request
+any specific fields using the [fields](#get-users-id--request--fields)
+parameter.
 
-Update User
------------
+## Update user
 
-To update a user call the
-[`users.update(userID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#update)
-method where `updates` contains the fields to update.
+Updates a managed or app user in an enterprise. This endpoint
+is only available to users and applications with the right
+admin permissions.
+
+This operation is performed by calling function `updateUserById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-users-id/).
 
 <!-- sample put_users_id -->
-```js
-client.users.update('33333', {name: 'New Name', job_title: 'New Title', phone: '555-1111'})
-    .then(user => {
-        /* user -> {
-            type: 'user',
-            id: '33333',
-            name: 'New Name',
-            login: 'user@example.com',
-            created_at: '2012-03-26T15:43:07-07:00',
-            modified_at: '2012-12-12T11:34:29-08:00',
-            language: 'en',
-            space_amount: 5368709120,
-            space_used: 2377016,
-            max_upload_size: 262144000,
-            status: 'active',
-            job_title: 'New Title',
-            phone: '555-1111',
-            address: '555 Office Drive',
-            avatar_url: 'https://app.box.com/api/avatar/deprecated' }
-        */
-    });
+
+```ts
+await client.users.updateUserById(user.id, {
+  requestBody: { name: updatedUserName } satisfies UpdateUserByIdRequestBody,
+} satisfies UpdateUserByIdOptionalsInput);
 ```
 
-To change a user's login email, update the `login` parameter on the user.  Note
-that the new email address must already be added as a verified email alias for the
-user.
+### Arguments
 
-```js
-client.users.update('33333', { login: 'newemail@example.com' })
-    .then(user => {
-        /* user -> {
-            type: 'user',
-            id: '33333',
-            name: 'New Name',
-            login: 'newemail@example.com',
-            created_at: '2012-03-26T15:43:07-07:00',
-            modified_at: '2012-12-12T11:34:29-08:00',
-            language: 'en',
-            space_amount: 5368709120,
-            space_used: 2377016,
-            max_upload_size: 262144000,
-            status: 'active',
-            job_title: 'New Title',
-            phone: '555-1111',
-            address: '555 Office Drive',
-            avatar_url: 'https://app.box.com/api/avatar/deprecated' }
-        */
-    });
-```
+- userId `string`
+  - The ID of the user. Example: "12345"
+- optionalsInput `UpdateUserByIdOptionalsInput`
 
-Delete User
------------
+### Returns
 
-To delete a user call the
-[`users.delete(userID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#delete)
-method.  If the user still has files in their account and the `force` parameter
-is not sent, an error is returned.
+This function returns a value of type `UserFull`.
 
-```js
-client.users.delete('33333')
-    .then(() => {
-        // deletion succeeded — no value returned
-    });
-```
+Returns the updated user object.
+
+## Delete user
+
+Deletes a user. By default this will fail if the user
+still owns any content. Move their owned content first
+before proceeding, or use the `force` field to delete
+the user and their files.
+
+This operation is performed by calling function `deleteUserById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/delete-users-id/).
 
 <!-- sample delete_users_id -->
-```js
-// Delete the user even if they still have files in their account
-client.users.delete('123', {force: true})
-    .then(() => {
-        // deletion succeeded — no value returned
-    });
+
+```ts
+await client.users.deleteUserById(user.id);
 ```
 
-Get Email Aliases
------------------
+### Arguments
 
-To get a users email aliases call the [`users.getEmailAliases(userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#getEmailAliases) method.
+- userId `string`
+  - The ID of the user. Example: "12345"
+- optionalsInput `DeleteUserByIdOptionalsInput`
 
-<!-- sample get_users_id_email_aliases -->
-```js
-client.users.getEmailAliases('33333')
-    .then(emailAliases => {
-        /* emailAliases -> {
-            total_count: 2,
-            entries: 
-            [ { type: 'email_alias',
-                id: '1234',
-                is_confirmed: true,
-                email: 'user+foo@example.com' },
-                { type: 'email_alias',
-                id: '1235',
-                is_confirmed: true,
-                email: 'user+bar@example.com' } ] }
-        */
-    });
-```
+### Returns
 
-Add Email Alias
----------------
+This function returns a value of type `undefined`.
 
-To add an email alias for a user call the
-[`users.addEmailAlias(userID, email, callback`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#addEmailAlias)
-method.
-
-<!-- sample post_users_id_email_aliases -->
-```js
-client.users.addEmailAlias('33333', 'user+baz@example.com')
-    .then(alias => {
-        /* alias -> {
-            type: 'email_alias',
-            id: '12345',
-            is_confirmed: false,
-            email: 'user+baz@example.com' }
-        */
-    });
-```
-
-Enterprise admins can automatically confirm the email alias via the `is_confirmed` option:
-```js
-client.users.addEmailAlias('33333', 'user+quux@example.com', {is_confirmed: true})
-    .then(alias => {
-        /* alias -> {
-            type: 'email_alias',
-            id: '12346',
-            is_confirmed: true,
-            email: 'user+quux@example.com' }
-        */
-    });
-```
-
-Delete Email Alias
-------------------
-
-To delete a users email alias call the [`users.removeEmailAlias(userID, aliasID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#removeEmailAlias) method.
-
-<!-- sample delete_users_id_email_aliases_id -->
-```js
-var userID = '33333';
-var aliasID = '12345';
-client.users.removeEmailAlias(userID, aliasID)
-    .then(() => {
-        // removal successful — no value returned
-    });
-```
-
-Terminate users session
-----------------------
-
-To terminate user's sessions call the [`users.terminateSession(options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Users.html#terminateSession) method.
-
-<!-- sample post_users_terminate_sessions -->
-```js
-var userIDs = ['33333', '44444'];
-var userLogins = ['user1@example.com', 'user2@example.com'];
-
-client.users.terminateSession({
-    user_ids: userIDs,
-    user_logins: userLogins
-}).then((result) => {
-        /* result -> {
-            message: "Request is successful, please check the admin events for the status of the job" }
-        */
-    });
-```
+Removes the user and returns an empty response.
