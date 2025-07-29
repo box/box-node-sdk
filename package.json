@@ -46,7 +46,7 @@
     "prettier": "npx prettier --write ."
   },
   "dependencies": {
-    "@cypress/request": "^3.0.1",
+    "@cypress/request": "^3.0.9",
     "@types/bluebird": "^3.5.35",
     "@types/node": "^18.15.3",
     "ajv": "^6.12.3",
