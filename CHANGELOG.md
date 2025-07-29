@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.2](https://github.com/box/box-node-sdk/compare/v3.8.1...v3.8.2) (2025-07-29)
+
+
+### Bug Fixes
+
+* Bump `cypress/request` to resolve `CVE-2025-7783` in `form-data` ([#904](https://github.com/box/box-node-sdk/issues/904)) ([8e8d2da](https://github.com/box/box-node-sdk/commit/8e8d2da58ab42bdfb9e5a49ca25e9b9fc50e0d61))
+
 ### [3.8.1](https://github.com/box/box-node-sdk/compare/v3.8.0...v3.8.1) (2025-06-11)
 
 
