@@ -45,7 +45,8 @@ export function generateReadableStreamFromFile(
 export function generateByteStreamFromBuffer(
   buffer: Buffer | ArrayBuffer,
 ): Readable {
-  return Readable.from(Buffer.from(buffer));
+  const buf = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer);
+  return Readable.from(buf);
 }
 
 export function decodeBase64ByteStream(data: string): Readable {
