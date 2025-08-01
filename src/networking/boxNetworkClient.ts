@@ -73,7 +73,9 @@ async function createRequestInit(options: FetchOptions): Promise<RequestInit> {
       for (const item of options.multipartData) {
         if (item.fileStream) {
           const buffer = await readByteStream(item.fileStream);
-          const blob = isBrowser() ? new Blob([buffer]) : buffer;
+          const blob = isBrowser()
+            ? new Blob([new Uint8Array(buffer)])
+            : buffer;
           contentHeaders['content-md5'] = await calculateMD5Hash(buffer);
           formData.append(item.partName, blob, {
             filename: item.fileName ?? 'file',
@@ -185,7 +187,7 @@ export class BoxNetworkClient implements NetworkClient {
 
     let isExceptionCase: boolean = false;
     let fetchResponse: FetchResponse;
-    let responseBytesBuffer: ArrayBuffer | undefined;
+    let responseBytesBuffer;
     const { params = {} } = fetchOptions;
 
     const requestInit = await createRequestInit({
@@ -214,7 +216,9 @@ export class BoxNetworkClient implements NetworkClient {
       const ignoreResponseBody = fetchOptions.followRedirects === false;
 
       let data: SerializedData | undefined;
-      let content: ByteStream = generateByteStreamFromBuffer(new Uint8Array());
+      let content: ByteStream = generateByteStreamFromBuffer(
+        new Uint8Array().buffer,
+      );
 
       if (!ignoreResponseBody) {
         if (options.responseFormat === 'binary') {
