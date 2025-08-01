@@ -49,7 +49,8 @@ export interface MultipartItem {
 }
 
 type FetchOptionsExtended = FetchOptions & {
-  numRetries?: number;
+  attemptNumber?: number;
+  numberOfRetriesOnException?: number;
 };
 
 async function createRequestInit(options: FetchOptions): Promise<RequestInit> {
@@ -160,7 +161,8 @@ export class BoxNetworkClient implements NetworkClient {
     Object.assign(this, fields);
   }
   async fetch(options: FetchOptionsExtended): Promise<FetchResponse> {
-    const numRetries = options.numRetries ?? 0;
+    const attemptNumber = options.attemptNumber ?? 1;
+    let numberOfRetriesOnException = options.numberOfRetriesOnException ?? 0;
     const interceptors: readonly Interceptor[] =
       options.networkSession?.interceptors ?? [];
     const retryStrategy: RetryStrategy =
@@ -181,6 +183,11 @@ export class BoxNetworkClient implements NetworkClient {
       ? await multipartStreamToBuffer(fetchOptions.multipartData)
       : void 0;
 
+    let isExceptionCase: boolean = false;
+    let fetchResponse: FetchResponse;
+    let responseBytesBuffer: ArrayBuffer | undefined;
+    const { params = {} } = fetchOptions;
+
     const requestInit = await createRequestInit({
       ...fetchOptions,
       fileStream: fileStreamBuffer
@@ -191,70 +198,81 @@ export class BoxNetworkClient implements NetworkClient {
         : void 0,
     });
 
-    const { params = {} } = fetchOptions;
-    const response = await nodeFetch(
-      ''.concat(
-        fetchOptions.url,
-        Object.keys(params).length === 0 || fetchOptions.url.endsWith('?')
-          ? ''
-          : '?',
-        new URLSearchParams(params).toString(),
-      ),
-      { ...requestInit, redirect: isBrowser() ? 'follow' : 'manual' },
-    );
-
-    const contentType = response.headers.get('content-type') ?? '';
-    const ignoreResponseBody = fetchOptions.followRedirects === false;
-
-    let data: SerializedData | undefined;
-    let content: ByteStream = generateByteStreamFromBuffer(new Uint8Array());
-    let responseBytesBuffer: ArrayBuffer | undefined;
-
-    if (!ignoreResponseBody) {
-      if (options.responseFormat === 'binary') {
-        content = response.body as unknown as ByteStream;
-        responseBytesBuffer = new Uint8Array();
-      } else if (options.responseFormat === 'json') {
-        responseBytesBuffer = await response.arrayBuffer();
-        const text = new TextDecoder().decode(responseBytesBuffer);
-        if (contentType.includes('application/json')) {
-          data = jsonToSerializedData(text);
-        }
-        content = generateByteStreamFromBuffer(responseBytesBuffer);
-      }
-    }
-
-    let fetchResponse: FetchResponse = {
-      url: response.url,
-      status: response.status,
-      data,
-      content,
-      headers: Object.fromEntries(Array.from(response.headers.entries())),
-    };
-    if (interceptors.length) {
-      fetchResponse = interceptors.reduce(
-        (modifiedResponse: FetchResponse, interceptor: Interceptor) =>
-          interceptor.afterRequest(modifiedResponse),
-        fetchResponse,
+    try {
+      const response = await nodeFetch(
+        ''.concat(
+          fetchOptions.url,
+          Object.keys(params).length === 0 || fetchOptions.url.endsWith('?')
+            ? ''
+            : '?',
+          new URLSearchParams(params).toString(),
+        ),
+        { ...requestInit, redirect: isBrowser() ? 'follow' : 'manual' },
       );
+
+      const contentType = response.headers.get('content-type') ?? '';
+      const ignoreResponseBody = fetchOptions.followRedirects === false;
+
+      let data: SerializedData | undefined;
+      let content: ByteStream = generateByteStreamFromBuffer(new Uint8Array());
+
+      if (!ignoreResponseBody) {
+        if (options.responseFormat === 'binary') {
+          content = response.body as unknown as ByteStream;
+          responseBytesBuffer = new Uint8Array();
+        } else if (options.responseFormat === 'json') {
+          responseBytesBuffer = await response.arrayBuffer();
+          const text = new TextDecoder().decode(responseBytesBuffer);
+          if (contentType.includes('application/json')) {
+            data = jsonToSerializedData(text);
+          }
+          content = generateByteStreamFromBuffer(responseBytesBuffer);
+        }
+      }
+
+      fetchResponse = {
+        url: response.url,
+        status: response.status,
+        data,
+        content,
+        headers: Object.fromEntries(Array.from(response.headers.entries())),
+      };
+      if (interceptors.length) {
+        fetchResponse = interceptors.reduce(
+          (modifiedResponse: FetchResponse, interceptor: Interceptor) =>
+            interceptor.afterRequest(modifiedResponse),
+          fetchResponse,
+        );
+      }
+    } catch (error) {
+      isExceptionCase = true;
+      numberOfRetriesOnException++;
+      fetchResponse = {
+        status: 0,
+        headers: {},
+      };
     }
+    const attemptForRetry = isExceptionCase
+      ? numberOfRetriesOnException
+      : attemptNumber;
 
     const shouldRetry = await retryStrategy.shouldRetry(
       fetchOptions,
       fetchResponse,
-      numRetries,
+      attemptForRetry,
     );
 
     if (shouldRetry) {
       const retryTimeout = retryStrategy.retryAfter(
         fetchOptions,
         fetchResponse,
-        numRetries,
+        attemptForRetry,
       );
       await new Promise((resolve) => setTimeout(resolve, retryTimeout));
       return this.fetch({
         ...options,
-        numRetries: numRetries + 1,
+        attemptNumber: attemptNumber + 1,
+        numberOfRetriesOnException: numberOfRetriesOnException,
         fileStream: fileStreamBuffer
           ? generateByteStreamFromBuffer(fileStreamBuffer)
           : void 0,
