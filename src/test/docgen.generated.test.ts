@@ -108,7 +108,7 @@ test('testDocgenBatchAndJobs', async function testDocgenBatchAndJobs(): Promise<
   }
   const docgenJobs: DocGenJobsFullV2025R0 =
     await client.docgen.getDocgenJobsV2025R0({
-      limit: 500,
+      limit: 10000,
     } satisfies GetDocgenJobsV2025R0QueryParams);
   if (!(docgenJobs.entries!.length >= 1)) {
     throw new Error('Assertion failed');
@@ -156,7 +156,7 @@ test('testDocgenBatchAndJobs', async function testDocgenBatchAndJobs(): Promise<
   if (!((toString(docgenJobs.entries![0].type) as string) == 'docgen_job')) {
     throw new Error('Assertion failed');
   }
-  const indexOfItem: number = 0;
+  const indexOfItem: number = docgenJobs.entries!.length - 1;
   const docgenJobItemFromList: DocGenJobFullV2025R0 =
     docgenJobs.entries![indexOfItem];
   const docgenJob: DocGenJobV2025R0 =
