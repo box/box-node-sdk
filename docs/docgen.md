@@ -45,7 +45,7 @@ See the endpoint docs at
 
 ```ts
 await client.docgen.getDocgenJobsV2025R0({
-  limit: 500,
+  limit: 10000,
 } satisfies GetDocgenJobsV2025R0QueryParams);
 ```
 
