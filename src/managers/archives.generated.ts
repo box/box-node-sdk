@@ -222,6 +222,8 @@ export class ArchivesManager {
   }
   /**
    * Retrieves archives for an enterprise.
+   *
+   * To learn more about the archive APIs, see the [Archive API Guide](g://archives).
    * @param {GetArchivesV2025R0QueryParams} queryParams Query parameters of getArchivesV2025R0 method
    * @param {GetArchivesV2025R0HeadersInput} headersInput Headers of getArchivesV2025R0 method
    * @param {CancellationToken} cancellationToken Token used for request cancellation.
@@ -273,6 +275,8 @@ export class ArchivesManager {
   }
   /**
    * Creates an archive.
+   *
+   * To learn more about the archive APIs, see the [Archive API Guide](g://archives).
    * @param {CreateArchiveV2025R0RequestBody} requestBody Request body of createArchiveV2025R0 method
    * @param {CreateArchiveV2025R0OptionalsInput} optionalsInput
    * @returns {Promise<ArchiveV2025R0>}
@@ -318,6 +322,8 @@ export class ArchivesManager {
   }
   /**
      * Permanently deletes an archive.
+     *
+     * To learn more about the archive APIs, see the [Archive API Guide](g://archives).
      * @param {string} archiveId The ID of the archive.
     Example: "982312"
      * @param {DeleteArchiveByIdV2025R0OptionalsInput} optionalsInput
