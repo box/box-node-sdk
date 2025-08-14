@@ -17,6 +17,7 @@ export const testConfig = {
 
   // Not supported in browser
   testGetEventsWithLongPolling: 'skip',
+  testGetEventStream: 'skip',
 };
 
 export const testEnvList = [

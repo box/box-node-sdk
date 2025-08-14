@@ -2,10 +2,10 @@ import { serializeEvents } from '../schemas/events.generated.js';
 import { deserializeEvents } from '../schemas/events.generated.js';
 import { serializeEvent } from '../schemas/event.generated.js';
 import { deserializeEvent } from '../schemas/event.generated.js';
-import { serializeGetEventsQueryParamsStreamTypeField } from '../managers/events.generated.js';
-import { deserializeGetEventsQueryParamsStreamTypeField } from '../managers/events.generated.js';
-import { serializeGetEventsQueryParamsEventTypeField } from '../managers/events.generated.js';
-import { deserializeGetEventsQueryParamsEventTypeField } from '../managers/events.generated.js';
+import { serializeGetEventStreamQueryParamsStreamTypeField } from '../managers/events.generated.js';
+import { deserializeGetEventStreamQueryParamsStreamTypeField } from '../managers/events.generated.js';
+import { serializeGetEventStreamQueryParamsEventTypeField } from '../managers/events.generated.js';
+import { deserializeGetEventStreamQueryParamsEventTypeField } from '../managers/events.generated.js';
 import { serializeRealtimeServers } from '../schemas/realtimeServers.generated.js';
 import { deserializeRealtimeServers } from '../schemas/realtimeServers.generated.js';
 import { serializeRealtimeServer } from '../schemas/realtimeServer.generated.js';
@@ -24,11 +24,12 @@ import { BoxClient } from '../client.generated.js';
 import { Events } from '../schemas/events.generated.js';
 import { Event } from '../schemas/event.generated.js';
 import { GetEventsQueryParams } from '../managers/events.generated.js';
-import { GetEventsQueryParamsStreamTypeField } from '../managers/events.generated.js';
-import { GetEventsQueryParamsEventTypeField } from '../managers/events.generated.js';
+import { GetEventStreamQueryParamsStreamTypeField } from '../managers/events.generated.js';
+import { GetEventStreamQueryParamsEventTypeField } from '../managers/events.generated.js';
 import { RealtimeServers } from '../schemas/realtimeServers.generated.js';
 import { RealtimeServer } from '../schemas/realtimeServer.generated.js';
 import { DateTime } from '../internal/utils.js';
+import { EventStream } from '../box/eventStream.js';
 import { getDefaultClient } from './commons.generated.js';
 import { EventSource } from '../schemas/eventSource.generated.js';
 import { File } from '../schemas/file.generated.js';
@@ -62,8 +63,8 @@ test('testEvents', async function testEvents(): Promise<any> {
 });
 test('testEventUpload', async function testEventUpload(): Promise<any> {
   const events: Events = await client.events.getEvents({
-    streamType: 'admin_logs' as GetEventsQueryParamsStreamTypeField,
-    eventType: ['UPLOAD' as GetEventsQueryParamsEventTypeField],
+    streamType: 'admin_logs' as GetEventStreamQueryParamsStreamTypeField,
+    eventType: ['UPLOAD' as GetEventStreamQueryParamsEventTypeField],
   } satisfies GetEventsQueryParams);
   if (!(events.entries!.length > 0)) {
     throw new Error('Assertion failed');
@@ -90,8 +91,8 @@ test('testEventUpload', async function testEventUpload(): Promise<any> {
 });
 test('testEventDeleteUser', async function testEventDeleteUser(): Promise<any> {
   const events: Events = await client.events.getEvents({
-    streamType: 'admin_logs' as GetEventsQueryParamsStreamTypeField,
-    eventType: ['DELETE_USER' as GetEventsQueryParamsEventTypeField],
+    streamType: 'admin_logs' as GetEventStreamQueryParamsStreamTypeField,
+    eventType: ['DELETE_USER' as GetEventStreamQueryParamsEventTypeField],
   } satisfies GetEventsQueryParams);
   if (!(events.entries!.length > 0)) {
     throw new Error('Assertion failed');
@@ -110,7 +111,7 @@ test('testEventDeleteUser', async function testEventDeleteUser(): Promise<any> {
 });
 test('testEventSourceFileOrFolder', async function testEventSourceFileOrFolder(): Promise<any> {
   const events: Events = await client.events.getEvents({
-    streamType: 'changes' as GetEventsQueryParamsStreamTypeField,
+    streamType: 'changes' as GetEventStreamQueryParamsStreamTypeField,
   } satisfies GetEventsQueryParams);
   if (!(events.entries!.length > 0)) {
     throw new Error('Assertion failed');
@@ -141,12 +142,18 @@ test('testGetEventsWithDateFilters', async function testGetEventsWithDateFilters
     currentEpochTimeInSeconds,
   );
   const servers: Events = await client.events.getEvents({
-    streamType: 'admin_logs' as GetEventsQueryParamsStreamTypeField,
+    streamType: 'admin_logs' as GetEventStreamQueryParamsStreamTypeField,
     limit: 1,
     createdAfter: createdAfterDate,
     createdBefore: createdBeforeDate,
   } satisfies GetEventsQueryParams);
   if (!(servers.entries!.length == 1)) {
+    throw new Error('Assertion failed');
+  }
+});
+test('testGetEventStream', function testGetEventStream(): any {
+  const eventStream: EventStream = client.events.getEventStream();
+  if (!!(eventStream == void 0)) {
     throw new Error('Assertion failed');
   }
 });

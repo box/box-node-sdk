@@ -2,6 +2,7 @@
 
 - [Get events long poll endpoint](#get-events-long-poll-endpoint)
 - [List user and enterprise events](#list-user-and-enterprise-events)
+- [Get event stream](#get-event-stream)
 
 ## Get events long poll endpoint
 
@@ -107,3 +108,26 @@ including a list of event objects. The response includes a
 `chunk_size` parameter indicating how many events were returned in this
 chunk, as well as the next `stream_position` that can be
 queried.
+
+## Get event stream
+
+Get an event stream for the Box API
+
+This operation is performed by calling function `getEventStream`.
+
+```ts
+client.events.getEventStream();
+```
+
+### Arguments
+
+- queryParams `GetEventStreamQueryParams`
+  - Query parameters of getEvents method
+- headersInput `GetEventStreamHeadersInput`
+  - Headers of getEvents method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
+
+### Returns
+
+This function returns a value of type `EventStream`.

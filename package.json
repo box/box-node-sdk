@@ -18,6 +18,8 @@
   "browser": {
     "./src/internal/utilsNode.ts": "./src/internal/utilsBrowser.ts",
     "./lib/internal/utilsNode.js": "./lib/internal/utilsBrowser.js",
+    "./src/box/eventStream.ts": "./src/box/eventStreamBrowser.ts",
+    "./lib-esm/box/eventStream.js": "./lib-esm/box/eventStreamBrowser.js",
     "./lib-esm/internal/utilsNode.js": "./lib-esm/internal/utilsBrowser.js"
   },
   "module": "./lib-esm/index.js",
