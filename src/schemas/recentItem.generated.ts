@@ -4,14 +4,14 @@ import { serializeFolderFull } from './folderFull.generated.js';
 import { deserializeFolderFull } from './folderFull.generated.js';
 import { serializeWebLink } from './webLink.generated.js';
 import { deserializeWebLink } from './webLink.generated.js';
-import { serializeFileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
-import { deserializeFileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
+import { serializeRecentItemResource } from './recentItemResource.generated.js';
+import { deserializeRecentItemResource } from './recentItemResource.generated.js';
 import { serializeDateTime } from '../internal/utils.js';
 import { deserializeDateTime } from '../internal/utils.js';
 import { FileFull } from './fileFull.generated.js';
 import { FolderFull } from './folderFull.generated.js';
 import { WebLink } from './webLink.generated.js';
-import { FileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
+import { RecentItemResource } from './recentItemResource.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { DateTime } from '../internal/utils.js';
 import { SerializedData } from '../serialization/json.js';
@@ -32,7 +32,7 @@ export interface RecentItem {
   /**
    * The value will always be `recent_item`. */
   readonly type?: string;
-  readonly item?: FileFullOrFolderFullOrWebLink;
+  readonly item?: RecentItemResource;
   /**
    * The most recent type of access the user performed on
    * the item. */
@@ -80,9 +80,7 @@ export function serializeRecentItem(val: RecentItem): SerializedData {
   return {
     ['type']: val.type,
     ['item']:
-      val.item == void 0
-        ? val.item
-        : serializeFileFullOrFolderFullOrWebLink(val.item),
+      val.item == void 0 ? val.item : serializeRecentItemResource(val.item),
     ['interaction_type']:
       val.interactionType == void 0
         ? val.interactionType
@@ -104,10 +102,8 @@ export function deserializeRecentItem(val: SerializedData): RecentItem {
     });
   }
   const type: undefined | string = val.type == void 0 ? void 0 : val.type;
-  const item: undefined | FileFullOrFolderFullOrWebLink =
-    val.item == void 0
-      ? void 0
-      : deserializeFileFullOrFolderFullOrWebLink(val.item);
+  const item: undefined | RecentItemResource =
+    val.item == void 0 ? void 0 : deserializeRecentItemResource(val.item);
   const interactionType: undefined | RecentItemInteractionTypeField =
     val.interaction_type == void 0
       ? void 0

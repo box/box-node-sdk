@@ -6,12 +6,12 @@ import { serializeWebLink } from './webLink.generated.js';
 import { deserializeWebLink } from './webLink.generated.js';
 import { serializeGroupMini } from './groupMini.generated.js';
 import { deserializeGroupMini } from './groupMini.generated.js';
-import { serializeFileOrFolderOrWebLink } from './fileOrFolderOrWebLink.generated.js';
-import { deserializeFileOrFolderOrWebLink } from './fileOrFolderOrWebLink.generated.js';
+import { serializeCollaborationItem } from './collaborationItem.generated.js';
+import { deserializeCollaborationItem } from './collaborationItem.generated.js';
 import { serializeAppItem } from './appItem.generated.js';
 import { deserializeAppItem } from './appItem.generated.js';
-import { serializeGroupMiniOrUserCollaborations } from './groupMiniOrUserCollaborations.generated.js';
-import { deserializeGroupMiniOrUserCollaborations } from './groupMiniOrUserCollaborations.generated.js';
+import { serializeCollaborationAccessGrantee } from './collaborationAccessGrantee.generated.js';
+import { deserializeCollaborationAccessGrantee } from './collaborationAccessGrantee.generated.js';
 import { serializeUserCollaborations } from './userCollaborations.generated.js';
 import { deserializeUserCollaborations } from './userCollaborations.generated.js';
 import { serializeTermsOfServiceBase } from './termsOfServiceBase.generated.js';
@@ -22,9 +22,9 @@ import { File } from './file.generated.js';
 import { Folder } from './folder.generated.js';
 import { WebLink } from './webLink.generated.js';
 import { GroupMini } from './groupMini.generated.js';
-import { FileOrFolderOrWebLink } from './fileOrFolderOrWebLink.generated.js';
+import { CollaborationItem } from './collaborationItem.generated.js';
 import { AppItem } from './appItem.generated.js';
-import { GroupMiniOrUserCollaborations } from './groupMiniOrUserCollaborations.generated.js';
+import { CollaborationAccessGrantee } from './collaborationAccessGrantee.generated.js';
 import { UserCollaborations } from './userCollaborations.generated.js';
 import { TermsOfServiceBase } from './termsOfServiceBase.generated.js';
 import { BoxSdkError } from '../box/errors.js';
@@ -100,9 +100,9 @@ export class Collaboration {
    * The value will always be `collaboration`. */
   readonly type: CollaborationTypeField =
     'collaboration' as CollaborationTypeField;
-  readonly item?: FileOrFolderOrWebLink | null;
+  readonly item?: CollaborationItem | null;
   readonly appItem?: AppItem | null;
-  readonly accessibleBy?: GroupMiniOrUserCollaborations;
+  readonly accessibleBy?: CollaborationAccessGrantee;
   /**
    * The email address used to invite an unregistered collaborator, if
    * they are not a registered user. */
@@ -118,7 +118,7 @@ export class Collaboration {
    * If set to `true`, collaborators have access to
    * shared items, but such items won't be visible in the
    * All Files list. Additionally, collaborators won't
-   * see the the path to the root folder for the
+   * see the path to the root folder for the
    * shared item. */
   readonly isAccessOnly?: boolean;
   /**
@@ -198,9 +198,9 @@ export interface CollaborationInput {
   /**
    * The value will always be `collaboration`. */
   readonly type?: CollaborationTypeField;
-  readonly item?: FileOrFolderOrWebLink | null;
+  readonly item?: CollaborationItem | null;
   readonly appItem?: AppItem | null;
-  readonly accessibleBy?: GroupMiniOrUserCollaborations;
+  readonly accessibleBy?: CollaborationAccessGrantee;
   /**
    * The email address used to invite an unregistered collaborator, if
    * they are not a registered user. */
@@ -216,7 +216,7 @@ export interface CollaborationInput {
    * If set to `true`, collaborators have access to
    * shared items, but such items won't be visible in the
    * All Files list. Additionally, collaborators won't
-   * see the the path to the root folder for the
+   * see the path to the root folder for the
    * shared item. */
   readonly isAccessOnly?: boolean;
   /**
@@ -525,13 +525,13 @@ export function serializeCollaboration(val: Collaboration): SerializedData {
     ['id']: val.id,
     ['type']: serializeCollaborationTypeField(val.type),
     ['item']:
-      val.item == void 0 ? val.item : serializeFileOrFolderOrWebLink(val.item),
+      val.item == void 0 ? val.item : serializeCollaborationItem(val.item),
     ['app_item']:
       val.appItem == void 0 ? val.appItem : serializeAppItem(val.appItem),
     ['accessible_by']:
       val.accessibleBy == void 0
         ? val.accessibleBy
-        : serializeGroupMiniOrUserCollaborations(val.accessibleBy),
+        : serializeCollaborationAccessGrantee(val.accessibleBy),
     ['invite_email']: val.inviteEmail,
     ['role']:
       val.role == void 0 ? val.role : serializeCollaborationRoleField(val.role),
@@ -591,14 +591,14 @@ export function deserializeCollaboration(val: SerializedData): Collaboration {
   const type: CollaborationTypeField = deserializeCollaborationTypeField(
     val.type,
   );
-  const item: undefined | FileOrFolderOrWebLink =
-    val.item == void 0 ? void 0 : deserializeFileOrFolderOrWebLink(val.item);
+  const item: undefined | CollaborationItem =
+    val.item == void 0 ? void 0 : deserializeCollaborationItem(val.item);
   const appItem: undefined | AppItem =
     val.app_item == void 0 ? void 0 : deserializeAppItem(val.app_item);
-  const accessibleBy: undefined | GroupMiniOrUserCollaborations =
+  const accessibleBy: undefined | CollaborationAccessGrantee =
     val.accessible_by == void 0
       ? void 0
-      : deserializeGroupMiniOrUserCollaborations(val.accessible_by);
+      : deserializeCollaborationAccessGrantee(val.accessible_by);
   if (!(val.invite_email == void 0) && !sdIsString(val.invite_email)) {
     throw new BoxSdkError({
       message: 'Expecting string for "invite_email" of type "Collaboration"',
@@ -687,13 +687,13 @@ export function serializeCollaborationInput(
     ['type']:
       val.type == void 0 ? val.type : serializeCollaborationTypeField(val.type),
     ['item']:
-      val.item == void 0 ? val.item : serializeFileOrFolderOrWebLink(val.item),
+      val.item == void 0 ? val.item : serializeCollaborationItem(val.item),
     ['app_item']:
       val.appItem == void 0 ? val.appItem : serializeAppItem(val.appItem),
     ['accessible_by']:
       val.accessibleBy == void 0
         ? val.accessibleBy
-        : serializeGroupMiniOrUserCollaborations(val.accessibleBy),
+        : serializeCollaborationAccessGrantee(val.accessibleBy),
     ['invite_email']: val.inviteEmail,
     ['role']:
       val.role == void 0 ? val.role : serializeCollaborationRoleField(val.role),
@@ -751,14 +751,14 @@ export function deserializeCollaborationInput(
   const id: string = val.id;
   const type: undefined | CollaborationTypeField =
     val.type == void 0 ? void 0 : deserializeCollaborationTypeField(val.type);
-  const item: undefined | FileOrFolderOrWebLink =
-    val.item == void 0 ? void 0 : deserializeFileOrFolderOrWebLink(val.item);
+  const item: undefined | CollaborationItem =
+    val.item == void 0 ? void 0 : deserializeCollaborationItem(val.item);
   const appItem: undefined | AppItem =
     val.app_item == void 0 ? void 0 : deserializeAppItem(val.app_item);
-  const accessibleBy: undefined | GroupMiniOrUserCollaborations =
+  const accessibleBy: undefined | CollaborationAccessGrantee =
     val.accessible_by == void 0
       ? void 0
-      : deserializeGroupMiniOrUserCollaborations(val.accessible_by);
+      : deserializeCollaborationAccessGrantee(val.accessible_by);
   if (!(val.invite_email == void 0) && !sdIsString(val.invite_email)) {
     throw new BoxSdkError({
       message:

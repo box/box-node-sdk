@@ -4,12 +4,12 @@ import { serializeFolderFull } from './folderFull.generated.js';
 import { deserializeFolderFull } from './folderFull.generated.js';
 import { serializeWebLink } from './webLink.generated.js';
 import { deserializeWebLink } from './webLink.generated.js';
-import { serializeFileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
-import { deserializeFileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
+import { serializeSearchResultItem } from './searchResultItem.generated.js';
+import { deserializeSearchResultItem } from './searchResultItem.generated.js';
 import { FileFull } from './fileFull.generated.js';
 import { FolderFull } from './folderFull.generated.js';
 import { WebLink } from './webLink.generated.js';
-import { FileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
+import { SearchResultItem } from './searchResultItem.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -40,7 +40,7 @@ export class SearchResults {
     'search_results_items' as SearchResultsTypeField;
   /**
    * The search results for the query provided. */
-  readonly entries?: readonly FileFullOrFolderFullOrWebLink[];
+  readonly entries?: readonly SearchResultItem[];
   readonly rawData?: SerializedData;
   constructor(
     fields: Omit<SearchResults, 'type'> & Partial<Pick<SearchResults, 'type'>>,
@@ -85,7 +85,7 @@ export interface SearchResultsInput {
   readonly type?: SearchResultsTypeField;
   /**
    * The search results for the query provided. */
-  readonly entries?: readonly FileFullOrFolderFullOrWebLink[];
+  readonly entries?: readonly SearchResultItem[];
   readonly rawData?: SerializedData;
 }
 export function serializeSearchResultsTypeField(
@@ -112,10 +112,8 @@ export function serializeSearchResults(val: SearchResults): SerializedData {
     ['entries']:
       val.entries == void 0
         ? val.entries
-        : (val.entries.map(function (
-            item: FileFullOrFolderFullOrWebLink,
-          ): SerializedData {
-            return serializeFileFullOrFolderFullOrWebLink(item);
+        : (val.entries.map(function (item: SearchResultItem): SerializedData {
+            return serializeSearchResultItem(item);
           }) as readonly any[]),
   };
 }
@@ -155,14 +153,12 @@ export function deserializeSearchResults(val: SerializedData): SearchResults {
       message: 'Expecting array for "entries" of type "SearchResults"',
     });
   }
-  const entries: undefined | readonly FileFullOrFolderFullOrWebLink[] =
+  const entries: undefined | readonly SearchResultItem[] =
     val.entries == void 0
       ? void 0
       : sdIsList(val.entries)
-        ? (val.entries.map(function (
-            itm: SerializedData,
-          ): FileFullOrFolderFullOrWebLink {
-            return deserializeFileFullOrFolderFullOrWebLink(itm);
+        ? (val.entries.map(function (itm: SerializedData): SearchResultItem {
+            return deserializeSearchResultItem(itm);
           }) as readonly any[])
         : [];
   return {
@@ -185,10 +181,8 @@ export function serializeSearchResultsInput(
     ['entries']:
       val.entries == void 0
         ? val.entries
-        : (val.entries.map(function (
-            item: FileFullOrFolderFullOrWebLink,
-          ): SerializedData {
-            return serializeFileFullOrFolderFullOrWebLink(item);
+        : (val.entries.map(function (item: SearchResultItem): SerializedData {
+            return serializeSearchResultItem(item);
           }) as readonly any[]),
   };
 }
@@ -227,14 +221,12 @@ export function deserializeSearchResultsInput(
       message: 'Expecting array for "entries" of type "SearchResultsInput"',
     });
   }
-  const entries: undefined | readonly FileFullOrFolderFullOrWebLink[] =
+  const entries: undefined | readonly SearchResultItem[] =
     val.entries == void 0
       ? void 0
       : sdIsList(val.entries)
-        ? (val.entries.map(function (
-            itm: SerializedData,
-          ): FileFullOrFolderFullOrWebLink {
-            return deserializeFileFullOrFolderFullOrWebLink(itm);
+        ? (val.entries.map(function (itm: SerializedData): SearchResultItem {
+            return deserializeSearchResultItem(itm);
           }) as readonly any[])
         : [];
   return {

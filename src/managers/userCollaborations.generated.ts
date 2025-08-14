@@ -338,7 +338,7 @@ export interface CreateCollaborationRequestBody {
    * If set to `true`, collaborators have access to
    * shared items, but such items won't be visible in the
    * All Files list. Additionally, collaborators won't
-   * see the the path to the root folder for the
+   * see the path to the root folder for the
    * shared item. */
   readonly isAccessOnly?: boolean;
   /**

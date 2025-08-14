@@ -15,8 +15,8 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export type FileOrFolderOrWebLink = File | Folder | WebLink;
-export function serializeFileOrFolderOrWebLink(val: any): SerializedData {
+export type LegalHoldPolicyAssignedItem = File | Folder | WebLink;
+export function serializeLegalHoldPolicyAssignedItem(val: any): SerializedData {
   if (val.type == 'file') {
     return serializeFile(val);
   }
@@ -28,12 +28,12 @@ export function serializeFileOrFolderOrWebLink(val: any): SerializedData {
   }
   throw new BoxSdkError({ message: 'unknown type' });
 }
-export function deserializeFileOrFolderOrWebLink(
+export function deserializeLegalHoldPolicyAssignedItem(
   val: SerializedData,
-): FileOrFolderOrWebLink {
+): LegalHoldPolicyAssignedItem {
   if (!sdIsMap(val)) {
     throw new BoxSdkError({
-      message: 'Expecting a map for "FileOrFolderOrWebLink"',
+      message: 'Expecting a map for "LegalHoldPolicyAssignedItem"',
     });
   }
   if (val.type == 'file') {
@@ -45,5 +45,7 @@ export function deserializeFileOrFolderOrWebLink(
   if (val.type == 'web_link') {
     return deserializeWebLink(val);
   }
-  throw new BoxSdkError({ message: "Can't deserialize FileOrFolderOrWebLink" });
+  throw new BoxSdkError({
+    message: "Can't deserialize LegalHoldPolicyAssignedItem",
+  });
 }

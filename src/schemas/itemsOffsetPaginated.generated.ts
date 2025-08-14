@@ -4,12 +4,12 @@ import { serializeFolderMini } from './folderMini.generated.js';
 import { deserializeFolderMini } from './folderMini.generated.js';
 import { serializeWebLink } from './webLink.generated.js';
 import { deserializeWebLink } from './webLink.generated.js';
-import { serializeFileFullOrFolderMiniOrWebLink } from './fileFullOrFolderMiniOrWebLink.generated.js';
-import { deserializeFileFullOrFolderMiniOrWebLink } from './fileFullOrFolderMiniOrWebLink.generated.js';
+import { serializeItem } from './item.generated.js';
+import { deserializeItem } from './item.generated.js';
 import { FileFull } from './fileFull.generated.js';
 import { FolderMini } from './folderMini.generated.js';
 import { WebLink } from './webLink.generated.js';
-import { FileFullOrFolderMiniOrWebLink } from './fileFullOrFolderMiniOrWebLink.generated.js';
+import { Item } from './item.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -57,7 +57,7 @@ export interface ItemsOffsetPaginated {
   readonly order?: readonly ItemsOffsetPaginatedOrderField[];
   /**
    * The items in this collection. */
-  readonly entries?: readonly FileFullOrFolderMiniOrWebLink[];
+  readonly entries?: readonly Item[];
   readonly rawData?: SerializedData;
 }
 export function serializeItemsOffsetPaginatedOrderDirectionField(
@@ -134,10 +134,8 @@ export function serializeItemsOffsetPaginated(
     ['entries']:
       val.entries == void 0
         ? val.entries
-        : (val.entries.map(function (
-            item: FileFullOrFolderMiniOrWebLink,
-          ): SerializedData {
-            return serializeFileFullOrFolderMiniOrWebLink(item);
+        : (val.entries.map(function (item: Item): SerializedData {
+            return serializeItem(item);
           }) as readonly any[]),
   };
 }
@@ -189,14 +187,12 @@ export function deserializeItemsOffsetPaginated(
       message: 'Expecting array for "entries" of type "ItemsOffsetPaginated"',
     });
   }
-  const entries: undefined | readonly FileFullOrFolderMiniOrWebLink[] =
+  const entries: undefined | readonly Item[] =
     val.entries == void 0
       ? void 0
       : sdIsList(val.entries)
-        ? (val.entries.map(function (
-            itm: SerializedData,
-          ): FileFullOrFolderMiniOrWebLink {
-            return deserializeFileFullOrFolderMiniOrWebLink(itm);
+        ? (val.entries.map(function (itm: SerializedData): Item {
+            return deserializeItem(itm);
           }) as readonly any[])
         : [];
   return {

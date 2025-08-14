@@ -20,7 +20,7 @@ export interface MetadataTemplateFieldsOptionsField {
    * option and the internal key used when updating templates. */
   readonly key: string;
   /**
-   * The internal unique identifier of the the option. */
+   * The internal unique identifier of the option. */
   readonly id?: string;
   readonly rawData?: SerializedData;
 }

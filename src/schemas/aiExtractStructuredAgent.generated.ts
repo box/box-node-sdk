@@ -1,9 +1,9 @@
-import { serializeAiAgentAsk } from './aiAgentAsk.generated.js';
-import { deserializeAiAgentAsk } from './aiAgentAsk.generated.js';
 import { serializeAiAgentReference } from './aiAgentReference.generated.js';
 import { deserializeAiAgentReference } from './aiAgentReference.generated.js';
-import { AiAgentAsk } from './aiAgentAsk.generated.js';
+import { serializeAiAgentExtractStructured } from './aiAgentExtractStructured.generated.js';
+import { deserializeAiAgentExtractStructured } from './aiAgentExtractStructured.generated.js';
 import { AiAgentReference } from './aiAgentReference.generated.js';
+import { AiAgentExtractStructured } from './aiAgentExtractStructured.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -12,33 +12,33 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export type AiAgentAskOrAiAgentReference = AiAgentAsk | AiAgentReference;
-export function serializeAiAgentAskOrAiAgentReference(
-  val: any,
-): SerializedData {
-  if (val.type == 'ai_agent_ask') {
-    return serializeAiAgentAsk(val);
-  }
+export type AiExtractStructuredAgent =
+  | AiAgentReference
+  | AiAgentExtractStructured;
+export function serializeAiExtractStructuredAgent(val: any): SerializedData {
   if (val.type == 'ai_agent_id') {
     return serializeAiAgentReference(val);
   }
+  if (val.type == 'ai_agent_extract_structured') {
+    return serializeAiAgentExtractStructured(val);
+  }
   throw new BoxSdkError({ message: 'unknown type' });
 }
-export function deserializeAiAgentAskOrAiAgentReference(
+export function deserializeAiExtractStructuredAgent(
   val: SerializedData,
-): AiAgentAskOrAiAgentReference {
+): AiExtractStructuredAgent {
   if (!sdIsMap(val)) {
     throw new BoxSdkError({
-      message: 'Expecting a map for "AiAgentAskOrAiAgentReference"',
+      message: 'Expecting a map for "AiExtractStructuredAgent"',
     });
-  }
-  if (val.type == 'ai_agent_ask') {
-    return deserializeAiAgentAsk(val);
   }
   if (val.type == 'ai_agent_id') {
     return deserializeAiAgentReference(val);
   }
+  if (val.type == 'ai_agent_extract_structured') {
+    return deserializeAiAgentExtractStructured(val);
+  }
   throw new BoxSdkError({
-    message: "Can't deserialize AiAgentAskOrAiAgentReference",
+    message: "Can't deserialize AiExtractStructuredAgent",
   });
 }

@@ -4,12 +4,12 @@ import { serializeFolderFull } from './folderFull.generated.js';
 import { deserializeFolderFull } from './folderFull.generated.js';
 import { serializeWebLink } from './webLink.generated.js';
 import { deserializeWebLink } from './webLink.generated.js';
-import { serializeFileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
-import { deserializeFileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
+import { serializeSearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem.generated.js';
+import { deserializeSearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem.generated.js';
 import { FileFull } from './fileFull.generated.js';
 import { FolderFull } from './folderFull.generated.js';
 import { WebLink } from './webLink.generated.js';
-import { FileFullOrFolderFullOrWebLink } from './fileFullOrFolderFullOrWebLink.generated.js';
+import { SearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -25,7 +25,7 @@ export interface SearchResultWithSharedLink {
    * recently accessed the file through a shared link. For all other
    * items this value will return `null`. */
   readonly accessibleViaSharedLink?: string;
-  readonly item?: FileFullOrFolderFullOrWebLink;
+  readonly item?: SearchResultWithSharedLinkItem;
   /**
    * The result type. The value is always `search_result`. */
   readonly type?: string;
@@ -39,7 +39,7 @@ export function serializeSearchResultWithSharedLink(
     ['item']:
       val.item == void 0
         ? val.item
-        : serializeFileFullOrFolderFullOrWebLink(val.item),
+        : serializeSearchResultWithSharedLinkItem(val.item),
     ['type']: val.type,
   };
 }
@@ -64,10 +64,10 @@ export function deserializeSearchResultWithSharedLink(
     val.accessible_via_shared_link == void 0
       ? void 0
       : val.accessible_via_shared_link;
-  const item: undefined | FileFullOrFolderFullOrWebLink =
+  const item: undefined | SearchResultWithSharedLinkItem =
     val.item == void 0
       ? void 0
-      : deserializeFileFullOrFolderFullOrWebLink(val.item);
+      : deserializeSearchResultWithSharedLinkItem(val.item);
   if (!(val.type == void 0) && !sdIsString(val.type)) {
     throw new BoxSdkError({
       message:

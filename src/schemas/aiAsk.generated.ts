@@ -1,18 +1,18 @@
-import { serializeAiAgentAsk } from './aiAgentAsk.generated.js';
-import { deserializeAiAgentAsk } from './aiAgentAsk.generated.js';
 import { serializeAiAgentReference } from './aiAgentReference.generated.js';
 import { deserializeAiAgentReference } from './aiAgentReference.generated.js';
+import { serializeAiAgentAsk } from './aiAgentAsk.generated.js';
+import { deserializeAiAgentAsk } from './aiAgentAsk.generated.js';
 import { serializeAiItemAsk } from './aiItemAsk.generated.js';
 import { deserializeAiItemAsk } from './aiItemAsk.generated.js';
 import { serializeAiDialogueHistory } from './aiDialogueHistory.generated.js';
 import { deserializeAiDialogueHistory } from './aiDialogueHistory.generated.js';
-import { serializeAiAgentAskOrAiAgentReference } from './aiAgentAskOrAiAgentReference.generated.js';
-import { deserializeAiAgentAskOrAiAgentReference } from './aiAgentAskOrAiAgentReference.generated.js';
-import { AiAgentAsk } from './aiAgentAsk.generated.js';
+import { serializeAiAskAgent } from './aiAskAgent.generated.js';
+import { deserializeAiAskAgent } from './aiAskAgent.generated.js';
 import { AiAgentReference } from './aiAgentReference.generated.js';
+import { AiAgentAsk } from './aiAgentAsk.generated.js';
 import { AiItemAsk } from './aiItemAsk.generated.js';
 import { AiDialogueHistory } from './aiDialogueHistory.generated.js';
-import { AiAgentAskOrAiAgentReference } from './aiAgentAskOrAiAgentReference.generated.js';
+import { AiAskAgent } from './aiAskAgent.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -45,7 +45,7 @@ export interface AiAsk {
   /**
    * A flag to indicate whether citations should be returned. */
   readonly includeCitations?: boolean;
-  readonly aiAgent?: AiAgentAskOrAiAgentReference;
+  readonly aiAgent?: AiAskAgent;
   readonly rawData?: SerializedData;
 }
 export function serializeAiAskModeField(val: AiAskModeField): SerializedData {
@@ -80,9 +80,7 @@ export function serializeAiAsk(val: AiAsk): SerializedData {
           }) as readonly any[]),
     ['include_citations']: val.includeCitations,
     ['ai_agent']:
-      val.aiAgent == void 0
-        ? val.aiAgent
-        : serializeAiAgentAskOrAiAgentReference(val.aiAgent),
+      val.aiAgent == void 0 ? val.aiAgent : serializeAiAskAgent(val.aiAgent),
   };
 }
 export function deserializeAiAsk(val: SerializedData): AiAsk {
@@ -146,10 +144,8 @@ export function deserializeAiAsk(val: SerializedData): AiAsk {
   }
   const includeCitations: undefined | boolean =
     val.include_citations == void 0 ? void 0 : val.include_citations;
-  const aiAgent: undefined | AiAgentAskOrAiAgentReference =
-    val.ai_agent == void 0
-      ? void 0
-      : deserializeAiAgentAskOrAiAgentReference(val.ai_agent);
+  const aiAgent: undefined | AiAskAgent =
+    val.ai_agent == void 0 ? void 0 : deserializeAiAskAgent(val.ai_agent);
   return {
     mode: mode,
     prompt: prompt,

@@ -1,0 +1,70 @@
+import { serializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.generated.js';
+import { deserializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.generated.js';
+import { serializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
+import { deserializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
+import { MetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.generated.js';
+import { MetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
+import { BoxSdkError } from '../box/errors.js';
+import { SerializedData } from '../serialization/json.js';
+import { sdIsEmpty } from '../serialization/json.js';
+import { sdIsBoolean } from '../serialization/json.js';
+import { sdIsNumber } from '../serialization/json.js';
+import { sdIsString } from '../serialization/json.js';
+import { sdIsList } from '../serialization/json.js';
+import { sdIsMap } from '../serialization/json.js';
+export type MetadataFilterValue =
+  | string
+  | number
+  | readonly string[]
+  | MetadataFieldFilterFloatRange
+  | MetadataFieldFilterDateRange;
+export function serializeMetadataFilterValue(val: any): SerializedData {
+  if (sdIsString(val)) {
+    return val;
+  }
+  if (sdIsNumber(val)) {
+    return val;
+  }
+  if (sdIsList(val) && val.every(sdIsString)) {
+    return val;
+  }
+  try {
+    return serializeMetadataFieldFilterFloatRange(val);
+  } catch (error) {
+    void 0;
+  } finally {
+  }
+  try {
+    return serializeMetadataFieldFilterDateRange(val);
+  } catch (error) {
+    void 0;
+  } finally {
+  }
+  throw new BoxSdkError({ message: "Can't serialize MetadataFilterValue" });
+}
+export function deserializeMetadataFilterValue(
+  val: SerializedData,
+): MetadataFilterValue {
+  if (sdIsString(val)) {
+    return val;
+  }
+  if (sdIsNumber(val)) {
+    return val;
+  }
+  if (sdIsList(val) && val.every(sdIsString)) {
+    return val;
+  }
+  try {
+    return deserializeMetadataFieldFilterFloatRange(val);
+  } catch (error) {
+    void 0;
+  } finally {
+  }
+  try {
+    return deserializeMetadataFieldFilterDateRange(val);
+  } catch (error) {
+    void 0;
+  } finally {
+  }
+  throw new BoxSdkError({ message: "Can't deserialize MetadataFilterValue" });
+}

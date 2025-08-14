@@ -6,13 +6,13 @@ import { serializeWebLinkBase } from './webLinkBase.generated.js';
 import { deserializeWebLinkBase } from './webLinkBase.generated.js';
 import { serializeAppItem } from './appItem.generated.js';
 import { deserializeAppItem } from './appItem.generated.js';
-import { serializeFileBaseOrFolderBaseOrWebLinkBase } from './fileBaseOrFolderBaseOrWebLinkBase.generated.js';
-import { deserializeFileBaseOrFolderBaseOrWebLinkBase } from './fileBaseOrFolderBaseOrWebLinkBase.generated.js';
+import { serializeAppItemAssociatedItem } from './appItemAssociatedItem.generated.js';
+import { deserializeAppItemAssociatedItem } from './appItemAssociatedItem.generated.js';
 import { FileBase } from './fileBase.generated.js';
 import { FolderBase } from './folderBase.generated.js';
 import { WebLinkBase } from './webLinkBase.generated.js';
 import { AppItem } from './appItem.generated.js';
-import { FileBaseOrFolderBaseOrWebLinkBase } from './fileBaseOrFolderBaseOrWebLinkBase.generated.js';
+import { AppItemAssociatedItem } from './appItemAssociatedItem.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -31,7 +31,7 @@ export class AppItemAssociation {
   readonly type: AppItemAssociationTypeField =
     'app_item_association' as AppItemAssociationTypeField;
   readonly appItem!: AppItem;
-  readonly item!: FileBaseOrFolderBaseOrWebLinkBase;
+  readonly item!: AppItemAssociatedItem;
   readonly rawData?: SerializedData;
   constructor(
     fields: Omit<AppItemAssociation, 'type'> &
@@ -62,7 +62,7 @@ export interface AppItemAssociationInput {
    * The value will always be `app_item_association`. */
   readonly type?: AppItemAssociationTypeField;
   readonly appItem: AppItem;
-  readonly item: FileBaseOrFolderBaseOrWebLinkBase;
+  readonly item: AppItemAssociatedItem;
   readonly rawData?: SerializedData;
 }
 export function serializeAppItemAssociationTypeField(
@@ -87,7 +87,7 @@ export function serializeAppItemAssociation(
     ['id']: val.id,
     ['type']: serializeAppItemAssociationTypeField(val.type),
     ['app_item']: serializeAppItem(val.appItem),
-    ['item']: serializeFileBaseOrFolderBaseOrWebLinkBase(val.item),
+    ['item']: serializeAppItemAssociatedItem(val.item),
   };
 }
 export function deserializeAppItemAssociation(
@@ -128,8 +128,9 @@ export function deserializeAppItemAssociation(
       message: 'Expecting "item" of type "AppItemAssociation" to be defined',
     });
   }
-  const item: FileBaseOrFolderBaseOrWebLinkBase =
-    deserializeFileBaseOrFolderBaseOrWebLinkBase(val.item);
+  const item: AppItemAssociatedItem = deserializeAppItemAssociatedItem(
+    val.item,
+  );
   return {
     id: id,
     type: type,
@@ -147,7 +148,7 @@ export function serializeAppItemAssociationInput(
         ? val.type
         : serializeAppItemAssociationTypeField(val.type),
     ['app_item']: serializeAppItem(val.appItem),
-    ['item']: serializeFileBaseOrFolderBaseOrWebLinkBase(val.item),
+    ['item']: serializeAppItemAssociatedItem(val.item),
   };
 }
 export function deserializeAppItemAssociationInput(
@@ -186,8 +187,9 @@ export function deserializeAppItemAssociationInput(
         'Expecting "item" of type "AppItemAssociationInput" to be defined',
     });
   }
-  const item: FileBaseOrFolderBaseOrWebLinkBase =
-    deserializeFileBaseOrFolderBaseOrWebLinkBase(val.item);
+  const item: AppItemAssociatedItem = deserializeAppItemAssociatedItem(
+    val.item,
+  );
   return {
     id: id,
     type: type,

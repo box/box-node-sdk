@@ -26,8 +26,8 @@ import { serializeMetadataQuery } from '../schemas/metadataQuery.generated.js';
 import { deserializeMetadataQuery } from '../schemas/metadataQuery.generated.js';
 import { serializeDeleteMetadataTemplateScope } from '../managers/metadataTemplates.generated.js';
 import { deserializeDeleteMetadataTemplateScope } from '../managers/metadataTemplates.generated.js';
-import { serializeSearchResultsOrSearchResultsWithSharedLinks } from '../schemas/searchResultsOrSearchResultsWithSharedLinks.generated.js';
-import { deserializeSearchResultsOrSearchResultsWithSharedLinks } from '../schemas/searchResultsOrSearchResultsWithSharedLinks.generated.js';
+import { serializeSearchResultsResponse } from '../schemas/searchResultsResponse.generated.js';
+import { deserializeSearchResultsResponse } from '../schemas/searchResultsResponse.generated.js';
 import { serializeMetadataFilter } from '../schemas/metadataFilter.generated.js';
 import { deserializeMetadataFilter } from '../schemas/metadataFilter.generated.js';
 import { serializeMetadataFilterScopeField } from '../schemas/metadataFilter.generated.js';
@@ -42,8 +42,8 @@ import { serializeSearchResults } from '../schemas/searchResults.generated.js';
 import { deserializeSearchResults } from '../schemas/searchResults.generated.js';
 import { serializeSearchResultsWithSharedLinks } from '../schemas/searchResultsWithSharedLinks.generated.js';
 import { deserializeSearchResultsWithSharedLinks } from '../schemas/searchResultsWithSharedLinks.generated.js';
-import { serializeMetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString } from '../schemas/metadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString.generated.js';
-import { deserializeMetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString } from '../schemas/metadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString.generated.js';
+import { serializeMetadataFilterValue } from '../schemas/metadataFilterValue.generated.js';
+import { deserializeMetadataFilterValue } from '../schemas/metadataFilterValue.generated.js';
 import { BoxClient } from '../client.generated.js';
 import { MetadataTemplate } from '../schemas/metadataTemplate.generated.js';
 import { CreateMetadataTemplateRequestBody } from '../managers/metadataTemplates.generated.js';
@@ -60,7 +60,7 @@ import { CreateFileMetadataByIdScope } from '../managers/fileMetadata.generated.
 import { MetadataQueryResults } from '../schemas/metadataQueryResults.generated.js';
 import { MetadataQuery } from '../schemas/metadataQuery.generated.js';
 import { DeleteMetadataTemplateScope } from '../managers/metadataTemplates.generated.js';
-import { SearchResultsOrSearchResultsWithSharedLinks } from '../schemas/searchResultsOrSearchResultsWithSharedLinks.generated.js';
+import { SearchResultsResponse } from '../schemas/searchResultsResponse.generated.js';
 import { SearchForContentQueryParams } from '../managers/search.generated.js';
 import { MetadataFilter } from '../schemas/metadataFilter.generated.js';
 import { MetadataFilterScopeField } from '../schemas/metadataFilter.generated.js';
@@ -74,7 +74,7 @@ import { MetadataFieldFilterDateRange } from '../schemas/metadataFieldFilterDate
 import { MetadataFieldFilterFloatRange } from '../schemas/metadataFieldFilterFloatRange.generated.js';
 import { SearchResults } from '../schemas/searchResults.generated.js';
 import { SearchResultsWithSharedLinks } from '../schemas/searchResultsWithSharedLinks.generated.js';
-import { MetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString } from '../schemas/metadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString.generated.js';
+import { MetadataFilterValue } from '../schemas/metadataFilterValue.generated.js';
 import { toString } from '../internal/utils.js';
 import { sdToJson } from '../serialization/json.js';
 import { SerializedData } from '../serialization/json.js';
@@ -272,9 +272,7 @@ test('testMetadataFilters', async function testMetadataFilters(): Promise<any> {
       },
     );
   const searchFilters: {
-    readonly [
-      key: string
-    ]: MetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString;
+    readonly [key: string]: MetadataFilterValue;
   } = {
     ['stringField']: 'stringValue',
     ['dateField']: {
@@ -288,17 +286,16 @@ test('testMetadataFilters', async function testMetadataFilters(): Promise<any> {
     ['enumField']: 'enumValue2',
     ['multiSelectField']: ['multiSelectValue1', 'multiSelectValue2'],
   };
-  const query: SearchResultsOrSearchResultsWithSharedLinks =
-    await client.search.searchForContent({
-      ancestorFolderIds: ['0'],
-      mdfilters: [
-        {
-          filters: searchFilters,
-          scope: 'enterprise' as MetadataFilterScopeField,
-          templateKey: templateKey,
-        } satisfies MetadataFilter,
-      ],
-    } satisfies SearchForContentQueryParams);
+  const query: SearchResultsResponse = await client.search.searchForContent({
+    ancestorFolderIds: ['0'],
+    mdfilters: [
+      {
+        filters: searchFilters,
+        scope: 'enterprise' as MetadataFilterScopeField,
+        templateKey: templateKey,
+      } satisfies MetadataFilter,
+    ],
+  } satisfies SearchForContentQueryParams);
   const queryResults: SearchResults = query as SearchResults;
   if (!(queryResults.entries!.length >= 0)) {
     throw new Error('Assertion failed');
@@ -311,13 +308,12 @@ test('testMetadataFilters', async function testMetadataFilters(): Promise<any> {
 });
 test('testGetSearch', async function testGetSearch(): Promise<any> {
   const keyword: string = 'test';
-  const search: SearchResultsOrSearchResultsWithSharedLinks =
-    await client.search.searchForContent({
-      ancestorFolderIds: ['0'],
-      query: keyword,
-      trashContent:
-        'non_trashed_only' as SearchForContentQueryParamsTrashContentField,
-    } satisfies SearchForContentQueryParams);
+  const search: SearchResultsResponse = await client.search.searchForContent({
+    ancestorFolderIds: ['0'],
+    query: keyword,
+    trashContent:
+      'non_trashed_only' as SearchForContentQueryParamsTrashContentField,
+  } satisfies SearchForContentQueryParams);
   if (!((toString(search.type) as string) == 'search_results_items')) {
     throw new Error('Assertion failed');
   }
@@ -325,7 +321,7 @@ test('testGetSearch', async function testGetSearch(): Promise<any> {
   if (!(searchResults.entries!.length >= 0)) {
     throw new Error('Assertion failed');
   }
-  const searchWithSharedLink: SearchResultsOrSearchResultsWithSharedLinks =
+  const searchWithSharedLink: SearchResultsResponse =
     await client.search.searchForContent({
       ancestorFolderIds: ['0'],
       query: keyword,

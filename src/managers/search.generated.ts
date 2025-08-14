@@ -8,8 +8,8 @@ import { serializeClientError } from '../schemas/clientError.generated.js';
 import { deserializeClientError } from '../schemas/clientError.generated.js';
 import { serializeMetadataQuery } from '../schemas/metadataQuery.generated.js';
 import { deserializeMetadataQuery } from '../schemas/metadataQuery.generated.js';
-import { serializeSearchResultsOrSearchResultsWithSharedLinks } from '../schemas/searchResultsOrSearchResultsWithSharedLinks.generated.js';
-import { deserializeSearchResultsOrSearchResultsWithSharedLinks } from '../schemas/searchResultsOrSearchResultsWithSharedLinks.generated.js';
+import { serializeSearchResultsResponse } from '../schemas/searchResultsResponse.generated.js';
+import { deserializeSearchResultsResponse } from '../schemas/searchResultsResponse.generated.js';
 import { serializeMetadataFilter } from '../schemas/metadataFilter.generated.js';
 import { deserializeMetadataFilter } from '../schemas/metadataFilter.generated.js';
 import { ResponseFormat } from '../networking/fetchOptions.generated.js';
@@ -18,7 +18,7 @@ import { SearchResultsWithSharedLinks } from '../schemas/searchResultsWithShared
 import { MetadataQueryResults } from '../schemas/metadataQueryResults.generated.js';
 import { ClientError } from '../schemas/clientError.generated.js';
 import { MetadataQuery } from '../schemas/metadataQuery.generated.js';
-import { SearchResultsOrSearchResultsWithSharedLinks } from '../schemas/searchResultsOrSearchResultsWithSharedLinks.generated.js';
+import { SearchResultsResponse } from '../schemas/searchResultsResponse.generated.js';
 import { MetadataFilter } from '../schemas/metadataFilter.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { Authentication } from '../networking/auth.generated.js';
@@ -173,7 +173,7 @@ export interface SearchForContentQueryParams {
    * Date ranges are defined as comma separated RFC3339
    * timestamps.
    *
-   * If the the start date is omitted (`,2014-05-17T13:35:01-07:00`)
+   * If the start date is omitted (`,2014-05-17T13:35:01-07:00`)
    * anything created before the end date will be returned.
    *
    * If the end date is omitted (`2014-05-15T13:35:01-07:00,`) the
@@ -358,7 +358,7 @@ export interface SearchForContentQueryParams {
    *
    * Date ranges are defined as comma separated RFC3339 timestamps.
    *
-   * If the the start date is omitted (`2014-05-17T13:35:01-07:00`),
+   * If the start date is omitted (`2014-05-17T13:35:01-07:00`),
    * anything deleted before the end date will be returned.
    *
    * If the end date is omitted (`2014-05-15T13:35:01-07:00`),
@@ -466,7 +466,7 @@ export class SearchManager {
    * @param {SearchForContentQueryParams} queryParams Query parameters of searchForContent method
    * @param {SearchForContentHeadersInput} headersInput Headers of searchForContent method
    * @param {CancellationToken} cancellationToken Token used for request cancellation.
-   * @returns {Promise<SearchResultsOrSearchResultsWithSharedLinks>}
+   * @returns {Promise<SearchResultsResponse>}
    */
   async searchForContent(
     queryParams: SearchForContentQueryParams = {} satisfies SearchForContentQueryParams,
@@ -474,7 +474,7 @@ export class SearchManager {
       {},
     ),
     cancellationToken?: CancellationToken,
-  ): Promise<SearchResultsOrSearchResultsWithSharedLinks> {
+  ): Promise<SearchResultsResponse> {
     const headers: SearchForContentHeaders = new SearchForContentHeaders({
       extraHeaders: headersInput.extraHeaders,
     });
@@ -549,7 +549,7 @@ export class SearchManager {
         }),
       );
     return {
-      ...deserializeSearchResultsOrSearchResultsWithSharedLinks(response.data!),
+      ...deserializeSearchResultsResponse(response.data!),
       rawData: response.data!,
     };
   }

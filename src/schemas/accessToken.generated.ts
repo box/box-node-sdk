@@ -1,6 +1,6 @@
-import { serializeFileOrFolderScope } from './fileOrFolderScope.generated.js';
-import { deserializeFileOrFolderScope } from './fileOrFolderScope.generated.js';
-import { FileOrFolderScope } from './fileOrFolderScope.generated.js';
+import { serializeResourceScope } from './resourceScope.generated.js';
+import { deserializeResourceScope } from './resourceScope.generated.js';
+import { ResourceScope } from './resourceScope.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -27,7 +27,7 @@ export interface AccessToken {
    * The permissions that this access token permits,
    * providing a list of resources (files, folders, etc)
    * and the scopes permitted for each of those resources. */
-  readonly restrictedTo?: readonly FileOrFolderScope[];
+  readonly restrictedTo?: readonly ResourceScope[];
   /**
    * The refresh token for this access token, which can be used
    * to request a new access token when the current one expires. */
@@ -85,10 +85,8 @@ export function serializeAccessToken(val: AccessToken): SerializedData {
     ['restricted_to']:
       val.restrictedTo == void 0
         ? val.restrictedTo
-        : (val.restrictedTo.map(function (
-            item: FileOrFolderScope,
-          ): SerializedData {
-            return serializeFileOrFolderScope(item);
+        : (val.restrictedTo.map(function (item: ResourceScope): SerializedData {
+            return serializeResourceScope(item);
           }) as readonly any[]),
     ['refresh_token']: val.refreshToken,
     ['issued_token_type']:
@@ -124,14 +122,12 @@ export function deserializeAccessToken(val: SerializedData): AccessToken {
       message: 'Expecting array for "restricted_to" of type "AccessToken"',
     });
   }
-  const restrictedTo: undefined | readonly FileOrFolderScope[] =
+  const restrictedTo: undefined | readonly ResourceScope[] =
     val.restricted_to == void 0
       ? void 0
       : sdIsList(val.restricted_to)
-        ? (val.restricted_to.map(function (
-            itm: SerializedData,
-          ): FileOrFolderScope {
-            return deserializeFileOrFolderScope(itm);
+        ? (val.restricted_to.map(function (itm: SerializedData): ResourceScope {
+            return deserializeResourceScope(itm);
           }) as readonly any[])
         : [];
   if (!(val.refresh_token == void 0) && !sdIsString(val.refresh_token)) {
