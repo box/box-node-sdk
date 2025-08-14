@@ -12,12 +12,10 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export type SearchResultsOrSearchResultsWithSharedLinks =
+export type SearchResultsResponse =
   | SearchResults
   | SearchResultsWithSharedLinks;
-export function serializeSearchResultsOrSearchResultsWithSharedLinks(
-  val: any,
-): SerializedData {
+export function serializeSearchResultsResponse(val: any): SerializedData {
   if (val.type == 'search_results_items') {
     return serializeSearchResults(val);
   }
@@ -26,13 +24,12 @@ export function serializeSearchResultsOrSearchResultsWithSharedLinks(
   }
   throw new BoxSdkError({ message: 'unknown type' });
 }
-export function deserializeSearchResultsOrSearchResultsWithSharedLinks(
+export function deserializeSearchResultsResponse(
   val: SerializedData,
-): SearchResultsOrSearchResultsWithSharedLinks {
+): SearchResultsResponse {
   if (!sdIsMap(val)) {
     throw new BoxSdkError({
-      message:
-        'Expecting a map for "SearchResultsOrSearchResultsWithSharedLinks"',
+      message: 'Expecting a map for "SearchResultsResponse"',
     });
   }
   if (val.type == 'search_results_items') {
@@ -41,7 +38,5 @@ export function deserializeSearchResultsOrSearchResultsWithSharedLinks(
   if (val.type == 'search_results_with_shared_links') {
     return deserializeSearchResultsWithSharedLinks(val);
   }
-  throw new BoxSdkError({
-    message: "Can't deserialize SearchResultsOrSearchResultsWithSharedLinks",
-  });
+  throw new BoxSdkError({ message: "Can't deserialize SearchResultsResponse" });
 }

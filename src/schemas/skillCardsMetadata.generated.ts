@@ -1,18 +1,18 @@
 import { serializeKeywordSkillCard } from './keywordSkillCard.generated.js';
 import { deserializeKeywordSkillCard } from './keywordSkillCard.generated.js';
-import { serializeStatusSkillCard } from './statusSkillCard.generated.js';
-import { deserializeStatusSkillCard } from './statusSkillCard.generated.js';
 import { serializeTimelineSkillCard } from './timelineSkillCard.generated.js';
 import { deserializeTimelineSkillCard } from './timelineSkillCard.generated.js';
 import { serializeTranscriptSkillCard } from './transcriptSkillCard.generated.js';
 import { deserializeTranscriptSkillCard } from './transcriptSkillCard.generated.js';
-import { serializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard } from './keywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard.generated.js';
-import { deserializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard } from './keywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard.generated.js';
+import { serializeStatusSkillCard } from './statusSkillCard.generated.js';
+import { deserializeStatusSkillCard } from './statusSkillCard.generated.js';
+import { serializeSkillCard } from './skillCard.generated.js';
+import { deserializeSkillCard } from './skillCard.generated.js';
 import { KeywordSkillCard } from './keywordSkillCard.generated.js';
-import { StatusSkillCard } from './statusSkillCard.generated.js';
 import { TimelineSkillCard } from './timelineSkillCard.generated.js';
 import { TranscriptSkillCard } from './transcriptSkillCard.generated.js';
-import { KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard } from './keywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard.generated.js';
+import { StatusSkillCard } from './statusSkillCard.generated.js';
+import { SkillCard } from './skillCard.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -52,7 +52,7 @@ export interface SkillCardsMetadata {
   readonly version?: number;
   /**
    * A list of Box Skill cards that have been applied to this file. */
-  readonly cards?: readonly KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard[];
+  readonly cards?: readonly SkillCard[];
   readonly rawData?: SerializedData;
 }
 export function serializeSkillCardsMetadata(
@@ -70,12 +70,8 @@ export function serializeSkillCardsMetadata(
     ['cards']:
       val.cards == void 0
         ? val.cards
-        : (val.cards.map(function (
-            item: KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard,
-          ): SerializedData {
-            return serializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-              item,
-            );
+        : (val.cards.map(function (item: SkillCard): SerializedData {
+            return serializeSkillCard(item);
           }) as readonly any[]),
   };
 }
@@ -146,18 +142,12 @@ export function deserializeSkillCardsMetadata(
       message: 'Expecting array for "cards" of type "SkillCardsMetadata"',
     });
   }
-  const cards:
-    | undefined
-    | readonly KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard[] =
+  const cards: undefined | readonly SkillCard[] =
     val.cards == void 0
       ? void 0
       : sdIsList(val.cards)
-        ? (val.cards.map(function (
-            itm: SerializedData,
-          ): KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard {
-            return deserializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-              itm,
-            );
+        ? (val.cards.map(function (itm: SerializedData): SkillCard {
+            return deserializeSkillCard(itm);
           }) as readonly any[])
         : [];
   return {

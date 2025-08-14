@@ -1,9 +1,12 @@
 import { serializeFileFull } from './fileFull.generated.js';
 import { deserializeFileFull } from './fileFull.generated.js';
-import { serializeFolderFull } from './folderFull.generated.js';
-import { deserializeFolderFull } from './folderFull.generated.js';
+import { serializeFolderMini } from './folderMini.generated.js';
+import { deserializeFolderMini } from './folderMini.generated.js';
+import { serializeWebLink } from './webLink.generated.js';
+import { deserializeWebLink } from './webLink.generated.js';
 import { FileFull } from './fileFull.generated.js';
-import { FolderFull } from './folderFull.generated.js';
+import { FolderMini } from './folderMini.generated.js';
+import { WebLink } from './webLink.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -12,29 +15,31 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export type FileFullOrFolderFull = FileFull | FolderFull;
-export function serializeFileFullOrFolderFull(val: any): SerializedData {
+export type Item = FileFull | FolderMini | WebLink;
+export function serializeItem(val: any): SerializedData {
   if (val.type == 'file') {
     return serializeFileFull(val);
   }
   if (val.type == 'folder') {
-    return serializeFolderFull(val);
+    return serializeFolderMini(val);
+  }
+  if (val.type == 'web_link') {
+    return serializeWebLink(val);
   }
   throw new BoxSdkError({ message: 'unknown type' });
 }
-export function deserializeFileFullOrFolderFull(
-  val: SerializedData,
-): FileFullOrFolderFull {
+export function deserializeItem(val: SerializedData): Item {
   if (!sdIsMap(val)) {
-    throw new BoxSdkError({
-      message: 'Expecting a map for "FileFullOrFolderFull"',
-    });
+    throw new BoxSdkError({ message: 'Expecting a map for "Item"' });
   }
   if (val.type == 'file') {
     return deserializeFileFull(val);
   }
   if (val.type == 'folder') {
-    return deserializeFolderFull(val);
+    return deserializeFolderMini(val);
   }
-  throw new BoxSdkError({ message: "Can't deserialize FileFullOrFolderFull" });
+  if (val.type == 'web_link') {
+    return deserializeWebLink(val);
+  }
+  throw new BoxSdkError({ message: "Can't deserialize Item" });
 }

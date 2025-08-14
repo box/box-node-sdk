@@ -1,5 +1,5 @@
-import { serializeAppItemEventSource } from './appItemEventSource.generated.js';
-import { deserializeAppItemEventSource } from './appItemEventSource.generated.js';
+import { serializeUser } from './user.generated.js';
+import { deserializeUser } from './user.generated.js';
 import { serializeEventSource } from './eventSource.generated.js';
 import { deserializeEventSource } from './eventSource.generated.js';
 import { serializeFile } from './file.generated.js';
@@ -8,22 +8,22 @@ import { serializeFolder } from './folder.generated.js';
 import { deserializeFolder } from './folder.generated.js';
 import { serializeGenericSource } from './genericSource.generated.js';
 import { deserializeGenericSource } from './genericSource.generated.js';
-import { serializeUser } from './user.generated.js';
-import { deserializeUser } from './user.generated.js';
+import { serializeAppItemEventSource } from './appItemEventSource.generated.js';
+import { deserializeAppItemEventSource } from './appItemEventSource.generated.js';
 import { serializeUserMini } from './userMini.generated.js';
 import { deserializeUserMini } from './userMini.generated.js';
-import { serializeAppItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser } from './appItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser.generated.js';
-import { deserializeAppItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser } from './appItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser.generated.js';
+import { serializeEventSourceResource } from './eventSourceResource.generated.js';
+import { deserializeEventSourceResource } from './eventSourceResource.generated.js';
 import { serializeDateTime } from '../internal/utils.js';
 import { deserializeDateTime } from '../internal/utils.js';
-import { AppItemEventSource } from './appItemEventSource.generated.js';
+import { User } from './user.generated.js';
 import { EventSource } from './eventSource.generated.js';
 import { File } from './file.generated.js';
 import { Folder } from './folder.generated.js';
 import { GenericSource } from './genericSource.generated.js';
-import { User } from './user.generated.js';
+import { AppItemEventSource } from './appItemEventSource.generated.js';
 import { UserMini } from './userMini.generated.js';
-import { AppItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser } from './appItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser.generated.js';
+import { EventSourceResource } from './eventSourceResource.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { DateTime } from '../internal/utils.js';
 import { SerializedData } from '../serialization/json.js';
@@ -198,7 +198,7 @@ export interface Event {
    * The session of the user that performed the action. Not all events will
    * populate this attribute. */
   readonly sessionId?: string;
-  readonly source?: AppItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser;
+  readonly source?: EventSourceResource;
   /**
    * This object provides additional information about the event if available.
    *
@@ -684,9 +684,7 @@ export function serializeEvent(val: Event): SerializedData {
     ['source']:
       val.source == void 0
         ? val.source
-        : serializeAppItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser(
-            val.source,
-          ),
+        : serializeEventSourceResource(val.source),
     ['additional_details']:
       val.additionalDetails == void 0
         ? val.additionalDetails
@@ -737,14 +735,8 @@ export function deserializeEvent(val: SerializedData): Event {
   }
   const sessionId: undefined | string =
     val.session_id == void 0 ? void 0 : val.session_id;
-  const source:
-    | undefined
-    | AppItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser =
-    val.source == void 0
-      ? void 0
-      : deserializeAppItemEventSourceOrEventSourceOrFileOrFolderOrGenericSourceOrUser(
-          val.source,
-        );
+  const source: undefined | EventSourceResource =
+    val.source == void 0 ? void 0 : deserializeEventSourceResource(val.source);
   const additionalDetails: undefined | EventAdditionalDetailsField =
     val.additional_details == void 0
       ? void 0

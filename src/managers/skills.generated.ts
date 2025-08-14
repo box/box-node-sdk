@@ -1,25 +1,25 @@
 import { serializeKeywordSkillCard } from '../schemas/keywordSkillCard.generated.js';
 import { deserializeKeywordSkillCard } from '../schemas/keywordSkillCard.generated.js';
-import { serializeStatusSkillCard } from '../schemas/statusSkillCard.generated.js';
-import { deserializeStatusSkillCard } from '../schemas/statusSkillCard.generated.js';
 import { serializeTimelineSkillCard } from '../schemas/timelineSkillCard.generated.js';
 import { deserializeTimelineSkillCard } from '../schemas/timelineSkillCard.generated.js';
 import { serializeTranscriptSkillCard } from '../schemas/transcriptSkillCard.generated.js';
 import { deserializeTranscriptSkillCard } from '../schemas/transcriptSkillCard.generated.js';
+import { serializeStatusSkillCard } from '../schemas/statusSkillCard.generated.js';
+import { deserializeStatusSkillCard } from '../schemas/statusSkillCard.generated.js';
 import { serializeSkillCardsMetadata } from '../schemas/skillCardsMetadata.generated.js';
 import { deserializeSkillCardsMetadata } from '../schemas/skillCardsMetadata.generated.js';
 import { serializeClientError } from '../schemas/clientError.generated.js';
 import { deserializeClientError } from '../schemas/clientError.generated.js';
-import { serializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard } from '../schemas/keywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard.generated.js';
-import { deserializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard } from '../schemas/keywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard.generated.js';
+import { serializeSkillCard } from '../schemas/skillCard.generated.js';
+import { deserializeSkillCard } from '../schemas/skillCard.generated.js';
 import { KeywordSkillCard } from '../schemas/keywordSkillCard.generated.js';
-import { StatusSkillCard } from '../schemas/statusSkillCard.generated.js';
 import { TimelineSkillCard } from '../schemas/timelineSkillCard.generated.js';
 import { TranscriptSkillCard } from '../schemas/transcriptSkillCard.generated.js';
+import { StatusSkillCard } from '../schemas/statusSkillCard.generated.js';
 import { ResponseFormat } from '../networking/fetchOptions.generated.js';
 import { SkillCardsMetadata } from '../schemas/skillCardsMetadata.generated.js';
 import { ClientError } from '../schemas/clientError.generated.js';
-import { KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard } from '../schemas/keywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard.generated.js';
+import { SkillCard } from '../schemas/skillCard.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { Authentication } from '../networking/auth.generated.js';
 import { NetworkSession } from '../networking/network.generated.js';
@@ -201,7 +201,7 @@ export interface GetBoxSkillCardsOnFileHeadersInput {
 export interface CreateBoxSkillCardsOnFileRequestBody {
   /**
    * A list of Box Skill cards to apply to this file. */
-  readonly cards: readonly KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard[];
+  readonly cards: readonly SkillCard[];
   readonly rawData?: SerializedData;
 }
 export class CreateBoxSkillCardsOnFileHeaders {
@@ -238,7 +238,7 @@ export interface UpdateBoxSkillCardsOnFileRequestBody {
    * this will be in the format `/cards/{index}` where `index` is the
    * zero-indexed position of the card in the list of cards. */
   readonly path?: string;
-  readonly value?: KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard;
+  readonly value?: SkillCard;
   readonly rawData?: SerializedData;
 }
 export class UpdateBoxSkillCardsOnFileHeaders {
@@ -299,7 +299,7 @@ export type UpdateAllSkillCardsOnFileRequestBodyStatusField =
 export interface UpdateAllSkillCardsOnFileRequestBodyMetadataField {
   /**
    * A list of Box Skill cards to apply to this file. */
-  readonly cards?: readonly KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard[];
+  readonly cards?: readonly SkillCard[];
   readonly rawData?: SerializedData;
 }
 export type UpdateAllSkillCardsOnFileRequestBodyFileTypeField = 'file';
@@ -657,12 +657,8 @@ export function serializeCreateBoxSkillCardsOnFileRequestBody(
   val: CreateBoxSkillCardsOnFileRequestBody,
 ): SerializedData {
   return {
-    ['cards']: val.cards.map(function (
-      item: KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard,
-    ): SerializedData {
-      return serializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-        item,
-      );
+    ['cards']: val.cards.map(function (item: SkillCard): SerializedData {
+      return serializeSkillCard(item);
     }) as readonly any[],
   };
 }
@@ -686,16 +682,11 @@ export function deserializeCreateBoxSkillCardsOnFileRequestBody(
         'Expecting array for "cards" of type "CreateBoxSkillCardsOnFileRequestBody"',
     });
   }
-  const cards: readonly KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard[] =
-    sdIsList(val.cards)
-      ? (val.cards.map(function (
-          itm: SerializedData,
-        ): KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard {
-          return deserializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-            itm,
-          );
-        }) as readonly any[])
-      : [];
+  const cards: readonly SkillCard[] = sdIsList(val.cards)
+    ? (val.cards.map(function (itm: SerializedData): SkillCard {
+        return deserializeSkillCard(itm);
+      }) as readonly any[])
+    : [];
   return { cards: cards } satisfies CreateBoxSkillCardsOnFileRequestBody;
 }
 export function serializeUpdateBoxSkillCardsOnFileRequestBodyOpField(
@@ -725,12 +716,7 @@ export function serializeUpdateBoxSkillCardsOnFileRequestBody(
         ? val.op
         : serializeUpdateBoxSkillCardsOnFileRequestBodyOpField(val.op),
     ['path']: val.path,
-    ['value']:
-      val.value == void 0
-        ? val.value
-        : serializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-            val.value,
-          ),
+    ['value']: val.value == void 0 ? val.value : serializeSkillCard(val.value),
   };
 }
 export function deserializeUpdateBoxSkillCardsOnFileRequestBody(
@@ -752,14 +738,8 @@ export function deserializeUpdateBoxSkillCardsOnFileRequestBody(
     });
   }
   const path: undefined | string = val.path == void 0 ? void 0 : val.path;
-  const value:
-    | undefined
-    | KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard =
-    val.value == void 0
-      ? void 0
-      : deserializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-          val.value,
-        );
+  const value: undefined | SkillCard =
+    val.value == void 0 ? void 0 : deserializeSkillCard(val.value);
   return {
     op: op,
     path: path,
@@ -804,12 +784,8 @@ export function serializeUpdateAllSkillCardsOnFileRequestBodyMetadataField(
     ['cards']:
       val.cards == void 0
         ? val.cards
-        : (val.cards.map(function (
-            item: KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard,
-          ): SerializedData {
-            return serializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-              item,
-            );
+        : (val.cards.map(function (item: SkillCard): SerializedData {
+            return serializeSkillCard(item);
           }) as readonly any[]),
   };
 }
@@ -828,18 +804,12 @@ export function deserializeUpdateAllSkillCardsOnFileRequestBodyMetadataField(
         'Expecting array for "cards" of type "UpdateAllSkillCardsOnFileRequestBodyMetadataField"',
     });
   }
-  const cards:
-    | undefined
-    | readonly KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard[] =
+  const cards: undefined | readonly SkillCard[] =
     val.cards == void 0
       ? void 0
       : sdIsList(val.cards)
-        ? (val.cards.map(function (
-            itm: SerializedData,
-          ): KeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard {
-            return deserializeKeywordSkillCardOrStatusSkillCardOrTimelineSkillCardOrTranscriptSkillCard(
-              itm,
-            );
+        ? (val.cards.map(function (itm: SerializedData): SkillCard {
+            return deserializeSkillCard(itm);
           }) as readonly any[])
         : [];
   return {

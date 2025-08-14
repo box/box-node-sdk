@@ -83,7 +83,7 @@ await client.search.searchForContent({
 
 ### Returns
 
-This function returns a value of type `SearchResultsOrSearchResultsWithSharedLinks`.
+This function returns a value of type `SearchResultsResponse`.
 
 Returns a collection of search results. If there are no matching
 search results, the `entries` array will be empty.

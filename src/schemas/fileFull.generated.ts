@@ -18,8 +18,8 @@ import { serializeFile } from './file.generated.js';
 import { deserializeFile } from './file.generated.js';
 import { serializeUserMini } from './userMini.generated.js';
 import { deserializeUserMini } from './userMini.generated.js';
-import { serializeFileOrFolderScope } from './fileOrFolderScope.generated.js';
-import { deserializeFileOrFolderScope } from './fileOrFolderScope.generated.js';
+import { serializeResourceScope } from './resourceScope.generated.js';
+import { deserializeResourceScope } from './resourceScope.generated.js';
 import { serializeMetadataFull } from './metadataFull.generated.js';
 import { deserializeMetadataFull } from './metadataFull.generated.js';
 import { serializeDateTime } from '../internal/utils.js';
@@ -34,7 +34,7 @@ import { FolderMini } from './folderMini.generated.js';
 import { FileItemStatusField } from './file.generated.js';
 import { File } from './file.generated.js';
 import { UserMini } from './userMini.generated.js';
-import { FileOrFolderScope } from './fileOrFolderScope.generated.js';
+import { ResourceScope } from './resourceScope.generated.js';
 import { MetadataFull } from './metadataFull.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { DateTime } from '../internal/utils.js';
@@ -136,7 +136,7 @@ export interface FileFullExpiringEmbedLinkField {
    * The permissions that this access token permits,
    * providing a list of resources (files, folders, etc)
    * and the scopes permitted for each of those resources. */
-  readonly restrictedTo?: readonly FileOrFolderScope[];
+  readonly restrictedTo?: readonly ResourceScope[];
   /**
    * The actual expiring embed URL for this file, constructed
    * from the file ID and access tokens specified in this object. */
@@ -725,10 +725,8 @@ export function serializeFileFullExpiringEmbedLinkField(
     ['restricted_to']:
       val.restrictedTo == void 0
         ? val.restrictedTo
-        : (val.restrictedTo.map(function (
-            item: FileOrFolderScope,
-          ): SerializedData {
-            return serializeFileOrFolderScope(item);
+        : (val.restrictedTo.map(function (item: ResourceScope): SerializedData {
+            return serializeResourceScope(item);
           }) as readonly any[]),
     ['url']: val.url,
   };
@@ -767,14 +765,12 @@ export function deserializeFileFullExpiringEmbedLinkField(
         'Expecting array for "restricted_to" of type "FileFullExpiringEmbedLinkField"',
     });
   }
-  const restrictedTo: undefined | readonly FileOrFolderScope[] =
+  const restrictedTo: undefined | readonly ResourceScope[] =
     val.restricted_to == void 0
       ? void 0
       : sdIsList(val.restricted_to)
-        ? (val.restricted_to.map(function (
-            itm: SerializedData,
-          ): FileOrFolderScope {
-            return deserializeFileOrFolderScope(itm);
+        ? (val.restricted_to.map(function (itm: SerializedData): ResourceScope {
+            return deserializeResourceScope(itm);
           }) as readonly any[])
         : [];
   if (!(val.url == void 0) && !sdIsString(val.url)) {

@@ -1,19 +1,16 @@
 import { serializeIntegrationMappingBaseTypeField } from './integrationMappingBase.generated.js';
 import { deserializeIntegrationMappingBaseTypeField } from './integrationMappingBase.generated.js';
-import { serializeIntegrationMappingPartnerItemTeams } from './integrationMappingPartnerItemTeams.generated.js';
-import { deserializeIntegrationMappingPartnerItemTeams } from './integrationMappingPartnerItemTeams.generated.js';
 import { serializeIntegrationMappingBase } from './integrationMappingBase.generated.js';
 import { deserializeIntegrationMappingBase } from './integrationMappingBase.generated.js';
-import { serializeIntegrationMappingPartnerItemTeamsUnion } from './integrationMappingPartnerItemTeamsUnion.generated.js';
-import { deserializeIntegrationMappingPartnerItemTeamsUnion } from './integrationMappingPartnerItemTeamsUnion.generated.js';
+import { serializeIntegrationMappingPartnerItemTeams } from './integrationMappingPartnerItemTeams.generated.js';
+import { deserializeIntegrationMappingPartnerItemTeams } from './integrationMappingPartnerItemTeams.generated.js';
 import { serializeFolderReference } from './folderReference.generated.js';
 import { deserializeFolderReference } from './folderReference.generated.js';
 import { serializeDateTime } from '../internal/utils.js';
 import { deserializeDateTime } from '../internal/utils.js';
 import { IntegrationMappingBaseTypeField } from './integrationMappingBase.generated.js';
-import { IntegrationMappingPartnerItemTeams } from './integrationMappingPartnerItemTeams.generated.js';
 import { IntegrationMappingBase } from './integrationMappingBase.generated.js';
-import { IntegrationMappingPartnerItemTeamsUnion } from './integrationMappingPartnerItemTeamsUnion.generated.js';
+import { IntegrationMappingPartnerItemTeams } from './integrationMappingPartnerItemTeams.generated.js';
 import { FolderReference } from './folderReference.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { DateTime } from '../internal/utils.js';
@@ -28,7 +25,7 @@ export type IntegrationMappingTeamsIntegrationTypeField = 'teams' | string;
 export class IntegrationMappingTeams extends IntegrationMappingBase {
   readonly integrationType?: IntegrationMappingTeamsIntegrationTypeField;
   readonly isOverriddenByManualMapping?: boolean;
-  readonly partnerItem!: IntegrationMappingPartnerItemTeamsUnion;
+  readonly partnerItem!: IntegrationMappingPartnerItemTeams;
   readonly boxItem!: FolderReference;
   readonly createdAt?: DateTime;
   readonly modifiedAt?: DateTime;
@@ -91,7 +88,7 @@ export function serializeIntegrationMappingTeams(
               val.integrationType,
             ),
       ['is_overridden_by_manual_mapping']: val.isOverriddenByManualMapping,
-      ['partner_item']: serializeIntegrationMappingPartnerItemTeamsUnion(
+      ['partner_item']: serializeIntegrationMappingPartnerItemTeams(
         val.partnerItem,
       ),
       ['box_item']: serializeFolderReference(val.boxItem),
@@ -141,8 +138,8 @@ export function deserializeIntegrationMappingTeams(
         'Expecting "partner_item" of type "IntegrationMappingTeams" to be defined',
     });
   }
-  const partnerItem: IntegrationMappingPartnerItemTeamsUnion =
-    deserializeIntegrationMappingPartnerItemTeamsUnion(val.partner_item);
+  const partnerItem: IntegrationMappingPartnerItemTeams =
+    deserializeIntegrationMappingPartnerItemTeams(val.partner_item);
   if (val.box_item == void 0) {
     throw new BoxSdkError({
       message:

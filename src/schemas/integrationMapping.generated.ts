@@ -1,25 +1,22 @@
 import { serializeIntegrationMappingBaseTypeField } from './integrationMappingBase.generated.js';
 import { deserializeIntegrationMappingBaseTypeField } from './integrationMappingBase.generated.js';
-import { serializeIntegrationMappingPartnerItemSlack } from './integrationMappingPartnerItemSlack.generated.js';
-import { deserializeIntegrationMappingPartnerItemSlack } from './integrationMappingPartnerItemSlack.generated.js';
 import { serializeIntegrationMappingBase } from './integrationMappingBase.generated.js';
 import { deserializeIntegrationMappingBase } from './integrationMappingBase.generated.js';
 import { serializeIntegrationMappingSlackOptions } from './integrationMappingSlackOptions.generated.js';
 import { deserializeIntegrationMappingSlackOptions } from './integrationMappingSlackOptions.generated.js';
 import { serializeUserIntegrationMappings } from './userIntegrationMappings.generated.js';
 import { deserializeUserIntegrationMappings } from './userIntegrationMappings.generated.js';
-import { serializeIntegrationMappingPartnerItemSlackUnion } from './integrationMappingPartnerItemSlackUnion.generated.js';
-import { deserializeIntegrationMappingPartnerItemSlackUnion } from './integrationMappingPartnerItemSlackUnion.generated.js';
+import { serializeIntegrationMappingPartnerItemSlack } from './integrationMappingPartnerItemSlack.generated.js';
+import { deserializeIntegrationMappingPartnerItemSlack } from './integrationMappingPartnerItemSlack.generated.js';
 import { serializeFolderMini } from './folderMini.generated.js';
 import { deserializeFolderMini } from './folderMini.generated.js';
 import { serializeDateTime } from '../internal/utils.js';
 import { deserializeDateTime } from '../internal/utils.js';
 import { IntegrationMappingBaseTypeField } from './integrationMappingBase.generated.js';
-import { IntegrationMappingPartnerItemSlack } from './integrationMappingPartnerItemSlack.generated.js';
 import { IntegrationMappingBase } from './integrationMappingBase.generated.js';
 import { IntegrationMappingSlackOptions } from './integrationMappingSlackOptions.generated.js';
 import { UserIntegrationMappings } from './userIntegrationMappings.generated.js';
-import { IntegrationMappingPartnerItemSlackUnion } from './integrationMappingPartnerItemSlackUnion.generated.js';
+import { IntegrationMappingPartnerItemSlack } from './integrationMappingPartnerItemSlack.generated.js';
 import { FolderMini } from './folderMini.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { DateTime } from '../internal/utils.js';
@@ -37,7 +34,7 @@ export class IntegrationMapping extends IntegrationMappingBase {
   readonly options?: IntegrationMappingSlackOptions;
   readonly createdBy?: UserIntegrationMappings;
   readonly modifiedBy?: UserIntegrationMappings;
-  readonly partnerItem!: IntegrationMappingPartnerItemSlackUnion;
+  readonly partnerItem!: IntegrationMappingPartnerItemSlack;
   readonly boxItem!: FolderMini;
   readonly createdAt?: DateTime;
   readonly modifiedAt?: DateTime;
@@ -121,7 +118,7 @@ export function serializeIntegrationMapping(
         val.modifiedBy == void 0
           ? val.modifiedBy
           : serializeUserIntegrationMappings(val.modifiedBy),
-      ['partner_item']: serializeIntegrationMappingPartnerItemSlackUnion(
+      ['partner_item']: serializeIntegrationMappingPartnerItemSlack(
         val.partnerItem,
       ),
       ['box_item']: serializeFolderMini(val.boxItem),
@@ -177,8 +174,8 @@ export function deserializeIntegrationMapping(
         'Expecting "partner_item" of type "IntegrationMapping" to be defined',
     });
   }
-  const partnerItem: IntegrationMappingPartnerItemSlackUnion =
-    deserializeIntegrationMappingPartnerItemSlackUnion(val.partner_item);
+  const partnerItem: IntegrationMappingPartnerItemSlack =
+    deserializeIntegrationMappingPartnerItemSlack(val.partner_item);
   if (val.box_item == void 0) {
     throw new BoxSdkError({
       message:

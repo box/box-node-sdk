@@ -15,10 +15,8 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export type FileFullOrFolderFullOrWebLink = FileFull | FolderFull | WebLink;
-export function serializeFileFullOrFolderFullOrWebLink(
-  val: any,
-): SerializedData {
+export type RecentItemResource = FileFull | FolderFull | WebLink;
+export function serializeRecentItemResource(val: any): SerializedData {
   if (val.type == 'file') {
     return serializeFileFull(val);
   }
@@ -30,12 +28,12 @@ export function serializeFileFullOrFolderFullOrWebLink(
   }
   throw new BoxSdkError({ message: 'unknown type' });
 }
-export function deserializeFileFullOrFolderFullOrWebLink(
+export function deserializeRecentItemResource(
   val: SerializedData,
-): FileFullOrFolderFullOrWebLink {
+): RecentItemResource {
   if (!sdIsMap(val)) {
     throw new BoxSdkError({
-      message: 'Expecting a map for "FileFullOrFolderFullOrWebLink"',
+      message: 'Expecting a map for "RecentItemResource"',
     });
   }
   if (val.type == 'file') {
@@ -47,7 +45,5 @@ export function deserializeFileFullOrFolderFullOrWebLink(
   if (val.type == 'web_link') {
     return deserializeWebLink(val);
   }
-  throw new BoxSdkError({
-    message: "Can't deserialize FileFullOrFolderFullOrWebLink",
-  });
+  throw new BoxSdkError({ message: "Can't deserialize RecentItemResource" });
 }

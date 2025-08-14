@@ -10,8 +10,8 @@ import { serializeLegalHoldPolicyAssignmentBase } from './legalHoldPolicyAssignm
 import { deserializeLegalHoldPolicyAssignmentBase } from './legalHoldPolicyAssignmentBase.generated.js';
 import { serializeLegalHoldPolicyMini } from './legalHoldPolicyMini.generated.js';
 import { deserializeLegalHoldPolicyMini } from './legalHoldPolicyMini.generated.js';
-import { serializeFileOrFolderOrWebLink } from './fileOrFolderOrWebLink.generated.js';
-import { deserializeFileOrFolderOrWebLink } from './fileOrFolderOrWebLink.generated.js';
+import { serializeLegalHoldPolicyAssignedItem } from './legalHoldPolicyAssignedItem.generated.js';
+import { deserializeLegalHoldPolicyAssignedItem } from './legalHoldPolicyAssignedItem.generated.js';
 import { serializeUserMini } from './userMini.generated.js';
 import { deserializeUserMini } from './userMini.generated.js';
 import { serializeDateTime } from '../internal/utils.js';
@@ -22,7 +22,7 @@ import { Folder } from './folder.generated.js';
 import { WebLink } from './webLink.generated.js';
 import { LegalHoldPolicyAssignmentBase } from './legalHoldPolicyAssignmentBase.generated.js';
 import { LegalHoldPolicyMini } from './legalHoldPolicyMini.generated.js';
-import { FileOrFolderOrWebLink } from './fileOrFolderOrWebLink.generated.js';
+import { LegalHoldPolicyAssignedItem } from './legalHoldPolicyAssignedItem.generated.js';
 import { UserMini } from './userMini.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { DateTime } from '../internal/utils.js';
@@ -35,7 +35,7 @@ import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
 export type LegalHoldPolicyAssignment = LegalHoldPolicyAssignmentBase & {
   readonly legalHoldPolicy?: LegalHoldPolicyMini;
-  readonly assignedTo?: FileOrFolderOrWebLink;
+  readonly assignedTo?: LegalHoldPolicyAssignedItem;
   readonly assignedBy?: UserMini;
   /**
    * When the legal hold policy assignment object was
@@ -68,7 +68,7 @@ export function serializeLegalHoldPolicyAssignment(
       ['assigned_to']:
         val.assignedTo == void 0
           ? val.assignedTo
-          : serializeFileOrFolderOrWebLink(val.assignedTo),
+          : serializeLegalHoldPolicyAssignedItem(val.assignedTo),
       ['assigned_by']:
         val.assignedBy == void 0
           ? val.assignedBy
@@ -96,10 +96,10 @@ export function deserializeLegalHoldPolicyAssignment(
     val.legal_hold_policy == void 0
       ? void 0
       : deserializeLegalHoldPolicyMini(val.legal_hold_policy);
-  const assignedTo: undefined | FileOrFolderOrWebLink =
+  const assignedTo: undefined | LegalHoldPolicyAssignedItem =
     val.assigned_to == void 0
       ? void 0
-      : deserializeFileOrFolderOrWebLink(val.assigned_to);
+      : deserializeLegalHoldPolicyAssignedItem(val.assigned_to);
   const assignedBy: undefined | UserMini =
     val.assigned_by == void 0 ? void 0 : deserializeUserMini(val.assigned_by);
   if (!(val.assigned_at == void 0) && !sdIsString(val.assigned_at)) {

@@ -1,12 +1,12 @@
-import { serializeFileMini } from './fileMini.generated.js';
-import { deserializeFileMini } from './fileMini.generated.js';
 import { serializeFolderMini } from './folderMini.generated.js';
 import { deserializeFolderMini } from './folderMini.generated.js';
-import { serializeFileMiniOrFolderMini } from './fileMiniOrFolderMini.generated.js';
-import { deserializeFileMiniOrFolderMini } from './fileMiniOrFolderMini.generated.js';
-import { FileMini } from './fileMini.generated.js';
+import { serializeFileMini } from './fileMini.generated.js';
+import { deserializeFileMini } from './fileMini.generated.js';
+import { serializeResource } from './resource.generated.js';
+import { deserializeResource } from './resource.generated.js';
 import { FolderMini } from './folderMini.generated.js';
-import { FileMiniOrFolderMini } from './fileMiniOrFolderMini.generated.js';
+import { FileMini } from './fileMini.generated.js';
+import { Resource } from './resource.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -15,7 +15,7 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export type FileOrFolderScopeScopeField =
+export type ResourceScopeScopeField =
   | 'annotation_edit'
   | 'annotation_view_all'
   | 'annotation_view_self'
@@ -31,21 +31,21 @@ export type FileOrFolderScopeScopeField =
   | 'item_upload'
   | 'item_read'
   | string;
-export interface FileOrFolderScope {
+export interface ResourceScope {
   /**
    * The scopes for the resource access. */
-  readonly scope?: FileOrFolderScopeScopeField;
-  readonly object?: FileMiniOrFolderMini;
+  readonly scope?: ResourceScopeScopeField;
+  readonly object?: Resource;
   readonly rawData?: SerializedData;
 }
-export function serializeFileOrFolderScopeScopeField(
-  val: FileOrFolderScopeScopeField,
+export function serializeResourceScopeScopeField(
+  val: ResourceScopeScopeField,
 ): SerializedData {
   return val;
 }
-export function deserializeFileOrFolderScopeScopeField(
+export function deserializeResourceScopeScopeField(
   val: SerializedData,
-): FileOrFolderScopeScopeField {
+): ResourceScopeScopeField {
   if (val == 'annotation_edit') {
     return val;
   }
@@ -92,36 +92,28 @@ export function deserializeFileOrFolderScopeScopeField(
     return val;
   }
   throw new BoxSdkError({
-    message: "Can't deserialize FileOrFolderScopeScopeField",
+    message: "Can't deserialize ResourceScopeScopeField",
   });
 }
-export function serializeFileOrFolderScope(
-  val: FileOrFolderScope,
-): SerializedData {
+export function serializeResourceScope(val: ResourceScope): SerializedData {
   return {
     ['scope']:
       val.scope == void 0
         ? val.scope
-        : serializeFileOrFolderScopeScopeField(val.scope),
+        : serializeResourceScopeScopeField(val.scope),
     ['object']:
-      val.object == void 0
-        ? val.object
-        : serializeFileMiniOrFolderMini(val.object),
+      val.object == void 0 ? val.object : serializeResource(val.object),
   };
 }
-export function deserializeFileOrFolderScope(
-  val: SerializedData,
-): FileOrFolderScope {
+export function deserializeResourceScope(val: SerializedData): ResourceScope {
   if (!sdIsMap(val)) {
-    throw new BoxSdkError({
-      message: 'Expecting a map for "FileOrFolderScope"',
-    });
+    throw new BoxSdkError({ message: 'Expecting a map for "ResourceScope"' });
   }
-  const scope: undefined | FileOrFolderScopeScopeField =
+  const scope: undefined | ResourceScopeScopeField =
     val.scope == void 0
       ? void 0
-      : deserializeFileOrFolderScopeScopeField(val.scope);
-  const object: undefined | FileMiniOrFolderMini =
-    val.object == void 0 ? void 0 : deserializeFileMiniOrFolderMini(val.object);
-  return { scope: scope, object: object } satisfies FileOrFolderScope;
+      : deserializeResourceScopeScopeField(val.scope);
+  const object: undefined | Resource =
+    val.object == void 0 ? void 0 : deserializeResource(val.object);
+  return { scope: scope, object: object } satisfies ResourceScope;
 }

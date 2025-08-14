@@ -1,12 +1,12 @@
-import { serializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
-import { deserializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
 import { serializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.generated.js';
 import { deserializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.generated.js';
-import { serializeMetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString } from './metadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString.generated.js';
-import { deserializeMetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString } from './metadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString.generated.js';
-import { MetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
+import { serializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
+import { deserializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
+import { serializeMetadataFilterValue } from './metadataFilterValue.generated.js';
+import { deserializeMetadataFilterValue } from './metadataFilterValue.generated.js';
 import { MetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.generated.js';
-import { MetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString } from './metadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString.generated.js';
+import { MetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.generated.js';
+import { MetadataFilterValue } from './metadataFilterValue.generated.js';
 import { BoxSdkError } from '../box/errors.js';
 import { SerializedData } from '../serialization/json.js';
 import { sdIsEmpty } from '../serialization/json.js';
@@ -50,9 +50,7 @@ export interface MetadataFilter {
    * performs a logical `AND` to ensure that the instance of the
    * template matches each of the fields specified. */
   readonly filters?: {
-    readonly [
-      key: string
-    ]: MetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString;
+    readonly [key: string]: MetadataFilterValue;
   };
   readonly rawData?: SerializedData;
 }
@@ -93,9 +91,7 @@ export function serializeMetadataFilter(val: MetadataFilter): SerializedData {
         : (Object.fromEntries(
             Object.entries(val.filters).map(([k, v]: [string, any]) => [
               k,
-              serializeMetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString(
-                v,
-              ),
+              serializeMetadataFilterValue(v),
             ]),
           ) as {
             readonly [key: string]: any;
@@ -125,9 +121,7 @@ export function deserializeMetadataFilter(val: SerializedData): MetadataFilter {
   const filters:
     | undefined
     | {
-        readonly [
-          key: string
-        ]: MetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString;
+        readonly [key: string]: MetadataFilterValue;
       } =
     val.filters == void 0
       ? void 0
@@ -135,9 +129,7 @@ export function deserializeMetadataFilter(val: SerializedData): MetadataFilter {
         ? (Object.fromEntries(
             Object.entries(val.filters).map(([k, v]: [string, any]) => [
               k,
-              deserializeMetadataFieldFilterDateRangeOrMetadataFieldFilterFloatRangeOrArrayOfStringOrNumberOrString(
-                v,
-              ),
+              deserializeMetadataFilterValue(v),
             ]),
           ) as {
             readonly [key: string]: any;

@@ -15,13 +15,8 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export type FileBaseOrFolderBaseOrWebLinkBase =
-  | FileBase
-  | FolderBase
-  | WebLinkBase;
-export function serializeFileBaseOrFolderBaseOrWebLinkBase(
-  val: any,
-): SerializedData {
+export type AppItemAssociatedItem = FileBase | FolderBase | WebLinkBase;
+export function serializeAppItemAssociatedItem(val: any): SerializedData {
   if (val.type == 'file') {
     return serializeFileBase(val);
   }
@@ -33,12 +28,12 @@ export function serializeFileBaseOrFolderBaseOrWebLinkBase(
   }
   throw new BoxSdkError({ message: 'unknown type' });
 }
-export function deserializeFileBaseOrFolderBaseOrWebLinkBase(
+export function deserializeAppItemAssociatedItem(
   val: SerializedData,
-): FileBaseOrFolderBaseOrWebLinkBase {
+): AppItemAssociatedItem {
   if (!sdIsMap(val)) {
     throw new BoxSdkError({
-      message: 'Expecting a map for "FileBaseOrFolderBaseOrWebLinkBase"',
+      message: 'Expecting a map for "AppItemAssociatedItem"',
     });
   }
   if (val.type == 'file') {
@@ -50,7 +45,5 @@ export function deserializeFileBaseOrFolderBaseOrWebLinkBase(
   if (val.type == 'web_link') {
     return deserializeWebLinkBase(val);
   }
-  throw new BoxSdkError({
-    message: "Can't deserialize FileBaseOrFolderBaseOrWebLinkBase",
-  });
+  throw new BoxSdkError({ message: "Can't deserialize AppItemAssociatedItem" });
 }

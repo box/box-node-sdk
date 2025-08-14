@@ -4,12 +4,12 @@ import { serializeFolderReferenceV2025R0 } from './folderReferenceV2025R0.genera
 import { deserializeFolderReferenceV2025R0 } from './folderReferenceV2025R0.generated.js';
 import { serializeWeblinkReferenceV2025R0 } from './weblinkReferenceV2025R0.generated.js';
 import { deserializeWeblinkReferenceV2025R0 } from './weblinkReferenceV2025R0.generated.js';
-import { serializeFileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0 } from './fileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0.generated.js';
-import { deserializeFileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0 } from './fileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0.generated.js';
+import { serializeHubItemReferenceV2025R0 } from './hubItemReferenceV2025R0.generated.js';
+import { deserializeHubItemReferenceV2025R0 } from './hubItemReferenceV2025R0.generated.js';
 import { FileReferenceV2025R0 } from './fileReferenceV2025R0.generated.js';
 import { FolderReferenceV2025R0 } from './folderReferenceV2025R0.generated.js';
 import { WeblinkReferenceV2025R0 } from './weblinkReferenceV2025R0.generated.js';
-import { FileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0 } from './fileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0.generated.js';
+import { HubItemReferenceV2025R0 } from './hubItemReferenceV2025R0.generated.js';
 import { BoxSdkError } from '../../box/errors.js';
 import { SerializedData } from '../../serialization/json.js';
 import { sdIsEmpty } from '../../serialization/json.js';
@@ -23,9 +23,7 @@ export interface HubItemOperationV2025R0 {
   /**
    * The action to perform on a Hub item. */
   readonly action: HubItemOperationV2025R0ActionField;
-  /**
-   * Reference to an item that can be added to a Hub. */
-  readonly item: FileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0;
+  readonly item: HubItemReferenceV2025R0;
   readonly rawData?: SerializedData;
 }
 export function serializeHubItemOperationV2025R0ActionField(
@@ -54,9 +52,7 @@ export function serializeHubItemOperationV2025R0(
 ): SerializedData {
   return {
     ['action']: serializeHubItemOperationV2025R0ActionField(val.action),
-    ['item']: serializeFileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0(
-      val.item,
-    ),
+    ['item']: serializeHubItemReferenceV2025R0(val.item),
   };
 }
 export function deserializeHubItemOperationV2025R0(
@@ -81,9 +77,8 @@ export function deserializeHubItemOperationV2025R0(
         'Expecting "item" of type "HubItemOperationV2025R0" to be defined',
     });
   }
-  const item: FileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0 =
-    deserializeFileReferenceOrFolderReferenceOrWeblinkReferenceV2025R0(
-      val.item,
-    );
+  const item: HubItemReferenceV2025R0 = deserializeHubItemReferenceV2025R0(
+    val.item,
+  );
   return { action: action, item: item } satisfies HubItemOperationV2025R0;
 }

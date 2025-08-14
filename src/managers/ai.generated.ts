@@ -1,11 +1,11 @@
 import { serializeAiAgentAsk } from '../schemas/aiAgentAsk.generated.js';
 import { deserializeAiAgentAsk } from '../schemas/aiAgentAsk.generated.js';
+import { serializeAiAgentTextGen } from '../schemas/aiAgentTextGen.generated.js';
+import { deserializeAiAgentTextGen } from '../schemas/aiAgentTextGen.generated.js';
 import { serializeAiAgentExtract } from '../schemas/aiAgentExtract.generated.js';
 import { deserializeAiAgentExtract } from '../schemas/aiAgentExtract.generated.js';
 import { serializeAiAgentExtractStructured } from '../schemas/aiAgentExtractStructured.generated.js';
 import { deserializeAiAgentExtractStructured } from '../schemas/aiAgentExtractStructured.generated.js';
-import { serializeAiAgentTextGen } from '../schemas/aiAgentTextGen.generated.js';
-import { deserializeAiAgentTextGen } from '../schemas/aiAgentTextGen.generated.js';
 import { serializeAiResponseFull } from '../schemas/aiResponseFull.generated.js';
 import { deserializeAiResponseFull } from '../schemas/aiResponseFull.generated.js';
 import { serializeClientError } from '../schemas/clientError.generated.js';
@@ -16,8 +16,8 @@ import { serializeAiResponse } from '../schemas/aiResponse.generated.js';
 import { deserializeAiResponse } from '../schemas/aiResponse.generated.js';
 import { serializeAiTextGen } from '../schemas/aiTextGen.generated.js';
 import { deserializeAiTextGen } from '../schemas/aiTextGen.generated.js';
-import { serializeAiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen } from '../schemas/aiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen.generated.js';
-import { deserializeAiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen } from '../schemas/aiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen.generated.js';
+import { serializeAiAgent } from '../schemas/aiAgent.generated.js';
+import { deserializeAiAgent } from '../schemas/aiAgent.generated.js';
 import { serializeAiExtract } from '../schemas/aiExtract.generated.js';
 import { deserializeAiExtract } from '../schemas/aiExtract.generated.js';
 import { serializeAiExtractStructuredResponse } from '../schemas/aiExtractStructuredResponse.generated.js';
@@ -26,15 +26,15 @@ import { serializeAiExtractStructured } from '../schemas/aiExtractStructured.gen
 import { deserializeAiExtractStructured } from '../schemas/aiExtractStructured.generated.js';
 import { ResponseFormat } from '../networking/fetchOptions.generated.js';
 import { AiAgentAsk } from '../schemas/aiAgentAsk.generated.js';
+import { AiAgentTextGen } from '../schemas/aiAgentTextGen.generated.js';
 import { AiAgentExtract } from '../schemas/aiAgentExtract.generated.js';
 import { AiAgentExtractStructured } from '../schemas/aiAgentExtractStructured.generated.js';
-import { AiAgentTextGen } from '../schemas/aiAgentTextGen.generated.js';
 import { AiResponseFull } from '../schemas/aiResponseFull.generated.js';
 import { ClientError } from '../schemas/clientError.generated.js';
 import { AiAsk } from '../schemas/aiAsk.generated.js';
 import { AiResponse } from '../schemas/aiResponse.generated.js';
 import { AiTextGen } from '../schemas/aiTextGen.generated.js';
-import { AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen } from '../schemas/aiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen.generated.js';
+import { AiAgent } from '../schemas/aiAgent.generated.js';
 import { AiExtract } from '../schemas/aiExtract.generated.js';
 import { AiExtractStructuredResponse } from '../schemas/aiExtractStructuredResponse.generated.js';
 import { AiExtractStructured } from '../schemas/aiExtractStructured.generated.js';
@@ -414,12 +414,12 @@ export class AiManager {
    * Get the AI agent default config.
    * @param {GetAiAgentDefaultConfigQueryParams} queryParams Query parameters of getAiAgentDefaultConfig method
    * @param {GetAiAgentDefaultConfigOptionalsInput} optionalsInput
-   * @returns {Promise<AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen>}
+   * @returns {Promise<AiAgent>}
    */
   async getAiAgentDefaultConfig(
     queryParams: GetAiAgentDefaultConfigQueryParams,
     optionalsInput: GetAiAgentDefaultConfigOptionalsInput = {},
-  ): Promise<AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen> {
+  ): Promise<AiAgent> {
     const optionals: GetAiAgentDefaultConfigOptionals =
       new GetAiAgentDefaultConfigOptionals({
         headers: optionalsInput.headers,
@@ -454,9 +454,7 @@ export class AiManager {
         }),
       );
     return {
-      ...deserializeAiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen(
-        response.data!,
-      ),
+      ...deserializeAiAgent(response.data!),
       rawData: response.data!,
     };
   }

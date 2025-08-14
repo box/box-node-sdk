@@ -1,5 +1,5 @@
-import { serializeAiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen } from '../schemas/aiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen.generated.js';
-import { deserializeAiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen } from '../schemas/aiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen.generated.js';
+import { serializeAiAgent } from '../schemas/aiAgent.generated.js';
+import { deserializeAiAgent } from '../schemas/aiAgent.generated.js';
 import { serializeGetAiAgentDefaultConfigQueryParamsModeField } from '../managers/ai.generated.js';
 import { deserializeGetAiAgentDefaultConfigQueryParamsModeField } from '../managers/ai.generated.js';
 import { serializeFileFull } from '../schemas/fileFull.generated.js';
@@ -67,7 +67,7 @@ import { deserializeAiAgentExtractStructured } from '../schemas/aiAgentExtractSt
 import { serializeAiAgentLongTextTool } from '../schemas/aiAgentLongTextTool.generated.js';
 import { deserializeAiAgentLongTextTool } from '../schemas/aiAgentLongTextTool.generated.js';
 import { BoxClient } from '../client.generated.js';
-import { AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen } from '../schemas/aiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen.generated.js';
+import { AiAgent } from '../schemas/aiAgent.generated.js';
 import { GetAiAgentDefaultConfigQueryParams } from '../managers/ai.generated.js';
 import { GetAiAgentDefaultConfigQueryParamsModeField } from '../managers/ai.generated.js';
 import { FileFull } from '../schemas/fileFull.generated.js';
@@ -123,11 +123,10 @@ import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
 export const client: BoxClient = getDefaultClient();
 test('testAskAISingleItem', async function testAskAISingleItem(): Promise<any> {
-  const aiAgentConfig: AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen =
-    await client.ai.getAiAgentDefaultConfig({
-      mode: 'ask' as GetAiAgentDefaultConfigQueryParamsModeField,
-      language: 'en-US',
-    } satisfies GetAiAgentDefaultConfigQueryParams);
+  const aiAgentConfig: AiAgent = await client.ai.getAiAgentDefaultConfig({
+    mode: 'ask' as GetAiAgentDefaultConfigQueryParamsModeField,
+    language: 'en-US',
+  } satisfies GetAiAgentDefaultConfigQueryParams);
   const aiAskAgentConfig: AiAgentAsk = aiAgentConfig as AiAgentAsk;
   const fileToAsk: FileFull = await uploadNewFile();
   const response: undefined | AiResponseFull = await client.ai.createAiAsk({
@@ -180,11 +179,10 @@ test('testAskAIMultipleItems', async function testAskAIMultipleItems(): Promise<
 });
 test('testAITextGenWithDialogueHistory', async function testAITextGenWithDialogueHistory(): Promise<any> {
   const fileToAsk: FileFull = await uploadNewFile();
-  const aiAgentConfig: AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen =
-    await client.ai.getAiAgentDefaultConfig({
-      mode: 'text_gen' as GetAiAgentDefaultConfigQueryParamsModeField,
-      language: 'en-US',
-    } satisfies GetAiAgentDefaultConfigQueryParams);
+  const aiAgentConfig: AiAgent = await client.ai.getAiAgentDefaultConfig({
+    mode: 'text_gen' as GetAiAgentDefaultConfigQueryParamsModeField,
+    language: 'en-US',
+  } satisfies GetAiAgentDefaultConfigQueryParams);
   const aiTextGenAgentConfig: AiAgentTextGen = aiAgentConfig as AiAgentTextGen;
   const response: AiResponse = await client.ai.createAiTextGen({
     prompt: 'Parapharse the document.s',
@@ -219,11 +217,10 @@ test('testAITextGenWithDialogueHistory', async function testAITextGenWithDialogu
   await client.files.deleteFileById(fileToAsk.id);
 });
 test('testGettingAIAskAgentConfig', async function testGettingAIAskAgentConfig(): Promise<any> {
-  const aiAgentConfig: AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen =
-    await client.ai.getAiAgentDefaultConfig({
-      mode: 'ask' as GetAiAgentDefaultConfigQueryParamsModeField,
-      language: 'en-US',
-    } satisfies GetAiAgentDefaultConfigQueryParams);
+  const aiAgentConfig: AiAgent = await client.ai.getAiAgentDefaultConfig({
+    mode: 'ask' as GetAiAgentDefaultConfigQueryParamsModeField,
+    language: 'en-US',
+  } satisfies GetAiAgentDefaultConfigQueryParams);
   if (!(aiAgentConfig.type == 'ai_agent_ask')) {
     throw new Error('Assertion failed');
   }
@@ -290,11 +287,10 @@ test('testGettingAIAskAgentConfig', async function testGettingAIAskAgentConfig()
   }
 });
 test('testGettingAITextGenAgentConfig', async function testGettingAITextGenAgentConfig(): Promise<any> {
-  const aiAgentConfig: AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen =
-    await client.ai.getAiAgentDefaultConfig({
-      mode: 'text_gen' as GetAiAgentDefaultConfigQueryParamsModeField,
-      language: 'en-US',
-    } satisfies GetAiAgentDefaultConfigQueryParams);
+  const aiAgentConfig: AiAgent = await client.ai.getAiAgentDefaultConfig({
+    mode: 'text_gen' as GetAiAgentDefaultConfigQueryParamsModeField,
+    language: 'en-US',
+  } satisfies GetAiAgentDefaultConfigQueryParams);
   if (!(aiAgentConfig.type == 'ai_agent_text_gen')) {
     throw new Error('Assertion failed');
   }
@@ -322,11 +318,10 @@ test('testGettingAITextGenAgentConfig', async function testGettingAITextGenAgent
   }
 });
 test('testAIExtract', async function testAIExtract(): Promise<any> {
-  const aiAgentConfig: AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen =
-    await client.ai.getAiAgentDefaultConfig({
-      mode: 'extract' as GetAiAgentDefaultConfigQueryParamsModeField,
-      language: 'en-US',
-    } satisfies GetAiAgentDefaultConfigQueryParams);
+  const aiAgentConfig: AiAgent = await client.ai.getAiAgentDefaultConfig({
+    mode: 'extract' as GetAiAgentDefaultConfigQueryParamsModeField,
+    language: 'en-US',
+  } satisfies GetAiAgentDefaultConfigQueryParams);
   const aiExtractAgentConfig: AiAgentExtract = aiAgentConfig as AiAgentExtract;
   const longTextConfigWithNoEmbeddings: AiAgentLongTextTool = {
     systemMessage: aiExtractAgentConfig.longText!.systemMessage,
@@ -368,11 +363,10 @@ test('testAIExtract', async function testAIExtract(): Promise<any> {
   await client.files.deleteFileById(file.id);
 });
 test('testAIExtractStructuredWithFields', async function testAIExtractStructuredWithFields(): Promise<any> {
-  const aiAgentConfig: AiAgentAskOrAiAgentExtractOrAiAgentExtractStructuredOrAiAgentTextGen =
-    await client.ai.getAiAgentDefaultConfig({
-      mode: 'extract_structured' as GetAiAgentDefaultConfigQueryParamsModeField,
-      language: 'en-US',
-    } satisfies GetAiAgentDefaultConfigQueryParams);
+  const aiAgentConfig: AiAgent = await client.ai.getAiAgentDefaultConfig({
+    mode: 'extract_structured' as GetAiAgentDefaultConfigQueryParamsModeField,
+    language: 'en-US',
+  } satisfies GetAiAgentDefaultConfigQueryParams);
   const aiExtractStructuredAgentConfig: AiAgentExtractStructured =
     aiAgentConfig as AiAgentExtractStructured;
   const longTextConfigWithNoEmbeddings: AiAgentLongTextTool = {
