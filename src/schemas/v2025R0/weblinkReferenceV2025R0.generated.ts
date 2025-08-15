@@ -13,7 +13,7 @@ export class WeblinkReferenceV2025R0 {
   readonly type: WeblinkReferenceV2025R0TypeField =
     'weblink' as WeblinkReferenceV2025R0TypeField;
   /**
-   * ID of the weblink. */
+   * ID of the web link. */
   readonly id!: string;
   readonly rawData?: SerializedData;
   constructor(
@@ -36,7 +36,7 @@ export interface WeblinkReferenceV2025R0Input {
    * The value will always be `weblink`. */
   readonly type?: WeblinkReferenceV2025R0TypeField;
   /**
-   * ID of the weblink. */
+   * ID of the web link. */
   readonly id: string;
   readonly rawData?: SerializedData;
 }
