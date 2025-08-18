@@ -1,69 +1,77 @@
-# Migration Guide: From `Box Node SDK` to `Box TypeScript SDK`
+# Migration guide from v3 to v10 version of `box-node-sdk`
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Migration Guide: From `Box Node SDK` to `Box TypeScript SDK`](#migration-guide-from-box-node-sdk-to-box-typescript-sdk)
-  - [Introduction](#introduction)
-  - [Installation](#installation)
-  - [Highlighting the Key Differences](#highlighting-the-key-differences)
-    - [Native support for async-await and Promises](#native-support-for-async-await-and-promises)
-    - [Embracing Explicitly Defined Schemas](#embracing-explicitly-defined-schemas)
-    - [Immutable design](#immutable-design)
-  - [Diving into Authentication](#diving-into-authentication)
-    - [Developer Token](#developer-token)
-    - [JWT Authentication](#jwt-authentication)
-      - [Leveraging the JWT Configuration File](#leveraging-the-jwt-configuration-file)
-      - [Manually Providing JWT Configuration](#manually-providing-jwt-configuration)
-      - [User Authentication Simplified](#user-authentication-simplified)
-    - [Client Credentials Grant](#client-credentials-grant)
-      - [Service Account Token Acquisition](#service-account-token-acquisition)
-      - [User Token Acquisition](#user-token-acquisition)
-    - [Smooth Switching between Service Account and User](#smooth-switching-between-service-account-and-user)
-    - [OAuth 2.0 Authentication](#oauth-20-authentication)
-      - [Fetching the Authorization URL](#fetching-the-authorization-url)
-      - [Seamless Authentication](#seamless-authentication)
-    - [Customizable Token Storage and Retrieval Callbacks](#customizable-token-storage-and-retrieval-callbacks)
-    - [Downscope token](#downscope-token)
-    - [Revoke token](#revoke-token)
-  - [Configuration](#configuration)
-    - [As-User header](#as-user-header)
-    - [Custom Base URLs](#custom-base-urls)
-  - [Convenience methods](#convenience-methods)
-    - [Webhook validation](#webhook-validation)
-    - [Chunked upload of big files](#chunked-upload-of-big-files)
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Highlighting the Key Differences](#highlighting-the-key-differences)
+  - [Native support for async-await and Promises](#native-support-for-async-await-and-promises)
+  - [Embracing Explicitly Defined Schemas](#embracing-explicitly-defined-schemas)
+  - [Immutable design](#immutable-design)
+- [Diving into Authentication](#diving-into-authentication)
+  - [Developer Token](#developer-token)
+  - [JWT Authentication](#jwt-authentication)
+    - [Leveraging the JWT Configuration File](#leveraging-the-jwt-configuration-file)
+    - [Manually Providing JWT Configuration](#manually-providing-jwt-configuration)
+    - [User Authentication Simplified](#user-authentication-simplified)
+  - [Client Credentials Grant](#client-credentials-grant)
+    - [Service Account Token Acquisition](#service-account-token-acquisition)
+    - [User Token Acquisition](#user-token-acquisition)
+  - [Smooth Switching between Service Account and User](#smooth-switching-between-service-account-and-user)
+  - [OAuth 2.0 Authentication](#oauth-20-authentication)
+    - [Fetching the Authorization URL](#fetching-the-authorization-url)
+    - [Seamless Authentication](#seamless-authentication)
+  - [Customizable Token Storage and Retrieval Callbacks](#customizable-token-storage-and-retrieval-callbacks)
+  - [Downscope token](#downscope-token)
+  - [Revoke token](#revoke-token)
+- [Configuration](#configuration)
+  - [As-User header](#as-user-header)
+  - [Custom Base URLs](#custom-base-urls)
+- [Convenience methods](#convenience-methods)
+  - [Webhook validation](#webhook-validation)
+  - [Chunked upload of big files](#chunked-upload-of-big-files)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Introduction
 
-Welcome to the `Box TypeScript SDK`, the pinnacle of Box's SDK evolution tailored for developers eager to integrate with the Box API using TypeScript. This next-generation toolkit is meticulously crafted with contemporary development practices, ensuring an unparalleled, seamless experience.
-
-While the `Box Node SDK` served its purpose well, the `Box TypeScript SDK` elevates the experience to new heights. One of its standout features is its auto-generation directly from the Open API Specification. This guarantees that developers are always equipped with the latest Box API features, eliminating any lag or discrepancies.
-
-This guide is your compass, offering insights and directions for a smooth migration from the legacy `Box Node SDK` to the state-of-the-art `Box TypeScript SDK`. As we journey through, we'll spotlight the key differences, enhanced functionalities, and the myriad benefits that await.
-
-For those who wish to delve deeper into the intricacies and advantages of the new SDK, the [official README](https://github.com/box/box-typescript-sdk-gen/blob/main/README.md) is a treasure trove of information.
+The v10 release of `box-node-sdk` library helps Javascript and Typescripts developers to conveniently integrate with Box API.
+In the contrary to the previous versions (v10 or lower), it is not manually maintained, but auto-generated
+based on Open API Specification. This means you can leverage the most up-to-date Box API features in your
+applications without delay. We introduced this major version bump to reflect the significant codebase changes
+and to align with other Box SDKs, which will also adopt generated code starting from their v10 releases.
+More information and benefits of using the new can be found in the
+[README](https://github.com/box/box-node-sdk/blob/sdk-gen/README.md) file.
 
 ## Installation
 
-Embarking on your journey with the `Box TypeScript SDK` is straightforward. Here's how you can set it up:
+To install v10 version of Box Node SDK, you can use npm or yarn or similar tool. The library is available on the
+[npm](https://www.npmjs.com/package/box-node-sdk).
+
+If you are using npm:
 
 ```console
-npm install box-typescript-sdk-gen
+npm install box-node-sdk@<version>
 ```
 
-For those who are hesitant to make the full leap, fear not. The `Box TypeScript SDK` can coexist peacefully alongside the legacy `Box Node SDK` within the same project. This coexistence offers a gentle migration path, allowing developers to transition at their own pace. However, for an optimal experience, a complete transition to the new SDK is recommended in due course.
+If you use yarn, please do this instead:
+
+```console
+yarn add box-node-sdk@<version>
+```
+
+Where `VERSION` is the version of the SDK you want to use. The next generation of the SDK starts with version `10.0.0`.
 
 ## Highlighting the Key Differences
 
 ### Native support for async-await and Promises
 
-The new SDK introduces a more organized and intuitive method of interacting with the Box API. Let's explore the changes:
+The v10 version of the SDK introduces a more organized and intuitive method of interacting with the Box API. Let's explore the changes:
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
-In the older SDK, API interactions allowed for passing `callback` as the last argument
+In the v3 version of the SDK, API interactions allowed for passing `callback` as the last argument
 
 ```typescript
 function callback(user) {
@@ -74,9 +82,9 @@ client.users.get('123456', {} /* options */, callback);
 
 If you didn't provide the `callback` a Promise would be returned.
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK ensures promises are used consistently across the full SDK.
+The v10 version of the SDK ensures promises are used consistently across the full SDK.
 
 ```typescript
 const user = await client.users.getUserById('123456');
@@ -84,20 +92,20 @@ const user = await client.users.getUserById('123456');
 
 ### Embracing Explicitly Defined Schemas
 
-The new SDK brings clarity to data interactions by providing explicit data type definitions:
+The v10 version of the SDK brings clarity to data interactions by providing explicit data type definitions:
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
-The older SDK was more ambiguous, which could lead to potential issues:
+The v3 version of the SDK was more ambiguous, which could lead to potential issues:
 
 ```typescript
 const file = await client.files.get('12345678');
 /* file has generic Object type */
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-With the new SDK, developers can be confident in the data structures they're working with:
+With the v10 version of the SDK, developers can be confident in the data structures they're working with:
 
 ```typescript
 interface FileBase {
@@ -109,12 +117,12 @@ interface FileBase {
 
 ### Immutable design
 
-The new SDK is designed to be mostly immutable. This means that methods,
-which used to modify the existing object in old SDK now return a new instance of the class with the modified state.
+The v10 version of the SDK is designed to be mostly immutable. This means that methods,
+which used to modify the existing object in the v3 version of the SDK now return a new instance of the class with the modified state.
 This design pattern is used to avoid side effects and make the code more predictable and easier to reason about.
 Methods, which returns a new modified instance of an object, will always have a prefix `with` in their names, e.g.
 
-**New (`box-sdk-gen`)**
+**New (`v10`)**
 
 ```typescript
 asUserClient: BoxClient = client.withAsUserHeader('USER_ID');
@@ -122,13 +130,13 @@ asUserClient: BoxClient = client.withAsUserHeader('USER_ID');
 
 ## Diving into Authentication
 
-Authentication is a crucial aspect of any SDK. Let's delve into the authentication methods supported by both SDKs and understand the enhancements in the new version:
+Authentication is a crucial aspect of any SDK. Let's delve into the authentication methods supported by both versions of the SDKs and understand the enhancements in the new version:
 
 ### Developer Token
 
 The Developer Token remains a straightforward method for authentication:
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 var BoxSDK = require('box-node-sdk');
@@ -140,12 +148,12 @@ var sdk = new BoxSDK({
 var client = sdk.getBasicClient('YOUR-DEVELOPER-TOKEN');
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK offers a more streamlined approach:
+The v10 version of the SDK offers a more streamlined approach:
 
 ```typescript
-import { BoxClient, BoxDeveloperTokenAuth } from 'box-typescript-sdk-gen';
+import { BoxClient, BoxDeveloperTokenAuth } from 'box-node-sdk';
 
 const auth = new BoxDeveloperTokenAuth({ token: 'DEVELOPER_TOKEN_GOES_HERE' });
 const client = new BoxClient({ auth });
@@ -157,7 +165,7 @@ JSON Web Tokens (JWT) offer a secure method of authentication. Here's how the pr
 
 #### Leveraging the JWT Configuration File
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 var BoxSDK = require('box-node-sdk');
@@ -167,12 +175,12 @@ var sdk = BoxSDK.getPreconfiguredInstance(jsonConfig);
 var serviceAccountClient = sdk.getAppAuthClient('enterprise');
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK provides a more organized approach:
+The v10 version of the provides a more organized approach:
 
 ```typescript
-import { BoxClient, BoxJwtAuth, JwtConfig } from 'box-typescript-sdk-gen';
+import { BoxClient, BoxJwtAuth, JwtConfig } from 'box-node-sdk';
 
 const jwtConfig = JwtConfig.fromConfigFile('/path/to/config.json');
 const auth = new BoxJwtAuth({ config: jwtConfig });
@@ -181,9 +189,9 @@ const client = new BoxClient({ auth });
 
 #### Manually Providing JWT Configuration
 
-For those who prefer manual configurations, both SDKs offer flexibility:
+For those who prefer manual configurations, both version of the SDKs offer flexibility:
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 var BoxSDK = require('box-node-sdk');
@@ -203,12 +211,12 @@ var serviceAccountClient = sdk.getAppAuthClient(
 );
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK introduces a more structured approach:
+The v10 version of the SDK introduces a more structured approach:
 
 ```typescript
-import { BoxJwtAuth, JwtConfig } from 'box-typescript-sdk-gen';
+import { BoxJwtAuth, JwtConfig } from 'box-node-sdk';
 
 const jwtConfig = new JwtConfig({
   clientId: 'YOUR_CLIENT_ID',
@@ -230,13 +238,13 @@ To authenticate as user you need to call
 `BoxJwtAuth` class, which will perform authentication call in scope of the user on the first API call.
 The new auth instance can be used to create a new user client instance.
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 const userClient = sdk.getAppAuthClient('user', 'USER_ID');
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
 ```typescript
 const userAuth = jwtAuth.withUserSubject('USER_ID');
@@ -249,7 +257,7 @@ The Client Credentials Grant method is a popular choice for many developers. Let
 
 #### Service Account Token Acquisition
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 const BoxSDK = require('box-node-sdk');
@@ -265,12 +273,12 @@ const sdk = BoxSDK.getPreconfiguredInstance(sdkConfig);
 const client = sdk.getAnonymousClient();
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK offers a more organized structure:
+The v10 version of the SDK offers a more organized structure:
 
 ```typescript
-import { CcgConfig, BoxCcgAuth, BoxClient } from 'box-typescript-sdk-gen';
+import { CcgConfig, BoxCcgAuth, BoxClient } from 'box-node-sdk';
 
 const ccgConfig = new CcgConfig({
   clientId: 'YOUR_CLIENT_ID',
@@ -283,7 +291,7 @@ const client = new BoxClient({ auth });
 
 #### User Token Acquisition
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 const BoxSDK = require('box-node-sdk');
@@ -299,12 +307,12 @@ const sdk = BoxSDK.getPreconfiguredInstance(sdkConfig);
 const client = sdk.getCCGClientForUser('USER_ID');
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK streamlines the process:
+The v10 version of the SDK streamlines the process:
 
 ```typescript
-import { CcgConfig, BoxCcgAuth, BoxClient } from 'box-typescript-sdk-gen';
+import { CcgConfig, BoxCcgAuth, BoxClient } from 'box-node-sdk';
 
 const ccgConfig = new CcgConfig({
   clientId: 'YOUR_CLIENT_ID',
@@ -317,18 +325,18 @@ const client = new BoxClient({ auth });
 
 ### Smooth Switching between Service Account and User
 
-In the new SDK, to keep the immutability design, the methods responsible for switching authenticated subject return
+In the v10 version of the SDK, to keep the immutability design, the methods responsible for switching authenticated subject return
 a new instance of `BoxCcgAuth` class. The new instance will fetch a new token on the next API call.
 The new auth instance can be used to create a new client instance.
 The old instance of `BoxCcgAuth` class will remain unchanged and will still use the old token.
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 const client = sdk.getCCGClientForUser('USER_ID');
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
 To authenticate with enterprise subject call:
 
@@ -350,7 +358,7 @@ OAuth 2.0 remains a robust authentication method. Let's explore the improvements
 
 #### Fetching the Authorization URL
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 var BoxSDK = require('box-node-sdk');
@@ -365,12 +373,12 @@ var authorize_url = sdk.getAuthorizeURL({
 });
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK provides more flexibility:
+The v10 version of the SDK provides more flexibility:
 
 ```typescript
-import { BoxOAuth, OAuthConfig } from 'box-typescript-sdk-gen';
+import { BoxOAuth, OAuthConfig } from 'box-node-sdk';
 
 const config = new OAuthConfig({
   clientId: 'OAUTH_CLIENT_ID',
@@ -383,7 +391,7 @@ var authorize_url = oauth.getAuthorizeUrl();
 
 #### Seamless Authentication
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 sdk.getTokensAuthorizationCodeGrant('<CODE>', null, function (err, tokenInfo) {
@@ -402,9 +410,9 @@ sdk.getTokensAuthorizationCodeGrant('<CODE>', null, function (err, tokenInfo) {
 });
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK simplifies the process:
+The v10 version of the SDK simplifies the process:
 
 ```typescript
 await oauth.getTokensAuthorizationCodeGrant('code');
@@ -413,9 +421,9 @@ const client = new BoxClient({ auth: oauth });
 
 ### Customizable Token Storage and Retrieval Callbacks
 
-Token management is crucial for maintaining secure sessions. The new SDK offers enhanced flexibility:
+Token management is crucial for maintaining secure sessions. The v10 version of the SDK offers enhanced flexibility:
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 function TokenStore() {
@@ -448,14 +456,14 @@ TokenStore.prototype.clear = function (callback) {
 };
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-The new SDK allows developers to define custom classes for token storage:
+The v10 version of the SDK allows developers to define custom classes for token storage:
 
 ```typescript
-import { BoxOAuth } from 'box-typescript-sdk-gen';
-import { TokenStorage } from 'box-typescript-sdk-gen/box/tokenStorage.generated';
-import { AccessToken } from 'box-typescript-sdk-gen/schemas/accessToken.generated';
+import { BoxOAuth } from 'box-node-sdk';
+import { TokenStorage } from 'box-node-sdk/box/tokenStorage.generated';
+import { AccessToken } from 'box-node-sdk/schemas/accessToken.generated';
 
 class CustomTokenStorage extends TokenStorage {
   async store(token: AccessToken): Promise<undefined> {
@@ -479,9 +487,9 @@ const auth = new BoxOAuth({ config: authConfig });
 
 ### Downscope token
 
-To process of downscoping token in the new SDK is enhanced and more flexible.
+To process of downscoping token in The v10 version of the SDK is enhanced and more flexible.
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 client
@@ -491,7 +499,7 @@ client
   });
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
 ```typescript
 let resource = 'https://api.box.com/2.0/files/123456789';
@@ -502,9 +510,9 @@ const client = new BoxClient({ auth });
 
 ### Revoke token
 
-The difference between the old and new SDK in the process of revoking token is as follows.
+The difference between the v3 version and the v10 version of the SDK in the process of revoking token is as follows.
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 client.revokeTokens('<TOKEN>').then(() => {
@@ -512,7 +520,7 @@ client.revokeTokens('<TOKEN>').then(() => {
 });
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
 ```typescript
 await auth.revokeTokens();
@@ -526,10 +534,10 @@ The As-User header is used by enterprise admins to make API calls on behalf of t
 This requires the API request to pass an `As-User: USER-ID` header. The following examples assume that the client has
 been instantiated with an access token with appropriate privileges to make As-User calls.
 
-In old SDK the client `asUser(userID)` method set up the client to impersonate a given user.
+In the v3 version of the SDK the client `asUser(userID)` method set up the client to impersonate a given user.
 It modified existing client, so that all calls made with its instance were made in context of the impersonated user.
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
 ```typescript
 client.asUser('USER-ID');
@@ -539,9 +547,9 @@ client.folders.getItems('0').then((items) => {
 });
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-In the new SDK the method was renamed to `withAsUserHeader(userId: string): BoxClient`
+In the v10 version of the SDK the method was renamed to `withAsUserHeader(userId: string): BoxClient`
 and returns a new instance of `BoxClient` class with the As-User header appended to all API calls made by the client.
 
 ```typescript
@@ -550,9 +558,9 @@ const userClient = client.withAsUserHeader('1234567');
 
 ### Custom Base URLs
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
-In old SDK you could specify the custom base URLs, which will be used for API calls made by using
+In the v3 version of the SDK you could specify the custom base URLs, which will be used for API calls made by using
 the `configure` method on the SDK instance:
 
 ```typescript
@@ -565,9 +573,9 @@ var additonalParams = {
 sdk.configure(additonalParams);
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-In the new SDK this functionality has been implemented as part of the `BoxClient` class.
+In the v10 version of the SDK this functionality has been implemented as part of the `BoxClient` class.
 By calling the `client.withCustomBaseUrls()` method, you can specify the custom base URLs that will be used for API
 calls made by client. Following the immutability pattern, this call creates a new client, leaving the original client unmodified.
 
@@ -585,9 +593,9 @@ const newClient = client.withCustomBaseUrls({
 
 Webhook validation is used to validate a webhook message by verifying the signature and the delivery timestamp.
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
-In the old SDK, you could pass the `body` as either a `JSON` object or a `string`, and it would return a `boolean` value indicating whether the message was valid.
+In the v3 version of the SDK, you could pass the `body` as either a `JSON` object or a `string`, and it would return a `boolean` value indicating whether the message was valid.
 
 ```typescript
 let isValid = BoxSDK.validateWebhookMessage(
@@ -598,9 +606,9 @@ let isValid = BoxSDK.validateWebhookMessage(
 );
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-In the new SDK, the `WebhooksManager.validateMessage()` method requires the `body` to be of type `string`.
+In the v10 version of the SDK, the `WebhooksManager.validateMessage()` method requires the `body` to be of type `string`.
 So if the body is in `JSON` type, you must convert it to a `string` using `JSON.stringify(body)` before calling `validateMessage()`.
 
 ```typescript
@@ -618,9 +626,9 @@ let isValid = await WebhooksManager.validateMessage(
 For large files or in cases where the network connection is less reliable, you may want to upload the file in parts.
 This allows a single part to fail without aborting the entire upload, and failed parts are being retried automatically.
 
-**Legacy (`Box Node SDK`):**
+**Old (`v3`):**
 
-In the old SDK, you could use the `getChunkedUploader()` method to create a chunked uploader object.
+In the v3 version of the SDK, you could use the `getChunkedUploader()` method to create a chunked uploader object.
 Then, you would call the `start()` method to begin the upload process.
 The `getChunkedUploader()` method requires the `parentFolderId`, `fileSize`, `fileName` and `stream` parameters.
 
@@ -637,14 +645,14 @@ client.files
   });
 ```
 
-**Modern (`Box TypeScript SDK`):**
+**New (`v10`):**
 
-In the new SDK, the equivalent method is `chunked_uploads.uploadBigFile()`. It accepts a `Readable` object
+In the v10 version of the SDK, the equivalent method is `chunked_uploads.uploadBigFile()`. It accepts a `Readable` object
 as the `file` parameter, and the `fileName` and `fileSize` parameters are now passed as arguments.
 The `parentFolderId` parameter is also required to specify the folder where the file will be uploaded.
 
 ```typescript
-import { File } from 'box-typescript-sdk-gen/schemas/file.generated';
+import { File } from 'box-node-sdk/schemas/file.generated';
 
 var fileByteStream = fs.createReadStream('/path/to/file.txt');
 var fileName = 'new_name.txt';
