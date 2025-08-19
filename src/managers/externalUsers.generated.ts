@@ -28,18 +28,18 @@ import { sdIsNumber } from '../serialization/json.js';
 import { sdIsString } from '../serialization/json.js';
 import { sdIsList } from '../serialization/json.js';
 import { sdIsMap } from '../serialization/json.js';
-export class CreateExternalUserSubmitDeleteJobV2025R0Optionals {
-  readonly headers: CreateExternalUserSubmitDeleteJobV2025R0Headers =
-    new CreateExternalUserSubmitDeleteJobV2025R0Headers({});
+export class SubmitJobToDeleteExternalUsersV2025R0Optionals {
+  readonly headers: SubmitJobToDeleteExternalUsersV2025R0Headers =
+    new SubmitJobToDeleteExternalUsersV2025R0Headers({});
   readonly cancellationToken?: CancellationToken = void 0;
   constructor(
     fields: Omit<
-      CreateExternalUserSubmitDeleteJobV2025R0Optionals,
+      SubmitJobToDeleteExternalUsersV2025R0Optionals,
       'headers' | 'cancellationToken'
     > &
       Partial<
         Pick<
-          CreateExternalUserSubmitDeleteJobV2025R0Optionals,
+          SubmitJobToDeleteExternalUsersV2025R0Optionals,
           'headers' | 'cancellationToken'
         >
       >,
@@ -52,11 +52,11 @@ export class CreateExternalUserSubmitDeleteJobV2025R0Optionals {
     }
   }
 }
-export interface CreateExternalUserSubmitDeleteJobV2025R0OptionalsInput {
-  readonly headers?: CreateExternalUserSubmitDeleteJobV2025R0Headers;
+export interface SubmitJobToDeleteExternalUsersV2025R0OptionalsInput {
+  readonly headers?: SubmitJobToDeleteExternalUsersV2025R0Headers;
   readonly cancellationToken?: undefined | CancellationToken;
 }
-export class CreateExternalUserSubmitDeleteJobV2025R0Headers {
+export class SubmitJobToDeleteExternalUsersV2025R0Headers {
   /**
    * Version header. */
   readonly boxVersion: BoxVersionHeaderV2025R0 =
@@ -68,12 +68,12 @@ export class CreateExternalUserSubmitDeleteJobV2025R0Headers {
   } = {};
   constructor(
     fields: Omit<
-      CreateExternalUserSubmitDeleteJobV2025R0Headers,
+      SubmitJobToDeleteExternalUsersV2025R0Headers,
       'boxVersion' | 'extraHeaders'
     > &
       Partial<
         Pick<
-          CreateExternalUserSubmitDeleteJobV2025R0Headers,
+          SubmitJobToDeleteExternalUsersV2025R0Headers,
           'boxVersion' | 'extraHeaders'
         >
       >,
@@ -86,7 +86,7 @@ export class CreateExternalUserSubmitDeleteJobV2025R0Headers {
     }
   }
 }
-export interface CreateExternalUserSubmitDeleteJobV2025R0HeadersInput {
+export interface SubmitJobToDeleteExternalUsersV2025R0HeadersInput {
   /**
    * Version header. */
   readonly boxVersion?: BoxVersionHeaderV2025R0;
@@ -104,7 +104,7 @@ export class ExternalUsersManager {
   constructor(
     fields: Omit<
       ExternalUsersManager,
-      'networkSession' | 'createExternalUserSubmitDeleteJobV2025R0'
+      'networkSession' | 'submitJobToDeleteExternalUsersV2025R0'
     > &
       Partial<Pick<ExternalUsersManager, 'networkSession'>>,
   ) {
@@ -118,16 +118,16 @@ export class ExternalUsersManager {
   /**
    * Delete external users from current user enterprise. This will remove each
    * external user from all invited collaborations within the current enterprise.
-   * @param {ExternalUsersSubmitDeleteJobRequestV2025R0} requestBody Request body of createExternalUserSubmitDeleteJobV2025R0 method
-   * @param {CreateExternalUserSubmitDeleteJobV2025R0OptionalsInput} optionalsInput
+   * @param {ExternalUsersSubmitDeleteJobRequestV2025R0} requestBody Request body of submitJobToDeleteExternalUsersV2025R0 method
+   * @param {SubmitJobToDeleteExternalUsersV2025R0OptionalsInput} optionalsInput
    * @returns {Promise<ExternalUsersSubmitDeleteJobResponseV2025R0>}
    */
-  async createExternalUserSubmitDeleteJobV2025R0(
+  async submitJobToDeleteExternalUsersV2025R0(
     requestBody: ExternalUsersSubmitDeleteJobRequestV2025R0,
-    optionalsInput: CreateExternalUserSubmitDeleteJobV2025R0OptionalsInput = {},
+    optionalsInput: SubmitJobToDeleteExternalUsersV2025R0OptionalsInput = {},
   ): Promise<ExternalUsersSubmitDeleteJobResponseV2025R0> {
-    const optionals: CreateExternalUserSubmitDeleteJobV2025R0Optionals =
-      new CreateExternalUserSubmitDeleteJobV2025R0Optionals({
+    const optionals: SubmitJobToDeleteExternalUsersV2025R0Optionals =
+      new SubmitJobToDeleteExternalUsersV2025R0Optionals({
         headers: optionalsInput.headers,
         cancellationToken: optionalsInput.cancellationToken,
       });
