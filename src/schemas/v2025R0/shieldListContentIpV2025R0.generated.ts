@@ -13,7 +13,7 @@ export class ShieldListContentIpV2025R0 {
   readonly type: ShieldListContentIpV2025R0TypeField =
     'ip' as ShieldListContentIpV2025R0TypeField;
   /**
-   * List of ips and cidrs. */
+   * List of ip addresses and CIDRs. */
   readonly ipAddresses!: readonly string[];
   readonly rawData?: SerializedData;
   constructor(
@@ -36,7 +36,7 @@ export interface ShieldListContentIpV2025R0Input {
    * The type of content in the shield list. */
   readonly type?: ShieldListContentIpV2025R0TypeField;
   /**
-   * List of ips and cidrs. */
+   * List of ip addresses and CIDRs. */
   readonly ipAddresses: readonly string[];
   readonly rawData?: SerializedData;
 }
