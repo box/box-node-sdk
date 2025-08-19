@@ -1,7 +1,7 @@
-import { SerializedData } from '../serialization/json.js';
-import { GeneratedCodeError } from '../internal/errors.js';
-import { utilLib } from '../internal/utils.js';
-import { DataSanitizer } from '../internal/logging.generated';
+import { SerializedData } from '../serialization/json';
+import { GeneratedCodeError } from '../internal/errors';
+import { utilLib } from '../internal/utils';
+import { DataSanitizer } from '../internal/logging';
 
 export class BoxSdkError extends GeneratedCodeError {
   readonly timestamp?: string;

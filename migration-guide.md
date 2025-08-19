@@ -462,8 +462,8 @@ The v10 version of the SDK allows developers to define custom classes for token 
 
 ```typescript
 import { BoxOAuth } from 'box-node-sdk';
-import { TokenStorage } from 'box-node-sdk/box/tokenStorage.generated';
-import { AccessToken } from 'box-node-sdk/schemas/accessToken.generated';
+import { TokenStorage } from 'box-node-sdk/box/tokenStorage';
+import { AccessToken } from 'box-node-sdk/schemas/accessToken';
 
 class CustomTokenStorage extends TokenStorage {
   async store(token: AccessToken): Promise<undefined> {
@@ -652,7 +652,7 @@ as the `file` parameter, and the `fileName` and `fileSize` parameters are now pa
 The `parentFolderId` parameter is also required to specify the folder where the file will be uploaded.
 
 ```typescript
-import { File } from 'box-node-sdk/schemas/file.generated';
+import { File } from 'box-node-sdk/schemas/file';
 
 var fileByteStream = fs.createReadStream('/path/to/file.txt');
 var fileName = 'new_name.txt';

@@ -2,5 +2,5 @@ export type {
   FetchOptions,
   MultipartItem,
   ResponseFormat,
-} from './fetchOptions.generated';
-export type { FetchResponse } from './fetchResponse.generated';
+} from './fetchOptions';
+export type { FetchResponse } from './fetchResponse';
