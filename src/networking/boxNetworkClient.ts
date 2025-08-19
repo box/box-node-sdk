@@ -12,7 +12,7 @@ import {
   multipartBufferToStream,
 } from '../internal/utils';
 import { sdkVersion } from './version';
-import { NetworkClient } from './networkClient.generated';
+import { NetworkClient } from './networkClient';
 import {
   SerializedData,
   jsonToSerializedData,
@@ -20,12 +20,12 @@ import {
   sdToJson,
   sdToUrlParams,
 } from '../serialization/json';
-import { Interceptor } from './interceptors.generated';
-import { FetchOptions } from './fetchOptions.generated';
-import { FetchResponse } from './fetchResponse.generated';
-import { RetryStrategy } from './retries.generated.js';
-import { BoxRetryStrategy } from './retries.generated.js';
-import { DataSanitizer } from '../internal/logging.generated.js';
+import { Interceptor } from './interceptors';
+import { FetchOptions } from './fetchOptions';
+import { FetchResponse } from './fetchResponse';
+import { RetryStrategy } from './retries';
+import { BoxRetryStrategy } from './retries';
+import { DataSanitizer } from '../internal/logging';
 
 export const userAgentHeader = `Box JavaScript generated SDK v${sdkVersion} (${
   isBrowser() ? navigator.userAgent : `Node ${process.version}`

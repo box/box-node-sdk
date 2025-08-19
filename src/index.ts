@@ -1,2 +1,2 @@
 export * from './box';
-export { BoxClient } from './client.generated';
+export { BoxClient } from './client';
