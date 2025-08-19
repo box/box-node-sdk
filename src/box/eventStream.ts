@@ -3,8 +3,8 @@ import {
   EventsManager,
   GetEventsHeadersInput,
   GetEventsQueryParams,
-} from '../managers/events.generated';
-import { RealtimeServer } from '../schemas/realtimeServer.generated';
+} from '../managers/events';
+import { RealtimeServer } from '../schemas/realtimeServer';
 import { ByteStream } from '../internal/utilsNode';
 
 enum RealtimeServerEventValue {
