@@ -77,7 +77,7 @@ export default {
   output: {
     file: 'lib/bundle.js',
     format: 'umd',
-    name: 'box-typescript-sdk-gen',
+    name: 'box-node-sdk',
     sourcemap: true,
     exports: 'named',
   },
