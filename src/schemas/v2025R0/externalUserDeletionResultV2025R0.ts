@@ -14,7 +14,7 @@ export interface ExternalUserDeletionResultV2025R0 {
    * HTTP status code for a specific user's deletion request. */
   readonly status: number;
   /**
-   * Deletion request status details. */
+   * Deletion request status details. This property is only present when the deletion request is not successful. */
   readonly detail?: string;
   readonly rawData?: SerializedData;
 }
