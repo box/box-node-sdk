@@ -3,14 +3,14 @@ import fs from 'fs';
 
 const testDir = path.resolve(
   process.cwd(),
-  'node_modules/box-typescript-sdk-gen/lib-esm/test',
+  'node_modules/box-node-sdk/lib-esm/test',
 );
 const files = fs.readdirSync(testDir);
 
 const importStatements = files
   .filter((file) => file.endsWith('.test.js'))
   .map((file) => file.replace('.js', ''))
-  .map((file) => `import('box-typescript-sdk-gen/test/${file}');`)
+  .map((file) => `import('box-node-sdk/test/${file}');`)
   .join('\n');
 
 const outputPath = path.resolve(process.cwd(), 'src/utils/importTests.ts');

@@ -42,8 +42,8 @@ object with the `token` set to the developer token and construct the client with
 <!-- sample x_auth init_with_dev_token -->
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxDeveloperTokenAuth } from 'box-typescript-sdk-gen/box/developerTokenAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxDeveloperTokenAuth } from 'box-node-sdk/box';
 
 const auth = new BoxDeveloperTokenAuth({ token: 'DEVELOPER_TOKEN_GOES_HERE' });
 const client = new BoxClient({ auth });
@@ -76,8 +76,8 @@ Service Account. Call one of static `BoxJwtAuth` method:
 or `JwtConfig.fromConfigJsonString(configJsonString)` and pass JSON config file content as string.
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxJwtAuth, JwtConfig } from 'box-typescript-sdk-gen/box/jwtAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxJwtAuth, JwtConfig } from 'box-node-sdk/box';
 
 const jwtConfig = JwtConfig.fromConfigFile('/path/to/settings.json');
 const jwtAuth = new BoxJwtAuth({ config: jwtConfig });
@@ -90,8 +90,8 @@ console.log(`My user ID is ${me.id}`);
 Otherwise, you'll need to provide the necessary configuration fields directly to the `JwtConfig` constructor:
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxJwtAuth, JwtConfig } from 'box-typescript-sdk-gen/box/jwtAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxJwtAuth, JwtConfig } from 'box-node-sdk/box';
 
 const jwtConfig = new JwtConfig({
   clientId: 'YOUR_CLIENT_ID',
@@ -119,8 +119,8 @@ Clients for making calls as an App User can be created with the same JSON JWT co
 which is authenticated as the user with provided id, leaving the original object unchanged.
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxJwtAuth, JwtConfig } from 'box-typescript-sdk-gen/box/jwtAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxJwtAuth, JwtConfig } from 'box-node-sdk/box';
 
 const jwtConfig = JwtConfig.fromConfigFile('/path/to/settings.json');
 const jwtAuth = new BoxJwtAuth({ config: jwtConfig });
@@ -133,8 +133,8 @@ constructor as in the above examples, similarly to creating a Service Account cl
 `userId` instead of `enterpriseId` when constructing the auth config instance:
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxJwtAuth, JwtConfig } from 'box-typescript-sdk-gen/box/jwtAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxJwtAuth, JwtConfig } from 'box-node-sdk/box';
 
 const jwtConfig = new JwtConfig({
   clientId: 'YOUR_CLIENT_ID',
@@ -163,8 +163,8 @@ and secret with enterprise or user ID, which allows you to work using service or
 You can use `CCGAuth` to initialize a client object the same way as for other authentication types:
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxCcgAuth, CcgConfig } from 'box-typescript-sdk-gen/box/ccgAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxCcgAuth, CcgConfig } from 'box-node-sdk/box';
 
 const ccgConfig = new CcgConfig({
   userId: 'YOUR_USER_ID',
@@ -189,8 +189,8 @@ are not accessible in any other account by default, and vice versa.
 To obtain service account you will have to provide enterprise ID with client id and secret:
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxCcgAuth, CcgConfig } from 'box-typescript-sdk-gen/box/ccgAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxCcgAuth, CcgConfig } from 'box-node-sdk/box';
 
 const ccgConfig = new CcgConfig({
   enterpriseId: 'YOUR_ENTERPRISE_ID',
@@ -210,8 +210,8 @@ select `Generate user access tokens`. Do not forget to re-authorize application 
 To obtain user account you will have to provide user ID with client id and secret.
 
 ```js
-import { BoxClient } from 'box-typescript-sdk-gen/client';
-import { BoxCcgAuth, CcgConfig } from 'box-typescript-sdk-gen/box/ccgAuth';
+import { BoxClient } from 'box-node-sdk';
+import { BoxCcgAuth, CcgConfig } from 'box-node-sdk/box';
 
 const ccgConfig = new CcgConfig({
   userId: 'YOUR_USER_ID',
@@ -261,7 +261,7 @@ browser or web view) in order to obtain an auth code.
 <!-- sample get_authorize -->
 
 ```js
-import { BoxOAuth, OAuthConfig } from 'box-typescript-sdk-gen/box/oauth';
+import { BoxOAuth, OAuthConfig } from 'box-node-sdk/box';
 
 const config = new OAuthConfig({
   clientId: 'OAUTH_CLIENT_ID',
