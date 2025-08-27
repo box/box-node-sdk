@@ -2,7 +2,7 @@
 
 import styles from './page.module.css';
 import { useEffect, useState } from 'react';
-import { setEnvVar } from 'box-typescript-sdk-gen/internal/utils';
+import { setEnvVar } from 'box-node-sdk/internal';
 import { setupExpect } from '@/utils/expect';
 import { TestResult, createTestRegistry } from '@/utils/testRegistry';
 import { testConfig } from '@/../sdkTest.config.mjs';

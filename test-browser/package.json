@@ -1,5 +1,5 @@
 {
-  "name": "box-typescript-sdk-gen-browser-test",
+  "name": "box-node-sdk-browser-test",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "cypress:run:firefox": "start-server-and-test build-run 3000 'cypress run --browser firefox'"
   },
   "dependencies": {
-    "box-typescript-sdk-gen": "file:../",
+    "box-node-sdk": "file:../",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

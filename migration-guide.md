@@ -3,34 +3,35 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Highlighting the Key Differences](#highlighting-the-key-differences)
-  - [Native support for async-await and Promises](#native-support-for-async-await-and-promises)
-  - [Embracing Explicitly Defined Schemas](#embracing-explicitly-defined-schemas)
-  - [Immutable design](#immutable-design)
-- [Diving into Authentication](#diving-into-authentication)
-  - [Developer Token](#developer-token)
-  - [JWT Authentication](#jwt-authentication)
-    - [Leveraging the JWT Configuration File](#leveraging-the-jwt-configuration-file)
-    - [Manually Providing JWT Configuration](#manually-providing-jwt-configuration)
-    - [User Authentication Simplified](#user-authentication-simplified)
-  - [Client Credentials Grant](#client-credentials-grant)
-    - [Service Account Token Acquisition](#service-account-token-acquisition)
-    - [User Token Acquisition](#user-token-acquisition)
-  - [Smooth Switching between Service Account and User](#smooth-switching-between-service-account-and-user)
-  - [OAuth 2.0 Authentication](#oauth-20-authentication)
-    - [Fetching the Authorization URL](#fetching-the-authorization-url)
-    - [Seamless Authentication](#seamless-authentication)
-  - [Customizable Token Storage and Retrieval Callbacks](#customizable-token-storage-and-retrieval-callbacks)
-  - [Downscope token](#downscope-token)
-  - [Revoke token](#revoke-token)
-- [Configuration](#configuration)
-  - [As-User header](#as-user-header)
-  - [Custom Base URLs](#custom-base-urls)
-- [Convenience methods](#convenience-methods)
-  - [Webhook validation](#webhook-validation)
-  - [Chunked upload of big files](#chunked-upload-of-big-files)
+- [Migration guide from v3 to v10 version of `box-node-sdk`](#migration-guide-from-v3-to-v10-version-of-box-node-sdk)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [Highlighting the Key Differences](#highlighting-the-key-differences)
+    - [Native support for async-await and Promises](#native-support-for-async-await-and-promises)
+    - [Embracing Explicitly Defined Schemas](#embracing-explicitly-defined-schemas)
+    - [Immutable design](#immutable-design)
+  - [Diving into Authentication](#diving-into-authentication)
+    - [Developer Token](#developer-token)
+    - [JWT Authentication](#jwt-authentication)
+      - [Leveraging the JWT Configuration File](#leveraging-the-jwt-configuration-file)
+      - [Manually Providing JWT Configuration](#manually-providing-jwt-configuration)
+      - [User Authentication Simplified](#user-authentication-simplified)
+    - [Client Credentials Grant](#client-credentials-grant)
+      - [Service Account Token Acquisition](#service-account-token-acquisition)
+      - [User Token Acquisition](#user-token-acquisition)
+    - [Smooth Switching between Service Account and User](#smooth-switching-between-service-account-and-user)
+    - [OAuth 2.0 Authentication](#oauth-20-authentication)
+      - [Fetching the Authorization URL](#fetching-the-authorization-url)
+      - [Seamless Authentication](#seamless-authentication)
+    - [Customizable Token Storage and Retrieval Callbacks](#customizable-token-storage-and-retrieval-callbacks)
+    - [Downscope token](#downscope-token)
+    - [Revoke token](#revoke-token)
+  - [Configuration](#configuration)
+    - [As-User header](#as-user-header)
+    - [Custom Base URLs](#custom-base-urls)
+  - [Convenience methods](#convenience-methods)
+    - [Webhook validation](#webhook-validation)
+    - [Chunked upload of big files](#chunked-upload-of-big-files)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -462,8 +463,8 @@ The v10 version of the SDK allows developers to define custom classes for token 
 
 ```typescript
 import { BoxOAuth } from 'box-node-sdk';
-import { TokenStorage } from 'box-node-sdk/box/tokenStorage';
-import { AccessToken } from 'box-node-sdk/schemas/accessToken';
+import { TokenStorage } from 'box-node-sdk/box';
+import { AccessToken } from 'box-node-sdk/schemas';
 
 class CustomTokenStorage extends TokenStorage {
   async store(token: AccessToken): Promise<undefined> {
