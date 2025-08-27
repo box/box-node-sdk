@@ -40,14 +40,6 @@ export const shouldIncludeBoxUaHeader = (options: FetchOptions) => {
   );
 };
 
-export interface MultipartItem {
-  readonly partName: string;
-  readonly data?: SerializedData;
-  readonly fileStream?: ByteStream;
-  readonly fileName?: string;
-  readonly contentType?: string;
-}
-
 type FetchOptionsExtended = FetchOptions & {
   attemptNumber?: number;
   numberOfRetriesOnException?: number;
