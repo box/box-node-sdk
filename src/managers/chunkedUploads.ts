@@ -1598,7 +1598,7 @@ export class ChunkedUploadsManager {
    * @param {ByteStream} chunk
    * @returns {Promise<PartAccumulator>}
    */
-  private async reducer(
+  async reducer(
     acc: PartAccumulator,
     chunk: ByteStream,
   ): Promise<PartAccumulator> {

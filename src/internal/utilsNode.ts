@@ -14,20 +14,20 @@ export type HashName = 'sha1';
 export type DigestHashType = 'base64';
 
 export class Hash {
-  #hash: any;
+  hash: any;
   algorithm: HashName;
 
   constructor({ algorithm }: { algorithm: HashName }) {
     this.algorithm = algorithm;
-    this.#hash = crypto.createHash(algorithm);
+    this.hash = crypto.createHash(algorithm);
   }
 
   async updateHash(data: Buffer) {
-    this.#hash.update(data);
+    this.hash.update(data);
   }
 
   async digestHash(encoding: DigestHashType = 'base64'): Promise<string> {
-    return this.#hash.digest(encoding);
+    return this.hash.digest(encoding);
   }
 }
 
