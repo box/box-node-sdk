@@ -16,19 +16,19 @@ export class utilLib {
 }
 
 export class Hash {
-  #hash: any;
+  hash: any;
   algorithm: HashName;
 
   constructor({ algorithm }: { algorithm: HashName }) {
     this.algorithm = algorithm;
-    this.#hash = undefined;
+    this.hash = undefined;
   }
 
   async initializeBrowserHash() {
     switch (this.algorithm) {
       case 'sha1':
-        this.#hash = await createSHA1();
-        this.#hash.init();
+        this.hash = await createSHA1();
+        this.hash.init();
         break;
       default:
         throw new Error(`Unsupported algorithm: ${this.algorithm}`);
@@ -36,17 +36,17 @@ export class Hash {
   }
 
   async updateHash(data: Buffer) {
-    if (!this.#hash) {
+    if (!this.hash) {
       await this.initializeBrowserHash();
     }
-    this.#hash.update(data);
+    this.hash.update(data);
   }
 
   async digestHash(encoding: DigestHashType = 'base64'): Promise<string> {
-    if (!this.#hash) {
+    if (!this.hash) {
       await this.initializeBrowserHash();
     }
-    const d = this.#hash.digest('binary');
+    const d = this.hash.digest('binary');
     switch (encoding) {
       case 'base64':
         return Buffer.from(d).toString('base64');

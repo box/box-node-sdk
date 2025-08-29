@@ -2,7 +2,7 @@ import { SerializedData } from '../serialization/json.js';
 import { sanitizeMap } from './utils.js';
 import { sanitizeSerializedData } from '../serialization/json.js';
 export class DataSanitizer {
-  private readonly keysToSanitize: {
+  readonly keysToSanitize: {
     readonly [key: string]: string;
   } = {
     ['authorization']: '',
