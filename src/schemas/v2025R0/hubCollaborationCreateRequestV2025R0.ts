@@ -60,13 +60,13 @@ export interface HubCollaborationCreateRequestV2025R0AccessibleByField {
 }
 export interface HubCollaborationCreateRequestV2025R0 {
   /**
-   * Hubs reference. */
+   * Box Hubs reference. */
   readonly hub: HubCollaborationCreateRequestV2025R0HubField;
   /**
    * The user or group who gets access to the item. */
   readonly accessibleBy: HubCollaborationCreateRequestV2025R0AccessibleByField;
   /**
-   * The level of access granted to hub.
+   * The level of access granted to a Box Hub.
    * Possible values are `editor`, `viewer`, and `co-owner`. */
   readonly role: string;
   readonly rawData?: SerializedData;

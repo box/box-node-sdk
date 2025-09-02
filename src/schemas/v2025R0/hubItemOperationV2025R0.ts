@@ -21,7 +21,7 @@ import { sdIsMap } from '../../serialization/json.js';
 export type HubItemOperationV2025R0ActionField = 'add' | 'remove' | string;
 export interface HubItemOperationV2025R0 {
   /**
-   * The action to perform on a Hub item. */
+   * The action to perform on a Box Hub item. */
   readonly action: HubItemOperationV2025R0ActionField;
   readonly item: HubItemReferenceV2025R0;
   readonly rawData?: SerializedData;

@@ -8,7 +8,7 @@ import { sdIsList } from '../../serialization/json.js';
 import { sdIsMap } from '../../serialization/json.js';
 export interface HubCollaborationUpdateRequestV2025R0 {
   /**
-   * The level of access granted to hub.
+   * The level of access granted to a Box Hub.
    * Possible values are `editor`, `viewer`, and `co-owner`. */
   readonly role?: string;
   readonly rawData?: SerializedData;

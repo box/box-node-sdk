@@ -9,10 +9,10 @@ import { sdIsMap } from '../../serialization/json.js';
 export type HubBaseV2025R0TypeField = 'hubs';
 export class HubBaseV2025R0 {
   /**
-   * The unique identifier that represent a hub.
+   * The unique identifier that represent a Box Hub.
    *
-   * The ID for any hub can be determined
-   * by visiting a hub in the web application
+   * The ID for any Box Hub can be determined
+   * by visiting a Box Hub in the web application
    * and copying the ID from the URL. For example,
    * for the URL `https://*.app.box.com/hubs/123`
    * the `hub_id` is `123`. */
@@ -38,10 +38,10 @@ export class HubBaseV2025R0 {
 }
 export interface HubBaseV2025R0Input {
   /**
-   * The unique identifier that represent a hub.
+   * The unique identifier that represent a Box Hub.
    *
-   * The ID for any hub can be determined
-   * by visiting a hub in the web application
+   * The ID for any Box Hub can be determined
+   * by visiting a Box Hub in the web application
    * and copying the ID from the URL. For example,
    * for the URL `https://*.app.box.com/hubs/123`
    * the `hub_id` is `123`. */

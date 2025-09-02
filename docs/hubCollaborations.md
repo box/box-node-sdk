@@ -1,14 +1,14 @@
 # HubCollaborationsManager
 
-- [Get hub collaborations](#get-hub-collaborations)
-- [Create hub collaboration](#create-hub-collaboration)
-- [Get hub collaboration by collaboration ID](#get-hub-collaboration-by-collaboration-id)
-- [Update hub collaboration](#update-hub-collaboration)
-- [Remove hub collaboration](#remove-hub-collaboration)
+- [Get Box Hub collaborations](#get-box-hub-collaborations)
+- [Create Box Hub collaboration](#create-box-hub-collaboration)
+- [Get Box Hub collaboration by collaboration ID](#get-box-hub-collaboration-by-collaboration-id)
+- [Update Box Hub collaboration](#update-box-hub-collaboration)
+- [Remove Box Hub collaboration](#remove-box-hub-collaboration)
 
-## Get hub collaborations
+## Get Box Hub collaborations
 
-Retrieves all collaborations for a hub.
+Retrieves all collaborations for a Box Hub.
 
 This operation is performed by calling function `getHubCollaborationsV2025R0`.
 
@@ -33,11 +33,11 @@ await client.hubCollaborations.getHubCollaborationsV2025R0({
 
 This function returns a value of type `HubCollaborationsV2025R0`.
 
-Retrieves the collaborations associated with the specified hub.
+Retrieves the collaborations associated with the specified Box Hub.
 
-## Create hub collaboration
+## Create Box Hub collaboration
 
-Adds a collaboration for a single user or a single group to a hub.
+Adds a collaboration for a single user or a single group to a Box Hub.
 
 Collaborations can be created using email address, user IDs, or group IDs.
 
@@ -69,11 +69,11 @@ await client.hubCollaborations.createHubCollaborationV2025R0({
 
 This function returns a value of type `HubCollaborationV2025R0`.
 
-Returns a new hub collaboration object.
+Returns a new Box Hub collaboration object.
 
-## Get hub collaboration by collaboration ID
+## Get Box Hub collaboration by collaboration ID
 
-Retrieves details for a hub collaboration by collaboration ID.
+Retrieves details for a Box Hub collaboration by collaboration ID.
 
 This operation is performed by calling function `getHubCollaborationByIdV2025R0`.
 
@@ -98,12 +98,12 @@ await client.hubCollaborations.getHubCollaborationByIdV2025R0(
 
 This function returns a value of type `HubCollaborationV2025R0`.
 
-Returns a hub collaboration object.
+Returns a Box Hub collaboration object.
 
-## Update hub collaboration
+## Update Box Hub collaboration
 
-Updates a hub collaboration.
-Can be used to change the hub role.
+Updates a Box Hub collaboration.
+Can be used to change the Box Hub role.
 
 This operation is performed by calling function `updateHubCollaborationByIdV2025R0`.
 
@@ -131,11 +131,11 @@ await client.hubCollaborations.updateHubCollaborationByIdV2025R0(
 
 This function returns a value of type `HubCollaborationV2025R0`.
 
-Returns an updated hub collaboration object.
+Returns an updated Box Hub collaboration object.
 
-## Remove hub collaboration
+## Remove Box Hub collaboration
 
-Deletes a single hub collaboration.
+Deletes a single Box Hub collaboration.
 
 This operation is performed by calling function `deleteHubCollaborationByIdV2025R0`.
 
@@ -160,5 +160,5 @@ await client.hubCollaborations.deleteHubCollaborationByIdV2025R0(
 
 This function returns a value of type `undefined`.
 
-A blank response is returned if the hub collaboration was
+A blank response is returned if the Box Hub collaboration was
 successfully deleted.

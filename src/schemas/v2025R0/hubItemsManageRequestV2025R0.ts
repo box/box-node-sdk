@@ -11,7 +11,7 @@ import { sdIsList } from '../../serialization/json.js';
 import { sdIsMap } from '../../serialization/json.js';
 export interface HubItemsManageRequestV2025R0 {
   /**
-   * List of operations to perform on Hub items. */
+   * List of operations to perform on Box Hub items. */
   readonly operations?: readonly HubItemOperationV2025R0[];
   readonly rawData?: SerializedData;
 }

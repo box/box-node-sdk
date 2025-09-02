@@ -424,7 +424,7 @@ export class HubCollaborationsManager {
     }
   }
   /**
-   * Retrieves all collaborations for a hub.
+   * Retrieves all collaborations for a Box Hub.
    * @param {GetHubCollaborationsV2025R0QueryParams} queryParams Query parameters of getHubCollaborationsV2025R0 method
    * @param {GetHubCollaborationsV2025R0OptionalsInput} optionalsInput
    * @returns {Promise<HubCollaborationsV2025R0>}
@@ -475,7 +475,7 @@ export class HubCollaborationsManager {
     };
   }
   /**
-   * Adds a collaboration for a single user or a single group to a hub.
+   * Adds a collaboration for a single user or a single group to a Box Hub.
    *
    * Collaborations can be created using email address, user IDs, or group IDs.
    * @param {HubCollaborationCreateRequestV2025R0} requestBody Request body of createHubCollaborationV2025R0 method
@@ -522,7 +522,7 @@ export class HubCollaborationsManager {
     };
   }
   /**
-     * Retrieves details for a hub collaboration by collaboration ID.
+     * Retrieves details for a Box Hub collaboration by collaboration ID.
      * @param {string} hubCollaborationId The ID of the hub collaboration.
     Example: "1234"
      * @param {GetHubCollaborationByIdV2025R0OptionalsInput} optionalsInput
@@ -567,8 +567,8 @@ export class HubCollaborationsManager {
     };
   }
   /**
-     * Updates a hub collaboration.
-     * Can be used to change the hub role.
+     * Updates a Box Hub collaboration.
+     * Can be used to change the Box Hub role.
      * @param {string} hubCollaborationId The ID of the hub collaboration.
     Example: "1234"
      * @param {HubCollaborationUpdateRequestV2025R0} requestBody Request body of updateHubCollaborationByIdV2025R0 method
@@ -617,7 +617,7 @@ export class HubCollaborationsManager {
     };
   }
   /**
-     * Deletes a single hub collaboration.
+     * Deletes a single Box Hub collaboration.
      * @param {string} hubCollaborationId The ID of the hub collaboration.
     Example: "1234"
      * @param {DeleteHubCollaborationByIdV2025R0OptionalsInput} optionalsInput
