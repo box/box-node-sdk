@@ -2,10 +2,10 @@ import { serializeEvents } from '../schemas/events.js';
 import { deserializeEvents } from '../schemas/events.js';
 import { serializeEvent } from '../schemas/event.js';
 import { deserializeEvent } from '../schemas/event.js';
-import { serializeGetEventStreamQueryParamsStreamTypeField } from '../managers/events.js';
-import { deserializeGetEventStreamQueryParamsStreamTypeField } from '../managers/events.js';
-import { serializeGetEventStreamQueryParamsEventTypeField } from '../managers/events.js';
-import { deserializeGetEventStreamQueryParamsEventTypeField } from '../managers/events.js';
+import { serializeGetEventsQueryParamsStreamTypeField } from '../managers/events.js';
+import { deserializeGetEventsQueryParamsStreamTypeField } from '../managers/events.js';
+import { serializeGetEventsQueryParamsEventTypeField } from '../managers/events.js';
+import { deserializeGetEventsQueryParamsEventTypeField } from '../managers/events.js';
 import { serializeRealtimeServers } from '../schemas/realtimeServers.js';
 import { deserializeRealtimeServers } from '../schemas/realtimeServers.js';
 import { serializeRealtimeServer } from '../schemas/realtimeServer.js';
@@ -24,8 +24,8 @@ import { BoxClient } from '../client.js';
 import { Events } from '../schemas/events.js';
 import { Event } from '../schemas/event.js';
 import { GetEventsQueryParams } from '../managers/events.js';
-import { GetEventStreamQueryParamsStreamTypeField } from '../managers/events.js';
-import { GetEventStreamQueryParamsEventTypeField } from '../managers/events.js';
+import { GetEventsQueryParamsStreamTypeField } from '../managers/events.js';
+import { GetEventsQueryParamsEventTypeField } from '../managers/events.js';
 import { RealtimeServers } from '../schemas/realtimeServers.js';
 import { RealtimeServer } from '../schemas/realtimeServer.js';
 import { DateTime } from '../internal/utils.js';
@@ -63,8 +63,8 @@ test('testEvents', async function testEvents(): Promise<any> {
 });
 test('testEventUpload', async function testEventUpload(): Promise<any> {
   const events: Events = await client.events.getEvents({
-    streamType: 'admin_logs' as GetEventStreamQueryParamsStreamTypeField,
-    eventType: ['UPLOAD' as GetEventStreamQueryParamsEventTypeField],
+    streamType: 'admin_logs' as GetEventsQueryParamsStreamTypeField,
+    eventType: ['UPLOAD' as GetEventsQueryParamsEventTypeField],
   } satisfies GetEventsQueryParams);
   if (!(events.entries!.length > 0)) {
     throw new Error('Assertion failed');
@@ -91,8 +91,8 @@ test('testEventUpload', async function testEventUpload(): Promise<any> {
 });
 test('testEventDeleteUser', async function testEventDeleteUser(): Promise<any> {
   const events: Events = await client.events.getEvents({
-    streamType: 'admin_logs' as GetEventStreamQueryParamsStreamTypeField,
-    eventType: ['DELETE_USER' as GetEventStreamQueryParamsEventTypeField],
+    streamType: 'admin_logs' as GetEventsQueryParamsStreamTypeField,
+    eventType: ['DELETE_USER' as GetEventsQueryParamsEventTypeField],
   } satisfies GetEventsQueryParams);
   if (!(events.entries!.length > 0)) {
     throw new Error('Assertion failed');
@@ -111,7 +111,7 @@ test('testEventDeleteUser', async function testEventDeleteUser(): Promise<any> {
 });
 test('testEventSourceFileOrFolder', async function testEventSourceFileOrFolder(): Promise<any> {
   const events: Events = await client.events.getEvents({
-    streamType: 'changes' as GetEventStreamQueryParamsStreamTypeField,
+    streamType: 'changes' as GetEventsQueryParamsStreamTypeField,
   } satisfies GetEventsQueryParams);
   if (!(events.entries!.length > 0)) {
     throw new Error('Assertion failed');
@@ -142,7 +142,7 @@ test('testGetEventsWithDateFilters', async function testGetEventsWithDateFilters
     currentEpochTimeInSeconds,
   );
   const servers: Events = await client.events.getEvents({
-    streamType: 'admin_logs' as GetEventStreamQueryParamsStreamTypeField,
+    streamType: 'admin_logs' as GetEventsQueryParamsStreamTypeField,
     limit: 1,
     createdAfter: createdAfterDate,
     createdBefore: createdBeforeDate,

@@ -149,10 +149,10 @@ export interface CopyHubV2025R0OptionalsInput {
 export type GetHubsV2025R0QueryParamsDirectionField = 'ASC' | 'DESC' | string;
 export interface GetHubsV2025R0QueryParams {
   /**
-   * The query string to search for hubs. */
+   * The query string to search for Box Hubs. */
   readonly query?: string;
   /**
-   * The scope of the hubs to retrieve. Possible values include `editable`,
+   * The scope of the Box Hubs to retrieve. Possible values include `editable`,
    * `view_only`, and `all`. Default is `all`. */
   readonly scope?: string;
   /**
@@ -247,7 +247,7 @@ export type GetEnterpriseHubsV2025R0QueryParamsDirectionField =
   | string;
 export interface GetEnterpriseHubsV2025R0QueryParams {
   /**
-   * The query string to search for hubs. */
+   * The query string to search for Box Hubs. */
   readonly query?: string;
   /**
    * The field to sort results by.
@@ -467,7 +467,7 @@ export class HubsManager {
     }
   }
   /**
-   * Retrieves all hubs for requesting user.
+   * Retrieves all Box Hubs for requesting user.
    * @param {GetHubsV2025R0QueryParams} queryParams Query parameters of getHubsV2025R0 method
    * @param {GetHubsV2025R0HeadersInput} headersInput Headers of getHubsV2025R0 method
    * @param {CancellationToken} cancellationToken Token used for request cancellation.
@@ -520,7 +520,7 @@ export class HubsManager {
     };
   }
   /**
-   * Creates a new Hub.
+   * Creates a new Box Hub.
    * @param {HubCreateRequestV2025R0} requestBody Request body of createHubV2025R0 method
    * @param {CreateHubV2025R0OptionalsInput} optionalsInput
    * @returns {Promise<HubV2025R0>}
@@ -564,7 +564,7 @@ export class HubsManager {
     };
   }
   /**
-   * Retrieves all hubs for a given enterprise.
+   * Retrieves all Box Hubs for a given enterprise.
    *
    * Admins or Hub Co-admins of an enterprise
    * with GCM scope can make this call.
@@ -622,7 +622,7 @@ export class HubsManager {
     };
   }
   /**
-     * Retrieves details for a hub by its ID.
+     * Retrieves details for a Box Hub by its ID.
      * @param {string} hubId The unique identifier that represent a hub.
     
     The ID for any hub can be determined
@@ -673,7 +673,7 @@ export class HubsManager {
     };
   }
   /**
-     * Updates a Hub. Can be used to change title, description, or Hub settings.
+     * Updates a Box Hub. Can be used to change title, description, or Box Hub settings.
      * @param {string} hubId The unique identifier that represent a hub.
     
     The ID for any hub can be determined
@@ -728,7 +728,7 @@ export class HubsManager {
     };
   }
   /**
-     * Deletes a single hub.
+     * Deletes a single Box Hub.
      * @param {string} hubId The unique identifier that represent a hub.
     
     The ID for any hub can be determined
@@ -776,9 +776,9 @@ export class HubsManager {
     return void 0;
   }
   /**
-     * Creates a copy of a Hub.
+     * Creates a copy of a Box Hub.
      *
-     * The original Hub will not be modified.
+     * The original Box Hub will not be modified.
      * @param {string} hubId The unique identifier that represent a hub.
     
     The ID for any hub can be determined

@@ -78,7 +78,7 @@ export class HubCollaborationV2025R0 {
   readonly hub?: HubBaseV2025R0;
   readonly accessibleBy?: HubAccessGranteeV2025R0;
   /**
-   * The level of access granted to hub.
+   * The level of access granted to a Box Hub.
    * Possible values are `editor`, `viewer`, and `co-owner`. */
   readonly role?: string;
   /**
@@ -127,7 +127,7 @@ export interface HubCollaborationV2025R0Input {
   readonly hub?: HubBaseV2025R0;
   readonly accessibleBy?: HubAccessGranteeV2025R0;
   /**
-   * The level of access granted to hub.
+   * The level of access granted to a Box Hub.
    * Possible values are `editor`, `viewer`, and `co-owner`. */
   readonly role?: string;
   /**

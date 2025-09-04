@@ -1,16 +1,16 @@
 # HubsManager
 
-- [List all hubs](#list-all-hubs)
-- [Create hub](#create-hub)
-- [List all hubs for requesting enterprise](#list-all-hubs-for-requesting-enterprise)
-- [Get hub information by ID](#get-hub-information-by-id)
-- [Update hub information by ID](#update-hub-information-by-id)
-- [Delete hub](#delete-hub)
-- [Copy hub](#copy-hub)
+- [List all Box Hubs](#list-all-box-hubs)
+- [Create Box Hub](#create-box-hub)
+- [List all Box Hubs for requesting enterprise](#list-all-box-hubs-for-requesting-enterprise)
+- [Get Box Hub information by ID](#get-box-hub-information-by-id)
+- [Update Box Hub information by ID](#update-box-hub-information-by-id)
+- [Delete Box Hub](#delete-box-hub)
+- [Copy Box Hub](#copy-box-hub)
 
-## List all hubs
+## List all Box Hubs
 
-Retrieves all hubs for requesting user.
+Retrieves all Box Hubs for requesting user.
 
 This operation is performed by calling function `getHubsV2025R0`.
 
@@ -40,11 +40,11 @@ await client.hubs.getHubsV2025R0({
 
 This function returns a value of type `HubsV2025R0`.
 
-Returns all hubs for the given user or enterprise.
+Returns all Box Hubs for the given user or enterprise.
 
-## Create hub
+## Create Box Hub
 
-Creates a new Hub.
+Creates a new Box Hub.
 
 This operation is performed by calling function `createHubV2025R0`.
 
@@ -72,9 +72,9 @@ This function returns a value of type `HubV2025R0`.
 
 Returns a new Hub object.
 
-## List all hubs for requesting enterprise
+## List all Box Hubs for requesting enterprise
 
-Retrieves all hubs for a given enterprise.
+Retrieves all Box Hubs for a given enterprise.
 
 Admins or Hub Co-admins of an enterprise
 with GCM scope can make this call.
@@ -106,11 +106,11 @@ await client.hubs.getEnterpriseHubsV2025R0({
 
 This function returns a value of type `HubsV2025R0`.
 
-Returns all hubs for the given user or enterprise.
+Returns all Box Hubs for the given user or enterprise.
 
-## Get hub information by ID
+## Get Box Hub information by ID
 
-Retrieves details for a hub by its ID.
+Retrieves details for a Box Hub by its ID.
 
 This operation is performed by calling function `getHubByIdV2025R0`.
 
@@ -135,9 +135,9 @@ This function returns a value of type `HubV2025R0`.
 
 Returns a hub object.
 
-## Update hub information by ID
+## Update Box Hub information by ID
 
-Updates a Hub. Can be used to change title, description, or Hub settings.
+Updates a Box Hub. Can be used to change title, description, or Box Hub settings.
 
 This operation is performed by calling function `updateHubByIdV2025R0`.
 
@@ -167,9 +167,9 @@ This function returns a value of type `HubV2025R0`.
 
 Returns a Hub object.
 
-## Delete hub
+## Delete Box Hub
 
-Deletes a single hub.
+Deletes a single Box Hub.
 
 This operation is performed by calling function `deleteHubByIdV2025R0`.
 
@@ -195,11 +195,11 @@ This function returns a value of type `undefined`.
 A blank response is returned if the hub was
 successfully deleted.
 
-## Copy hub
+## Copy Box Hub
 
-Creates a copy of a Hub.
+Creates a copy of a Box Hub.
 
-The original Hub will not be modified.
+The original Box Hub will not be modified.
 
 This operation is performed by calling function `copyHubV2025R0`.
 

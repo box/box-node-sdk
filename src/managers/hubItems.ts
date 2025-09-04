@@ -187,7 +187,7 @@ export class HubItemsManager {
     }
   }
   /**
-   * Retrieves all items associated with a Hub.
+   * Retrieves all items associated with a Box Hub.
    * @param {GetHubItemsV2025R0QueryParams} queryParams Query parameters of getHubItemsV2025R0 method
    * @param {GetHubItemsV2025R0OptionalsInput} optionalsInput
    * @returns {Promise<HubItemsV2025R0>}
@@ -238,7 +238,7 @@ export class HubItemsManager {
     };
   }
   /**
-     * Adds and/or removes Hub items from a Hub.
+     * Adds and/or removes Box Hub items from a Box Hub.
      * @param {string} hubId The unique identifier that represent a hub.
     
     The ID for any hub can be determined

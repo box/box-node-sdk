@@ -8,22 +8,22 @@ import { sdIsList } from '../../serialization/json.js';
 import { sdIsMap } from '../../serialization/json.js';
 export interface HubUpdateRequestV2025R0 {
   /**
-   * Title of the Hub. It cannot be empty and should be less than 50 characters. */
+   * Title of the Box Hub. It cannot be empty and should be less than 50 characters. */
   readonly title?: string;
   /**
-   * Description of the Hub. */
+   * Description of the Box Hub. */
   readonly description?: string;
   /**
-   * Indicates if AI features are enabled for the Hub. */
+   * Indicates if AI features are enabled for the Box Hub. */
   readonly isAiEnabled?: boolean;
   /**
    * Indicates if collaboration is restricted to the enterprise. */
   readonly isCollaborationRestrictedToEnterprise?: boolean;
   /**
-   * Indicates if non-owners can invite others to the Hub. */
+   * Indicates if non-owners can invite others to the Box Hub. */
   readonly canNonOwnersInvite?: boolean;
   /**
-   * Indicates if a shared link can be created for the Hub. */
+   * Indicates if a shared link can be created for the Box Hub. */
   readonly canSharedLinkBeCreated?: boolean;
   readonly rawData?: SerializedData;
 }

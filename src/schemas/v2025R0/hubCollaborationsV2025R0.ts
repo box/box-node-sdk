@@ -11,7 +11,7 @@ import { sdIsList } from '../../serialization/json.js';
 import { sdIsMap } from '../../serialization/json.js';
 export interface HubCollaborationsV2025R0 {
   /**
-   * A list of hub collaborations. */
+   * A list of Box Hub collaborations. */
   readonly entries?: readonly HubCollaborationV2025R0[];
   /**
    * The limit that was used for these entries. This will be the same as the

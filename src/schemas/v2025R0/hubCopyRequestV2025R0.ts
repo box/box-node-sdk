@@ -8,10 +8,10 @@ import { sdIsList } from '../../serialization/json.js';
 import { sdIsMap } from '../../serialization/json.js';
 export interface HubCopyRequestV2025R0 {
   /**
-   * Title of the Hub. It cannot be empty and should be less than 50 characters. */
+   * Title of the Box Hub. It cannot be empty and should be less than 50 characters. */
   readonly title?: string;
   /**
-   * Description of the Hub. */
+   * Description of the Box Hub. */
   readonly description?: string;
   readonly rawData?: SerializedData;
 }
