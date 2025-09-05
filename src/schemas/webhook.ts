@@ -62,6 +62,9 @@ export type WebhookTriggersField =
   | 'SIGN_REQUEST.DECLINED'
   | 'SIGN_REQUEST.EXPIRED'
   | 'SIGN_REQUEST.SIGNER_EMAIL_BOUNCED'
+  | 'SIGN_REQUEST.SIGN_SIGNER_SIGNED'
+  | 'SIGN_REQUEST.SIGN_DOCUMENT_CREATED'
+  | 'SIGN_REQUEST.SIGN_ERROR_FINALIZING'
   | string;
 export type Webhook = WebhookMini & {
   readonly createdBy?: UserMini;
@@ -203,6 +206,15 @@ export function deserializeWebhookTriggersField(
     return val;
   }
   if (val == 'SIGN_REQUEST.SIGNER_EMAIL_BOUNCED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_SIGNER_SIGNED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_DOCUMENT_CREATED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_ERROR_FINALIZING') {
     return val;
   }
   if (sdIsString(val)) {
