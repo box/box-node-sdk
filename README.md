@@ -2,11 +2,12 @@
   <img src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" alt= “box-dev-logo” width="30%" height="50%">
 </p>
 
-# Deprecation notice
+# Migration to v10
 
-This version of the Box Node SDK is under maintenance mode, and will be deprecated soon, only critical security updates and bug fixes will be provided. We recommend using the new version Box Typescript SDK, which can be found at [box/box-typescript-sdk-gen](https://github.com/box/box-typescript-sdk-gen)
+The [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch contains the generated code for the `v10` version of the Box Node SDK. This is intended primarily for developers migrating from [Box TypeScript SDK Gen](https://github.com/box/box-typescript-sdk-gen) to the v10 version.
+As part of our upcoming major release, we will be introducing a combined SDK that consolidates the previously separate generated SDK into one unified SDK package for improved usability and maintenance.
 
-You can find the migration guide [here](https://github.com/box/box-typescript-sdk-gen/blob/main/migration-guide.md) for transitioning from Box Node SDK to the new `box-typescript-sdk-gen` package. If you have any questions, please create an issue in the new repository or reach out to [Box Developer Support](https://developer.box.com/support/).
+You can find the migration guide [here](https://github.com/box/box-node-sdk/blob/sdk-gen/docs/migration-guides/from-box-typescript-sdk-gen-v1-to-box-node-sdk-v10.md) for transitioning from Box TypeScript SDK Gen to Box Node SDK v10. If you have any questions, please create an issue in the repository or reach out to [Box Developer Support](https://developer.box.com/support/).
 
 # Box Node.js SDK
 
@@ -20,7 +21,7 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Deprecation notice](#deprecation-notice)
+- [Migration to v10](#migration-to-v10)
 - [Box Node.js SDK](#box-nodejs-sdk)
   - [Installation](#installation)
   - [Getting Started](#getting-started)
