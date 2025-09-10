@@ -1,9 +1,8 @@
 name: build-and-test
 on:
+  schedule:
+    - cron: "30 0 * * 1-5"
   pull_request:
-    branches:
-      - sdk-gen
-  push:
     branches:
       - sdk-gen
 jobs:
@@ -11,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        browser: ['chrome', 'firefox']
+        browser: ["chrome", "firefox"]
     name: Browser ${{ matrix.browser }}
     steps:
       - name: Checkout
@@ -19,12 +18,41 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
+      - name: Remove not Smoke Tests
+        if: "!startsWith(github.head_ref, 'codegen-release') && github.event_name != 'schedule'"
+        run: |
+          TEST_ROOT="./src/test"
+          KEEP_LIST=(
+            "auth.test.ts"
+            "commons.ts"
+            "files.test.ts"
+            "downloads.test.ts"
+            "uploads.test.ts"
+          )
+
+          find "$TEST_ROOT" -type f | while read -r TEST_FILE; do
+              FILE_NAME=$(basename "$TEST_FILE")
+
+              KEEP=false
+              for ENTRY in "${KEEP_LIST[@]}"; do
+                  if [[ "$FILE_NAME" == "$ENTRY" ]]; then
+                      KEEP=true
+                      break
+                  fi
+              done
+
+              if [[ "$KEEP" == false ]]; then
+                  echo "Removing $TEST_FILE"
+                  rm "$TEST_FILE"
+              fi
+          done
       - name: Install dependencies and build
         run: |
           npm install
           npm run build
-      - name: Run tests
+      - name: All Tests
+        if: startsWith(github.head_ref, 'codegen-release') || github.event_name == 'schedule'
         run: |
           cd test-browser
           npm install
@@ -47,3 +75,16 @@ jobs:
           SLACK_AUTOMATION_USER_ID: ${{ secrets.SLACK_AUTOMATION_USER_ID }}
           SLACK_ORG_ID: ${{ secrets.SLACK_ORG_ID }}
           SLACK_PARTNER_ITEM_ID: ${{ secrets.SLACK_PARTNER_ITEM_ID }}
+      - name: Smoke Tests
+        if: "!startsWith(github.head_ref, 'codegen-release') && github.event_name != 'schedule'"
+        run: |
+          cd test-browser
+          npm install
+          npx start-server-and-test build-run 3000 'cypress run --browser ${{ matrix.browser }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JWT_CONFIG_BASE_64: ${{ secrets.JWT_CONFIG_BASE_64 }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          USER_ID: ${{ secrets.USER_ID }}
+          ENTERPRISE_ID: ${{ secrets.ENTERPRISE_ID }}

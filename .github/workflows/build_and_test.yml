@@ -1,9 +1,8 @@
 name: build-and-test
 on:
+  schedule:
+    - cron: "0 0 * * 1-5"
   pull_request:
-    branches:
-      - sdk-gen
-  push:
     branches:
       - sdk-gen
 jobs:
@@ -11,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['18', '20', '22']
+        node: ["18", "20", "22"]
       max-parallel: 1
     name: Node ${{ matrix.node }}
     steps:
@@ -23,7 +22,8 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: npm install
         run: npm install
-      - name: Build and test
+      - name: All Tests
+        if: startsWith(github.head_ref, 'codegen-release') || github.event_name == 'schedule'
         run: npm run test -- --coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -43,13 +43,24 @@ jobs:
           SLACK_AUTOMATION_USER_ID: ${{ secrets.SLACK_AUTOMATION_USER_ID }}
           SLACK_ORG_ID: ${{ secrets.SLACK_ORG_ID }}
           SLACK_PARTNER_ITEM_ID: ${{ secrets.SLACK_PARTNER_ITEM_ID }}
+      - name: Smoke tests
+        if: "!startsWith(github.head_ref, 'codegen-release') && github.event_name != 'schedule'"
+        run: npm run test -- src/test/auth.test.ts src/test/files.test.ts src/test/downloads.test.ts src/test/uploads.test.ts
+        env:
+          JWT_CONFIG_BASE_64: ${{ secrets.JWT_CONFIG_BASE_64 }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          USER_ID: ${{ secrets.USER_ID }}
+          ENTERPRISE_ID: ${{ secrets.ENTERPRISE_ID }}
       - name: Coveralls
+        if: startsWith(github.head_ref, 'codegen-release') || github.event_name == 'schedule'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: run-node-${{ matrix.node }}
           parallel: true
   finish:
+    if: startsWith(github.head_ref, 'codegen-release') || github.event_name == 'schedule'
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
