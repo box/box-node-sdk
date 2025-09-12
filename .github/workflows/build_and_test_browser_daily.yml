@@ -1,7 +1,7 @@
 name: Build and Test browser daily (sdk-gen)
 on:
   schedule:
-    - cron: "35 2 * * 1-5"
+    - cron: '50 0 * * 1-5'
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
