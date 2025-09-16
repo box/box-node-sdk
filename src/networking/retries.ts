@@ -79,7 +79,8 @@ export class BoxRetryStrategy implements RetryStrategy {
     }
     const isSuccessful: boolean =
       fetchResponse.status >= 200 && fetchResponse.status < 400;
-    const retryAfterHeader: string = fetchResponse.headers['Retry-After'];
+    const retryAfterHeader: undefined | string =
+      fetchResponse.headers['Retry-After'];
     const isAcceptedWithRetryAfter: boolean =
       fetchResponse.status == 202 && !(retryAfterHeader == void 0);
     if (attemptNumber >= this.maxAttempts) {
@@ -114,9 +115,10 @@ export class BoxRetryStrategy implements RetryStrategy {
     fetchResponse: FetchResponse,
     attemptNumber: number,
   ): number {
-    const retryAfterHeader: string = fetchResponse.headers['Retry-After'];
+    const retryAfterHeader: undefined | string =
+      fetchResponse.headers['Retry-After'];
     if (!(retryAfterHeader == void 0)) {
-      return parseFloat(retryAfterHeader) as number;
+      return parseFloat(retryAfterHeader!) as number;
     }
     const randomization: number = random(
       1 - this.retryRandomizationFactor,
