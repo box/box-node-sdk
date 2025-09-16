@@ -12,7 +12,7 @@ You can find the migration guide [here](https://github.com/box/box-node-sdk/blob
 # Box Node.js SDK
 
 [![Known Vulnerabilities](https://snyk.io/test/github/box/box-node-sdk/badge.svg)](https://snyk.io/test/github/box/box-node-sdk)
-![Platform](https://img.shields.io/badge/node-14--20-blue)
+![Platform](https://img.shields.io/badge/node-18--24-blue)
 [![Project Status](http://opensource.box.com/badges/stable.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
