@@ -3,7 +3,7 @@
 const { getAppClient } = require('../context');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
 const { createBoxTestFile } = require('../objects/box-test-file');
-const utils = require('@/lib/utils');
+const utils = require('../lib/utils');
 const path = require('path');
 const context = {};
 

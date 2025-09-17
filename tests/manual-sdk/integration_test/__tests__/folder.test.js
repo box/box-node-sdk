@@ -23,7 +23,7 @@ const {
 const {
   deleteFilePermanently,
   deleteWeblinkPermanently,
-} = require('@/lib/utils');
+} = require('../lib/utils');
 const context = {};
 
 beforeAll(async () => {

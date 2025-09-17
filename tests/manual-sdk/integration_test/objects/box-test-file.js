@@ -1,6 +1,6 @@
 'use strict';
 
-const utils = require('@/lib/utils');
+const utils = require('../lib/utils');
 const fs = require('fs');
 
 const createBoxTestFile = async (

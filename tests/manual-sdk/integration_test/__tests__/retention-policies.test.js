@@ -7,7 +7,7 @@ const {
   createBoxTestRetentionPolicy,
 } = require('../objects/box-test-retention-policy');
 const { createBoxTestFolder } = require('../objects/box-test-folder');
-const utils = require('@/lib/utils');
+const utils = require('../lib/utils');
 const context = {};
 
 beforeAll(async () => {

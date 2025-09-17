@@ -1,5 +1,5 @@
 'use strict';
-const utils = require('@/lib/utils');
+const utils = require('../lib/utils');
 const fs = require('fs');
 
 function createLocalLargeFile(filename, fileSize) {

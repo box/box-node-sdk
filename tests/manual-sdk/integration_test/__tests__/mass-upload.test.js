@@ -3,7 +3,7 @@
 
 const fs = require('fs');
 const crypto = require('crypto');
-const utils = require('@/lib/utils');
+const utils = require('../lib/utils');
 const systemPath = require('path');
 const { getAppClient, getUserClient } = require('../context');
 const { createBoxTestFolder } = require('../objects/box-test-folder');

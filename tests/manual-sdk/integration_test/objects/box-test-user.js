@@ -1,6 +1,6 @@
 'use strict';
 
-const utils = require('@/lib/utils');
+const utils = require('../lib/utils');
 
 // eslint-disable-next-line require-jsdoc
 async function createBoxTestUser(appClient) {
