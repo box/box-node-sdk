@@ -4,9 +4,11 @@ on:
     types: [opened, synchronize]
     branches:
       - main
+      - combine-sdk
   push:
     branches:
       - main
+      - combine-sdk
 jobs:
   build-and-test:
     runs-on: ubuntu-latest

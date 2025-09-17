@@ -3,9 +3,11 @@ on:
   pull_request:
     branches:
       - main
+      - combine-sdk
   push:
     branches:
       - main
+      - combine-sdk
 
 jobs:
   tests:
