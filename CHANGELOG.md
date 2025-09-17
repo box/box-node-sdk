@@ -4,30 +4,48 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [10.0.0](https://github.com/box/box-node-sdk/compare/v3.8.1...v10.0.0) (2025-09-17)
 
+Introducing **`Box Node SDK v10`**, a major release designed to elevate your developer experience and streamline integration with Box Content Cloud. Currently available as a separate [`sdk-gen`](https://github.com/box/box-node-sdk/tree/sdk-gen) branch, `v10` will ultimately become the main branch.
 
-### ⚠ BREAKING CHANGES
+### Breaking Changes
 
-* Change names of unions (box/box-codegen#787) (#938)
-* remove unused models from schemas (box/box-openapi#547) (#933)
+- This SDK version is auto-generated and introduces a new interface for all methods. Extensive documentation is available [here](https://github.com/box/box-node-sdk/tree/sdk-gen/docs).
 
-### Bug Fixes
+### What's New in `v10`
 
-* bump form-data to 4.0.4 and types/node-fetch to 2.6.13 (box/box-codegen[#808](https://github.com/box/box-node-sdk/issues/808)) ([#961](https://github.com/box/box-node-sdk/issues/961)) ([2ac7493](https://github.com/box/box-node-sdk/commit/2ac7493804a88a48574782a07c55995cae9771c9)), closes [box/box-codegen#799](https://github.com/box/box-codegen/issues/799)
-* Fix ESM build and add test set (box/box-codegen[#828](https://github.com/box/box-node-sdk/issues/828)) ([#1005](https://github.com/box/box-node-sdk/issues/1005)) ([a29be30](https://github.com/box/box-node-sdk/commit/a29be309d76f4594dc127261847765ba27692de7))
-* fix serialization for unions without discriminants in ts (box/box-codegen[#800](https://github.com/box/box-node-sdk/issues/800)) ([#954](https://github.com/box/box-node-sdk/issues/954)) ([7f75f6d](https://github.com/box/box-node-sdk/commit/7f75f6d6d87f2a9b6d500306fcc0dddf023b7118))
-* Remove private properties and methods (box/box-codegen[#815](https://github.com/box/box-node-sdk/issues/815)) ([#977](https://github.com/box/box-node-sdk/issues/977)) ([bf86a05](https://github.com/box/box-node-sdk/commit/bf86a0568ae3aaa4d77f02352879b75c8495051a)), closes [box/box-codegen#816](https://github.com/box/box-codegen/issues/816)
+- **Full API Support** — Complete coverage of the Box API ecosystem, giving you access to all the latest features and functionalities to build feature-rich applications.  
 
+- **Rapid API Updates** — Our new auto-generation approach enables Box API additions within days, ensuring you can leverage the most up-to-date features without delay.  
 
-### New Features and Enhancements
+- **Embedded Documentation** — All objects and parameters are documented directly in the SDK source code, keeping essential information in one place.  
+
+- **Enhanced Convenience Methods** — New methods for authentication, chunk uploads, automatic retries, retry strategy, and more.
+
+### Important Notes
+
+This version includes the Box Next Generation SDK artifact, previously developed in parallel to core Box SDKs. To facilitate migration and provide access to the newest features, we'll soon release an additional major version combining both artifacts. Migration to `v10` includes breaking changes, please review the [migration guide](https://github.com/box/box-node-sdk/blob/sdk-gen/docs/migration-guides/from-v3-to-v10.md) for details.  For more information, see the [SDK versioning strategy document](https://developer.box.com/tooling/sdks/sdk-versioning). Follow developer changelog for future updates.
+
+---
+
+### What’s New Compared to [Typescript SDK Gen](https://github.com/box/box-typescript-sdk-gen) `v1.19.1`
+
+#### ⚠ BREAKING CHANGES
+
+* Change names of unions (box/box-codegen[#787](https://github.com/box/box-node-sdk/issues/787)) ([#938](https://github.com/box/box-node-sdk/issues/938)) ([06a8e9b](https://github.com/box/box-node-sdk/commit/06a8e9bb6de67547dd900b74778c8203aa388a91))
+* Remove unused models from schemas (box/box-openapi[#547](https://github.com/box/box-node-sdk/issues/547)) ([#933](https://github.com/box/box-node-sdk/issues/933)) ([35690f4](https://github.com/box/box-node-sdk/commit/35690f4e4ef7383cae890d4df810ed77168384e1)), closes [box/box-codegen#773](https://github.com/box/box-codegen/issues/773) [box/box-openapi#542](https://github.com/box/box-openapi/issues/542) [box/box-openapi#544](https://github.com/box/box-openapi/issues/544) [box/box-codegen#781](https://github.com/box/box-codegen/issues/781) [box/box-openapi#545](https://github.com/box/box-openapi/issues/545)
+* Remove generated suffix from files (box/box-codegen[#779](https://github.com/box/box-node-sdk/issues/779)) ([#948](https://github.com/box/box-node-sdk/issues/948)) ([4bfb073](https://github.com/box/box-node-sdk/commit/4bfb07350be95a5717ee9be032af4995d1d97395))
+* Adjust imports and exports (box/box-codegen[#801](https://github.com/box/box-node-sdk/issues/801)) ([#965](https://github.com/box/box-node-sdk/issues/965)) ([d8e6a0a](https://github.com/box/box-node-sdk/commit/d8e6a0a466d367dd6c871bc20534f1b950732997))
+
+#### Bug Fixes
+
+* Fix serialization for unions (box/box-codegen[#800](https://github.com/box/box-node-sdk/issues/800)) ([#954](https://github.com/box/box-node-sdk/issues/954)) ([7f75f6d](https://github.com/box/box-node-sdk/commit/7f75f6d6d87f2a9b6d500306fcc0dddf023b7118))
+
+#### New Features and Enhancements
 
 * Add missing webhook events (box/box-openapi[#554](https://github.com/box/box-node-sdk/issues/554)) ([#982](https://github.com/box/box-node-sdk/issues/982)) ([2f5e245](https://github.com/box/box-node-sdk/commit/2f5e24574dbaff7d23140a2a5c22e54b1f047bf6))
-* Adjust imports and exports (box/box-codegen[#801](https://github.com/box/box-node-sdk/issues/801)) ([#965](https://github.com/box/box-node-sdk/issues/965)) ([d8e6a0a](https://github.com/box/box-node-sdk/commit/d8e6a0a466d367dd6c871bc20534f1b950732997))
-* Change names of unions (box/box-codegen[#787](https://github.com/box/box-node-sdk/issues/787)) ([#938](https://github.com/box/box-node-sdk/issues/938)) ([06a8e9b](https://github.com/box/box-node-sdk/commit/06a8e9bb6de67547dd900b74778c8203aa388a91))
-* Remove generated suffix from files (box/box-codegen[#779](https://github.com/box/box-node-sdk/issues/779)) ([#948](https://github.com/box/box-node-sdk/issues/948)) ([4bfb073](https://github.com/box/box-node-sdk/commit/4bfb07350be95a5717ee9be032af4995d1d97395))
-* remove unused models from schemas (box/box-openapi[#547](https://github.com/box/box-node-sdk/issues/547)) ([#933](https://github.com/box/box-node-sdk/issues/933)) ([35690f4](https://github.com/box/box-node-sdk/commit/35690f4e4ef7383cae890d4df810ed77168384e1)), closes [box/box-codegen#773](https://github.com/box/box-codegen/issues/773) [box/box-openapi#542](https://github.com/box/box-openapi/issues/542) [box/box-openapi#544](https://github.com/box/box-openapi/issues/544) [box/box-codegen#781](https://github.com/box/box-codegen/issues/781) [box/box-openapi#545](https://github.com/box/box-openapi/issues/545)
-* Retry request on network exception (box/box-codegen[#770](https://github.com/box/box-node-sdk/issues/770)) ([#907](https://github.com/box/box-node-sdk/issues/907)) ([536ac31](https://github.com/box/box-node-sdk/commit/536ac31f02f447087d0348576c5fa4bd88e74687))
-* Support event with long polling (box/box-codegen[#757](https://github.com/box/box-node-sdk/issues/757)) ([#937](https://github.com/box/box-node-sdk/issues/937)) ([398dada](https://github.com/box/box-node-sdk/commit/398dada82008b538b290c6816ee33659916d0b1c))
 * Support external user deletion API (box/box-codegen[#796](https://github.com/box/box-node-sdk/issues/796)) ([#946](https://github.com/box/box-node-sdk/issues/946)) ([44b37a4](https://github.com/box/box-node-sdk/commit/44b37a49ddbf587575f005342c9457cc46b5a573))
+
+For more details check [migration guide](https://github.com/box/box-node-sdk/blob/sdk-gen/docs/migration-guides/from-box-typescript-sdk-gen-v1-to-box-node-sdk-v10.md) from `box-typescript-sdk-gen` `v1` to `box-node-sdk` `v10`.
+
 
 ### [3.8.1](https://github.com/box/box-node-sdk/compare/v3.8.0...v3.8.1) (2025-06-11)
 
