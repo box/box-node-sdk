@@ -1,0 +1,36 @@
+import { serializeAiAgentReference } from './aiAgentReference.js';
+import { deserializeAiAgentReference } from './aiAgentReference.js';
+import { serializeAiAgentTextGen } from './aiAgentTextGen.js';
+import { deserializeAiAgentTextGen } from './aiAgentTextGen.js';
+import { AiAgentReference } from './aiAgentReference.js';
+import { AiAgentTextGen } from './aiAgentTextGen.js';
+import { BoxSdkError } from '../box/errors.js';
+import { SerializedData } from '../serialization/json.js';
+import { sdIsEmpty } from '../serialization/json.js';
+import { sdIsBoolean } from '../serialization/json.js';
+import { sdIsNumber } from '../serialization/json.js';
+import { sdIsString } from '../serialization/json.js';
+import { sdIsList } from '../serialization/json.js';
+import { sdIsMap } from '../serialization/json.js';
+export type AiTextGenAgent = AiAgentReference | AiAgentTextGen;
+export function serializeAiTextGenAgent(val: any): SerializedData {
+  if (val.type == 'ai_agent_id') {
+    return serializeAiAgentReference(val);
+  }
+  if (val.type == 'ai_agent_text_gen') {
+    return serializeAiAgentTextGen(val);
+  }
+  throw new BoxSdkError({ message: 'unknown type' });
+}
+export function deserializeAiTextGenAgent(val: SerializedData): AiTextGenAgent {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({ message: 'Expecting a map for "AiTextGenAgent"' });
+  }
+  if (val.type == 'ai_agent_id') {
+    return deserializeAiAgentReference(val);
+  }
+  if (val.type == 'ai_agent_text_gen') {
+    return deserializeAiAgentTextGen(val);
+  }
+  throw new BoxSdkError({ message: "Can't deserialize AiTextGenAgent" });
+}
