@@ -13,7 +13,9 @@ export class AiAgentReference {
   readonly type: AiAgentReferenceTypeField =
     'ai_agent_id' as AiAgentReferenceTypeField;
   /**
-   * The ID of an Agent. */
+   * The ID of an Agent. This can be a numeric ID for custom agents (for example, `14031`)
+   * or a unique identifier for pre-built agents (for example, `enhanced_extract_agent`
+   * for the [Enhanced Extract Agent](g://box-ai/ai-tutorials/extract-metadata-structured/#enhanced-extract-agent)). */
   readonly id?: string;
   readonly rawData?: SerializedData;
   constructor(
@@ -36,7 +38,9 @@ export interface AiAgentReferenceInput {
    * The type of AI agent used to handle queries. */
   readonly type?: AiAgentReferenceTypeField;
   /**
-   * The ID of an Agent. */
+   * The ID of an Agent. This can be a numeric ID for custom agents (for example, `14031`)
+   * or a unique identifier for pre-built agents (for example, `enhanced_extract_agent`
+   * for the [Enhanced Extract Agent](g://box-ai/ai-tutorials/extract-metadata-structured/#enhanced-extract-agent)). */
   readonly id?: string;
   readonly rawData?: SerializedData;
 }
