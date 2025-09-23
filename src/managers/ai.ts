@@ -506,7 +506,7 @@ export class AiManager {
    * For this request, you either need a metadata template or a list of fields you want to extract.
    * Input is **either** a metadata template or a list of fields to ensure the structure.
    * To learn more about creating templates, see [Creating metadata templates in the Admin Console](https://support.box.com/hc/en-us/articles/360044194033-Customizing-Metadata-Templates)
-   * or use the [metadata template API](g://metadata/templates/create).
+   * or use the [metadata template API](g://metadata/templates/create). This endpoint also supports [Enhanced Extract Agent](g://box-ai/ai-tutorials/extract-metadata-structured/#enhanced-extract-agent).
    * @param {AiExtractStructured} requestBody Request body of createAiExtractStructured method
    * @param {CreateAiExtractStructuredOptionalsInput} optionalsInput
    * @returns {Promise<AiExtractStructuredResponse>}
