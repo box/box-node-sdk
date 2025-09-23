@@ -1,233 +1,157 @@
-Comments
-========
+# CommentsManager
 
-Comment objects represent a user-created comment on a file. They can be added
-directly to a file.
+- [List file comments](#list-file-comments)
+- [Get comment](#get-comment)
+- [Update comment](#update-comment)
+- [Remove comment](#remove-comment)
+- [Create comment](#create-comment)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## List file comments
 
+Retrieves a list of comments for a file.
 
-- [Get a Comment's Information](#get-a-comments-information)
-- [Get the Comments on a File](#get-the-comments-on-a-file)
-- [Add a Comment to a File](#add-a-comment-to-a-file)
-- [Reply to a Comment](#reply-to-a-comment)
-- [Change a Comment's Message](#change-a-comments-message)
-- [Delete a Comment](#delete-a-comment)
+This operation is performed by calling function `getFileComments`.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-Get a Comment's Information
----------------------------
-
-Calling
-[`comments.get(commentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#get)
-on a comment returns a snapshot of the comment's info.
-
-<!-- sample get_comments_id -->
-```js
-client.comments.get('11111')
-    .then(comment => {
-        /* comment -> {
-            type: 'comment',
-            id: '11111',
-            is_reply_comment: false,
-            message: 'Great work!',
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            created_at: '2012-12-12T11:25:01-08:00',
-            item: { id: '33333', type: 'file' },
-            modified_at: '2012-12-12T11:25:01-08:00' }
-        */
-    });
-```
-
-Get the Comments on a File
---------------------------
-
-You can get all of the comments on a file by calling the
-[`files.getComments(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getComments) method.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-files-id-comments/).
 
 <!-- sample get_files_id_comments -->
-```js
-var fileID = '12345';
-client.files.getComments(fileID)
-    .then(comments => {
-        /* comments -> {
-            total_count: 1,
-            entries: 
-            [ { type: 'comment',
-                id: '11111',
-                is_reply_comment: false,
-                message: 'Great work!',
-                created_by: 
-                    { type: 'user',
-                    id: '22222',
-                    name: 'Example User',
-                    login: 'user@example.com' },
-                created_at: '2012-12-12T11:25:01-08:00',
-                item: { id: '33333', type: 'file' },
-                modified_at: '2012-12-12T11:25:01-08:00' } ] }
-        */
-    });
+
+```ts
+await client.comments.getFileComments(fileId);
 ```
 
-Add a Comment to a File
------------------------
+### Arguments
 
-A comment can be added to a file with the [`comments.create(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#create)
-method.
+- fileId `string`
+  - The unique identifier that represents a file. The ID for any file can be determined by visiting a file in the web application and copying the ID from the URL. For example, for the URL `https://*.app.box.com/files/123` the `file_id` is `123`. Example: "12345"
+- optionalsInput `GetFileCommentsOptionalsInput`
 
-<!-- sample post_comments -->
-```js
-client.comments.create('33333', 'Is this the latest version?')
-    .then(comment => {
-        /* comment -> {
-            type: 'comment',
-            id: '11111',
-            is_reply_comment: false,
-            message: 'Is this the latest version?',
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            created_at: '2012-12-12T11:25:01-08:00',
-            item: { id: '33333', type: 'file' },
-            modified_at: '2012-12-12T11:25:01-08:00' }
-        */
-    });
+### Returns
+
+This function returns a value of type `Comments`.
+
+Returns a collection of comment objects. If there are no
+comments on this file an empty collection will be returned.
+
+## Get comment
+
+Retrieves the message and metadata for a specific comment, as well
+as information on the user who created the comment.
+
+This operation is performed by calling function `getCommentById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-comments-id/).
+
+<!-- sample get_comments_id -->
+
+```ts
+await client.comments.getCommentById(newComment.id!);
 ```
 
-A comment's message can also contain @mentions by using the string
-`@[userid:username]` anywhere within the message, where userid and username are
-the ID and username of the person being mentioned.
-[See the documentation](https://developers.box.com/docs/#comments-comment-object) on the
-`tagged_message` field for more information on @mentions.  To make a tagged comment,
-use the [`comments.createTaggedComment(fileID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#createTaggedComment)
-method.
+### Arguments
 
-<!-- sample post_comments tag_user  -->
-```js
-client.comments.createTaggedComment('33333', '@[23560:Bob] Is this the latest version?')
-    .then(comment => {
-        /* comment -> {
-            type: 'comment',
-            id: '11111',
-            is_reply_comment: false,
-            tagged_message: '@[23560:Bob] Is this the latest version?',
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            created_at: '2012-12-12T11:25:01-08:00',
-            item: { id: '33333', type: 'file' },
-            modified_at: '2012-12-12T11:25:01-08:00' }
-        */
-    });
-```
+- commentId `string`
+  - The ID of the comment. Example: "12345"
+- optionalsInput `GetCommentByIdOptionalsInput`
 
-Reply to a Comment
-------------------
+### Returns
 
-To reply to a comment, call
-[`comments.reply(commentID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#reply)
-with the ID of the comment to reply to and the text of the reply comment.
+This function returns a value of type `CommentFull`.
 
-<!-- sample post_comments as_reply  -->
-```js
-// Reply to the comment with ID 11111
-client.comments.reply('11111', 'Yes, this is the latest version.')
-    .then(comment => {
-        /* comment -> {
-            type: 'comment',
-            id: '44444',
-            is_reply_comment: true,
-            message: 'Yes, this is the latest version',
-            created_by: 
-            { type: 'user',
-                id: '55555',
-                name: 'Example User 2',
-                login: 'user2@example.com' },
-            created_at: '2012-12-13T07:19:08-08:00',
-            item: { id: '33333', type: 'file' },
-            modified_at: '2012-12-13T07:19:08-08:00' }
-        */
-    });
-```
+Returns a full comment object.
 
-A comment's message can also contain at-mentions by using the string
-`@[userid:username]` anywhere within the message, where `userid` and `username` are
-the ID and username of the person being mentioned.
-[See the documentation](https://developers.box.com/docs/#comments-comment-object) on the
-`tagged_message` field for more information on at-mentions.  To make a tagged reply,
-use the [`comments.createTaggedReply(commentID, text, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#createTaggedReply)
-method.
+## Update comment
 
-<!-- sample post_comments as_reply_tag_user  -->
-```js
-client.comments.createTaggedReply('11111', '@[22222:Sam] Yes, this is the most recent version!')
-    .then(comment => {
-        /* comment -> {
-            type: 'comment',
-            id: '44444',
-            is_reply_comment: false,
-            tagged_message: '@[22222:Sam] Yes, this is the most recent version!',
-            created_by: 
-            { type: 'user',
-                id: '55555',
-                name: 'Example User 2',
-                login: 'user2@example.com' },
-            created_at: '2012-12-13T07:19:08-08:00',
-            item: { id: '33333', type: 'file' },
-            modified_at: '2012-12-13T07:19:08-08:00' }
-        */
-    });
-```
+Update the message of a comment.
 
-Change a Comment's Message
---------------------------
+This operation is performed by calling function `updateCommentById`.
 
-The message of a comment can be changed with the
-[`comments.update(commentID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#update)
-method.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-comments-id/).
 
 <!-- sample put_comments_id -->
-```js
-client.comments.update('11111', {message: 'New message'})
-    .then(comment => {
-        /* comment -> {
-            type: 'comment',
-            id: '11111',
-            is_reply_comment: false,
-            message: 'New message',
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            created_at: '2012-12-12T11:25:01-08:00',
-            item: { id: '33333', type: 'file' },
-            modified_at: '2012-12-12T11:25:01-08:00' }
-        */
-    });
+
+```ts
+await client.comments.updateCommentById(newReplyComment.id!, {
+  requestBody: { message: newMessage } satisfies UpdateCommentByIdRequestBody,
+} satisfies UpdateCommentByIdOptionalsInput);
 ```
 
-Delete a Comment
-----------------
+### Arguments
 
-A comment can be deleted with the
-[`comments.delete(commentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Comments.html#delete)
-method.
+- commentId `string`
+  - The ID of the comment. Example: "12345"
+- optionalsInput `UpdateCommentByIdOptionalsInput`
+
+### Returns
+
+This function returns a value of type `CommentFull`.
+
+Returns the updated comment object.
+
+## Remove comment
+
+Permanently deletes a comment.
+
+This operation is performed by calling function `deleteCommentById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/delete-comments-id/).
 
 <!-- sample delete_comments_id -->
-```js
-client.comments.delete('11111')
-    .then(() => {
-        // deletion successful — no value returned
-    });
+
+```ts
+await client.comments.deleteCommentById(newComment.id!);
 ```
+
+### Arguments
+
+- commentId `string`
+  - The ID of the comment. Example: "12345"
+- optionalsInput `DeleteCommentByIdOptionalsInput`
+
+### Returns
+
+This function returns a value of type `undefined`.
+
+Returns an empty response when the comment has been deleted.
+
+## Create comment
+
+Adds a comment by the user to a specific file, or
+as a reply to an other comment.
+
+This operation is performed by calling function `createComment`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-comments/).
+
+<!-- sample post_comments -->
+
+```ts
+await client.comments.createComment({
+  message: message,
+  item: {
+    id: fileId,
+    type: 'file' as CreateCommentRequestBodyItemTypeField,
+  } satisfies CreateCommentRequestBodyItemField,
+} satisfies CreateCommentRequestBody);
+```
+
+### Arguments
+
+- requestBody `CreateCommentRequestBody`
+  - Request body of createComment method
+- optionalsInput `CreateCommentOptionalsInput`
+
+### Returns
+
+This function returns a value of type `CommentFull`.
+
+Returns the newly created comment object.
+
+Not all available fields are returned by default. Use the
+[fields](#param-fields) query parameter to explicitly request
+any specific fields.
