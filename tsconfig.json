@@ -2,16 +2,17 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "outDir": "lib",
-    "strict": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowJs": true,
-    "sourceMap": true,
+    "moduleResolution": "Node",
     "declaration": true,
-    "forceConsistentCasingInFileNames": true
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "lib",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "src/__tests__"]
 }

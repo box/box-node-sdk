@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "dependencies": {
+    "sdk": "../../"
+  },
+  "scripts": {
+    "start": "node main.js"
+  }
+}

@@ -1,0 +1,36 @@
+<!-- Run this example on localhost with `npx serve` and navigate to http://localhost:3000/example.html -->
+<!doctype html>
+<html>
+  <head>
+    <title>Sample Website</title>
+    <!-- Meta tags to prevent caching -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+  </head>
+  <body>
+    <script src="./lib/bundle.js"></script>
+    <script>
+      const { BoxClient, BoxDeveloperTokenAuth } =
+        window['box-typescript-sdk-gen'];
+
+      async function main(token) {
+        try {
+          const client = new BoxClient({
+            auth: new BoxDeveloperTokenAuth({ token }),
+          });
+          const { name } = await client.users.getUserMe();
+          alert(`Hello ${name}!`);
+        } catch (e) {
+          alert(String(e));
+          console.error(e);
+        }
+      }
+
+      main(prompt('Provide the developer token'));
+    </script>
+  </body>
+</html>

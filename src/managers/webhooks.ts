@@ -1,542 +1,1257 @@
-/**
- * @fileoverview Manager for the Box Webhooks resource
- */
-
-// -----------------------------------------------------------------------------
-// Requirements
-// -----------------------------------------------------------------------------
-
-import urlPath from '../util/url-path';
-import crypto from 'crypto';
-import BoxClient from '../box-client';
-
-// -----------------------------------------------------------------------------
-// Typedefs
-// -----------------------------------------------------------------------------
-
-/**
- * A webhook trigger type constant
- * @typedef {string} WebhookTriggerType
- */
-
-enum WebhookTriggerType {
-  FILE_UPLOADED = 'FILE.UPLOADED',
-  FILE_PREVIEWED = 'FILE.PREVIEWED',
-  FILE_DOWNLOADED = 'FILE.DOWNLOADED',
-  FILE_TRASHED = 'FILE.TRASHED',
-  FILE_DELETED = 'FILE.DELETED',
-  FILE_RESTORED = 'FILE.RESTORED',
-  FILE_COPIED = 'FILE.COPIED',
-  FILE_MOVED = 'FILE.MOVED',
-  FILE_LOCKED = 'FILE.LOCKED',
-  FILE_UNLOCKED = 'FILE.UNLOCKED',
-  FILE_RENAMED = 'FILE.RENAMED',
-
-  COMMENT_CREATED = 'COMMENT.CREATED',
-  COMMENT_UPDATED = 'COMMENT.UPDATED',
-  COMMENT_DELETED = 'COMMENT.DELETED',
-
-  TASK_ASSIGNMENT_CREATED = 'TASK_ASSIGNMENT.CREATED',
-  TASK_ASSIGNMENT_UPDATED = 'TASK_ASSIGNMENT.UPDATED',
-
-  METADATA_INSTANCE_CREATED = 'METADATA_INSTANCE.CREATED',
-  METADATA_INSTANCE_UPDATED = 'METADATA_INSTANCE.UPDATED',
-  METADATA_INSTANCE_DELETED = 'METADATA_INSTANCE.DELETED',
-
-  FOLDER_CREATED = 'FOLDER.CREATED',
-  FOLDER_DOWNLOADED = 'FOLDER.DOWNLOADED',
-  FOLDER_RESTORED = 'FOLDER.RESTORED',
-  FOLDER_DELETED = 'FOLDER.DELETED',
-  FOLDER_COPIED = 'FOLDER.COPIED',
-  FOLDER_MOVED = 'FOLDER.MOVED',
-  FOLDER_TRASHED = 'FOLDER.TRASHED',
-  FOLDER_RENAMED = 'FOLDER.RENAMED',
-
-  WEBHOOK_DELETED = 'WEBHOOK.DELETED',
-
-  COLLABORATION_CREATED = 'COLLABORATION.CREATED',
-  COLLABORATION_ACCEPTED = 'COLLABORATION.ACCEPTED',
-  COLLABORATION_REJECTED = 'COLLABORATION.REJECTED',
-  COLLABORATION_REMOVED = 'COLLABORATION.REMOVED',
-  COLLABORATION_UPDATED = 'COLLABORATION.UPDATED',
-
-  SHARED_LINK_DELETED = 'SHARED_LINK.DELETED',
-  SHARED_LINK_CREATED = 'SHARED_LINK.CREATED',
-  SHARED_LINK_UPDATED = 'SHARED_LINK.UPDATED',
-
-  SIGN_REQUEST_COMPLETED = 'SIGN_REQUEST.COMPLETED',
-  SIGN_REQUEST_DECLINED = 'SIGN_REQUEST.DECLINED',
-  SIGN_REQUEST_EXPIRED = 'SIGN_REQUEST.EXPIRED',
-}
-
-// -----------------------------------------------------------------------------
-// Private
-// -----------------------------------------------------------------------------
-
-// Base path for all webhooks endpoints
-const BASE_PATH = '/webhooks';
-
-// This prevents replay attacks
-const MAX_MESSAGE_AGE = 10 * 60; // 10 minutes
-
-/**
- * Compute the message signature
- * @see {@Link https://developer.box.com/en/guides/webhooks/handle/setup-signatures/}
- *
- * @param {string} body - The request body of the webhook message
- * @param {Object} headers - The request headers of the webhook message
- * @param {?string} signatureKey - The signature to verify the message with
- * @returns {?string} - The message signature (or null, if it can't be computed)
- * @private
- */
-function computeSignature(
-  body: string,
-  headers: Record<string, any>,
-  signatureKey?: string
-) {
-  if (!signatureKey) {
-    return null;
-  }
-
-  if (headers['box-signature-version'] !== '1') {
-    return null;
-  }
-
-  if (headers['box-signature-algorithm'] !== 'HmacSHA256') {
-    return null;
-  }
-
-  let hmac = crypto.createHmac('sha256', signatureKey);
-  hmac.update(body);
-  hmac.update(headers['box-delivery-timestamp']);
-
-  const signature = hmac.digest('base64');
-
-  return signature;
-}
-
-/**
- * Validate the message signature
- * @see {@Link https://developer.box.com/en/guides/webhooks/handle/verify-signatures/}
- *
- * @param {string} body - The request body of the webhook message
- * @param {Object} headers - The request headers of the webhook message
- * @param {string} [primarySignatureKey] - The primary signature to verify the message with
- * @param {string} [secondarySignatureKey] - The secondary signature to verify the message with
- * @returns {boolean} - True or false
- * @private
- */
-function validateSignature(
-  body: string,
-  headers: Record<string, any>,
-  primarySignatureKey?: string,
-  secondarySignatureKey?: string
-) {
-  // Either the primary or secondary signature must match the corresponding signature from Box
-  // (The use of two signatures allows the signing keys to be rotated one at a time)
-  const primarySignature = computeSignature(body, headers, primarySignatureKey);
-
-  if (
-    primarySignature &&
-    compareSignatures(primarySignature, headers['box-signature-primary'])
+import { serializeDateTime } from '../internal/utils.js';
+import { deserializeDateTime } from '../internal/utils.js';
+import { serializeWebhooks } from '../schemas/webhooks.js';
+import { deserializeWebhooks } from '../schemas/webhooks.js';
+import { serializeClientError } from '../schemas/clientError.js';
+import { deserializeClientError } from '../schemas/clientError.js';
+import { serializeWebhook } from '../schemas/webhook.js';
+import { deserializeWebhook } from '../schemas/webhook.js';
+import { ResponseFormat } from '../networking/fetchOptions.js';
+import { DateTime } from '../internal/utils.js';
+import { Webhooks } from '../schemas/webhooks.js';
+import { ClientError } from '../schemas/clientError.js';
+import { Webhook } from '../schemas/webhook.js';
+import { BoxSdkError } from '../box/errors.js';
+import { Authentication } from '../networking/auth.js';
+import { NetworkSession } from '../networking/network.js';
+import { FetchOptions } from '../networking/fetchOptions.js';
+import { FetchResponse } from '../networking/fetchResponse.js';
+import { prepareParams } from '../internal/utils.js';
+import { toString } from '../internal/utils.js';
+import { ByteStream } from '../internal/utils.js';
+import { CancellationToken } from '../internal/utils.js';
+import { sdToJson } from '../serialization/json.js';
+import { SerializedData } from '../serialization/json.js';
+import { computeWebhookSignature } from '../internal/utils.js';
+import { compareSignatures } from '../internal/utils.js';
+import { dateTimeFromString } from '../internal/utils.js';
+import { getEpochTimeInSeconds } from '../internal/utils.js';
+import { dateTimeToEpochSeconds } from '../internal/utils.js';
+import { sdIsEmpty } from '../serialization/json.js';
+import { sdIsBoolean } from '../serialization/json.js';
+import { sdIsNumber } from '../serialization/json.js';
+import { sdIsString } from '../serialization/json.js';
+import { sdIsList } from '../serialization/json.js';
+import { sdIsMap } from '../serialization/json.js';
+export class CreateWebhookOptionals {
+  readonly headers: CreateWebhookHeaders = new CreateWebhookHeaders({});
+  readonly cancellationToken?: CancellationToken = void 0;
+  constructor(
+    fields: Omit<CreateWebhookOptionals, 'headers' | 'cancellationToken'> &
+      Partial<Pick<CreateWebhookOptionals, 'headers' | 'cancellationToken'>>,
   ) {
-    return true;
+    if (fields.headers !== undefined) {
+      this.headers = fields.headers;
+    }
+    if (fields.cancellationToken !== undefined) {
+      this.cancellationToken = fields.cancellationToken;
+    }
   }
-
-  const secondarySignature = computeSignature(
-    body,
-    headers,
-    secondarySignatureKey
-  );
-
-  if (
-    secondarySignature &&
-    compareSignatures(secondarySignature, headers['box-signature-secondary'])
+}
+export interface CreateWebhookOptionalsInput {
+  readonly headers?: CreateWebhookHeaders;
+  readonly cancellationToken?: undefined | CancellationToken;
+}
+export class GetWebhookByIdOptionals {
+  readonly headers: GetWebhookByIdHeaders = new GetWebhookByIdHeaders({});
+  readonly cancellationToken?: CancellationToken = void 0;
+  constructor(
+    fields: Omit<GetWebhookByIdOptionals, 'headers' | 'cancellationToken'> &
+      Partial<Pick<GetWebhookByIdOptionals, 'headers' | 'cancellationToken'>>,
   ) {
-    return true;
+    if (fields.headers !== undefined) {
+      this.headers = fields.headers;
+    }
+    if (fields.cancellationToken !== undefined) {
+      this.cancellationToken = fields.cancellationToken;
+    }
   }
-
-  return false;
 }
-
-/**
- * Compare two signatures using a timing-safe comparison
- * @param expectedSignature Expected signature in base64 format
- * @param receivedSignature Received signature in base64 format
- */
-function compareSignatures(
-  expectedSignature: string,
-  receivedSignature: string
-): boolean {
-  const expectedBuffer = Buffer.from(expectedSignature, 'base64');
-  const receivedBuffer = Buffer.from(receivedSignature, 'base64');
-  return crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
+export interface GetWebhookByIdOptionalsInput {
+  readonly headers?: GetWebhookByIdHeaders;
+  readonly cancellationToken?: undefined | CancellationToken;
 }
-
-/**
- * Validate that the delivery timestamp is not too far in the past (to prevent replay attacks)
- *
- * @param {Object} headers - The request headers of the webhook message
- * @param {int} maxMessageAge - The maximum message age (in seconds)
- * @returns {boolean} - True or false
- * @private
- */
-function validateDeliveryTimestamp(
-  headers: Record<string, any>,
-  maxMessageAge: number
-) {
-  const deliveryTime = Date.parse(headers['box-delivery-timestamp']);
-  const currentTime = Date.now();
-  const messageAge = (currentTime - deliveryTime) / 1000;
-
-  if (messageAge > maxMessageAge) {
+export class UpdateWebhookByIdOptionals {
+  readonly requestBody: UpdateWebhookByIdRequestBody =
+    {} satisfies UpdateWebhookByIdRequestBody;
+  readonly headers: UpdateWebhookByIdHeaders = new UpdateWebhookByIdHeaders({});
+  readonly cancellationToken?: CancellationToken = void 0;
+  constructor(
+    fields: Omit<
+      UpdateWebhookByIdOptionals,
+      'requestBody' | 'headers' | 'cancellationToken'
+    > &
+      Partial<
+        Pick<
+          UpdateWebhookByIdOptionals,
+          'requestBody' | 'headers' | 'cancellationToken'
+        >
+      >,
+  ) {
+    if (fields.requestBody !== undefined) {
+      this.requestBody = fields.requestBody;
+    }
+    if (fields.headers !== undefined) {
+      this.headers = fields.headers;
+    }
+    if (fields.cancellationToken !== undefined) {
+      this.cancellationToken = fields.cancellationToken;
+    }
+  }
+}
+export interface UpdateWebhookByIdOptionalsInput {
+  readonly requestBody?: UpdateWebhookByIdRequestBody;
+  readonly headers?: UpdateWebhookByIdHeaders;
+  readonly cancellationToken?: undefined | CancellationToken;
+}
+export class DeleteWebhookByIdOptionals {
+  readonly headers: DeleteWebhookByIdHeaders = new DeleteWebhookByIdHeaders({});
+  readonly cancellationToken?: CancellationToken = void 0;
+  constructor(
+    fields: Omit<DeleteWebhookByIdOptionals, 'headers' | 'cancellationToken'> &
+      Partial<
+        Pick<DeleteWebhookByIdOptionals, 'headers' | 'cancellationToken'>
+      >,
+  ) {
+    if (fields.headers !== undefined) {
+      this.headers = fields.headers;
+    }
+    if (fields.cancellationToken !== undefined) {
+      this.cancellationToken = fields.cancellationToken;
+    }
+  }
+}
+export interface DeleteWebhookByIdOptionalsInput {
+  readonly headers?: DeleteWebhookByIdHeaders;
+  readonly cancellationToken?: undefined | CancellationToken;
+}
+export class ValidateMessageOptionals {
+  readonly secondaryKey?: string = void 0;
+  readonly maxAge?: number = 600;
+  constructor(
+    fields: Omit<ValidateMessageOptionals, 'secondaryKey' | 'maxAge'> &
+      Partial<Pick<ValidateMessageOptionals, 'secondaryKey' | 'maxAge'>>,
+  ) {
+    if (fields.secondaryKey !== undefined) {
+      this.secondaryKey = fields.secondaryKey;
+    }
+    if (fields.maxAge !== undefined) {
+      this.maxAge = fields.maxAge;
+    }
+  }
+}
+export interface ValidateMessageOptionalsInput {
+  readonly secondaryKey?: undefined | string;
+  readonly maxAge?: undefined | number;
+}
+export interface GetWebhooksQueryParams {
+  /**
+   * Defines the position marker at which to begin returning results. This is
+   * used when paginating using marker-based pagination.
+   *
+   * This requires `usemarker` to be set to `true`. */
+  readonly marker?: string;
+  /**
+   * The maximum number of items to return per page. */
+  readonly limit?: number;
+}
+export class GetWebhooksHeaders {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<GetWebhooksHeaders, 'extraHeaders'> &
+      Partial<Pick<GetWebhooksHeaders, 'extraHeaders'>>,
+  ) {
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface GetWebhooksHeadersInput {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?:
+    | undefined
+    | {
+        readonly [key: string]: undefined | string;
+      };
+}
+export type CreateWebhookRequestBodyTargetTypeField = 'file' | 'folder';
+export interface CreateWebhookRequestBodyTargetField {
+  /**
+   * The ID of the item to trigger a webhook. */
+  readonly id?: string;
+  /**
+   * The type of item to trigger a webhook. */
+  readonly type?: CreateWebhookRequestBodyTargetTypeField;
+  readonly rawData?: SerializedData;
+}
+export type CreateWebhookRequestBodyTriggersField =
+  | 'FILE.UPLOADED'
+  | 'FILE.PREVIEWED'
+  | 'FILE.DOWNLOADED'
+  | 'FILE.TRASHED'
+  | 'FILE.DELETED'
+  | 'FILE.RESTORED'
+  | 'FILE.COPIED'
+  | 'FILE.MOVED'
+  | 'FILE.LOCKED'
+  | 'FILE.UNLOCKED'
+  | 'FILE.RENAMED'
+  | 'COMMENT.CREATED'
+  | 'COMMENT.UPDATED'
+  | 'COMMENT.DELETED'
+  | 'TASK_ASSIGNMENT.CREATED'
+  | 'TASK_ASSIGNMENT.UPDATED'
+  | 'METADATA_INSTANCE.CREATED'
+  | 'METADATA_INSTANCE.UPDATED'
+  | 'METADATA_INSTANCE.DELETED'
+  | 'FOLDER.CREATED'
+  | 'FOLDER.RENAMED'
+  | 'FOLDER.DOWNLOADED'
+  | 'FOLDER.RESTORED'
+  | 'FOLDER.DELETED'
+  | 'FOLDER.COPIED'
+  | 'FOLDER.MOVED'
+  | 'FOLDER.TRASHED'
+  | 'WEBHOOK.DELETED'
+  | 'COLLABORATION.CREATED'
+  | 'COLLABORATION.ACCEPTED'
+  | 'COLLABORATION.REJECTED'
+  | 'COLLABORATION.REMOVED'
+  | 'COLLABORATION.UPDATED'
+  | 'SHARED_LINK.DELETED'
+  | 'SHARED_LINK.CREATED'
+  | 'SHARED_LINK.UPDATED'
+  | 'SIGN_REQUEST.COMPLETED'
+  | 'SIGN_REQUEST.DECLINED'
+  | 'SIGN_REQUEST.EXPIRED'
+  | 'SIGN_REQUEST.SIGNER_EMAIL_BOUNCED'
+  | 'SIGN_REQUEST.SIGN_SIGNER_SIGNED'
+  | 'SIGN_REQUEST.SIGN_DOCUMENT_CREATED'
+  | 'SIGN_REQUEST.SIGN_ERROR_FINALIZING'
+  | string;
+export interface CreateWebhookRequestBody {
+  /**
+   * The item that will trigger the webhook. */
+  readonly target: CreateWebhookRequestBodyTargetField;
+  /**
+   * The URL that is notified by this webhook. */
+  readonly address: string;
+  /**
+   * An array of event names that this webhook is
+   * to be triggered for. */
+  readonly triggers: readonly CreateWebhookRequestBodyTriggersField[];
+  readonly rawData?: SerializedData;
+}
+export class CreateWebhookHeaders {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<CreateWebhookHeaders, 'extraHeaders'> &
+      Partial<Pick<CreateWebhookHeaders, 'extraHeaders'>>,
+  ) {
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface CreateWebhookHeadersInput {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?:
+    | undefined
+    | {
+        readonly [key: string]: undefined | string;
+      };
+}
+export class GetWebhookByIdHeaders {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<GetWebhookByIdHeaders, 'extraHeaders'> &
+      Partial<Pick<GetWebhookByIdHeaders, 'extraHeaders'>>,
+  ) {
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface GetWebhookByIdHeadersInput {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?:
+    | undefined
+    | {
+        readonly [key: string]: undefined | string;
+      };
+}
+export type UpdateWebhookByIdRequestBodyTargetTypeField = 'file' | 'folder';
+export interface UpdateWebhookByIdRequestBodyTargetField {
+  /**
+   * The ID of the item to trigger a webhook. */
+  readonly id?: string;
+  /**
+   * The type of item to trigger a webhook. */
+  readonly type?: UpdateWebhookByIdRequestBodyTargetTypeField;
+  readonly rawData?: SerializedData;
+}
+export type UpdateWebhookByIdRequestBodyTriggersField =
+  | 'FILE.UPLOADED'
+  | 'FILE.PREVIEWED'
+  | 'FILE.DOWNLOADED'
+  | 'FILE.TRASHED'
+  | 'FILE.DELETED'
+  | 'FILE.RESTORED'
+  | 'FILE.COPIED'
+  | 'FILE.MOVED'
+  | 'FILE.LOCKED'
+  | 'FILE.UNLOCKED'
+  | 'FILE.RENAMED'
+  | 'COMMENT.CREATED'
+  | 'COMMENT.UPDATED'
+  | 'COMMENT.DELETED'
+  | 'TASK_ASSIGNMENT.CREATED'
+  | 'TASK_ASSIGNMENT.UPDATED'
+  | 'METADATA_INSTANCE.CREATED'
+  | 'METADATA_INSTANCE.UPDATED'
+  | 'METADATA_INSTANCE.DELETED'
+  | 'FOLDER.CREATED'
+  | 'FOLDER.RENAMED'
+  | 'FOLDER.DOWNLOADED'
+  | 'FOLDER.RESTORED'
+  | 'FOLDER.DELETED'
+  | 'FOLDER.COPIED'
+  | 'FOLDER.MOVED'
+  | 'FOLDER.TRASHED'
+  | 'WEBHOOK.DELETED'
+  | 'COLLABORATION.CREATED'
+  | 'COLLABORATION.ACCEPTED'
+  | 'COLLABORATION.REJECTED'
+  | 'COLLABORATION.REMOVED'
+  | 'COLLABORATION.UPDATED'
+  | 'SHARED_LINK.DELETED'
+  | 'SHARED_LINK.CREATED'
+  | 'SHARED_LINK.UPDATED'
+  | 'SIGN_REQUEST.COMPLETED'
+  | 'SIGN_REQUEST.DECLINED'
+  | 'SIGN_REQUEST.EXPIRED'
+  | 'SIGN_REQUEST.SIGNER_EMAIL_BOUNCED'
+  | 'SIGN_REQUEST.SIGN_SIGNER_SIGNED'
+  | 'SIGN_REQUEST.SIGN_DOCUMENT_CREATED'
+  | 'SIGN_REQUEST.SIGN_ERROR_FINALIZING'
+  | string;
+export interface UpdateWebhookByIdRequestBody {
+  /**
+   * The item that will trigger the webhook. */
+  readonly target?: UpdateWebhookByIdRequestBodyTargetField;
+  /**
+   * The URL that is notified by this webhook. */
+  readonly address?: string;
+  /**
+   * An array of event names that this webhook is
+   * to be triggered for. */
+  readonly triggers?: readonly UpdateWebhookByIdRequestBodyTriggersField[];
+  readonly rawData?: SerializedData;
+}
+export class UpdateWebhookByIdHeaders {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<UpdateWebhookByIdHeaders, 'extraHeaders'> &
+      Partial<Pick<UpdateWebhookByIdHeaders, 'extraHeaders'>>,
+  ) {
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface UpdateWebhookByIdHeadersInput {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?:
+    | undefined
+    | {
+        readonly [key: string]: undefined | string;
+      };
+}
+export class DeleteWebhookByIdHeaders {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<DeleteWebhookByIdHeaders, 'extraHeaders'> &
+      Partial<Pick<DeleteWebhookByIdHeaders, 'extraHeaders'>>,
+  ) {
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface DeleteWebhookByIdHeadersInput {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?:
+    | undefined
+    | {
+        readonly [key: string]: undefined | string;
+      };
+}
+export class WebhooksManager {
+  readonly auth?: Authentication;
+  readonly networkSession: NetworkSession = new NetworkSession({});
+  constructor(
+    fields: Omit<
+      WebhooksManager,
+      | 'networkSession'
+      | 'getWebhooks'
+      | 'createWebhook'
+      | 'getWebhookById'
+      | 'updateWebhookById'
+      | 'deleteWebhookById'
+      | 'validateMessage'
+    > &
+      Partial<Pick<WebhooksManager, 'networkSession'>>,
+  ) {
+    if (fields.auth !== undefined) {
+      this.auth = fields.auth;
+    }
+    if (fields.networkSession !== undefined) {
+      this.networkSession = fields.networkSession;
+    }
+  }
+  /**
+   * Returns all defined webhooks for the requesting application.
+   *
+   * This API only returns webhooks that are applied to files or folders that are
+   * owned by the authenticated user. This means that an admin can not see webhooks
+   * created by a service account unless the admin has access to those folders, and
+   * vice versa.
+   * @param {GetWebhooksQueryParams} queryParams Query parameters of getWebhooks method
+   * @param {GetWebhooksHeadersInput} headersInput Headers of getWebhooks method
+   * @param {CancellationToken} cancellationToken Token used for request cancellation.
+   * @returns {Promise<Webhooks>}
+   */
+  async getWebhooks(
+    queryParams: GetWebhooksQueryParams = {} satisfies GetWebhooksQueryParams,
+    headersInput: GetWebhooksHeadersInput = new GetWebhooksHeaders({}),
+    cancellationToken?: CancellationToken,
+  ): Promise<Webhooks> {
+    const headers: GetWebhooksHeaders = new GetWebhooksHeaders({
+      extraHeaders: headersInput.extraHeaders,
+    });
+    const queryParamsMap: {
+      readonly [key: string]: string;
+    } = prepareParams({
+      ['marker']: toString(queryParams.marker) as string,
+      ['limit']: toString(queryParams.limit) as string,
+    });
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ...{}, ...headers.extraHeaders });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            this.networkSession.baseUrls.baseUrl,
+            '/2.0/webhooks',
+          ) as string,
+          method: 'GET',
+          params: queryParamsMap,
+          headers: headersMap,
+          responseFormat: 'json' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        }),
+      );
+    return {
+      ...deserializeWebhooks(response.data!),
+      rawData: response.data!,
+    };
+  }
+  /**
+   * Creates a webhook.
+   * @param {CreateWebhookRequestBody} requestBody Request body of createWebhook method
+   * @param {CreateWebhookOptionalsInput} optionalsInput
+   * @returns {Promise<Webhook>}
+   */
+  async createWebhook(
+    requestBody: CreateWebhookRequestBody,
+    optionalsInput: CreateWebhookOptionalsInput = {},
+  ): Promise<Webhook> {
+    const optionals: CreateWebhookOptionals = new CreateWebhookOptionals({
+      headers: optionalsInput.headers,
+      cancellationToken: optionalsInput.cancellationToken,
+    });
+    const headers: any = optionals.headers;
+    const cancellationToken: any = optionals.cancellationToken;
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ...{}, ...headers.extraHeaders });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            this.networkSession.baseUrls.baseUrl,
+            '/2.0/webhooks',
+          ) as string,
+          method: 'POST',
+          headers: headersMap,
+          data: serializeCreateWebhookRequestBody(requestBody),
+          contentType: 'application/json',
+          responseFormat: 'json' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        }),
+      );
+    return {
+      ...deserializeWebhook(response.data!),
+      rawData: response.data!,
+    };
+  }
+  /**
+     * Retrieves a specific webhook.
+     * @param {string} webhookId The ID of the webhook.
+    Example: "3321123"
+     * @param {GetWebhookByIdOptionalsInput} optionalsInput
+     * @returns {Promise<Webhook>}
+     */
+  async getWebhookById(
+    webhookId: string,
+    optionalsInput: GetWebhookByIdOptionalsInput = {},
+  ): Promise<Webhook> {
+    const optionals: GetWebhookByIdOptionals = new GetWebhookByIdOptionals({
+      headers: optionalsInput.headers,
+      cancellationToken: optionalsInput.cancellationToken,
+    });
+    const headers: any = optionals.headers;
+    const cancellationToken: any = optionals.cancellationToken;
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ...{}, ...headers.extraHeaders });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            this.networkSession.baseUrls.baseUrl,
+            '/2.0/webhooks/',
+            toString(webhookId) as string,
+          ) as string,
+          method: 'GET',
+          headers: headersMap,
+          responseFormat: 'json' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        }),
+      );
+    return {
+      ...deserializeWebhook(response.data!),
+      rawData: response.data!,
+    };
+  }
+  /**
+     * Updates a webhook.
+     * @param {string} webhookId The ID of the webhook.
+    Example: "3321123"
+     * @param {UpdateWebhookByIdOptionalsInput} optionalsInput
+     * @returns {Promise<Webhook>}
+     */
+  async updateWebhookById(
+    webhookId: string,
+    optionalsInput: UpdateWebhookByIdOptionalsInput = {},
+  ): Promise<Webhook> {
+    const optionals: UpdateWebhookByIdOptionals =
+      new UpdateWebhookByIdOptionals({
+        requestBody: optionalsInput.requestBody,
+        headers: optionalsInput.headers,
+        cancellationToken: optionalsInput.cancellationToken,
+      });
+    const requestBody: any = optionals.requestBody;
+    const headers: any = optionals.headers;
+    const cancellationToken: any = optionals.cancellationToken;
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ...{}, ...headers.extraHeaders });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            this.networkSession.baseUrls.baseUrl,
+            '/2.0/webhooks/',
+            toString(webhookId) as string,
+          ) as string,
+          method: 'PUT',
+          headers: headersMap,
+          data: serializeUpdateWebhookByIdRequestBody(requestBody),
+          contentType: 'application/json',
+          responseFormat: 'json' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        }),
+      );
+    return {
+      ...deserializeWebhook(response.data!),
+      rawData: response.data!,
+    };
+  }
+  /**
+     * Deletes a webhook.
+     * @param {string} webhookId The ID of the webhook.
+    Example: "3321123"
+     * @param {DeleteWebhookByIdOptionalsInput} optionalsInput
+     * @returns {Promise<undefined>}
+     */
+  async deleteWebhookById(
+    webhookId: string,
+    optionalsInput: DeleteWebhookByIdOptionalsInput = {},
+  ): Promise<undefined> {
+    const optionals: DeleteWebhookByIdOptionals =
+      new DeleteWebhookByIdOptionals({
+        headers: optionalsInput.headers,
+        cancellationToken: optionalsInput.cancellationToken,
+      });
+    const headers: any = optionals.headers;
+    const cancellationToken: any = optionals.cancellationToken;
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ...{}, ...headers.extraHeaders });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            this.networkSession.baseUrls.baseUrl,
+            '/2.0/webhooks/',
+            toString(webhookId) as string,
+          ) as string,
+          method: 'DELETE',
+          headers: headersMap,
+          responseFormat: 'no_content' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        }),
+      );
+    return void 0;
+  }
+  /**
+     * Validate a webhook message by verifying the signature and the delivery timestamp
+     * @param {string} body The request body of the webhook message
+     * @param {{
+        readonly [key: string]: string;
+    }} headers The headers of the webhook message
+     * @param {string} primaryKey The primary signature to verify the message with
+     * @param {ValidateMessageOptionalsInput} optionalsInput
+     * @returns {Promise<boolean>}
+     */
+  static async validateMessage(
+    body: string,
+    headers: {
+      readonly [key: string]: string;
+    },
+    primaryKey: string,
+    optionalsInput: ValidateMessageOptionalsInput = {},
+  ): Promise<boolean> {
+    const optionals: ValidateMessageOptionals = new ValidateMessageOptionals({
+      secondaryKey: optionalsInput.secondaryKey,
+      maxAge: optionalsInput.maxAge,
+    });
+    const secondaryKey: any = optionals.secondaryKey;
+    const maxAge: any = optionals.maxAge;
+    const deliveryTimestamp: DateTime = dateTimeFromString(
+      headers['box-delivery-timestamp'],
+    );
+    const currentEpoch: number = getEpochTimeInSeconds();
+    if (
+      currentEpoch - maxAge > dateTimeToEpochSeconds(deliveryTimestamp) ||
+      dateTimeToEpochSeconds(deliveryTimestamp) > currentEpoch
+    ) {
+      return false;
+    }
+    if (
+      !(primaryKey == void 0) &&
+      !(headers['box-signature-primary'] == void 0) &&
+      (await compareSignatures(
+        await computeWebhookSignature(body, headers, primaryKey, false),
+        headers['box-signature-primary'],
+      ))
+    ) {
+      return true;
+    }
+    if (
+      !(primaryKey == void 0) &&
+      !(headers['box-signature-primary'] == void 0) &&
+      (await compareSignatures(
+        await computeWebhookSignature(body, headers, primaryKey, true),
+        headers['box-signature-primary'],
+      ))
+    ) {
+      return true;
+    }
+    if (
+      !(secondaryKey == void 0) &&
+      !(headers['box-signature-secondary'] == void 0) &&
+      (await compareSignatures(
+        await computeWebhookSignature(body, headers, secondaryKey, false),
+        headers['box-signature-secondary'],
+      ))
+    ) {
+      return true;
+    }
+    if (
+      !(secondaryKey == void 0) &&
+      !(headers['box-signature-secondary'] == void 0) &&
+      (await compareSignatures(
+        await computeWebhookSignature(body, headers, secondaryKey, true),
+        headers['box-signature-secondary'],
+      ))
+    ) {
+      return true;
+    }
     return false;
   }
-
-  return true;
 }
-
-/**
- * Stringify JSON with escaped multibyte Unicode characters to ensure computed signatures match PHP's default behavior
- *
- * @param {Object} body - The parsed JSON object
- * @returns {string} - Stringified JSON with escaped multibyte Unicode characters
- * @private
- */
-function jsonStringifyWithEscapedUnicode(body: object) {
-  return JSON.stringify(body).replace(
-    /[\u007f-\uffff]/g,
-    (char) => `\\u${`0000${char.charCodeAt(0).toString(16)}`.slice(-4)}`
-  );
+export interface WebhooksManagerInput {
+  readonly auth?: Authentication;
+  readonly networkSession?: NetworkSession;
 }
-
-// -----------------------------------------------------------------------------
-// Public
-// -----------------------------------------------------------------------------
-
-/**
- * Simple manager for interacting with all 'Webhooks' endpoints and actions.
- *
- * @param {BoxClient} client The Box API Client that is responsible for making calls to the API
- * @constructor
- */
-class Webhooks {
-  /**
-   * Primary signature key to protect webhooks against attacks.
-   * @static
-   * @type {?string}
-   */
-  static primarySignatureKey: string | null = null;
-
-  /**
-   * Secondary signature key to protect webhooks against attacks.
-   * @static
-   * @type {?string}
-   */
-  static secondarySignatureKey: string | null = null;
-
-  /**
-   * Sets primary and secondary signatures that are used to verify the Webhooks messages
-   *
-   * @param {string} primaryKey - The primary signature to verify the message with
-   * @param {string} [secondaryKey] - The secondary signature to verify the message with
-   * @returns {void}
-   */
-  static setSignatureKeys(primaryKey: string, secondaryKey?: string) {
-    Webhooks.primarySignatureKey = primaryKey;
-
-    if (typeof secondaryKey === 'string') {
-      Webhooks.secondarySignatureKey = secondaryKey;
-    }
-  }
-
-  /**
-	 * Validate a webhook message by verifying the signature and the delivery timestamp
-	 *
-	 * @param {string|Object} body - The request body of the webhook message
-	 * @param {Object} headers - The request headers of the webhook message
-	 * @param {string} [primaryKey] - The primary signature to verify the message with. If it is sent as a parameter,
-		 it overrides the static variable primarySignatureKey
-	* @param {string} [secondaryKey] - The secondary signature to verify the message with. If it is sent as a parameter,
-		it overrides the static variable primarySignatureKey
-	* @param {int} [maxMessageAge] - The maximum message age (in seconds).  Defaults to 10 minutes
-	* @returns {boolean} - True or false
-	*/
-  static validateMessage(
-    body: string | object,
-    headers: Record<string, string>,
-    primaryKey?: string,
-    secondaryKey?: string,
-    maxMessageAge?: number
-  ) {
-    if (!primaryKey && Webhooks.primarySignatureKey) {
-      primaryKey = Webhooks.primarySignatureKey;
-    }
-
-    if (!secondaryKey && Webhooks.secondarySignatureKey) {
-      secondaryKey = Webhooks.secondarySignatureKey;
-    }
-
-    if (typeof maxMessageAge !== 'number') {
-      maxMessageAge = MAX_MESSAGE_AGE;
-    }
-
-    // For frameworks like Express that automatically parse JSON
-    // bodies into Objects, re-stringify for signature testing
-    if (typeof body === 'object') {
-      // Escape forward slashes to ensure a matching signature
-      body = jsonStringifyWithEscapedUnicode(body).replace(/\//g, '\\/');
-    }
-
-    if (!validateSignature(body, headers, primaryKey, secondaryKey)) {
-      return false;
-    }
-
-    if (!validateDeliveryTimestamp(headers, maxMessageAge)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  client: BoxClient;
-
-  triggerTypes!: Record<
-    | 'FILE'
-    | 'COMMENT'
-    | 'TASK_ASSIGNMENT'
-    | 'METADATA_INSTANCE'
-    | 'FOLDER'
-    | 'WEBHOOK'
-    | 'COLLABORATION'
-    | 'SHARED_LINK'
-    | 'SIGN_REQUEST',
-    Record<string, WebhookTriggerType>
-  >;
-  validateMessage!: typeof Webhooks.validateMessage;
-
-  constructor(client: BoxClient) {
-    // Attach the client, for making API calls
-    this.client = client;
-  }
-
-  /**
-   * Create a new webhook on a given Box object, specified by type and ID.
-   *
-   * API Endpoint: '/webhooks'
-   * Method: POST
-   *
-   * @param {string} targetID - Box ID  of the item to create webhook on
-   * @param {ItemType} targetType - Type of item the webhook will be created on
-   * @param {string} notificationURL - The URL of your application where Box will notify you of events triggers
-   * @param {WebhookTriggerType[]} triggerTypes - Array of event types that trigger notification for the target
-   * @param {Function} [callback] - Passed the new webhook information if it was acquired successfully
-   * @returns {Promise<Object>} A promise resolving to the new webhook object
-   */
-  create(
-    targetID: string,
-    targetType: string,
-    notificationURL: string,
-    triggerTypes: WebhookTriggerType[],
-    callback?: Function
-  ) {
-    var params = {
-      body: {
-        target: {
-          id: targetID,
-          type: targetType,
-        },
-        address: notificationURL,
-        triggers: triggerTypes,
-      },
-    };
-
-    var apiPath = urlPath(BASE_PATH);
-    return this.client.wrapWithDefaultHandler(this.client.post)(
-      apiPath,
-      params,
-      callback
-    );
-  }
-
-  /**
-   * Returns a webhook object with the specified Webhook ID
-   *
-   * API Endpoint: '/webhooks/:webhookID'
-   * Method: GET
-   *
-   * @param {string} webhookID - ID of the webhook to retrieve
-   * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
-   * @param {Function} [callback] - Passed the webhook information if it was acquired successfully
-   * @returns {Promise<Object>} A promise resolving to the webhook object
-   */
-  get(webhookID: string, options?: Record<string, any>, callback?: Function) {
-    var params = {
-      qs: options,
-    };
-
-    var apiPath = urlPath(BASE_PATH, webhookID);
-    return this.client.wrapWithDefaultHandler(this.client.get)(
-      apiPath,
-      params,
-      callback
-    );
-  }
-
-  /**
-   * Get a list of webhooks that are active for the current application and user.
-   *
-   * API Endpoint: '/webhooks'
-   * Method: GET
-   *
-   * @param {Object} [options] - Additional options for the request. Can be left null in most cases.
-   * @param {int} [options.limit=100] - The number of webhooks to return
-   * @param {string} [options.marker] - Pagination marker
-   * @param {Function} [callback] - Passed the list of webhooks if successful, error otherwise
-   * @returns {Promise<Object>} A promise resolving to the collection of webhooks
-   */
-  getAll(
-    options?: {
-      limit?: number;
-      marker?: string;
-    },
-    callback?: Function
-  ) {
-    var params = {
-      qs: options,
-    };
-
-    var apiPath = urlPath(BASE_PATH);
-    return this.client.wrapWithDefaultHandler(this.client.get)(
-      apiPath,
-      params,
-      callback
-    );
-  }
-
-  /**
-   * Update a webhook
-   *
-   * API Endpoint: '/webhooks/:webhookID'
-   * Method: PUT
-   *
-   * @param {string} webhookID - The ID of the webhook to be updated
-   * @param {Object} updates - Webhook fields to update
-   * @param {string} [updates.address] - The new URL used by Box to send a notification when webhook is triggered
-   * @param {WebhookTriggerType[]} [updates.triggers] - The new events that triggers a notification
-   * @param {Function} [callback] - Passed the updated webhook information if successful, error otherwise
-   * @returns {Promise<Object>} A promise resolving to the updated webhook object
-   */
-  update(
-    webhookID: string,
-    updates?: {
-      address?: string;
-      triggers?: WebhookTriggerType[];
-    },
-    callback?: Function
-  ) {
-    var apiPath = urlPath(BASE_PATH, webhookID),
-      params = {
-        body: updates,
-      };
-
-    return this.client.wrapWithDefaultHandler(this.client.put)(
-      apiPath,
-      params,
-      callback
-    );
-  }
-
-  /**
-   * Delete a specified webhook by ID
-   *
-   * API Endpoint: '/webhooks/:webhookID'
-   * Method: DELETE
-   *
-   * @param {string} webhookID - ID of webhook to be deleted
-   * @param {Function} [callback] - Empty response body passed if successful.
-   * @returns {Promise<void>} A promise resolving to nothing
-   */
-  delete(webhookID: string, callback?: Function) {
-    var apiPath = urlPath(BASE_PATH, webhookID);
-    return this.client.wrapWithDefaultHandler(this.client.del)(
-      apiPath,
-      null,
-      callback
-    );
-  }
+export function serializeCreateWebhookRequestBodyTargetTypeField(
+  val: CreateWebhookRequestBodyTargetTypeField,
+): SerializedData {
+  return val;
 }
-
-/**
- * Enum of valid webhooks event triggers
- *
- * @readonly
- * @enum {WebhookTriggerType}
- */
-Webhooks.prototype.triggerTypes = {
-  FILE: {
-    UPLOADED: WebhookTriggerType.FILE_UPLOADED,
-    PREVIEWED: WebhookTriggerType.FILE_PREVIEWED,
-    DOWNLOADED: WebhookTriggerType.FILE_DOWNLOADED,
-    TRASHED: WebhookTriggerType.FILE_TRASHED,
-    DELETED: WebhookTriggerType.FILE_DELETED,
-    RESTORED: WebhookTriggerType.FILE_RESTORED,
-    COPIED: WebhookTriggerType.FILE_COPIED,
-    MOVED: WebhookTriggerType.FILE_MOVED,
-    LOCKED: WebhookTriggerType.FILE_LOCKED,
-    UNLOCKED: WebhookTriggerType.FILE_UNLOCKED,
-    RENAMED: WebhookTriggerType.FILE_RENAMED,
-  },
-  COMMENT: {
-    CREATED: WebhookTriggerType.COMMENT_CREATED,
-    UPDATED: WebhookTriggerType.COMMENT_UPDATED,
-    DELETED: WebhookTriggerType.COMMENT_DELETED,
-  },
-  TASK_ASSIGNMENT: {
-    CREATED: WebhookTriggerType.TASK_ASSIGNMENT_CREATED,
-    UPDATED: WebhookTriggerType.TASK_ASSIGNMENT_UPDATED,
-  },
-  METADATA_INSTANCE: {
-    CREATED: WebhookTriggerType.METADATA_INSTANCE_CREATED,
-    UPDATED: WebhookTriggerType.METADATA_INSTANCE_UPDATED,
-    DELETED: WebhookTriggerType.METADATA_INSTANCE_DELETED,
-  },
-  FOLDER: {
-    CREATED: WebhookTriggerType.FOLDER_CREATED,
-    DOWNLOADED: WebhookTriggerType.FOLDER_DOWNLOADED,
-    RESTORED: WebhookTriggerType.FOLDER_RESTORED,
-    DELETED: WebhookTriggerType.FOLDER_DELETED,
-    COPIED: WebhookTriggerType.FOLDER_COPIED,
-    MOVED: WebhookTriggerType.FOLDER_MOVED,
-    TRASHED: WebhookTriggerType.FOLDER_TRASHED,
-    RENAMED: WebhookTriggerType.FOLDER_RENAMED,
-  },
-  WEBHOOK: {
-    DELETED: WebhookTriggerType.WEBHOOK_DELETED,
-  },
-  COLLABORATION: {
-    CREATED: WebhookTriggerType.COLLABORATION_CREATED,
-    ACCEPTED: WebhookTriggerType.COLLABORATION_ACCEPTED,
-    REJECTED: WebhookTriggerType.COLLABORATION_REJECTED,
-    REMOVED: WebhookTriggerType.COLLABORATION_REMOVED,
-    UPDATED: WebhookTriggerType.COLLABORATION_UPDATED,
-  },
-  SHARED_LINK: {
-    DELETED: WebhookTriggerType.SHARED_LINK_DELETED,
-    CREATED: WebhookTriggerType.SHARED_LINK_CREATED,
-    UPDATED: WebhookTriggerType.SHARED_LINK_UPDATED,
-  },
-  SIGN_REQUEST: {
-    COMPLETED: WebhookTriggerType.SIGN_REQUEST_COMPLETED,
-    DECLINED: WebhookTriggerType.SIGN_REQUEST_DECLINED,
-    EXPIRED: WebhookTriggerType.SIGN_REQUEST_EXPIRED,
-  },
-};
-
-Webhooks.prototype.validateMessage = Webhooks.validateMessage;
-
-/**
- * @module box-node-sdk/lib/managers/webhooks
- * @see {@Link Webhooks}
- */
-export = Webhooks;
+export function deserializeCreateWebhookRequestBodyTargetTypeField(
+  val: SerializedData,
+): CreateWebhookRequestBodyTargetTypeField {
+  if (val == 'file') {
+    return val;
+  }
+  if (val == 'folder') {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize CreateWebhookRequestBodyTargetTypeField",
+  });
+}
+export function serializeCreateWebhookRequestBodyTargetField(
+  val: CreateWebhookRequestBodyTargetField,
+): SerializedData {
+  return {
+    ['id']: val.id,
+    ['type']:
+      val.type == void 0
+        ? val.type
+        : serializeCreateWebhookRequestBodyTargetTypeField(val.type),
+  };
+}
+export function deserializeCreateWebhookRequestBodyTargetField(
+  val: SerializedData,
+): CreateWebhookRequestBodyTargetField {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "CreateWebhookRequestBodyTargetField"',
+    });
+  }
+  if (!(val.id == void 0) && !sdIsString(val.id)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "id" of type "CreateWebhookRequestBodyTargetField"',
+    });
+  }
+  const id: undefined | string = val.id == void 0 ? void 0 : val.id;
+  const type: undefined | CreateWebhookRequestBodyTargetTypeField =
+    val.type == void 0
+      ? void 0
+      : deserializeCreateWebhookRequestBodyTargetTypeField(val.type);
+  return { id: id, type: type } satisfies CreateWebhookRequestBodyTargetField;
+}
+export function serializeCreateWebhookRequestBodyTriggersField(
+  val: CreateWebhookRequestBodyTriggersField,
+): SerializedData {
+  return val;
+}
+export function deserializeCreateWebhookRequestBodyTriggersField(
+  val: SerializedData,
+): CreateWebhookRequestBodyTriggersField {
+  if (val == 'FILE.UPLOADED') {
+    return val;
+  }
+  if (val == 'FILE.PREVIEWED') {
+    return val;
+  }
+  if (val == 'FILE.DOWNLOADED') {
+    return val;
+  }
+  if (val == 'FILE.TRASHED') {
+    return val;
+  }
+  if (val == 'FILE.DELETED') {
+    return val;
+  }
+  if (val == 'FILE.RESTORED') {
+    return val;
+  }
+  if (val == 'FILE.COPIED') {
+    return val;
+  }
+  if (val == 'FILE.MOVED') {
+    return val;
+  }
+  if (val == 'FILE.LOCKED') {
+    return val;
+  }
+  if (val == 'FILE.UNLOCKED') {
+    return val;
+  }
+  if (val == 'FILE.RENAMED') {
+    return val;
+  }
+  if (val == 'COMMENT.CREATED') {
+    return val;
+  }
+  if (val == 'COMMENT.UPDATED') {
+    return val;
+  }
+  if (val == 'COMMENT.DELETED') {
+    return val;
+  }
+  if (val == 'TASK_ASSIGNMENT.CREATED') {
+    return val;
+  }
+  if (val == 'TASK_ASSIGNMENT.UPDATED') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE.CREATED') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE.UPDATED') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE.DELETED') {
+    return val;
+  }
+  if (val == 'FOLDER.CREATED') {
+    return val;
+  }
+  if (val == 'FOLDER.RENAMED') {
+    return val;
+  }
+  if (val == 'FOLDER.DOWNLOADED') {
+    return val;
+  }
+  if (val == 'FOLDER.RESTORED') {
+    return val;
+  }
+  if (val == 'FOLDER.DELETED') {
+    return val;
+  }
+  if (val == 'FOLDER.COPIED') {
+    return val;
+  }
+  if (val == 'FOLDER.MOVED') {
+    return val;
+  }
+  if (val == 'FOLDER.TRASHED') {
+    return val;
+  }
+  if (val == 'WEBHOOK.DELETED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.CREATED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.ACCEPTED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.REJECTED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.REMOVED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.UPDATED') {
+    return val;
+  }
+  if (val == 'SHARED_LINK.DELETED') {
+    return val;
+  }
+  if (val == 'SHARED_LINK.CREATED') {
+    return val;
+  }
+  if (val == 'SHARED_LINK.UPDATED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.COMPLETED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.DECLINED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.EXPIRED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGNER_EMAIL_BOUNCED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_SIGNER_SIGNED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_DOCUMENT_CREATED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_ERROR_FINALIZING') {
+    return val;
+  }
+  if (sdIsString(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize CreateWebhookRequestBodyTriggersField",
+  });
+}
+export function serializeCreateWebhookRequestBody(
+  val: CreateWebhookRequestBody,
+): SerializedData {
+  return {
+    ['target']: serializeCreateWebhookRequestBodyTargetField(val.target),
+    ['address']: val.address,
+    ['triggers']: val.triggers.map(function (
+      item: CreateWebhookRequestBodyTriggersField,
+    ): SerializedData {
+      return serializeCreateWebhookRequestBodyTriggersField(item);
+    }) as readonly any[],
+  };
+}
+export function deserializeCreateWebhookRequestBody(
+  val: SerializedData,
+): CreateWebhookRequestBody {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "CreateWebhookRequestBody"',
+    });
+  }
+  if (val.target == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "target" of type "CreateWebhookRequestBody" to be defined',
+    });
+  }
+  const target: CreateWebhookRequestBodyTargetField =
+    deserializeCreateWebhookRequestBodyTargetField(val.target);
+  if (val.address == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "address" of type "CreateWebhookRequestBody" to be defined',
+    });
+  }
+  if (!sdIsString(val.address)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "address" of type "CreateWebhookRequestBody"',
+    });
+  }
+  const address: string = val.address;
+  if (val.triggers == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "triggers" of type "CreateWebhookRequestBody" to be defined',
+    });
+  }
+  if (!sdIsList(val.triggers)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "triggers" of type "CreateWebhookRequestBody"',
+    });
+  }
+  const triggers: readonly CreateWebhookRequestBodyTriggersField[] = sdIsList(
+    val.triggers,
+  )
+    ? (val.triggers.map(function (
+        itm: SerializedData,
+      ): CreateWebhookRequestBodyTriggersField {
+        return deserializeCreateWebhookRequestBodyTriggersField(itm);
+      }) as readonly any[])
+    : [];
+  return {
+    target: target,
+    address: address,
+    triggers: triggers,
+  } satisfies CreateWebhookRequestBody;
+}
+export function serializeUpdateWebhookByIdRequestBodyTargetTypeField(
+  val: UpdateWebhookByIdRequestBodyTargetTypeField,
+): SerializedData {
+  return val;
+}
+export function deserializeUpdateWebhookByIdRequestBodyTargetTypeField(
+  val: SerializedData,
+): UpdateWebhookByIdRequestBodyTargetTypeField {
+  if (val == 'file') {
+    return val;
+  }
+  if (val == 'folder') {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize UpdateWebhookByIdRequestBodyTargetTypeField",
+  });
+}
+export function serializeUpdateWebhookByIdRequestBodyTargetField(
+  val: UpdateWebhookByIdRequestBodyTargetField,
+): SerializedData {
+  return {
+    ['id']: val.id,
+    ['type']:
+      val.type == void 0
+        ? val.type
+        : serializeUpdateWebhookByIdRequestBodyTargetTypeField(val.type),
+  };
+}
+export function deserializeUpdateWebhookByIdRequestBodyTargetField(
+  val: SerializedData,
+): UpdateWebhookByIdRequestBodyTargetField {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "UpdateWebhookByIdRequestBodyTargetField"',
+    });
+  }
+  if (!(val.id == void 0) && !sdIsString(val.id)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "id" of type "UpdateWebhookByIdRequestBodyTargetField"',
+    });
+  }
+  const id: undefined | string = val.id == void 0 ? void 0 : val.id;
+  const type: undefined | UpdateWebhookByIdRequestBodyTargetTypeField =
+    val.type == void 0
+      ? void 0
+      : deserializeUpdateWebhookByIdRequestBodyTargetTypeField(val.type);
+  return {
+    id: id,
+    type: type,
+  } satisfies UpdateWebhookByIdRequestBodyTargetField;
+}
+export function serializeUpdateWebhookByIdRequestBodyTriggersField(
+  val: UpdateWebhookByIdRequestBodyTriggersField,
+): SerializedData {
+  return val;
+}
+export function deserializeUpdateWebhookByIdRequestBodyTriggersField(
+  val: SerializedData,
+): UpdateWebhookByIdRequestBodyTriggersField {
+  if (val == 'FILE.UPLOADED') {
+    return val;
+  }
+  if (val == 'FILE.PREVIEWED') {
+    return val;
+  }
+  if (val == 'FILE.DOWNLOADED') {
+    return val;
+  }
+  if (val == 'FILE.TRASHED') {
+    return val;
+  }
+  if (val == 'FILE.DELETED') {
+    return val;
+  }
+  if (val == 'FILE.RESTORED') {
+    return val;
+  }
+  if (val == 'FILE.COPIED') {
+    return val;
+  }
+  if (val == 'FILE.MOVED') {
+    return val;
+  }
+  if (val == 'FILE.LOCKED') {
+    return val;
+  }
+  if (val == 'FILE.UNLOCKED') {
+    return val;
+  }
+  if (val == 'FILE.RENAMED') {
+    return val;
+  }
+  if (val == 'COMMENT.CREATED') {
+    return val;
+  }
+  if (val == 'COMMENT.UPDATED') {
+    return val;
+  }
+  if (val == 'COMMENT.DELETED') {
+    return val;
+  }
+  if (val == 'TASK_ASSIGNMENT.CREATED') {
+    return val;
+  }
+  if (val == 'TASK_ASSIGNMENT.UPDATED') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE.CREATED') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE.UPDATED') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE.DELETED') {
+    return val;
+  }
+  if (val == 'FOLDER.CREATED') {
+    return val;
+  }
+  if (val == 'FOLDER.RENAMED') {
+    return val;
+  }
+  if (val == 'FOLDER.DOWNLOADED') {
+    return val;
+  }
+  if (val == 'FOLDER.RESTORED') {
+    return val;
+  }
+  if (val == 'FOLDER.DELETED') {
+    return val;
+  }
+  if (val == 'FOLDER.COPIED') {
+    return val;
+  }
+  if (val == 'FOLDER.MOVED') {
+    return val;
+  }
+  if (val == 'FOLDER.TRASHED') {
+    return val;
+  }
+  if (val == 'WEBHOOK.DELETED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.CREATED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.ACCEPTED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.REJECTED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.REMOVED') {
+    return val;
+  }
+  if (val == 'COLLABORATION.UPDATED') {
+    return val;
+  }
+  if (val == 'SHARED_LINK.DELETED') {
+    return val;
+  }
+  if (val == 'SHARED_LINK.CREATED') {
+    return val;
+  }
+  if (val == 'SHARED_LINK.UPDATED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.COMPLETED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.DECLINED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.EXPIRED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGNER_EMAIL_BOUNCED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_SIGNER_SIGNED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_DOCUMENT_CREATED') {
+    return val;
+  }
+  if (val == 'SIGN_REQUEST.SIGN_ERROR_FINALIZING') {
+    return val;
+  }
+  if (sdIsString(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize UpdateWebhookByIdRequestBodyTriggersField",
+  });
+}
+export function serializeUpdateWebhookByIdRequestBody(
+  val: UpdateWebhookByIdRequestBody,
+): SerializedData {
+  return {
+    ['target']:
+      val.target == void 0
+        ? val.target
+        : serializeUpdateWebhookByIdRequestBodyTargetField(val.target),
+    ['address']: val.address,
+    ['triggers']:
+      val.triggers == void 0
+        ? val.triggers
+        : (val.triggers.map(function (
+            item: UpdateWebhookByIdRequestBodyTriggersField,
+          ): SerializedData {
+            return serializeUpdateWebhookByIdRequestBodyTriggersField(item);
+          }) as readonly any[]),
+  };
+}
+export function deserializeUpdateWebhookByIdRequestBody(
+  val: SerializedData,
+): UpdateWebhookByIdRequestBody {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "UpdateWebhookByIdRequestBody"',
+    });
+  }
+  const target: undefined | UpdateWebhookByIdRequestBodyTargetField =
+    val.target == void 0
+      ? void 0
+      : deserializeUpdateWebhookByIdRequestBodyTargetField(val.target);
+  if (!(val.address == void 0) && !sdIsString(val.address)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "address" of type "UpdateWebhookByIdRequestBody"',
+    });
+  }
+  const address: undefined | string =
+    val.address == void 0 ? void 0 : val.address;
+  if (!(val.triggers == void 0) && !sdIsList(val.triggers)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "triggers" of type "UpdateWebhookByIdRequestBody"',
+    });
+  }
+  const triggers:
+    | undefined
+    | readonly UpdateWebhookByIdRequestBodyTriggersField[] =
+    val.triggers == void 0
+      ? void 0
+      : sdIsList(val.triggers)
+        ? (val.triggers.map(function (
+            itm: SerializedData,
+          ): UpdateWebhookByIdRequestBodyTriggersField {
+            return deserializeUpdateWebhookByIdRequestBodyTriggersField(itm);
+          }) as readonly any[])
+        : [];
+  return {
+    target: target,
+    address: address,
+    triggers: triggers,
+  } satisfies UpdateWebhookByIdRequestBody;
+}

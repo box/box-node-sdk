@@ -1,387 +1,161 @@
-Tasks
-=====
+# TasksManager
 
-Tasks enable file-centric workflows in Box. User can create tasks on files and assign them to collaborators on Box.
+- [List tasks on file](#list-tasks-on-file)
+- [Create task](#create-task)
+- [Get task](#get-task)
+- [Update task](#update-task)
+- [Remove task](#remove-task)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## List tasks on file
 
+Retrieves a list of all the tasks for a file. This
+endpoint does not support pagination.
 
-- [Create a Task](#create-a-task)
-- [Get a Task's Information](#get-a-tasks-information)
-- [Update a Task](#update-a-task)
-- [Delete a Task](#delete-a-task)
-- [Get Assignments for a Task](#get-assignments-for-a-task)
-- [Get Task Assignment](#get-task-assignment)
-- [Assign Task](#assign-task)
-- [Update Task Assignment](#update-task-assignment)
-- [Remove Task Assignment](#remove-task-assignment)
-- [Get Tasks on a File](#get-tasks-on-a-file)
+This operation is performed by calling function `getFileTasks`.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-files-id-tasks/).
 
-Create a Task
--------------
+<!-- sample get_files_id_tasks -->
 
-To create a task call the [`tasks.create(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#create) method.
-
-<!-- sample post_tasks-->
-```js
-var options = {
-	message: 'Please review for publication!',
-	due_at: '2014-04-03T11:09:43-07:00'
-};
-client.tasks.create('22222', options)
-	.then(task => {
-		/* task -> {
-			type: 'task',
-			id: '11111',
-			item: 
-			{ type: 'file',
-				id: '22222',
-				sequence_id: '0',
-				etag: '0',
-				sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
-				name: 'box-logo.png' },
-			due_at: '2014-04-03T11:09:43-07:00',
-			action: 'review',
-			message: 'Please review for publication!',
-			task_assignment_collection: { total_count: 0, entries: [] },
-			is_completed: false,
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2013-04-03T11:12:54-07:00' }
-		*/
-	});
+```ts
+await client.tasks.getFileTasks(file.id);
 ```
 
-Get a Task's Information
-------------------------
+### Arguments
 
-To get a task information call the [`tasks.get(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#get) method.
+- fileId `string`
+  - The unique identifier that represents a file. The ID for any file can be determined by visiting a file in the web application and copying the ID from the URL. For example, for the URL `https://*.app.box.com/files/123` the `file_id` is `123`. Example: "12345"
+- optionalsInput `GetFileTasksOptionalsInput`
+
+### Returns
+
+This function returns a value of type `Tasks`.
+
+Returns a list of tasks on a file.
+
+If there are no tasks on this file an empty collection is returned
+instead.
+
+## Create task
+
+Creates a single task on a file. This task is not assigned to any user and
+will need to be assigned separately.
+
+This operation is performed by calling function `createTask`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-tasks/).
+
+<!-- sample post_tasks -->
+
+```ts
+await client.tasks.createTask({
+  item: {
+    type: 'file' as CreateTaskRequestBodyItemTypeField,
+    id: file.id,
+  } satisfies CreateTaskRequestBodyItemField,
+  message: 'test message',
+  dueAt: dateTime,
+  action: 'review' as CreateTaskRequestBodyActionField,
+  completionRule: 'all_assignees' as CreateTaskRequestBodyCompletionRuleField,
+} satisfies CreateTaskRequestBody);
+```
+
+### Arguments
+
+- requestBody `CreateTaskRequestBody`
+  - Request body of createTask method
+- optionalsInput `CreateTaskOptionalsInput`
+
+### Returns
+
+This function returns a value of type `Task`.
+
+Returns the newly created task.
+
+## Get task
+
+Retrieves information about a specific task.
+
+This operation is performed by calling function `getTaskById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-tasks-id/).
 
 <!-- sample get_tasks_id -->
-```js
-client.tasks.get('11111')
-	.then(task => {
-		/* task -> {
-			type: 'task',
-			id: '11111',
-			item: 
-			{ type: 'file',
-				id: '22222',
-				sequence_id: '0',
-				etag: '0',
-				sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
-				name: 'box-logo.png' },
-			due_at: '2014-04-03T11:09:43-07:00',
-			action: 'review',
-			message: 'Please review for publication!',
-			task_assignment_collection: { total_count: 0, entries: [] },
-			is_completed: false,
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2013-04-03T11:12:54-07:00' }
-		*/
-	});
+
+```ts
+await client.tasks.getTaskById(task.id!);
 ```
 
-Requesting information for only the fields you need with the `fields` option
-can improve performance and reduce the size of the network request.
+### Arguments
 
-```js
-client.tasks.get('11111', {fields: 'message,is_completed'})
-	.then(task => {
-		/* task -> {
-			type: 'task',
-			id: '11111',
-			message: 'Please review for publication!',
-			is_completed: false }
-		*/
-	});
-```
+- taskId `string`
+  - The ID of the task. Example: "12345"
+- optionalsInput `GetTaskByIdOptionalsInput`
 
-Update a Task
--------------
+### Returns
 
-To update a task call the
-[`tasks.update(taskID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#update)
-method with the set of fields to update and their new values.
+This function returns a value of type `Task`.
+
+Returns a task object.
+
+## Update task
+
+Updates a task. This can be used to update a task's configuration, or to
+update its completion state.
+
+This operation is performed by calling function `updateTaskById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-tasks-id/).
 
 <!-- sample put_tasks_id -->
-```js
-client.tasks.update('11111', { message: 'Could you please review?' })
-	.then(task => {
-		/* task -> {
-			type: 'task',
-			id: '11111',
-			item: 
-			{ type: 'file',
-				id: '22222',
-				sequence_id: '0',
-				etag: '0',
-				sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
-				name: 'box-logo.png' },
-			due_at: '2014-04-03T11:09:43-07:00',
-			action: 'review',
-			message: 'Could you please review?',
-			task_assignment_collection: { total_count: 0, entries: [] },
-			is_completed: false,
-			created_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' },
-			created_at: '2013-04-03T11:12:54-07:00' }
-		*/
-	});
+
+```ts
+await client.tasks.updateTaskById(task.id!, {
+  requestBody: {
+    message: 'updated message',
+  } satisfies UpdateTaskByIdRequestBody,
+} satisfies UpdateTaskByIdOptionalsInput);
 ```
 
-Delete a Task
--------------
+### Arguments
 
-To delete a task, call the
-[`tasks.delete(taskID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#delete)
-method with the ID of the task to be deleted.
+- taskId `string`
+  - The ID of the task. Example: "12345"
+- optionalsInput `UpdateTaskByIdOptionalsInput`
+
+### Returns
+
+This function returns a value of type `Task`.
+
+Returns the updated task object.
+
+## Remove task
+
+Removes a task from a file.
+
+This operation is performed by calling function `deleteTaskById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/delete-tasks-id/).
 
 <!-- sample delete_tasks_id -->
-```js
-client.tasks.delete('11111')
-	.then(() => {
-		// deletion succeeded — no value returned
-	});
+
+```ts
+await client.tasks.deleteTaskById(task.id!);
 ```
 
-Get Assignments for a Task
---------------------------
+### Arguments
 
-To get a list of assignments for a task, which associate the task to users who
-must complete it, call the
-[`tasks.getAssignments(taskID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#getAssignments)
-method.
+- taskId `string`
+  - The ID of the task. Example: "12345"
+- optionalsInput `DeleteTaskByIdOptionalsInput`
 
-<!-- sample get_tasks_id_assignments -->
-```js
-client.tasks.getAssignments('11111')
-	.then(assignments => {
-		/* assignments -> {
-			total_count: 1,
-			entries: 
-			[ { type: 'task_assignment',
-				id: '22222',
-				item: 
-					{ type: 'file',
-					id: '44444',
-					sequence_id: '0',
-					etag: '0',
-					sha1: '0bbd79a105c504f99573e3799756debba4c760cd',
-					name: 'box-logo.png' },
-				assigned_to: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Example User',
-					login: 'user@example.com' } } ] }
-		*/
-	});
-```
+### Returns
 
-Get Task Assignment
--------------------
+This function returns a value of type `undefined`.
 
-To retrieve information about a specific task assignment, call the
-[`tasks.getAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#getAssignment)
-method with the ID of the assignment to get.
-
-<!-- sample get_task_assignments_id -->
-```js
-client.tasks.getAssignment('12345')
-	.then(assignment => {
-		/* assignment -> {
-			type: 'task_assignment',
-			id: '12345',
-			item: 
-			{ type: 'file',
-				id: '33333',
-				sequence_id: '0',
-				etag: '0',
-				sha1: '7840095ee096ee8297676a138d4e316eabb3ec96',
-				name: 'script.js' },
-			assigned_to: 
-			{ type: 'user',
-				id: '22222',
-				name: 'Sample Assignee',
-				login: 'assignee@exmaple.com' },
-			message: null,
-			completed_at: null,
-			assigned_at: '2013-05-10T11:43:41-07:00',
-			reminded_at: null,
-			resolution_state: 'incomplete',
-			assigned_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' } }
-		*/
-	});
-```
-
-Assign Task
------------
-
-To assign a task to a user, call
-[`tasks.assignByUserID(taskID, userID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#assignByUserID)
-or
-[`tasks.assignByEmail(taskID, email, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#assignByEmail)
-with the ID of the task to assign and either the ID or login email address of the
-user to whom the task should be assigned.
-
-<!-- sample post_task_assignments -->
-```js
-// Assign task 11111 to user 22222
-var taskID = '11111';
-var userID = '22222';
-client.tasks.assignByUserID(taskID, userID)
-	.then(assignment => {
-		/* assignment -> {
-			type: 'task_assignment',
-			id: '12345',
-			item: 
-			{ type: 'file',
-				id: '33333',
-				sequence_id: '0',
-				etag: '0',
-				sha1: '7840095ee096ee8297676a138d4e316eabb3ec96',
-				name: 'script.js' },
-			assigned_to: 
-			{ type: 'user',
-				id: '22222',
-				name: 'Sample Assignee',
-				login: 'assignee@exmaple.com' },
-			message: null,
-			completed_at: null,
-			assigned_at: '2013-05-10T11:43:41-07:00',
-			reminded_at: null,
-			resolution_state: 'incomplete',
-			assigned_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' } }
-		*/
-	});
-```
-
-```js
-// Assign task 11111 to the user with email address assignee@exmaple.com
-client.tasks.assignByEmail('11111', 'assignee@example.com')
-	.then(assignment => {
-		// ...
-	});
-```
-
-Update Task Assignment
-----------------------
-
-To update a task assignment, call the
-[`tasks.updateAssignment(assignmentID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#updateAssignment)
-method.  This can be used to resolve or complete a task.
-
-<!-- sample put_task_assignments_id -->
-```js
-// Complete a task
-client.tasks.updateAssignment(
-	'12345',
-	{
-		message: 'Done!',
-		resolution_state: client.tasks.resolutionStates.COMPLETE
-	})
-	.then(assignment => {
-		/* assignment -> {
-			type: 'task_assignment',
-			id: '12345',
-			item: 
-			{ type: 'file',
-				id: '33333',
-				sequence_id: '0',
-				etag: '0',
-				sha1: '7840095ee096ee8297676a138d4e316eabb3ec96',
-				name: 'script.js' },
-			assigned_to: 
-			{ type: 'user',
-				id: '22222',
-				name: 'Sample Assignee',
-				login: 'assignee@exmaple.com' },
-			message: 'Done!',
-			completed_at: null,
-			assigned_at: '2013-05-10T11:43:41-07:00',
-			reminded_at: null,
-			resolution_state: 'complete',
-			assigned_by: 
-			{ type: 'user',
-				id: '33333',
-				name: 'Example User',
-				login: 'user@example.com' } }
-		*/
-	});
-```
-<!-- sample put_task_assignments_id message -->
-```js
-// Update the task assignment message
-client.tasks.updateAssignment(
-	'12345',
-	{
-		message: 'This needs some more changes'
-	})
-	.then(assignment => {
-		// ...
-	});
-```
-
-Remove Task Assignment
-----------------------
-
-To delete a task assignment, effectively unassigning a user from the task, call the
-[`tasks.deleteAssignment(assignmentID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Tasks.html#deleteAssignment)
-method with the ID of the assignment to remove.
-
-<!-- sample delete_task_assignments_id -->
-```js
-client.tasks.deleteAssignment('12345')
-	.then(() => {
-		// deletion succeeded — no value returned
-	});
-```
-
-Get Tasks on a File
--------------------
-
-Calling the
-[`files.getTasks(fileID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getTasks)
-method will retrieve all of the tasks for given file.
-
-<!-- sample get_files_id_tasks-->
-```js
-client.files.getTasks('11111')
-	.then(tasks => {
-		/* tasks -> {
-			total_count: 1,
-			entries: 
-			[ { type: 'task',
-				id: '22222',
-				item: 
-					{ type: 'file',
-					id: '11111',
-					sequence_id: '6',
-					etag: '6',
-					sha1: '81cc829fb8366fcfc108aa6c5a9bde01a6a10c16',
-					name: 'box-logo.png' },
-				due_at: null } ] }
-		*/
-	});
-```
+Returns an empty response when the task was successfully deleted.

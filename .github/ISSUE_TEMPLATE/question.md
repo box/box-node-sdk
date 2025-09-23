@@ -3,7 +3,7 @@ name: Question
 about: Request for Assistance
 title: ''
 labels: question
-assignees: mwwoda, mhagmajer, antusus, arjankowski, lukaszsocha2, bartlomiejleszczynski
+assignees: mwwoda, mhagmajer, arjankowski, lukaszsocha2, bartlomiejleszczynski, congminh1254
 ---
 
 - [ ] I have checked that the [SDK documentation][sdk-docs] doesn't solve my issue.
@@ -45,9 +45,11 @@ assignees: mwwoda, mhagmajer, antusus, arjankowski, lukaszsocha2, bartlomiejlesz
 
 ### Versions Used
 
-Node SDK: <!-- Replace with the version of the Node SDK you're using. -->
+Typescript SDK: <!-- Replace with the version of the Typescript SDK you're using. -->
+Platform: <!-- Replace with the platform you're using (e.g. Node.js, Javascript (Browser), etc.) -->
+Node.js (if applicable): <!-- Replace with the version of Node.js your application is running on. -->
 
-[sdk-docs]: ./doc
+[sdk-docs]: https://github.com/box/box-typescript-sdk-gen/tree/main/docs
 [api-docs]: https://developer.box.com/docs
 [dev-forums]: https://community.box.com/t5/Platform-and-Development-Forum/bd-p/DeveloperForum
-[github-repo]: https://github.com/box/box-node-sdk/search?type=Issues
+[github-repo]: https://github.com/box/box-typescript-sdk-gen/search?type=Issues

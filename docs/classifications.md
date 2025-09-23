@@ -1,284 +1,165 @@
-Classifications
-===============
+# ClassificationsManager
 
-Classfications are a type of metadata that allows users and applications 
-to define and assign a content classification to files and folders.
+- [List all classifications](#list-all-classifications)
+- [Add classification](#add-classification)
+- [Update classification](#update-classification)
+- [Add initial classifications](#add-initial-classifications)
 
-Classifications use the metadata APIs to add and remove classifications, and
-assign them to files. For more details on metadata templates please see the
-[metadata documentation](./metadata.md).
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## List all classifications
 
+Retrieves the classification metadata template and lists all the
+classifications available to this enterprise.
 
-- [Classifications](#classifications)
-	- [Add initial classifications](#add-initial-classifications)
-	- [List all classifications](#list-all-classifications)
-	- [Add another classification](#add-another-classification)
-	- [Update a classification](#update-a-classification)
-	- [Delete a classification](#delete-a-classification)
-	- [Delete all classifications](#delete-all-classifications)
-	- [Add classification to file](#add-classification-to-file)
-	- [Update classification on file](#update-classification-on-file)
-	- [Get classification on file](#get-classification-on-file)
-	- [Remove classification from file](#remove-classification-from-file)
-	- [Add classification to folder](#add-classification-to-folder)
-	- [Update classification on folder](#update-classification-on-folder)
-	- [Get classification on folder](#get-classification-on-folder)
-	- [Remove classification from folder](#remove-classification-from-folder)
+This API can also be called by including the enterprise ID in the
+URL explicitly, for example
+`/metadata_templates/enterprise_12345/securityClassification-6VMVochwUWo/schema`.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+This operation is performed by calling function `getClassificationTemplate`.
 
-Add initial classifications
----------------------------
-
-If an enterprise does not already have a classification defined, the first classification(s)
-can be added with the
-[`metadata.createTemplate(templateName, fields, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#createTemplate)
-method.
-
-<!-- sample post_metadata_templates_schema classifications -->
-```js
-client.metadata.createTemplate(
-		'Classification',
-		[
-      {
-        type: "enum",
-        key: "Box__Security__Classification__Key",
-        displayName: "Classification",
-        hidden: false,
-        options: [
-         {
-           key: "Classified",
-           staticConfig: {
-             classification: {
-               colorID: 7,
-               classificationDefinition: "Top Seret"
-             }
-           }
-         }
-       ]
-      }
-    ],
-		{
-			hidden: false,
-			templateKey: 'securityClassification-6VMVochwUWo'
-		}
-	)
-	.then(template => {
-		// the new classification template
-	});
-```
-
-List all classifications
-------------------------
-
-To retrieve a list of all the classifications in an enterprise call the
-[`metadata.getTemplateSchema(scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#getTemplateSchema)
-method to get the classifciations template, which will contain a list of all the 
-classifications
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-metadata-templates-enterprise-securityClassification-6VMVochwUWo-schema/).
 
 <!-- sample get_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema -->
-```js
-client.metadata.getTemplateSchema('enterprise', 'securityClassification-6VMVochwUWo')
-	.then(template => {
-		// the classification template
-	});
+
+```ts
+await client.classifications.getClassificationTemplate();
 ```
 
-Add another classification
---------------------------
+### Arguments
 
-To add another classification, call the
-[`metadata.updateTemplate(scope, template, operations, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#updateTemplate)
-method with the an operation to add a new classification to the template. 
+- headersInput `GetClassificationTemplateHeadersInput`
+  - Headers of getClassificationTemplate method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
 
-<!-- sample put_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema add -->
-```js
-var operations = [{
-  op: "addEnumOption",
-  fieldKey: "Box__Security__Classification__Key",
-  data: {
-    key: "Sensitive",
-    classification: {
-      classificationDefinition: "Sensitive information that must not be shared.",
-      colorID: 4
-    }
- }
-}];
-client.metadata.updateTemplate('enterprise', 'securityClassification-6VMVochwUWo', operations)
-	.then(template => {
-		// the updated classification template
-	});
+### Returns
+
+This function returns a value of type `ClassificationTemplate`.
+
+Returns the `securityClassification` metadata template, which contains
+a `Box__Security__Classification__Key` field that lists all the
+classifications available to this enterprise.
+
+## Add classification
+
+Adds one or more new classifications to the list of classifications
+available to the enterprise.
+
+This API can also be called by including the enterprise ID in the
+URL explicitly, for example
+`/metadata_templates/enterprise_12345/securityClassification-6VMVochwUWo/schema`.
+
+This operation is performed by calling function `addClassification`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-metadata-templates-enterprise-securityClassification-6VMVochwUWo-schema--add/).
+
+<!-- sample put_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema#add -->
+
+```ts
+await client.classifications.addClassification([
+  new AddClassificationRequestBody({
+    data: {
+      key: getUuid(),
+      staticConfig: {
+        classification: {
+          colorId: 4,
+          classificationDefinition: 'Other description',
+        } satisfies AddClassificationRequestBodyDataStaticConfigClassificationField,
+      } satisfies AddClassificationRequestBodyDataStaticConfigField,
+    } satisfies AddClassificationRequestBodyDataField,
+  }),
+]);
 ```
 
-Update a classification
------------------------
+### Arguments
 
-To update an existing classification, call the
-[`metadata.updateTemplate(scope, template, operations, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Metadata.html#updateTemplate)
-method with the an operation to update the existing classification already present on the template. 
+- requestBody `readonly AddClassificationRequestBody[]`
+  - Request body of addClassification method
+- optionalsInput `AddClassificationOptionalsInput`
 
-<!-- sample put_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema update -->
-```js
-var operations = [{
-  op: "editEnumOption",
-  fieldKey: "Box__Security__Classification__Key",
-  enumOptionKey: "Sensitive",
-  data: {
-    key: "Very Sensitive",
-    classification: {
-      classificationDefinition: "Sensitive information that must not be shared.",
-      colorID: 4
-    }
- }
-}];
-client.metadata.updateTemplate('enterprise', 'securityClassification-6VMVochwUWo', operations)
-	.then(template => {
-		// the updated classification template
-	});
+### Returns
+
+This function returns a value of type `ClassificationTemplate`.
+
+Returns the updated `securityClassification` metadata template, which
+contains a `Box__Security__Classification__Key` field that lists all
+the classifications available to this enterprise.
+
+## Update classification
+
+Updates the labels and descriptions of one or more classifications
+available to the enterprise.
+
+This API can also be called by including the enterprise ID in the
+URL explicitly, for example
+`/metadata_templates/enterprise_12345/securityClassification-6VMVochwUWo/schema`.
+
+This operation is performed by calling function `updateClassification`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-metadata-templates-enterprise-securityClassification-6VMVochwUWo-schema--update/).
+
+<!-- sample put_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema#update -->
+
+```ts
+await client.classifications.updateClassification([
+  new UpdateClassificationRequestBody({
+    enumOptionKey: classification.key,
+    data: {
+      key: updatedClassificationName,
+      staticConfig: {
+        classification: {
+          colorId: 2,
+          classificationDefinition: updatedClassificationDescription,
+        } satisfies UpdateClassificationRequestBodyDataStaticConfigClassificationField,
+      } satisfies UpdateClassificationRequestBodyDataStaticConfigField,
+    } satisfies UpdateClassificationRequestBodyDataField,
+  }),
+]);
 ```
 
-Add classification to file
---------------------------
+### Arguments
 
-To add a classification to a file, call 
-[`files.setMetadata(fileID, scope, template, classification, callback)`][set-metadata]
-with the name of the classification template, as well as the details of the classification
-to add to the file.
+- requestBody `readonly UpdateClassificationRequestBody[]`
+  - Request body of updateClassification method
+- optionalsInput `UpdateClassificationOptionalsInput`
 
-<!-- sample post_files_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-var classification = {
-	Box__Security__Classification__Key: "Sensitive"
-};
-client.files.addMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo', classification)
-	.then(metadata => {
-		// the classification applied to the file
-	});
-```
+### Returns
 
-[set-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#setMetadata
+This function returns a value of type `ClassificationTemplate`.
 
-Update classification on file
------------------------------
+Returns the updated `securityClassification` metadata template, which
+contains a `Box__Security__Classification__Key` field that lists all
+the classifications available to this enterprise.
 
-To update a classification on a file, call 
-[`files.setMetadata(fileID, scope, template, classification, callback)`][update-metadata]
-with the name of the classification template, as well as the details of the classification
-to add to the file.
+## Add initial classifications
 
-<!-- sample put_files_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-var classification = {
-	Box__Security__Classification__Key: "Sensitive"
-};
-client.files.addMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo', classification)
-	.then(metadata => {
-		// the updated classification applied to the file
-	});
-```
+When an enterprise does not yet have any classifications, this API call
+initializes the classification template with an initial set of
+classifications.
 
-[update-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Files.html#updateMetadata
+If an enterprise already has a classification, the template will already
+exist and instead an API call should be made to add additional
+classifications.
 
-Get classification on file
---------------------------
+This operation is performed by calling function `createClassificationTemplate`.
 
-Retrieve the classification on a file by calling
-[`files.getMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#getMetadata)
-with the ID of the file.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-metadata-templates-schema--classifications/).
 
-<!-- sample get_files_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-client.files.getMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo')
-	.then(metadata => {
-		// the metadata instance, which includes the applied metadata
-	});
-```
+_Currently we don't have an example for calling `createClassificationTemplate` in integration tests_
 
-Remove classification from file
--------------------------------
+### Arguments
 
-A classification can be removed from a file by calling
-[`files.deleteMetadata(fileID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Files.html#deleteMetadata).
+- requestBodyInput `CreateClassificationTemplateRequestBodyInput`
+  - Request body of createClassificationTemplate method
+- optionalsInput `CreateClassificationTemplateOptionalsInput`
 
-<!-- sample delete_files_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-client.files.deleteMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo')
-	.then(() => {
-		// removal succeeded — no value returned
-	});;
-```
+### Returns
 
+This function returns a value of type `ClassificationTemplate`.
 
-
-Add classification to folder
-----------------------------
-
-To add a classification to a folder, call 
-[`folders.setMetadata(folderID, scope, template, classification, callback)`][set-metadata]
-with the name of the classification template, as well as the details of the classification
-to add to the folder.
-
-<!-- sample post_folders_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-var classification = {
-	Box__Security__Classification__Key: "Sensitive"
-};
-client.folders.addMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo', classification)
-	.then(metadata => {
-		// the classification applied to the folder
-	});
-```
-
-[set-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#setMetadata
-
-Update classification on folder
--------------------------------
-
-To update a classification on a folder, call 
-[`folders.setMetadata(folderID, scope, template, classification, callback)`][update-metadata]
-with the name of the classification template, as well as the details of the classification
-to add to the folder.
-
-<!-- sample put_folders_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-var classification = {
-	Box__Security__Classification__Key: "Sensitive"
-};
-client.folders.addMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo', classification)
-	.then(metadata => {
-		// the updated classification applied to the folder
-	});
-```
-
-[update-metadata]: http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#updateMetadata
-
-Get classification on folder
-----------------------------
-
-Retrieve the classification on a folder by calling
-[`folders.getMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getMetadata)
-with the ID of the folder.
-
-<!-- sample get_folders_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-client.folders.getMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo')
-	.then(metadata => {
-		// the metadata instance, which includes the applied metadata
-	});
-```
-
-Remove classification from folder
----------------------------------
-
-A classification can be removed from a folder by calling
-[`folders.deleteMetadata(folderID, scope, template, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deleteMetadata).
-
-<!-- sample delete_folders_id_metadata_enterprise_securityClassification-6VMVochwUWo -->
-```js
-client.folders.deleteMetadata('11111', 'enterprise', 'securityClassification-6VMVochwUWo')
-	.then(() => {
-		// removal succeeded — no value returned
-	});;
-```
+Returns a new `securityClassification` metadata template, which
+contains a `Box__Security__Classification__Key` field that lists all
+the classifications available to this enterprise.
