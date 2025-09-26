@@ -18,6 +18,7 @@ module.exports = {
   },
   moduleNameMapper: {
     '^(\.\.?\/.+)\\.jsx?$': '$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   clearMocks: true,
   setupFilesAfterEnv: ['<rootDir>/setup-jest.js'],

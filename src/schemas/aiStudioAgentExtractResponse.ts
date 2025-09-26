@@ -1,17 +1,17 @@
-import { serializeAiStudioAgentLongTextToolResponse } from './aiStudioAgentLongTextToolResponse.js';
-import { deserializeAiStudioAgentLongTextToolResponse } from './aiStudioAgentLongTextToolResponse.js';
-import { serializeAiStudioAgentBasicTextToolResponse } from './aiStudioAgentBasicTextToolResponse.js';
-import { deserializeAiStudioAgentBasicTextToolResponse } from './aiStudioAgentBasicTextToolResponse.js';
-import { AiStudioAgentLongTextToolResponse } from './aiStudioAgentLongTextToolResponse.js';
-import { AiStudioAgentBasicTextToolResponse } from './aiStudioAgentBasicTextToolResponse.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeAiStudioAgentLongTextToolResponse } from './aiStudioAgentLongTextToolResponse';
+import { deserializeAiStudioAgentLongTextToolResponse } from './aiStudioAgentLongTextToolResponse';
+import { serializeAiStudioAgentBasicTextToolResponse } from './aiStudioAgentBasicTextToolResponse';
+import { deserializeAiStudioAgentBasicTextToolResponse } from './aiStudioAgentBasicTextToolResponse';
+import { AiStudioAgentLongTextToolResponse } from './aiStudioAgentLongTextToolResponse';
+import { AiStudioAgentBasicTextToolResponse } from './aiStudioAgentBasicTextToolResponse';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AiStudioAgentExtractResponseTypeField = 'ai_agent_extract';
 export class AiStudioAgentExtractResponse {
   /**

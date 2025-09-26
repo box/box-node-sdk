@@ -1,14 +1,14 @@
-import { serializeCollaborationAllowlistExemptTarget } from './collaborationAllowlistExemptTarget.js';
-import { deserializeCollaborationAllowlistExemptTarget } from './collaborationAllowlistExemptTarget.js';
-import { CollaborationAllowlistExemptTarget } from './collaborationAllowlistExemptTarget.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeCollaborationAllowlistExemptTarget } from './collaborationAllowlistExemptTarget';
+import { deserializeCollaborationAllowlistExemptTarget } from './collaborationAllowlistExemptTarget';
+import { CollaborationAllowlistExemptTarget } from './collaborationAllowlistExemptTarget';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface CollaborationAllowlistExemptTargets {
   /**
    * The limit that was used for these entries. This will be the same as the

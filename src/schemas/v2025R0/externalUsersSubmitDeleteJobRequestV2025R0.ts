@@ -1,14 +1,14 @@
-import { serializeUserReferenceV2025R0 } from './userReferenceV2025R0.js';
-import { deserializeUserReferenceV2025R0 } from './userReferenceV2025R0.js';
-import { UserReferenceV2025R0 } from './userReferenceV2025R0.js';
-import { BoxSdkError } from '../../box/errors.js';
-import { SerializedData } from '../../serialization/json.js';
-import { sdIsEmpty } from '../../serialization/json.js';
-import { sdIsBoolean } from '../../serialization/json.js';
-import { sdIsNumber } from '../../serialization/json.js';
-import { sdIsString } from '../../serialization/json.js';
-import { sdIsList } from '../../serialization/json.js';
-import { sdIsMap } from '../../serialization/json.js';
+import { serializeUserReferenceV2025R0 } from './userReferenceV2025R0';
+import { deserializeUserReferenceV2025R0 } from './userReferenceV2025R0';
+import { UserReferenceV2025R0 } from './userReferenceV2025R0';
+import { BoxSdkError } from '../../box/errors';
+import { SerializedData } from '../../serialization/json';
+import { sdIsEmpty } from '../../serialization/json';
+import { sdIsBoolean } from '../../serialization/json';
+import { sdIsNumber } from '../../serialization/json';
+import { sdIsString } from '../../serialization/json';
+import { sdIsList } from '../../serialization/json';
+import { sdIsMap } from '../../serialization/json';
 export interface ExternalUsersSubmitDeleteJobRequestV2025R0 {
   /**
    * List of external users to delete. */

@@ -1,20 +1,20 @@
-import { serializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.js';
-import { deserializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.js';
-import { serializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.js';
-import { deserializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.js';
-import { serializeMetadataFilterValue } from './metadataFilterValue.js';
-import { deserializeMetadataFilterValue } from './metadataFilterValue.js';
-import { MetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange.js';
-import { MetadataFieldFilterDateRange } from './metadataFieldFilterDateRange.js';
-import { MetadataFilterValue } from './metadataFilterValue.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange';
+import { deserializeMetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange';
+import { serializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange';
+import { deserializeMetadataFieldFilterDateRange } from './metadataFieldFilterDateRange';
+import { serializeMetadataFilterValue } from './metadataFilterValue';
+import { deserializeMetadataFilterValue } from './metadataFilterValue';
+import { MetadataFieldFilterFloatRange } from './metadataFieldFilterFloatRange';
+import { MetadataFieldFilterDateRange } from './metadataFieldFilterDateRange';
+import { MetadataFilterValue } from './metadataFilterValue';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type MetadataFilterScopeField =
   | 'global'
   | 'enterprise'

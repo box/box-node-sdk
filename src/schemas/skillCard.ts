@@ -1,23 +1,23 @@
-import { serializeKeywordSkillCard } from './keywordSkillCard.js';
-import { deserializeKeywordSkillCard } from './keywordSkillCard.js';
-import { serializeTimelineSkillCard } from './timelineSkillCard.js';
-import { deserializeTimelineSkillCard } from './timelineSkillCard.js';
-import { serializeTranscriptSkillCard } from './transcriptSkillCard.js';
-import { deserializeTranscriptSkillCard } from './transcriptSkillCard.js';
-import { serializeStatusSkillCard } from './statusSkillCard.js';
-import { deserializeStatusSkillCard } from './statusSkillCard.js';
-import { KeywordSkillCard } from './keywordSkillCard.js';
-import { TimelineSkillCard } from './timelineSkillCard.js';
-import { TranscriptSkillCard } from './transcriptSkillCard.js';
-import { StatusSkillCard } from './statusSkillCard.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeKeywordSkillCard } from './keywordSkillCard';
+import { deserializeKeywordSkillCard } from './keywordSkillCard';
+import { serializeTimelineSkillCard } from './timelineSkillCard';
+import { deserializeTimelineSkillCard } from './timelineSkillCard';
+import { serializeTranscriptSkillCard } from './transcriptSkillCard';
+import { deserializeTranscriptSkillCard } from './transcriptSkillCard';
+import { serializeStatusSkillCard } from './statusSkillCard';
+import { deserializeStatusSkillCard } from './statusSkillCard';
+import { KeywordSkillCard } from './keywordSkillCard';
+import { TimelineSkillCard } from './timelineSkillCard';
+import { TranscriptSkillCard } from './transcriptSkillCard';
+import { StatusSkillCard } from './statusSkillCard';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type SkillCard =
   | KeywordSkillCard
   | TimelineSkillCard

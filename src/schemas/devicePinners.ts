@@ -1,14 +1,14 @@
-import { serializeDevicePinner } from './devicePinner.js';
-import { deserializeDevicePinner } from './devicePinner.js';
-import { DevicePinner } from './devicePinner.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeDevicePinner } from './devicePinner';
+import { deserializeDevicePinner } from './devicePinner';
+import { DevicePinner } from './devicePinner';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type DevicePinnersOrderByField = 'id' | string;
 export type DevicePinnersOrderDirectionField = 'asc' | 'desc' | string;
 export interface DevicePinnersOrderField {

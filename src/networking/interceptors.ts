@@ -1,5 +1,5 @@
-import { FetchOptions } from './fetchOptions.js';
-import { FetchResponse } from './fetchResponse.js';
+import { FetchOptions } from './fetchOptions';
+import { FetchResponse } from './fetchResponse';
 export interface Interceptor {
   /**
    * @param {FetchOptions} options

@@ -1,4 +1,4 @@
-import { AccessToken } from '../schemas/accessToken.js';
+import { AccessToken } from '../schemas/accessToken';
 export interface TokenStorage {
   /**
    * @param {AccessToken} token

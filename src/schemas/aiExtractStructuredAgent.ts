@@ -1,17 +1,17 @@
-import { serializeAiAgentReference } from './aiAgentReference.js';
-import { deserializeAiAgentReference } from './aiAgentReference.js';
-import { serializeAiAgentExtractStructured } from './aiAgentExtractStructured.js';
-import { deserializeAiAgentExtractStructured } from './aiAgentExtractStructured.js';
-import { AiAgentReference } from './aiAgentReference.js';
-import { AiAgentExtractStructured } from './aiAgentExtractStructured.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeAiAgentReference } from './aiAgentReference';
+import { deserializeAiAgentReference } from './aiAgentReference';
+import { serializeAiAgentExtractStructured } from './aiAgentExtractStructured';
+import { deserializeAiAgentExtractStructured } from './aiAgentExtractStructured';
+import { AiAgentReference } from './aiAgentReference';
+import { AiAgentExtractStructured } from './aiAgentExtractStructured';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AiExtractStructuredAgent =
   | AiAgentReference
   | AiAgentExtractStructured;

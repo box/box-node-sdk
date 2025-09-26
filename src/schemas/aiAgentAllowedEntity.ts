@@ -1,17 +1,17 @@
-import { serializeUserBase } from './userBase.js';
-import { deserializeUserBase } from './userBase.js';
-import { serializeGroupBase } from './groupBase.js';
-import { deserializeGroupBase } from './groupBase.js';
-import { UserBase } from './userBase.js';
-import { GroupBase } from './groupBase.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeUserBase } from './userBase';
+import { deserializeUserBase } from './userBase';
+import { serializeGroupBase } from './groupBase';
+import { deserializeGroupBase } from './groupBase';
+import { UserBase } from './userBase';
+import { GroupBase } from './groupBase';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AiAgentAllowedEntity = UserBase | GroupBase;
 export function serializeAiAgentAllowedEntity(val: any): SerializedData {
   if (val.type == 'user') {

@@ -1,14 +1,14 @@
-import { PostOAuth2TokenGrantTypeField } from '../schemas/postOAuth2Token.js';
-import { PostOAuth2TokenSubjectTokenTypeField } from '../schemas/postOAuth2Token.js';
-import { AccessToken } from '../schemas/accessToken.js';
-import { Authentication } from '../networking/auth.js';
-import { NetworkSession } from '../networking/network.js';
-import { BoxSdkError } from './errors.js';
-import { TokenStorage } from './tokenStorage.js';
-import { InMemoryTokenStorage } from './tokenStorage.js';
-import { AuthorizationManager } from '../managers/authorization.js';
-import { PostOAuth2Token } from '../schemas/postOAuth2Token.js';
-import { PostOAuth2Revoke } from '../schemas/postOAuth2Revoke.js';
+import { PostOAuth2TokenGrantTypeField } from '../schemas/postOAuth2Token';
+import { PostOAuth2TokenSubjectTokenTypeField } from '../schemas/postOAuth2Token';
+import { AccessToken } from '../schemas/accessToken';
+import { Authentication } from '../networking/auth';
+import { NetworkSession } from '../networking/network';
+import { BoxSdkError } from './errors';
+import { TokenStorage } from './tokenStorage';
+import { InMemoryTokenStorage } from './tokenStorage';
+import { AuthorizationManager } from '../managers/authorization';
+import { PostOAuth2Token } from '../schemas/postOAuth2Token';
+import { PostOAuth2Revoke } from '../schemas/postOAuth2Revoke';
 export interface DeveloperTokenConfig {
   readonly clientId?: string;
   readonly clientSecret?: string;
