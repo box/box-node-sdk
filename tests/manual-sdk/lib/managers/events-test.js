@@ -10,9 +10,9 @@ const sinon = require('sinon'),
   assert = require('chai').assert,
   Promise = require('bluebird'),
   leche = require('leche');
-const BoxClient = require('@/lib/box-client'),
-  EventStream = require('@/lib/event-stream'),
-  EnterpriseEventStream = require('@/lib/enterprise-event-stream');
+const BoxClient = require('@/lib/box-client').default,
+  EventStream = require('@/lib/event-stream').default,
+  EnterpriseEventStream = require('@/lib/enterprise-event-stream').default;
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ describe('Events', () => {
     );
     mockery.registerAllowable(MODULE_FILE_PATH, true);
     // eslint-disable-next-line global-require
-    Events = require(MODULE_FILE_PATH);
+    Events = require(MODULE_FILE_PATH).default;
     events = new Events(boxClientFake);
   });
   afterEach(() => {

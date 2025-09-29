@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -43,7 +43,7 @@ describe('CollaborationAllowlist', function () {
   beforeEach(function () {
     testParamsWithQs = { qs: testQS };
     // Setup File Under Test
-    CollaborationAllowlist = require(MODULE_FILE_PATH);
+    CollaborationAllowlist = require(MODULE_FILE_PATH).default;
     collaborationAllowlist = new CollaborationAllowlist(boxClientFake);
   });
 

@@ -44,7 +44,7 @@ describe('Box Node SDK', function () {
     });
     mockery.registerAllowable(MODULE_FILE_PATH, true);
 
-    BoxSDK = require(MODULE_FILE_PATH);
+    BoxSDK = require(MODULE_FILE_PATH).default;
   });
 
   afterEach(function () {

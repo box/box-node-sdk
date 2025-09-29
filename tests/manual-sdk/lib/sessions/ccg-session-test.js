@@ -13,7 +13,7 @@ const assert = require('chai').assert,
   Promise = require('bluebird'),
   mockery = require('mockery');
 
-const TokenManager = require('@/lib/token-manager');
+const TokenManager = require('@/lib/token-manager').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -47,7 +47,7 @@ describe('CCGAPISession', function () {
     mockery.registerAllowable(MODULE_FILE_PATH, true);
 
     // Setup File Under Test
-    CCGAPISession = require(MODULE_FILE_PATH);
+    CCGAPISession = require(MODULE_FILE_PATH).default;
     ccgSession = new CCGAPISession(config, tokenManagerFake);
   });
 

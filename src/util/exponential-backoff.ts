@@ -15,11 +15,13 @@ const RETRY_RANDOMIZATION_FACTOR = 0.5;
  * @param {int} baseInterval The base retry interval set in config
  * @returns {int} The number of milliseconds after which to retry
  */
-export = function getRetryTimeout(numRetries: number, baseInterval: number) {
+function getRetryTimeout(numRetries: number, baseInterval: number) {
   var minRandomization = 1 - RETRY_RANDOMIZATION_FACTOR;
   var maxRandomization = 1 + RETRY_RANDOMIZATION_FACTOR;
   var randomization =
     Math.random() * (maxRandomization - minRandomization) + minRandomization;
   var exponential = Math.pow(2, numRetries - 1);
   return Math.ceil(exponential * baseInterval * randomization);
-};
+}
+
+export default getRetryTimeout;

@@ -13,8 +13,8 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client'),
-  Events = require('@/lib/managers/events');
+var BoxClient = require('@/lib/box-client').default,
+  Events = require('@/lib/managers/events').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -44,7 +44,7 @@ describe('EventStream', function () {
     });
     mockery.registerAllowable(MODULE_FILE_PATH, true);
 
-    EventStream = require(MODULE_FILE_PATH);
+    EventStream = require(MODULE_FILE_PATH).default;
     eventStream = new EventStream(boxClientFake, TEST_STREAM_POSITION);
   });
 

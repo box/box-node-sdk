@@ -10,8 +10,8 @@ var sinon = require('sinon'),
   assert = require('chai').assert,
   Readable = require('stream').Readable,
   leche = require('leche');
-var BoxClient = require('@/lib/box-client'),
-  Events = require('@/lib/managers/events');
+var BoxClient = require('@/lib/box-client').default,
+  Events = require('@/lib/managers/events').default;
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ describe('EnterpriseEventStream', () => {
     });
     mockery.registerAllowable(MODULE_FILE_PATH, true);
     // eslint-disable-next-line global-require
-    EnterpriseEventStream = require(MODULE_FILE_PATH);
+    EnterpriseEventStream = require(MODULE_FILE_PATH).default;
     enterpriseEventStream = new EnterpriseEventStream(boxClientFake, {
       streamPosition: TEST_STREAM_POSITION,
     });

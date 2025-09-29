@@ -110,4 +110,4 @@ class FileRequestsManager {
   }
 }
 
-export = FileRequestsManager;
+export default FileRequestsManager;

@@ -13,7 +13,7 @@ var assert = require('chai').assert,
   leche = require('leche'),
   Stream = require('stream'),
   EventEmitter = require('events').EventEmitter,
-  Config = require('@/lib/util/config'),
+  Config = require('@/lib/util/config').default,
   mockery = require('mockery');
 
 // ------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ describe('APIRequest', function () {
 
     // Setup File Under Test
     mockery.registerAllowable(MODULE_UNDER_TEST_PATH, true);
-    APIRequest = require(MODULE_UNDER_TEST_PATH);
+    APIRequest = require(MODULE_UNDER_TEST_PATH).default;
   });
 
   afterEach(function () {

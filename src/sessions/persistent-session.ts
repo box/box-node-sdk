@@ -301,4 +301,4 @@ class PersistentSession {
  * @module box-node-sdk/lib/sessions/persistent-session
  * @see {@Link PersistentSession}
  */
-export = PersistentSession;
+export default PersistentSession;

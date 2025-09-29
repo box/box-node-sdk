@@ -13,8 +13,8 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client'),
-  Users = require('@/lib/managers/users');
+var BoxClient = require('@/lib/box-client').default,
+  Users = require('@/lib/managers/users').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -44,7 +44,7 @@ describe('DevicePins', function () {
     mockery.registerAllowable('../util/url-path');
     // Setup File Under Test
     mockery.registerAllowable(MODULE_FILE_PATH);
-    DevicePins = require(MODULE_FILE_PATH);
+    DevicePins = require(MODULE_FILE_PATH).default;
     devicePins = new DevicePins(boxClientFake);
   });
 

@@ -12,7 +12,7 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -44,7 +44,7 @@ describe('SharedItems', function () {
 
   beforeEach(function () {
     // Setup File Under Test
-    SharedItems = require(MODULE_FILE_PATH);
+    SharedItems = require(MODULE_FILE_PATH).default;
     sharedItems = new SharedItems(boxClientFake);
   });
 

@@ -9,7 +9,7 @@
 // ------------------------------------------------------------------------------
 
 var assert = require('chai').assert,
-  pathBuilder = require('@/lib/util/url-path');
+  pathBuilder = require('@/lib/util/url-path').default;
 
 // ------------------------------------------------------------------------------
 // Tests

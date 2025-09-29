@@ -2,7 +2,7 @@
  * @fileoverview Configuration Object
  */
 
-import assert = require('assert');
+import assert from 'assert';
 import * as https from 'https';
 import * as url from 'url';
 import { Readable } from 'stream';
@@ -10,8 +10,9 @@ import { Readable } from 'stream';
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-const merge = require('merge-options'),
-  sdkVersion = require('../../package.json').version;
+import merge from 'merge-options';
+const packageJson = require('../../package.json');
+const sdkVersion = packageJson.version;
 
 // ------------------------------------------------------------------------------
 // Private
@@ -207,7 +208,7 @@ function updateRequestAgent(
       );
     }
 
-    const ProxyAgent = require('proxy-agent').ProxyAgent;
+    const { ProxyAgent } = require('proxy-agent');
     params.request.agentClass = ProxyAgent;
     params.request.agentOptions = Object.assign(
       {},
@@ -305,4 +306,5 @@ class Config {
  * @module box-node-sdk/lib/util/config
  * @see {@Link Config}
  */
-export = Config;
+export default Config;
+export type { UserConfigurationOptions, AppAuthConfig };

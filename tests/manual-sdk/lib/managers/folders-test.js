@@ -12,7 +12,7 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -47,7 +47,7 @@ describe('Folders', function () {
     testParamsWithBody = { body: testBody };
     testParamsWithQs = { qs: testQS };
     // Setup File Under Test
-    Folders = require(MODULE_FILE_PATH);
+    Folders = require(MODULE_FILE_PATH).default;
     folders = new Folders(boxClientFake);
   });
 

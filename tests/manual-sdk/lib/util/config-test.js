@@ -11,7 +11,7 @@
 var assert = require('chai').assert,
   leche = require('leche'),
   Readable = require('stream').Readable,
-  Config = require('@/lib/util/config');
+  Config = require('@/lib/util/config').default;
 
 // ------------------------------------------------------------------------------
 // Helpers

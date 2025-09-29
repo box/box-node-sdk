@@ -193,4 +193,4 @@ class ShieldInformationBarrierSegmentsManager {
     );
   }
 }
-export = ShieldInformationBarrierSegmentsManager;
+export default ShieldInformationBarrierSegmentsManager;

@@ -68,14 +68,14 @@ type APIRequestManager = any /* FIXME */;
 // ------------------------------------------------------------------------------
 // Requirements
 // ------------------------------------------------------------------------------
-var util = require('util'),
-  qs = require('querystring'),
-  errors = require('./util/errors'),
-  httpStatusCodes = require('http-status'),
-  isIP = require('net').isIP,
-  merge = require('merge-options'),
-  PagingIterator = require('./util/paging-iterator'),
-  pkg = require('../package.json');
+import util from 'util';
+import * as qs from 'querystring';
+import errors from './util/errors';
+const httpStatusCodes = require('http-status');
+import { isIP } from 'net';
+import merge from 'merge-options';
+import PagingIterator from './util/paging-iterator';
+const pkg = require('../package.json');
 
 // ------------------------------------------------------------------------------
 // Private
@@ -794,4 +794,4 @@ BoxClient.prototype.CURRENT_USER_ID = Users.prototype.CURRENT_USER_ID;
  * @module box-node-sdk/lib/box-client
  * @see {@Link BoxClient}
  */
-export = BoxClient;
+export default BoxClient;

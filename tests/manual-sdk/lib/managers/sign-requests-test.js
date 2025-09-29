@@ -9,7 +9,7 @@
 var sinon = require('sinon'),
   mockery = require('mockery'),
   leche = require('leche'),
-  BoxClient = require('@/lib/box-client');
+  BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -39,7 +39,7 @@ describe('SignRequests', () => {
 
   beforeEach(() => {
     // Setup File Under Test
-    SignRequests = require(MODULE_FILE_PATH);
+    SignRequests = require(MODULE_FILE_PATH).default;
     signRequests = new SignRequests(boxClientFake);
     testQS = { testQSKey: 'testQSValue' };
   });

@@ -13,8 +13,8 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   mockery = require('mockery');
 
-var TokenManager = require('@/lib/token-manager'),
-  Config = require('@/lib/util/config');
+var TokenManager = require('@/lib/token-manager').default,
+  Config = require('@/lib/util/config').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -65,7 +65,7 @@ describe('AppAuthSession', function () {
     mockery.registerAllowable(MODULE_FILE_PATH, true);
 
     // Setup File Under Test
-    AppAuthSession = require(MODULE_FILE_PATH);
+    AppAuthSession = require(MODULE_FILE_PATH).default;
     appAuthSession = new AppAuthSession(
       TEST_TYPE,
       TEST_ID,

@@ -17,10 +17,10 @@ var assert = require('chai').assert,
   httpStatusCodes = require('http-status'),
   pkg = require('@/package.json');
 
-var APIRequestManager = require('@/lib/api-request-manager'),
-  BasicAPISession = require('@/lib/sessions/basic-session'),
+var APIRequestManager = require('@/lib/api-request-manager').default,
+  BasicAPISession = require('@/lib/sessions/basic-session').default,
   testPlugin = require('../fixtures/plugins/test-plugin'),
-  Config = require('@/lib/util/config');
+  Config = require('@/lib/util/config').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -86,7 +86,7 @@ describe('box-client', function () {
 
     // Setup File Under Test
     mockery.registerAllowable(MODULE_FILE_PATH, true);
-    BasicClient = require(MODULE_FILE_PATH);
+    BasicClient = require(MODULE_FILE_PATH).default;
     basicClient = new BasicClient(apiSessionFake, config, requestManagerFake);
   });
 
