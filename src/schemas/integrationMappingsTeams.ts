@@ -1,14 +1,14 @@
-import { serializeIntegrationMappingTeams } from './integrationMappingTeams.js';
-import { deserializeIntegrationMappingTeams } from './integrationMappingTeams.js';
-import { IntegrationMappingTeams } from './integrationMappingTeams.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeIntegrationMappingTeams } from './integrationMappingTeams';
+import { deserializeIntegrationMappingTeams } from './integrationMappingTeams';
+import { IntegrationMappingTeams } from './integrationMappingTeams';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface IntegrationMappingsTeams {
   /**
    * A list of integration mappings. */

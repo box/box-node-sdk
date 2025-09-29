@@ -1,15 +1,15 @@
-import { PostOAuth2TokenGrantTypeField } from '../schemas/postOAuth2Token.js';
-import { PostOAuth2TokenSubjectTokenTypeField } from '../schemas/postOAuth2Token.js';
-import { AccessToken } from '../schemas/accessToken.js';
-import { PostOAuth2TokenBoxSubjectTypeField } from '../schemas/postOAuth2Token.js';
-import { Authentication } from '../networking/auth.js';
-import { NetworkSession } from '../networking/network.js';
-import { TokenStorage } from './tokenStorage.js';
-import { InMemoryTokenStorage } from './tokenStorage.js';
-import { AuthorizationManager } from '../managers/authorization.js';
-import { BoxSdkError } from './errors.js';
-import { PostOAuth2Token } from '../schemas/postOAuth2Token.js';
-import { PostOAuth2Revoke } from '../schemas/postOAuth2Revoke.js';
+import { PostOAuth2TokenGrantTypeField } from '../schemas/postOAuth2Token';
+import { PostOAuth2TokenSubjectTokenTypeField } from '../schemas/postOAuth2Token';
+import { AccessToken } from '../schemas/accessToken';
+import { PostOAuth2TokenBoxSubjectTypeField } from '../schemas/postOAuth2Token';
+import { Authentication } from '../networking/auth';
+import { NetworkSession } from '../networking/network';
+import { TokenStorage } from './tokenStorage';
+import { InMemoryTokenStorage } from './tokenStorage';
+import { AuthorizationManager } from '../managers/authorization';
+import { BoxSdkError } from './errors';
+import { PostOAuth2Token } from '../schemas/postOAuth2Token';
+import { PostOAuth2Revoke } from '../schemas/postOAuth2Revoke';
 export class CcgConfig {
   /**
    * Box API key used for identifying the application the user is authenticating with */

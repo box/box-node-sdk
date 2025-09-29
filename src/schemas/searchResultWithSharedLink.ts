@@ -1,23 +1,23 @@
-import { serializeFileFull } from './fileFull.js';
-import { deserializeFileFull } from './fileFull.js';
-import { serializeFolderFull } from './folderFull.js';
-import { deserializeFolderFull } from './folderFull.js';
-import { serializeWebLink } from './webLink.js';
-import { deserializeWebLink } from './webLink.js';
-import { serializeSearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem.js';
-import { deserializeSearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem.js';
-import { FileFull } from './fileFull.js';
-import { FolderFull } from './folderFull.js';
-import { WebLink } from './webLink.js';
-import { SearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFileFull } from './fileFull';
+import { deserializeFileFull } from './fileFull';
+import { serializeFolderFull } from './folderFull';
+import { deserializeFolderFull } from './folderFull';
+import { serializeWebLink } from './webLink';
+import { deserializeWebLink } from './webLink';
+import { serializeSearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem';
+import { deserializeSearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem';
+import { FileFull } from './fileFull';
+import { FolderFull } from './folderFull';
+import { WebLink } from './webLink';
+import { SearchResultWithSharedLinkItem } from './searchResultWithSharedLinkItem';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface SearchResultWithSharedLink {
   /**
    * The optional shared link through which the user has access to this

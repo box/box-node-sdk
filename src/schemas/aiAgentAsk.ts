@@ -1,20 +1,20 @@
-import { serializeAiAgentLongTextTool } from './aiAgentLongTextTool.js';
-import { deserializeAiAgentLongTextTool } from './aiAgentLongTextTool.js';
-import { serializeAiAgentBasicTextTool } from './aiAgentBasicTextTool.js';
-import { deserializeAiAgentBasicTextTool } from './aiAgentBasicTextTool.js';
-import { serializeAiAgentSpreadsheetTool } from './aiAgentSpreadsheetTool.js';
-import { deserializeAiAgentSpreadsheetTool } from './aiAgentSpreadsheetTool.js';
-import { AiAgentLongTextTool } from './aiAgentLongTextTool.js';
-import { AiAgentBasicTextTool } from './aiAgentBasicTextTool.js';
-import { AiAgentSpreadsheetTool } from './aiAgentSpreadsheetTool.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeAiAgentLongTextTool } from './aiAgentLongTextTool';
+import { deserializeAiAgentLongTextTool } from './aiAgentLongTextTool';
+import { serializeAiAgentBasicTextTool } from './aiAgentBasicTextTool';
+import { deserializeAiAgentBasicTextTool } from './aiAgentBasicTextTool';
+import { serializeAiAgentSpreadsheetTool } from './aiAgentSpreadsheetTool';
+import { deserializeAiAgentSpreadsheetTool } from './aiAgentSpreadsheetTool';
+import { AiAgentLongTextTool } from './aiAgentLongTextTool';
+import { AiAgentBasicTextTool } from './aiAgentBasicTextTool';
+import { AiAgentSpreadsheetTool } from './aiAgentSpreadsheetTool';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AiAgentAskTypeField = 'ai_agent_ask';
 export class AiAgentAsk {
   /**

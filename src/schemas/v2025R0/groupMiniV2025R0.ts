@@ -1,17 +1,17 @@
-import { serializeGroupBaseV2025R0TypeField } from './groupBaseV2025R0.js';
-import { deserializeGroupBaseV2025R0TypeField } from './groupBaseV2025R0.js';
-import { serializeGroupBaseV2025R0 } from './groupBaseV2025R0.js';
-import { deserializeGroupBaseV2025R0 } from './groupBaseV2025R0.js';
-import { GroupBaseV2025R0TypeField } from './groupBaseV2025R0.js';
-import { GroupBaseV2025R0 } from './groupBaseV2025R0.js';
-import { BoxSdkError } from '../../box/errors.js';
-import { SerializedData } from '../../serialization/json.js';
-import { sdIsEmpty } from '../../serialization/json.js';
-import { sdIsBoolean } from '../../serialization/json.js';
-import { sdIsNumber } from '../../serialization/json.js';
-import { sdIsString } from '../../serialization/json.js';
-import { sdIsList } from '../../serialization/json.js';
-import { sdIsMap } from '../../serialization/json.js';
+import { serializeGroupBaseV2025R0TypeField } from './groupBaseV2025R0';
+import { deserializeGroupBaseV2025R0TypeField } from './groupBaseV2025R0';
+import { serializeGroupBaseV2025R0 } from './groupBaseV2025R0';
+import { deserializeGroupBaseV2025R0 } from './groupBaseV2025R0';
+import { GroupBaseV2025R0TypeField } from './groupBaseV2025R0';
+import { GroupBaseV2025R0 } from './groupBaseV2025R0';
+import { BoxSdkError } from '../../box/errors';
+import { SerializedData } from '../../serialization/json';
+import { sdIsEmpty } from '../../serialization/json';
+import { sdIsBoolean } from '../../serialization/json';
+import { sdIsNumber } from '../../serialization/json';
+import { sdIsString } from '../../serialization/json';
+import { sdIsList } from '../../serialization/json';
+import { sdIsMap } from '../../serialization/json';
 export type GroupMiniV2025R0GroupTypeField =
   | 'managed_group'
   | 'all_users_group'

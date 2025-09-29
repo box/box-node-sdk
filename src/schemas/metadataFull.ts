@@ -1,17 +1,17 @@
-import { serializeMetadataBase } from './metadataBase.js';
-import { deserializeMetadataBase } from './metadataBase.js';
-import { serializeMetadata } from './metadata.js';
-import { deserializeMetadata } from './metadata.js';
-import { MetadataBase } from './metadataBase.js';
-import { Metadata } from './metadata.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeMetadataBase } from './metadataBase';
+import { deserializeMetadataBase } from './metadataBase';
+import { serializeMetadata } from './metadata';
+import { deserializeMetadata } from './metadata';
+import { MetadataBase } from './metadataBase';
+import { Metadata } from './metadata';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type MetadataFull = Metadata & {
   /**
    * Whether the user can edit this metadata instance. */

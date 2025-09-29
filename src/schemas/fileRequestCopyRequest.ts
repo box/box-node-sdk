@@ -1,20 +1,20 @@
-import { serializeFileRequestUpdateRequestStatusField } from './fileRequestUpdateRequest.js';
-import { deserializeFileRequestUpdateRequestStatusField } from './fileRequestUpdateRequest.js';
-import { serializeDateTime } from '../internal/utils.js';
-import { deserializeDateTime } from '../internal/utils.js';
-import { serializeFileRequestUpdateRequest } from './fileRequestUpdateRequest.js';
-import { deserializeFileRequestUpdateRequest } from './fileRequestUpdateRequest.js';
-import { FileRequestUpdateRequestStatusField } from './fileRequestUpdateRequest.js';
-import { DateTime } from '../internal/utils.js';
-import { FileRequestUpdateRequest } from './fileRequestUpdateRequest.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFileRequestUpdateRequestStatusField } from './fileRequestUpdateRequest';
+import { deserializeFileRequestUpdateRequestStatusField } from './fileRequestUpdateRequest';
+import { serializeDateTime } from '../internal/utils';
+import { deserializeDateTime } from '../internal/utils';
+import { serializeFileRequestUpdateRequest } from './fileRequestUpdateRequest';
+import { deserializeFileRequestUpdateRequest } from './fileRequestUpdateRequest';
+import { FileRequestUpdateRequestStatusField } from './fileRequestUpdateRequest';
+import { DateTime } from '../internal/utils';
+import { FileRequestUpdateRequest } from './fileRequestUpdateRequest';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type FileRequestCopyRequestFolderTypeField = 'folder';
 export interface FileRequestCopyRequestFolderField {
   /**

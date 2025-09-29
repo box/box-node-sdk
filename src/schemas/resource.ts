@@ -1,17 +1,17 @@
-import { serializeFolderMini } from './folderMini.js';
-import { deserializeFolderMini } from './folderMini.js';
-import { serializeFileMini } from './fileMini.js';
-import { deserializeFileMini } from './fileMini.js';
-import { FolderMini } from './folderMini.js';
-import { FileMini } from './fileMini.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFolderMini } from './folderMini';
+import { deserializeFolderMini } from './folderMini';
+import { serializeFileMini } from './fileMini';
+import { deserializeFileMini } from './fileMini';
+import { FolderMini } from './folderMini';
+import { FileMini } from './fileMini';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type Resource = FolderMini | FileMini;
 export function serializeResource(val: any): SerializedData {
   if (val.type == 'folder') {

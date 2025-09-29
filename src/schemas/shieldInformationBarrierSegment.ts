@@ -1,20 +1,20 @@
-import { serializeShieldInformationBarrierBase } from './shieldInformationBarrierBase.js';
-import { deserializeShieldInformationBarrierBase } from './shieldInformationBarrierBase.js';
-import { serializeUserBase } from './userBase.js';
-import { deserializeUserBase } from './userBase.js';
-import { serializeDateTime } from '../internal/utils.js';
-import { deserializeDateTime } from '../internal/utils.js';
-import { ShieldInformationBarrierBase } from './shieldInformationBarrierBase.js';
-import { UserBase } from './userBase.js';
-import { BoxSdkError } from '../box/errors.js';
-import { DateTime } from '../internal/utils.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeShieldInformationBarrierBase } from './shieldInformationBarrierBase';
+import { deserializeShieldInformationBarrierBase } from './shieldInformationBarrierBase';
+import { serializeUserBase } from './userBase';
+import { deserializeUserBase } from './userBase';
+import { serializeDateTime } from '../internal/utils';
+import { deserializeDateTime } from '../internal/utils';
+import { ShieldInformationBarrierBase } from './shieldInformationBarrierBase';
+import { UserBase } from './userBase';
+import { BoxSdkError } from '../box/errors';
+import { DateTime } from '../internal/utils';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type ShieldInformationBarrierSegmentTypeField =
   'shield_information_barrier_segment';
 export interface ShieldInformationBarrierSegment {

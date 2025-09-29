@@ -1,14 +1,14 @@
-import { serializeGroupFull } from './groupFull.js';
-import { deserializeGroupFull } from './groupFull.js';
-import { GroupFull } from './groupFull.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeGroupFull } from './groupFull';
+import { deserializeGroupFull } from './groupFull';
+import { GroupFull } from './groupFull';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type GroupsOrderDirectionField = 'ASC' | 'DESC' | string;
 export interface GroupsOrderField {
   /**

@@ -1,20 +1,20 @@
-import { serializeFolderMini } from './folderMini.js';
-import { deserializeFolderMini } from './folderMini.js';
-import { serializeFileMini } from './fileMini.js';
-import { deserializeFileMini } from './fileMini.js';
-import { serializeResource } from './resource.js';
-import { deserializeResource } from './resource.js';
-import { FolderMini } from './folderMini.js';
-import { FileMini } from './fileMini.js';
-import { Resource } from './resource.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFolderMini } from './folderMini';
+import { deserializeFolderMini } from './folderMini';
+import { serializeFileMini } from './fileMini';
+import { deserializeFileMini } from './fileMini';
+import { serializeResource } from './resource';
+import { deserializeResource } from './resource';
+import { FolderMini } from './folderMini';
+import { FileMini } from './fileMini';
+import { Resource } from './resource';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type ResourceScopeScopeField =
   | 'annotation_edit'
   | 'annotation_view_all'
