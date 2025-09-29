@@ -11,9 +11,10 @@ You can find the migration guide [here](https://github.com/box/box-node-sdk/blob
 
 # Box Node.js SDK
 
+[![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Known Vulnerabilities](https://snyk.io/test/github/box/box-node-sdk/badge.svg)](https://snyk.io/test/github/box/box-node-sdk)
 ![Platform](https://img.shields.io/badge/node-18--24-blue)
-[![Project Status](http://opensource.box.com/badges/stable.svg)](http://opensource.box.com/badges)
+[![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
 A Node.js interface to the [Box Content API](https://developer.box.com/reference/).
@@ -274,7 +275,7 @@ We use a modified version of [Semantic Versioning](https://semver.org/) for all 
 
 ### Supported Version
 
-Only the current MAJOR version of SDK is supported. New features, functionality, bug fixes, and security updates will only be added to the current MAJOR version.
+Currently, we support the v10 version and v3 version of the SDK. New features, functionality, bug fixes, and security updates will only be added to these versions.
 
 A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  
 Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often).
@@ -286,6 +287,8 @@ We highly recommend upgrading to the latest SDK major release at the earliest co
 
 | Version | Supported Environments  | State      | First Release | EOL/Terminated |
 | ------- | ----------------------- | ---------- | ------------- | -------------- |
+| 10      | Node.js >= 16           | Supported  | 17 Sep 2025   | TBD            |
+| 4       | Node.js >= 16           | Supported  | Q4 2025       | TBD            |
 | 3       | Node.js >= 14 and <= 20 | Supported  | 23 May 2023   | TBD            |
 | 2       | Node.js >= 8 and <= 14  | Maintained | 29 Sep 2021   | 23 Jul 2023    |
 | 1       |                         | EOL        | 28 Mar 2019   | 29 Sep 2021    |
