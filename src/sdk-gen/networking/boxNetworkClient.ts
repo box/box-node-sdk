@@ -219,7 +219,7 @@ export class BoxNetworkClient implements NetworkClient {
         } else if (options.responseFormat === 'json') {
           responseBytesBuffer = await response.arrayBuffer();
           const text = new TextDecoder().decode(responseBytesBuffer);
-          if (contentType.includes('application/json')) {
+          if (text) {
             data = jsonToSerializedData(text);
           }
           content = generateByteStreamFromBuffer(responseBytesBuffer);
