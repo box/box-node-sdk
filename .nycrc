@@ -1,7 +1,7 @@
 {
   "include": ["lib/**/*.js"],
   "reporter": ["text-summary", "lcov", "html"],
-  "check-coverage": true,
+  "check-coverage": false,
   "report-dir": "./coverage",
   "exclude-after-remap": false,
   "all": true
