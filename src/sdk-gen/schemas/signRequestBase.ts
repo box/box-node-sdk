@@ -1,14 +1,14 @@
-import { serializeSignRequestPrefillTag } from './signRequestPrefillTag.js';
-import { deserializeSignRequestPrefillTag } from './signRequestPrefillTag.js';
-import { SignRequestPrefillTag } from './signRequestPrefillTag.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeSignRequestPrefillTag } from './signRequestPrefillTag';
+import { deserializeSignRequestPrefillTag } from './signRequestPrefillTag';
+import { SignRequestPrefillTag } from './signRequestPrefillTag';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface SignRequestBase {
   /**
    * Indicates if the sender should receive a `prepare_url` in the response to complete document preparation using the UI. */

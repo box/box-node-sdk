@@ -1,20 +1,20 @@
-import { serializeFileReferenceV2025R0 } from './fileReferenceV2025R0.js';
-import { deserializeFileReferenceV2025R0 } from './fileReferenceV2025R0.js';
-import { serializeFileVersionBaseV2025R0 } from './fileVersionBaseV2025R0.js';
-import { deserializeFileVersionBaseV2025R0 } from './fileVersionBaseV2025R0.js';
-import { serializeDocGenDocumentGenerationDataV2025R0 } from './docGenDocumentGenerationDataV2025R0.js';
-import { deserializeDocGenDocumentGenerationDataV2025R0 } from './docGenDocumentGenerationDataV2025R0.js';
-import { FileReferenceV2025R0 } from './fileReferenceV2025R0.js';
-import { FileVersionBaseV2025R0 } from './fileVersionBaseV2025R0.js';
-import { DocGenDocumentGenerationDataV2025R0 } from './docGenDocumentGenerationDataV2025R0.js';
-import { BoxSdkError } from '../../box/errors.js';
-import { SerializedData } from '../../serialization/json.js';
-import { sdIsEmpty } from '../../serialization/json.js';
-import { sdIsBoolean } from '../../serialization/json.js';
-import { sdIsNumber } from '../../serialization/json.js';
-import { sdIsString } from '../../serialization/json.js';
-import { sdIsList } from '../../serialization/json.js';
-import { sdIsMap } from '../../serialization/json.js';
+import { serializeFileReferenceV2025R0 } from './fileReferenceV2025R0';
+import { deserializeFileReferenceV2025R0 } from './fileReferenceV2025R0';
+import { serializeFileVersionBaseV2025R0 } from './fileVersionBaseV2025R0';
+import { deserializeFileVersionBaseV2025R0 } from './fileVersionBaseV2025R0';
+import { serializeDocGenDocumentGenerationDataV2025R0 } from './docGenDocumentGenerationDataV2025R0';
+import { deserializeDocGenDocumentGenerationDataV2025R0 } from './docGenDocumentGenerationDataV2025R0';
+import { FileReferenceV2025R0 } from './fileReferenceV2025R0';
+import { FileVersionBaseV2025R0 } from './fileVersionBaseV2025R0';
+import { DocGenDocumentGenerationDataV2025R0 } from './docGenDocumentGenerationDataV2025R0';
+import { BoxSdkError } from '../../box/errors';
+import { SerializedData } from '../../serialization/json';
+import { sdIsEmpty } from '../../serialization/json';
+import { sdIsBoolean } from '../../serialization/json';
+import { sdIsNumber } from '../../serialization/json';
+import { sdIsString } from '../../serialization/json';
+import { sdIsList } from '../../serialization/json';
+import { sdIsMap } from '../../serialization/json';
 export type DocGenBatchCreateRequestV2025R0DestinationFolderTypeField =
   'folder';
 export class DocGenBatchCreateRequestV2025R0DestinationFolderField {

@@ -1,17 +1,17 @@
-import { serializeUserMini } from './userMini.js';
-import { deserializeUserMini } from './userMini.js';
-import { serializeGroupMini } from './groupMini.js';
-import { deserializeGroupMini } from './groupMini.js';
-import { UserMini } from './userMini.js';
-import { GroupMini } from './groupMini.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeUserMini } from './userMini';
+import { deserializeUserMini } from './userMini';
+import { serializeGroupMini } from './groupMini';
+import { deserializeGroupMini } from './groupMini';
+import { UserMini } from './userMini';
+import { GroupMini } from './groupMini';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AppItemEventSourceTypeField = 'app_item';
 export class AppItemEventSource {
   /**

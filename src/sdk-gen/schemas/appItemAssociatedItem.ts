@@ -1,20 +1,20 @@
-import { serializeFileBase } from './fileBase.js';
-import { deserializeFileBase } from './fileBase.js';
-import { serializeFolderBase } from './folderBase.js';
-import { deserializeFolderBase } from './folderBase.js';
-import { serializeWebLinkBase } from './webLinkBase.js';
-import { deserializeWebLinkBase } from './webLinkBase.js';
-import { FileBase } from './fileBase.js';
-import { FolderBase } from './folderBase.js';
-import { WebLinkBase } from './webLinkBase.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFileBase } from './fileBase';
+import { deserializeFileBase } from './fileBase';
+import { serializeFolderBase } from './folderBase';
+import { deserializeFolderBase } from './folderBase';
+import { serializeWebLinkBase } from './webLinkBase';
+import { deserializeWebLinkBase } from './webLinkBase';
+import { FileBase } from './fileBase';
+import { FolderBase } from './folderBase';
+import { WebLinkBase } from './webLinkBase';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AppItemAssociatedItem = FileBase | FolderBase | WebLinkBase;
 export function serializeAppItemAssociatedItem(val: any): SerializedData {
   if (val.type == 'file') {

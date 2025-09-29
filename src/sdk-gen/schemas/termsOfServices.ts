@@ -1,14 +1,14 @@
-import { serializeTermsOfService } from './termsOfService.js';
-import { deserializeTermsOfService } from './termsOfService.js';
-import { TermsOfService } from './termsOfService.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeTermsOfService } from './termsOfService';
+import { deserializeTermsOfService } from './termsOfService';
+import { TermsOfService } from './termsOfService';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface TermsOfServices {
   /**
    * The total number of objects. */

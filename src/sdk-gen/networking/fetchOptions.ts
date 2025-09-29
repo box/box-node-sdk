@@ -1,8 +1,8 @@
-import { Authentication } from './auth.js';
-import { NetworkSession } from './network.js';
-import { SerializedData } from '../serialization/json.js';
-import { ByteStream } from '../internal/utils.js';
-import { CancellationToken } from '../internal/utils.js';
+import { Authentication } from './auth';
+import { NetworkSession } from './network';
+import { SerializedData } from '../serialization/json';
+import { ByteStream } from '../internal/utils';
+import { CancellationToken } from '../internal/utils';
 export type ResponseFormat = 'json' | 'binary' | 'no_content';
 export interface MultipartItem {
   /**

@@ -1,14 +1,14 @@
-import { serializeUploadPartMini } from './uploadPartMini.js';
-import { deserializeUploadPartMini } from './uploadPartMini.js';
-import { UploadPartMini } from './uploadPartMini.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeUploadPartMini } from './uploadPartMini';
+import { deserializeUploadPartMini } from './uploadPartMini';
+import { UploadPartMini } from './uploadPartMini';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type UploadPart = UploadPartMini & {
   /**
    * The SHA1 hash of the chunk. */

@@ -1,20 +1,20 @@
-import { serializeFileMini } from './fileMini.js';
-import { deserializeFileMini } from './fileMini.js';
-import { serializeUserMini } from './userMini.js';
-import { deserializeUserMini } from './userMini.js';
-import { serializeDateTime } from '../internal/utils.js';
-import { deserializeDateTime } from '../internal/utils.js';
-import { FileMini } from './fileMini.js';
-import { UserMini } from './userMini.js';
-import { BoxSdkError } from '../box/errors.js';
-import { DateTime } from '../internal/utils.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFileMini } from './fileMini';
+import { deserializeFileMini } from './fileMini';
+import { serializeUserMini } from './userMini';
+import { deserializeUserMini } from './userMini';
+import { serializeDateTime } from '../internal/utils';
+import { deserializeDateTime } from '../internal/utils';
+import { FileMini } from './fileMini';
+import { UserMini } from './userMini';
+import { BoxSdkError } from '../box/errors';
+import { DateTime } from '../internal/utils';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type TaskAssignmentTypeField = 'task_assignment';
 export type TaskAssignmentResolutionStateField =
   | 'completed'

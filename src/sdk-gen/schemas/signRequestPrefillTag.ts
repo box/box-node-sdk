@@ -1,14 +1,14 @@
-import { serializeDate } from '../internal/utils.js';
-import { deserializeDate } from '../internal/utils.js';
-import { BoxSdkError } from '../box/errors.js';
-import { Date } from '../internal/utils.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeDate } from '../internal/utils';
+import { deserializeDate } from '../internal/utils';
+import { BoxSdkError } from '../box/errors';
+import { Date } from '../internal/utils';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface SignRequestPrefillTag {
   /**
    * This references the ID of a specific tag contained in a file of the signature request. */

@@ -1,17 +1,17 @@
-import { serializeRetentionPolicyBaseTypeField } from './retentionPolicyBase.js';
-import { deserializeRetentionPolicyBaseTypeField } from './retentionPolicyBase.js';
-import { serializeRetentionPolicyBase } from './retentionPolicyBase.js';
-import { deserializeRetentionPolicyBase } from './retentionPolicyBase.js';
-import { RetentionPolicyBaseTypeField } from './retentionPolicyBase.js';
-import { RetentionPolicyBase } from './retentionPolicyBase.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeRetentionPolicyBaseTypeField } from './retentionPolicyBase';
+import { deserializeRetentionPolicyBaseTypeField } from './retentionPolicyBase';
+import { serializeRetentionPolicyBase } from './retentionPolicyBase';
+import { deserializeRetentionPolicyBase } from './retentionPolicyBase';
+import { RetentionPolicyBaseTypeField } from './retentionPolicyBase';
+import { RetentionPolicyBase } from './retentionPolicyBase';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type RetentionPolicyMiniDispositionActionField =
   | 'permanently_delete'
   | 'remove_retention'

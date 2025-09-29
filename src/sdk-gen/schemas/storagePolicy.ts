@@ -1,17 +1,17 @@
-import { serializeStoragePolicyMiniTypeField } from './storagePolicyMini.js';
-import { deserializeStoragePolicyMiniTypeField } from './storagePolicyMini.js';
-import { serializeStoragePolicyMini } from './storagePolicyMini.js';
-import { deserializeStoragePolicyMini } from './storagePolicyMini.js';
-import { StoragePolicyMiniTypeField } from './storagePolicyMini.js';
-import { StoragePolicyMini } from './storagePolicyMini.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeStoragePolicyMiniTypeField } from './storagePolicyMini';
+import { deserializeStoragePolicyMiniTypeField } from './storagePolicyMini';
+import { serializeStoragePolicyMini } from './storagePolicyMini';
+import { deserializeStoragePolicyMini } from './storagePolicyMini';
+import { StoragePolicyMiniTypeField } from './storagePolicyMini';
+import { StoragePolicyMini } from './storagePolicyMini';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export class StoragePolicy extends StoragePolicyMini {
   readonly name?: string;
   constructor(fields: StoragePolicy) {

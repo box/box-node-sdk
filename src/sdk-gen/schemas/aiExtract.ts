@@ -1,23 +1,23 @@
-import { serializeAiAgentReference } from './aiAgentReference.js';
-import { deserializeAiAgentReference } from './aiAgentReference.js';
-import { serializeAiAgentExtract } from './aiAgentExtract.js';
-import { deserializeAiAgentExtract } from './aiAgentExtract.js';
-import { serializeAiItemBase } from './aiItemBase.js';
-import { deserializeAiItemBase } from './aiItemBase.js';
-import { serializeAiExtractAgent } from './aiExtractAgent.js';
-import { deserializeAiExtractAgent } from './aiExtractAgent.js';
-import { AiAgentReference } from './aiAgentReference.js';
-import { AiAgentExtract } from './aiAgentExtract.js';
-import { AiItemBase } from './aiItemBase.js';
-import { AiExtractAgent } from './aiExtractAgent.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeAiAgentReference } from './aiAgentReference';
+import { deserializeAiAgentReference } from './aiAgentReference';
+import { serializeAiAgentExtract } from './aiAgentExtract';
+import { deserializeAiAgentExtract } from './aiAgentExtract';
+import { serializeAiItemBase } from './aiItemBase';
+import { deserializeAiItemBase } from './aiItemBase';
+import { serializeAiExtractAgent } from './aiExtractAgent';
+import { deserializeAiExtractAgent } from './aiExtractAgent';
+import { AiAgentReference } from './aiAgentReference';
+import { AiAgentExtract } from './aiAgentExtract';
+import { AiItemBase } from './aiItemBase';
+import { AiExtractAgent } from './aiExtractAgent';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface AiExtract {
   /**
    * The prompt provided to a Large Language Model (LLM) in the request. The prompt can be up to 10000 characters long and it can be an XML or a JSON schema. */

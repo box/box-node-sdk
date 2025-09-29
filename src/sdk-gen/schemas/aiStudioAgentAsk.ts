@@ -1,20 +1,20 @@
-import { serializeAiStudioAgentLongTextTool } from './aiStudioAgentLongTextTool.js';
-import { deserializeAiStudioAgentLongTextTool } from './aiStudioAgentLongTextTool.js';
-import { serializeAiStudioAgentBasicTextTool } from './aiStudioAgentBasicTextTool.js';
-import { deserializeAiStudioAgentBasicTextTool } from './aiStudioAgentBasicTextTool.js';
-import { serializeAiStudioAgentSpreadsheetTool } from './aiStudioAgentSpreadsheetTool.js';
-import { deserializeAiStudioAgentSpreadsheetTool } from './aiStudioAgentSpreadsheetTool.js';
-import { AiStudioAgentLongTextTool } from './aiStudioAgentLongTextTool.js';
-import { AiStudioAgentBasicTextTool } from './aiStudioAgentBasicTextTool.js';
-import { AiStudioAgentSpreadsheetTool } from './aiStudioAgentSpreadsheetTool.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeAiStudioAgentLongTextTool } from './aiStudioAgentLongTextTool';
+import { deserializeAiStudioAgentLongTextTool } from './aiStudioAgentLongTextTool';
+import { serializeAiStudioAgentBasicTextTool } from './aiStudioAgentBasicTextTool';
+import { deserializeAiStudioAgentBasicTextTool } from './aiStudioAgentBasicTextTool';
+import { serializeAiStudioAgentSpreadsheetTool } from './aiStudioAgentSpreadsheetTool';
+import { deserializeAiStudioAgentSpreadsheetTool } from './aiStudioAgentSpreadsheetTool';
+import { AiStudioAgentLongTextTool } from './aiStudioAgentLongTextTool';
+import { AiStudioAgentBasicTextTool } from './aiStudioAgentBasicTextTool';
+import { AiStudioAgentSpreadsheetTool } from './aiStudioAgentSpreadsheetTool';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AiStudioAgentAskTypeField = 'ai_agent_ask';
 export class AiStudioAgentAsk {
   /**

@@ -1,23 +1,23 @@
-import { serializeClientErrorTypeField } from './clientError.js';
-import { deserializeClientErrorTypeField } from './clientError.js';
-import { serializeClientErrorCodeField } from './clientError.js';
-import { deserializeClientErrorCodeField } from './clientError.js';
-import { serializeClientError } from './clientError.js';
-import { deserializeClientError } from './clientError.js';
-import { serializeFileConflict } from './fileConflict.js';
-import { deserializeFileConflict } from './fileConflict.js';
-import { ClientErrorTypeField } from './clientError.js';
-import { ClientErrorCodeField } from './clientError.js';
-import { ClientError } from './clientError.js';
-import { FileConflict } from './fileConflict.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeClientErrorTypeField } from './clientError';
+import { deserializeClientErrorTypeField } from './clientError';
+import { serializeClientErrorCodeField } from './clientError';
+import { deserializeClientErrorCodeField } from './clientError';
+import { serializeClientError } from './clientError';
+import { deserializeClientError } from './clientError';
+import { serializeFileConflict } from './fileConflict';
+import { deserializeFileConflict } from './fileConflict';
+import { ClientErrorTypeField } from './clientError';
+import { ClientErrorCodeField } from './clientError';
+import { ClientError } from './clientError';
+import { FileConflict } from './fileConflict';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface ConflictErrorContextInfoField {
   /**
    * A list of the file conflicts that caused this error. */

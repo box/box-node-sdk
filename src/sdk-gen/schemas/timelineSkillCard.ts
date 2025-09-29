@@ -1,14 +1,14 @@
-import { serializeDateTime } from '../internal/utils.js';
-import { deserializeDateTime } from '../internal/utils.js';
-import { BoxSdkError } from '../box/errors.js';
-import { DateTime } from '../internal/utils.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeDateTime } from '../internal/utils';
+import { deserializeDateTime } from '../internal/utils';
+import { BoxSdkError } from '../box/errors';
+import { DateTime } from '../internal/utils';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type TimelineSkillCardTypeField = 'skill_card';
 export type TimelineSkillCardSkillCardTypeField = 'timeline';
 export interface TimelineSkillCardSkillCardTitleField {

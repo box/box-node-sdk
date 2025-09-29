@@ -1,14 +1,14 @@
-import { serializeHubCollaborationV2025R0 } from './hubCollaborationV2025R0.js';
-import { deserializeHubCollaborationV2025R0 } from './hubCollaborationV2025R0.js';
-import { HubCollaborationV2025R0 } from './hubCollaborationV2025R0.js';
-import { BoxSdkError } from '../../box/errors.js';
-import { SerializedData } from '../../serialization/json.js';
-import { sdIsEmpty } from '../../serialization/json.js';
-import { sdIsBoolean } from '../../serialization/json.js';
-import { sdIsNumber } from '../../serialization/json.js';
-import { sdIsString } from '../../serialization/json.js';
-import { sdIsList } from '../../serialization/json.js';
-import { sdIsMap } from '../../serialization/json.js';
+import { serializeHubCollaborationV2025R0 } from './hubCollaborationV2025R0';
+import { deserializeHubCollaborationV2025R0 } from './hubCollaborationV2025R0';
+import { HubCollaborationV2025R0 } from './hubCollaborationV2025R0';
+import { BoxSdkError } from '../../box/errors';
+import { SerializedData } from '../../serialization/json';
+import { sdIsEmpty } from '../../serialization/json';
+import { sdIsBoolean } from '../../serialization/json';
+import { sdIsNumber } from '../../serialization/json';
+import { sdIsString } from '../../serialization/json';
+import { sdIsList } from '../../serialization/json';
+import { sdIsMap } from '../../serialization/json';
 export interface HubCollaborationsV2025R0 {
   /**
    * A list of Box Hub collaborations. */

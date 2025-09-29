@@ -1,14 +1,14 @@
-import { serializeFileVersionFull } from './fileVersionFull.js';
-import { deserializeFileVersionFull } from './fileVersionFull.js';
-import { FileVersionFull } from './fileVersionFull.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFileVersionFull } from './fileVersionFull';
+import { deserializeFileVersionFull } from './fileVersionFull';
+import { FileVersionFull } from './fileVersionFull';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type FileVersionsOrderDirectionField = 'ASC' | 'DESC' | string;
 export interface FileVersionsOrderField {
   /**

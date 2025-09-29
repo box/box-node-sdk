@@ -1,18 +1,18 @@
-import { serializeRecentItems } from '../schemas/recentItems.js';
-import { deserializeRecentItems } from '../schemas/recentItems.js';
-import { BoxClient } from '../client.js';
-import { RecentItems } from '../schemas/recentItems.js';
-import { decodeBase64 } from '../internal/utils.js';
-import { getEnvVar } from '../internal/utils.js';
-import { getUuid } from '../internal/utils.js';
-import { getDefaultClientWithUserSubject } from './commons.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeRecentItems } from '@/schemas/recentItems';
+import { deserializeRecentItems } from '@/schemas/recentItems';
+import { BoxClient } from '@/client';
+import { RecentItems } from '@/schemas/recentItems';
+import { decodeBase64 } from '@/internal/utils';
+import { getEnvVar } from '@/internal/utils';
+import { getUuid } from '@/internal/utils';
+import { getDefaultClientWithUserSubject } from './commons';
+import { SerializedData } from '@/serialization/json';
+import { sdIsEmpty } from '@/serialization/json';
+import { sdIsBoolean } from '@/serialization/json';
+import { sdIsNumber } from '@/serialization/json';
+import { sdIsString } from '@/serialization/json';
+import { sdIsList } from '@/serialization/json';
+import { sdIsMap } from '@/serialization/json';
 test('testRecentItems', async function testRecentItems(): Promise<any> {
   const client: BoxClient = getDefaultClientWithUserSubject(
     getEnvVar('USER_ID')

@@ -1,23 +1,23 @@
-import { serializeAiAgentAsk } from './aiAgentAsk.js';
-import { deserializeAiAgentAsk } from './aiAgentAsk.js';
-import { serializeAiAgentTextGen } from './aiAgentTextGen.js';
-import { deserializeAiAgentTextGen } from './aiAgentTextGen.js';
-import { serializeAiAgentExtract } from './aiAgentExtract.js';
-import { deserializeAiAgentExtract } from './aiAgentExtract.js';
-import { serializeAiAgentExtractStructured } from './aiAgentExtractStructured.js';
-import { deserializeAiAgentExtractStructured } from './aiAgentExtractStructured.js';
-import { AiAgentAsk } from './aiAgentAsk.js';
-import { AiAgentTextGen } from './aiAgentTextGen.js';
-import { AiAgentExtract } from './aiAgentExtract.js';
-import { AiAgentExtractStructured } from './aiAgentExtractStructured.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeAiAgentAsk } from './aiAgentAsk';
+import { deserializeAiAgentAsk } from './aiAgentAsk';
+import { serializeAiAgentTextGen } from './aiAgentTextGen';
+import { deserializeAiAgentTextGen } from './aiAgentTextGen';
+import { serializeAiAgentExtract } from './aiAgentExtract';
+import { deserializeAiAgentExtract } from './aiAgentExtract';
+import { serializeAiAgentExtractStructured } from './aiAgentExtractStructured';
+import { deserializeAiAgentExtractStructured } from './aiAgentExtractStructured';
+import { AiAgentAsk } from './aiAgentAsk';
+import { AiAgentTextGen } from './aiAgentTextGen';
+import { AiAgentExtract } from './aiAgentExtract';
+import { AiAgentExtractStructured } from './aiAgentExtractStructured';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AiAgent =
   | AiAgentAsk
   | AiAgentTextGen
