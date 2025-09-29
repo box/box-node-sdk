@@ -4,7 +4,7 @@
     "module": "ESNext",
     "declaration": true,
     "sourceMap": true,
-    "outDir": "lib/sdk-gen",
+    "outDir": "lib-rollup/sdk-gen",
     "isolatedModules": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,6 +14,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/sdk-gen/**/*"],
   "exclude": ["node_modules", "src/__tests__"]
 }

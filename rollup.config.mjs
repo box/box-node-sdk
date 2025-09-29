@@ -75,11 +75,12 @@ function cleanupTypeScript(options = {}) {
 export default {
   input: 'src/sdk-gen/index.ts',
   output: {
-    file: 'lib/bundle.js',
+    file: 'lib-esm/bundle.js',
     format: 'umd',
     name: 'box-node-sdk',
     sourcemap: true,
     exports: 'named',
+    inlineDynamicImports: true,
   },
   plugins: [
     replaceFiles({
