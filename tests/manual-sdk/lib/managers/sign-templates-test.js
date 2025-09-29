@@ -9,7 +9,7 @@
 var sinon = require('sinon'),
   mockery = require('mockery'),
   leche = require('leche'),
-  BoxClient = require('@/lib/box-client');
+  BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -38,7 +38,7 @@ describe('SignTemplates', () => {
 
   beforeEach(() => {
     // Setup File Under Test
-    SignTemplates = require(MODULE_FILE_PATH);
+    SignTemplates = require(MODULE_FILE_PATH).default;
     signTemplates = new SignTemplates(boxClientFake);
   });
 

@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -40,7 +40,7 @@ describe('Metadata', function () {
 
   beforeEach(function () {
     // Setup File Under Test
-    MetadataManager = require(MODULE_FILE_PATH);
+    MetadataManager = require(MODULE_FILE_PATH).default;
     metadata = new MetadataManager(boxClientFake);
   });
 

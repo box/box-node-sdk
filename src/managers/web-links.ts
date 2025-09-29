@@ -282,4 +282,4 @@ class WebLinks {
   }
 }
 
-export = WebLinks;
+export default WebLinks;

@@ -11,7 +11,7 @@ var assert = require('chai').assert,
   mockery = require('mockery'),
   Promise = require('bluebird'),
   leche = require('leche'),
-  BoxClient = require('@/lib/box-client');
+  BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -40,7 +40,7 @@ describe('PagingIterator', function () {
     mockery.registerAllowable(MODULE_FILE_PATH);
 
     // Setup File Under Test
-    PagingIterator = require(MODULE_FILE_PATH);
+    PagingIterator = require(MODULE_FILE_PATH).default;
   });
 
   afterEach(function () {

@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -47,7 +47,7 @@ describe('Comments', function () {
     testParamsWithBody = { body: testBody };
     testParamsWithQs = { qs: testQS };
     // Setup File Under Test
-    Comments = require(MODULE_FILE_PATH);
+    Comments = require(MODULE_FILE_PATH).default;
     comments = new Comments(boxClientFake);
   });
 

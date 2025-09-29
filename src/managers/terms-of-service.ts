@@ -393,4 +393,4 @@ TermsOfService.prototype.status = TermsOfServicesStatus;
  * @module box-node-sdk/lib/managers/terms-of-service
  * @see {@Link TermsOfService}
  */
-export = TermsOfService;
+export default TermsOfService;

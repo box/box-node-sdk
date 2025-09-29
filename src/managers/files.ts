@@ -16,7 +16,7 @@ import * as schemas from '../schemas';
 import errors from '../util/errors';
 import urlPath from '../util/url-path';
 
-const ChunkedUploader = require('../chunked-uploader');
+import ChunkedUploader from '../chunked-uploader';
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -2072,4 +2072,4 @@ Files.prototype.representation = FileRepresentationType;
  * @module box-node-sdk/lib/managers/files
  * @see {@Link Files}
  */
-export = Files;
+export default Files;

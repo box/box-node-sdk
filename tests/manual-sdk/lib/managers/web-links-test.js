@@ -11,7 +11,7 @@ var sinon = require('sinon'),
   leche = require('leche'),
   assert = require('chai').assert,
   Promise = require('bluebird'),
-  BoxClient = require('@/lib/box-client');
+  BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -43,7 +43,7 @@ describe('WebLinks', function () {
 
   beforeEach(function () {
     // Setup File Under Test
-    WebLinks = require(MODULE_FILE_PATH);
+    WebLinks = require(MODULE_FILE_PATH).default;
     weblinks = new WebLinks(boxClientFake);
     testQS = { testQSKey: 'testQSValue' };
     testParamsWithQs = { qs: testQS };

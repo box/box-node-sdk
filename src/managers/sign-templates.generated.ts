@@ -79,4 +79,4 @@ class SignTemplatesManager {
     );
   }
 }
-export = SignTemplatesManager;
+export default SignTemplatesManager;

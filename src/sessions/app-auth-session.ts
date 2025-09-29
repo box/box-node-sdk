@@ -61,7 +61,7 @@ function isObjectValidTokenStore(obj: Record<string, any>) {
  */
 class AppAuthSession {
   _type: string;
-  _id: string;
+  _id: string | undefined;
   _config: Config;
   _tokenManager: TokenManager;
   _tokenStore: TokenStore | null;
@@ -70,7 +70,7 @@ class AppAuthSession {
 
   constructor(
     type: string,
-    id: string,
+    id: string | undefined,
     config: Config,
     tokenManager: TokenManager,
     tokenStore?: TokenStore
@@ -236,4 +236,4 @@ class AppAuthSession {
  * @module box-node-sdk/lib/sessions/app-auth-session
  * @see {@Link AppAuthSession}
  */
-export = AppAuthSession;
+export default AppAuthSession;

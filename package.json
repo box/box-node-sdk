@@ -89,7 +89,7 @@
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --project tsconfig.json",
     "build:esm": "tsc --project tsconfig.esm.json",
-    "postbuild": "rollup -c",
+    "postbuild": "echo 'postbuild'",
     "codegen": "cd codegen && npm run codegen",
     "docs": "jsdoc -p -r -c ./jsdoc.json -d ./docs/jsdoc ./src/",
     "doctoc": "doctoc docs",

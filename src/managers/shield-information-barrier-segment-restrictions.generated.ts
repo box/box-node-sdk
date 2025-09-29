@@ -156,4 +156,4 @@ class ShieldInformationBarrierSegmentRestrictionsManager {
     );
   }
 }
-export = ShieldInformationBarrierSegmentRestrictionsManager;
+export default ShieldInformationBarrierSegmentRestrictionsManager;

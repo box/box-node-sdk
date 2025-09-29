@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -38,7 +38,7 @@ describe('TermsOfService', function () {
     // Register Mocks
     mockery.registerAllowable(MODULE_FILE_PATH, true);
     // Setup File Under Test
-    TermsOfService = require(MODULE_FILE_PATH);
+    TermsOfService = require(MODULE_FILE_PATH).default;
     termsOfService = new TermsOfService(boxClientFake);
   });
 

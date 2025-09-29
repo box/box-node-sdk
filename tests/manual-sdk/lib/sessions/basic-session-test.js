@@ -13,7 +13,7 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   mockery = require('mockery');
 
-var TokenManager = require('@/lib/token-manager');
+var TokenManager = require('@/lib/token-manager').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -38,7 +38,7 @@ describe('BasicAPISession', function () {
     // Register Mocks
     mockery.registerAllowable(MODULE_FILE_PATH, true);
     // Setup File Under Test
-    BasicAPISession = require(MODULE_FILE_PATH);
+    BasicAPISession = require(MODULE_FILE_PATH).default;
     basicAPISession = new BasicAPISession(ACCESS_TOKEN, tokenManagerFake);
   });
 

@@ -8,16 +8,16 @@
 
 import { EventEmitter } from 'events';
 import * as qs from 'querystring';
-import CCGAPISession = require('./sessions/ccg-session');
-import APIRequestManager = require('./api-request-manager');
-import BoxClient = require('./box-client');
-import TokenManager = require('./token-manager');
+import CCGAPISession from './sessions/ccg-session';
+import APIRequestManager from './api-request-manager';
+import BoxClient from './box-client';
+import TokenManager from './token-manager';
 
-const Config = require('./util/config'),
-  BasicAPISession = require('./sessions/basic-session'),
-  PersistentAPISession = require('./sessions/persistent-session'),
-  AppAuthSession = require('./sessions/app-auth-session'),
-  Webhooks = require('./managers/webhooks');
+import Config from './util/config';
+import BasicAPISession from './sessions/basic-session';
+import PersistentAPISession from './sessions/persistent-session';
+import AppAuthSession from './sessions/app-auth-session';
+import Webhooks from './managers/webhooks';
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -53,7 +53,7 @@ const Config = require('./util/config'),
  */
 
 type TokenStore = object /* FIXME */;
-type UserConfigurationOptions = object /* FIXME */;
+type UserConfigurationOptions = any /* FIXME */;
 type TokenRequestOptions = object /* FIXME */;
 type CCGConfig = {
   boxSubjectType: 'user' | 'enterprise';
@@ -489,4 +489,4 @@ BoxSDKNode.prototype.collaborationRoles =
 BoxSDKNode.prototype.CURRENT_USER_ID = BoxClient.prototype.CURRENT_USER_ID;
 
 /** @module box-node-sdk/lib/box-node-sdk */
-export = BoxSDKNode;
+export default BoxSDKNode;

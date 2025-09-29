@@ -89,4 +89,4 @@ class SharedItems {
  * @module box-node-sdk/lib/managers/shared-items
  * @see {@Link SharedItems}
  */
-export = SharedItems;
+export default SharedItems;

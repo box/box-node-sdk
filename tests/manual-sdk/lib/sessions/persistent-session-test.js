@@ -13,7 +13,7 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   mockery = require('mockery');
 
-var TokenManager = require('@/lib/token-manager');
+var TokenManager = require('@/lib/token-manager').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -54,7 +54,7 @@ describe('PersistentAPISession', function () {
     mockery.registerAllowable(MODULE_FILE_PATH, true);
 
     // Setup File Under Test
-    PersistentAPISession = require(MODULE_FILE_PATH);
+    PersistentAPISession = require(MODULE_FILE_PATH).default;
     persistentAPISession = new PersistentAPISession(
       testTokenInfo,
       null,

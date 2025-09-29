@@ -370,4 +370,4 @@ Events.prototype.CURRENT_STREAM_POSITION = CURRENT_STREAM_POSITION;
 
 Events.prototype.enterpriseEventTypes = EventType;
 
-export = Events;
+export default Events;

@@ -11,7 +11,7 @@ var sinon = require('sinon'),
   leche = require('leche'),
   assert = require('chai').assert,
   Promise = require('bluebird'),
-  BoxClient = require('@/lib/box-client');
+  BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -46,7 +46,7 @@ describe('Tasks', function () {
 
   beforeEach(function () {
     // Setup File Under Test
-    Tasks = require(MODULE_FILE_PATH);
+    Tasks = require(MODULE_FILE_PATH).default;
     tasks = new Tasks(boxClientFake);
     testQS = { testQSKey: 'testQSValue' };
     testParamsWithQs = { qs: testQS };
