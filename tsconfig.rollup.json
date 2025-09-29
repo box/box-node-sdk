@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "Node",
+    "module": "ESNext",
     "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
-    "outDir": "lib",
+    "outDir": "lib/sdk-gen",
     "isolatedModules": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -17,5 +15,5 @@
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts", "src/__tests__"]
+  "exclude": ["node_modules", "src/__tests__"]
 }

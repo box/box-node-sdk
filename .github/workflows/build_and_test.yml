@@ -3,10 +3,10 @@ on:
   pull_request:
     types: [opened, synchronize]
     branches:
-      - main
+      - combined-sdk
   push:
     branches:
-      - main
+      - combined-sdk
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
