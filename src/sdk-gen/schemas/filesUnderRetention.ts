@@ -1,14 +1,14 @@
-import { serializeFileMini } from './fileMini.js';
-import { deserializeFileMini } from './fileMini.js';
-import { FileMini } from './fileMini.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFileMini } from './fileMini';
+import { deserializeFileMini } from './fileMini';
+import { FileMini } from './fileMini';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface FilesUnderRetention {
   /**
    * The limit that was used for these entries. This will be the same as the

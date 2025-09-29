@@ -1,14 +1,14 @@
-import { serializeCommentFull } from './commentFull.js';
-import { deserializeCommentFull } from './commentFull.js';
-import { CommentFull } from './commentFull.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeCommentFull } from './commentFull';
+import { deserializeCommentFull } from './commentFull';
+import { CommentFull } from './commentFull';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type CommentsOrderDirectionField = 'ASC' | 'DESC' | string;
 export interface CommentsOrderField {
   /**

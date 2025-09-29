@@ -1,14 +1,14 @@
-import { serializeRetentionPolicyAssignment } from './retentionPolicyAssignment.js';
-import { deserializeRetentionPolicyAssignment } from './retentionPolicyAssignment.js';
-import { RetentionPolicyAssignment } from './retentionPolicyAssignment.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeRetentionPolicyAssignment } from './retentionPolicyAssignment';
+import { deserializeRetentionPolicyAssignment } from './retentionPolicyAssignment';
+import { RetentionPolicyAssignment } from './retentionPolicyAssignment';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface RetentionPolicyAssignments {
   /**
    * A list of retention policy assignments. */

@@ -1,20 +1,20 @@
-import { serializeFileFull } from './fileFull.js';
-import { deserializeFileFull } from './fileFull.js';
-import { serializeFolderFull } from './folderFull.js';
-import { deserializeFolderFull } from './folderFull.js';
-import { serializeWebLink } from './webLink.js';
-import { deserializeWebLink } from './webLink.js';
-import { FileFull } from './fileFull.js';
-import { FolderFull } from './folderFull.js';
-import { WebLink } from './webLink.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFileFull } from './fileFull';
+import { deserializeFileFull } from './fileFull';
+import { serializeFolderFull } from './folderFull';
+import { deserializeFolderFull } from './folderFull';
+import { serializeWebLink } from './webLink';
+import { deserializeWebLink } from './webLink';
+import { FileFull } from './fileFull';
+import { FolderFull } from './folderFull';
+import { WebLink } from './webLink';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type RecentItemResource = FileFull | FolderFull | WebLink;
 export function serializeRecentItemResource(val: any): SerializedData {
   if (val.type == 'file') {

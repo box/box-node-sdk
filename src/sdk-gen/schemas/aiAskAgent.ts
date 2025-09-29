@@ -1,17 +1,17 @@
-import { serializeAiAgentReference } from './aiAgentReference.js';
-import { deserializeAiAgentReference } from './aiAgentReference.js';
-import { serializeAiAgentAsk } from './aiAgentAsk.js';
-import { deserializeAiAgentAsk } from './aiAgentAsk.js';
-import { AiAgentReference } from './aiAgentReference.js';
-import { AiAgentAsk } from './aiAgentAsk.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeAiAgentReference } from './aiAgentReference';
+import { deserializeAiAgentReference } from './aiAgentReference';
+import { serializeAiAgentAsk } from './aiAgentAsk';
+import { deserializeAiAgentAsk } from './aiAgentAsk';
+import { AiAgentReference } from './aiAgentReference';
+import { AiAgentAsk } from './aiAgentAsk';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type AiAskAgent = AiAgentReference | AiAgentAsk;
 export function serializeAiAskAgent(val: any): SerializedData {
   if (val.type == 'ai_agent_id') {

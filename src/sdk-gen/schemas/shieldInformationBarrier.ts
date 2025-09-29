@@ -1,20 +1,20 @@
-import { serializeEnterpriseBase } from './enterpriseBase.js';
-import { deserializeEnterpriseBase } from './enterpriseBase.js';
-import { serializeUserBase } from './userBase.js';
-import { deserializeUserBase } from './userBase.js';
-import { serializeDateTime } from '../internal/utils.js';
-import { deserializeDateTime } from '../internal/utils.js';
-import { EnterpriseBase } from './enterpriseBase.js';
-import { UserBase } from './userBase.js';
-import { BoxSdkError } from '../box/errors.js';
-import { DateTime } from '../internal/utils.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeEnterpriseBase } from './enterpriseBase';
+import { deserializeEnterpriseBase } from './enterpriseBase';
+import { serializeUserBase } from './userBase';
+import { deserializeUserBase } from './userBase';
+import { serializeDateTime } from '../internal/utils';
+import { deserializeDateTime } from '../internal/utils';
+import { EnterpriseBase } from './enterpriseBase';
+import { UserBase } from './userBase';
+import { BoxSdkError } from '../box/errors';
+import { DateTime } from '../internal/utils';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type ShieldInformationBarrierTypeField = 'shield_information_barrier';
 export type ShieldInformationBarrierStatusField =
   | 'draft'

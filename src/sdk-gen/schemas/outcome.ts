@@ -1,20 +1,20 @@
-import { serializeCollaboratorVariable } from './collaboratorVariable.js';
-import { deserializeCollaboratorVariable } from './collaboratorVariable.js';
-import { serializeCompletionRuleVariable } from './completionRuleVariable.js';
-import { deserializeCompletionRuleVariable } from './completionRuleVariable.js';
-import { serializeRoleVariable } from './roleVariable.js';
-import { deserializeRoleVariable } from './roleVariable.js';
-import { CollaboratorVariable } from './collaboratorVariable.js';
-import { CompletionRuleVariable } from './completionRuleVariable.js';
-import { RoleVariable } from './roleVariable.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeCollaboratorVariable } from './collaboratorVariable';
+import { deserializeCollaboratorVariable } from './collaboratorVariable';
+import { serializeCompletionRuleVariable } from './completionRuleVariable';
+import { deserializeCompletionRuleVariable } from './completionRuleVariable';
+import { serializeRoleVariable } from './roleVariable';
+import { deserializeRoleVariable } from './roleVariable';
+import { CollaboratorVariable } from './collaboratorVariable';
+import { CompletionRuleVariable } from './completionRuleVariable';
+import { RoleVariable } from './roleVariable';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export interface Outcome {
   /**
    * ID of a specific outcome. */

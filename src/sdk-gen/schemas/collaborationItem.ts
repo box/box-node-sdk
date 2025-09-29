@@ -1,20 +1,20 @@
-import { serializeFile } from './file.js';
-import { deserializeFile } from './file.js';
-import { serializeFolder } from './folder.js';
-import { deserializeFolder } from './folder.js';
-import { serializeWebLink } from './webLink.js';
-import { deserializeWebLink } from './webLink.js';
-import { File } from './file.js';
-import { Folder } from './folder.js';
-import { WebLink } from './webLink.js';
-import { BoxSdkError } from '../box/errors.js';
-import { SerializedData } from '../serialization/json.js';
-import { sdIsEmpty } from '../serialization/json.js';
-import { sdIsBoolean } from '../serialization/json.js';
-import { sdIsNumber } from '../serialization/json.js';
-import { sdIsString } from '../serialization/json.js';
-import { sdIsList } from '../serialization/json.js';
-import { sdIsMap } from '../serialization/json.js';
+import { serializeFile } from './file';
+import { deserializeFile } from './file';
+import { serializeFolder } from './folder';
+import { deserializeFolder } from './folder';
+import { serializeWebLink } from './webLink';
+import { deserializeWebLink } from './webLink';
+import { File } from './file';
+import { Folder } from './folder';
+import { WebLink } from './webLink';
+import { BoxSdkError } from '../box/errors';
+import { SerializedData } from '../serialization/json';
+import { sdIsEmpty } from '../serialization/json';
+import { sdIsBoolean } from '../serialization/json';
+import { sdIsNumber } from '../serialization/json';
+import { sdIsString } from '../serialization/json';
+import { sdIsList } from '../serialization/json';
+import { sdIsMap } from '../serialization/json';
 export type CollaborationItem = File | Folder | WebLink;
 export function serializeCollaborationItem(val: any): SerializedData {
   if (val.type == 'file') {
