@@ -11,18 +11,20 @@ overview of how the Box API handles authentication.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Ways to Authenticate](#ways-to-authenticate)
-  - [Developer Token](#developer-token)
-  - [Server Auth with JWT](#server-auth-with-jwt)
-  - [Traditional 3-Legged OAuth2](#traditional-3-legged-oauth2)
-    - [Token Store](#token-store)
-  - [Box View Authentication with App Tokens](#box-view-authentication-with-app-tokens)
-  - [Client Credentials Grant Authentication](#client-credentials-grant-authentication)
-- [As-User](#as-user)
-- [Proxy Support](#proxy-support)
-- [Token Exchange](#token-exchange)
-    - [Annotator Tokens](#annotator-tokens)
-- [Revoking Tokens](#revoking-tokens)
+- [Authentication](#authentication)
+	- [Ways to Authenticate](#ways-to-authenticate)
+		- [Developer Token](#developer-token)
+		- [Server Auth with JWT](#server-auth-with-jwt)
+		- [Traditional 3-Legged OAuth2](#traditional-3-legged-oauth2)
+			- [Token Store](#token-store)
+		- [Box View Authentication with App Tokens](#box-view-authentication-with-app-tokens)
+		- [Client Credentials Grant Authentication](#client-credentials-grant-authentication)
+			- [Obtaining Service Account token](#obtaining-service-account-token)
+			- [Obtaining User token](#obtaining-user-token)
+	- [As-User](#as-user)
+	- [Token Exchange](#token-exchange)
+			- [Annotator Tokens](#annotator-tokens)
+	- [Revoking tokens](#revoking-tokens)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -42,7 +44,7 @@ The following example creates an API client with a developer token:
 
 <!-- sample x_auth init_with_dev_token -->
 ```js
-var BoxSDK = require('box-node-sdk');
+var BoxSDK = require('box-node-sdk').default;
 var sdk = new BoxSDK({
 	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'YOUR-CLIENT_SECRET'
@@ -70,7 +72,7 @@ Service Account:
 
 <!-- sample x_auth init_with_jwt_enterprise -->
 ```js
-var BoxSDK = require('box-node-sdk');
+var BoxSDK = require('box-node-sdk').default;
 var jsonConfig = require('/path/to/config.json');
 var sdk = BoxSDK.getPreconfiguredInstance(jsonConfig);
 
@@ -82,7 +84,7 @@ to the SDK constructor:
 
 <!-- sample x_auth init_with_jwt_enterprise_with_config -->
 ```js
-var BoxSDK = require('box-node-sdk');
+var BoxSDK = require('box-node-sdk').default;
 var sdk = new BoxSDK({
 	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'YOUR-CLIENT_SECRET',
@@ -128,7 +130,7 @@ browser or web view) in order to obtain an auth code.
 
 <!-- sample get_authorize -->
 ```js
-var BoxSDK = require('box-node-sdk');
+var BoxSDK = require('box-node-sdk').default;
 var sdk = new BoxSDK({
 	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'YOUR-CLIENT_SECRET'
@@ -219,7 +221,7 @@ simply create a basic client with that token:
 
 <!-- sample x_auth init_with_app_token -->
 ```js
-var BoxSDK = require('box-node-sdk');
+var BoxSDK = require('box-node-sdk').default;
 var sdk = new BoxSDK({
 	clientID: 'YOUR-CLIENT-ID',
 	clientSecret: 'unused'
@@ -243,7 +245,7 @@ To obtain service account, you will have to provide enterprise ID with client ID
 
 <!-- sample x_auth with_client_credentials -->
 ```js
-const BoxSDK = require('box-node-sdk');
+const BoxSDK = require('box-node-sdk').default;
 const sdkConfig = {
 	boxAppSettings: {
 		clientID: "CLIENT_ID",
@@ -261,7 +263,7 @@ const client = sdk.getAnonymousClient();
 To obtain user account you will have to provide user ID with client ID and secret.
 
 ```js
-const BoxSDK = require('box-node-sdk');
+const BoxSDK = require('box-node-sdk').default;
 const sdkConfig = {
 	boxAppSettings: {
 		clientID: "CLIENT_ID",

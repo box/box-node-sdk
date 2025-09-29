@@ -60,7 +60,7 @@ of your platform app in the [Box Developer Console][dev-console].
 You can use this token to make test calls for your own Box account.
 
 ```js
-var BoxSDK = require('box-node-sdk');
+var BoxSDK = require('box-node-sdk').default;
 
 // Initialize the SDK with your app credentials
 var sdk = new BoxSDK({
