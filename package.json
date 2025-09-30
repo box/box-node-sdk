@@ -39,6 +39,26 @@
       "import": "./lib-esm/*.js",
       "require": "./lib/*.js"
     },
+    "./managers/*": {
+      "import": "./lib-esm/managers/*.js",
+      "require": "./lib/managers/*.js",
+      "types": "./lib/managers/*.d.ts"
+    },
+    "./schemas/*": {
+      "import": "./lib-esm/schemas/*.js",
+      "require": "./lib/schemas/*.js",
+      "types": "./lib/schemas/*.d.ts"
+    },
+    "./sessions/*": {
+      "import": "./lib-esm/sessions/*.js",
+      "require": "./lib/sessions/*.js",
+      "types": "./lib/sessions/*.d.ts"
+    },
+    "./util/*": {
+      "import": "./lib-esm/util/*.js",
+      "require": "./lib/util/*.js",
+      "types": "./lib/util/*.d.ts"
+    },
     "./next-gen": {
       "import": "./lib-esm/index.js",
       "require": "./lib/index.js",
