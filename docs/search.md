@@ -1,108 +1,89 @@
-Search
-======
+# SearchManager
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+- [Query files/folders by metadata](#query-files-folders-by-metadata)
+- [Search for content](#search-for-content)
 
+## Query files/folders by metadata
 
-- [Search for Content](#search-for-content)
+Create a search using SQL-like syntax to return items that match specific
+metadata.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+By default, this endpoint returns only the most basic info about the items for
+which the query matches. To get additional fields for each item, including any
+of the metadata, use the `fields` attribute in the query.
 
-Search for Content
-------------------
+This operation is performed by calling function `searchByMetadataQuery`.
 
-To get a list of items matching a search query, call the
-[`search.query(searchQuery, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Search.html#query)
-method.  There are many possible options for advanced search filtering, which are
-documented in the [Search API Reference](https://developer.box.com/en/guides/search/).
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-metadata-queries-execute-read/).
+
+<!-- sample post_metadata_queries_execute_read -->
+
+```ts
+await client.search.searchByMetadataQuery({
+  ancestorFolderId: '0',
+  from: searchFrom,
+  query:
+    'name = :name AND age < :age AND birthDate >= :birthDate AND countryCode = :countryCode AND sports = :sports',
+  queryParams: {
+    ['name']: 'John',
+    ['age']: 50,
+    ['birthDate']: '2001-01-01T02:20:10.120Z',
+    ['countryCode']: 'US',
+    ['sports']: ['basketball', 'tennis'],
+  },
+} satisfies MetadataQuery);
+```
+
+### Arguments
+
+- requestBody `MetadataQuery`
+  - Request body of searchByMetadataQuery method
+- optionalsInput `SearchByMetadataQueryOptionalsInput`
+
+### Returns
+
+This function returns a value of type `MetadataQueryResults`.
+
+Returns a list of files and folders that match this metadata query.
+
+## Search for content
+
+Searches for files, folders, web links, and shared files across the
+users content or across the entire enterprise.
+
+This operation is performed by calling function `searchForContent`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-search/).
 
 <!-- sample get_search -->
-```js
-// Search for PDF or Word documents matching "Mobile"
-client.search.query(
-	'Mobile',
-	{
-		fields: 'name,modified_at,size,extension,permissions,sync_state',
-		file_extensions: 'pdf,doc',
-		limit: 200,
-		offset: 0
-	})
-	.then(results => {
-		/* results -> {
-			total_count: 1,
-			entries: 
-			[ { type: 'file',
-				id: '11111',
-				sequence_id: '1',
-				etag: '1',
-				sha1: 'f89d97c5eea0a68e2cec911s932eca34a52355d2',
-				name: 'Box for Sales - Empowering Your Mobile Worker White paper 2pg (External).pdf',
-				description: '',
-				size: 408979,
-				path_collection: 
-					{ total_count: 2,
-					entries: 
-					[ { type: 'folder',
-						id: '0',
-						sequence_id: null,
-						etag: null,
-						name: 'All Files' },
-						{ type: 'folder',
-						id: '22222',
-						sequence_id: '1',
-						etag: '1',
-						name: 'Marketing Active Work' } ] },
-				created_at: '2014-05-17T12:59:45-07:00',
-				modified_at: '2014-05-17T13:00:20-07:00',
-				trashed_at: null,
-				purged_at: null,
-				content_created_at: '2014-05-17T12:58:58-07:00',
-				content_modified_at: '2014-05-17T12:58:58-07:00',
-				created_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Example User',
-					login: 'user@example.com' },
-				modified_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Example User',
-					login: 'user@example.com' },
-				owned_by: 
-					{ type: 'user',
-					id: '33333',
-					name: 'Example User',
-					login: 'user@example.com' },
-				shared_link: null,
-				parent: 
-					{ type: 'folder',
-					id: '22222',
-					sequence_id: '1',
-					etag: '1',
-					name: 'Marketing Active Work' },
-				item_status: 'active' } ],
-			limit: 200,
-			offset: 0 }
-		*/
-	});
+
+```ts
+await client.search.searchForContent({
+  ancestorFolderIds: ['0'],
+  mdfilters: [
+    {
+      filters: searchFilters,
+      scope: 'enterprise' as MetadataFilterScopeField,
+      templateKey: templateKey,
+    } satisfies MetadataFilter,
+  ],
+} satisfies SearchForContentQueryParams);
 ```
 
-```js
-// Search for all Powerpoint presentations with the TopSecret metadata applied
-client.search.query(
-	'',
-	{
-		file_extensions: 'ppt,pptx',
-		mdfilters: [
-			{
-				templateKey: 'TopSecret',
-				scope: 'enterprise',
-				filters: {}
-			}
-		]
-	})
-	.then(results => {
-		// ...
-	});
-```
+### Arguments
+
+- queryParams `SearchForContentQueryParams`
+  - Query parameters of searchForContent method
+- headersInput `SearchForContentHeadersInput`
+  - Headers of searchForContent method
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
+
+### Returns
+
+This function returns a value of type `SearchResultsResponse`.
+
+Returns a collection of search results. If there are no matching
+search results, the `entries` array will be empty.

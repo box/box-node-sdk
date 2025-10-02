@@ -1,0 +1,36 @@
+{
+  "name": "box-node-sdk-browser-test",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run prebuild && next dev --turbopack",
+    "prebuild": "tsx init.ts",
+    "build": "next build",
+    "build:dev": "NODE_ENV=development next build",
+    "build-run": "npm run build && npm run start",
+    "start": "next start",
+    "lint": "next lint",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:all": "npm run cypress:run:chrome && npm run cypress:run:firefox",
+    "cypress:run:chrome": "start-server-and-test build-run 3000 'cypress run --browser chrome'",
+    "cypress:run:firefox": "start-server-and-test build-run 3000 'cypress run --browser firefox'"
+  },
+  "dependencies": {
+    "box-node-sdk": "file:../",
+    "next": "15.2.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cypress": "^14.5.3",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.3",
+    "start-server-and-test": "^2.0.11",
+    "typescript": "^5",
+    "tsx": "^4.20.3"
+  }
+}

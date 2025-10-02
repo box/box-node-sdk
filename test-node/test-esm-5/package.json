@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "dependencies": {
+    "sdk": "../../"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/main.js"
+  }
+}

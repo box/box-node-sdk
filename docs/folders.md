@@ -1,674 +1,228 @@
-# Folders
+# FoldersManager
 
-Folder objects represent a folder from a user's account. They can be used to
-iterate through a folder's contents, collaborate a folder with another user or
-group, and perform other common folder operations (move, copy, delete, etc.).
+- [Get folder information](#get-folder-information)
+- [Update folder](#update-folder)
+- [Delete folder](#delete-folder)
+- [List items in folder](#list-items-in-folder)
+- [Create folder](#create-folder)
+- [Copy folder](#copy-folder)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Get folder information
 
+Retrieves details for a folder, including the first 100 entries
+in the folder.
 
-- [Folders](#folders)
-  - [Get a Folder's Information](#get-a-folders-information)
-  - [Get a Folder's Items](#get-a-folders-items)
-  - [Update a Folder's Information](#update-a-folders-information)
-  - [Create a Folder](#create-a-folder)
-  - [Copy a Folder](#copy-a-folder)
-  - [Move a Folder](#move-a-folder)
-  - [Rename a Folder](#rename-a-folder)
-  - [Delete a Folder](#delete-a-folder)
-  - [Lock a folder](#lock-a-folder)
-  - [Get All Locks on a Folder](#get-all-locks-on-a-folder)
-  - [Delete a Lock on a Folder](#delete-a-lock-on-a-folder)
-  - [Find a Folder for a Shared Link](#find-a-folder-for-a-shared-link)
-  - [Ceate or update a Shared Link](#create-or-update-a-shared-link)
-  - [Get a Shared Link](#get-a-shared-link)
-  - [Remove a Shared Link](#remove-a-shared-link)
+Passing `sort`, `direction`, `offset`, and `limit`
+parameters in query allows you to manage the
+list of returned
+[folder items](r://folder--full#param-item-collection).
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+To fetch more items within the folder, use the
+[Get items in a folder](e://get-folders-id-items) endpoint.
 
-## Get a Folder's Information
+This operation is performed by calling function `getFolderById`.
 
-Folder information can be retrieved by calling the
-[`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#get)
-method. Use the `fields` option to specify the desired fields. 
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-folders-id/).
 
 <!-- sample get_folders_id -->
-```js
-client.folders.get('11111')
-    .then(folder => {
-        /* folder -> {
-            type: 'folder',
-            id: '11111',
-            sequence_id: '1',
-            etag: '1',
-            name: 'Pictures',
-            created_at: '2012-12-12T10:53:43-08:00',
-            modified_at: '2012-12-12T11:15:04-08:00',
-            description: 'Some pictures I took',
-            size: 629644,
-            path_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'folder',
-                    id: '0',
-                    sequence_id: null,
-                    etag: null,
-                    name: 'All Files' } ] },
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User'
-                login: 'user@example.com' },
-            modified_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            owned_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            shared_link: null,
-            parent: 
-            { type: 'folder',
-                id: '0',
-                sequence_id: null,
-                etag: null,
-                name: 'All Files' },
-            item_status: 'active',
-            item_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'file',
-                    id: '33333',
-                    sequence_id: '3',
-                    etag: '3',
-                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
-                    name: 'tigers.jpeg' } ],
-                offset: 0,
-                limit: 100 } }
-        */
-    });
+
+```ts
+await client.folders.getFolderById('0');
 ```
 
-Requesting
-information for only the fields you need can improve performance and reduce the
-size of the network request.
+### Arguments
 
-<!-- sample get_folders_id with_fields -->
-```js
-client.folders.get(
-    '12345',
-    { fields: 'name,shared_link,permissions,collections,sync_state' }
-).then(folder => {
-    // ...
-});
-```
+- folderId `string`
+  - The unique identifier that represent a folder. The ID for any folder can be determined by visiting this folder in the web application and copying the ID from the URL. For example, for the URL `https://*.app.box.com/folder/123` the `folder_id` is `123`. The root folder of a Box account is always represented by the ID `0`. Example: "12345"
+- optionalsInput `GetFolderByIdOptionalsInput`
 
-The user's root folder can be accessed by calling the
-[`folders.get(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#get)
-method with the `folderID` value of `'0'`.
+### Returns
 
-<!-- sample get_folders_id for_root_folder -->
-```js
-client.folders.get('0')
-    .then(rootFolder => {
-        // ...
-    });
-```
+This function returns a value of type `FolderFull`.
 
-## Get a Folder's Items
+Returns a folder, including the first 100 entries in the folder.
+If you used query parameters like
+`sort`, `direction`, `offset`, or `limit`
+the _folder items list_ will be affected accordingly.
 
-Folder items can be retrieved by calling the
-[`folders.getItems(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#getItems)
-method. This method supports offset-based pagination and marker-based pagination. To use offset-based pagination, do not pass in the `usemarker` parameter or set it to `false`. To use marker-based pagination, pass in the `usemarker` parameter as `true`. Use the `fields` option to specify the desired fields, and `limit` and (`offset` or `marker`) to control result set paging. Requesting information for only the fields you need can improve performance by reducing the size of the network response.
+To fetch more items within the folder, use the
+[Get items in a folder](e://get-folders-id-items)) endpoint.
 
-<!-- sample get_folders_id_items -->
-```js
-client.folders.getItems(
-    '12345',
-    {
-        usemarker: 'false',
-        fields: 'name',
-        offset: 0,
-        limit: 25
-    })
-    .then(items => {
-        /* items -> {
-            total_count: 2,
-            entries: 
-            [ { type: 'folder',
-                id: '11111',
-                sequence_id: '1',
-                etag: '1',
-                name: 'Personal Documents' },
-                { type: 'file',
-                id: '22222',
-                sequence_id: '0',
-                etag: '0',
-                name: 'Q2 Strategy.pptx' } ],
-            offset: 0,
-            limit: 25,
-            order: 
-            [ { by: 'type', direction: 'ASC' },
-                { by: 'name', direction: 'ASC' } ] }
-        */
-    });
-```
+Not all available fields are returned by default. Use the
+[fields](#param-fields) query parameter to explicitly request
+any specific fields.
 
-## Update a Folder's Information
+## Update folder
 
-Updating a folder's information is done by calling the 
-[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
-method. Use the `updates` parameter to specify the fields to update and their new values.
+Updates a folder. This can be also be used to move the folder,
+create shared links, update collaborations, and more.
+
+This operation is performed by calling function `updateFolderById`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/put-folders-id/).
 
 <!-- sample put_folders_id -->
-```js
-client.folders.update('11111', {name: 'Pictures from 2017'})
-    .then(updatedFolder => {
-        /* updatedFolder -> {
-            type: 'folder',
-            id: '11111',
-            sequence_id: '1',
-            etag: '1',
-            name: 'Pictures from 2017',
-            created_at: '2012-12-12T10:53:43-08:00',
-            modified_at: '2012-12-12T11:15:04-08:00',
-            description: 'Some pictures I took',
-            size: 629644,
-            path_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'folder',
-                    id: '0',
-                    sequence_id: null,
-                    etag: null,
-                    name: 'All Files' } ] },
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User'
-                login: 'user@example.com' },
-            modified_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            owned_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            shared_link: null,
-            parent: 
-            { type: 'folder',
-                id: '0',
-                sequence_id: null,
-                etag: null,
-                name: 'All Files' },
-            item_status: 'active',
-            item_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'file',
-                    id: '33333',
-                    sequence_id: '3',
-                    etag: '3',
-                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
-                    name: 'tigers.jpeg' } ],
-                offset: 0,
-                limit: 100 } }
-        */
-    });
+
+```ts
+await client.folders.updateFolderById(folderToUpdate.id, {
+  requestBody: {
+    name: updatedName,
+    description: 'Updated description',
+  } satisfies UpdateFolderByIdRequestBody,
+} satisfies UpdateFolderByIdOptionalsInput);
 ```
 
-If you want to ensure that your update does not overwrite any other updates (i.e. to prevent against possible race
-conditions), you can pass the last known value of the folder's `etag` field via the `etag` option; this will generate
-an error if the folder was modified between when you read that `etag` value and when your updates are processed by the
-API.
+### Arguments
 
-<!-- sample put_folders_id with_etag -->
-```js
-client.folders.update('22222', { name: 'Renamed Folder', etag: '5', fields: 'name' })
-	.then(updatedFolder => {
-        /* updatedFolder -> {
-            type: 'folder',
-            id: '22222',
-            sequence_id: '1',
-            etag: '6',
-            name: 'Renamed Folder' }
-        */
-	})
-	.catch(err => {
-		if (err.statusCode === 412) {
-			// Precondition failed — the folder was modified before the update was processed
-			// Read the folder again to ensure it is safe to update and then retry
-		}
-	});
-```
+- folderId `string`
+  - The unique identifier that represent a folder. The ID for any folder can be determined by visiting this folder in the web application and copying the ID from the URL. For example, for the URL `https://*.app.box.com/folder/123` the `folder_id` is `123`. The root folder of a Box account is always represented by the ID `0`. Example: "12345"
+- optionalsInput `UpdateFolderByIdOptionalsInput`
 
-## Create a Folder
+### Returns
 
-Create a child folder by calling the [`folders.create(parentFolderID, newFolderName, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#create) method.
+This function returns a value of type `FolderFull`.
 
-<!-- sample post_folders -->
-```js
-client.folders.create('0', 'New Folder')
-    .then(folder => {
-        /* folder -> {
-            type: 'folder',
-            id: '123456',
-            sequence_id: '0',
-            etag: '0',
-            name: 'New Folder',
-            created_at: '2012-12-12T10:53:43-08:00',
-            modified_at: '2012-12-12T11:15:04-08:00',
-            description: '',
-            size: 0,
-            path_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'folder',
-                    id: '0',
-                    sequence_id: null,
-                    etag: null,
-                    name: 'All Files' } ] },
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User'
-                login: 'user@example.com' },
-            modified_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            owned_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            shared_link: null,
-            parent: 
-            { type: 'folder',
-                id: '0',
-                sequence_id: null,
-                etag: null,
-                name: 'All Files' },
-            item_status: 'active',
-            item_collection: 
-            { total_count: 0,
-                entries: [],
-                offset: 0,
-                limit: 100 } }
-        */
-    });
-```
+Returns a folder object for the updated folder
 
+Not all available fields are returned by default. Use the
+[fields](#param-fields) query parameter to explicitly request
+any specific fields.
 
-## Copy a Folder
+If the user is moving folders with a large number of items in all of
+their descendants, the call will be run asynchronously. If the
+operation is not completed within 10 minutes, the user will receive
+a 200 OK response, and the operation will continue running.
 
-Call the
-[`folders.copy(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#copy)
-method to copy a folder into another folder.
+## Delete folder
 
-<!-- sample post_folders_id_copy -->
-```js
-client.folders.copy('11111', '22222')
-    .then(folderCopy => {
-       /* folderCopy -> {
-            type: 'folder',
-            id: '1234567',
-            sequence_id: '0',
-            etag: '0',
-            name: 'Pictures from 2017',
-            created_at: '2012-12-12T10:53:43-08:00',
-            modified_at: '2012-12-12T11:15:04-08:00',
-            description: 'Some pictures I took',
-            size: 629644,
-            path_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'folder',
-                    id: '0',
-                    sequence_id: null,
-                    etag: null,
-                    name: 'All Files' },
-                  { type: 'folder',
-                    id: '22222',
-                    sequence_id: '3',
-                    etag: '3',
-                    name: 'Archives' } ] },
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User'
-                login: 'user@example.com' },
-            modified_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            owned_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            shared_link: null,
-            parent: 
-            { type: 'folder',
-                id: '22222',
-                sequence_id: '3',
-                etag: '3',
-                name: 'Archives' },
-            item_status: 'active',
-            item_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'file',
-                    id: '44444',
-                    sequence_id: '0',
-                    etag: '0',
-                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
-                    name: 'tigers.jpeg' } ],
-                offset: 0,
-                limit: 100 } }
-        */
-    });
-```
+Deletes a folder, either permanently or by moving it to
+the trash.
 
-An optional `name` parameter can also be passed to rename the folder on copy.  This can be
-used to avoid a name conflict when there is already an item with the same name in the
-target folder.
+This operation is performed by calling function `deleteFolderById`.
 
-<!-- sample post_folders_id_copy with_name -->
-```js
-client.folders.copy('12345', '0', {name: 'Renamed folder'})
-    .then(folderCopy => {
-        // ...
-    });
-```
-
-## Move a Folder
-
-Call the [`folders.move(sourceFolderID, destinationFolderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#move) method with the destination you want the folder moved to.
-
-<!-- sample put_folders_id move -->
-```js
-var folderID = '11111';
-var destinationFolderID = '22222';
-client.folders.move(folderID, destinationfolderID)
-    .then(folder => {
-       /* folder -> {
-            type: 'folder',
-            id: '11111',
-            sequence_id: '1',
-            etag: '1',
-            name: 'Pictures from 2017',
-            created_at: '2012-12-12T10:53:43-08:00',
-            modified_at: '2012-12-12T11:15:04-08:00',
-            description: 'Some pictures I took',
-            size: 629644,
-            path_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'folder',
-                    id: '0',
-                    sequence_id: null,
-                    etag: null,
-                    name: 'All Files' },
-                  { type: 'folder',
-                    id: '22222',
-                    sequence_id: '3',
-                    etag: '3',
-                    name: 'Archives' } ] },
-            created_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User'
-                login: 'user@example.com' },
-            modified_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            owned_by: 
-            { type: 'user',
-                id: '22222',
-                name: 'Example User',
-                login: 'user@example.com' },
-            shared_link: null,
-            parent: 
-            { type: 'folder',
-                id: '22222',
-                sequence_id: '3',
-                etag: '3',
-                name: 'Archives' },
-            item_status: 'active',
-            item_collection: 
-            { total_count: 1,
-                entries: 
-                [ { type: 'file',
-                    id: '33333',
-                    sequence_id: '3',
-                    etag: '3',
-                    sha1: '134b65991ed521fcfe4724b7d814ab8ded5185dc',
-                    name: 'tigers.jpeg' } ],
-                offset: 0,
-                limit: 100 } }
-        */
-    });
-```
-
-## Rename a Folder
-
-Use the [`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update) method to rename a folder by passing a new name for the folder in `updates.name`.
-
-<!-- sample put_folders_id rename -->
-```js
-client.folders.update('12345', {name: 'New Name'}, callback);
-```
-
-
-## Delete a Folder
-
-A folder can be deleted with the [`folders.delete(folderID, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#delete) method.
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/delete-folders-id/).
 
 <!-- sample delete_folders_id -->
-```js
-client.folders.delete('12345', {recursive: true})
-    .then(() => {
-        // deletion succeeded — no value returned
-    });
+
+```ts
+await client.folders.deleteFolderById(newFolder.id);
 ```
 
-## Lock a Folder
+### Arguments
 
-Use the [`folders.lock(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#lock) to lock a folder
+- folderId `string`
+  - The unique identifier that represent a folder. The ID for any folder can be determined by visiting this folder in the web application and copying the ID from the URL. For example, for the URL `https://*.app.box.com/folder/123` the `folder_id` is `123`. The root folder of a Box account is always represented by the ID `0`. Example: "12345"
+- optionalsInput `DeleteFolderByIdOptionalsInput`
 
-```js
-var folderID = '11111';
-client.folders.lock(folderID)
-    .then(folderLock => {
-       /* folderLock -> {
-            "id": "12345678",
-            "type": "folder_lock",
-            "created_at": "2020-09-14T23:12:53Z",
-            "created_by": {
-                "id": "11446498",
-                "type": "user"
-            },
-            "folder": {
-                "id": "12345",
-                "type": "folder",
-                "etag": "1",
-                "name": "Contracts",
-                "sequence_id": "3"
-            },
-            "lock_type": "freeze",
-            "locked_operations": {
-                "delete": true,
-                "move": true
-            }
-        }
-        */
-    });
+### Returns
+
+This function returns a value of type `undefined`.
+
+Returns an empty response when the folder is successfully deleted
+or moved to the trash.
+
+## List items in folder
+
+Retrieves a page of items in a folder. These items can be files,
+folders, and web links.
+
+To request more information about the folder itself, like its size,
+use the [Get a folder](#get-folders-id) endpoint instead.
+
+This operation is performed by calling function `getFolderItems`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/get-folders-id-items/).
+
+<!-- sample get_folders_id_items -->
+
+```ts
+await client.folders.getFolderItems(folderOrigin.id);
 ```
 
-## Get All Locks on a Folder
+### Arguments
 
-Use the [`folders.getLocks(folderID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#lock) to get all locks on a folder.
+- folderId `string`
+  - The unique identifier that represent a folder. The ID for any folder can be determined by visiting this folder in the web application and copying the ID from the URL. For example, for the URL `https://*.app.box.com/folder/123` the `folder_id` is `123`. The root folder of a Box account is always represented by the ID `0`. Example: "12345"
+- optionalsInput `GetFolderItemsOptionalsInput`
 
-```js
-var folderID = '11111';
-client.folders.getLocks(folderID)
-    .then(folderLocks => {
-       /* folderLocks -> {
-            "entries": [
-                {
-                    "folder": {
-                        "id": "12345",
-                        "etag": "1",
-                        "type": "folder",
-                        "sequence_id": "3",
-                        "name": "Contracts"
-                    },
-                    "id": "12345678",
-                    "type": "folder_lock",
-                    "created_by": {
-                        "id": "11446498",
-                        "type": "user"
-                    },
-                    "created_at": "2020-09-14T23:12:53Z",
-                    "locked_operations": {
-                        "move": true,
-                        "delete": true
-                    },
-                    "lock_type": "freeze"
-                }
-            ],
-            "limit": 1000,
-            "next_marker": null
-        }
-        */
-    });
+### Returns
+
+This function returns a value of type `Items`.
+
+Returns a collection of files, folders, and web links contained in a folder.
+
+## Create folder
+
+Creates a new empty folder within the specified parent folder.
+
+This operation is performed by calling function `createFolder`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-folders/).
+
+<!-- sample post_folders -->
+
+```ts
+await client.folders.createFolder({
+  name: newFolderName,
+  parent: { id: '0' } satisfies CreateFolderRequestBodyParentField,
+} satisfies CreateFolderRequestBody);
 ```
 
-## Delete a Lock on a Folder
+### Arguments
 
-Use the [`folders.deleteLock(folderLockID, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#deleteLock) method to delete a folder lock.
+- requestBody `CreateFolderRequestBody`
+  - Request body of createFolder method
+- optionalsInput `CreateFolderOptionalsInput`
 
-```js
-var folderLockID = '12345';
-client.folders.deleteLock(folderLockID)
-    .then(() => {
-        // deletion succeeded — no value returned
-    });
+### Returns
+
+This function returns a value of type `FolderFull`.
+
+Returns a folder object.
+
+Not all available fields are returned by default. Use the
+[fields](#param-fields) query parameter to explicitly request
+any specific fields.
+
+## Copy folder
+
+Creates a copy of a folder within a destination folder.
+
+The original folder will not be changed.
+
+This operation is performed by calling function `copyFolder`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-folders-id-copy/).
+
+<!-- sample post_folders_id_copy -->
+
+```ts
+await client.folders.copyFolder(folderOrigin.id, {
+  parent: { id: '0' } satisfies CopyFolderRequestBodyParentField,
+  name: copiedFolderName,
+} satisfies CopyFolderRequestBody);
 ```
 
-## Find a Folder for a Shared Link
+### Arguments
 
-To find a folder given a shared link, use the
-[`sharedItems.get(url, password, options, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/SharedItems.html#get)
-method.
+- folderId `string`
+  - The unique identifier of the folder to copy. The ID for any folder can be determined by visiting this folder in the web application and copying the ID from the URL. For example, for the URL `https://*.app.box.com/folder/123` the `folder_id` is `123`. The root folder with the ID `0` can not be copied. Example: "0"
+- requestBody `CopyFolderRequestBody`
+  - Request body of copyFolder method
+- optionalsInput `CopyFolderOptionalsInput`
 
-<!-- sample get_shared_items folders -->
-```js
-client.sharedItems.get(
-  'https://app.box.com/s/gjasdasjhasd',
-  'letmein'
-),then(folder => {
-  //...
-});
-```
+### Returns
 
-## Create or update a Shared Link
+This function returns a value of type `FolderFull`.
 
-To create or update a shared link for a file use
-[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
-method, passing a new `shared_link` value in the `updates` parameter.
+Returns a new folder object representing the copied folder.
 
-<!-- sample put_folders_id add_shared_link -->
-```js
-client.folders.update('12345', {
-  shared_link: {
-    access: "open",
-    password: "do-not-use-this-password",
-    unshared_at: "2022-12-12T10:53:43-08:00",
-    vanity_name: "my-shared-link",
-    permissions: {
-      can_view: true,
-      can_download: true
-    }
-  }
-}).then(folder => {
-  // ...
-})
-```
-This will make a shared link to be `open` to everyone, but users will need to provide `password` to access the folder.
-This link will be unshared at `"2022-12-12T10:53:43-08:00"`. By setting `vanity_name` we create custom URL
-`https://app.box.com/v/my-shared-link`. Custom URLs should not be used when sharing sensitive content as vanity URLs are
-a lot easier to guess than regular shared links.
-Additionally, everyone who has this link can `view` and `download` the folder.
-
-You can create shared link using default values
-```js
-client.folders.update('12345', {
-  shared_link: {}
-}).then(folder => {
-  // ...
-})
-```
-- Default `access` value comes from the access level specified by the enterprise admin.
-- Default `password`, `unshared_at`, `vanity_name` will be empty.
-- Default `permissions` allows to view and download folder.
-
-You can remove any field set on a link by sending value `null` (or empty object when it comes to `permissions`).
-This will cause it's value to be default. For example, let's remove `access` and `permissions`:
-```js
-client.folders.update('12345', {
-  shared_link: {
-    access: null,
-    permissions: {}
-  }
-}).then(folder => {
-  // ...
-})
-```
-This will remove `open` access, and it will fall back to default value set by the enterprise admin.
-The `permissions` we set on a shared link will be removed and default permissions will be applied.
-Other properties of the shared link will not be changed as we are not sending them.
-
-## Get a Shared Link
-
-To check for an existing shared link on a folder, inspect the
-`shared_link` field on a folder object.
-
-This object, when present, contains a `unicode` string containing the shared
-link URL.
-
-<!-- sample get_folders_id get_shared_link -->
-```js
-client.folders.get('11111', { fields: 'shared_link' })
-  .then(folder => {
-    let url = folder.shared_link.url
-    //...
-  })
-```
-
-## Remove a Shared Link
-
-A shared link for a folder can be removed calling
-[`folders.update(folderID, updates, callback)`](http://opensource.box.com/box-node-sdk/jsdoc/Folders.html#update)
-with `null` for the `shared_link` value.
-
-<!-- sample put_folders_id remove_shared_link -->
-```js
-client.folders.update('12345', {
-  shared_link: null
-}).then(folder => {
-  // ...
-})
-```
+Not all available fields are returned by default. Use the
+[fields](#param-fields) query parameter to explicitly request
+any specific fields.
