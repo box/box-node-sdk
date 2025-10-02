@@ -8,7 +8,7 @@
 const sinon = require('sinon');
 const mockery = require('mockery');
 const leche = require('leche');
-const BoxClient = require('@/lib/box-client');
+const BoxClient = require('@/lib/box-client').default;
 const Promise = require('bluebird');
 const fs = require('fs');
 const path = require('path');
@@ -54,7 +54,7 @@ describe('FileRequests', () => {
   beforeEach(() => {
     // Setup File Under Test
     // eslint-disable-next-line global-require
-    FileRequestsManager = require(MODULE_FILE_PATH);
+    FileRequestsManager = require(MODULE_FILE_PATH).default;
     fileRequests = new FileRequestsManager(boxClientFake);
   });
   afterEach(() => {

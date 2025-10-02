@@ -11,7 +11,7 @@ var sinon = require('sinon'),
   leche = require('leche'),
   assert = require('chai').assert,
   Promise = require('bluebird'),
-  BoxClient = require('@/lib/box-client');
+  BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -37,7 +37,7 @@ describe('Enterprise', function () {
     mockery.registerAllowable('../util/url-path');
     mockery.registerAllowable(MODULE_FILE_PATH);
     // Setup File Under Test
-    Enterprise = require(MODULE_FILE_PATH);
+    Enterprise = require(MODULE_FILE_PATH).default;
     enterprise = new Enterprise(boxClientFake);
   });
 

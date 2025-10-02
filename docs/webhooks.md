@@ -9,12 +9,13 @@ requests to a URL of your choosing, when they occur.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Create a Webhook](#create-a-webhook)
-- [Get a Webhook's Information](#get-a-webhooks-information)
-- [Get all Webhooks Information](#get-all-webhooks-information)
-- [Update a Webhook](#update-a-webhook)
-- [Delete a Webhook](#delete-a-webhook)
-- [Validate a Webhook Message](#validate-a-webhook-message)
+- [Webhooks](#webhooks)
+	- [Create a Webhook](#create-a-webhook)
+	- [Get a Webhook's Information](#get-a-webhooks-information)
+	- [Get all Webhooks Information](#get-all-webhooks-information)
+	- [Update a Webhook](#update-a-webhook)
+	- [Delete a Webhook](#delete-a-webhook)
+	- [Validate a Webhook Message](#validate-a-webhook-message)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -192,7 +193,7 @@ also available as `webhooks.validateMessage(body, headers, primarySignatureKey, 
 
 <!-- sample x_webhooks validate_signatures -->
 ```js
-const BoxSDK = require('box-node-sdk');
+const BoxSDK = require('box-node-sdk').default;
 let body = '{"type":"webhook_event","webhook":{"id":"1234567890"},"trigger":"FILE.UPLOADED","source":{"id":"1234567890","type":"file","name":"Test.txt"}}',
 	headers = {
 		'box-delivery-id': 'f96bb54b-ee16-4fc5-aa65-8c2d9e5b546f',

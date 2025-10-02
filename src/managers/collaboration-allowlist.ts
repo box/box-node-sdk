@@ -277,4 +277,4 @@ CollaborationAllowlist.prototype.directions = CollaborationAllowlistDirection;
  * @module box-node-sdk/lib/managers/collaboration-allowlists
  * @see {@Link CollaborationAllowlist}
  */
-export = CollaborationAllowlist;
+export default CollaborationAllowlist;

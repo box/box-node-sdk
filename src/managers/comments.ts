@@ -229,4 +229,4 @@ class Comments {
  * @module box-node-sdk/lib/managers/comments
  * @see {@Link Comments}
  */
-export = Comments;
+export default Comments;

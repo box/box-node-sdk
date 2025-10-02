@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -36,7 +36,7 @@ describe('StoragePolicies', function () {
     mockery.registerAllowable(MODULE_FILE_PATH, true);
     // Setup File Under Test
     boxClientFake = leche.fake(BoxClient.prototype);
-    StoragePolicies = require(MODULE_FILE_PATH);
+    StoragePolicies = require(MODULE_FILE_PATH).default;
     storagePolicies = new StoragePolicies(boxClientFake);
   });
 

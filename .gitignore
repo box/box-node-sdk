@@ -14,5 +14,6 @@ docs/jsdoc-dev
 
 /lib/
 /lib-esm/
+/lib-rollup/
 
 /openapi.json

@@ -4,7 +4,7 @@
 
 import * as qs from 'querystring';
 import { Promise } from 'bluebird';
-import PromiseQueue = require('promise-queue');
+import PromiseQueue from 'promise-queue';
 
 // -----------------------------------------------------------------------------
 // Typedefs
@@ -29,7 +29,7 @@ import PromiseQueue = require('promise-queue');
 // Requirements
 // -----------------------------------------------------------------------------
 
-const errors = require('./errors');
+import errors from './errors';
 
 PromiseQueue.configure(Promise as any);
 
@@ -249,4 +249,4 @@ class PagingIterator {
   }
 }
 
-export = PagingIterator;
+export default PagingIterator;

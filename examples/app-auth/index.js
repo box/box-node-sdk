@@ -11,7 +11,7 @@ var express = require('express'),
   util = require('util'),
   multipart = require('express-formidable').parse,
   bodyParser = require('body-parser'),
-  BoxSDK = require('box-node-sdk');
+  BoxSDK = require('box-node-sdk').default;
 
 // ------------------------------------------------------------------------------
 // Application Parameters - Fill in with your app's values

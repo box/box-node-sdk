@@ -13,10 +13,10 @@ var assert = require('chai').assert,
   leche = require('leche'),
   Stream = require('stream'),
   mockery = require('mockery'),
-  Config = require('@/lib/util/config'),
+  Config = require('@/lib/util/config').default,
   EventEmitter = require('events').EventEmitter;
 
-var APIRequest = require('@/lib/api-request');
+var APIRequest = require('@/lib/api-request').default;
 
 // ------------------------------------------------------------------------------
 // Typedefs and Callbacks
@@ -68,7 +68,7 @@ describe('APIRequestManager', function () {
 
     // Setup File Under Test
     mockery.registerAllowable(MODULE_UNDER_TEST_PATH, true);
-    APIRequestManager = require(MODULE_UNDER_TEST_PATH);
+    APIRequestManager = require(MODULE_UNDER_TEST_PATH).default;
   });
 
   afterEach(function () {

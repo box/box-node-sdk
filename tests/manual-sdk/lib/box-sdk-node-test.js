@@ -13,10 +13,10 @@ var assert = require('chai').assert,
   leche = require('leche');
 
 // Modules to Fake
-var TokenManager = require('@/lib/token-manager'),
-  APIRequestManager = require('@/lib/api-request-manager'),
-  AppAuthSession = require('@/lib/sessions/app-auth-session'),
-  Webhooks = require('@/lib/managers/webhooks'),
+var TokenManager = require('@/lib/token-manager').default,
+  APIRequestManager = require('@/lib/api-request-manager').default,
+  AppAuthSession = require('@/lib/sessions/app-auth-session').default,
+  Webhooks = require('@/lib/managers/webhooks').default,
   EventEmitter = require('events').EventEmitter;
 
 describe('box-node-sdk', function () {
@@ -108,7 +108,7 @@ describe('box-node-sdk', function () {
 
     // Setup File Under Test
     mockery.registerAllowable('@/lib/box-node-sdk', true);
-    BoxSDKNode = require('@/lib/box-node-sdk');
+    BoxSDKNode = require('@/lib/box-node-sdk').default;
   });
 
   afterEach(function () {

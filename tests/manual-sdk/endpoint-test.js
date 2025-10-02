@@ -71,7 +71,7 @@ describe('Endpoint', () => {
     });
     mockery.registerAllowable(MODULE_FILE_PATH, true);
     // eslint-disable-next-line global-require
-    BoxSDK = require(MODULE_FILE_PATH);
+    BoxSDK = require(MODULE_FILE_PATH).default;
     sdk = new BoxSDK({
       clientID: TEST_CLIENT_ID,
       clientSecret: TEST_CLIENT_SECRET,

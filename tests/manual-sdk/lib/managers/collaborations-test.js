@@ -12,7 +12,7 @@ const sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-const BoxClient = require('@/lib/box-client');
+const BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -46,7 +46,7 @@ describe('Collaborations', () => {
     testParamsWithQs = { qs: testQS };
     // Setup File Under Test
     // eslint-disable-next-line global-require
-    Collaborations = require(MODULE_FILE_PATH);
+    Collaborations = require(MODULE_FILE_PATH).default;
     collaborations = new Collaborations(boxClientFake);
   });
 

@@ -27,7 +27,7 @@ describe('Errors', function () {
       warnOnUnregistered: false,
     });
     mockery.registerAllowable(MODULE_FILE_PATH, true);
-    errors = require(MODULE_FILE_PATH);
+    errors = require(MODULE_FILE_PATH).default;
   });
 
   afterEach(function () {

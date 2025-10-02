@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   assert = require('chai').assert;
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -39,7 +39,7 @@ describe('Webhooks', function () {
     mockery.registerAllowable('crypto');
     // Setup File Under Test
     mockery.registerAllowable(MODULE_WEBHOOKS_PATH);
-    Webhooks = require(MODULE_WEBHOOKS_PATH);
+    Webhooks = require(MODULE_WEBHOOKS_PATH).default;
     webhooks = new Webhooks(boxClientFake);
   });
 

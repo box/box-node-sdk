@@ -423,4 +423,4 @@ class APIRequest {
  * @module box-node-sdk/lib/api-request
  * @see {@Link APIRequest}
  */
-export = APIRequest;
+export default APIRequest;

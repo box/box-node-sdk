@@ -22,6 +22,14 @@
   },
   "main": "./lib/box-node-sdk.js",
   "module": "./lib-esm/box-node-sdk.js",
+  "types": "./lib/index.d.ts",
+  "sideEffects": false,
+  "browser": {
+    "./src/sdk-gen/internal/utilsNode.ts": "./src/sdk-gen/internal/utilsBrowser.ts",
+    "./src/sdk-gen/box/eventStream.ts": "./src/sdk-gen/box/eventStreamBrowser.ts",
+    "./lib-esm/sdk-gen/box/eventStream.js": "./lib-esm/sdk-gen/box/eventStreamBrowser.js",
+    "./lib-esm/sdk-gen/internal/utilsNode.js": "./lib-esm/sdk-gen/internal/utilsBrowser.js"
+  },
   "exports": {
     ".": {
       "import": "./lib-esm/box-node-sdk.js",
@@ -30,6 +38,71 @@
     "./*": {
       "import": "./lib-esm/*.js",
       "require": "./lib/*.js"
+    },
+    "./managers/*": {
+      "import": "./lib-esm/managers/*.js",
+      "require": "./lib/managers/*.js",
+      "types": "./lib/managers/*.d.ts"
+    },
+    "./schemas/*": {
+      "import": "./lib-esm/schemas/*.js",
+      "require": "./lib/schemas/*.js",
+      "types": "./lib/schemas/*.d.ts"
+    },
+    "./sessions/*": {
+      "import": "./lib-esm/sessions/*.js",
+      "require": "./lib/sessions/*.js",
+      "types": "./lib/sessions/*.d.ts"
+    },
+    "./util/*": {
+      "import": "./lib-esm/util/*.js",
+      "require": "./lib/util/*.js",
+      "types": "./lib/util/*.d.ts"
+    },
+    "./sdk-gen": {
+      "import": "./lib-esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./sdk-gen/*": {
+      "import": "./lib-esm/*.js",
+      "require": "./lib/*.js",
+      "types": "./lib/*.d.ts"
+    },
+    "./sdk-gen/box": {
+      "import": "./lib-esm/box/index.js",
+      "require": "./lib/box/index.js",
+      "types": "./lib/box/index.d.ts"
+    },
+    "./sdk-gen/internal": {
+      "import": "./lib-esm/internal/index.js",
+      "require": "./lib/internal/index.js",
+      "types": "./lib/internal/index.d.ts"
+    },
+    "./sdk-gen/managers": {
+      "import": "./lib-esm/managers/index.js",
+      "require": "./lib/managers/index.js",
+      "types": "./lib/managers/index.d.ts"
+    },
+    "./sdk-gen/networking": {
+      "import": "./lib-esm/networking/index.js",
+      "require": "./lib/networking/index.js",
+      "types": "./lib/networking/index.d.ts"
+    },
+    "./sdk-gen/parameters": {
+      "import": "./lib-esm/parameters/index.js",
+      "require": "./lib/parameters/index.js",
+      "types": "./lib/parameters/index.d.ts"
+    },
+    "./sdk-gen/schemas": {
+      "import": "./lib-esm/schemas/index.js",
+      "require": "./lib/schemas/index.js",
+      "types": "./lib/schemas/index.d.ts"
+    },
+    "./sdk-gen/serialization": {
+      "import": "./lib-esm/serialization/index.js",
+      "require": "./lib/serialization/index.js",
+      "types": "./lib/serialization/index.d.ts"
     }
   },
   "scripts": {
@@ -38,6 +111,7 @@
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --project tsconfig.json",
     "build:esm": "tsc --project tsconfig.esm.json",
+    "postbuild": "rollup -c",
     "codegen": "cd codegen && npm run codegen",
     "docs": "jsdoc -p -r -c ./jsdoc.json -d ./docs/jsdoc ./src/",
     "doctoc": "doctoc docs",
@@ -51,17 +125,27 @@
     "@types/node": "^18.15.3",
     "ajv": "^6.12.3",
     "bluebird": "^3.7.2",
+    "buffer": "^6.0.3",
+    "form-data": "^4.0.4",
+    "hash-wasm": "^4.12.0",
     "http-status": "^1.4.1",
+    "jose": "^5.10.0",
     "jsonwebtoken": "^9.0.2",
     "merge-options": "^3.0.4",
+    "node-fetch": "^2.6.13",
     "promise-queue": "^2.2.3",
     "proxy-agent": "^6.4.0",
     "url-template": "^2.0.8",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.5",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^8.5.1",
+    "@types/node-fetch": "^2.6.13",
     "@types/prettier": "^2.3.2",
     "@types/promise-queue": "^2.2.0",
     "@types/url-template": "^2.0.28",
@@ -84,6 +168,7 @@
     "nock": "^13.3.1",
     "nyc": "^14.0.0",
     "prettier": "^3.5.3",
+    "rollup": "^4.52.3",
     "sinon": "^7.5.0",
     "standard-version": "^9.3.2",
     "ts-jest": "^29.1.0",

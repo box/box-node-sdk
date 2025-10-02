@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -39,7 +39,7 @@ describe('Trash', function () {
 
     testParamsWithQs = { qs: testQS };
     // Setup File Under Test
-    Trash = require(MODULE_FILE_PATH);
+    Trash = require(MODULE_FILE_PATH).default;
     trash = new Trash(boxClientFake);
   });
 

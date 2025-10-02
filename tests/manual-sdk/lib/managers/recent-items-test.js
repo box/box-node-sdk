@@ -13,7 +13,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -39,7 +39,7 @@ describe('RecentItems', function () {
 
   beforeEach(function () {
     // Setup File Under Test
-    RecentItems = require(MODULE_FILE_PATH);
+    RecentItems = require(MODULE_FILE_PATH).default;
     recentItems = new RecentItems(boxClientFake);
   });
 

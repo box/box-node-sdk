@@ -15,8 +15,8 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   leche = require('leche');
 
-var APIRequestManager = require('@/lib/api-request-manager'),
-  Config = require('@/lib/util/config');
+var APIRequestManager = require('@/lib/api-request-manager').default,
+  Config = require('@/lib/util/config').default;
 
 // ------------------------------------------------------------------------------
 // Private
@@ -67,7 +67,7 @@ describe('token-manager', function () {
     mockery.registerAllowable(MODULE_FILE_PATH, true);
 
     // Setup File Under Test
-    TokenManager = require(MODULE_FILE_PATH);
+    TokenManager = require(MODULE_FILE_PATH).default;
     tokenManager = new TokenManager(config, requestManagerFake);
   });
 

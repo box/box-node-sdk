@@ -12,7 +12,7 @@ var assert = require('chai').assert,
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 var Readable = require('stream').Readable;
 
 // ------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ describe('Files', function () {
     mockery.registerMock('../chunked-uploader', ChunkedUploaderStub);
     // Setup File Under Test
     mockery.registerAllowable(MODULE_FILE_PATH, true);
-    Files = require(MODULE_FILE_PATH);
+    Files = require(MODULE_FILE_PATH).default;
     files = new Files(boxClientFake);
   });
 

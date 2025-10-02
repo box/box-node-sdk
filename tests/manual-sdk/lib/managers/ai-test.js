@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   assert = require('chai').assert;
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -34,7 +34,7 @@ describe('AI', function () {
     mockery.registerAllowable('../util/url-path');
     // Setup File Under Test
     mockery.registerAllowable(MODULE_AI_PATH);
-    AIModule = require(MODULE_AI_PATH);
+    AIModule = require(MODULE_AI_PATH).default;
     aimodule = new AIModule(boxClientFake);
   });
 

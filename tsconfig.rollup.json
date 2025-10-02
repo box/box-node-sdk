@@ -1,22 +1,19 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "Node",
+    "module": "ESNext",
     "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
-    "outDir": "lib",
+    "outDir": "lib-rollup/sdk-gen",
     "isolatedModules": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts", "src/__tests__"]
+  "include": ["src/sdk-gen/**/*"],
+  "exclude": ["node_modules", "src/__tests__"]
 }

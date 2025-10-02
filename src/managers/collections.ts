@@ -86,4 +86,4 @@ class Collections {
  * @module box-node-sdk/lib/managers/collections
  * @see {@Link Collections}
  */
-export = Collections;
+export default Collections;

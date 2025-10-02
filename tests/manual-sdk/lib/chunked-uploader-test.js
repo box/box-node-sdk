@@ -11,8 +11,8 @@ const sinon = require('sinon'),
   assert = require('chai').assert,
   leche = require('leche');
 
-const BoxClient = require('@/lib/box-client'),
-  Files = require('@/lib/managers/files'),
+const BoxClient = require('@/lib/box-client').default,
+  Files = require('@/lib/managers/files').default,
   EventEmitter = require('events').EventEmitter,
   ReadStream = require('fs').ReadStream,
   crypto = require('crypto'),
@@ -52,7 +52,7 @@ describe('ChunkedUploader', function () {
     });
     mockery.registerAllowable(MODULE_FILE_PATH, true);
 
-    ChunkedUploader = require(MODULE_FILE_PATH);
+    ChunkedUploader = require(MODULE_FILE_PATH).default;
     uploader = new ChunkedUploader(
       boxClientFake,
       TEST_UPLOAD_SESSION_INFO,

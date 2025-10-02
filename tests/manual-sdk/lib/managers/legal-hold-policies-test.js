@@ -12,7 +12,7 @@ var sinon = require('sinon'),
   Promise = require('bluebird'),
   leche = require('leche');
 
-var BoxClient = require('@/lib/box-client');
+var BoxClient = require('@/lib/box-client').default;
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -37,7 +37,7 @@ describe('LegalHoldPolicies', function () {
     mockery.registerAllowable('../util/url-path');
     // Setup File Under Test
     mockery.registerAllowable(MODULE_FILE_PATH);
-    LegalHoldPolicies = require(MODULE_FILE_PATH);
+    LegalHoldPolicies = require(MODULE_FILE_PATH).default;
     legalHoldPolicies = new LegalHoldPolicies(boxClientFake);
   });
 
