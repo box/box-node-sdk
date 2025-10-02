@@ -6,21 +6,36 @@ import { sdIsNumber } from '../serialization/json';
 import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
-export interface AiExtractResponse {
-  readonly rawData?: SerializedData;
-}
+export type AiExtractResponse = {
+  readonly [key: string]: any;
+};
 export function serializeAiExtractResponse(
   val: AiExtractResponse,
 ): SerializedData {
-  return {};
+  return Object.fromEntries(
+    Object.entries(val).map(([k, v]: [string, any]) => [
+      k,
+      (function (v: any): any {
+        return v;
+      })(v),
+    ]),
+  ) as {
+    readonly [key: string]: any;
+  };
 }
 export function deserializeAiExtractResponse(
   val: SerializedData,
 ): AiExtractResponse {
-  if (!sdIsMap(val)) {
-    throw new BoxSdkError({
-      message: 'Expecting a map for "AiExtractResponse"',
-    });
-  }
-  return {} satisfies AiExtractResponse;
+  return sdIsMap(val)
+    ? (Object.fromEntries(
+        Object.entries(val).map(([k, v]: [string, any]) => [
+          k,
+          (function (v: any): any {
+            return v;
+          })(v),
+        ]),
+      ) as {
+        readonly [key: string]: any;
+      })
+    : {};
 }

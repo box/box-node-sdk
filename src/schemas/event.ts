@@ -176,9 +176,6 @@ export type EventEventTypeField =
   | 'WATERMARK_LABEL_CREATE'
   | 'WATERMARK_LABEL_DELETE'
   | string;
-export interface EventAdditionalDetailsField {
-  readonly rawData?: SerializedData;
-}
 export interface Event {
   /**
    * The value will always be `event`. */
@@ -206,7 +203,9 @@ export interface Event {
    * information to correlate an event to external KeySafe logs. Not all events
    * have an `additional_details` object.  This object is only available in the
    * Enterprise Events. */
-  readonly additionalDetails?: EventAdditionalDetailsField;
+  readonly additionalDetails?: {
+    readonly [key: string]: any;
+  };
   readonly rawData?: SerializedData;
 }
 export function serializeEventEventTypeField(
@@ -645,21 +644,6 @@ export function deserializeEventEventTypeField(
   }
   throw new BoxSdkError({ message: "Can't deserialize EventEventTypeField" });
 }
-export function serializeEventAdditionalDetailsField(
-  val: EventAdditionalDetailsField,
-): SerializedData {
-  return {};
-}
-export function deserializeEventAdditionalDetailsField(
-  val: SerializedData,
-): EventAdditionalDetailsField {
-  if (!sdIsMap(val)) {
-    throw new BoxSdkError({
-      message: 'Expecting a map for "EventAdditionalDetailsField"',
-    });
-  }
-  return {} satisfies EventAdditionalDetailsField;
-}
 export function serializeEvent(val: Event): SerializedData {
   return {
     ['type']: val.type,
@@ -688,7 +672,18 @@ export function serializeEvent(val: Event): SerializedData {
     ['additional_details']:
       val.additionalDetails == void 0
         ? val.additionalDetails
-        : serializeEventAdditionalDetailsField(val.additionalDetails),
+        : (Object.fromEntries(
+            Object.entries(val.additionalDetails).map(
+              ([k, v]: [string, any]) => [
+                k,
+                (function (v: any): any {
+                  return v;
+                })(v),
+              ],
+            ),
+          ) as {
+            readonly [key: string]: any;
+          }),
   };
 }
 export function deserializeEvent(val: SerializedData): Event {
@@ -737,10 +732,32 @@ export function deserializeEvent(val: SerializedData): Event {
     val.session_id == void 0 ? void 0 : val.session_id;
   const source: undefined | EventSourceResource =
     val.source == void 0 ? void 0 : deserializeEventSourceResource(val.source);
-  const additionalDetails: undefined | EventAdditionalDetailsField =
+  if (!(val.additional_details == void 0) && !sdIsMap(val.additional_details)) {
+    throw new BoxSdkError({
+      message: 'Expecting object for "additional_details" of type "Event"',
+    });
+  }
+  const additionalDetails:
+    | undefined
+    | {
+        readonly [key: string]: any;
+      } =
     val.additional_details == void 0
       ? void 0
-      : deserializeEventAdditionalDetailsField(val.additional_details);
+      : sdIsMap(val.additional_details)
+        ? (Object.fromEntries(
+            Object.entries(val.additional_details).map(
+              ([k, v]: [string, any]) => [
+                k,
+                (function (v: any): any {
+                  return v;
+                })(v),
+              ],
+            ),
+          ) as {
+            readonly [key: string]: any;
+          })
+        : {};
   return {
     type: type,
     createdAt: createdAt,
