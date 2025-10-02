@@ -2,7 +2,7 @@
   "name": "box-node-sdk",
   "author": "Box <oss@box.com>",
   "version": "10.0.0",
-  "description": "Official SDK for Box Plaform APIs",
+  "description": "Official SDK for Box Platform APIs",
   "keywords": [
     "box",
     "sdk",
