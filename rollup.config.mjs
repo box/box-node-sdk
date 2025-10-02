@@ -61,7 +61,7 @@ function cleanupTypeScript(options = {}) {
           : 'dist');
       tsOutputDir = path.resolve(
         outputDir,
-        tsconfigFile.compilerOptions.outDir,
+        tsconfigFile.compilerOptions.outDir
       );
     },
     closeBundle() {
