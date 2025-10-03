@@ -73,6 +73,11 @@ test('testEventUpload', async function testEventUpload(): Promise<any> {
   if (!((toString(firstEvent.eventType!) as string) == 'UPLOAD')) {
     throw new Error('Assertion failed');
   }
+  if (
+    !((toString(firstEvent.additionalDetails!.hash_type) as string) == 'sha1')
+  ) {
+    throw new Error('Assertion failed');
+  }
   const source: EventSource = firstEvent.source! as EventSource;
   if (
     !(
