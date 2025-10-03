@@ -2,12 +2,27 @@
   <img src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" alt= “box-dev-logo” width="30%" height="50%">
 </p>
 
-# Migration to v10
+# Versioning Strategy
 
-The [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch contains the generated code for the `v10` version of the Box Node SDK. This is intended primarily for developers migrating from [Box TypeScript SDK Gen](https://github.com/box/box-typescript-sdk-gen) to the v10 version.
-As part of our upcoming major release, we will be introducing a combined SDK that consolidates the previously separate generated SDK into one unified SDK package for improved usability and maintenance.
+Starting with v10 of the SDK, we’ve introduced a new generated codebase designed to enhance your experience with the Box API.  
+It is currently available on the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
 
-You can find the migration guide [here](https://github.com/box/box-node-sdk/blob/sdk-gen/docs/migration-guides/from-box-typescript-sdk-gen-v1-to-box-node-sdk-v10.md) for transitioning from Box TypeScript SDK Gen to Box Node SDK v10. If you have any questions, please create an issue in the repository or reach out to [Box Developer Support](https://developer.box.com/support/).
+v10 is targeted at new users of Box Node SDK and users already working with the generated Box Typescript SDK previously available under the [Box Typescript SDK Gen repository](https://github.com/box/box-typescript-sdk-gen).
+
+For users of v3 of the Box Node SDK, no action is required at this time — we’ll be providing an upcoming v4 release that will include code from both versions for a smooth migration path. To avoid unintentional upgrades, pin your version to `box-node-sdk: ^3.8.2` in your `package.json`.
+
+For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://developer.box.com/guides/tooling/sdks/sdk-versioning/).
+
+---
+
+## Which Version Should I Use?
+
+| Scenario                                                                                                       | Recommended Version                                                | Example Dependency                |
+|----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|-----------------------------------|
+| Creating a new application                                                                                     | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)        | `npm install box-node-sdk@10`     |
+| Existing app using [box-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Upgrade to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-node-sdk@10`      |
+| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and planning to use new features | Wait for v4 to start migration process                             | TBD                               |
+| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and not planning changes         | Stay on your current version                                       | `npm install box-node-sdk@^3.8.2` |
 
 # Box Node.js SDK
 
@@ -21,7 +36,6 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Migration to v10](#migration-to-v10)
 - [Box Node.js SDK](#box-nodejs-sdk)
   - [Installation](#installation)
   - [Getting Started](#getting-started)
