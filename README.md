@@ -17,12 +17,12 @@ For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://
 
 ## Which Version Should I Use?
 
-| Scenario                                                                                                       | Recommended Version                                                | Example Dependency                   |
-|----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|-------------------------------------|
-| Creating a new application                                                                                     | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)        | `npm install box-sdk-gen@10`         |
-| Existing app using [box-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Upgrade to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-sdk-gen@10`         |
-| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and planning to use new features | Wait for v5 to start migration process                              | TBD                                 |
-| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and not planning changes         | Stay on your current version                                        | `npm install box-node-sdk@^3.8.2`   |
+| Scenario                                                                                                       | Recommended Version                                                | Example Dependency                |
+|----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|-----------------------------------|
+| Creating a new application                                                                                     | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)        | `npm install box-node-sdk@10`     |
+| Existing app using [box-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Upgrade to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-node-sdk@10`      |
+| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and planning to use new features | Wait for v5 to start migration process                              | TBD                               |
+| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and not planning changes         | Stay on your current version                                        | `npm install box-node-sdk@^3.8.2` |
 
 # Box Node.js SDK
 
