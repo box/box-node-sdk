@@ -60,18 +60,26 @@ export interface GetCollaborationByIdOptionalsInput {
   readonly cancellationToken?: undefined | CancellationToken;
 }
 export class UpdateCollaborationByIdOptionals {
+  readonly requestBody: UpdateCollaborationByIdRequestBody =
+    {} satisfies UpdateCollaborationByIdRequestBody;
   readonly headers: UpdateCollaborationByIdHeaders =
     new UpdateCollaborationByIdHeaders({});
   readonly cancellationToken?: CancellationToken = void 0;
   constructor(
     fields: Omit<
       UpdateCollaborationByIdOptionals,
-      'headers' | 'cancellationToken'
+      'requestBody' | 'headers' | 'cancellationToken'
     > &
       Partial<
-        Pick<UpdateCollaborationByIdOptionals, 'headers' | 'cancellationToken'>
+        Pick<
+          UpdateCollaborationByIdOptionals,
+          'requestBody' | 'headers' | 'cancellationToken'
+        >
       >,
   ) {
+    if (fields.requestBody !== undefined) {
+      this.requestBody = fields.requestBody;
+    }
     if (fields.headers !== undefined) {
       this.headers = fields.headers;
     }
@@ -81,6 +89,7 @@ export class UpdateCollaborationByIdOptionals {
   }
 }
 export interface UpdateCollaborationByIdOptionalsInput {
+  readonly requestBody?: UpdateCollaborationByIdRequestBody;
   readonly headers?: UpdateCollaborationByIdHeaders;
   readonly cancellationToken?: undefined | CancellationToken;
 }
@@ -199,7 +208,7 @@ export type UpdateCollaborationByIdRequestBodyStatusField =
 export interface UpdateCollaborationByIdRequestBody {
   /**
    * The level of access granted. */
-  readonly role: UpdateCollaborationByIdRequestBodyRoleField;
+  readonly role?: UpdateCollaborationByIdRequestBodyRoleField;
   /**
    * Set the status of a `pending` collaboration invitation,
    * effectively accepting, or rejecting the invite. */
@@ -486,23 +495,23 @@ export class UserCollaborationsManager {
   /**
      * Updates a collaboration.
      * Can be used to change the owner of an item, or to
-     * accept collaboration invites.
+     * accept collaboration invites. In case of accepting collaboration invite, role is not required.
      * @param {string} collaborationId The ID of the collaboration.
     Example: "1234"
-     * @param {UpdateCollaborationByIdRequestBody} requestBody Request body of updateCollaborationById method
      * @param {UpdateCollaborationByIdOptionalsInput} optionalsInput
      * @returns {Promise<undefined | Collaboration>}
      */
   async updateCollaborationById(
     collaborationId: string,
-    requestBody: UpdateCollaborationByIdRequestBody,
     optionalsInput: UpdateCollaborationByIdOptionalsInput = {},
   ): Promise<undefined | Collaboration> {
     const optionals: UpdateCollaborationByIdOptionals =
       new UpdateCollaborationByIdOptionals({
+        requestBody: optionalsInput.requestBody,
         headers: optionalsInput.headers,
         cancellationToken: optionalsInput.cancellationToken,
       });
+    const requestBody: any = optionals.requestBody;
     const headers: any = optionals.headers;
     const cancellationToken: any = optionals.cancellationToken;
     const headersMap: {
@@ -711,7 +720,10 @@ export function serializeUpdateCollaborationByIdRequestBody(
   val: UpdateCollaborationByIdRequestBody,
 ): SerializedData {
   return {
-    ['role']: serializeUpdateCollaborationByIdRequestBodyRoleField(val.role),
+    ['role']:
+      val.role == void 0
+        ? val.role
+        : serializeUpdateCollaborationByIdRequestBodyRoleField(val.role),
     ['status']:
       val.status == void 0
         ? val.status
@@ -731,14 +743,10 @@ export function deserializeUpdateCollaborationByIdRequestBody(
       message: 'Expecting a map for "UpdateCollaborationByIdRequestBody"',
     });
   }
-  if (val.role == void 0) {
-    throw new BoxSdkError({
-      message:
-        'Expecting "role" of type "UpdateCollaborationByIdRequestBody" to be defined',
-    });
-  }
-  const role: UpdateCollaborationByIdRequestBodyRoleField =
-    deserializeUpdateCollaborationByIdRequestBodyRoleField(val.role);
+  const role: undefined | UpdateCollaborationByIdRequestBodyRoleField =
+    val.role == void 0
+      ? void 0
+      : deserializeUpdateCollaborationByIdRequestBodyRoleField(val.role);
   const status: undefined | UpdateCollaborationByIdRequestBodyStatusField =
     val.status == void 0
       ? void 0
