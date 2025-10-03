@@ -36,7 +36,6 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Migration to v10](#migration-to-v10)
 - [Box Node.js SDK](#box-nodejs-sdk)
   - [Installation](#installation)
   - [Getting Started](#getting-started)
