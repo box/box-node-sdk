@@ -1,6 +1,27 @@
 <p align="center">
   <img src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" alt= “box-dev-logo” width="30%" height="50%">
 </p>
+# Versioning Strategy
+
+Starting with v10 of the SDK, we’ve introduced a new generated codebase designed to enhance your experience with the Box API.  
+It is currently available on the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
+
+v10 is targeted at new users of Box Node SDK and users already working with the generated Box Typescript SDK previously available under the [Box Typescript SDK Gen repository](https://github.com/box/box-typescript-sdk-gen).
+
+For users of v3 of the Box Node SDK, no action is required at this time — we’ll be providing an upcoming v4 release that will include code from both versions for a smooth migration path. To avoid unintentional upgrades, pin your version to `box-node-sdk: ^3.8.2` in your `package.json`.
+
+For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://developer.box.com/guides/tooling/sdks/sdk-versioning/).
+
+---
+
+## Which Version Should I Use?
+
+| Scenario                                                                                                       | Recommended Version                                                | Example Dependency                |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------- |
+| Creating a new application                                                                                     | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)        | `npm install box-node-sdk@10`     |
+| Existing app using [box-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Upgrade to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-node-sdk@10`     |
+| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and planning to use new features | Wait for v4 to start migration process                             | TBD                               |
+| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and not planning changes         | Stay on your current version                                       | `npm install box-node-sdk@^3.8.2` |
 
 # Box Node SDK
 
