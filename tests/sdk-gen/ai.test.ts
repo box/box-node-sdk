@@ -442,46 +442,22 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
     } satisfies AiExtractStructured);
   if (
     !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.hobby')
-      ) as string) == (['guitar'].map(toString).join(',') as string)
+      (toString(response.answer.hobby) as string) ==
+      (['guitar'].map(toString).join(',') as string)
     )
   ) {
     throw new Error('Assertion failed');
   }
-  if (
-    !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.firstName')
-      ) as string) == 'John'
-    )
-  ) {
+  if (!((toString(response.answer.firstName) as string) == 'John')) {
     throw new Error('Assertion failed');
   }
-  if (
-    !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.lastName')
-      ) as string) == 'Doe'
-    )
-  ) {
+  if (!((toString(response.answer.lastName) as string) == 'Doe')) {
     throw new Error('Assertion failed');
   }
-  if (
-    !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.dateOfBirth')
-      ) as string) == '1990-07-04'
-    )
-  ) {
+  if (!((toString(response.answer.dateOfBirth) as string) == '1990-07-04')) {
     throw new Error('Assertion failed');
   }
-  if (
-    !(
-      (toString(getValueFromObjectRawData(response, 'answer.age')) as string) ==
-      '34'
-    )
-  ) {
+  if (!((toString(response.answer.age) as string) == '34')) {
     throw new Error('Assertion failed');
   }
   if (!(response.completionReason == 'done')) {
@@ -556,46 +532,27 @@ test('testAIExtractStructuredWithMetadataTemplate', async function testAIExtract
       } satisfies AiExtractStructuredMetadataTemplateField,
       items: [new AiItemBase({ id: file.id })],
     } satisfies AiExtractStructured);
-  if (
-    !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.firstName')
-      ) as string) == 'John'
-    )
-  ) {
+  if (!((toString(response.answer.firstName) as string) == 'John')) {
+    throw new Error('Assertion failed');
+  }
+  if (!((toString(response.answer.lastName) as string) == 'Doe')) {
     throw new Error('Assertion failed');
   }
   if (
     !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.lastName')
-      ) as string) == 'Doe'
+      (toString(response.answer.dateOfBirth) as string) ==
+      '1990-07-04T00:00:00Z'
     )
   ) {
     throw new Error('Assertion failed');
   }
-  if (
-    !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.dateOfBirth')
-      ) as string) == '1990-07-04T00:00:00Z'
-    )
-  ) {
+  if (!((toString(response.answer.age) as string) == '34')) {
     throw new Error('Assertion failed');
   }
   if (
     !(
-      (toString(getValueFromObjectRawData(response, 'answer.age')) as string) ==
-      '34'
-    )
-  ) {
-    throw new Error('Assertion failed');
-  }
-  if (
-    !(
-      (toString(
-        getValueFromObjectRawData(response, 'answer.hobby')
-      ) as string) == (['guitar'].map(toString).join(',') as string)
+      (toString(response.answer.hobby) as string) ==
+      (['guitar'].map(toString).join(',') as string)
     )
   ) {
     throw new Error('Assertion failed');
