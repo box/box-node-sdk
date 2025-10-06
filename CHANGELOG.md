@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1](https://github.com/box/box-node-sdk/compare/v10.0.0...v10.0.1) (2025-10-06)
+
+
+### Bug Fixes
+
+* Allow flexible key-value data in `AiExtractResponse.answer` and `Event.additionalDetails` (box/box-openapi[#556](https://github.com/box/box-node-sdk/issues/556)) ([#1051](https://github.com/box/box-node-sdk/issues/1051)) ([70a2275](https://github.com/box/box-node-sdk/commit/70a2275ada40f079178166d60c7f5d0a48bd5e40))
+* Make `role` parameter of update collaboration optional (box/box-openapi[#557](https://github.com/box/box-node-sdk/issues/557)) ([#1068](https://github.com/box/box-node-sdk/issues/1068)) ([3992171](https://github.com/box/box-node-sdk/commit/3992171af8587d9f43888ecd2fcbcd70a9f1b2b6))
+* Relax JSON deserialization guard by removing strict `content-type` check (box/box-codegen[#844](https://github.com/box/box-node-sdk/issues/844)) ([#1033](https://github.com/box/box-node-sdk/issues/1033)) ([1eb2c32](https://github.com/box/box-node-sdk/commit/1eb2c32a923be1762bf9dfbb2dfdb9e5b3e78af5))
+
 ## [10.0.0](https://github.com/box/box-node-sdk/compare/v3.8.1...v10.0.0) (2025-09-17)
 
 Introducing **`Box Node SDK v10`**, a major release designed to elevate your developer experience and streamline integration with Box Content Cloud. Currently available as a separate [`sdk-gen`](https://github.com/box/box-node-sdk/tree/sdk-gen) branch, `v10` will ultimately become the main branch.
