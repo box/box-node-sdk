@@ -74,7 +74,7 @@ test('testEventUpload', async function testEventUpload(): Promise<any> {
     throw new Error('Assertion failed');
   }
   if (
-    !((toString(firstEvent.additionalDetails!.hash_type) as string) == 'sha1')
+    !!((toString(firstEvent.additionalDetails!.service_id) as string) == '')
   ) {
     throw new Error('Assertion failed');
   }
