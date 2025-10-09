@@ -24,6 +24,8 @@ import { serializeUpdateCollaborationByIdRequestBodyRoleField } from '@/managers
 import { deserializeUpdateCollaborationByIdRequestBodyRoleField } from '@/managers/userCollaborations';
 import { serializeCollaborations } from '@/schemas/collaborations';
 import { deserializeCollaborations } from '@/schemas/collaborations';
+import { UpdateCollaborationByIdOptionalsInput } from '@/managers/userCollaborations';
+import { UpdateCollaborationByIdOptionals } from '@/managers/userCollaborations';
 import { BoxClient } from '@/client';
 import { UserFull } from '@/schemas/userFull';
 import { CreateUserRequestBody } from '@/managers/users';
@@ -92,8 +94,10 @@ test('testUserCollaborations', async function testUserCollaborations(): Promise<
   }
   const updatedCollaboration: undefined | Collaboration =
     await client.userCollaborations.updateCollaborationById(collaborationId, {
-      role: 'viewer' as UpdateCollaborationByIdRequestBodyRoleField,
-    } satisfies UpdateCollaborationByIdRequestBody);
+      requestBody: {
+        role: 'viewer' as UpdateCollaborationByIdRequestBodyRoleField,
+      } satisfies UpdateCollaborationByIdRequestBody,
+    } satisfies UpdateCollaborationByIdOptionalsInput);
   if (!((toString(updatedCollaboration!.role!) as string) == 'viewer')) {
     throw new Error('Assertion failed');
   }
@@ -130,8 +134,10 @@ test('testConvertingUserCollaborationToOwnership', async function testConverting
   }
   const ownerCollaboration: undefined | Collaboration =
     await client.userCollaborations.updateCollaborationById(collaboration.id, {
-      role: 'owner' as UpdateCollaborationByIdRequestBodyRoleField,
-    } satisfies UpdateCollaborationByIdRequestBody);
+      requestBody: {
+        role: 'owner' as UpdateCollaborationByIdRequestBodyRoleField,
+      } satisfies UpdateCollaborationByIdRequestBody,
+    } satisfies UpdateCollaborationByIdOptionalsInput);
   if (!(ownerCollaboration == void 0)) {
     throw new Error('Assertion failed');
   }
@@ -182,8 +188,10 @@ test('testExternalUserCollaborations', async function testExternalUserCollaborat
   }
   const updatedCollaboration: undefined | Collaboration =
     await client.userCollaborations.updateCollaborationById(collaborationId, {
-      role: 'viewer' as UpdateCollaborationByIdRequestBodyRoleField,
-    } satisfies UpdateCollaborationByIdRequestBody);
+      requestBody: {
+        role: 'viewer' as UpdateCollaborationByIdRequestBodyRoleField,
+      } satisfies UpdateCollaborationByIdRequestBody,
+    } satisfies UpdateCollaborationByIdOptionalsInput);
   if (!((toString(updatedCollaboration!.role!) as string) == 'viewer')) {
     throw new Error('Assertion failed');
   }

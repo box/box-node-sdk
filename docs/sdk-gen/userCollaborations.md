@@ -39,7 +39,7 @@ Returns a collaboration object.
 
 Updates a collaboration.
 Can be used to change the owner of an item, or to
-accept collaboration invites.
+accept collaboration invites. In case of accepting collaboration invite, role is not required.
 
 This operation is performed by calling function `updateCollaborationById`.
 
@@ -48,15 +48,13 @@ See the endpoint docs at
 
 <!-- sample put_collaborations_id -->
 ```ts
-await client.userCollaborations.updateCollaborationById(collaborationId, { role: "viewer" as UpdateCollaborationByIdRequestBodyRoleField } satisfies UpdateCollaborationByIdRequestBody)
+await client.userCollaborations.updateCollaborationById(collaborationId, { requestBody: { role: "viewer" as UpdateCollaborationByIdRequestBodyRoleField } satisfies UpdateCollaborationByIdRequestBody } satisfies UpdateCollaborationByIdOptionalsInput)
 ```
 
 ### Arguments
 
 - collaborationId `string`
   - The ID of the collaboration. Example: "1234"
-- requestBody `UpdateCollaborationByIdRequestBody`
-  - Request body of updateCollaborationById method
 - optionalsInput `UpdateCollaborationByIdOptionalsInput`
   
 
