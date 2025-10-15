@@ -1,5 +1,7 @@
 /**
  * @fileoverview Box API Client
+ * @deprecated This BoxClient class and the entire manual-sdk is deprecated and will be removed in the future version.
+ * It is recommended to use sdk-gen package. Instead of this class, use BoxClient from sdk-gen package.
  */
 
 import { Promise } from 'bluebird';
@@ -165,6 +167,10 @@ function constructBoxUAHeader(client: any /* FIXME */) {
     .join('; ');
 }
 
+/**
+ * @deprecated This BoxClient class and the entire manual-sdk is deprecated and will be removed in the future version.
+ * It is recommended to use sdk-gen package. Instead of this class, use BoxClient from sdk-gen package.
+ */
 class BoxClient {
   _session: APISession;
   _requestManager: APIRequestManager;
@@ -233,6 +239,12 @@ class BoxClient {
     config: any /* FIXME */,
     requestManager: APIRequestManager
   ) {
+    // Runtime deprecation warning
+    console.warn(
+      'DEPRECATION WARNING: This BoxClient class and the entire manual-sdk is deprecated and will be removed in the future version. ' +
+      'Please use the new BoxClient from "box-node-sdk/src/sdk-gen/client" instead. '
+    );
+    
     // the API Session used by the client for authentication
     this._session = apiSession;
 
@@ -791,6 +803,7 @@ BoxClient.prototype.CURRENT_USER_ID = Users.prototype.CURRENT_USER_ID;
 // ------------------------------------------------------------------------------
 
 /**
+ * @deprecated This module is deprecated. Please use ./sdk-gen/client.BoxClient instead.
  * @module box-node-sdk/lib/box-client
  * @see {@Link BoxClient}
  */
