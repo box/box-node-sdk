@@ -242,7 +242,7 @@ class BoxClient {
     // Runtime deprecation warning
     console.warn(
       'DEPRECATION WARNING: This BoxClient class and the entire manual/legacy sdk package is deprecated and will be removed in the future version. ' +
-      'Please use the new BoxClient from "box-node-sdk/src/sdk-gen/client" instead. '
+      'Please use the new BoxClient from "box-node-sdk/sdk-gen/client" instead. '
     );
     
     // the API Session used by the client for authentication
@@ -803,7 +803,7 @@ BoxClient.prototype.CURRENT_USER_ID = Users.prototype.CURRENT_USER_ID;
 // ------------------------------------------------------------------------------
 
 /**
- * @deprecated This module is deprecated. Please use box-node-sdk/src/sdk-gen/client instead.
+ * @deprecated This module is deprecated. Please use box-node-sdk/sdk-gen/client instead.
  * @module box-node-sdk/lib/box-client
  * @see {@Link BoxClient}
  */
