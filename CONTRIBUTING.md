@@ -68,7 +68,7 @@ Examples without scope:
 - `chore: update build configuration`
 - `ci: fix GitHub Actions workflow`
 
-The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/commitizen/conventional-commit-types/blob/master/index.json). Note that you must include the `!` for breaking changes (e.g. `feat(boxsdk)!: removed old apis` or `feat!: breaking change` for general changes).
+The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/commitizen/conventional-commit-types/blob/master/index.json). Note that you must include the `!` for breaking changes (e.g. `feat(boxsdk)!: removed old apis` for changes in manual part of the SDK or `feat!: breaking change` for general changes).
 
 Shown below are examples of the release type that will be done based on a commit message.
 
