@@ -8,7 +8,6 @@
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Known Vulnerabilities](https://snyk.io/test/github/box/box-node-sdk/badge.svg)](https://snyk.io/test/github/box/box-node-sdk)
 ![Platform](https://img.shields.io/badge/node-18--24-blue)
-[![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
 A Node.js interface to the [Box Content API](https://developer.box.com/reference/).
@@ -21,6 +20,8 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
   - [Version v4](#version-v4)
   - [Version v10](#version-v10)
 - [Installation](#installation)
+  - [Installing v10 (Generated SDK only)](#installing-v10-generated-sdk-only)
+  - [Installing v4 (Both Generated and Manual SDK)](#installing-v4-both-generated-and-manual-sdk)
 - [Getting Started](#getting-started)
   - [With generated SDK](#with-generated-sdk)
   - [With manually written SDK](#with-manually-written-sdk)
@@ -54,7 +55,7 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 
 In v4 of the Box Node SDK, we are introducing a version that consolidates both the manually written SDK (formerly known as v3) and the generated SDK (currently in v10, formerly known as [box-typescript-sdk-gen](https://github.com/box/box-typescript-sdk-gen)) into a single SDK package for improved usability and maintenance. This allows developers to use both the manually written SDK and the generated SDK in the same project.
 
-Version v4 of the Box Node SDK will be supporte until 2027. During this period, the manually written SDK will be marked as deprecated and will receive only bug fixes and security updates.
+Version v4 of the Box Node SDK will be supported until 2027. During this period, the manually written SDK will be marked as deprecated and will receive only bug fixes and security updates.
 All new features and functionality will be provided exclusively in the `sdk-gen` namespace.
 
 The codebase for v4 of the Box Node SDK is currently available in the [combined-sdk](https://github.com/box/box-node-sdk/tree/combined-sdk) branch.
@@ -79,16 +80,25 @@ You can find the migration guide [here](https://github.com/box/box-node-sdk/blob
 
 # Installation
 
-Node SDK Installation [details](https://developer.box.com/guides/tooling/sdks/node/).
+For general Node SDK installation details, see the [Box Developer documentation](https://developer.box.com/guides/tooling/sdks/node/).
 
-The installation process for v4 of the Box Node SDK is similar, but there are some differences in the version number you need to use. 
+## Installing v10 (Generated SDK only)
 
-In version v4, all classes and methods of manually written SDK are available in the `box-node-sdk` package, and the generated SDK is available in the `box-node-sdk/sdk-gen` namespace.
+If you want to use only the generated SDK with the latest features:
 
-To install v4 of the Box Node SDK, you can use the following command:
+```bash
+npm install --save box-node-sdk@^10
 ```
+
+## Installing v4 (Both Generated and Manual SDK)
+
+If you need to use both the generated SDK and the manually written SDK (for migration purposes):
+
+```bash
 npm install --save box-node-sdk@^4
 ```
+
+In version v4, the manually written SDK is available in the `box-node-sdk` package, and the generated SDK is available in the `box-node-sdk/sdk-gen` namespace.
 
 # Getting Started
 
@@ -100,7 +110,7 @@ You can use this token to make test calls for your own Box account.
 
 ## With generated SDK
 
-The SDK provides a `DeveloperTokenAuth` class, which allows you to authenticate using your Developer Token. Use instance of `DeveloperTokenAuth` to initialize `Client` object. Using `Client` object you can access managers, which allow you to perform some operations on your Box account.
+The SDK provides a `BoxDeveloperTokenAuth` class, which allows you to authenticate using your Developer Token. Use an instance of `BoxDeveloperTokenAuth` to initialize a `BoxClient` object. Using the `BoxClient` object you can access managers, which allow you to perform operations on your Box account.
 
 The example below demonstrates how to authenticate with Developer Token and print names of all items inside a root folder.
 
@@ -367,7 +377,7 @@ We use a modified version of [Semantic Versioning](https://semver.org/) for all 
 
 ## Supported Version
 
-Currently, we support the v10 version and v3 version of the SDK. New features, functionality, bug fixes, and security updates will only be added to these versions.
+Currently, we support versions v10, v4 of the SDK. New features and functionality are added to v10, while the manually written portion of v4 receive bug fixes and security updates only.
 
 A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  
 Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often).
