@@ -121,7 +121,7 @@ async function main(token) {
   let auth = new BoxDeveloperTokenAuth({ token });
   let client = new BoxClient({ auth });
   let entries = (await client.folders.getFolderItems('0')).entries;
-  entries.forEach((entry) => console.log(entry));
+  entries.forEach(entry => console.log(entry.name));
 }
 
 main('INSERT YOUR DEVELOPER TOKEN HERE');
@@ -132,7 +132,7 @@ main('INSERT YOUR DEVELOPER TOKEN HERE');
 From this version v4, we are introducing the ESM and CJS modules support for the SDK.
 To use the SDK in ESM mode, you can use the following import:
 ```js
-import { BoxSDK } from 'box-node-sdk';
+import BoxSDK from 'box-node-sdk';
 ```
 
 To use the SDK in CJS mode, you can use the following import:
