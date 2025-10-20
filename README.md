@@ -63,7 +63,7 @@ Migration guide for migrating from manually written SDK to generated SDK can be 
 
 Version v4 is intended for:
 
-- Existing developers of the Box Node SDK, who want to access new APIs features while keeping minimum changes to their existing code.
+- Existing developers of the Box Node SDK, who want to access new API features while keeping minimum changes to their existing code.
 - Existing developers who are in process of migrating to the generated SDK, but do not want to move all functions immediately.
 
 ## Version v10
