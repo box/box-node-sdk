@@ -240,7 +240,7 @@ class BoxClient {
     requestManager: APIRequestManager
   ) {
     // Runtime deprecation warning
-    console.warn(
+    process.emitWarning(
       'DEPRECATION WARNING: This BoxClient class and the entire manual/legacy sdk package is deprecated and will be removed in the future version. ' +
       'Please use the new BoxClient from "box-node-sdk/sdk-gen/client" instead. '
     );
