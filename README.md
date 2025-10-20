@@ -68,7 +68,7 @@ Version v4 is intended for:
 
 ## Version v10
 
-Starting from v10, the Box Node SDK will only contain the generated SDK, and fully removed the manually written SDK.
+Starting from v10, the Box Node SDK will only contain the generated SDK, and will fully remove the manually written SDK.
 The codebase for v10 of the Box Node SDK is currently available in the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
 
 Version v10 is intended for:
