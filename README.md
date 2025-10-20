@@ -27,7 +27,7 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
   - [With manually written SDK](#with-manually-written-sdk)
 - [Generated SDK](#generated-sdk)
   - [Authentication](#authentication)
-  - [Documentation](#documentation)
+  - [Generated SDK Documentation](#generated-sdk-documentation)
 - [Manually Written SDK (deprecated)](#manually-written-sdk-deprecated)
   - [Creating API Clients](#creating-api-clients)
   - [Basic Client](#basic-client)
@@ -43,7 +43,7 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 - [Contributing to the Box Node SDK](#contributing-to-the-box-node-sdk)
 - [Changelog](#changelog)
 - [Upgrades](#upgrades)
-- [Documentation](#documentation-1)
+- [Documentation](#documentation)
 - [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -176,7 +176,7 @@ The generated SDK supports multiple authentication methods to fit different use 
 
 For detailed information on each authentication method, including setup instructions and code examples, please see the [Authentication Guide](./docs/sdk-gen/authentication.md).
 
-## Documentation
+## Generated SDK Documentation
 
 Complete documentation for the generated SDK is available in the [`./docs/sdk-gen`](./docs/sdk-gen).
 
