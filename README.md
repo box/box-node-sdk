@@ -22,21 +22,27 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
   - [Version v10](#version-v10)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
-- [Creating API Clients](#creating-api-clients)
+  - [With generated SDK](#with-generated-sdk)
+  - [With manually written SDK](#with-manually-written-sdk)
+- [Generated SDK](#generated-sdk)
+  - [Authentication](#authentication)
+  - [Documentation](#documentation)
+- [Manually Written SDK (deprecated)](#manually-written-sdk-deprecated)
+  - [Creating API Clients](#creating-api-clients)
   - [Basic Client](#basic-client)
   - [Persistent Client](#persistent-client)
   - [App Auth Client](#app-auth-client)
-- [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
+  - [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
   - [Constructing API Calls Manually](#constructing-api-calls-manually)
 - [FIPS 140-2 Compliance](#fips-140-2-compliance)
 - [Versions](#versions)
   - [Supported Version](#supported-version)
   - [Version schedule](#version-schedule)
 - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
-- [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
+- [Contributing to the Box Node SDK](#contributing-to-the-box-node-sdk)
 - [Changelog](#changelog)
 - [Upgrades](#upgrades)
-- [Documentation](#documentation)
+- [Documentation](#documentation-1)
 - [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -46,10 +52,28 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 
 ## Version v4
 
+In v4 of the Box Node SDK, we are introducing a version that consolidates both the manually written SDK (formerly known as v3) and the generated SDK (currently in v10, formerly known as [box-typescript-sdk-gen](https://github.com/box/box-typescript-sdk-gen)) into a single SDK package for improved usability and maintenance. This allows developers to use both the manually written SDK and the generated SDK in the same project.
+
+Version v4 of the Box Node SDK will be supporte until 2027. During this period, the manually written SDK will be marked as deprecated and will receive only bug fixes and security updates.
+All new features and functionality will be provided exclusively in the `sdk-gen` namespace.
+
+The codebase for v4 of the Box Node SDK is currently available in the [combined-sdk](https://github.com/box/box-node-sdk/tree/combined-sdk) branch.
+Migration guide for migrating from manually written SDK to generated SDK can be found [here](./docs/migration-guides/from-typescript-sdk-gen-v1-to-box-node-sdk-v4.md).
+
+Version v4 is intended for:
+
+- Existing developers of the Box Node SDK, who want to access new APIs features while keeping minimum changes to their existing code.
+- Existing developers who are in process of migrating to the generated SDK, but do not want to move all functions immediately.
+
 ## Version v10
 
-The [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch contains the generated code for the `v10` version of the Box Node SDK. This is intended primarily for developers migrating from [Box TypeScript SDK Gen](https://github.com/box/box-typescript-sdk-gen) to the v10 version.
-As part of our upcoming major release, we will be introducing a combined SDK that consolidates the previously separate generated SDK into one unified SDK package for improved usability and maintenance.
+Starting from v10, the Box Node SDK will only contain the generated SDK, and fully removed the manually written SDK.
+The codebase for v10 of the Box Node SDK is currently available in the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
+
+Version v10 is intended for:
+
+- New developers of the Box Node SDK, who want to use the latest and greatest features of the Box API.
+- Developers already working with the [Box TypeScript SDK Gen](https://github.com/box/box-typescript-sdk-gen), who want to migrate to the Box Node SDK package name.
 
 You can find the migration guide [here](https://github.com/box/box-node-sdk/blob/sdk-gen/docs/migration-guides/from-box-typescript-sdk-gen-v1-to-box-node-sdk-v10.md) for transitioning from Box TypeScript SDK Gen to Box Node SDK v10. If you have any questions, please create an issue in the repository or reach out to [Box Developer Support](https://developer.box.com/support/).
 
@@ -57,8 +81,13 @@ You can find the migration guide [here](https://github.com/box/box-node-sdk/blob
 
 Node SDK Installation [details](https://developer.box.com/guides/tooling/sdks/node/).
 
+The installation process for v4 of the Box Node SDK is similar, but there are some differences in the version number you need to use. 
+
+In version v4, all classes and methods of manually written SDK are available in the `box-node-sdk` package, and the generated SDK is available in the `box-node-sdk/sdk-gen` namespace.
+
+To install v4 of the Box Node SDK, you can use the following command:
 ```
-npm install --save box-node-sdk
+npm install --save box-node-sdk@^4
 ```
 
 # Getting Started
@@ -67,9 +96,42 @@ To get started with the SDK, get a Developer Token from the Configuration page
 of your platform app in the [Box Developer Console][dev-console].
 You can use this token to make test calls for your own Box account.
 
-```js
-var BoxSDK = require('box-node-sdk').default;
+[dev-console]: https://app.box.com/developers/console
 
+## With generated SDK
+
+The SDK provides a `DeveloperTokenAuth` class, which allows you to authenticate using your Developer Token. Use instance of `DeveloperTokenAuth` to initialize `Client` object. Using `Client` object you can access managers, which allow you to perform some operations on your Box account.
+
+The example below demonstrates how to authenticate with Developer Token and print names of all items inside a root folder.
+
+```js
+const { BoxClient, BoxDeveloperTokenAuth } = require('box-node-sdk/sdk-gen');
+
+async function main(token) {
+  let auth = new BoxDeveloperTokenAuth({ token });
+  let client = new BoxClient({ auth });
+  let entries = (await client.folders.getFolderItems('0')).entries;
+  entries.forEach((entry) => console.log(entry));
+}
+
+main('INSERT YOUR DEVELOPER TOKEN HERE');
+```
+
+## With manually written SDK
+
+From this version v4, we are introducing the ESM and CJS modules support for the SDK.
+To use the SDK in ESM mode, you can use the following import:
+```js
+import { BoxSDK } from 'box-node-sdk';
+```
+
+To use the SDK in CJS mode, you can use the following import:
+```js
+const BoxSDK = require('box-node-sdk').default;
+```
+
+Then, you can use the SDK to make API calls. For example:
+```js
 // Initialize the SDK with your app credentials
 var sdk = new BoxSDK({
   clientID: 'CLIENT_ID',
@@ -88,9 +150,31 @@ client.users
   .catch((err) => console.log('Got an error!', err));
 ```
 
-[dev-console]: https://app.box.com/developers/console
 
-# Creating API Clients
+# Generated SDK
+
+The following sections provide detailed documentation for the generated SDK.
+
+## Authentication
+
+The generated SDK supports multiple authentication methods to fit different use cases:
+
+- **[Developer Token](./docs/sdk-gen/authentication.md#developer-token)** - For quick testing and development
+- **[OAuth 2.0](./docs/sdk-gen/authentication.md#oauth-20-auth)** - For integrating with existing Box users
+- **[JWT Auth](./docs/sdk-gen/authentication.md#jwt-auth)** - Server-to-server authentication for enterprise applications
+- **[Client Credentials Grant](./docs/sdk-gen/authentication.md#client-credentials-grant)** - Alternative server-to-server authentication method
+
+For detailed information on each authentication method, including setup instructions and code examples, please see the [Authentication Guide](./docs/sdk-gen/authentication.md).
+
+## Documentation
+
+Complete documentation for the generated SDK is available in the [`./docs/sdk-gen`](./docs/sdk-gen).
+
+# Manually Written SDK (deprecated)
+
+The following sections provide detailed documentation for the manually written SDK.
+
+## Creating API Clients
 
 Clients are used to communicate with the API on behalf of a user.
 
@@ -185,7 +269,7 @@ var serviceAccountClient = sdk.getAppAuthClient(
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 
-# Using the Client to Make API Calls
+## Using the Client to Make API Calls
 
 The different API endpoints you can call are represented as methods, grouped into
 managers by the type of object they interact with.
@@ -306,19 +390,9 @@ We highly recommend upgrading to the latest SDK major release at the earliest co
 [Browse the issues tickets](https://github.com/box/box-node-sdk/issues)! Or, if that doesn't work, [file a new one](https://github.com/box/box-node-sdk/issues/new) and someone will get back to you. If you have general questions about the
 Box API, you can post to the [Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum).
 
-# Contributing to the Box Node.js SDK
+# Contributing to the Box Node SDK
 
-1. Clone this repo.
-1. Run `npm install`.
-1. Run `npm test` to ensure everything is working.
-1. Make the changes you want in the `lib/` directory. Be sure to add corresponding tests
-   in the `tests/` directory!
-1. Run the unit tests by command `npm run test` and integration test as instructed [here](./tests/integration_test/README.md).
-1. Create a pull request with your changes — we'll review it and help you get it merged.
-
-Currently, the **Sign Request** module is generated automatically from OpenAPI specs. To re-generate this module, download the latest version of Box OpenAPI specs [here](https://raw.githubusercontent.com/box/box-openapi/en/openapi.json), save it to the root directory and run `npm run codegen`.
-
-For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
+For information on how to contribute to this project, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
 # Changelog
 
