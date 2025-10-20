@@ -377,7 +377,7 @@ We use a modified version of [Semantic Versioning](https://semver.org/) for all 
 
 ## Supported Version
 
-Currently, we support versions v10, v4 of the SDK. New features and functionality are added to v10, while the manually written portion of v4 receive bug fixes and security updates only.
+Currently, we support versions v10 and v4 of the SDK. New features and functionality are added to v10, while the manually written portion of v4 receives bug fixes and security updates only.
 
 A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  
 Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often).
