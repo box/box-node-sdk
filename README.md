@@ -2,12 +2,6 @@
   <img src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" alt= “box-dev-logo” width="30%" height="50%">
 </p>
 
-# Migration to v10
-
-The [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch contains the generated code for the `v10` version of the Box Node SDK. This is intended primarily for developers migrating from [Box TypeScript SDK Gen](https://github.com/box/box-typescript-sdk-gen) to the v10 version.
-As part of our upcoming major release, we will be introducing a combined SDK that consolidates the previously separate generated SDK into one unified SDK package for improved usability and maintenance.
-
-You can find the migration guide [here](https://github.com/box/box-node-sdk/blob/sdk-gen/docs/migration-guides/from-box-typescript-sdk-gen-v1-to-box-node-sdk-v10.md) for transitioning from Box TypeScript SDK Gen to Box Node SDK v10. If you have any questions, please create an issue in the repository or reach out to [Box Developer Support](https://developer.box.com/support/).
 
 # Box Node.js SDK
 
@@ -22,30 +16,44 @@ A Node.js interface to the [Box Content API](https://developer.box.com/reference
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Migration to v10](#migration-to-v10)
 - [Box Node.js SDK](#box-nodejs-sdk)
-  - [Installation](#installation)
-  - [Getting Started](#getting-started)
-  - [Creating API Clients](#creating-api-clients)
-    - [Basic Client](#basic-client)
-    - [Persistent Client](#persistent-client)
-    - [App Auth Client](#app-auth-client)
-  - [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
-    - [Constructing API Calls Manually](#constructing-api-calls-manually)
-  - [FIPS 140-2 Compliance](#fips-140-2-compliance)
-  - [Versions](#versions)
-    - [Supported Version](#supported-version)
-    - [Version schedule](#version-schedule)
-  - [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
-  - [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
-  - [Changelog](#changelog)
-  - [Upgrades](#upgrades)
-  - [Documentation](#documentation)
-  - [Copyright and License](#copyright-and-license)
+- [Supported versions](#supported-versions)
+  - [Version v4](#version-v4)
+  - [Version v10](#version-v10)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Creating API Clients](#creating-api-clients)
+  - [Basic Client](#basic-client)
+  - [Persistent Client](#persistent-client)
+  - [App Auth Client](#app-auth-client)
+- [Using the Client to Make API Calls](#using-the-client-to-make-api-calls)
+  - [Constructing API Calls Manually](#constructing-api-calls-manually)
+- [FIPS 140-2 Compliance](#fips-140-2-compliance)
+- [Versions](#versions)
+  - [Supported Version](#supported-version)
+  - [Version schedule](#version-schedule)
+- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
+- [Contributing to the Box Node.js SDK](#contributing-to-the-box-nodejs-sdk)
+- [Changelog](#changelog)
+- [Upgrades](#upgrades)
+- [Documentation](#documentation)
+- [Copyright and License](#copyright-and-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Installation
+
+# Supported versions
+
+## Version v4
+
+## Version v10
+
+The [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch contains the generated code for the `v10` version of the Box Node SDK. This is intended primarily for developers migrating from [Box TypeScript SDK Gen](https://github.com/box/box-typescript-sdk-gen) to the v10 version.
+As part of our upcoming major release, we will be introducing a combined SDK that consolidates the previously separate generated SDK into one unified SDK package for improved usability and maintenance.
+
+You can find the migration guide [here](https://github.com/box/box-node-sdk/blob/sdk-gen/docs/migration-guides/from-box-typescript-sdk-gen-v1-to-box-node-sdk-v10.md) for transitioning from Box TypeScript SDK Gen to Box Node SDK v10. If you have any questions, please create an issue in the repository or reach out to [Box Developer Support](https://developer.box.com/support/).
+
+# Installation
 
 Node SDK Installation [details](https://developer.box.com/guides/tooling/sdks/node/).
 
@@ -53,7 +61,7 @@ Node SDK Installation [details](https://developer.box.com/guides/tooling/sdks/no
 npm install --save box-node-sdk
 ```
 
-## Getting Started
+# Getting Started
 
 To get started with the SDK, get a Developer Token from the Configuration page
 of your platform app in the [Box Developer Console][dev-console].
@@ -82,7 +90,7 @@ client.users
 
 [dev-console]: https://app.box.com/developers/console
 
-## Creating API Clients
+# Creating API Clients
 
 Clients are used to communicate with the API on behalf of a user.
 
@@ -92,7 +100,7 @@ Box supports three different types of client:
 - **Persistent Client:** For use with traditional OAuth2 apps, can refresh its tokens automatically and persist them via a token store
 - **App Auth Client:** Uses the app auth JWT grant to act on behalf of app/managed users and create new tokens automatically
 
-### Basic Client
+## Basic Client
 
 Returns a Box Client with a Basic API Session. The client is able to make requests on behalf of a user. A basic session has no access to a user's refresh token. Because of this, once the session's tokens expire the client cannot recover and a new session will need to be generated.
 
@@ -100,7 +108,7 @@ Returns a Box Client with a Basic API Session. The client is able to make reques
 var client = BoxSDK.getBasicClient('ACCESS_TOKEN');
 ```
 
-### Persistent Client
+## Persistent Client
 
 Returns a Box Client with a persistent API session. A persistent API session helps manage the user's tokens, and can refresh them automatically if the access token expires. If a central data-store is given, the session can read & write tokens to it.
 
@@ -132,7 +140,7 @@ store.clear(function (err, data) {}); // delete TokenInfo from the app's central
 
 Note that these methods don't pass in identifying information as arguments. You'll most likely need to create them on-demand for each client.
 
-### App Auth Client
+## App Auth Client
 
 App Auth allows an platform app to fully manage the Box accounts of its users; they do not
 have direct login credentials to Box and all operations are performed through the API
@@ -177,7 +185,7 @@ var serviceAccountClient = sdk.getAppAuthClient(
 var appUserClient = sdk.getAppAuthClient('user', 'YOUR-APP-USER-ID');
 ```
 
-## Using the Client to Make API Calls
+# Using the Client to Make API Calls
 
 The different API endpoints you can call are represented as methods, grouped into
 managers by the type of object they interact with.
@@ -232,7 +240,7 @@ the [SDK documentation pages](./docs) and the auto-generated
 These contain detailed information about which methods are available and
 how to use them.
 
-### Constructing API Calls Manually
+## Constructing API Calls Manually
 
 The SDK also exposes low-level request methods for constructing your own API calls.
 These can be useful for adding your own API calls that aren't yet explicitly supported by the SDK.
@@ -260,7 +268,7 @@ client.del('/files/123');
 	.catch(error => { /* handle any errors */ });
 ```
 
-## FIPS 140-2 Compliance
+# FIPS 140-2 Compliance
 
 The Box Node SDK allows the use of FIPS 140-2 validated SSL libraries, such as OpenSSL 3.0.
 However, some actions are required to enable this functionality.
@@ -269,11 +277,11 @@ By default, the version of OpenSSL Node.js includes is not FIPS enabled. Therefo
 
 According to [Node.js OpenSSL Strategy](https://github.com/nodejs/TSC/blob/main/OpenSSL-Strategy.md) document, you can use the OpenSSL 3.0 from Node.js v16 or later.
 
-## Versions
+# Versions
 
 We use a modified version of [Semantic Versioning](https://semver.org/) for all changes. See [version strategy](VERSIONS.md) for details which is effective from 30 July 2022.
 
-### Supported Version
+## Supported Version
 
 Currently, we support the v10 version and v3 version of the SDK. New features, functionality, bug fixes, and security updates will only be added to these versions.
 
@@ -283,7 +291,7 @@ At the same time, there is no schedule for major or breaking release. Instead, w
 allow customers to plan for the upgrade. We always recommend that all users run the latest available minor release for whatever major version is in use.
 We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
 
-### Version schedule
+## Version schedule
 
 | Version | Supported Environments  | State      | First Release | EOL/Terminated |
 | ------- | ----------------------- | ---------- | ------------- | -------------- |
@@ -293,12 +301,12 @@ We highly recommend upgrading to the latest SDK major release at the earliest co
 | 2       | Node.js >= 8 and <= 14  | Maintained | 29 Sep 2021   | 23 Jul 2023    |
 | 1       |                         | EOL        | 28 Mar 2019   | 29 Sep 2021    |
 
-## Questions, Bugs, and Feature Requests?
+# Questions, Bugs, and Feature Requests?
 
 [Browse the issues tickets](https://github.com/box/box-node-sdk/issues)! Or, if that doesn't work, [file a new one](https://github.com/box/box-node-sdk/issues/new) and someone will get back to you. If you have general questions about the
 Box API, you can post to the [Box Developer Forum](https://community.box.com/t5/Developer-Forum/bd-p/DeveloperForum).
 
-## Contributing to the Box Node.js SDK
+# Contributing to the Box Node.js SDK
 
 1. Clone this repo.
 1. Run `npm install`.
@@ -312,21 +320,21 @@ Currently, the **Sign Request** module is generated automatically from OpenAPI s
 
 For more information, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
-## Changelog
+# Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-## Upgrades
+# Upgrades
 
 You can read about how to migrate to the new version [here](./docs/upgrade/).
 
-## Documentation
+# Documentation
 
 You can find guides and tutorials in the `docs` directory.
 
 - [Configuration](docs/configuration.md)
 
-## Copyright and License
+# Copyright and License
 
 Copyright 2018 Box, Inc. All rights reserved.
 
