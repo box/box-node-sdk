@@ -168,7 +168,7 @@ function constructBoxUAHeader(client: any /* FIXME */) {
 }
 
 /**
- * @deprecated This BoxClient class and the entire manual/legacy sdk package is deprecated and will be removed in the future version.
+ * @deprecated This BoxClient class and the entire manual/legacy SDK package is deprecated and will be removed in the future version.
  * It is recommended to use BoxClient from sdk-gen package instead.
  */
 class BoxClient {
@@ -241,7 +241,7 @@ class BoxClient {
   ) {
     // Runtime deprecation warning
     process.emitWarning(
-      'DEPRECATION WARNING: This BoxClient class and the entire manual/legacy sdk package is deprecated and will be removed in the future version. ' +
+      'DEPRECATION WARNING: This BoxClient class and the entire manual/legacy SDK package is deprecated and will be removed in the future version. ' +
       'Please use the new BoxClient from "box-node-sdk/sdk-gen/client" instead. '
     );
     
