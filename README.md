@@ -51,7 +51,7 @@ Version v4 of the Box Node SDK will be supported until 2027. During this period,
 All new features and functionality will be provided exclusively in the `sdk-gen` module.
 
 The codebase for v4 of the Box Node SDK is currently available in the [combined-sdk](https://github.com/box/box-node-sdk/tree/combined-sdk) branch.
-Migration guide for migrating from manually written SDK to generated SDK can be found [here](./migration-guides/from-manual-sdk-to-sdk-gen.md).
+Migration guide for migrating from manually written SDK to generated SDK can be found [here](./migration-guides/from-box-node-sdk-to-sdk-gen.md).
 
 Version v4 is intended for:
 - Existing developers of the Box Node SDK v3 who want to access new API features while keeping their current codebase largely unchanged.
