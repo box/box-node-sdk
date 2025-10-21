@@ -47,7 +47,7 @@ assignees: mwwoda, mhagmajer, antusus, arjankowski, lukaszsocha2, bartlomiejlesz
 
 Node SDK: <!-- Replace with the version of the Node SDK you're using. -->
 
-[sdk-docs]: ./doc
-[api-docs]: https://developer.box.com/docs
-[dev-forums]: https://community.box.com/t5/Platform-and-Development-Forum/bd-p/DeveloperForum
+[sdk-docs]: ./docs
+[api-docs]: https://developer.box.com/guides/
+[dev-forums]: https://community.box.com/box-platform-5
 [github-repo]: https://github.com/box/box-node-sdk/search?type=Issues
