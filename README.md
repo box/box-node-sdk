@@ -55,7 +55,7 @@ Migration guide for migrating from manually written SDK to generated SDK can be 
 
 Version v4 is intended for:
 - Existing developers of the Box Node SDK v3 who want to access new API features while keeping their current codebase largely unchanged.
-- xisting developers who are in the process of migrating to `sdk-gen` module, but do not want to move all their code to the new module immediately.
+- Existing developers who are in the process of migrating to `sdk-gen` module, but do not want to move all their code to the new module immediately.
 
 ## Version v10
 
@@ -71,8 +71,8 @@ Version v10 is intended for:
 | Scenario                                                                                                       | Recommended Version                                                | Example Dependency                |
 |----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|-----------------------------------|
 | Creating a new application                                                                                     | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)        | `npm install box-node-sdk@10`     |
-| Existing app using [box-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Migrate to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-node-sdk@10`      |
-| Existing app using both [box-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) and [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk)                             | `npm install box-node-sdk@^4`                               |
+| Existing app using [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Migrate to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-node-sdk@10`      |
+| Existing app using both [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) and [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk)                             | `npm install box-node-sdk@^4`                               |
 | Existing app using v3 of [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) artifact         | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk)                                       | `npm install box-node-sdk@^4` |
 
 For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://developer.box.com/guides/tooling/sdks/sdk-versioning/).
@@ -104,7 +104,7 @@ Use instance of `BoxDeveloperTokenAuth` to initialize BoxClient object. Using `B
 which allow you to perform some operations on your Box account.
 
 ```js
-const { BoxClient, BoxDeveloperTokenAuth } = require('box-node-sdk/sdk-gen');
+import { BoxClient, BoxDeveloperTokenAuth } from 'box-node-sdk/sdk-gen';
 
 async function main(token) {
   let auth = new BoxDeveloperTokenAuth({ token });
@@ -165,8 +165,8 @@ You can find detailed instructions and example code for each authentication meth
 With v4 of the Box Python SDK, you can use both the `sdk-gen` and manual modules in the same project.
 
 ```js
-const { BoxSDK } = require('box-node-sdk');
-const { BoxClient, BoxDeveloperTokenAuth } = require('box-node-sdk/sdk-gen');
+import BoxSDK from 'box-node-sdk';
+import { BoxClient, BoxDeveloperTokenAuth } from 'box-node-sdk/sdk-gen';
 
 // Using the generated SDK (recommended)
 const newAuth = new BoxDeveloperTokenAuth({ token: 'DEVELOPER_TOKEN' });
