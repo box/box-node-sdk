@@ -19,6 +19,17 @@ This project adheres to the [Box Open Code of Conduct](http://opensource.box.com
 - **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
 - **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
 
+## Setup for contributing to manual part of SDK
+
+1. Clone this repo.
+2. Run `npm install`.
+3. Run `npm test` to ensure everything is working.
+4. Make the changes you want in the `lib/` directory. Be sure to add corresponding tests in the `tests/` directory!
+5. Run the unit tests by command `npm run test` and integration test as instructed [here](./tests/integration_test/README.md).
+6. Create a pull request with your changes — we'll review it and help you get it merged.
+
+**Note:** Currently, the **Sign Request** module is generated automatically from OpenAPI specs. To re-generate this module, download the latest version of Box OpenAPI specs [here](https://raw.githubusercontent.com/box/box-openapi/en/openapi.json), save it to the root directory and run `npm run codegen`.
+
 ## Pull request best practices
 
 We want to accept your pull requests. Please follow these steps:
