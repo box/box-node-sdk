@@ -60,49 +60,49 @@
       "types": "./lib/util/*.d.ts"
     },
     "./sdk-gen": {
-      "import": "./lib-esm/index.js",
-      "require": "./lib/index.js",
-      "types": "./lib/index.d.ts"
+      "import": "./lib-esm/sdk-gen/index.js",
+      "require": "./lib/sdk-gen/index.js",
+      "types": "./lib/sdk-gen/index.d.ts"
     },
     "./sdk-gen/*": {
-      "import": "./lib-esm/*.js",
-      "require": "./lib/*.js",
-      "types": "./lib/*.d.ts"
+      "import": "./lib-esm/sdk-gen/*.js",
+      "require": "./lib/sdk-gen/*.js",
+      "types": "./lib/sdk-gen/*.d.ts"
     },
     "./sdk-gen/box": {
-      "import": "./lib-esm/box/index.js",
-      "require": "./lib/box/index.js",
-      "types": "./lib/box/index.d.ts"
+      "import": "./lib-esm/sdk-gen/box/index.js",
+      "require": "./lib/sdk-gen/box/index.js",
+      "types": "./lib/sdk-gen/box/index.d.ts"
     },
     "./sdk-gen/internal": {
-      "import": "./lib-esm/internal/index.js",
-      "require": "./lib/internal/index.js",
-      "types": "./lib/internal/index.d.ts"
+      "import": "./lib-esm/sdk-gen/internal/index.js",
+      "require": "./lib/sdk-gen/internal/index.js",
+      "types": "./lib/sdk-gen/internal/index.d.ts"
     },
     "./sdk-gen/managers": {
-      "import": "./lib-esm/managers/index.js",
-      "require": "./lib/managers/index.js",
-      "types": "./lib/managers/index.d.ts"
+      "import": "./lib-esm/sdk-gen/managers/index.js",
+      "require": "./lib/sdk-gen/managers/index.js",
+      "types": "./lib/sdk-gen/managers/index.d.ts"
     },
     "./sdk-gen/networking": {
-      "import": "./lib-esm/networking/index.js",
-      "require": "./lib/networking/index.js",
-      "types": "./lib/networking/index.d.ts"
+      "import": "./lib-esm/sdk-gen/networking/index.js",
+      "require": "./lib/sdk-gen/networking/index.js",
+      "types": "./lib/sdk-gen/networking/index.d.ts"
     },
     "./sdk-gen/parameters": {
-      "import": "./lib-esm/parameters/index.js",
-      "require": "./lib/parameters/index.js",
-      "types": "./lib/parameters/index.d.ts"
+      "import": "./lib-esm/sdk-gen/parameters/index.js",
+      "require": "./lib/sdk-gen/parameters/index.js",
+      "types": "./lib/sdk-gen/parameters/index.d.ts"
     },
     "./sdk-gen/schemas": {
-      "import": "./lib-esm/schemas/index.js",
-      "require": "./lib/schemas/index.js",
-      "types": "./lib/schemas/index.d.ts"
+      "import": "./lib-esm/sdk-gen/schemas/index.js",
+      "require": "./lib/sdk-gen/schemas/index.js",
+      "types": "./lib/sdk-gen/schemas/index.d.ts"
     },
     "./sdk-gen/serialization": {
-      "import": "./lib-esm/serialization/index.js",
-      "require": "./lib/serialization/index.js",
-      "types": "./lib/serialization/index.d.ts"
+      "import": "./lib-esm/sdk-gen/serialization/index.js",
+      "require": "./lib/sdk-gen/serialization/index.js",
+      "types": "./lib/sdk-gen/serialization/index.d.ts"
     }
   },
   "scripts": {
