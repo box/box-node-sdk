@@ -63,6 +63,7 @@ The codebase for v4 of the Box Node SDK is currently available in the [combined-
 Migration guide for migrating from manually written SDK to generated SDK can be found [here](./migration-guides/from-box-node-sdk-to-sdk-gen.md).
 
 Version v4 is intended for:
+
 - Existing developers of the Box Node SDK v3 who want to access new API features while keeping their current codebase largely unchanged.
 - Existing developers who are in the process of migrating to `sdk-gen` module, but do not want to move all their code to the new module immediately.
 
@@ -72,23 +73,24 @@ Starting from v10, the SDK is built entirely on the generated `sdk-gen` module, 
 The codebase for v10 of the Box Node SDK is currently available in the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
 
 Version v10 is intended for:
+
 - New users of the Box Node SDK.
 - Developers already working with the generated Box TypeScript SDK previously available under the [Box TypeScript SDK Gen repository](https://github.com/box/box-typescript-sdk-gen).
 
 ## Which Version Should I Use?
 
-| Scenario                                                                                                       | Recommended Version                                                | Example Dependency                |
-|----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|-----------------------------------|
-| Creating a new application                                                                                     | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)        | `npm install box-node-sdk@10`     |
-| Existing app using [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Migrate to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-node-sdk@10`      |
-| Existing app using both [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) and [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk)                             | `npm install box-node-sdk@^4`                               |
-| Existing app using v3 of [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) artifact         | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk)                                       | `npm install box-node-sdk@^4` |
+| Scenario                                                                                                                                                              | Recommended Version                                                    | Example Dependency            |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------- |
+| Creating a new application                                                                                                                                            | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)            | `npm install box-node-sdk@10` |
+| Existing app using [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                                                            | Migrate to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)     | `npm install box-node-sdk@10` |
+| Existing app using both [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) and [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk) | `npm install box-node-sdk@^4` |
+| Existing app using v3 of [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) artifact                                                                          | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk) | `npm install box-node-sdk@^4` |
 
 For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://developer.box.com/guides/tooling/sdks/sdk-versioning/).
 
 ## Deprecation of the manually written SDK
 
-The  manual module of `box-node-sdk` will be marked as deprecated, will receive only bug fixes and security patches, 
+The manual module of `box-node-sdk` will be marked as deprecated, will receive only bug fixes and security patches,
 and reach end of support in 2027.
 
 All new features and functionality will be provided exclusively in the `sdk-gen` module.
@@ -107,7 +109,7 @@ Supported Node versions are 18 and above.
 
 # Getting Started
 
-To get started with the SDK, get a Developer Token from the Configuration page of your app in the [Box Developer Console](https://app.box.com/developers/console). 
+To get started with the SDK, get a Developer Token from the Configuration page of your app in the [Box Developer Console](https://app.box.com/developers/console).
 Developer Tokens are short-lived and expire after 60 minutes, which is good for testing but not for production use.
 To learn about other authentication methods, see the [Authentication](#authentication) section below.
 
@@ -126,7 +128,7 @@ async function main(token) {
   let auth = new BoxDeveloperTokenAuth({ token });
   let client = new BoxClient({ auth });
   let entries = (await client.folders.getFolderItems('0')).entries;
-  entries.forEach(entry => console.log(entry.name));
+  entries.forEach((entry) => console.log(entry.name));
 }
 
 main('INSERT YOUR DEVELOPER TOKEN HERE');
@@ -138,16 +140,19 @@ From version v4, we are adding support for ESM modules, and keeping support for 
 For each class in the package are exported as a default export, and you can import them using the following syntax:
 
 Using `import` syntax:
+
 ```js
 import BoxSDK from 'box-node-sdk';
 ```
 
 Using `require` syntax:
+
 ```js
 const BoxSDK = require('box-node-sdk').default;
 ```
 
 Then, you can use the SDK to make API calls. For example:
+
 ```js
 // Initialize the SDK with your app credentials
 var sdk = new BoxSDK({
@@ -173,6 +178,7 @@ Both the manual and `sdk-gen` modules support multiple authentication methods, i
 Developer Token, OAuth 2.0, Client Credentials Grant, and JSON Web Token (JWT).
 
 You can find detailed instructions and example code for each authentication method in the following documentation:
+
 - [Authentication for the `sdk-gen` module](./docs/sdk-gen/authentication.md)
 - [Authentication for the manual SDK](./docs/authentication.md)
 
@@ -192,7 +198,7 @@ const newFolderItems = await newClient.folders.getFolderItems('0');
 // Using the manual legacy SDK (deprecated)
 const legacySdk = new BoxSDK({ clientID: 'id', clientSecret: 'secret' });
 const manualClient = legacySdk.getBasicClient('DEVELOPER_TOKEN');
-const manualFolderItems = await manualClient.folders.getItems('0')
+const manualFolderItems = await manualClient.folders.getItems('0');
 
 // Both clients can be used in the same application
 ```
@@ -200,6 +206,7 @@ const manualFolderItems = await manualClient.folders.getItems('0')
 # Documentation
 
 Full documentation of the available functionality, along with example code can be found:
+
 - for the `sdk-gen` module in the [sdk-gen](./docs/sdk-gen/) directory.
 - for the manual SDK in the [manual](./docs/) directory.
 
@@ -214,16 +221,16 @@ We use a modified version of [Semantic Versioning](https://semver.org/) for all 
 Currently, we support versions v10 and v4 of the SDK. New features and functionality are added to v10, while the manually written portion of v4 receives bug fixes and security updates only.
 
 A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  
-Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often). 
-At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to allow customers to plan for the upgrade. 
+Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often).
+At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to allow customers to plan for the upgrade.
 
-We always recommend that all users run the latest available minor release for whatever major version is in use. 
+We always recommend that all users run the latest available minor release for whatever major version is in use.
 We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
 
 ## Version schedule
 
 | Version | Supported Environments  | State      | First Release | EOL/Terminated         |
-| ------- | ----------------------- | ---------- | ------------- |------------------------|
+| ------- | ----------------------- | ---------- | ------------- | ---------------------- |
 | 10      | Node.js >= 18           | Supported  | 17 Sep 2025   | TBD                    |
 | 4       | Node.js >= 18           | Supported  | 23 Oct 2025   | 2027 or v5 is released |
 | 3       | Node.js >= 14 and <= 20 | Supported  | 23 May 2023   | 23 Oct 2025            |

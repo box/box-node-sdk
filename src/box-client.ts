@@ -242,9 +242,9 @@ class BoxClient {
     // Runtime deprecation warning
     process.emitWarning(
       'DEPRECATION WARNING: This BoxClient class and the entire manual/legacy SDK package is deprecated and will be removed in the future version. ' +
-      'Please use the new BoxClient from "box-node-sdk/sdk-gen/client" instead. '
+        'Please use the new BoxClient from "box-node-sdk/sdk-gen/client" instead. '
     );
-    
+
     // the API Session used by the client for authentication
     this._session = apiSession;
 
