@@ -72,6 +72,7 @@ export * from './ai';
 export * from './aiStudio';
 export * from './docgenTemplate';
 export * from './docgen';
+export * from './enterpriseConfigurations';
 export * from './hubs';
 export * from './hubCollaborations';
 export * from './hubItems';
