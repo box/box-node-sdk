@@ -33,11 +33,18 @@
   "exports": {
     ".": {
       "import": "./lib-esm/box-node-sdk.js",
-      "require": "./lib/box-node-sdk.js"
+      "require": "./lib/box-node-sdk.js",
+      "types": "./lib/box-node-sdk.d.ts"
     },
     "./*": {
       "import": "./lib-esm/*.js",
-      "require": "./lib/*.js"
+      "require": "./lib/*.js",
+      "types": "./lib/*.d.ts"
+    },
+    "./lib/*": {
+      "import": "./lib-esm/*.js",
+      "require": "./lib/*.js",
+      "types": "./lib/*.d.ts"
     },
     "./managers/*": {
       "import": "./lib-esm/managers/*.js",
