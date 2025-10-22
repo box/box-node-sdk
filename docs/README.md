@@ -22,6 +22,7 @@ the SDK are available by topic:
 - [Docgen template](docgenTemplate.md)
 - [Downloads](downloads.md)
 - [Email aliases](emailAliases.md)
+- [Enterprise configurations](enterpriseConfigurations.md)
 - [Events](events.md)
 - [External users](externalUsers.md)
 - [File classifications](fileClassifications.md)
