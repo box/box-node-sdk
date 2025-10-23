@@ -59,7 +59,7 @@ The `sdk-gen` module is available in two major supported versions: v4 and v10.
 In v4 of the Box Node SDK, we are introducing a version that consolidates both the manually written package (legacy SDK) and the generated SDK (currently in v10, formerly known as [box-typescript-sdk-gen](https://github.com/box/box-typescript-sdk-gen)) into a single SDK package for improved usability and maintenance. This allows developers to use both modules within a single project.
 
 The codebase for v4 of the Box Node SDK is currently available in the [combined-sdk](https://github.com/box/box-node-sdk/tree/combined-sdk) branch.
-Migration guide for migrating from manually written SDK to generated SDK can be found [here](./migration-guides/from-box-node-sdk-to-sdk-gen.md).
+Migration guide for migrating from manually written SDK to generated SDK can be found [here](https://github.com/box/box-node-sdk/tree/sdk-gen/migration-guides/from-box-node-sdk-to-sdk-gen.md).
 
 Version v4 is intended for:
 
