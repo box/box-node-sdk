@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/box/box-node-sdk/compare/v3.8.2...v4.0.0) (2025-10-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* Drop support Node 14, 16 and adding support Node 22, 24 (#897)
+
+### Bug Fixes
+
+* Allow flexible key-value data in `AiExtractResponse.answer` and `Event.additionalDetails` (box/box-openapi[#556](https://github.com/box/box-node-sdk/issues/556)) ([#1061](https://github.com/box/box-node-sdk/issues/1061)) ([aac6881](https://github.com/box/box-node-sdk/commit/aac6881c035f6f1a39f1bd1bc95470f31d62ca00))
+* **boxsdkgen:** Make  parameter of update collaboration optional (box/box-openapi[#557](https://github.com/box/box-node-sdk/issues/557)) ([#1103](https://github.com/box/box-node-sdk/issues/1103)) ([9b4482c](https://github.com/box/box-node-sdk/commit/9b4482c21ba12f38c784098ff94c5bacd2026c15)), closes [box/box-codegen#856](https://github.com/box/box-codegen/issues/856)
+* Relax JSON deserialization guard by removing strict `content-type` check (box/box-codegen[#844](https://github.com/box/box-node-sdk/issues/844)) ([#1039](https://github.com/box/box-node-sdk/issues/1039)) ([d572950](https://github.com/box/box-node-sdk/commit/d572950edef1c057204f63a81f098d06286975ee))
+* update the exports path in `package.json` ([#1122](https://github.com/box/box-node-sdk/issues/1122)) ([3d7a6ad](https://github.com/box/box-node-sdk/commit/3d7a6add95afe5274f73a317d1a0d2e1007c1e81))
+
+
+* Drop support Node 14, 16 and adding support Node 22, 24 ([#897](https://github.com/box/box-node-sdk/issues/897)) ([610153e](https://github.com/box/box-node-sdk/commit/610153e9a198cd3633f14fc3029d04c69032d6e2))
+
+
+### New Features and Enhancements
+
+* Support import syntax in legacy SDK ([#1042](https://github.com/box/box-node-sdk/issues/1042)) ([979e451](https://github.com/box/box-node-sdk/commit/979e451a89402def31014c6ea09dded7bbf82367))
+
 ### [3.8.2](https://github.com/box/box-node-sdk/compare/v3.8.1...v3.8.2) (2025-07-29)
 
 
