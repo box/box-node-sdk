@@ -167,7 +167,7 @@ This SDK works in modern browsers that support ES6+ features. It seamlessly inte
 
 # Versioning
 
-We use a modified version of [Semantic Versioning](https://semver.org/) for all changes. See [version strategy](https://github.com/box/box-node-sdk/blob/sdk-gen/VERSION.md) for details which is effective from 30 July 2022.
+We use a modified version of [Semantic Versioning](https://semver.org/) for all changes. See [version strategy](https://github.com/box/box-node-sdk/blob/sdk-gen/VERSIONS.md) for details which is effective from 30 July 2022.
 
 Currently, we support versions v10 and v4 of the SDK. New features and functionality are added to v10, while the manually written portion of v4 receives bug fixes and security updates only.
 
