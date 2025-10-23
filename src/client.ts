@@ -76,6 +76,7 @@ import { AiManager } from './managers/ai';
 import { AiStudioManager } from './managers/aiStudio';
 import { DocgenTemplateManager } from './managers/docgenTemplate';
 import { DocgenManager } from './managers/docgen';
+import { EnterpriseConfigurationsManager } from './managers/enterpriseConfigurations';
 import { HubsManager } from './managers/hubs';
 import { HubCollaborationsManager } from './managers/hubCollaborations';
 import { HubItemsManager } from './managers/hubItems';
@@ -177,6 +178,7 @@ export class BoxClient {
   readonly aiStudio: AiStudioManager;
   readonly docgenTemplate: DocgenTemplateManager;
   readonly docgen: DocgenManager;
+  readonly enterpriseConfigurations: EnterpriseConfigurationsManager;
   readonly hubs: HubsManager;
   readonly hubCollaborations: HubCollaborationsManager;
   readonly hubItems: HubItemsManager;
@@ -260,6 +262,7 @@ export class BoxClient {
       | 'aiStudio'
       | 'docgenTemplate'
       | 'docgen'
+      | 'enterpriseConfigurations'
       | 'hubs'
       | 'hubCollaborations'
       | 'hubItems'
@@ -583,6 +586,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.docgen = new DocgenManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.enterpriseConfigurations = new EnterpriseConfigurationsManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });
