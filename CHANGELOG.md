@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/box/box-node-sdk/compare/v3.8.2...v4.0.0) (2025-10-23)
+
+Introducing a new major version of Box Node SDK `v4` that includes two modules — the manually maintained module and the generated module. The coexisting modules provide easier access to the latest Box API features and support gradual migration to the standalone generated module.
+
+### Breaking Changes
+
+- With `v4` of Box Node SDK, support for Node version below 18 has been dropped. While it may still be possible to download and use this SDK under Node below 18, we do not provide support for issues encountered on that version.
+
+- We have updated the module export style in the manually maintained `box-node-sdk` module to support the ES module and be more consistent with the generated `sdk-gen` module. Classes in the manual SDK are now exported as default exports from their respective files. When importing via CommonJS (`require`), use `.default` to access the class (e.g., `const BoxSDK = require('box-node-sdk').default;`).
+
+For more information about migrating to v4 visit [v3 to v4 migration guide](https://github.com/box/box-node-sdk/blob/combined-sdk/migration-guides/from-v3-to-v4.md)
+
+### What's New in `v4`
+
+With this SDK version, alongside the existing manually maintained module, we’re introducing a new generated `sdk-gen` module under `box-node-sdk/sdk-gen` import path, which gives you access to:
+
+- **Full API Support** — Complete coverage of the Box API ecosystem, giving you access to all the latest features and functionalities to build feature-rich applications.  
+
+- **Rapid API Updates** — Our new auto-generation approach enables Box API additions within days, ensuring you can leverage the most up-to-date features without delay.  
+
+- **Embedded Documentation** — All objects and parameters are documented directly in the SDK source code, keeping essential information in one place.  
+
+- **Enhanced Convenience Methods** — New methods for authentication, chunk uploads, automatic retries, retry strategy, and more.
+
+### Important Notes
+
+This version allows you to gradually migrate your codebase to the `sdk-gen` module. The key differences between the modules are documented in the [module migration guide](https://github.com/box/box-node-sdk/blob/combined-sdk/migration-guides/from-box-node-sdk-to-sdk-gen.md).
+
+Ultimately, we recommend to migrate to `v10` which includes only the generated `sdk-gen` module. To migrate from `v4` to `v10` follow this [migration guide](https://github.com/box/box-node-sdk/blob/combined-sdk/migration-guides/from-v4-to-v10.md). 
+
+For more information, see the [SDK versioning strategy document](https://developer.box.com/guides/tooling/sdks/sdk-versioning/). Follow developer changelog for future updates.
+
 ### [3.8.2](https://github.com/box/box-node-sdk/compare/v3.8.1...v3.8.2) (2025-07-29)
 
 
