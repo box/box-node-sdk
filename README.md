@@ -233,8 +233,8 @@ We highly recommend upgrading to the latest SDK major release at the earliest co
 | ------- | ----------------------- | ---------- | ------------- | ---------------------- |
 | 10      | Node.js >= 18           | Supported  | 17 Sep 2025   | TBD                    |
 | 4       | Node.js >= 18           | Supported  | 23 Oct 2025   | 2027 or v5 is released |
-| 3       | Node.js >= 14 and <= 20 | Supported  | 23 May 2023   | 23 Oct 2025            |
-| 2       | Node.js >= 8 and <= 14  | Maintained | 29 Sep 2021   | 23 Jul 2023            |
+| 3       | Node.js >= 14 and <= 20 | EOL        | 23 May 2023   | 23 Oct 2025            |
+| 2       | Node.js >= 8 and <= 14  | EOL        | 29 Sep 2021   | 23 Jul 2023            |
 | 1       |                         | EOL        | 28 Mar 2019   | 29 Sep 2021            |
 
 # Contributing
