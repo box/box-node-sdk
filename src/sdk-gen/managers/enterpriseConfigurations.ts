@@ -55,9 +55,9 @@ export interface GetEnterpriseConfigurationByIdV2025R0OptionalsInput {
 }
 export interface GetEnterpriseConfigurationByIdV2025R0QueryParams {
   /**
-   * The comma-delimited list of the enterprise configuration categories.
+   * A comma-separated list of the enterprise configuration categories.
    * Allowed values: `security`, `content_and_sharing`, `user_settings`, `shield`. */
-  readonly categories: string;
+  readonly categories: readonly string[];
 }
 export class GetEnterpriseConfigurationByIdV2025R0Headers {
   /**
@@ -141,7 +141,9 @@ export class EnterpriseConfigurationsManager {
     const queryParamsMap: {
       readonly [key: string]: string;
     } = prepareParams({
-      ['categories']: toString(queryParams.categories) as string,
+      ['categories']: queryParams.categories
+        ? queryParams.categories.map(toString).join(',')
+        : undefined,
     });
     const headersMap: {
       readonly [key: string]: string;
