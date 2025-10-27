@@ -80,7 +80,9 @@ export class BoxRetryStrategy implements RetryStrategy {
     const isSuccessful: boolean =
       fetchResponse.status >= 200 && fetchResponse.status < 400;
     const retryAfterHeader: undefined | string =
-      fetchResponse.headers['Retry-After'];
+      'Retry-After' in fetchResponse.headers
+        ? fetchResponse.headers['Retry-After']
+        : void 0;
     const isAcceptedWithRetryAfter: boolean =
       fetchResponse.status == 202 && !(retryAfterHeader == void 0);
     if (attemptNumber >= this.maxAttempts) {
