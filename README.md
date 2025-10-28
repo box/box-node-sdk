@@ -1,29 +1,8 @@
 <p align="center">
   <img src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" alt= “box-dev-logo” width="30%" height="50%">
 </p>
-# Versioning Strategy
 
-Starting with v10 of the SDK, we’ve introduced a new generated codebase designed to enhance your experience with the Box API.  
-It is currently available on the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
-
-v10 is targeted at new users of Box Node SDK and users already working with the generated Box Typescript SDK previously available under the [Box Typescript SDK Gen repository](https://github.com/box/box-typescript-sdk-gen).
-
-For users of v3 of the Box Node SDK, no action is required at this time — we’ll be providing an upcoming v4 release that will include code from both versions for a smooth migration path. To avoid unintentional upgrades, pin your version to `box-node-sdk: ^3.8.2` in your `package.json`.
-
-For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://developer.box.com/guides/tooling/sdks/sdk-versioning/).
-
----
-
-## Which Version Should I Use?
-
-| Scenario                                                                                                       | Recommended Version                                                | Example Dependency                |
-| -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------- |
-| Creating a new application                                                                                     | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)        | `npm install box-node-sdk@10`     |
-| Existing app using [box-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                | Upgrade to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen) | `npm install box-node-sdk@10`     |
-| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and planning to use new features | Wait for v4 to start migration process                             | TBD                               |
-| Existing app using [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) and not planning changes         | Stay on your current version                                       | `npm install box-node-sdk@^3.8.2` |
-
-# Box Node SDK
+# Box Node SDK v10
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 ![build](https://github.com/box/box-node-sdk/actions/workflows/build_and_test.yml/badge.svg)
@@ -32,9 +11,35 @@ For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://
 ![Platform](https://img.shields.io/badge/node-18--22-blue)
 [![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=sdk-gen)](https://coveralls.io/github/box/box-node-sdk?branch=sdk-gen)
 
-We are excited to introduce the stable release of the latest generation of Box Node SDK, designed to elevate the developer experience and streamline your integration with the Box Content Cloud.
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-With this SDK, you’ll have access to:
+- [Introduction](#introduction)
+- [Supported versions](#supported-versions)
+  - [Version v4](#version-v4)
+  - [Version v10](#version-v10)
+  - [Which Version Should I Use?](#which-version-should-i-use)
+- [Installing](#installing)
+- [Getting Started](#getting-started)
+- [Authentication](#authentication)
+- [Documentation](#documentation)
+- [Migration guides](#migration-guides)
+- [Browser Support](#browser-support)
+- [Versioning](#versioning)
+  - [Version schedule](#version-schedule)
+- [Contributing](#contributing)
+- [FIPS 140-2 Compliance](#fips-140-2-compliance)
+- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
+- [Copyright and License](#copyright-and-license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Introduction
+
+We are excited to introduce the v10 major release of the Box Node SDK,
+designed to elevate the developer experience and streamline your integration with the Box Content Cloud.
+
+With this SDK version, you’ll have access to:
 
 1. Full API Support: The new generation of Box SDKs empowers developers with complete coverage of the Box API ecosystem. You can now access all the latest features and functionalities offered by Box, allowing you to build even more sophisticated and feature-rich applications.
 2. Rapid API Updates: Say goodbye to waiting for new Box APIs to be incorporated into the SDK. With our new auto-generation development approach, we can now add new Box APIs to the SDK at a much faster pace (in a matter of days). This means you can leverage the most up-to-date features in your applications without delay.
@@ -44,26 +49,43 @@ With this SDK, you’ll have access to:
 
 Embrace the new generation of Box SDKs and unlock the full potential of the Box Content Cloud.
 
-# Table of contents
+# Supported versions
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+To enhance developer experience, we have introduced the new generated codebase through the `sdk-gen` module.
+The `sdk-gen` module is available in two major supported versions: v4 and v10.
 
-- [Box Node SDK](#box-node-sdk)
-- [Table of contents](#table-of-contents)
-- [Installing](#installing)
-- [Getting Started](#getting-started)
-- [Documentation](#documentation)
-- [Browser Support](#browser-support)
-- [Upgrades](#upgrades)
-- [Integration Tests](#integration-tests)
-  - [Running integration tests locally](#running-integration-tests-locally)
-    - [Create Platform Application](#create-platform-application)
-    - [Export configuration](#export-configuration)
-- [Questions, Bugs, and Feature Requests?](#questions-bugs-and-feature-requests)
-- [Copyright and License](#copyright-and-license)
+## Version v4
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+In v4 of the Box Node SDK, we are introducing a version that consolidates both the manually written package (legacy SDK) and the generated SDK (currently in v10, formerly known as [box-typescript-sdk-gen](https://github.com/box/box-typescript-sdk-gen)) into a single SDK package for improved usability and maintenance. This allows developers to use both modules within a single project.
+
+The codebase for v4 of the Box Node SDK is currently available in the [combined-sdk](https://github.com/box/box-node-sdk/tree/combined-sdk) branch.
+Migration guide for migrating from manually written SDK to generated SDK can be found [here](./migration-guides/from-box-node-sdk-to-sdk-gen.md).
+
+Version v4 is intended for:
+
+- Existing developers of the Box Node SDK v3 who want to access new API features while keeping their current codebase largely unchanged.
+- Existing developers who are in the process of migrating to `sdk-gen` module, but do not want to move all their code to the new module immediately.
+
+## Version v10
+
+Starting from v10, the SDK is built entirely on the generated `sdk-gen` module, which fully and exclusively replaces the old `boxsdk` module.
+The codebase for v10 of the Box Node SDK is currently available in the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
+
+Version v10 is intended for:
+
+- New users of the Box Node SDK.
+- Developers already working with the generated Box TypeScript SDK previously available under the [Box TypeScript SDK Gen repository](https://github.com/box/box-typescript-sdk-gen).
+
+## Which Version Should I Use?
+
+| Scenario                                                                                                                                                              | Recommended Version                                                    | Example Dependency            |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------- |
+| Creating a new application                                                                                                                                            | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)            | `npm install box-node-sdk@10` |
+| Existing app using [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                                                            | Migrate to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)     | `npm install box-node-sdk@10` |
+| Existing app using both [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) and [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk) | `npm install box-node-sdk@^4` |
+| Existing app using v3 of [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) artifact                                                                          | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk) | `npm install box-node-sdk@^4` |
+
+For full guidance on SDK versioning, see the [Box SDK Versioning Guide](https://developer.box.com/guides/tooling/sdks/sdk-versioning/).
 
 # Installing
 
@@ -121,9 +143,21 @@ To run the example locally:
 4. Provide a fresh Developer Token to the dialog window that shows up upon running the example.
 5. Make sure that you get an alert message that includes your user name.
 
+# Authentication
+
+Box Node SDK v10 supports multiple authentication methods including Developer Token, OAuth 2.0,
+Client Credentials Grant, and JSON Web Token (JWT).
+
+You can find detailed instructions and example code for each authentication method in
+[Authentication](./docs/authentication.md) document.
+
 # Documentation
 
 Browse the [docs](docs/README.md) or see [API Reference](https://developer.box.com/reference/) for more information.
+
+# Migration guides
+
+Migration guides which help you to migrate to supported major SDK versions can be found [here](./migration-guides).
 
 # Browser Support
 
@@ -131,49 +165,51 @@ This SDK works in modern browsers that support ES6+ features. It seamlessly inte
 
 - [React Sample App](https://github.com/box-community/box-ts-sdk-react)
 
-# Upgrades
+# Versioning
 
-Upgrading from our legacy SDKs to the new generation SDKs is a straightforward process. See our [migration guide](migration-guide.md) and [changelog](CHANGELOG.md) for more information.
+We use a modified version of [Semantic Versioning](https://semver.org/) for all changes. See [version strategy](VERSIONS.md) for details which is effective from 30 July 2022.
 
-# Integration Tests
+Currently, we support versions v10 and v4 of the SDK. New features and functionality are added to v10, while the manually written portion of v4 receives bug fixes and security updates only.
 
-## Running integration tests locally
+A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  
+Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often).
+At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to allow customers to plan for the upgrade.
 
-### Create Platform Application
+We always recommend that all users run the latest available minor release for whatever major version is in use.
+We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
 
-To run integration tests locally you will need a `Custom App` created in the [Box Developer
-Console](https://app.box.com/developers/console) with `Server Authentication (with JWT)` selected as authentication method.
-Once created you can edit properties of the application:
+## Version schedule
 
-- In section `App Access Level` select `App + Enterprise Access`. You can enable all `Application Scopes`.
-- In section `Advanced Features` enable `Make API calls using the as-user header` and `Generate user access tokens`.
+| Version | Supported Environments  | State     | First Release | EOL/Terminated         |
+| ------- | ----------------------- | --------- | ------------- | ---------------------- |
+| 10      | Node.js >= 18           | Supported | 17 Sep 2025   | TBD                    |
+| 4       | Node.js >= 18           | Supported | 23 Oct 2025   | 2027 or v5 is released |
+| 3       | Node.js >= 14 and <= 20 | EOL       | 23 May 2023   | 23 Oct 2025            |
+| 2       | Node.js >= 8 and <= 14  | EOL       | 29 Sep 2021   | 23 Jul 2023            |
+| 1       |                         | EOL       | 28 Mar 2019   | 29 Sep 2021            |
 
-Now select `Authorization` and submit application to be reviewed by account admin.
+# Contributing
 
-### Export configuration
+For information on how to contribute to this project, please see [the Contribution guidelines](./CONTRIBUTING.md).
 
-1. Select `Configuration` tab and in the bottom in the section `App Settings`
-   download your app configuration settings as JSON.
-2. Encode configuration file to Base64, e.g. using command: `base64 -i path_to_json_file`
-3. Set environment variable: `JWT_CONFIG_BASE_64` with base64 encoded jwt configuration file
-4. Set environment variable: `BOX_FILE_REQUEST_ID` with ID of file request already created in the user account, `BOX_EXTERNAL_USER_EMAIL` with email of free external user which not belongs to any enterprise and `BOX_EXTERNAL_USER_ID` with its ID.
-5. Set environment variable: `WORKFLOW_FOLDER_ID` with the ID of the Relay workflow that deletes the file that triggered the workflow. The workflow should have a manual start to be able to start it from the API.
-6. Set environment variable: `APP_ITEM_ASSOCIATION_FILE_ID` to the ID of the file with associated app item and `APP_ITEM_ASSOCIATION_FOLDER_ID` to the ID of the folder with associated app item.
-7. Set environment variable: `APP_ITEM_SHARED_LINK` to the shared link associated with app item.
-8. Set environment variable: `SLACK_AUTOMATION_USER_ID` to the ID of the user responsible for the Slack automation, `SLACK_ORG_ID` to the ID of the Slack organization and `SLACK_PARTNER_ITEM_ID` to the ID of the Slack partner item.
+# FIPS 140-2 Compliance
+
+The Box Node SDK allows the use of FIPS 140-2 validated SSL libraries, such as OpenSSL 3.0.
+However, some actions are required to enable this functionality.
+
+By default, the version of OpenSSL Node.js includes is not FIPS enabled. Therefore, if you want to use OpenSSL 3.0 with FIPS, you need to [build OpenSSL 3.0 with FIPS enabled](https://github.com/openssl/openssl/blob/master/README-FIPS.md) and then build Node.js use the shared OpenSSL 3.0 library.
+
+According to [Node.js OpenSSL Strategy](https://github.com/nodejs/TSC/blob/main/OpenSSL-Strategy.md) document, you can use the OpenSSL 3.0 from Node.js v16 or later.
 
 # Questions, Bugs, and Feature Requests?
 
-Need to contact us directly? [Browse the issues
-tickets](https://github.com/box/box-node-sdk/issues)! Or, if that
-doesn't work, [file a new
-one](https://github.com/box/box-node-sdk/issues/new) and we will get
-back to you. If you have general questions about the Box API, you can
-post to the [Box Developer Forum](https://forum.box.com/).
+Need to contact us directly? [Browse the issues tickets](https://github.com/box/box-node-sdk/issues)! Or, if that
+doesn't work, [file a new one](https://github.com/box/box-node-sdk/issues/new) and we will get
+back to you. If you have general questions about the Box API, you can post to the [Box Developer Forum](https://community.box.com/box-platform-5).
 
 # Copyright and License
 
-Copyright 2023 Box, Inc. All rights reserved.
+Copyright 2025 Box, Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
