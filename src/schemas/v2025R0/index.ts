@@ -2,7 +2,6 @@ export * from './archiveV2025R0';
 export * from './archivesV2025R0';
 export * from './clientErrorV2025R0';
 export * from './collaborationPermissionsV2025R0';
-export * from './collaborationRestrictionV2025R0';
 export * from './customSessionDurationGroupItemV2025R0';
 export * from './docGenBatchBaseV2025R0';
 export * from './docGenDocumentGenerationDataV2025R0';
