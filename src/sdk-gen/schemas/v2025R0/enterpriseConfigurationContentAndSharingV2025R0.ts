@@ -10,8 +10,6 @@ import { serializeEnterpriseConfigurationItemBooleanV2025R0 } from './enterprise
 import { deserializeEnterpriseConfigurationItemBooleanV2025R0 } from './enterpriseConfigurationItemBooleanV2025R0';
 import { serializeCollaborationPermissionsV2025R0 } from './collaborationPermissionsV2025R0';
 import { deserializeCollaborationPermissionsV2025R0 } from './collaborationPermissionsV2025R0';
-import { serializeCollaborationRestrictionV2025R0 } from './collaborationRestrictionV2025R0';
-import { deserializeCollaborationRestrictionV2025R0 } from './collaborationRestrictionV2025R0';
 import { serializeListUserV2025R0 } from './listUserV2025R0';
 import { deserializeListUserV2025R0 } from './listUserV2025R0';
 import { serializeEnterpriseConfigurationItemIntegerV2025R0 } from './enterpriseConfigurationItemIntegerV2025R0';
@@ -22,7 +20,6 @@ import { EnterpriseConfigurationItemV2025R0 } from './enterpriseConfigurationIte
 import { SharedLinkPermissionsV2025R0 } from './sharedLinkPermissionsV2025R0';
 import { EnterpriseConfigurationItemBooleanV2025R0 } from './enterpriseConfigurationItemBooleanV2025R0';
 import { CollaborationPermissionsV2025R0 } from './collaborationPermissionsV2025R0';
-import { CollaborationRestrictionV2025R0 } from './collaborationRestrictionV2025R0';
 import { ListUserV2025R0 } from './listUserV2025R0';
 import { EnterpriseConfigurationItemIntegerV2025R0 } from './enterpriseConfigurationItemIntegerV2025R0';
 import { BoxSdkError } from '../../box/errors';
@@ -43,18 +40,13 @@ export type EnterpriseConfigurationContentAndSharingV2025R0CollaborationPermissi
   };
 export type EnterpriseConfigurationContentAndSharingV2025R0CollaborationRestrictionsField =
   EnterpriseConfigurationItemV2025R0 & {
-    readonly value?: readonly CollaborationRestrictionV2025R0[];
+    readonly value?: readonly string[];
   };
-export type EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField =
-
-    | 'enable_external_collaboration'
-    | 'limit_collaboration_to_allowlisted_domains'
-    | string;
 export type EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusField =
   EnterpriseConfigurationItemV2025R0 & {
     /**
      * The external collaboration status. */
-    readonly value?: EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField | null;
+    readonly value?: string | null;
   };
 export type EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationAllowlistUsersField =
   EnterpriseConfigurationItemV2025R0 & {
@@ -224,10 +216,8 @@ export function serializeEnterpriseConfigurationContentAndSharingV2025R0Collabor
       ['value']:
         val.value == void 0
           ? val.value
-          : (val.value.map(function (
-              item: CollaborationRestrictionV2025R0
-            ): SerializedData {
-              return serializeCollaborationRestrictionV2025R0(item);
+          : (val.value.map(function (item: string): SerializedData {
+              return item;
             }) as readonly any[]),
     },
   };
@@ -247,14 +237,18 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0Collab
         'Expecting array for "value" of type "EnterpriseConfigurationContentAndSharingV2025R0CollaborationRestrictionsField"',
     });
   }
-  const value: undefined | readonly CollaborationRestrictionV2025R0[] =
+  const value: undefined | readonly string[] =
     val.value == void 0
       ? void 0
       : sdIsList(val.value)
-        ? (val.value.map(function (
-            itm: SerializedData
-          ): CollaborationRestrictionV2025R0 {
-            return deserializeCollaborationRestrictionV2025R0(itm);
+        ? (val.value.map(function (itm: SerializedData): string {
+            if (!sdIsString(itm)) {
+              throw new BoxSdkError({
+                message:
+                  'Expecting string for "EnterpriseConfigurationContentAndSharingV2025R0CollaborationRestrictionsField"',
+              });
+            }
+            return itm;
           }) as readonly any[])
         : [];
   if (!(val.is_used == void 0) && !sdIsBoolean(val.is_used)) {
@@ -270,28 +264,6 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0Collab
     isUsed: isUsed,
   } satisfies EnterpriseConfigurationContentAndSharingV2025R0CollaborationRestrictionsField;
 }
-export function serializeEnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField(
-  val: EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField
-): SerializedData {
-  return val;
-}
-export function deserializeEnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField(
-  val: SerializedData
-): EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField {
-  if (val == 'enable_external_collaboration') {
-    return val;
-  }
-  if (val == 'limit_collaboration_to_allowlisted_domains') {
-    return val;
-  }
-  if (sdIsString(val)) {
-    return val;
-  }
-  throw new BoxSdkError({
-    message:
-      "Can't deserialize EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField",
-  });
-}
 export function serializeEnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusField(
   val: EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusField
 ): SerializedData {
@@ -302,17 +274,7 @@ export function serializeEnterpriseConfigurationContentAndSharingV2025R0External
         'Expecting a map for "EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusField"',
     });
   }
-  return {
-    ...base,
-    ...{
-      ['value']:
-        val.value == void 0
-          ? val.value
-          : serializeEnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField(
-              val.value
-            ),
-    },
-  };
+  return { ...base, ...{ ['value']: val.value } };
 }
 export function deserializeEnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusField(
   val: SerializedData
@@ -323,14 +285,13 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0Extern
         'Expecting a map for "EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusField"',
     });
   }
-  const value:
-    | undefined
-    | EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField =
-    val.value == void 0
-      ? void 0
-      : deserializeEnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusFieldValueField(
-          val.value
-        );
+  if (!(val.value == void 0) && !sdIsString(val.value)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "value" of type "EnterpriseConfigurationContentAndSharingV2025R0ExternalCollaborationStatusField"',
+    });
+  }
+  const value: undefined | string = val.value == void 0 ? void 0 : val.value;
   if (!(val.is_used == void 0) && !sdIsBoolean(val.is_used)) {
     throw new BoxSdkError({
       message:
