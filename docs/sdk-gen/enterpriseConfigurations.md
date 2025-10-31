@@ -12,7 +12,10 @@ This operation is performed by calling function `getEnterpriseConfigurationByIdV
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2025.0/get-enterprise-configurations-id/).
 
-*Currently we don't have an example for calling `getEnterpriseConfigurationByIdV2025R0` in integration tests*
+<!-- sample get_enterprise_configurations_id_v2025.0 -->
+```ts
+await adminClient.enterpriseConfigurations.getEnterpriseConfigurationByIdV2025R0(enterpriseId, { categories: ["user_settings", "content_and_sharing", "security", "shield"] } satisfies GetEnterpriseConfigurationByIdV2025R0QueryParams)
+```
 
 ### Arguments
 
