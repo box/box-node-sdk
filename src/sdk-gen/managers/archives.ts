@@ -78,6 +78,40 @@ export interface DeleteArchiveByIdV2025R0OptionalsInput {
   readonly headers?: DeleteArchiveByIdV2025R0Headers;
   readonly cancellationToken?: undefined | CancellationToken;
 }
+export class UpdateArchiveByIdV2025R0Optionals {
+  readonly requestBody: UpdateArchiveByIdV2025R0RequestBody =
+    {} satisfies UpdateArchiveByIdV2025R0RequestBody;
+  readonly headers: UpdateArchiveByIdV2025R0Headers =
+    new UpdateArchiveByIdV2025R0Headers({});
+  readonly cancellationToken?: CancellationToken = void 0;
+  constructor(
+    fields: Omit<
+      UpdateArchiveByIdV2025R0Optionals,
+      'requestBody' | 'headers' | 'cancellationToken'
+    > &
+      Partial<
+        Pick<
+          UpdateArchiveByIdV2025R0Optionals,
+          'requestBody' | 'headers' | 'cancellationToken'
+        >
+      >
+  ) {
+    if (fields.requestBody !== undefined) {
+      this.requestBody = fields.requestBody;
+    }
+    if (fields.headers !== undefined) {
+      this.headers = fields.headers;
+    }
+    if (fields.cancellationToken !== undefined) {
+      this.cancellationToken = fields.cancellationToken;
+    }
+  }
+}
+export interface UpdateArchiveByIdV2025R0OptionalsInput {
+  readonly requestBody?: UpdateArchiveByIdV2025R0RequestBody;
+  readonly headers?: UpdateArchiveByIdV2025R0Headers;
+  readonly cancellationToken?: undefined | CancellationToken;
+}
 export interface GetArchivesV2025R0QueryParams {
   /**
    * The maximum number of items to return per page. */
@@ -125,6 +159,12 @@ export interface CreateArchiveV2025R0RequestBody {
   /**
    * The name of the archive. */
   readonly name: string;
+  /**
+   * The description of the archive. */
+  readonly description?: string;
+  /**
+   * The ID of the storage policy that the archive is assigned to. */
+  readonly storagePolicyId?: string;
   readonly rawData?: SerializedData;
 }
 export class CreateArchiveV2025R0Headers {
@@ -200,6 +240,54 @@ export interface DeleteArchiveByIdV2025R0HeadersInput {
         readonly [key: string]: undefined | string;
       };
 }
+export interface UpdateArchiveByIdV2025R0RequestBody {
+  /**
+   * The name of the archive. */
+  readonly name?: string;
+  /**
+   * The description of the archive. */
+  readonly description?: string;
+  readonly rawData?: SerializedData;
+}
+export class UpdateArchiveByIdV2025R0Headers {
+  /**
+   * Version header. */
+  readonly boxVersion: BoxVersionHeaderV2025R0 =
+    '2025.0' as BoxVersionHeaderV2025R0;
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<
+      UpdateArchiveByIdV2025R0Headers,
+      'boxVersion' | 'extraHeaders'
+    > &
+      Partial<
+        Pick<UpdateArchiveByIdV2025R0Headers, 'boxVersion' | 'extraHeaders'>
+      >
+  ) {
+    if (fields.boxVersion !== undefined) {
+      this.boxVersion = fields.boxVersion;
+    }
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface UpdateArchiveByIdV2025R0HeadersInput {
+  /**
+   * Version header. */
+  readonly boxVersion?: BoxVersionHeaderV2025R0;
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?:
+    | undefined
+    | {
+        readonly [key: string]: undefined | string;
+      };
+}
 export class ArchivesManager {
   readonly auth?: Authentication;
   readonly networkSession: NetworkSession = new NetworkSession({});
@@ -210,6 +298,7 @@ export class ArchivesManager {
       | 'getArchivesV2025R0'
       | 'createArchiveV2025R0'
       | 'deleteArchiveByIdV2025R0'
+      | 'updateArchiveByIdV2025R0'
     > &
       Partial<Pick<ArchivesManager, 'networkSession'>>
   ) {
@@ -364,6 +453,57 @@ export class ArchivesManager {
       );
     return void 0;
   }
+  /**
+     * Updates an archive.
+     *
+     * To learn more about the archive APIs, see the [Archive API Guide](g://archives).
+     * @param {string} archiveId The ID of the archive.
+    Example: "982312"
+     * @param {UpdateArchiveByIdV2025R0OptionalsInput} optionalsInput
+     * @returns {Promise<ArchiveV2025R0>}
+     */
+  async updateArchiveByIdV2025R0(
+    archiveId: string,
+    optionalsInput: UpdateArchiveByIdV2025R0OptionalsInput = {}
+  ): Promise<ArchiveV2025R0> {
+    const optionals: UpdateArchiveByIdV2025R0Optionals =
+      new UpdateArchiveByIdV2025R0Optionals({
+        requestBody: optionalsInput.requestBody,
+        headers: optionalsInput.headers,
+        cancellationToken: optionalsInput.cancellationToken,
+      });
+    const requestBody: any = optionals.requestBody;
+    const headers: any = optionals.headers;
+    const cancellationToken: any = optionals.cancellationToken;
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({
+      ...{ ['box-version']: toString(headers.boxVersion) as string },
+      ...headers.extraHeaders,
+    });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            this.networkSession.baseUrls.baseUrl,
+            '/2.0/archives/',
+            toString(archiveId) as string
+          ) as string,
+          method: 'PUT',
+          headers: headersMap,
+          data: serializeUpdateArchiveByIdV2025R0RequestBody(requestBody),
+          contentType: 'application/json',
+          responseFormat: 'json' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        })
+      );
+    return {
+      ...deserializeArchiveV2025R0(response.data!),
+      rawData: response.data!,
+    };
+  }
 }
 export interface ArchivesManagerInput {
   readonly auth?: Authentication;
@@ -372,7 +512,11 @@ export interface ArchivesManagerInput {
 export function serializeCreateArchiveV2025R0RequestBody(
   val: CreateArchiveV2025R0RequestBody
 ): SerializedData {
-  return { ['name']: val.name };
+  return {
+    ['name']: val.name,
+    ['description']: val.description,
+    ['storage_policy_id']: val.storagePolicyId,
+  };
 }
 export function deserializeCreateArchiveV2025R0RequestBody(
   val: SerializedData
@@ -395,5 +539,61 @@ export function deserializeCreateArchiveV2025R0RequestBody(
     });
   }
   const name: string = val.name;
-  return { name: name } satisfies CreateArchiveV2025R0RequestBody;
+  if (!(val.description == void 0) && !sdIsString(val.description)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "description" of type "CreateArchiveV2025R0RequestBody"',
+    });
+  }
+  const description: undefined | string =
+    val.description == void 0 ? void 0 : val.description;
+  if (
+    !(val.storage_policy_id == void 0) &&
+    !sdIsString(val.storage_policy_id)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "storage_policy_id" of type "CreateArchiveV2025R0RequestBody"',
+    });
+  }
+  const storagePolicyId: undefined | string =
+    val.storage_policy_id == void 0 ? void 0 : val.storage_policy_id;
+  return {
+    name: name,
+    description: description,
+    storagePolicyId: storagePolicyId,
+  } satisfies CreateArchiveV2025R0RequestBody;
+}
+export function serializeUpdateArchiveByIdV2025R0RequestBody(
+  val: UpdateArchiveByIdV2025R0RequestBody
+): SerializedData {
+  return { ['name']: val.name, ['description']: val.description };
+}
+export function deserializeUpdateArchiveByIdV2025R0RequestBody(
+  val: SerializedData
+): UpdateArchiveByIdV2025R0RequestBody {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "UpdateArchiveByIdV2025R0RequestBody"',
+    });
+  }
+  if (!(val.name == void 0) && !sdIsString(val.name)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "name" of type "UpdateArchiveByIdV2025R0RequestBody"',
+    });
+  }
+  const name: undefined | string = val.name == void 0 ? void 0 : val.name;
+  if (!(val.description == void 0) && !sdIsString(val.description)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "description" of type "UpdateArchiveByIdV2025R0RequestBody"',
+    });
+  }
+  const description: undefined | string =
+    val.description == void 0 ? void 0 : val.description;
+  return {
+    name: name,
+    description: description,
+  } satisfies UpdateArchiveByIdV2025R0RequestBody;
 }
