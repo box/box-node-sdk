@@ -55,6 +55,7 @@ See the endpoint docs at
 ```ts
 await client.archives.createArchiveV2025R0({
   name: archiveName,
+  description: archiveDescription,
 } satisfies CreateArchiveV2025R0RequestBody);
 ```
 
@@ -110,7 +111,16 @@ This operation is performed by calling function `updateArchiveByIdV2025R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2025.0/put-archives-id/).
 
-_Currently we don't have an example for calling `updateArchiveByIdV2025R0` in integration tests_
+<!-- sample put_archives_id_v2025.0 -->
+
+```ts
+await client.archives.updateArchiveByIdV2025R0(archive.id, {
+  requestBody: {
+    name: newArchiveName,
+    description: newArchiveDescription,
+  } satisfies UpdateArchiveByIdV2025R0RequestBody,
+} satisfies UpdateArchiveByIdV2025R0OptionalsInput);
+```
 
 ### Arguments
 
