@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/box/box-node-sdk/compare/v4.0.0...v4.1.0) (2025-11-07)
+
+
+### Bug Fixes
+
+* **boxsdkgen:** Fix error handling in TS (box/box-codegen[#882](https://github.com/box/box-node-sdk/issues/882)) ([#1182](https://github.com/box/box-node-sdk/issues/1182)) ([c6c0f50](https://github.com/box/box-node-sdk/commit/c6c0f50e15058bfb3632649135a47624cefbc6aa))
+* **boxsdkgen:** Remove enum types from GET enterprise configurations endpoint (box/box-openapi[#560](https://github.com/box/box-node-sdk/issues/560)) ([#1154](https://github.com/box/box-node-sdk/issues/1154)) ([5fd824b](https://github.com/box/box-node-sdk/commit/5fd824b9757c5250f5dc9b6e02578a43dbb129fe)), closes [box/box-codegen#869](https://github.com/box/box-codegen/issues/869) [box/box-openapi#559](https://github.com/box/box-openapi/issues/559) [box/box-codegen#872](https://github.com/box/box-codegen/issues/872)
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** Add GET enterprise configuration endpoint (box/box-openapi[#559](https://github.com/box/box-node-sdk/issues/559)) ([#1149](https://github.com/box/box-node-sdk/issues/1149)) ([55ffde1](https://github.com/box/box-node-sdk/commit/55ffde14b60682628f8229cd4856d23a2be3babf))
+* **boxsdkgen:** add update Archive API (box/box-openapi[#563](https://github.com/box/box-node-sdk/issues/563)) ([#1172](https://github.com/box/box-node-sdk/issues/1172)) ([fbe3d0f](https://github.com/box/box-node-sdk/commit/fbe3d0fcd2a15487ac17a93c9189e7cc70b2bba1))
+
 ## [4.0.0](https://github.com/box/box-node-sdk/compare/v3.8.2...v4.0.0) (2025-10-23)
 
 Introducing a new major version of Box Node SDK `v4` that includes two modules — the manually maintained module and the generated module. The coexisting modules provide easier access to the latest Box API features and support gradual migration to the standalone generated module.
