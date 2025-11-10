@@ -178,8 +178,9 @@ export class BoxNetworkClient implements NetworkClient {
       : void 0;
 
     let isExceptionCase: boolean = false;
-    let fetchResponse: FetchResponse;
+    let fetchResponse: FetchResponse | undefined;
     let responseBytesBuffer;
+    let caughtError: Error | undefined;
     const { params = {} } = fetchOptions;
 
     const requestInit = await createRequestInit({
@@ -243,10 +244,8 @@ export class BoxNetworkClient implements NetworkClient {
     } catch (error) {
       isExceptionCase = true;
       numberOfRetriesOnException++;
-      fetchResponse = {
-        status: 0,
-        headers: {},
-      };
+      caughtError = error instanceof Error ? error : new Error(String(error));
+      fetchResponse = fetchResponse ?? { status: 0, headers: {} };
     }
     const attemptForRetry = isExceptionCase
       ? numberOfRetriesOnException
@@ -316,6 +315,14 @@ export class BoxNetworkClient implements NetworkClient {
           sdToJson(fetchResponse.data['message']),
         ]
       : [];
+
+    if (fetchResponse.status === 0) {
+      throw new BoxSdkError({
+        message: `Unexpected Error occurred`,
+        timestamp: `${Date.now()}`,
+        error: caughtError,
+      });
+    }
 
     throw new BoxApiError({
       message: `${fetchResponse.status} ${message}; Request ID: ${requestId}`,
