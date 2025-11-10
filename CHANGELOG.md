@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.1.0](https://github.com/box/box-node-sdk/compare/v10.0.1...v10.1.0) (2025-11-10)
+
+
+### Bug Fixes
+
+* Fix error handling in TS (box/box-codegen[#882](https://github.com/box/box-node-sdk/issues/882)) ([#1180](https://github.com/box/box-node-sdk/issues/1180)) ([2b68145](https://github.com/box/box-node-sdk/commit/2b68145d9d8e46e26d08b8bc774ba757ef3b444f))
+* Fix error propagation and empty fetch response handling in node SDK (box/box-codegen[#883](https://github.com/box/box-node-sdk/issues/883)) ([#1192](https://github.com/box/box-node-sdk/issues/1192)) ([5664231](https://github.com/box/box-node-sdk/commit/56642319c5b77ab0113ed4e1af5df30100449fcd))
+* Remove enum types from GET enterprise configurations endpoint (box/box-openapi[#560](https://github.com/box/box-node-sdk/issues/560)) ([#1155](https://github.com/box/box-node-sdk/issues/1155)) ([3ba01aa](https://github.com/box/box-node-sdk/commit/3ba01aaac7861ce3f0578af65d838f61b78b7dcb)), closes [box/box-openapi#558](https://github.com/box/box-openapi/issues/558) [box/box-openapi#558](https://github.com/box/box-openapi/issues/558) [box/box-openapi#559](https://github.com/box/box-openapi/issues/559) [box/box-codegen#869](https://github.com/box/box-codegen/issues/869) [box/box-codegen#871](https://github.com/box/box-codegen/issues/871) [box/box-codegen#872](https://github.com/box/box-codegen/issues/872)
+
+
+### New Features and Enhancements
+
+* Add GET enterprise configuration endpoint (box/box-openapi[#559](https://github.com/box/box-node-sdk/issues/559)) ([#1143](https://github.com/box/box-node-sdk/issues/1143)) ([5eeeb4f](https://github.com/box/box-node-sdk/commit/5eeeb4fe7d0fff376cb31b820597e63d71dd0b69))
+* support delete Archive endpoint (box/box-openapi[#563](https://github.com/box/box-node-sdk/issues/563)) ([#1173](https://github.com/box/box-node-sdk/issues/1173)) ([7dc774d](https://github.com/box/box-node-sdk/commit/7dc774d8764a3a0b3f60525e416ed5345d4a71b1))
+
 ### [10.0.1](https://github.com/box/box-node-sdk/compare/v10.0.0...v10.0.1) (2025-10-06)
 
 
