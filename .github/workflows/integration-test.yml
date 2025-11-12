@@ -9,7 +9,7 @@ on:
 
 permissions:
   contents: read
-  
+
 jobs:
   tests:
     name: Integration tests
