@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.1](https://github.com/box/box-node-sdk/compare/v4.1.0...v4.1.1) (2025-11-12)
+
+
+### Bug Fixes
+
+* **boxsdkgen:** Fix error propagation and empty fetch response handling in node SDK (box/box-codegen[#883](https://github.com/box/box-node-sdk/issues/883)) ([#1196](https://github.com/box/box-node-sdk/issues/1196)) ([9615a34](https://github.com/box/box-node-sdk/commit/9615a3480686eb8af9374691a2ec1de82688eaa1))
+
 ## [4.1.0](https://github.com/box/box-node-sdk/compare/v4.0.0...v4.1.0) (2025-11-07)
 
 
