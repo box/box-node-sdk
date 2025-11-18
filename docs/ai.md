@@ -20,15 +20,15 @@ See the endpoint docs at
 ```ts
 await client.ai.createAiAsk({
   mode: 'single_item_qa' as AiAskModeField,
-  prompt: 'which direction sun rises',
+  prompt: 'Which direction does the Sun rise?',
   items: [
     {
       id: fileToAsk.id,
       type: 'file' as AiItemAskTypeField,
-      content: 'Sun rises in the East',
+      content: 'The Sun rises in the east',
     } satisfies AiItemAsk,
   ],
-  aiAgent: aiAskAgentConfig,
+  aiAgent: aiAskAgentBasicTextConfig,
 } satisfies AiAsk);
 ```
 
@@ -57,28 +57,27 @@ See the endpoint docs at
 
 ```ts
 await client.ai.createAiTextGen({
-  prompt: 'Parapharse the document.s',
+  prompt: 'Paraphrase the documents',
   items: [
     new AiTextGenItemsField({
       id: fileToAsk.id,
       type: 'file' as AiTextGenItemsTypeField,
       content:
-        'The Earth goes around the sun. Sun rises in the East in the morning.',
+        'The Earth goes around the Sun. The Sun rises in the east in the morning.',
     }),
   ],
   dialogueHistory: [
     {
       prompt: 'What does the earth go around?',
-      answer: 'The sun',
+      answer: 'The Sun',
       createdAt: dateTimeFromString('2021-01-01T00:00:00Z'),
     } satisfies AiDialogueHistory,
     {
-      prompt: 'On Earth, where does the sun rise?',
-      answer: 'East',
+      prompt: 'On Earth, where does the Sun rise?',
+      answer: 'east',
       createdAt: dateTimeFromString('2021-01-01T00:00:00Z'),
     } satisfies AiDialogueHistory,
   ],
-  aiAgent: aiTextGenAgentConfig,
 } satisfies AiTextGen);
 ```
 
@@ -148,7 +147,7 @@ See the endpoint docs at
 await client.ai.createAiExtract({
   prompt: 'firstName, lastName, location, yearOfBirth, company',
   items: [new AiItemBase({ id: file.id })],
-  aiAgent: agentIgnoringOverridingEmbeddingsModel,
+  aiAgent: aiExtractAgentBasicTextConfig,
 } satisfies AiExtract);
 ```
 
@@ -226,7 +225,7 @@ await client.ai.createAiExtractStructured({
     } satisfies AiExtractStructuredFieldsField,
   ],
   items: [new AiItemBase({ id: file.id })],
-  aiAgent: agentIgnoringOverridingEmbeddingsModel,
+  aiAgent: aiExtractStructuredAgentBasicTextConfig,
 } satisfies AiExtractStructured);
 ```
 

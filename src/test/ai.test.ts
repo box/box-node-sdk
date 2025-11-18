@@ -64,8 +64,6 @@ import { serializeAiAgentExtract } from '@/schemas/aiAgentExtract';
 import { deserializeAiAgentExtract } from '@/schemas/aiAgentExtract';
 import { serializeAiAgentExtractStructured } from '@/schemas/aiAgentExtractStructured';
 import { deserializeAiAgentExtractStructured } from '@/schemas/aiAgentExtractStructured';
-import { serializeAiAgentLongTextTool } from '@/schemas/aiAgentLongTextTool';
-import { deserializeAiAgentLongTextTool } from '@/schemas/aiAgentLongTextTool';
 import { BoxClient } from '@/client';
 import { AiAgent } from '@/schemas/aiAgent';
 import { GetAiAgentDefaultConfigQueryParams } from '@/managers/ai';
@@ -102,16 +100,12 @@ import { getDefaultClient } from './commons';
 import { getUuid } from '@/internal/utils';
 import { stringToByteStream } from '@/internal/utils';
 import { delayInSeconds } from '@/internal/utils';
-import { generateByteStream } from '@/internal/utils';
 import { dateTimeFromString } from '@/internal/utils';
-import { dateTimeToString } from '@/internal/utils';
-import { getValueFromObjectRawData } from '@/internal/utils';
 import { uploadNewFile } from './commons';
 import { AiAgentAsk } from '@/schemas/aiAgentAsk';
 import { AiAgentTextGen } from '@/schemas/aiAgentTextGen';
 import { AiAgentExtract } from '@/schemas/aiAgentExtract';
 import { AiAgentExtractStructured } from '@/schemas/aiAgentExtractStructured';
-import { AiAgentLongTextTool } from '@/schemas/aiAgentLongTextTool';
 import { toString } from '@/internal/utils';
 import { sdToJson } from '@/serialization/json';
 import { SerializedData } from '@/serialization/json';
@@ -128,20 +122,23 @@ test('testAskAISingleItem', async function testAskAISingleItem(): Promise<any> {
     language: 'en-US',
   } satisfies GetAiAgentDefaultConfigQueryParams);
   const aiAskAgentConfig: AiAgentAsk = aiAgentConfig as AiAgentAsk;
+  const aiAskAgentBasicTextConfig: AiAgentAsk = new AiAgentAsk({
+    basicText: aiAskAgentConfig.basicText,
+  });
   const fileToAsk: FileFull = await uploadNewFile();
   const response: undefined | AiResponseFull = await client.ai.createAiAsk({
     mode: 'single_item_qa' as AiAskModeField,
-    prompt: 'which direction sun rises',
+    prompt: 'Which direction does the Sun rise?',
     items: [
       {
         id: fileToAsk.id,
         type: 'file' as AiItemAskTypeField,
-        content: 'Sun rises in the East',
+        content: 'The Sun rises in the east',
       } satisfies AiItemAsk,
     ],
-    aiAgent: aiAskAgentConfig,
+    aiAgent: aiAskAgentBasicTextConfig,
   } satisfies AiAsk);
-  if (!(response!.answer.includes('East') as boolean)) {
+  if (!(response!.answer.includes('east') as boolean)) {
     throw new Error('Assertion failed');
   }
   if (!(response!.completionReason == 'done')) {
@@ -154,21 +151,21 @@ test('testAskAIMultipleItems', async function testAskAIMultipleItems(): Promise<
   const fileToAsk2: FileFull = await uploadNewFile();
   const response: undefined | AiResponseFull = await client.ai.createAiAsk({
     mode: 'multiple_item_qa' as AiAskModeField,
-    prompt: 'Which direction sun rises?',
+    prompt: 'Which direction does the Sun rise?',
     items: [
       {
         id: fileToAsk1.id,
         type: 'file' as AiItemAskTypeField,
-        content: 'Earth goes around the sun',
+        content: 'Earth goes around the Sun',
       } satisfies AiItemAsk,
       {
         id: fileToAsk2.id,
         type: 'file' as AiItemAskTypeField,
-        content: 'Sun rises in the East in the morning',
+        content: 'The Sun rises in the east in the morning',
       } satisfies AiItemAsk,
     ],
   } satisfies AiAsk);
-  if (!(response!.answer.includes('East') as boolean)) {
+  if (!(response!.answer.includes('east') as boolean)) {
     throw new Error('Assertion failed');
   }
   if (!(response!.completionReason == 'done')) {
@@ -179,36 +176,30 @@ test('testAskAIMultipleItems', async function testAskAIMultipleItems(): Promise<
 });
 test('testAITextGenWithDialogueHistory', async function testAITextGenWithDialogueHistory(): Promise<any> {
   const fileToAsk: FileFull = await uploadNewFile();
-  const aiAgentConfig: AiAgent = await client.ai.getAiAgentDefaultConfig({
-    mode: 'text_gen' as GetAiAgentDefaultConfigQueryParamsModeField,
-    language: 'en-US',
-  } satisfies GetAiAgentDefaultConfigQueryParams);
-  const aiTextGenAgentConfig: AiAgentTextGen = aiAgentConfig as AiAgentTextGen;
   const response: AiResponse = await client.ai.createAiTextGen({
-    prompt: 'Parapharse the document.s',
+    prompt: 'Paraphrase the documents',
     items: [
       new AiTextGenItemsField({
         id: fileToAsk.id,
         type: 'file' as AiTextGenItemsTypeField,
         content:
-          'The Earth goes around the sun. Sun rises in the East in the morning.',
+          'The Earth goes around the Sun. The Sun rises in the east in the morning.',
       }),
     ],
     dialogueHistory: [
       {
         prompt: 'What does the earth go around?',
-        answer: 'The sun',
+        answer: 'The Sun',
         createdAt: dateTimeFromString('2021-01-01T00:00:00Z'),
       } satisfies AiDialogueHistory,
       {
-        prompt: 'On Earth, where does the sun rise?',
-        answer: 'East',
+        prompt: 'On Earth, where does the Sun rise?',
+        answer: 'east',
         createdAt: dateTimeFromString('2021-01-01T00:00:00Z'),
       } satisfies AiDialogueHistory,
     ],
-    aiAgent: aiTextGenAgentConfig,
   } satisfies AiTextGen);
-  if (!(response.answer.includes('sun') as boolean)) {
+  if (!(response.answer.includes('Sun') as boolean)) {
     throw new Error('Assertion failed');
   }
   if (!(response.completionReason == 'done')) {
@@ -323,19 +314,9 @@ test('testAIExtract', async function testAIExtract(): Promise<any> {
     language: 'en-US',
   } satisfies GetAiAgentDefaultConfigQueryParams);
   const aiExtractAgentConfig: AiAgentExtract = aiAgentConfig as AiAgentExtract;
-  const longTextConfigWithNoEmbeddings: AiAgentLongTextTool = {
-    systemMessage: aiExtractAgentConfig.longText!.systemMessage,
-    promptTemplate: aiExtractAgentConfig.longText!.promptTemplate,
-    model: aiExtractAgentConfig.longText!.model,
-    numTokensForCompletion:
-      aiExtractAgentConfig.longText!.numTokensForCompletion,
-    llmEndpointParams: aiExtractAgentConfig.longText!.llmEndpointParams,
-  } satisfies AiAgentLongTextTool;
-  const agentIgnoringOverridingEmbeddingsModel: AiAgentExtract =
-    new AiAgentExtract({
-      basicText: aiExtractAgentConfig.basicText,
-      longText: longTextConfigWithNoEmbeddings,
-    });
+  const aiExtractAgentBasicTextConfig: AiAgentExtract = new AiAgentExtract({
+    basicText: aiExtractAgentConfig.basicText,
+  });
   const uploadedFiles: Files = await client.uploads.uploadFile({
     attributes: {
       name: ''.concat(getUuid(), '.txt') as string,
@@ -350,7 +331,7 @@ test('testAIExtract', async function testAIExtract(): Promise<any> {
   const response: AiResponse = await client.ai.createAiExtract({
     prompt: 'firstName, lastName, location, yearOfBirth, company',
     items: [new AiItemBase({ id: file.id })],
-    aiAgent: agentIgnoringOverridingEmbeddingsModel,
+    aiAgent: aiExtractAgentBasicTextConfig,
   } satisfies AiExtract);
   const expectedResponse: string =
     '{"firstName": "John", "lastName": "Doe", "location": "San Francisco", "yearOfBirth": "1990", "company": "Box"}';
@@ -369,19 +350,9 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
   } satisfies GetAiAgentDefaultConfigQueryParams);
   const aiExtractStructuredAgentConfig: AiAgentExtractStructured =
     aiAgentConfig as AiAgentExtractStructured;
-  const longTextConfigWithNoEmbeddings: AiAgentLongTextTool = {
-    systemMessage: aiExtractStructuredAgentConfig.longText!.systemMessage,
-    promptTemplate: aiExtractStructuredAgentConfig.longText!.promptTemplate,
-    model: aiExtractStructuredAgentConfig.longText!.model,
-    numTokensForCompletion:
-      aiExtractStructuredAgentConfig.longText!.numTokensForCompletion,
-    llmEndpointParams:
-      aiExtractStructuredAgentConfig.longText!.llmEndpointParams,
-  } satisfies AiAgentLongTextTool;
-  const agentIgnoringOverridingEmbeddingsModel: AiAgentExtractStructured =
+  const aiExtractStructuredAgentBasicTextConfig: AiAgentExtractStructured =
     new AiAgentExtractStructured({
       basicText: aiExtractStructuredAgentConfig.basicText,
-      longText: longTextConfigWithNoEmbeddings,
     });
   const uploadedFiles: Files = await client.uploads.uploadFile({
     attributes: {
@@ -438,7 +409,7 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
         } satisfies AiExtractStructuredFieldsField,
       ],
       items: [new AiItemBase({ id: file.id })],
-      aiAgent: agentIgnoringOverridingEmbeddingsModel,
+      aiAgent: aiExtractStructuredAgentBasicTextConfig,
     } satisfies AiExtractStructured);
   if (
     !(
