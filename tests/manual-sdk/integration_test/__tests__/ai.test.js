@@ -39,12 +39,12 @@ test('test AI send ask', async () => {
   );
   const response = await context.client.ai.ask({
     mode: 'multiple_item_qa',
-    prompt: 'Which direction sun rises?',
+    prompt: 'Which direction does the Sun rise?',
     items: [
       {
         id: file.id,
         type: 'file',
-        content: 'The sun rises in the east',
+        content: 'The Sun rises in the east.',
       },
     ],
   });
