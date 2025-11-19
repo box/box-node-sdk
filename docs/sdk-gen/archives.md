@@ -4,6 +4,7 @@
 - [List archives](#list-archives)
 - [Create archive](#create-archive)
 - [Delete archive](#delete-archive)
+- [Update archive](#update-archive)
 
 ## List archives
 
@@ -51,7 +52,7 @@ See the endpoint docs at
 
 <!-- sample post_archives_v2025.0 -->
 ```ts
-await client.archives.createArchiveV2025R0({ name: archiveName } satisfies CreateArchiveV2025R0RequestBody)
+await client.archives.createArchiveV2025R0({ name: archiveName, description: archiveDescription } satisfies CreateArchiveV2025R0RequestBody)
 ```
 
 ### Arguments
@@ -98,5 +99,36 @@ await client.archives.deleteArchiveByIdV2025R0(archive.id)
 This function returns a value of type `undefined`.
 
 Returns an empty response when the archive has been deleted.
+
+
+## Update archive
+
+Updates an archive.
+
+To learn more about the archive APIs, see the [Archive API Guide](g://archives).
+
+This operation is performed by calling function `updateArchiveByIdV2025R0`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/v2025.0/put-archives-id/).
+
+<!-- sample put_archives_id_v2025.0 -->
+```ts
+await client.archives.updateArchiveByIdV2025R0(archive.id, { requestBody: { name: newArchiveName, description: newArchiveDescription } satisfies UpdateArchiveByIdV2025R0RequestBody } satisfies UpdateArchiveByIdV2025R0OptionalsInput)
+```
+
+### Arguments
+
+- archiveId `string`
+  - The ID of the archive. Example: "982312"
+- optionalsInput `UpdateArchiveByIdV2025R0OptionalsInput`
+  
+
+
+### Returns
+
+This function returns a value of type `ArchiveV2025R0`.
+
+Returns the updated archive object.
 
 

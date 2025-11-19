@@ -26,7 +26,7 @@ export function serializeHubItemReferenceV2025R0(val: any): SerializedData {
   if (val.type == 'folder') {
     return serializeFolderReferenceV2025R0(val);
   }
-  if (val.type == 'weblink') {
+  if (val.type == 'web_link') {
     return serializeWeblinkReferenceV2025R0(val);
   }
   throw new BoxSdkError({ message: 'unknown type' });
@@ -45,7 +45,7 @@ export function deserializeHubItemReferenceV2025R0(
   if (val.type == 'folder') {
     return deserializeFolderReferenceV2025R0(val);
   }
-  if (val.type == 'weblink') {
+  if (val.type == 'web_link') {
     return deserializeWeblinkReferenceV2025R0(val);
   }
   throw new BoxSdkError({

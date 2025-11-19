@@ -54,6 +54,8 @@ export class BoxApiError extends BoxSdkError {
   ) {
     super(fields);
     this.name = 'BoxApiError';
+    this.requestInfo = fields.requestInfo;
+    this.responseInfo = fields.responseInfo;
     if (fields.dataSanitizer) {
       this.dataSanitizer = fields.dataSanitizer;
     }

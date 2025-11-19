@@ -6,12 +6,12 @@ import { sdIsNumber } from '../../serialization/json';
 import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
-export type WeblinkReferenceV2025R0TypeField = 'weblink';
+export type WeblinkReferenceV2025R0TypeField = 'web_link';
 export class WeblinkReferenceV2025R0 {
   /**
-   * The value will always be `weblink`. */
+   * The value will always be `web_link`. */
   readonly type: WeblinkReferenceV2025R0TypeField =
-    'weblink' as WeblinkReferenceV2025R0TypeField;
+    'web_link' as WeblinkReferenceV2025R0TypeField;
   /**
    * ID of the web link. */
   readonly id!: string;
@@ -33,7 +33,7 @@ export class WeblinkReferenceV2025R0 {
 }
 export interface WeblinkReferenceV2025R0Input {
   /**
-   * The value will always be `weblink`. */
+   * The value will always be `web_link`. */
   readonly type?: WeblinkReferenceV2025R0TypeField;
   /**
    * ID of the web link. */
@@ -48,7 +48,7 @@ export function serializeWeblinkReferenceV2025R0TypeField(
 export function deserializeWeblinkReferenceV2025R0TypeField(
   val: SerializedData
 ): WeblinkReferenceV2025R0TypeField {
-  if (val == 'weblink') {
+  if (val == 'web_link') {
     return val;
   }
   throw new BoxSdkError({

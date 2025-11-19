@@ -18,7 +18,7 @@ See the endpoint docs at
 
 <!-- sample post_ai_ask -->
 ```ts
-await client.ai.createAiAsk({ mode: "single_item_qa" as AiAskModeField, prompt: "which direction sun rises", items: [{ id: fileToAsk.id, type: "file" as AiItemAskTypeField, content: "Sun rises in the East" } satisfies AiItemAsk], aiAgent: aiAskAgentConfig } satisfies AiAsk)
+await client.ai.createAiAsk({ mode: "single_item_qa" as AiAskModeField, prompt: "Which direction does the Sun rise?", items: [{ id: fileToAsk.id, type: "file" as AiItemAskTypeField, content: "The Sun rises in the east" } satisfies AiItemAsk], aiAgent: aiAskAgentBasicTextConfig } satisfies AiAsk)
 ```
 
 ### Arguments
@@ -47,7 +47,7 @@ See the endpoint docs at
 
 <!-- sample post_ai_text_gen -->
 ```ts
-await client.ai.createAiTextGen({ prompt: "Parapharse the document.s", items: [new AiTextGenItemsField({ id: fileToAsk.id, type: "file" as AiTextGenItemsTypeField, content: "The Earth goes around the sun. Sun rises in the East in the morning." })], dialogueHistory: [{ prompt: "What does the earth go around?", answer: "The sun", createdAt: dateTimeFromString("2021-01-01T00:00:00Z") } satisfies AiDialogueHistory, { prompt: "On Earth, where does the sun rise?", answer: "East", createdAt: dateTimeFromString("2021-01-01T00:00:00Z") } satisfies AiDialogueHistory], aiAgent: aiTextGenAgentConfig } satisfies AiTextGen)
+await client.ai.createAiTextGen({ prompt: "Paraphrase the documents", items: [new AiTextGenItemsField({ id: fileToAsk.id, type: "file" as AiTextGenItemsTypeField, content: "The Earth goes around the Sun. The Sun rises in the east in the morning." })], dialogueHistory: [{ prompt: "What does the earth go around?", answer: "The Sun", createdAt: dateTimeFromString("2021-01-01T00:00:00Z") } satisfies AiDialogueHistory, { prompt: "On Earth, where does the Sun rise?", answer: "east", createdAt: dateTimeFromString("2021-01-01T00:00:00Z") } satisfies AiDialogueHistory] } satisfies AiTextGen)
 ```
 
 ### Arguments
@@ -113,7 +113,7 @@ See the endpoint docs at
 
 <!-- sample post_ai_extract -->
 ```ts
-await client.ai.createAiExtract({ prompt: "firstName, lastName, location, yearOfBirth, company", items: [new AiItemBase({ id: file.id })], aiAgent: agentIgnoringOverridingEmbeddingsModel } satisfies AiExtract)
+await client.ai.createAiExtract({ prompt: "firstName, lastName, location, yearOfBirth, company", items: [new AiItemBase({ id: file.id })], aiAgent: aiExtractAgentBasicTextConfig } satisfies AiExtract)
 ```
 
 ### Arguments
@@ -134,10 +134,13 @@ A response including the answer from the LLM.
 ## Extract metadata (structured)
 
 Sends an AI request to supported Large Language Models (LLMs) and returns extracted metadata as a set of key-value pairs.
-For this request, you either need a metadata template or a list of fields you want to extract.
-Input is **either** a metadata template or a list of fields to ensure the structure.
-To learn more about creating templates, see [Creating metadata templates in the Admin Console](https://support.box.com/hc/en-us/articles/360044194033-Customizing-Metadata-Templates)
-or use the [metadata template API](g://metadata/templates/create). This endpoint also supports [Enhanced Extract Agent](g://box-ai/ai-tutorials/extract-metadata-structured/#enhanced-extract-agent).
+
+To define the extraction structure, provide either a metadata template or a list of fields. To learn more about creating templates, see [Creating metadata templates in the Admin Console](https://support.box.com/hc/en-us/articles/360044194033-Customizing-Metadata-Templates)
+or use the [metadata template API](g://metadata/templates/create). 
+
+This endpoint also supports [Enhanced Extract Agent](g://box-ai/ai-tutorials/extract-metadata-structured/#enhanced-extract-agent).
+
+For information about supported file formats and languages, see the [Extract metadata from file (structured)](g://box-ai/ai-tutorials/extract-metadata-structured) API guide.
 
 This operation is performed by calling function `createAiExtractStructured`.
 
@@ -146,7 +149,7 @@ See the endpoint docs at
 
 <!-- sample post_ai_extract_structured -->
 ```ts
-await client.ai.createAiExtractStructured({ fields: [{ key: "firstName", displayName: "First name", description: "Person first name", prompt: "What is the your first name?", type: "string" } satisfies AiExtractStructuredFieldsField, { key: "lastName", displayName: "Last name", description: "Person last name", prompt: "What is the your last name?", type: "string" } satisfies AiExtractStructuredFieldsField, { key: "dateOfBirth", displayName: "Birth date", description: "Person date of birth", prompt: "What is the date of your birth?", type: "date" } satisfies AiExtractStructuredFieldsField, { key: "age", displayName: "Age", description: "Person age", prompt: "How old are you?", type: "float" } satisfies AiExtractStructuredFieldsField, { key: "hobby", displayName: "Hobby", description: "Person hobby", prompt: "What is your hobby?", type: "multiSelect", options: [{ key: "guitar" } satisfies AiExtractStructuredFieldsOptionsField, { key: "books" } satisfies AiExtractStructuredFieldsOptionsField] } satisfies AiExtractStructuredFieldsField], items: [new AiItemBase({ id: file.id })], aiAgent: agentIgnoringOverridingEmbeddingsModel } satisfies AiExtractStructured)
+await client.ai.createAiExtractStructured({ fields: [{ key: "firstName", displayName: "First name", description: "Person first name", prompt: "What is the your first name?", type: "string" } satisfies AiExtractStructuredFieldsField, { key: "lastName", displayName: "Last name", description: "Person last name", prompt: "What is the your last name?", type: "string" } satisfies AiExtractStructuredFieldsField, { key: "dateOfBirth", displayName: "Birth date", description: "Person date of birth", prompt: "What is the date of your birth?", type: "date" } satisfies AiExtractStructuredFieldsField, { key: "age", displayName: "Age", description: "Person age", prompt: "How old are you?", type: "float" } satisfies AiExtractStructuredFieldsField, { key: "hobby", displayName: "Hobby", description: "Person hobby", prompt: "What is your hobby?", type: "multiSelect", options: [{ key: "guitar" } satisfies AiExtractStructuredFieldsOptionsField, { key: "books" } satisfies AiExtractStructuredFieldsOptionsField] } satisfies AiExtractStructuredFieldsField], items: [new AiItemBase({ id: file.id })], aiAgent: aiExtractStructuredAgentBasicTextConfig } satisfies AiExtractStructured)
 ```
 
 ### Arguments
