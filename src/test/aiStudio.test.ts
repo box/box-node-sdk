@@ -124,17 +124,17 @@ test('testUseAIAgentReferenceInAIAsk', async function testUseAIAgentReferenceInA
   const fileToAsk: FileFull = await uploadNewFile();
   const response: undefined | AiResponseFull = await client.ai.createAiAsk({
     mode: 'single_item_qa' as AiAskModeField,
-    prompt: 'which direction sun rises',
+    prompt: 'Which direction does the Sun rise?',
     items: [
       {
         id: fileToAsk.id,
         type: 'file' as AiItemAskTypeField,
-        content: 'Sun rises in the East',
+        content: 'The Sun rises in the east.',
       } satisfies AiItemAsk,
     ],
     aiAgent: new AiAgentReference({ id: createdAgent.id }),
   } satisfies AiAsk);
-  if (!(response!.answer.includes('East') as boolean)) {
+  if (!(response!.answer.includes('east') as boolean)) {
     throw new Error('Assertion failed');
   }
   if (!(response!.completionReason == 'done')) {
