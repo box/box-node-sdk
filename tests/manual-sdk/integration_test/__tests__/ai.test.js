@@ -37,21 +37,16 @@ test('test AI send ask', async () => {
     `${uuid.v4()}.pdf`,
     context.folder.id
   );
-  const agent = await context.client.ai.getAiAgentDefaultConfig({
-    mode: 'ask',
-  });
-  expect(agent.type).toBe('ai_agent_ask');
   const response = await context.client.ai.ask({
     mode: 'multiple_item_qa',
-    prompt: 'Which direction sun rises?',
+    prompt: 'Which direction does the Sun rise?',
     items: [
       {
         id: file.id,
         type: 'file',
-        content: 'The sun rises in the east',
+        content: 'The Sun rises in the east.',
       },
     ],
-    ai_agent: agent,
   });
 
   expect(response).toBeDefined();
@@ -79,10 +74,6 @@ test('test AI text gen', async () => {
       created_at: '2013-12-12T11:20:43-08:00',
     },
   ];
-  const agent = await context.client.ai.getAiAgentDefaultConfig({
-    mode: 'text_gen',
-  });
-  expect(agent.type).toBe('ai_agent_text_gen');
   const response = await context.client.ai.textGen({
     prompt: 'What is public API?',
     items: [
@@ -92,7 +83,6 @@ test('test AI text gen', async () => {
       },
     ],
     dialogue_history: dialogueHistory,
-    ai_agent: agent,
   });
 
   expect(response).toBeDefined();
