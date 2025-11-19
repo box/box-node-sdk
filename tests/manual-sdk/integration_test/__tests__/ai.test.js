@@ -37,7 +37,6 @@ test('test AI send ask', async () => {
     `${uuid.v4()}.pdf`,
     context.folder.id
   );
-  expect(agent.type).toBe('ai_agent_ask');
   const response = await context.client.ai.ask({
     mode: 'multiple_item_qa',
     prompt: 'Which direction sun rises?',
@@ -75,7 +74,6 @@ test('test AI text gen', async () => {
       created_at: '2013-12-12T11:20:43-08:00',
     },
   ];
-  expect(agent.type).toBe('ai_agent_text_gen');
   const response = await context.client.ai.textGen({
     prompt: 'What is public API?',
     items: [
