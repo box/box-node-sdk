@@ -9,7 +9,7 @@
 [![npm version](https://badge.fury.io/js/box-node-sdk.svg)](https://badge.fury.io/js/box-node-sdk)
 [![image](https://img.shields.io/npm/dm/box-node-sdk.svg)](https://badge.fury.io/js/box-node-sdk)
 ![Platform](https://img.shields.io/badge/node-18--22-blue)
-[![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=sdk-gen)](https://coveralls.io/github/box/box-node-sdk?branch=sdk-gen)
+[![Coverage](https://coveralls.io/repos/github/box/box-node-sdk/badge.svg?branch=main)](https://coveralls.io/github/box/box-node-sdk?branch=main)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -69,7 +69,7 @@ Version v4 is intended for:
 ## Version v10
 
 Starting from v10, the SDK is built entirely on the generated `sdk-gen` module, which fully and exclusively replaces the old `boxsdk` module.
-The codebase for v10 of the Box Node SDK is currently available in the [sdk-gen](https://github.com/box/box-node-sdk/tree/sdk-gen) branch.
+The codebase for v10 of the Box Node SDK is currently available in the [main](https://github.com/box/box-node-sdk/tree/main) branch.
 
 Version v10 is intended for:
 
@@ -80,8 +80,8 @@ Version v10 is intended for:
 
 | Scenario                                                                                                                                                              | Recommended Version                                                    | Example Dependency            |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------- |
-| Creating a new application                                                                                                                                            | Use [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)            | `npm install box-node-sdk@10` |
-| Existing app using [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                                                            | Migrate to [v10](https://github.com/box/box-node-sdk/tree/sdk-gen)     | `npm install box-node-sdk@10` |
+| Creating a new application                                                                                                                                            | Use [v10](https://github.com/box/box-node-sdk/tree/main)               | `npm install box-node-sdk@10` |
+| Existing app using [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) artifact                                                            | Migrate to [v10](https://github.com/box/box-node-sdk/tree/main)        | `npm install box-node-sdk@10` |
 | Existing app using both [box-typescript-sdk-gen](https://www.npmjs.com/package/box-typescript-sdk-gen) and [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk) | `npm install box-node-sdk@^4` |
 | Existing app using v3 of [box-node-sdk](https://www.npmjs.com/package/box-node-sdk) artifact                                                                          | Upgrade to [v4](https://github.com/box/box-node-sdk/tree/combined-sdk) | `npm install box-node-sdk@^4` |
 
