@@ -4,11 +4,14 @@ import { serializeSignRequestCreateSigner } from './signRequestCreateSigner';
 import { deserializeSignRequestCreateSigner } from './signRequestCreateSigner';
 import { serializeSignRequestSignerInput } from './signRequestSignerInput';
 import { deserializeSignRequestSignerInput } from './signRequestSignerInput';
+import { serializeSignRequestSignerAttachment } from './signRequestSignerAttachment';
+import { deserializeSignRequestSignerAttachment } from './signRequestSignerAttachment';
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
 import { SignRequestCreateSignerRoleField } from './signRequestCreateSigner';
 import { SignRequestCreateSigner } from './signRequestCreateSigner';
 import { SignRequestSignerInput } from './signRequestSignerInput';
+import { SignRequestSignerAttachment } from './signRequestSignerAttachment';
 import { BoxSdkError } from '../box/errors';
 import { DateTime } from '../internal/utils';
 import { SerializedData } from '../serialization/json';
@@ -50,6 +53,9 @@ export type SignRequestSigner = SignRequestCreateSigner & {
    * parameter was passed in the
    * `create Box Sign request` call. */
   readonly iframeableEmbedUrl?: string | null;
+  /**
+   * Attachments that the signer uploaded. */
+  readonly attachments?: readonly SignRequestSignerAttachment[] | null;
 };
 export function serializeSignRequestSignerSignerDecisionTypeField(
   val: SignRequestSignerSignerDecisionTypeField,
@@ -145,6 +151,14 @@ export function serializeSignRequestSigner(
             }) as readonly any[]),
       ['embed_url']: val.embedUrl,
       ['iframeable_embed_url']: val.iframeableEmbedUrl,
+      ['attachments']:
+        val.attachments == void 0
+          ? val.attachments
+          : (val.attachments.map(function (
+              item: SignRequestSignerAttachment,
+            ): SerializedData {
+              return serializeSignRequestSignerAttachment(item);
+            }) as readonly any[]),
     },
   };
 }
@@ -204,6 +218,21 @@ export function deserializeSignRequestSigner(
   }
   const iframeableEmbedUrl: undefined | string =
     val.iframeable_embed_url == void 0 ? void 0 : val.iframeable_embed_url;
+  if (!(val.attachments == void 0) && !sdIsList(val.attachments)) {
+    throw new BoxSdkError({
+      message: 'Expecting array for "attachments" of type "SignRequestSigner"',
+    });
+  }
+  const attachments: undefined | readonly SignRequestSignerAttachment[] =
+    val.attachments == void 0
+      ? void 0
+      : sdIsList(val.attachments)
+        ? (val.attachments.map(function (
+            itm: SerializedData,
+          ): SignRequestSignerAttachment {
+            return deserializeSignRequestSignerAttachment(itm);
+          }) as readonly any[])
+        : [];
   if (!(val.email == void 0) && !sdIsString(val.email)) {
     throw new BoxSdkError({
       message: 'Expecting string for "email" of type "SignRequestSigner"',
@@ -313,6 +342,7 @@ export function deserializeSignRequestSigner(
     inputs: inputs,
     embedUrl: embedUrl,
     iframeableEmbedUrl: iframeableEmbedUrl,
+    attachments: attachments,
     email: email,
     role: role,
     isInPerson: isInPerson,
