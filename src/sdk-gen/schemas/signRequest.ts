@@ -94,6 +94,15 @@ export type SignRequest = SignRequestBase & {
    * The collaborator level of the user to the sign request. Values can include "owner", "editor", and "viewer". */
   readonly collaboratorLevel?: string | null;
   /**
+   * Short identifier for the sign request. */
+  readonly shortId?: string;
+  /**
+   * Timestamp marking when the sign request was created. */
+  readonly createdAt?: DateTime;
+  /**
+   * Timestamp indicating when all signing actions completed. */
+  readonly finishedAt?: DateTime | null;
+  /**
    * The email address of the sender of the sign request. */
   readonly senderEmail?: string | null;
   /**
@@ -263,6 +272,15 @@ export function serializeSignRequest(val: SignRequest): SerializedData {
           ? val.parentFolder
           : serializeFolderMini(val.parentFolder),
       ['collaborator_level']: val.collaboratorLevel,
+      ['short_id']: val.shortId,
+      ['created_at']:
+        val.createdAt == void 0
+          ? val.createdAt
+          : serializeDateTime(val.createdAt),
+      ['finished_at']:
+        val.finishedAt == void 0
+          ? val.finishedAt
+          : serializeDateTime(val.finishedAt),
       ['sender_email']: val.senderEmail,
       ['sender_id']: val.senderId,
     },
@@ -354,6 +372,27 @@ export function deserializeSignRequest(val: SerializedData): SignRequest {
   }
   const collaboratorLevel: undefined | string =
     val.collaborator_level == void 0 ? void 0 : val.collaborator_level;
+  if (!(val.short_id == void 0) && !sdIsString(val.short_id)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "short_id" of type "SignRequest"',
+    });
+  }
+  const shortId: undefined | string =
+    val.short_id == void 0 ? void 0 : val.short_id;
+  if (!(val.created_at == void 0) && !sdIsString(val.created_at)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "created_at" of type "SignRequest"',
+    });
+  }
+  const createdAt: undefined | DateTime =
+    val.created_at == void 0 ? void 0 : deserializeDateTime(val.created_at);
+  if (!(val.finished_at == void 0) && !sdIsString(val.finished_at)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "finished_at" of type "SignRequest"',
+    });
+  }
+  const finishedAt: undefined | DateTime =
+    val.finished_at == void 0 ? void 0 : deserializeDateTime(val.finished_at);
   if (!(val.sender_email == void 0) && !sdIsString(val.sender_email)) {
     throw new BoxSdkError({
       message: 'Expecting string for "sender_email" of type "SignRequest"',
@@ -503,6 +542,9 @@ export function deserializeSignRequest(val: SerializedData): SignRequest {
     autoExpireAt: autoExpireAt,
     parentFolder: parentFolder,
     collaboratorLevel: collaboratorLevel,
+    shortId: shortId,
+    createdAt: createdAt,
+    finishedAt: finishedAt,
     senderEmail: senderEmail,
     senderId: senderId,
     isDocumentPreparationNeeded: isDocumentPreparationNeeded,
