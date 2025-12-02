@@ -238,8 +238,8 @@ export interface UpdateCollaborationByIdRequestBody {
    * invitee's **All Files** page. We recommend you limit the number of
    * collaborations with `can_view_path` enabled to 1,000 per user.
    *
-   * Only owner or co-owners can invite collaborators with a `can_view_path` of
-   * `true`.
+   * Only an owner or co-owners can invite collaborators with a `can_view_path` of
+   * `true`. Only an owner can update `can_view_path` on existing collaborations.
    *
    * `can_view_path` can only be used for folder collaborations. */
   readonly canViewPath?: boolean;
@@ -360,8 +360,8 @@ export interface CreateCollaborationRequestBody {
    * invitee's **All Files** page. We recommend you limit the number of
    * collaborations with `can_view_path` enabled to 1,000 per user.
    *
-   * Only owner or co-owners can invite collaborators with a `can_view_path` of
-   * `true`.
+   * Only an owner or co-owners can invite collaborators with a `can_view_path` of
+   * `true`. Only an owner can update `can_view_path` on existing collaborations.
    *
    * `can_view_path` can only be used for folder collaborations. */
   readonly canViewPath?: boolean;

@@ -23,6 +23,11 @@ export interface AiExtractStructuredResponse {
   /**
    * The reason the response finishes. */
   readonly completionReason?: string;
+  /**
+   * The confidence score numeric values for each extracted field as a JSON dictionary. This can be empty if no field could be extracted. */
+  readonly confidenceScore?: {
+    readonly [key: string]: any;
+  };
   readonly aiAgentInfo?: AiAgentInfo;
   readonly rawData?: SerializedData;
 }
@@ -33,6 +38,19 @@ export function serializeAiExtractStructuredResponse(
     ['answer']: serializeAiExtractResponse(val.answer),
     ['created_at']: serializeDateTime(val.createdAt),
     ['completion_reason']: val.completionReason,
+    ['confidence_score']:
+      val.confidenceScore == void 0
+        ? val.confidenceScore
+        : (Object.fromEntries(
+            Object.entries(val.confidenceScore).map(([k, v]: [string, any]) => [
+              k,
+              (function (v: any): any {
+                return v;
+              })(v),
+            ])
+          ) as {
+            readonly [key: string]: any;
+          }),
     ['ai_agent_info']:
       val.aiAgentInfo == void 0
         ? val.aiAgentInfo
@@ -78,6 +96,33 @@ export function deserializeAiExtractStructuredResponse(
   }
   const completionReason: undefined | string =
     val.completion_reason == void 0 ? void 0 : val.completion_reason;
+  if (!(val.confidence_score == void 0) && !sdIsMap(val.confidence_score)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting object for "confidence_score" of type "AiExtractStructuredResponse"',
+    });
+  }
+  const confidenceScore:
+    | undefined
+    | {
+        readonly [key: string]: any;
+      } =
+    val.confidence_score == void 0
+      ? void 0
+      : sdIsMap(val.confidence_score)
+        ? (Object.fromEntries(
+            Object.entries(val.confidence_score).map(
+              ([k, v]: [string, any]) => [
+                k,
+                (function (v: any): any {
+                  return v;
+                })(v),
+              ]
+            )
+          ) as {
+            readonly [key: string]: any;
+          })
+        : {};
   const aiAgentInfo: undefined | AiAgentInfo =
     val.ai_agent_info == void 0
       ? void 0
@@ -86,6 +131,7 @@ export function deserializeAiExtractStructuredResponse(
     answer: answer,
     createdAt: createdAt,
     completionReason: completionReason,
+    confidenceScore: confidenceScore,
     aiAgentInfo: aiAgentInfo,
   } satisfies AiExtractStructuredResponse;
 }
