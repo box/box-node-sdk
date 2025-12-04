@@ -302,9 +302,15 @@ export class BoxNetworkClient implements NetworkClient {
       return fetchResponse;
     }
 
-    const [code, contextInfo, requestId, helpUrl, message] = sdIsMap(
-      fetchResponse.data,
-    )
+    const [
+      code,
+      contextInfo,
+      requestId,
+      helpUrl,
+      message,
+      error,
+      errorDescription,
+    ] = sdIsMap(fetchResponse.data)
       ? [
           sdToJson(fetchResponse.data['code']),
           sdIsMap(fetchResponse.data['context_info'])
@@ -313,9 +319,10 @@ export class BoxNetworkClient implements NetworkClient {
           sdToJson(fetchResponse.data['request_id']),
           sdToJson(fetchResponse.data['help_url']),
           sdToJson(fetchResponse.data['message']),
+          sdToJson(fetchResponse.data['error']),
+          sdToJson(fetchResponse.data['error_description']),
         ]
       : [];
-
     if (fetchResponse.status === 0) {
       throw new BoxSdkError({
         message: `Unexpected Error occurred`,
@@ -324,8 +331,15 @@ export class BoxNetworkClient implements NetworkClient {
       });
     }
 
+    const errorMessage = [
+      [fetchResponse.status, code, message].filter(Boolean).join(' '),
+      requestId && `Request ID: ${requestId}`,
+      error && `${error} - ${errorDescription}`,
+    ]
+      .filter(Boolean)
+      .join('; ');
     throw new BoxApiError({
-      message: `${fetchResponse.status} ${message}; Request ID: ${requestId}`,
+      message: errorMessage,
       timestamp: `${Date.now()}`,
       requestInfo: {
         method: requestInit.method!,
