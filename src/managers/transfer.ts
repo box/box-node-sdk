@@ -55,7 +55,7 @@ export class TransferOwnedFolderOptionals {
 export interface TransferOwnedFolderOptionalsInput {
   readonly queryParams?: TransferOwnedFolderQueryParams;
   readonly headers?: TransferOwnedFolderHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface TransferOwnedFolderRequestBodyOwnedByField {
   /**
@@ -105,11 +105,9 @@ export class TransferOwnedFolderHeaders {
 export interface TransferOwnedFolderHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TransferManager {
   readonly auth?: Authentication;

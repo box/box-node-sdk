@@ -32,8 +32,8 @@ export class DocGenJobV2025R0 extends DocGenJobBaseV2025R0 {
   readonly batch!: DocGenBatchBaseV2025R0;
   readonly templateFile!: FileReferenceV2025R0;
   readonly templateFileVersion!: FileVersionBaseV2025R0;
-  readonly outputFile?: FileReferenceV2025R0 | undefined;
-  readonly outputFileVersion?: FileVersionBaseV2025R0 | undefined;
+  readonly outputFile?: FileReferenceV2025R0;
+  readonly outputFileVersion?: FileVersionBaseV2025R0;
   readonly status!: DocGenJobV2025R0StatusField;
   readonly outputType!: string;
   constructor(fields: DocGenJobV2025R0) {
@@ -111,15 +111,11 @@ export function serializeDocGenJobV2025R0(
       ['output_file']:
         val.outputFile == void 0
           ? val.outputFile
-          : val.outputFile == void 0
-            ? val.outputFile
-            : serializeFileReferenceV2025R0(val.outputFile),
+          : serializeFileReferenceV2025R0(val.outputFile),
       ['output_file_version']:
         val.outputFileVersion == void 0
           ? val.outputFileVersion
-          : val.outputFileVersion == void 0
-            ? val.outputFileVersion
-            : serializeFileVersionBaseV2025R0(val.outputFileVersion),
+          : serializeFileVersionBaseV2025R0(val.outputFileVersion),
       ['status']: serializeDocGenJobV2025R0StatusField(val.status),
       ['output_type']: val.outputType,
     },
@@ -158,18 +154,14 @@ export function deserializeDocGenJobV2025R0(
   }
   const templateFileVersion: FileVersionBaseV2025R0 =
     deserializeFileVersionBaseV2025R0(val.template_file_version);
-  const outputFile: undefined | (FileReferenceV2025R0 | undefined) =
+  const outputFile: FileReferenceV2025R0 | undefined =
     val.output_file == void 0
       ? void 0
-      : val.output_file == void 0
-        ? void 0
-        : deserializeFileReferenceV2025R0(val.output_file);
-  const outputFileVersion: undefined | (FileVersionBaseV2025R0 | undefined) =
+      : deserializeFileReferenceV2025R0(val.output_file);
+  const outputFileVersion: FileVersionBaseV2025R0 | undefined =
     val.output_file_version == void 0
       ? void 0
-      : val.output_file_version == void 0
-        ? void 0
-        : deserializeFileVersionBaseV2025R0(val.output_file_version);
+      : deserializeFileVersionBaseV2025R0(val.output_file_version);
   if (val.status == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "status" of type "DocGenJobV2025R0" to be defined',

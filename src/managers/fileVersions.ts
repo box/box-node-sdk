@@ -56,7 +56,7 @@ export class GetFileVersionsOptionals {
 export interface GetFileVersionsOptionalsInput {
   readonly queryParams?: GetFileVersionsQueryParams;
   readonly headers?: GetFileVersionsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileVersionByIdOptionals {
   readonly queryParams: GetFileVersionByIdQueryParams =
@@ -91,7 +91,7 @@ export class GetFileVersionByIdOptionals {
 export interface GetFileVersionByIdOptionalsInput {
   readonly queryParams?: GetFileVersionByIdQueryParams;
   readonly headers?: GetFileVersionByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFileVersionByIdOptionals {
   readonly headers: DeleteFileVersionByIdHeaders =
@@ -116,7 +116,7 @@ export class DeleteFileVersionByIdOptionals {
 }
 export interface DeleteFileVersionByIdOptionalsInput {
   readonly headers?: DeleteFileVersionByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFileVersionByIdOptionals {
   readonly requestBody: UpdateFileVersionByIdRequestBody =
@@ -150,7 +150,7 @@ export class UpdateFileVersionByIdOptionals {
 export interface UpdateFileVersionByIdOptionalsInput {
   readonly requestBody?: UpdateFileVersionByIdRequestBody;
   readonly headers?: UpdateFileVersionByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class PromoteFileVersionOptionals {
   readonly requestBody: PromoteFileVersionRequestBody =
@@ -191,7 +191,7 @@ export interface PromoteFileVersionOptionalsInput {
   readonly requestBody?: PromoteFileVersionRequestBody;
   readonly queryParams?: PromoteFileVersionQueryParams;
   readonly headers?: PromoteFileVersionHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetFileVersionsQueryParams {
   /**
@@ -234,11 +234,9 @@ export class GetFileVersionsHeaders {
 export interface GetFileVersionsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetFileVersionByIdQueryParams {
   /**
@@ -271,11 +269,9 @@ export class GetFileVersionByIdHeaders {
 export interface GetFileVersionByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFileVersionByIdHeaders {
   /**
@@ -316,11 +312,9 @@ export interface DeleteFileVersionByIdHeadersInput {
   readonly ifMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateFileVersionByIdRequestBody {
   /**
@@ -347,11 +341,9 @@ export class UpdateFileVersionByIdHeaders {
 export interface UpdateFileVersionByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type PromoteFileVersionRequestBodyTypeField = 'file_version';
 export interface PromoteFileVersionRequestBody {
@@ -394,11 +386,9 @@ export class PromoteFileVersionHeaders {
 export interface PromoteFileVersionHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FileVersionsManager {
   readonly auth?: Authentication;

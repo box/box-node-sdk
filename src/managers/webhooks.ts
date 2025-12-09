@@ -50,7 +50,7 @@ export class CreateWebhookOptionals {
 }
 export interface CreateWebhookOptionalsInput {
   readonly headers?: CreateWebhookHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetWebhookByIdOptionals {
   readonly headers: GetWebhookByIdHeaders = new GetWebhookByIdHeaders({});
@@ -69,7 +69,7 @@ export class GetWebhookByIdOptionals {
 }
 export interface GetWebhookByIdOptionalsInput {
   readonly headers?: GetWebhookByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateWebhookByIdOptionals {
   readonly requestBody: UpdateWebhookByIdRequestBody =
@@ -102,7 +102,7 @@ export class UpdateWebhookByIdOptionals {
 export interface UpdateWebhookByIdOptionalsInput {
   readonly requestBody?: UpdateWebhookByIdRequestBody;
   readonly headers?: UpdateWebhookByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteWebhookByIdOptionals {
   readonly headers: DeleteWebhookByIdHeaders = new DeleteWebhookByIdHeaders({});
@@ -123,7 +123,7 @@ export class DeleteWebhookByIdOptionals {
 }
 export interface DeleteWebhookByIdOptionalsInput {
   readonly headers?: DeleteWebhookByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class ValidateMessageOptionals {
   readonly secondaryKey?: string = void 0;
@@ -141,8 +141,8 @@ export class ValidateMessageOptionals {
   }
 }
 export interface ValidateMessageOptionalsInput {
-  readonly secondaryKey?: undefined | string;
-  readonly maxAge?: undefined | number;
+  readonly secondaryKey?: string;
+  readonly maxAge?: number;
 }
 export interface GetWebhooksQueryParams {
   /**
@@ -173,11 +173,9 @@ export class GetWebhooksHeaders {
 export interface GetWebhooksHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateWebhookRequestBodyTargetTypeField = 'file' | 'folder';
 export interface CreateWebhookRequestBodyTargetField {
@@ -265,11 +263,9 @@ export class CreateWebhookHeaders {
 export interface CreateWebhookHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetWebhookByIdHeaders {
   /**
@@ -289,11 +285,9 @@ export class GetWebhookByIdHeaders {
 export interface GetWebhookByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateWebhookByIdRequestBodyTargetTypeField = 'file' | 'folder';
 export interface UpdateWebhookByIdRequestBodyTargetField {
@@ -381,11 +375,9 @@ export class UpdateWebhookByIdHeaders {
 export interface UpdateWebhookByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteWebhookByIdHeaders {
   /**
@@ -405,11 +397,9 @@ export class DeleteWebhookByIdHeaders {
 export interface DeleteWebhookByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class WebhooksManager {
   readonly auth?: Authentication;

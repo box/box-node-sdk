@@ -52,7 +52,7 @@ export class GetHubItemsV2025R0Optionals {
 }
 export interface GetHubItemsV2025R0OptionalsInput {
   readonly headers?: GetHubItemsV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class ManageHubItemsV2025R0Optionals {
   readonly headers: ManageHubItemsV2025R0Headers =
@@ -77,7 +77,7 @@ export class ManageHubItemsV2025R0Optionals {
 }
 export interface ManageHubItemsV2025R0OptionalsInput {
   readonly headers?: ManageHubItemsV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetHubItemsV2025R0QueryParams {
   /**
@@ -127,11 +127,9 @@ export interface GetHubItemsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ManageHubItemsV2025R0Headers {
   /**
@@ -163,11 +161,9 @@ export interface ManageHubItemsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class HubItemsManager {
   readonly auth?: Authentication;

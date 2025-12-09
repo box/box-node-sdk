@@ -51,7 +51,7 @@ export class GetFileVersionRetentionByIdOptionals {
 }
 export interface GetFileVersionRetentionByIdOptionalsInput {
   readonly headers?: GetFileVersionRetentionByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetFileVersionRetentionsQueryParamsDispositionActionField =
   | 'permanently_delete'
@@ -107,11 +107,9 @@ export class GetFileVersionRetentionsHeaders {
 export interface GetFileVersionRetentionsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetFileVersionRetentionByIdHeaders {
   /**
@@ -131,11 +129,9 @@ export class GetFileVersionRetentionByIdHeaders {
 export interface GetFileVersionRetentionByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FileVersionRetentionsManager {
   readonly auth?: Authentication;

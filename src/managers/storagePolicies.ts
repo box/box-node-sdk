@@ -48,7 +48,7 @@ export class GetStoragePolicyByIdOptionals {
 }
 export interface GetStoragePolicyByIdOptionalsInput {
   readonly headers?: GetStoragePolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetStoragePoliciesQueryParams {
   /**
@@ -90,11 +90,9 @@ export class GetStoragePoliciesHeaders {
 export interface GetStoragePoliciesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetStoragePolicyByIdHeaders {
   /**
@@ -114,11 +112,9 @@ export class GetStoragePolicyByIdHeaders {
 export interface GetStoragePolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class StoragePoliciesManager {
   readonly auth?: Authentication;

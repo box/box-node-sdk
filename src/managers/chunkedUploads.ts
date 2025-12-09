@@ -70,7 +70,7 @@ export class CreateFileUploadSessionOptionals {
 }
 export interface CreateFileUploadSessionOptionalsInput {
   readonly headers?: CreateFileUploadSessionHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFileUploadSessionForExistingFileOptionals {
   readonly headers: CreateFileUploadSessionForExistingFileHeaders =
@@ -98,7 +98,7 @@ export class CreateFileUploadSessionForExistingFileOptionals {
 }
 export interface CreateFileUploadSessionForExistingFileOptionalsInput {
   readonly headers?: CreateFileUploadSessionForExistingFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileUploadSessionByUrlOptionals {
   readonly headers: GetFileUploadSessionByUrlHeaders =
@@ -126,7 +126,7 @@ export class GetFileUploadSessionByUrlOptionals {
 }
 export interface GetFileUploadSessionByUrlOptionalsInput {
   readonly headers?: GetFileUploadSessionByUrlHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileUploadSessionByIdOptionals {
   readonly headers: GetFileUploadSessionByIdHeaders =
@@ -151,7 +151,7 @@ export class GetFileUploadSessionByIdOptionals {
 }
 export interface GetFileUploadSessionByIdOptionalsInput {
   readonly headers?: GetFileUploadSessionByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UploadFilePartByUrlOptionals {
   readonly cancellationToken?: CancellationToken = void 0;
@@ -165,7 +165,7 @@ export class UploadFilePartByUrlOptionals {
   }
 }
 export interface UploadFilePartByUrlOptionalsInput {
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UploadFilePartOptionals {
   readonly cancellationToken?: CancellationToken = void 0;
@@ -179,7 +179,7 @@ export class UploadFilePartOptionals {
   }
 }
 export interface UploadFilePartOptionalsInput {
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFileUploadSessionByUrlOptionals {
   readonly headers: DeleteFileUploadSessionByUrlHeaders =
@@ -207,7 +207,7 @@ export class DeleteFileUploadSessionByUrlOptionals {
 }
 export interface DeleteFileUploadSessionByUrlOptionalsInput {
   readonly headers?: DeleteFileUploadSessionByUrlHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFileUploadSessionByIdOptionals {
   readonly headers: DeleteFileUploadSessionByIdHeaders =
@@ -235,7 +235,7 @@ export class DeleteFileUploadSessionByIdOptionals {
 }
 export interface DeleteFileUploadSessionByIdOptionalsInput {
   readonly headers?: DeleteFileUploadSessionByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileUploadSessionPartsByUrlOptionals {
   readonly queryParams: GetFileUploadSessionPartsByUrlQueryParams =
@@ -269,7 +269,7 @@ export class GetFileUploadSessionPartsByUrlOptionals {
 export interface GetFileUploadSessionPartsByUrlOptionalsInput {
   readonly queryParams?: GetFileUploadSessionPartsByUrlQueryParams;
   readonly headers?: GetFileUploadSessionPartsByUrlHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileUploadSessionPartsOptionals {
   readonly queryParams: GetFileUploadSessionPartsQueryParams =
@@ -303,7 +303,7 @@ export class GetFileUploadSessionPartsOptionals {
 export interface GetFileUploadSessionPartsOptionalsInput {
   readonly queryParams?: GetFileUploadSessionPartsQueryParams;
   readonly headers?: GetFileUploadSessionPartsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFileUploadSessionCommitByUrlOptionals {
   readonly cancellationToken?: CancellationToken = void 0;
@@ -322,7 +322,7 @@ export class CreateFileUploadSessionCommitByUrlOptionals {
   }
 }
 export interface CreateFileUploadSessionCommitByUrlOptionalsInput {
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFileUploadSessionCommitOptionals {
   readonly cancellationToken?: CancellationToken = void 0;
@@ -338,7 +338,7 @@ export class CreateFileUploadSessionCommitOptionals {
   }
 }
 export interface CreateFileUploadSessionCommitOptionalsInput {
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 interface PartAccumulator {
   readonly lastIndex: number;
@@ -377,11 +377,9 @@ export class CreateFileUploadSessionHeaders {
 export interface CreateFileUploadSessionHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateFileUploadSessionForExistingFileRequestBody {
   /**
@@ -415,11 +413,9 @@ export class CreateFileUploadSessionForExistingFileHeaders {
 export interface CreateFileUploadSessionForExistingFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetFileUploadSessionByUrlHeaders {
   /**
@@ -439,11 +435,9 @@ export class GetFileUploadSessionByUrlHeaders {
 export interface GetFileUploadSessionByUrlHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetFileUploadSessionByIdHeaders {
   /**
@@ -463,11 +457,9 @@ export class GetFileUploadSessionByIdHeaders {
 export interface GetFileUploadSessionByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UploadFilePartByUrlHeaders {
   /**
@@ -549,11 +541,9 @@ export interface UploadFilePartByUrlHeadersInput {
   readonly contentRange: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UploadFilePartHeaders {
   /**
@@ -635,11 +625,9 @@ export interface UploadFilePartHeadersInput {
   readonly contentRange: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFileUploadSessionByUrlHeaders {
   /**
@@ -659,11 +647,9 @@ export class DeleteFileUploadSessionByUrlHeaders {
 export interface DeleteFileUploadSessionByUrlHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFileUploadSessionByIdHeaders {
   /**
@@ -683,11 +669,9 @@ export class DeleteFileUploadSessionByIdHeaders {
 export interface DeleteFileUploadSessionByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetFileUploadSessionPartsByUrlQueryParams {
   /**
@@ -719,11 +703,9 @@ export class GetFileUploadSessionPartsByUrlHeaders {
 export interface GetFileUploadSessionPartsByUrlHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetFileUploadSessionPartsQueryParams {
   /**
@@ -755,11 +737,9 @@ export class GetFileUploadSessionPartsHeaders {
 export interface GetFileUploadSessionPartsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateFileUploadSessionCommitByUrlRequestBody {
   /**
@@ -846,11 +826,9 @@ export interface CreateFileUploadSessionCommitByUrlHeadersInput {
   readonly ifNoneMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateFileUploadSessionCommitRequestBody {
   /**
@@ -937,11 +915,9 @@ export interface CreateFileUploadSessionCommitHeadersInput {
   readonly ifNoneMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ChunkedUploadsManager {
   readonly auth?: Authentication;

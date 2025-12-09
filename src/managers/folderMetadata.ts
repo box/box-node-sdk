@@ -50,7 +50,7 @@ export class GetFolderMetadataOptionals {
 }
 export interface GetFolderMetadataOptionalsInput {
   readonly headers?: GetFolderMetadataHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFolderMetadataByIdOptionals {
   readonly headers: GetFolderMetadataByIdHeaders =
@@ -75,7 +75,7 @@ export class GetFolderMetadataByIdOptionals {
 }
 export interface GetFolderMetadataByIdOptionalsInput {
   readonly headers?: GetFolderMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFolderMetadataByIdOptionals {
   readonly headers: CreateFolderMetadataByIdHeaders =
@@ -100,7 +100,7 @@ export class CreateFolderMetadataByIdOptionals {
 }
 export interface CreateFolderMetadataByIdOptionalsInput {
   readonly headers?: CreateFolderMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFolderMetadataByIdOptionals {
   readonly headers: UpdateFolderMetadataByIdHeaders =
@@ -125,7 +125,7 @@ export class UpdateFolderMetadataByIdOptionals {
 }
 export interface UpdateFolderMetadataByIdOptionalsInput {
   readonly headers?: UpdateFolderMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFolderMetadataByIdOptionals {
   readonly headers: DeleteFolderMetadataByIdHeaders =
@@ -150,7 +150,7 @@ export class DeleteFolderMetadataByIdOptionals {
 }
 export interface DeleteFolderMetadataByIdOptionalsInput {
   readonly headers?: DeleteFolderMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFolderMetadataHeaders {
   /**
@@ -170,11 +170,9 @@ export class GetFolderMetadataHeaders {
 export interface GetFolderMetadataHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetFolderMetadataByIdScope = 'global' | 'enterprise' | string;
 export class GetFolderMetadataByIdHeaders {
@@ -195,11 +193,9 @@ export class GetFolderMetadataByIdHeaders {
 export interface GetFolderMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateFolderMetadataByIdScope = 'global' | 'enterprise' | string;
 export type CreateFolderMetadataByIdRequestBody = {
@@ -223,11 +219,9 @@ export class CreateFolderMetadataByIdHeaders {
 export interface CreateFolderMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateFolderMetadataByIdScope = 'global' | 'enterprise' | string;
 export type UpdateFolderMetadataByIdRequestBodyOpField =
@@ -278,11 +272,9 @@ export class UpdateFolderMetadataByIdHeaders {
 export interface UpdateFolderMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type DeleteFolderMetadataByIdScope = 'global' | 'enterprise' | string;
 export class DeleteFolderMetadataByIdHeaders {
@@ -303,11 +295,9 @@ export class DeleteFolderMetadataByIdHeaders {
 export interface DeleteFolderMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FolderMetadataManager {
   readonly auth?: Authentication;

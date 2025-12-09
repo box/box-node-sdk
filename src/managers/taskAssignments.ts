@@ -46,7 +46,7 @@ export class GetTaskAssignmentsOptionals {
 }
 export interface GetTaskAssignmentsOptionalsInput {
   readonly headers?: GetTaskAssignmentsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateTaskAssignmentOptionals {
   readonly headers: CreateTaskAssignmentHeaders =
@@ -71,7 +71,7 @@ export class CreateTaskAssignmentOptionals {
 }
 export interface CreateTaskAssignmentOptionalsInput {
   readonly headers?: CreateTaskAssignmentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetTaskAssignmentByIdOptionals {
   readonly headers: GetTaskAssignmentByIdHeaders =
@@ -96,7 +96,7 @@ export class GetTaskAssignmentByIdOptionals {
 }
 export interface GetTaskAssignmentByIdOptionalsInput {
   readonly headers?: GetTaskAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateTaskAssignmentByIdOptionals {
   readonly requestBody: UpdateTaskAssignmentByIdRequestBody =
@@ -130,7 +130,7 @@ export class UpdateTaskAssignmentByIdOptionals {
 export interface UpdateTaskAssignmentByIdOptionalsInput {
   readonly requestBody?: UpdateTaskAssignmentByIdRequestBody;
   readonly headers?: UpdateTaskAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteTaskAssignmentByIdOptionals {
   readonly headers: DeleteTaskAssignmentByIdHeaders =
@@ -155,7 +155,7 @@ export class DeleteTaskAssignmentByIdOptionals {
 }
 export interface DeleteTaskAssignmentByIdOptionalsInput {
   readonly headers?: DeleteTaskAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetTaskAssignmentsHeaders {
   /**
@@ -175,11 +175,9 @@ export class GetTaskAssignmentsHeaders {
 export interface GetTaskAssignmentsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateTaskAssignmentRequestBodyTaskTypeField = 'task';
 export class CreateTaskAssignmentRequestBodyTaskField {
@@ -256,11 +254,9 @@ export class CreateTaskAssignmentHeaders {
 export interface CreateTaskAssignmentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetTaskAssignmentByIdHeaders {
   /**
@@ -280,11 +276,9 @@ export class GetTaskAssignmentByIdHeaders {
 export interface GetTaskAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateTaskAssignmentByIdRequestBodyResolutionStateField =
   | 'completed'
@@ -324,11 +318,9 @@ export class UpdateTaskAssignmentByIdHeaders {
 export interface UpdateTaskAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteTaskAssignmentByIdHeaders {
   /**
@@ -348,11 +340,9 @@ export class DeleteTaskAssignmentByIdHeaders {
 export interface DeleteTaskAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TaskAssignmentsManager {
   readonly auth?: Authentication;

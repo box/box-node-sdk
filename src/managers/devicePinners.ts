@@ -49,7 +49,7 @@ export class GetDevicePinnerByIdOptionals {
 }
 export interface GetDevicePinnerByIdOptionalsInput {
   readonly headers?: GetDevicePinnerByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteDevicePinnerByIdOptionals {
   readonly headers: DeleteDevicePinnerByIdHeaders =
@@ -74,7 +74,7 @@ export class DeleteDevicePinnerByIdOptionals {
 }
 export interface DeleteDevicePinnerByIdOptionalsInput {
   readonly headers?: DeleteDevicePinnerByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetEnterpriseDevicePinnersOptionals {
   readonly queryParams: GetEnterpriseDevicePinnersQueryParams =
@@ -108,7 +108,7 @@ export class GetEnterpriseDevicePinnersOptionals {
 export interface GetEnterpriseDevicePinnersOptionalsInput {
   readonly queryParams?: GetEnterpriseDevicePinnersQueryParams;
   readonly headers?: GetEnterpriseDevicePinnersHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetDevicePinnerByIdHeaders {
   /**
@@ -128,11 +128,9 @@ export class GetDevicePinnerByIdHeaders {
 export interface GetDevicePinnerByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteDevicePinnerByIdHeaders {
   /**
@@ -152,11 +150,9 @@ export class DeleteDevicePinnerByIdHeaders {
 export interface DeleteDevicePinnerByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetEnterpriseDevicePinnersQueryParamsDirectionField =
   | 'ASC'
@@ -195,11 +191,9 @@ export class GetEnterpriseDevicePinnersHeaders {
 export interface GetEnterpriseDevicePinnersHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DevicePinnersManager {
   readonly auth?: Authentication;

@@ -56,7 +56,7 @@ export class GetFileCommentsOptionals {
 export interface GetFileCommentsOptionalsInput {
   readonly queryParams?: GetFileCommentsQueryParams;
   readonly headers?: GetFileCommentsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetCommentByIdOptionals {
   readonly queryParams: GetCommentByIdQueryParams =
@@ -89,7 +89,7 @@ export class GetCommentByIdOptionals {
 export interface GetCommentByIdOptionalsInput {
   readonly queryParams?: GetCommentByIdQueryParams;
   readonly headers?: GetCommentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateCommentByIdOptionals {
   readonly requestBody: UpdateCommentByIdRequestBody =
@@ -128,7 +128,7 @@ export interface UpdateCommentByIdOptionalsInput {
   readonly requestBody?: UpdateCommentByIdRequestBody;
   readonly queryParams?: UpdateCommentByIdQueryParams;
   readonly headers?: UpdateCommentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteCommentByIdOptionals {
   readonly headers: DeleteCommentByIdHeaders = new DeleteCommentByIdHeaders({});
@@ -149,7 +149,7 @@ export class DeleteCommentByIdOptionals {
 }
 export interface DeleteCommentByIdOptionalsInput {
   readonly headers?: DeleteCommentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateCommentOptionals {
   readonly queryParams: CreateCommentQueryParams =
@@ -182,7 +182,7 @@ export class CreateCommentOptionals {
 export interface CreateCommentOptionalsInput {
   readonly queryParams?: CreateCommentQueryParams;
   readonly headers?: CreateCommentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetFileCommentsQueryParams {
   /**
@@ -225,11 +225,9 @@ export class GetFileCommentsHeaders {
 export interface GetFileCommentsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetCommentByIdQueryParams {
   /**
@@ -262,11 +260,9 @@ export class GetCommentByIdHeaders {
 export interface GetCommentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateCommentByIdRequestBody {
   /**
@@ -305,11 +301,9 @@ export class UpdateCommentByIdHeaders {
 export interface UpdateCommentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteCommentByIdHeaders {
   /**
@@ -329,11 +323,9 @@ export class DeleteCommentByIdHeaders {
 export interface DeleteCommentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateCommentRequestBodyItemTypeField = 'file' | 'comment';
 export interface CreateCommentRequestBodyItemField {
@@ -401,11 +393,9 @@ export class CreateCommentHeaders {
 export interface CreateCommentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CommentsManager {
   readonly auth?: Authentication;

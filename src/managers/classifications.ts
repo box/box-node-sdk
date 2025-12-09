@@ -40,7 +40,7 @@ export class AddClassificationOptionals {
 }
 export interface AddClassificationOptionalsInput {
   readonly headers?: AddClassificationHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateClassificationOptionals {
   readonly headers: UpdateClassificationHeaders =
@@ -65,7 +65,7 @@ export class UpdateClassificationOptionals {
 }
 export interface UpdateClassificationOptionalsInput {
   readonly headers?: UpdateClassificationHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateClassificationTemplateOptionals {
   readonly headers: CreateClassificationTemplateHeaders =
@@ -93,7 +93,7 @@ export class CreateClassificationTemplateOptionals {
 }
 export interface CreateClassificationTemplateOptionalsInput {
   readonly headers?: CreateClassificationTemplateHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetClassificationTemplateHeaders {
   /**
@@ -113,11 +113,9 @@ export class GetClassificationTemplateHeaders {
 export interface GetClassificationTemplateHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type AddClassificationRequestBodyOpField = 'addEnumOption' | string;
 export type AddClassificationRequestBodyFieldKeyField =
@@ -228,11 +226,9 @@ export class AddClassificationHeaders {
 export interface AddClassificationHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateClassificationRequestBodyOpField = 'editEnumOption' | string;
 export type UpdateClassificationRequestBodyFieldKeyField =
@@ -351,11 +347,9 @@ export class UpdateClassificationHeaders {
 export interface UpdateClassificationHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateClassificationTemplateRequestBodyScopeField =
   | 'enterprise'
@@ -611,11 +605,9 @@ export class CreateClassificationTemplateHeaders {
 export interface CreateClassificationTemplateHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ClassificationsManager {
   readonly auth?: Authentication;

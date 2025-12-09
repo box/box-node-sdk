@@ -57,7 +57,7 @@ export class GetShieldInformationBarrierSegmentMemberByIdOptionals {
 }
 export interface GetShieldInformationBarrierSegmentMemberByIdOptionalsInput {
   readonly headers?: GetShieldInformationBarrierSegmentMemberByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteShieldInformationBarrierSegmentMemberByIdOptionals {
   readonly headers: DeleteShieldInformationBarrierSegmentMemberByIdHeaders =
@@ -85,7 +85,7 @@ export class DeleteShieldInformationBarrierSegmentMemberByIdOptionals {
 }
 export interface DeleteShieldInformationBarrierSegmentMemberByIdOptionalsInput {
   readonly headers?: DeleteShieldInformationBarrierSegmentMemberByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetShieldInformationBarrierSegmentMembersOptionals {
   readonly headers: GetShieldInformationBarrierSegmentMembersHeaders =
@@ -113,7 +113,7 @@ export class GetShieldInformationBarrierSegmentMembersOptionals {
 }
 export interface GetShieldInformationBarrierSegmentMembersOptionalsInput {
   readonly headers?: GetShieldInformationBarrierSegmentMembersHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateShieldInformationBarrierSegmentMemberOptionals {
   readonly headers: CreateShieldInformationBarrierSegmentMemberHeaders =
@@ -141,7 +141,7 @@ export class CreateShieldInformationBarrierSegmentMemberOptionals {
 }
 export interface CreateShieldInformationBarrierSegmentMemberOptionalsInput {
   readonly headers?: CreateShieldInformationBarrierSegmentMemberHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetShieldInformationBarrierSegmentMemberByIdHeaders {
   /**
@@ -169,11 +169,9 @@ export class GetShieldInformationBarrierSegmentMemberByIdHeaders {
 export interface GetShieldInformationBarrierSegmentMemberByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteShieldInformationBarrierSegmentMemberByIdHeaders {
   /**
@@ -201,11 +199,9 @@ export class DeleteShieldInformationBarrierSegmentMemberByIdHeaders {
 export interface DeleteShieldInformationBarrierSegmentMemberByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetShieldInformationBarrierSegmentMembersQueryParams {
   /**
@@ -244,11 +240,9 @@ export class GetShieldInformationBarrierSegmentMembersHeaders {
 export interface GetShieldInformationBarrierSegmentMembersHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateShieldInformationBarrierSegmentMemberRequestBodyTypeField =
   'shield_information_barrier_segment_member';
@@ -301,11 +295,9 @@ export class CreateShieldInformationBarrierSegmentMemberHeaders {
 export interface CreateShieldInformationBarrierSegmentMemberHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ShieldInformationBarrierSegmentMembersManager {
   readonly auth?: Authentication;

@@ -60,7 +60,7 @@ export class GetHubCollaborationsV2025R0Optionals {
 }
 export interface GetHubCollaborationsV2025R0OptionalsInput {
   readonly headers?: GetHubCollaborationsV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateHubCollaborationV2025R0Optionals {
   readonly headers: CreateHubCollaborationV2025R0Headers =
@@ -88,7 +88,7 @@ export class CreateHubCollaborationV2025R0Optionals {
 }
 export interface CreateHubCollaborationV2025R0OptionalsInput {
   readonly headers?: CreateHubCollaborationV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetHubCollaborationByIdV2025R0Optionals {
   readonly headers: GetHubCollaborationByIdV2025R0Headers =
@@ -116,7 +116,7 @@ export class GetHubCollaborationByIdV2025R0Optionals {
 }
 export interface GetHubCollaborationByIdV2025R0OptionalsInput {
   readonly headers?: GetHubCollaborationByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateHubCollaborationByIdV2025R0Optionals {
   readonly headers: UpdateHubCollaborationByIdV2025R0Headers =
@@ -144,7 +144,7 @@ export class UpdateHubCollaborationByIdV2025R0Optionals {
 }
 export interface UpdateHubCollaborationByIdV2025R0OptionalsInput {
   readonly headers?: UpdateHubCollaborationByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteHubCollaborationByIdV2025R0Optionals {
   readonly headers: DeleteHubCollaborationByIdV2025R0Headers =
@@ -172,7 +172,7 @@ export class DeleteHubCollaborationByIdV2025R0Optionals {
 }
 export interface DeleteHubCollaborationByIdV2025R0OptionalsInput {
   readonly headers?: DeleteHubCollaborationByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetHubCollaborationsV2025R0QueryParams {
   /**
@@ -227,11 +227,9 @@ export interface GetHubCollaborationsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateHubCollaborationV2025R0Headers {
   /**
@@ -269,11 +267,9 @@ export interface CreateHubCollaborationV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetHubCollaborationByIdV2025R0Headers {
   /**
@@ -311,11 +307,9 @@ export interface GetHubCollaborationByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UpdateHubCollaborationByIdV2025R0Headers {
   /**
@@ -353,11 +347,9 @@ export interface UpdateHubCollaborationByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteHubCollaborationByIdV2025R0Headers {
   /**
@@ -395,11 +387,9 @@ export interface DeleteHubCollaborationByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class HubCollaborationsManager {
   readonly auth?: Authentication;

@@ -72,7 +72,7 @@ export class CreateAiAskOptionals {
 }
 export interface CreateAiAskOptionalsInput {
   readonly headers?: CreateAiAskHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateAiTextGenOptionals {
   readonly headers: CreateAiTextGenHeaders = new CreateAiTextGenHeaders({});
@@ -91,7 +91,7 @@ export class CreateAiTextGenOptionals {
 }
 export interface CreateAiTextGenOptionalsInput {
   readonly headers?: CreateAiTextGenHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetAiAgentDefaultConfigOptionals {
   readonly headers: GetAiAgentDefaultConfigHeaders =
@@ -116,7 +116,7 @@ export class GetAiAgentDefaultConfigOptionals {
 }
 export interface GetAiAgentDefaultConfigOptionalsInput {
   readonly headers?: GetAiAgentDefaultConfigHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateAiExtractOptionals {
   readonly headers: CreateAiExtractHeaders = new CreateAiExtractHeaders({});
@@ -135,7 +135,7 @@ export class CreateAiExtractOptionals {
 }
 export interface CreateAiExtractOptionalsInput {
   readonly headers?: CreateAiExtractHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateAiExtractStructuredOptionals {
   readonly headers: CreateAiExtractStructuredHeaders =
@@ -163,7 +163,7 @@ export class CreateAiExtractStructuredOptionals {
 }
 export interface CreateAiExtractStructuredOptionalsInput {
   readonly headers?: CreateAiExtractStructuredHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateAiAskHeaders {
   /**
@@ -183,11 +183,9 @@ export class CreateAiAskHeaders {
 export interface CreateAiAskHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateAiTextGenHeaders {
   /**
@@ -207,11 +205,9 @@ export class CreateAiTextGenHeaders {
 export interface CreateAiTextGenHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetAiAgentDefaultConfigQueryParamsModeField =
   | 'ask'
@@ -249,11 +245,9 @@ export class GetAiAgentDefaultConfigHeaders {
 export interface GetAiAgentDefaultConfigHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateAiExtractHeaders {
   /**
@@ -273,11 +267,9 @@ export class CreateAiExtractHeaders {
 export interface CreateAiExtractHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateAiExtractStructuredHeaders {
   /**
@@ -297,11 +289,9 @@ export class CreateAiExtractStructuredHeaders {
 export interface CreateAiExtractStructuredHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class AiManager {
   readonly auth?: Authentication;

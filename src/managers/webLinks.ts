@@ -42,7 +42,7 @@ export class CreateWebLinkOptionals {
 }
 export interface CreateWebLinkOptionalsInput {
   readonly headers?: CreateWebLinkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetWebLinkByIdOptionals {
   readonly headers: GetWebLinkByIdHeaders = new GetWebLinkByIdHeaders({});
@@ -61,7 +61,7 @@ export class GetWebLinkByIdOptionals {
 }
 export interface GetWebLinkByIdOptionalsInput {
   readonly headers?: GetWebLinkByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateWebLinkByIdOptionals {
   readonly requestBody: UpdateWebLinkByIdRequestBody =
@@ -94,7 +94,7 @@ export class UpdateWebLinkByIdOptionals {
 export interface UpdateWebLinkByIdOptionalsInput {
   readonly requestBody?: UpdateWebLinkByIdRequestBody;
   readonly headers?: UpdateWebLinkByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteWebLinkByIdOptionals {
   readonly headers: DeleteWebLinkByIdHeaders = new DeleteWebLinkByIdHeaders({});
@@ -115,7 +115,7 @@ export class DeleteWebLinkByIdOptionals {
 }
 export interface DeleteWebLinkByIdOptionalsInput {
   readonly headers?: DeleteWebLinkByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface CreateWebLinkRequestBodyParentField {
   /**
@@ -157,11 +157,9 @@ export class CreateWebLinkHeaders {
 export interface CreateWebLinkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetWebLinkByIdHeaders {
   /**
@@ -208,11 +206,9 @@ export interface GetWebLinkByIdHeadersInput {
   readonly boxapi?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateWebLinkByIdRequestBodyParentField {
   /**
@@ -302,11 +298,9 @@ export class UpdateWebLinkByIdHeaders {
 export interface UpdateWebLinkByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteWebLinkByIdHeaders {
   /**
@@ -326,11 +320,9 @@ export class DeleteWebLinkByIdHeaders {
 export interface DeleteWebLinkByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class WebLinksManager {
   readonly auth?: Authentication;

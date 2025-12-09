@@ -51,7 +51,7 @@ export class CreateLegalHoldPolicyOptionals {
 }
 export interface CreateLegalHoldPolicyOptionalsInput {
   readonly headers?: CreateLegalHoldPolicyHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetLegalHoldPolicyByIdOptionals {
   readonly headers: GetLegalHoldPolicyByIdHeaders =
@@ -76,7 +76,7 @@ export class GetLegalHoldPolicyByIdOptionals {
 }
 export interface GetLegalHoldPolicyByIdOptionalsInput {
   readonly headers?: GetLegalHoldPolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateLegalHoldPolicyByIdOptionals {
   readonly requestBody: UpdateLegalHoldPolicyByIdRequestBody =
@@ -110,7 +110,7 @@ export class UpdateLegalHoldPolicyByIdOptionals {
 export interface UpdateLegalHoldPolicyByIdOptionalsInput {
   readonly requestBody?: UpdateLegalHoldPolicyByIdRequestBody;
   readonly headers?: UpdateLegalHoldPolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteLegalHoldPolicyByIdOptionals {
   readonly headers: DeleteLegalHoldPolicyByIdHeaders =
@@ -138,7 +138,7 @@ export class DeleteLegalHoldPolicyByIdOptionals {
 }
 export interface DeleteLegalHoldPolicyByIdOptionalsInput {
   readonly headers?: DeleteLegalHoldPolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetLegalHoldPoliciesQueryParams {
   /**
@@ -184,11 +184,9 @@ export class GetLegalHoldPoliciesHeaders {
 export interface GetLegalHoldPoliciesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateLegalHoldPolicyRequestBody {
   /**
@@ -253,11 +251,9 @@ export class CreateLegalHoldPolicyHeaders {
 export interface CreateLegalHoldPolicyHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetLegalHoldPolicyByIdHeaders {
   /**
@@ -277,11 +273,9 @@ export class GetLegalHoldPolicyByIdHeaders {
 export interface GetLegalHoldPolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateLegalHoldPolicyByIdRequestBody {
   /**
@@ -313,11 +307,9 @@ export class UpdateLegalHoldPolicyByIdHeaders {
 export interface UpdateLegalHoldPolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteLegalHoldPolicyByIdHeaders {
   /**
@@ -337,11 +329,9 @@ export class DeleteLegalHoldPolicyByIdHeaders {
 export interface DeleteLegalHoldPolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class LegalHoldPoliciesManager {
   readonly auth?: Authentication;

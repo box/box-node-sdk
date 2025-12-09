@@ -48,7 +48,7 @@ export class GetFileMetadataOptionals {
 }
 export interface GetFileMetadataOptionalsInput {
   readonly headers?: GetFileMetadataHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileMetadataByIdOptionals {
   readonly headers: GetFileMetadataByIdHeaders = new GetFileMetadataByIdHeaders(
@@ -74,7 +74,7 @@ export class GetFileMetadataByIdOptionals {
 }
 export interface GetFileMetadataByIdOptionalsInput {
   readonly headers?: GetFileMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFileMetadataByIdOptionals {
   readonly headers: CreateFileMetadataByIdHeaders =
@@ -99,7 +99,7 @@ export class CreateFileMetadataByIdOptionals {
 }
 export interface CreateFileMetadataByIdOptionalsInput {
   readonly headers?: CreateFileMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFileMetadataByIdOptionals {
   readonly headers: UpdateFileMetadataByIdHeaders =
@@ -124,7 +124,7 @@ export class UpdateFileMetadataByIdOptionals {
 }
 export interface UpdateFileMetadataByIdOptionalsInput {
   readonly headers?: UpdateFileMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFileMetadataByIdOptionals {
   readonly headers: DeleteFileMetadataByIdHeaders =
@@ -149,7 +149,7 @@ export class DeleteFileMetadataByIdOptionals {
 }
 export interface DeleteFileMetadataByIdOptionalsInput {
   readonly headers?: DeleteFileMetadataByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileMetadataHeaders {
   /**
@@ -169,11 +169,9 @@ export class GetFileMetadataHeaders {
 export interface GetFileMetadataHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetFileMetadataByIdScope = 'global' | 'enterprise' | string;
 export class GetFileMetadataByIdHeaders {
@@ -194,11 +192,9 @@ export class GetFileMetadataByIdHeaders {
 export interface GetFileMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateFileMetadataByIdScope = 'global' | 'enterprise' | string;
 export type CreateFileMetadataByIdRequestBody = {
@@ -222,11 +218,9 @@ export class CreateFileMetadataByIdHeaders {
 export interface CreateFileMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateFileMetadataByIdScope = 'global' | 'enterprise' | string;
 export type UpdateFileMetadataByIdRequestBodyOpField =
@@ -277,11 +271,9 @@ export class UpdateFileMetadataByIdHeaders {
 export interface UpdateFileMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type DeleteFileMetadataByIdScope = 'global' | 'enterprise' | string;
 export class DeleteFileMetadataByIdHeaders {
@@ -302,11 +294,9 @@ export class DeleteFileMetadataByIdHeaders {
 export interface DeleteFileMetadataByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FileMetadataManager {
   readonly auth?: Authentication;

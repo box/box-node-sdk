@@ -43,7 +43,7 @@ export class GetFolderWatermarkOptionals {
 }
 export interface GetFolderWatermarkOptionalsInput {
   readonly headers?: GetFolderWatermarkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFolderWatermarkOptionals {
   readonly headers: UpdateFolderWatermarkHeaders =
@@ -68,7 +68,7 @@ export class UpdateFolderWatermarkOptionals {
 }
 export interface UpdateFolderWatermarkOptionalsInput {
   readonly headers?: UpdateFolderWatermarkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFolderWatermarkOptionals {
   readonly headers: DeleteFolderWatermarkHeaders =
@@ -93,7 +93,7 @@ export class DeleteFolderWatermarkOptionals {
 }
 export interface DeleteFolderWatermarkOptionalsInput {
   readonly headers?: DeleteFolderWatermarkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFolderWatermarkHeaders {
   /**
@@ -113,11 +113,9 @@ export class GetFolderWatermarkHeaders {
 export interface GetFolderWatermarkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateFolderWatermarkRequestBodyWatermarkImprintField =
   | 'default'
@@ -174,11 +172,9 @@ export class UpdateFolderWatermarkHeaders {
 export interface UpdateFolderWatermarkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFolderWatermarkHeaders {
   /**
@@ -198,11 +194,9 @@ export class DeleteFolderWatermarkHeaders {
 export interface DeleteFolderWatermarkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FolderWatermarksManager {
   readonly auth?: Authentication;

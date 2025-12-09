@@ -44,7 +44,7 @@ export class TerminateUsersSessionsOptionals {
 }
 export interface TerminateUsersSessionsOptionalsInput {
   readonly headers?: TerminateUsersSessionsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class TerminateGroupsSessionsOptionals {
   readonly headers: TerminateGroupsSessionsHeaders =
@@ -69,7 +69,7 @@ export class TerminateGroupsSessionsOptionals {
 }
 export interface TerminateGroupsSessionsOptionalsInput {
   readonly headers?: TerminateGroupsSessionsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface TerminateUsersSessionsRequestBody {
   /**
@@ -98,11 +98,9 @@ export class TerminateUsersSessionsHeaders {
 export interface TerminateUsersSessionsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface TerminateGroupsSessionsRequestBody {
   /**
@@ -128,11 +126,9 @@ export class TerminateGroupsSessionsHeaders {
 export interface TerminateGroupsSessionsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SessionTerminationManager {
   readonly auth?: Authentication;
