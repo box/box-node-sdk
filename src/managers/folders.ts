@@ -59,7 +59,7 @@ export class GetFolderByIdOptionals {
 export interface GetFolderByIdOptionalsInput {
   readonly queryParams?: GetFolderByIdQueryParams;
   readonly headers?: GetFolderByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFolderByIdOptionals {
   readonly requestBody: UpdateFolderByIdRequestBody =
@@ -98,7 +98,7 @@ export interface UpdateFolderByIdOptionalsInput {
   readonly requestBody?: UpdateFolderByIdRequestBody;
   readonly queryParams?: UpdateFolderByIdQueryParams;
   readonly headers?: UpdateFolderByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFolderByIdOptionals {
   readonly queryParams: DeleteFolderByIdQueryParams =
@@ -131,7 +131,7 @@ export class DeleteFolderByIdOptionals {
 export interface DeleteFolderByIdOptionalsInput {
   readonly queryParams?: DeleteFolderByIdQueryParams;
   readonly headers?: DeleteFolderByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFolderItemsOptionals {
   readonly queryParams: GetFolderItemsQueryParams =
@@ -164,7 +164,7 @@ export class GetFolderItemsOptionals {
 export interface GetFolderItemsOptionalsInput {
   readonly queryParams?: GetFolderItemsQueryParams;
   readonly headers?: GetFolderItemsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFolderOptionals {
   readonly queryParams: CreateFolderQueryParams =
@@ -197,7 +197,7 @@ export class CreateFolderOptionals {
 export interface CreateFolderOptionalsInput {
   readonly queryParams?: CreateFolderQueryParams;
   readonly headers?: CreateFolderHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CopyFolderOptionals {
   readonly queryParams: CopyFolderQueryParams =
@@ -230,7 +230,7 @@ export class CopyFolderOptionals {
 export interface CopyFolderOptionalsInput {
   readonly queryParams?: CopyFolderQueryParams;
   readonly headers?: CopyFolderHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetFolderByIdQueryParamsSortField =
   | 'id'
@@ -365,11 +365,9 @@ export interface GetFolderByIdHeadersInput {
   readonly boxapi?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateFolderByIdRequestBodySyncStateField =
   | 'synced'
@@ -591,11 +589,9 @@ export interface UpdateFolderByIdHeadersInput {
   readonly ifMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface DeleteFolderByIdQueryParams {
   /**
@@ -642,11 +638,9 @@ export interface DeleteFolderByIdHeadersInput {
   readonly ifMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetFolderItemsQueryParamsSortField =
   | 'id'
@@ -777,11 +771,9 @@ export interface GetFolderItemsHeadersInput {
   readonly boxapi?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateFolderRequestBodyParentField {
   /**
@@ -871,11 +863,9 @@ export class CreateFolderHeaders {
 export interface CreateFolderHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CopyFolderRequestBodyParentField {
   /**
@@ -931,11 +921,9 @@ export class CopyFolderHeaders {
 export interface CopyFolderHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FoldersManager {
   readonly auth?: Authentication;

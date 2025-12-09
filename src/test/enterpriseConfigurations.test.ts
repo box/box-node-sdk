@@ -52,7 +52,7 @@ test('testGetEnterpriseConfigurationById', async function testGetEnterpriseConfi
     throw new Error('Assertion failed');
   }
   const userSettings: EnterpriseConfigurationUserSettingsV2025R0 =
-    enterpriseConfiguration.userSettings!!;
+    enterpriseConfiguration.userSettings!;
   if (!(userSettings.isEnterpriseSsoRequired!.value == false)) {
     throw new Error('Assertion failed');
   }
@@ -63,7 +63,7 @@ test('testGetEnterpriseConfigurationById', async function testGetEnterpriseConfi
     throw new Error('Assertion failed');
   }
   const contentAndSharing: EnterpriseConfigurationContentAndSharingV2025R0 =
-    enterpriseConfiguration.contentAndSharing!!;
+    enterpriseConfiguration.contentAndSharing!;
   if (
     !(
       contentAndSharing.collaborationPermissions!.value!.isEditorRoleEnabled ==
@@ -73,12 +73,12 @@ test('testGetEnterpriseConfigurationById', async function testGetEnterpriseConfi
     throw new Error('Assertion failed');
   }
   const security: EnterpriseConfigurationSecurityV2025R0 =
-    enterpriseConfiguration.security!!;
+    enterpriseConfiguration.security!;
   if (!(security.isManagedUserSignupEnabled!.value! == false)) {
     throw new Error('Assertion failed');
   }
   const shield: EnterpriseConfigurationShieldV2025R0 =
-    enterpriseConfiguration.shield!!;
+    enterpriseConfiguration.shield!;
   if (!(shield.shieldRules!.length == 0)) {
     throw new Error('Assertion failed');
   }

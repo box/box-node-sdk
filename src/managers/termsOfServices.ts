@@ -48,7 +48,7 @@ export class CreateTermsOfServiceOptionals {
 }
 export interface CreateTermsOfServiceOptionalsInput {
   readonly headers?: CreateTermsOfServiceHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetTermsOfServiceByIdOptionals {
   readonly headers: GetTermsOfServiceByIdHeaders =
@@ -73,7 +73,7 @@ export class GetTermsOfServiceByIdOptionals {
 }
 export interface GetTermsOfServiceByIdOptionalsInput {
   readonly headers?: GetTermsOfServiceByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateTermsOfServiceByIdOptionals {
   readonly headers: UpdateTermsOfServiceByIdHeaders =
@@ -98,7 +98,7 @@ export class UpdateTermsOfServiceByIdOptionals {
 }
 export interface UpdateTermsOfServiceByIdOptionalsInput {
   readonly headers?: UpdateTermsOfServiceByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetTermsOfServiceQueryParamsTosTypeField =
   | 'external'
@@ -127,11 +127,9 @@ export class GetTermsOfServiceHeaders {
 export interface GetTermsOfServiceHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateTermsOfServiceRequestBodyStatusField =
   | 'enabled'
@@ -174,11 +172,9 @@ export class CreateTermsOfServiceHeaders {
 export interface CreateTermsOfServiceHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetTermsOfServiceByIdHeaders {
   /**
@@ -198,11 +194,9 @@ export class GetTermsOfServiceByIdHeaders {
 export interface GetTermsOfServiceByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateTermsOfServiceByIdRequestBodyStatusField =
   | 'enabled'
@@ -237,11 +231,9 @@ export class UpdateTermsOfServiceByIdHeaders {
 export interface UpdateTermsOfServiceByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TermsOfServicesManager {
   readonly auth?: Authentication;

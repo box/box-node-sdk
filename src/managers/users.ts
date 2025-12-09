@@ -59,7 +59,7 @@ export class CreateUserOptionals {
 export interface CreateUserOptionalsInput {
   readonly queryParams?: CreateUserQueryParams;
   readonly headers?: CreateUserHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetUserByIdOptionals {
   readonly queryParams: GetUserByIdQueryParams =
@@ -92,7 +92,7 @@ export class GetUserByIdOptionals {
 export interface GetUserByIdOptionalsInput {
   readonly queryParams?: GetUserByIdQueryParams;
   readonly headers?: GetUserByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateUserByIdOptionals {
   readonly requestBody: UpdateUserByIdRequestBody =
@@ -131,7 +131,7 @@ export interface UpdateUserByIdOptionalsInput {
   readonly requestBody?: UpdateUserByIdRequestBody;
   readonly queryParams?: UpdateUserByIdQueryParams;
   readonly headers?: UpdateUserByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteUserByIdOptionals {
   readonly queryParams: DeleteUserByIdQueryParams =
@@ -164,7 +164,7 @@ export class DeleteUserByIdOptionals {
 export interface DeleteUserByIdOptionalsInput {
   readonly queryParams?: DeleteUserByIdQueryParams;
   readonly headers?: DeleteUserByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetUsersQueryParamsUserTypeField =
   | 'all'
@@ -258,11 +258,9 @@ export class GetUsersHeaders {
 export interface GetUsersHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateUserRequestBodyRoleField = 'coadmin' | 'user' | string;
 export type CreateUserRequestBodyStatusField =
@@ -371,11 +369,9 @@ export class CreateUserHeaders {
 export interface CreateUserHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetUserMeQueryParams {
   /**
@@ -408,11 +404,9 @@ export class GetUserMeHeaders {
 export interface GetUserMeHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetUserByIdQueryParams {
   /**
@@ -445,11 +439,9 @@ export class GetUserByIdHeaders {
 export interface GetUserByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateUserByIdRequestBodyRoleField = 'coadmin' | 'user' | string;
 export type UpdateUserByIdRequestBodyStatusField =
@@ -583,11 +575,9 @@ export class UpdateUserByIdHeaders {
 export interface UpdateUserByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface DeleteUserByIdQueryParams {
   /**
@@ -617,11 +607,9 @@ export class DeleteUserByIdHeaders {
 export interface DeleteUserByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UsersManager {
   readonly auth?: Authentication;

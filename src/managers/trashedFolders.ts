@@ -63,7 +63,7 @@ export interface RestoreFolderFromTrashOptionalsInput {
   readonly requestBody?: RestoreFolderFromTrashRequestBody;
   readonly queryParams?: RestoreFolderFromTrashQueryParams;
   readonly headers?: RestoreFolderFromTrashHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetTrashedFolderByIdOptionals {
   readonly queryParams: GetTrashedFolderByIdQueryParams =
@@ -97,7 +97,7 @@ export class GetTrashedFolderByIdOptionals {
 export interface GetTrashedFolderByIdOptionalsInput {
   readonly queryParams?: GetTrashedFolderByIdQueryParams;
   readonly headers?: GetTrashedFolderByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteTrashedFolderByIdOptionals {
   readonly headers: DeleteTrashedFolderByIdHeaders =
@@ -122,7 +122,7 @@ export class DeleteTrashedFolderByIdOptionals {
 }
 export interface DeleteTrashedFolderByIdOptionalsInput {
   readonly headers?: DeleteTrashedFolderByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface RestoreFolderFromTrashRequestBodyParentField {
   /**
@@ -168,11 +168,9 @@ export class RestoreFolderFromTrashHeaders {
 export interface RestoreFolderFromTrashHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetTrashedFolderByIdQueryParams {
   /**
@@ -205,11 +203,9 @@ export class GetTrashedFolderByIdHeaders {
 export interface GetTrashedFolderByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteTrashedFolderByIdHeaders {
   /**
@@ -229,11 +225,9 @@ export class DeleteTrashedFolderByIdHeaders {
 export interface DeleteTrashedFolderByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TrashedFoldersManager {
   readonly auth?: Authentication;

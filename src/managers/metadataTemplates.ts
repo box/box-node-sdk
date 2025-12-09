@@ -51,7 +51,7 @@ export class GetMetadataTemplatesByInstanceIdOptionals {
 }
 export interface GetMetadataTemplatesByInstanceIdOptionalsInput {
   readonly headers?: GetMetadataTemplatesByInstanceIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetMetadataTemplateOptionals {
   readonly headers: GetMetadataTemplateHeaders = new GetMetadataTemplateHeaders(
@@ -77,7 +77,7 @@ export class GetMetadataTemplateOptionals {
 }
 export interface GetMetadataTemplateOptionalsInput {
   readonly headers?: GetMetadataTemplateHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateMetadataTemplateOptionals {
   readonly headers: UpdateMetadataTemplateHeaders =
@@ -102,7 +102,7 @@ export class UpdateMetadataTemplateOptionals {
 }
 export interface UpdateMetadataTemplateOptionalsInput {
   readonly headers?: UpdateMetadataTemplateHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteMetadataTemplateOptionals {
   readonly headers: DeleteMetadataTemplateHeaders =
@@ -127,7 +127,7 @@ export class DeleteMetadataTemplateOptionals {
 }
 export interface DeleteMetadataTemplateOptionalsInput {
   readonly headers?: DeleteMetadataTemplateHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetMetadataTemplateByIdOptionals {
   readonly headers: GetMetadataTemplateByIdHeaders =
@@ -152,7 +152,7 @@ export class GetMetadataTemplateByIdOptionals {
 }
 export interface GetMetadataTemplateByIdOptionalsInput {
   readonly headers?: GetMetadataTemplateByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateMetadataTemplateOptionals {
   readonly headers: CreateMetadataTemplateHeaders =
@@ -177,7 +177,7 @@ export class CreateMetadataTemplateOptionals {
 }
 export interface CreateMetadataTemplateOptionalsInput {
   readonly headers?: CreateMetadataTemplateHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetMetadataTemplatesByInstanceIdQueryParams {
   /**
@@ -211,11 +211,9 @@ export class GetMetadataTemplatesByInstanceIdHeaders {
 export interface GetMetadataTemplatesByInstanceIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetMetadataTemplateScope = 'global' | 'enterprise' | string;
 export class GetMetadataTemplateHeaders {
@@ -236,11 +234,9 @@ export class GetMetadataTemplateHeaders {
 export interface GetMetadataTemplateHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateMetadataTemplateScope = 'global' | 'enterprise' | string;
 export type UpdateMetadataTemplateRequestBodyOpField =
@@ -313,11 +309,9 @@ export class UpdateMetadataTemplateHeaders {
 export interface UpdateMetadataTemplateHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type DeleteMetadataTemplateScope = 'global' | 'enterprise' | string;
 export class DeleteMetadataTemplateHeaders {
@@ -338,11 +332,9 @@ export class DeleteMetadataTemplateHeaders {
 export interface DeleteMetadataTemplateHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetMetadataTemplateByIdHeaders {
   /**
@@ -362,11 +354,9 @@ export class GetMetadataTemplateByIdHeaders {
 export interface GetMetadataTemplateByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetGlobalMetadataTemplatesQueryParams {
   /**
@@ -397,11 +387,9 @@ export class GetGlobalMetadataTemplatesHeaders {
 export interface GetGlobalMetadataTemplatesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetEnterpriseMetadataTemplatesQueryParams {
   /**
@@ -432,11 +420,9 @@ export class GetEnterpriseMetadataTemplatesHeaders {
 export interface GetEnterpriseMetadataTemplatesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateMetadataTemplateRequestBodyFieldsTypeField =
   | 'string'
@@ -536,11 +522,9 @@ export class CreateMetadataTemplateHeaders {
 export interface CreateMetadataTemplateHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class MetadataTemplatesManager {
   readonly auth?: Authentication;

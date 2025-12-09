@@ -27,14 +27,10 @@ export interface EnterpriseConfigurationV2025R0 {
   /**
    * The value will always be `enterprise_configuration`. */
   readonly type?: EnterpriseConfigurationV2025R0TypeField;
-  readonly security?: EnterpriseConfigurationSecurityV2025R0 | undefined;
-  readonly contentAndSharing?:
-    | EnterpriseConfigurationContentAndSharingV2025R0
-    | undefined;
-  readonly userSettings?:
-    | EnterpriseConfigurationUserSettingsV2025R0
-    | undefined;
-  readonly shield?: EnterpriseConfigurationShieldV2025R0 | undefined;
+  readonly security?: EnterpriseConfigurationSecurityV2025R0;
+  readonly contentAndSharing?: EnterpriseConfigurationContentAndSharingV2025R0;
+  readonly userSettings?: EnterpriseConfigurationUserSettingsV2025R0;
+  readonly shield?: EnterpriseConfigurationShieldV2025R0;
   readonly rawData?: SerializedData;
 }
 export function serializeEnterpriseConfigurationV2025R0TypeField(
@@ -64,31 +60,21 @@ export function serializeEnterpriseConfigurationV2025R0(
     ['security']:
       val.security == void 0
         ? val.security
-        : val.security == void 0
-          ? val.security
-          : serializeEnterpriseConfigurationSecurityV2025R0(val.security),
+        : serializeEnterpriseConfigurationSecurityV2025R0(val.security),
     ['content_and_sharing']:
       val.contentAndSharing == void 0
         ? val.contentAndSharing
-        : val.contentAndSharing == void 0
-          ? val.contentAndSharing
-          : serializeEnterpriseConfigurationContentAndSharingV2025R0(
-              val.contentAndSharing,
-            ),
+        : serializeEnterpriseConfigurationContentAndSharingV2025R0(
+            val.contentAndSharing,
+          ),
     ['user_settings']:
       val.userSettings == void 0
         ? val.userSettings
-        : val.userSettings == void 0
-          ? val.userSettings
-          : serializeEnterpriseConfigurationUserSettingsV2025R0(
-              val.userSettings,
-            ),
+        : serializeEnterpriseConfigurationUserSettingsV2025R0(val.userSettings),
     ['shield']:
       val.shield == void 0
         ? val.shield
-        : val.shield == void 0
-          ? val.shield
-          : serializeEnterpriseConfigurationShieldV2025R0(val.shield),
+        : serializeEnterpriseConfigurationShieldV2025R0(val.shield),
   };
 }
 export function deserializeEnterpriseConfigurationV2025R0(
@@ -110,40 +96,28 @@ export function deserializeEnterpriseConfigurationV2025R0(
     val.type == void 0
       ? void 0
       : deserializeEnterpriseConfigurationV2025R0TypeField(val.type);
-  const security:
-    | undefined
-    | (EnterpriseConfigurationSecurityV2025R0 | undefined) =
+  const security: EnterpriseConfigurationSecurityV2025R0 | undefined =
     val.security == void 0
       ? void 0
-      : val.security == void 0
-        ? void 0
-        : deserializeEnterpriseConfigurationSecurityV2025R0(val.security);
+      : deserializeEnterpriseConfigurationSecurityV2025R0(val.security);
   const contentAndSharing:
-    | undefined
-    | (EnterpriseConfigurationContentAndSharingV2025R0 | undefined) =
+    | EnterpriseConfigurationContentAndSharingV2025R0
+    | undefined =
     val.content_and_sharing == void 0
       ? void 0
-      : val.content_and_sharing == void 0
-        ? void 0
-        : deserializeEnterpriseConfigurationContentAndSharingV2025R0(
-            val.content_and_sharing,
-          );
-  const userSettings:
-    | undefined
-    | (EnterpriseConfigurationUserSettingsV2025R0 | undefined) =
+      : deserializeEnterpriseConfigurationContentAndSharingV2025R0(
+          val.content_and_sharing,
+        );
+  const userSettings: EnterpriseConfigurationUserSettingsV2025R0 | undefined =
     val.user_settings == void 0
       ? void 0
-      : val.user_settings == void 0
-        ? void 0
-        : deserializeEnterpriseConfigurationUserSettingsV2025R0(
-            val.user_settings,
-          );
-  const shield: undefined | (EnterpriseConfigurationShieldV2025R0 | undefined) =
+      : deserializeEnterpriseConfigurationUserSettingsV2025R0(
+          val.user_settings,
+        );
+  const shield: EnterpriseConfigurationShieldV2025R0 | undefined =
     val.shield == void 0
       ? void 0
-      : val.shield == void 0
-        ? void 0
-        : deserializeEnterpriseConfigurationShieldV2025R0(val.shield);
+      : deserializeEnterpriseConfigurationShieldV2025R0(val.shield);
   return {
     id: id,
     type: type,

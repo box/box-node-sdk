@@ -61,7 +61,7 @@ export class GetCollectionItemsOptionals {
 export interface GetCollectionItemsOptionalsInput {
   readonly queryParams?: GetCollectionItemsQueryParams;
   readonly headers?: GetCollectionItemsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetCollectionByIdOptionals {
   readonly headers: GetCollectionByIdHeaders = new GetCollectionByIdHeaders({});
@@ -82,7 +82,7 @@ export class GetCollectionByIdOptionals {
 }
 export interface GetCollectionByIdOptionalsInput {
   readonly headers?: GetCollectionByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetCollectionsQueryParams {
   /**
@@ -125,11 +125,9 @@ export class GetCollectionsHeaders {
 export interface GetCollectionsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetCollectionItemsQueryParams {
   /**
@@ -172,11 +170,9 @@ export class GetCollectionItemsHeaders {
 export interface GetCollectionItemsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetCollectionByIdHeaders {
   /**
@@ -196,11 +192,9 @@ export class GetCollectionByIdHeaders {
 export interface GetCollectionByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CollectionsManager {
   readonly auth?: Authentication;

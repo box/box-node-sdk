@@ -58,7 +58,7 @@ export class GetUserMembershipsOptionals {
 export interface GetUserMembershipsOptionalsInput {
   readonly queryParams?: GetUserMembershipsQueryParams;
   readonly headers?: GetUserMembershipsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetGroupMembershipsOptionals {
   readonly queryParams: GetGroupMembershipsQueryParams =
@@ -93,7 +93,7 @@ export class GetGroupMembershipsOptionals {
 export interface GetGroupMembershipsOptionalsInput {
   readonly queryParams?: GetGroupMembershipsQueryParams;
   readonly headers?: GetGroupMembershipsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateGroupMembershipOptionals {
   readonly queryParams: CreateGroupMembershipQueryParams =
@@ -127,7 +127,7 @@ export class CreateGroupMembershipOptionals {
 export interface CreateGroupMembershipOptionalsInput {
   readonly queryParams?: CreateGroupMembershipQueryParams;
   readonly headers?: CreateGroupMembershipHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetGroupMembershipByIdOptionals {
   readonly queryParams: GetGroupMembershipByIdQueryParams =
@@ -161,7 +161,7 @@ export class GetGroupMembershipByIdOptionals {
 export interface GetGroupMembershipByIdOptionalsInput {
   readonly queryParams?: GetGroupMembershipByIdQueryParams;
   readonly headers?: GetGroupMembershipByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateGroupMembershipByIdOptionals {
   readonly requestBody: UpdateGroupMembershipByIdRequestBody =
@@ -201,7 +201,7 @@ export interface UpdateGroupMembershipByIdOptionalsInput {
   readonly requestBody?: UpdateGroupMembershipByIdRequestBody;
   readonly queryParams?: UpdateGroupMembershipByIdQueryParams;
   readonly headers?: UpdateGroupMembershipByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteGroupMembershipByIdOptionals {
   readonly headers: DeleteGroupMembershipByIdHeaders =
@@ -229,7 +229,7 @@ export class DeleteGroupMembershipByIdOptionals {
 }
 export interface DeleteGroupMembershipByIdOptionalsInput {
   readonly headers?: DeleteGroupMembershipByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetUserMembershipsQueryParams {
   /**
@@ -261,11 +261,9 @@ export class GetUserMembershipsHeaders {
 export interface GetUserMembershipsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetGroupMembershipsQueryParams {
   /**
@@ -297,11 +295,9 @@ export class GetGroupMembershipsHeaders {
 export interface GetGroupMembershipsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateGroupMembershipRequestBodyUserField {
   /**
@@ -376,11 +372,9 @@ export class CreateGroupMembershipHeaders {
 export interface CreateGroupMembershipHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetGroupMembershipByIdQueryParams {
   /**
@@ -413,11 +407,9 @@ export class GetGroupMembershipByIdHeaders {
 export interface GetGroupMembershipByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateGroupMembershipByIdRequestBodyRoleField =
   | 'member'
@@ -474,11 +466,9 @@ export class UpdateGroupMembershipByIdHeaders {
 export interface UpdateGroupMembershipByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteGroupMembershipByIdHeaders {
   /**
@@ -498,11 +488,9 @@ export class DeleteGroupMembershipByIdHeaders {
 export interface DeleteGroupMembershipByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class MembershipsManager {
   readonly auth?: Authentication;

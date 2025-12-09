@@ -54,7 +54,7 @@ export class CreateRetentionPolicyOptionals {
 }
 export interface CreateRetentionPolicyOptionalsInput {
   readonly headers?: CreateRetentionPolicyHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetRetentionPolicyByIdOptionals {
   readonly queryParams: GetRetentionPolicyByIdQueryParams =
@@ -88,7 +88,7 @@ export class GetRetentionPolicyByIdOptionals {
 export interface GetRetentionPolicyByIdOptionalsInput {
   readonly queryParams?: GetRetentionPolicyByIdQueryParams;
   readonly headers?: GetRetentionPolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateRetentionPolicyByIdOptionals {
   readonly requestBody: UpdateRetentionPolicyByIdRequestBody =
@@ -122,7 +122,7 @@ export class UpdateRetentionPolicyByIdOptionals {
 export interface UpdateRetentionPolicyByIdOptionalsInput {
   readonly requestBody?: UpdateRetentionPolicyByIdRequestBody;
   readonly headers?: UpdateRetentionPolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteRetentionPolicyByIdOptionals {
   readonly headers: DeleteRetentionPolicyByIdHeaders =
@@ -150,7 +150,7 @@ export class DeleteRetentionPolicyByIdOptionals {
 }
 export interface DeleteRetentionPolicyByIdOptionalsInput {
   readonly headers?: DeleteRetentionPolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetRetentionPoliciesQueryParamsPolicyTypeField =
   | 'finite'
@@ -204,11 +204,9 @@ export class GetRetentionPoliciesHeaders {
 export interface GetRetentionPoliciesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateRetentionPolicyRequestBodyPolicyTypeField =
   | 'finite'
@@ -301,11 +299,9 @@ export class CreateRetentionPolicyHeaders {
 export interface CreateRetentionPolicyHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetRetentionPolicyByIdQueryParams {
   /**
@@ -338,11 +334,9 @@ export class GetRetentionPolicyByIdHeaders {
 export interface GetRetentionPolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateRetentionPolicyByIdRequestBody {
   /**
@@ -429,11 +423,9 @@ export class UpdateRetentionPolicyByIdHeaders {
 export interface UpdateRetentionPolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteRetentionPolicyByIdHeaders {
   /**
@@ -453,11 +445,9 @@ export class DeleteRetentionPolicyByIdHeaders {
 export interface DeleteRetentionPolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class RetentionPoliciesManager {
   readonly auth?: Authentication;

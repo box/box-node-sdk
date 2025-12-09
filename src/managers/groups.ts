@@ -56,7 +56,7 @@ export class CreateGroupOptionals {
 export interface CreateGroupOptionalsInput {
   readonly queryParams?: CreateGroupQueryParams;
   readonly headers?: CreateGroupHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetGroupByIdOptionals {
   readonly queryParams: GetGroupByIdQueryParams =
@@ -89,7 +89,7 @@ export class GetGroupByIdOptionals {
 export interface GetGroupByIdOptionalsInput {
   readonly queryParams?: GetGroupByIdQueryParams;
   readonly headers?: GetGroupByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateGroupByIdOptionals {
   readonly requestBody: UpdateGroupByIdRequestBody =
@@ -128,7 +128,7 @@ export interface UpdateGroupByIdOptionalsInput {
   readonly requestBody?: UpdateGroupByIdRequestBody;
   readonly queryParams?: UpdateGroupByIdQueryParams;
   readonly headers?: UpdateGroupByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteGroupByIdOptionals {
   readonly headers: DeleteGroupByIdHeaders = new DeleteGroupByIdHeaders({});
@@ -147,7 +147,7 @@ export class DeleteGroupByIdOptionals {
 }
 export interface DeleteGroupByIdOptionalsInput {
   readonly headers?: DeleteGroupByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetGroupsQueryParams {
   /**
@@ -194,11 +194,9 @@ export class GetGroupsHeaders {
 export interface GetGroupsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateGroupRequestBodyInvitabilityLevelField =
   | 'admins_only'
@@ -296,11 +294,9 @@ export class CreateGroupHeaders {
 export interface CreateGroupHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetGroupByIdQueryParams {
   /**
@@ -333,11 +329,9 @@ export class GetGroupByIdHeaders {
 export interface GetGroupByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateGroupByIdRequestBodyInvitabilityLevelField =
   | 'admins_only'
@@ -435,11 +429,9 @@ export class UpdateGroupByIdHeaders {
 export interface UpdateGroupByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteGroupByIdHeaders {
   /**
@@ -459,11 +451,9 @@ export class DeleteGroupByIdHeaders {
 export interface DeleteGroupByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GroupsManager {
   readonly auth?: Authentication;

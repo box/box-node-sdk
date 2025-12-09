@@ -63,7 +63,7 @@ export class UploadFileVersionOptionals {
 export interface UploadFileVersionOptionalsInput {
   readonly queryParams?: UploadFileVersionQueryParams;
   readonly headers?: UploadFileVersionHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UploadFileOptionals {
   readonly queryParams: UploadFileQueryParams =
@@ -96,7 +96,7 @@ export class UploadFileOptionals {
 export interface UploadFileOptionalsInput {
   readonly queryParams?: UploadFileQueryParams;
   readonly headers?: UploadFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UploadWithPreflightCheckOptionals {
   readonly queryParams: UploadWithPreflightCheckQueryParams =
@@ -130,7 +130,7 @@ export class UploadWithPreflightCheckOptionals {
 export interface UploadWithPreflightCheckOptionalsInput {
   readonly queryParams?: UploadWithPreflightCheckQueryParams;
   readonly headers?: UploadWithPreflightCheckHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface UploadFileVersionRequestBodyAttributesField {
   /**
@@ -237,11 +237,9 @@ export interface UploadFileVersionHeadersInput {
   readonly contentMd5?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface PreflightFileUploadCheckRequestBodyParentField {
   /**
@@ -277,11 +275,9 @@ export class PreflightFileUploadCheckHeaders {
 export interface PreflightFileUploadCheckHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UploadFileRequestBodyAttributesParentField {
   /**
@@ -384,11 +380,9 @@ export interface UploadFileHeadersInput {
   readonly contentMd5?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UploadWithPreflightCheckRequestBodyAttributesParentField {
   /**
@@ -481,11 +475,9 @@ export interface UploadWithPreflightCheckHeadersInput {
   readonly contentMd5?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UploadsManager {
   readonly auth?: Authentication;

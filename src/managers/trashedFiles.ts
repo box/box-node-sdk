@@ -63,7 +63,7 @@ export interface RestoreFileFromTrashOptionalsInput {
   readonly requestBody?: RestoreFileFromTrashRequestBody;
   readonly queryParams?: RestoreFileFromTrashQueryParams;
   readonly headers?: RestoreFileFromTrashHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetTrashedFileByIdOptionals {
   readonly queryParams: GetTrashedFileByIdQueryParams =
@@ -98,7 +98,7 @@ export class GetTrashedFileByIdOptionals {
 export interface GetTrashedFileByIdOptionalsInput {
   readonly queryParams?: GetTrashedFileByIdQueryParams;
   readonly headers?: GetTrashedFileByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteTrashedFileByIdOptionals {
   readonly headers: DeleteTrashedFileByIdHeaders =
@@ -123,7 +123,7 @@ export class DeleteTrashedFileByIdOptionals {
 }
 export interface DeleteTrashedFileByIdOptionalsInput {
   readonly headers?: DeleteTrashedFileByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface RestoreFileFromTrashRequestBodyParentField {
   /**
@@ -169,11 +169,9 @@ export class RestoreFileFromTrashHeaders {
 export interface RestoreFileFromTrashHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetTrashedFileByIdQueryParams {
   /**
@@ -206,11 +204,9 @@ export class GetTrashedFileByIdHeaders {
 export interface GetTrashedFileByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteTrashedFileByIdHeaders {
   /**
@@ -230,11 +226,9 @@ export class DeleteTrashedFileByIdHeaders {
 export interface DeleteTrashedFileByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TrashedFilesManager {
   readonly auth?: Authentication;

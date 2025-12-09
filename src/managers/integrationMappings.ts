@@ -72,7 +72,7 @@ export class CreateSlackIntegrationMappingOptionals {
 }
 export interface CreateSlackIntegrationMappingOptionalsInput {
   readonly headers?: CreateSlackIntegrationMappingHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateSlackIntegrationMappingByIdOptionals {
   readonly requestBody: UpdateSlackIntegrationMappingByIdRequestBody =
@@ -106,7 +106,7 @@ export class UpdateSlackIntegrationMappingByIdOptionals {
 export interface UpdateSlackIntegrationMappingByIdOptionalsInput {
   readonly requestBody?: UpdateSlackIntegrationMappingByIdRequestBody;
   readonly headers?: UpdateSlackIntegrationMappingByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteSlackIntegrationMappingByIdOptionals {
   readonly headers: DeleteSlackIntegrationMappingByIdHeaders =
@@ -134,7 +134,7 @@ export class DeleteSlackIntegrationMappingByIdOptionals {
 }
 export interface DeleteSlackIntegrationMappingByIdOptionalsInput {
   readonly headers?: DeleteSlackIntegrationMappingByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateTeamsIntegrationMappingOptionals {
   readonly headers: CreateTeamsIntegrationMappingHeaders =
@@ -162,7 +162,7 @@ export class CreateTeamsIntegrationMappingOptionals {
 }
 export interface CreateTeamsIntegrationMappingOptionalsInput {
   readonly headers?: CreateTeamsIntegrationMappingHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateTeamsIntegrationMappingByIdOptionals {
   readonly requestBody: UpdateTeamsIntegrationMappingByIdRequestBody =
@@ -196,7 +196,7 @@ export class UpdateTeamsIntegrationMappingByIdOptionals {
 export interface UpdateTeamsIntegrationMappingByIdOptionalsInput {
   readonly requestBody?: UpdateTeamsIntegrationMappingByIdRequestBody;
   readonly headers?: UpdateTeamsIntegrationMappingByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteTeamsIntegrationMappingByIdOptionals {
   readonly headers: DeleteTeamsIntegrationMappingByIdHeaders =
@@ -224,7 +224,7 @@ export class DeleteTeamsIntegrationMappingByIdOptionals {
 }
 export interface DeleteTeamsIntegrationMappingByIdOptionalsInput {
   readonly headers?: DeleteTeamsIntegrationMappingByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetSlackIntegrationMappingQueryParamsPartnerItemTypeField =
   | 'channel'
@@ -278,11 +278,9 @@ export class GetSlackIntegrationMappingHeaders {
 export interface GetSlackIntegrationMappingHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateSlackIntegrationMappingHeaders {
   /**
@@ -302,11 +300,9 @@ export class CreateSlackIntegrationMappingHeaders {
 export interface CreateSlackIntegrationMappingHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateSlackIntegrationMappingByIdRequestBody {
   readonly boxItem?: IntegrationMappingBoxItemSlack;
@@ -331,11 +327,9 @@ export class UpdateSlackIntegrationMappingByIdHeaders {
 export interface UpdateSlackIntegrationMappingByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteSlackIntegrationMappingByIdHeaders {
   /**
@@ -355,11 +349,9 @@ export class DeleteSlackIntegrationMappingByIdHeaders {
 export interface DeleteSlackIntegrationMappingByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetTeamsIntegrationMappingQueryParamsPartnerItemTypeField =
   | 'channel'
@@ -402,11 +394,9 @@ export class GetTeamsIntegrationMappingHeaders {
 export interface GetTeamsIntegrationMappingHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateTeamsIntegrationMappingHeaders {
   /**
@@ -426,11 +416,9 @@ export class CreateTeamsIntegrationMappingHeaders {
 export interface CreateTeamsIntegrationMappingHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateTeamsIntegrationMappingByIdRequestBody {
   readonly boxItem?: FolderReference;
@@ -454,11 +442,9 @@ export class UpdateTeamsIntegrationMappingByIdHeaders {
 export interface UpdateTeamsIntegrationMappingByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteTeamsIntegrationMappingByIdHeaders {
   /**
@@ -478,11 +464,9 @@ export class DeleteTeamsIntegrationMappingByIdHeaders {
 export interface DeleteTeamsIntegrationMappingByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class IntegrationMappingsManager {
   readonly auth?: Authentication;

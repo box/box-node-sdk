@@ -49,7 +49,7 @@ export class AuthorizeUserOptionals {
 }
 export interface AuthorizeUserOptionalsInput {
   readonly headers?: AuthorizeUserHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class RequestAccessTokenOptionals {
   readonly headers: RequestAccessTokenHeaders = new RequestAccessTokenHeaders(
@@ -72,7 +72,7 @@ export class RequestAccessTokenOptionals {
 }
 export interface RequestAccessTokenOptionalsInput {
   readonly headers?: RequestAccessTokenHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class RefreshAccessTokenOptionals {
   readonly headers: RefreshAccessTokenHeaders = new RefreshAccessTokenHeaders(
@@ -95,7 +95,7 @@ export class RefreshAccessTokenOptionals {
 }
 export interface RefreshAccessTokenOptionalsInput {
   readonly headers?: RefreshAccessTokenHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class RevokeAccessTokenOptionals {
   readonly headers: RevokeAccessTokenHeaders = new RevokeAccessTokenHeaders({});
@@ -116,7 +116,7 @@ export class RevokeAccessTokenOptionals {
 }
 export interface RevokeAccessTokenOptionalsInput {
   readonly headers?: RevokeAccessTokenHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type AuthorizeUserQueryParamsResponseTypeField = 'code' | string;
 export interface AuthorizeUserQueryParams {
@@ -172,11 +172,9 @@ export class AuthorizeUserHeaders {
 export interface AuthorizeUserHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class RequestAccessTokenHeaders {
   /**
@@ -196,11 +194,9 @@ export class RequestAccessTokenHeaders {
 export interface RequestAccessTokenHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class RefreshAccessTokenHeaders {
   /**
@@ -220,11 +216,9 @@ export class RefreshAccessTokenHeaders {
 export interface RefreshAccessTokenHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class RevokeAccessTokenHeaders {
   /**
@@ -244,11 +238,9 @@ export class RevokeAccessTokenHeaders {
 export interface RevokeAccessTokenHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class AuthorizationManager {
   readonly auth?: Authentication;

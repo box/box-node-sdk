@@ -57,7 +57,7 @@ export class CreateShieldListV2025R0Optionals {
 }
 export interface CreateShieldListV2025R0OptionalsInput {
   readonly headers?: CreateShieldListV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetShieldListByIdV2025R0Optionals {
   readonly headers: GetShieldListByIdV2025R0Headers =
@@ -82,7 +82,7 @@ export class GetShieldListByIdV2025R0Optionals {
 }
 export interface GetShieldListByIdV2025R0OptionalsInput {
   readonly headers?: GetShieldListByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteShieldListByIdV2025R0Optionals {
   readonly headers: DeleteShieldListByIdV2025R0Headers =
@@ -110,7 +110,7 @@ export class DeleteShieldListByIdV2025R0Optionals {
 }
 export interface DeleteShieldListByIdV2025R0OptionalsInput {
   readonly headers?: DeleteShieldListByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateShieldListByIdV2025R0Optionals {
   readonly headers: UpdateShieldListByIdV2025R0Headers =
@@ -138,7 +138,7 @@ export class UpdateShieldListByIdV2025R0Optionals {
 }
 export interface UpdateShieldListByIdV2025R0OptionalsInput {
   readonly headers?: UpdateShieldListByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetShieldListsV2025R0Headers {
   /**
@@ -170,11 +170,9 @@ export interface GetShieldListsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateShieldListV2025R0Headers {
   /**
@@ -209,11 +207,9 @@ export interface CreateShieldListV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetShieldListByIdV2025R0Headers {
   /**
@@ -248,11 +244,9 @@ export interface GetShieldListByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteShieldListByIdV2025R0Headers {
   /**
@@ -287,11 +281,9 @@ export interface DeleteShieldListByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UpdateShieldListByIdV2025R0Headers {
   /**
@@ -326,11 +318,9 @@ export interface UpdateShieldListByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ShieldListsManager {
   readonly auth?: Authentication;
