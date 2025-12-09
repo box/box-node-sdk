@@ -69,7 +69,7 @@ export class CreateDocgenTemplateV2025R0Optionals {
 }
 export interface CreateDocgenTemplateV2025R0OptionalsInput {
   readonly headers?: CreateDocgenTemplateV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteDocgenTemplateByIdV2025R0Optionals {
   readonly headers: DeleteDocgenTemplateByIdV2025R0Headers =
@@ -97,7 +97,7 @@ export class DeleteDocgenTemplateByIdV2025R0Optionals {
 }
 export interface DeleteDocgenTemplateByIdV2025R0OptionalsInput {
   readonly headers?: DeleteDocgenTemplateByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetDocgenTemplateByIdV2025R0Optionals {
   readonly headers: GetDocgenTemplateByIdV2025R0Headers =
@@ -125,7 +125,7 @@ export class GetDocgenTemplateByIdV2025R0Optionals {
 }
 export interface GetDocgenTemplateByIdV2025R0OptionalsInput {
   readonly headers?: GetDocgenTemplateByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetDocgenTemplateTagsV2025R0Optionals {
   readonly queryParams: GetDocgenTemplateTagsV2025R0QueryParams =
@@ -159,7 +159,7 @@ export class GetDocgenTemplateTagsV2025R0Optionals {
 export interface GetDocgenTemplateTagsV2025R0OptionalsInput {
   readonly queryParams?: GetDocgenTemplateTagsV2025R0QueryParams;
   readonly headers?: GetDocgenTemplateTagsV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetDocgenTemplateJobByIdV2025R0Optionals {
   readonly queryParams: GetDocgenTemplateJobByIdV2025R0QueryParams =
@@ -193,7 +193,7 @@ export class GetDocgenTemplateJobByIdV2025R0Optionals {
 export interface GetDocgenTemplateJobByIdV2025R0OptionalsInput {
   readonly queryParams?: GetDocgenTemplateJobByIdV2025R0QueryParams;
   readonly headers?: GetDocgenTemplateJobByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateDocgenTemplateV2025R0Headers {
   /**
@@ -228,11 +228,9 @@ export interface CreateDocgenTemplateV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetDocgenTemplatesV2025R0QueryParams {
   /**
@@ -278,11 +276,9 @@ export interface GetDocgenTemplatesV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteDocgenTemplateByIdV2025R0Headers {
   /**
@@ -320,11 +316,9 @@ export interface DeleteDocgenTemplateByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetDocgenTemplateByIdV2025R0Headers {
   /**
@@ -359,11 +353,9 @@ export interface GetDocgenTemplateByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetDocgenTemplateTagsV2025R0QueryParams {
   /**
@@ -412,11 +404,9 @@ export interface GetDocgenTemplateTagsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetDocgenTemplateJobByIdV2025R0QueryParams {
   /**
@@ -465,11 +455,9 @@ export interface GetDocgenTemplateJobByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DocgenTemplateManager {
   readonly auth?: Authentication;

@@ -158,5 +158,5 @@ export interface FetchOptionsInput {
   readonly cancellationToken?: CancellationToken;
   /**
    * A boolean value indicate if the request should follow redirects. Defaults to True. Not supported in Browser environment. */
-  readonly followRedirects?: undefined | boolean;
+  readonly followRedirects?: boolean;
 }

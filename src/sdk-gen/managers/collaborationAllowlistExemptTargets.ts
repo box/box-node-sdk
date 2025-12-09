@@ -51,7 +51,7 @@ export class CreateCollaborationWhitelistExemptTargetOptionals {
 }
 export interface CreateCollaborationWhitelistExemptTargetOptionalsInput {
   readonly headers?: CreateCollaborationWhitelistExemptTargetHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetCollaborationWhitelistExemptTargetByIdOptionals {
   readonly headers: GetCollaborationWhitelistExemptTargetByIdHeaders =
@@ -79,7 +79,7 @@ export class GetCollaborationWhitelistExemptTargetByIdOptionals {
 }
 export interface GetCollaborationWhitelistExemptTargetByIdOptionalsInput {
   readonly headers?: GetCollaborationWhitelistExemptTargetByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteCollaborationWhitelistExemptTargetByIdOptionals {
   readonly headers: DeleteCollaborationWhitelistExemptTargetByIdHeaders =
@@ -107,7 +107,7 @@ export class DeleteCollaborationWhitelistExemptTargetByIdOptionals {
 }
 export interface DeleteCollaborationWhitelistExemptTargetByIdOptionalsInput {
   readonly headers?: DeleteCollaborationWhitelistExemptTargetByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetCollaborationWhitelistExemptTargetsQueryParams {
   /**
@@ -143,11 +143,9 @@ export class GetCollaborationWhitelistExemptTargetsHeaders {
 export interface GetCollaborationWhitelistExemptTargetsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateCollaborationWhitelistExemptTargetRequestBodyUserField {
   /**
@@ -184,11 +182,9 @@ export class CreateCollaborationWhitelistExemptTargetHeaders {
 export interface CreateCollaborationWhitelistExemptTargetHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetCollaborationWhitelistExemptTargetByIdHeaders {
   /**
@@ -213,11 +209,9 @@ export class GetCollaborationWhitelistExemptTargetByIdHeaders {
 export interface GetCollaborationWhitelistExemptTargetByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteCollaborationWhitelistExemptTargetByIdHeaders {
   /**
@@ -245,11 +239,9 @@ export class DeleteCollaborationWhitelistExemptTargetByIdHeaders {
 export interface DeleteCollaborationWhitelistExemptTargetByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CollaborationAllowlistExemptTargetsManager {
   readonly auth?: Authentication;

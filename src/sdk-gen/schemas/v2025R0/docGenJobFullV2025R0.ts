@@ -141,18 +141,14 @@ export function deserializeDocGenJobFullV2025R0(
   }
   const templateFileVersion: FileVersionBaseV2025R0 =
     deserializeFileVersionBaseV2025R0(val.template_file_version);
-  const outputFile: undefined | (FileReferenceV2025R0 | undefined) =
+  const outputFile: FileReferenceV2025R0 | undefined =
     val.output_file == void 0
       ? void 0
-      : val.output_file == void 0
-        ? void 0
-        : deserializeFileReferenceV2025R0(val.output_file);
-  const outputFileVersion: undefined | (FileVersionBaseV2025R0 | undefined) =
+      : deserializeFileReferenceV2025R0(val.output_file);
+  const outputFileVersion: FileVersionBaseV2025R0 | undefined =
     val.output_file_version == void 0
       ? void 0
-      : val.output_file_version == void 0
-        ? void 0
-        : deserializeFileVersionBaseV2025R0(val.output_file_version);
+      : deserializeFileVersionBaseV2025R0(val.output_file_version);
   if (val.status == void 0) {
     throw new BoxSdkError({
       message:

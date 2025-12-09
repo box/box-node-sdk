@@ -54,7 +54,7 @@ export class CreateHubV2025R0Optionals {
 }
 export interface CreateHubV2025R0OptionalsInput {
   readonly headers?: CreateHubV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetHubByIdV2025R0Optionals {
   readonly headers: GetHubByIdV2025R0Headers = new GetHubByIdV2025R0Headers({});
@@ -73,7 +73,7 @@ export class GetHubByIdV2025R0Optionals {
 }
 export interface GetHubByIdV2025R0OptionalsInput {
   readonly headers?: GetHubByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateHubByIdV2025R0Optionals {
   readonly headers: UpdateHubByIdV2025R0Headers =
@@ -98,7 +98,7 @@ export class UpdateHubByIdV2025R0Optionals {
 }
 export interface UpdateHubByIdV2025R0OptionalsInput {
   readonly headers?: UpdateHubByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteHubByIdV2025R0Optionals {
   readonly headers: DeleteHubByIdV2025R0Headers =
@@ -123,7 +123,7 @@ export class DeleteHubByIdV2025R0Optionals {
 }
 export interface DeleteHubByIdV2025R0OptionalsInput {
   readonly headers?: DeleteHubByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CopyHubV2025R0Optionals {
   readonly headers: CopyHubV2025R0Headers = new CopyHubV2025R0Headers({});
@@ -142,7 +142,7 @@ export class CopyHubV2025R0Optionals {
 }
 export interface CopyHubV2025R0OptionalsInput {
   readonly headers?: CopyHubV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetHubsV2025R0QueryParamsDirectionField = 'ASC' | 'DESC' | string;
 export interface GetHubsV2025R0QueryParams {
@@ -199,11 +199,9 @@ export interface GetHubsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateHubV2025R0Headers {
   /**
@@ -233,11 +231,9 @@ export interface CreateHubV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetEnterpriseHubsV2025R0QueryParamsDirectionField =
   | 'ASC'
@@ -298,11 +294,9 @@ export interface GetEnterpriseHubsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetHubByIdV2025R0Headers {
   /**
@@ -332,11 +326,9 @@ export interface GetHubByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UpdateHubByIdV2025R0Headers {
   /**
@@ -366,11 +358,9 @@ export interface UpdateHubByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteHubByIdV2025R0Headers {
   /**
@@ -400,11 +390,9 @@ export interface DeleteHubByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CopyHubV2025R0Headers {
   /**
@@ -434,11 +422,9 @@ export interface CopyHubV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class HubsManager {
   readonly auth?: Authentication;

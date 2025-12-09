@@ -60,7 +60,7 @@ export class SearchByMetadataQueryOptionals {
 }
 export interface SearchByMetadataQueryOptionalsInput {
   readonly headers?: SearchByMetadataQueryHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class SearchByMetadataQueryHeaders {
   /**
@@ -80,11 +80,9 @@ export class SearchByMetadataQueryHeaders {
 export interface SearchByMetadataQueryHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type SearchForContentQueryParamsScopeField =
   | 'user_content'
@@ -390,11 +388,9 @@ export class SearchForContentHeaders {
 export interface SearchForContentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SearchManager {
   readonly auth?: Authentication;
