@@ -45,7 +45,7 @@ export class GetClassificationOnFileOptionals {
 }
 export interface GetClassificationOnFileOptionalsInput {
   readonly headers?: GetClassificationOnFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class AddClassificationToFileOptionals {
   readonly requestBody: AddClassificationToFileRequestBody =
@@ -79,7 +79,7 @@ export class AddClassificationToFileOptionals {
 export interface AddClassificationToFileOptionalsInput {
   readonly requestBody?: AddClassificationToFileRequestBody;
   readonly headers?: AddClassificationToFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateClassificationOnFileOptionals {
   readonly headers: UpdateClassificationOnFileHeaders =
@@ -107,7 +107,7 @@ export class UpdateClassificationOnFileOptionals {
 }
 export interface UpdateClassificationOnFileOptionalsInput {
   readonly headers?: UpdateClassificationOnFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteClassificationFromFileOptionals {
   readonly headers: DeleteClassificationFromFileHeaders =
@@ -135,7 +135,7 @@ export class DeleteClassificationFromFileOptionals {
 }
 export interface DeleteClassificationFromFileOptionalsInput {
   readonly headers?: DeleteClassificationFromFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetClassificationOnFileHeaders {
   /**
@@ -155,11 +155,9 @@ export class GetClassificationOnFileHeaders {
 export interface GetClassificationOnFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface AddClassificationToFileRequestBody {
   /**
@@ -190,11 +188,9 @@ export class AddClassificationToFileHeaders {
 export interface AddClassificationToFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateClassificationOnFileRequestBodyOpField = 'replace' | string;
 export type UpdateClassificationOnFileRequestBodyPathField =
@@ -273,11 +269,9 @@ export class UpdateClassificationOnFileHeaders {
 export interface UpdateClassificationOnFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteClassificationFromFileHeaders {
   /**
@@ -297,11 +291,9 @@ export class DeleteClassificationFromFileHeaders {
 export interface DeleteClassificationFromFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FileClassificationsManager {
   readonly auth?: Authentication;

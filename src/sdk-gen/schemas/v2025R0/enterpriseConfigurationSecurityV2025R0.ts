@@ -38,11 +38,11 @@ export type EnterpriseConfigurationSecurityV2025R0LastPasswordResetAtField =
   };
 export type EnterpriseConfigurationSecurityV2025R0ExternalCollabMultiFactorAuthSettingsField =
   EnterpriseConfigurationItemV2025R0 & {
-    readonly value?: ExternalCollabSecuritySettingsV2025R0 | undefined;
+    readonly value?: ExternalCollabSecuritySettingsV2025R0;
   };
 export type EnterpriseConfigurationSecurityV2025R0KeysafeField =
   EnterpriseConfigurationItemV2025R0 & {
-    readonly value?: KeysafeSettingsV2025R0 | undefined;
+    readonly value?: KeysafeSettingsV2025R0;
   };
 export type EnterpriseConfigurationSecurityV2025R0CustomSessionDurationGroupsField =
   EnterpriseConfigurationItemV2025R0 & {
@@ -157,9 +157,7 @@ export function serializeEnterpriseConfigurationSecurityV2025R0ExternalCollabMul
       ['value']:
         val.value == void 0
           ? val.value
-          : val.value == void 0
-            ? val.value
-            : serializeExternalCollabSecuritySettingsV2025R0(val.value),
+          : serializeExternalCollabSecuritySettingsV2025R0(val.value),
     },
   };
 }
@@ -172,12 +170,10 @@ export function deserializeEnterpriseConfigurationSecurityV2025R0ExternalCollabM
         'Expecting a map for "EnterpriseConfigurationSecurityV2025R0ExternalCollabMultiFactorAuthSettingsField"',
     });
   }
-  const value: undefined | (ExternalCollabSecuritySettingsV2025R0 | undefined) =
+  const value: ExternalCollabSecuritySettingsV2025R0 | undefined =
     val.value == void 0
       ? void 0
-      : val.value == void 0
-        ? void 0
-        : deserializeExternalCollabSecuritySettingsV2025R0(val.value);
+      : deserializeExternalCollabSecuritySettingsV2025R0(val.value);
   if (!(val.is_used == void 0) && !sdIsBoolean(val.is_used)) {
     throw new BoxSdkError({
       message:
@@ -207,9 +203,7 @@ export function serializeEnterpriseConfigurationSecurityV2025R0KeysafeField(
       ['value']:
         val.value == void 0
           ? val.value
-          : val.value == void 0
-            ? val.value
-            : serializeKeysafeSettingsV2025R0(val.value),
+          : serializeKeysafeSettingsV2025R0(val.value),
     },
   };
 }
@@ -222,12 +216,8 @@ export function deserializeEnterpriseConfigurationSecurityV2025R0KeysafeField(
         'Expecting a map for "EnterpriseConfigurationSecurityV2025R0KeysafeField"',
     });
   }
-  const value: undefined | (KeysafeSettingsV2025R0 | undefined) =
-    val.value == void 0
-      ? void 0
-      : val.value == void 0
-        ? void 0
-        : deserializeKeysafeSettingsV2025R0(val.value);
+  const value: KeysafeSettingsV2025R0 | undefined =
+    val.value == void 0 ? void 0 : deserializeKeysafeSettingsV2025R0(val.value);
   if (!(val.is_used == void 0) && !sdIsBoolean(val.is_used)) {
     throw new BoxSdkError({
       message:

@@ -54,7 +54,7 @@ export class GetMetadataCascadePoliciesOptionals {
 }
 export interface GetMetadataCascadePoliciesOptionalsInput {
   readonly headers?: GetMetadataCascadePoliciesHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateMetadataCascadePolicyOptionals {
   readonly headers: CreateMetadataCascadePolicyHeaders =
@@ -82,7 +82,7 @@ export class CreateMetadataCascadePolicyOptionals {
 }
 export interface CreateMetadataCascadePolicyOptionalsInput {
   readonly headers?: CreateMetadataCascadePolicyHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetMetadataCascadePolicyByIdOptionals {
   readonly headers: GetMetadataCascadePolicyByIdHeaders =
@@ -110,7 +110,7 @@ export class GetMetadataCascadePolicyByIdOptionals {
 }
 export interface GetMetadataCascadePolicyByIdOptionalsInput {
   readonly headers?: GetMetadataCascadePolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteMetadataCascadePolicyByIdOptionals {
   readonly headers: DeleteMetadataCascadePolicyByIdHeaders =
@@ -138,7 +138,7 @@ export class DeleteMetadataCascadePolicyByIdOptionals {
 }
 export interface DeleteMetadataCascadePolicyByIdOptionalsInput {
   readonly headers?: DeleteMetadataCascadePolicyByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class ApplyMetadataCascadePolicyOptionals {
   readonly headers: ApplyMetadataCascadePolicyHeaders =
@@ -166,7 +166,7 @@ export class ApplyMetadataCascadePolicyOptionals {
 }
 export interface ApplyMetadataCascadePolicyOptionalsInput {
   readonly headers?: ApplyMetadataCascadePolicyHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetMetadataCascadePoliciesQueryParams {
   /**
@@ -210,11 +210,9 @@ export class GetMetadataCascadePoliciesHeaders {
 export interface GetMetadataCascadePoliciesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateMetadataCascadePolicyRequestBodyScopeField =
   | 'global'
@@ -267,11 +265,9 @@ export class CreateMetadataCascadePolicyHeaders {
 export interface CreateMetadataCascadePolicyHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetMetadataCascadePolicyByIdHeaders {
   /**
@@ -291,11 +287,9 @@ export class GetMetadataCascadePolicyByIdHeaders {
 export interface GetMetadataCascadePolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteMetadataCascadePolicyByIdHeaders {
   /**
@@ -315,11 +309,9 @@ export class DeleteMetadataCascadePolicyByIdHeaders {
 export interface DeleteMetadataCascadePolicyByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type ApplyMetadataCascadePolicyRequestBodyConflictResolutionField =
   | 'none'
@@ -355,11 +347,9 @@ export class ApplyMetadataCascadePolicyHeaders {
 export interface ApplyMetadataCascadePolicyHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class MetadataCascadePoliciesManager {
   readonly auth?: Authentication;

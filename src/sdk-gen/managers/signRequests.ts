@@ -45,7 +45,7 @@ export class CancelSignRequestOptionals {
 }
 export interface CancelSignRequestOptionalsInput {
   readonly headers?: CancelSignRequestHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class ResendSignRequestOptionals {
   readonly headers: ResendSignRequestHeaders = new ResendSignRequestHeaders({});
@@ -64,7 +64,7 @@ export class ResendSignRequestOptionals {
 }
 export interface ResendSignRequestOptionalsInput {
   readonly headers?: ResendSignRequestHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetSignRequestByIdOptionals {
   readonly headers: GetSignRequestByIdHeaders = new GetSignRequestByIdHeaders(
@@ -87,7 +87,7 @@ export class GetSignRequestByIdOptionals {
 }
 export interface GetSignRequestByIdOptionalsInput {
   readonly headers?: GetSignRequestByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateSignRequestOptionals {
   readonly headers: CreateSignRequestHeaders = new CreateSignRequestHeaders({});
@@ -106,7 +106,7 @@ export class CreateSignRequestOptionals {
 }
 export interface CreateSignRequestOptionalsInput {
   readonly headers?: CreateSignRequestHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CancelSignRequestHeaders {
   /**
@@ -126,11 +126,9 @@ export class CancelSignRequestHeaders {
 export interface CancelSignRequestHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ResendSignRequestHeaders {
   /**
@@ -150,11 +148,9 @@ export class ResendSignRequestHeaders {
 export interface ResendSignRequestHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetSignRequestByIdHeaders {
   /**
@@ -174,11 +170,9 @@ export class GetSignRequestByIdHeaders {
 export interface GetSignRequestByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetSignRequestsQueryParams {
   /**
@@ -219,11 +213,9 @@ export class GetSignRequestsHeaders {
 export interface GetSignRequestsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateSignRequestHeaders {
   /**
@@ -243,11 +235,9 @@ export class CreateSignRequestHeaders {
 export interface CreateSignRequestHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SignRequestsManager {
   readonly auth?: Authentication;

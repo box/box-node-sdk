@@ -55,7 +55,7 @@ export class GetDownloadFileUrlOptionals {
 export interface GetDownloadFileUrlOptionalsInput {
   readonly queryParams?: GetDownloadFileUrlQueryParams;
   readonly headers?: GetDownloadFileUrlHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DownloadFileOptionals {
   readonly queryParams: DownloadFileQueryParams =
@@ -88,7 +88,7 @@ export class DownloadFileOptionals {
 export interface DownloadFileOptionalsInput {
   readonly queryParams?: DownloadFileQueryParams;
   readonly headers?: DownloadFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetDownloadFileUrlQueryParams {
   /**
@@ -159,11 +159,9 @@ export interface GetDownloadFileUrlHeadersInput {
   readonly boxapi?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface DownloadFileQueryParams {
   /**
@@ -234,11 +232,9 @@ export interface DownloadFileHeadersInput {
   readonly boxapi?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DownloadsManager {
   readonly auth?: Authentication;

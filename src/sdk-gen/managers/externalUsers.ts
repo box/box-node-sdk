@@ -54,7 +54,7 @@ export class SubmitJobToDeleteExternalUsersV2025R0Optionals {
 }
 export interface SubmitJobToDeleteExternalUsersV2025R0OptionalsInput {
   readonly headers?: SubmitJobToDeleteExternalUsersV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class SubmitJobToDeleteExternalUsersV2025R0Headers {
   /**
@@ -92,11 +92,9 @@ export interface SubmitJobToDeleteExternalUsersV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ExternalUsersManager {
   readonly auth?: Authentication;

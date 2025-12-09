@@ -60,7 +60,7 @@ export class GetDocgenJobByIdV2025R0Optionals {
 }
 export interface GetDocgenJobByIdV2025R0OptionalsInput {
   readonly headers?: GetDocgenJobByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetDocgenBatchJobByIdV2025R0Optionals {
   readonly queryParams: GetDocgenBatchJobByIdV2025R0QueryParams =
@@ -94,7 +94,7 @@ export class GetDocgenBatchJobByIdV2025R0Optionals {
 export interface GetDocgenBatchJobByIdV2025R0OptionalsInput {
   readonly queryParams?: GetDocgenBatchJobByIdV2025R0QueryParams;
   readonly headers?: GetDocgenBatchJobByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateDocgenBatchV2025R0Optionals {
   readonly headers: CreateDocgenBatchV2025R0Headers =
@@ -119,7 +119,7 @@ export class CreateDocgenBatchV2025R0Optionals {
 }
 export interface CreateDocgenBatchV2025R0OptionalsInput {
   readonly headers?: CreateDocgenBatchV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetDocgenJobByIdV2025R0Headers {
   /**
@@ -154,11 +154,9 @@ export interface GetDocgenJobByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetDocgenJobsV2025R0QueryParams {
   /**
@@ -199,11 +197,9 @@ export interface GetDocgenJobsV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetDocgenBatchJobByIdV2025R0QueryParams {
   /**
@@ -249,11 +245,9 @@ export interface GetDocgenBatchJobByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateDocgenBatchV2025R0Headers {
   /**
@@ -288,11 +282,9 @@ export interface CreateDocgenBatchV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DocgenManager {
   readonly auth?: Authentication;

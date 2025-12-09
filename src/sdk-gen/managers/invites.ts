@@ -53,7 +53,7 @@ export class CreateInviteOptionals {
 export interface CreateInviteOptionalsInput {
   readonly queryParams?: CreateInviteQueryParams;
   readonly headers?: CreateInviteHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetInviteByIdOptionals {
   readonly queryParams: GetInviteByIdQueryParams =
@@ -86,7 +86,7 @@ export class GetInviteByIdOptionals {
 export interface GetInviteByIdOptionalsInput {
   readonly queryParams?: GetInviteByIdQueryParams;
   readonly headers?: GetInviteByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface CreateInviteRequestBodyEnterpriseField {
   /**
@@ -140,11 +140,9 @@ export class CreateInviteHeaders {
 export interface CreateInviteHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetInviteByIdQueryParams {
   /**
@@ -177,11 +175,9 @@ export class GetInviteByIdHeaders {
 export interface GetInviteByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class InvitesManager {
   readonly auth?: Authentication;
