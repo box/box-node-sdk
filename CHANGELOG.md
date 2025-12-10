@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.2.0](https://github.com/box/box-node-sdk/compare/v10.1.0...v10.2.0) (2025-12-10)
+
+
+### Bug Fixes
+
+* Remove duplicated  in union type (box/box-codegen[#898](https://github.com/box/box-node-sdk/issues/898)) ([#1240](https://github.com/box/box-node-sdk/issues/1240)) ([0b03b60](https://github.com/box/box-node-sdk/commit/0b03b607789ccf6a94253101760aa530a9737e78))
+
+
+### New Features and Enhancements
+
+* Remove `confidence_score` and `include_confidence_score` from AI extract (box/box-openapi[#567](https://github.com/box/box-node-sdk/issues/567)) ([#1243](https://github.com/box/box-node-sdk/issues/1243)) ([55d6cd0](https://github.com/box/box-node-sdk/commit/55d6cd00790a81fa5c54379c045b4e652173dcb8))
+* support `includeConfidenceScore` and `includeConfidenceScore` fields in AI extract structured (box/box-openapi[#566](https://github.com/box/box-node-sdk/issues/566)) ([#1228](https://github.com/box/box-node-sdk/issues/1228)) ([4bf9f46](https://github.com/box/box-node-sdk/commit/4bf9f46baaeaa213878c9102c0628e3c351c7b3c))
+* Support new sign request metadata (box/box-openapi[#565](https://github.com/box/box-node-sdk/issues/565)) ([#1226](https://github.com/box/box-node-sdk/issues/1226)) ([8dfc1cc](https://github.com/box/box-node-sdk/commit/8dfc1ccc9c600c24d4d5e7879eaebfd6bf1f9a0e))
+* update error message on exception (box/box-codegen[#896](https://github.com/box/box-node-sdk/issues/896)) ([#1233](https://github.com/box/box-node-sdk/issues/1233)) ([b298afa](https://github.com/box/box-node-sdk/commit/b298afa69fce884f7def10a8022aa67dc58ac949))
+
 ## [10.1.0](https://github.com/box/box-node-sdk/compare/v10.0.1...v10.1.0) (2025-11-10)
 
 
