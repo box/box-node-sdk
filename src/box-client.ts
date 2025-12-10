@@ -80,6 +80,30 @@ import PagingIterator from './util/paging-iterator';
 const pkg = require('../package.json');
 
 // ------------------------------------------------------------------------------
+// SDK-Gen Imports (for getAuthentication, getNetworkSession, getSdkGenClient)
+// ------------------------------------------------------------------------------
+import { BoxDeveloperTokenAuth } from './sdk-gen/box/developerTokenAuth';
+import { BoxOAuth, OAuthConfig } from './sdk-gen/box/oauth';
+import { BoxJwtAuth, JwtConfig } from './sdk-gen/box/jwtAuth';
+import { BoxCcgAuth, CcgConfig } from './sdk-gen/box/ccgAuth';
+import { InMemoryTokenStorage } from './sdk-gen/box/tokenStorage';
+import {
+  wrapLegacyTokenStore,
+  convertLegacyTokenInfoToAccessToken,
+} from './util/token-storage-adapter';
+import BasicAPISession from './sessions/basic-session';
+import PersistentAPISession from './sessions/persistent-session';
+import AppAuthSession from './sessions/app-auth-session';
+import CCGAPISession from './sessions/ccg-session';
+import { NetworkSession } from './sdk-gen/networking/network';
+import { BaseUrls } from './sdk-gen/networking/baseUrls';
+import { BoxRetryStrategy } from './sdk-gen/networking/retries';
+import { BoxNetworkClient } from './sdk-gen/networking/boxNetworkClient';
+import { DataSanitizer } from './sdk-gen/internal/logging';
+import { createAgent } from './sdk-gen/internal/utils';
+import { BoxClient as SdkGenBoxClient } from './sdk-gen/client';
+
+// ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
 
@@ -757,28 +781,12 @@ class BoxClient {
    * @throws {Error} If the authentication type cannot be determined or is not supported
    */
   getAuthentication(options?: { tokenStorage?: any }): any {
-    const { BoxDeveloperTokenAuth } = require('./sdk-gen/box/developerTokenAuth');
-    const { BoxOAuth, OAuthConfig } = require('./sdk-gen/box/oauth');
-    const { BoxJwtAuth, JwtConfig } = require('./sdk-gen/box/jwtAuth');
-    const { BoxCcgAuth, CcgConfig } = require('./sdk-gen/box/ccgAuth');
-    const { InMemoryTokenStorage } = require('./sdk-gen/box/tokenStorage');
-    const {
-      wrapLegacyTokenStore,
-      convertLegacyTokenInfoToAccessToken,
-    } = require('./util/token-storage-adapter');
-
-    const BasicAPISession = require('./sessions/basic-session').default;
-    const PersistentAPISession = require('./sessions/persistent-session').default;
-    const AppAuthSession = require('./sessions/app-auth-session').default;
-    const CCGAPISession = require('./sessions/ccg-session').default;
-
     // Determine token storage to use
     let tokenStorage = options?.tokenStorage;
 
-    // Case 1: BasicAPISession (simple access token)
+    //BasicAPISession (simple access token)
     if (this._session instanceof BasicAPISession) {
-      // For basic session, use DeveloperTokenAuth
-      // Create token storage with the current access token
+
       if (!tokenStorage) {
         tokenStorage = new InMemoryTokenStorage({
           token: { accessToken: (this._session as any)._accessToken },
@@ -794,7 +802,7 @@ class BoxClient {
       });
     }
 
-    // Case 2: PersistentAPISession (OAuth with refresh token)
+    //PersistentAPISession (OAuth with refresh token)
     if (this._session instanceof PersistentAPISession) {
       const session = this._session as any;
 
@@ -823,7 +831,7 @@ class BoxClient {
       return new BoxOAuth({ config });
     }
 
-    // Case 3: AppAuthSession (JWT App Auth)
+    //AppAuthSession (JWT App Auth)
     if (this._session instanceof AppAuthSession) {
       const session = this._session as any;
       const appAuthConfig = session._config.appAuth;
@@ -864,7 +872,7 @@ class BoxClient {
       return new BoxJwtAuth({ config: jwtConfig });
     }
 
-    // Case 4: CCGAPISession (Client Credentials Grant)
+    //CCGAPISession (Client Credentials Grant)
     if (this._session instanceof CCGAPISession) {
       const session = this._session as any;
 
@@ -904,39 +912,13 @@ class BoxClient {
   /**
    * Get an sdk-gen NetworkSession configured with the current SDK's network settings.
    * This allows reusing network configuration between the legacy SDK and sdk-gen SDK.
-   *
-   * Properties mapped from legacy SDK:
-   * - Base URLs (API, Upload, OAuth)
-   * - Proxy configuration
-   * - Custom headers
-   * - Agent options
-   * - Retry settings (maxRetries, retryInterval)
-   *
-   * Properties only in SDK-Gen (provided via options):
-   * - networkClient: Custom network client implementation
-   * - retryStrategy: Custom retry strategy (overrides legacy retry config)
-   * - dataSanitizer: Data sanitization for logging
-   * - interceptors: Request/response interceptors
-   *
    * @param {Object} [options] Optional configuration for SDK-Gen-only properties
    * @param {NetworkClient} [options.networkClient] Custom network client
    * @param {RetryStrategy} [options.retryStrategy] Custom retry strategy
    * @param {DataSanitizer} [options.dataSanitizer] Custom data sanitizer
    * @param {Interceptor[]} [options.interceptors] Request interceptors
-   * @param {Object} [options.additionalHeaders] Extra headers (merged with legacy)
+   * @param {Object} [options.additionalHeaders] Extra headers
    * @returns {NetworkSession} Configured NetworkSession for sdk-gen
-   *
-   * @example
-   * // Basic usage - extracts all settings from legacy SDK
-   * const networkSession = legacyClient.getNetworkSession();
-   * const sdkGenClient = new SdkGenBoxClient({ auth, networkSession });
-   *
-   * @example
-   * // With custom options
-   * const networkSession = legacyClient.getNetworkSession({
-   *   retryStrategy: new BoxRetryStrategy({ maxAttempts: 10 }),
-   *   additionalHeaders: { 'X-Custom-Header': 'value' }
-   * });
    */
   getNetworkSession(options?: {
     networkClient?: any;
@@ -945,24 +927,16 @@ class BoxClient {
     interceptors?: any[];
     additionalHeaders?: { [key: string]: string };
   }): any {
-    // Import sdk-gen types dynamically to avoid circular dependencies
-    const { NetworkSession } = require('./sdk-gen/networking/network');
-    const { BaseUrls } = require('./sdk-gen/networking/baseUrls');
-    const { BoxRetryStrategy } = require('./sdk-gen/networking/retries');
-    const { BoxNetworkClient } = require('./sdk-gen/networking/boxNetworkClient');
-    const { DataSanitizer } = require('./sdk-gen/internal/logging');
-    const { createAgent } = require('./sdk-gen/internal/utils');
 
-    // Get config from session (same approach as getAuthentication)
+    // Get config from session
     const session = this._session as any;
     const config = session._config || {};
 
-    // Step 1: Build BaseUrls from legacy config
+    // Build BaseUrls from legacy config
     // Legacy authorizeRootURL is 'https://account.box.com/api'
     // SDK-Gen oauth2Url should be 'https://account.box.com/api/oauth2'
     let oauth2Url = 'https://account.box.com/api/oauth2';
     if (config.authorizeRootURL) {
-      // If legacy has custom authorizeRootURL, append /oauth2 if not present
       oauth2Url = config.authorizeRootURL.endsWith('/oauth2')
         ? config.authorizeRootURL
         : `${config.authorizeRootURL}/oauth2`;
@@ -974,7 +948,7 @@ class BoxClient {
       oauth2Url: oauth2Url,
     });
 
-    // Step 2: Build ProxyConfig from legacy config
+    //Build ProxyConfig from legacy config
     let proxyConfig:
       | { url: string; username?: string; password?: string }
       | undefined;
@@ -986,26 +960,25 @@ class BoxClient {
       };
     }
 
-    // Step 3: Build additionalHeaders from legacy request.headers
+    //Build additionalHeaders from legacy request.headers
     const legacyHeaders = config.request?.headers || {};
     const additionalHeaders = {
       ...legacyHeaders,
       ...(options?.additionalHeaders || {}),
     };
 
-    // Step 4: Build RetryStrategy from legacy config or use provided
+    //Build RetryStrategy from legacy config or use provided
     const retryStrategy =
       options?.retryStrategy ||
       new BoxRetryStrategy({
         maxAttempts: config.numMaxRetries || 5,
-        // Convert retryIntervalMS (milliseconds) to retryBaseInterval (seconds)
         retryBaseInterval: (config.retryIntervalMS || 2000) / 1000,
       });
 
-    // Step 5: Extract agent options from legacy config
+    //Extract agent options from legacy config
     const agentOptions = config.request?.agentOptions || { keepAlive: true };
 
-    // Step 6: Create and return NetworkSession
+    //Create and return NetworkSession
     return new NetworkSession({
       additionalHeaders: additionalHeaders,
       baseUrls: baseUrls,
@@ -1023,10 +996,6 @@ class BoxClient {
    * Get a fully configured sdk-gen BoxClient that shares authentication and
    * network settings with this legacy client.
    *
-   * This is a convenience method that internally calls:
-   * - getAuthentication() to extract auth configuration
-   * - getNetworkSession() to extract network configuration
-   *
    * @param {Object} [options] Optional configuration
    * @param {Object} [options.authOptions] Options to pass to getAuthentication()
    * @param {TokenStorage} [options.authOptions.tokenStorage] Custom token storage
@@ -1037,21 +1006,6 @@ class BoxClient {
    * @param {Interceptor[]} [options.networkOptions.interceptors] Request interceptors
    * @param {Object} [options.networkOptions.additionalHeaders] Extra headers
    * @returns {BoxClient} A fully configured sdk-gen BoxClient
-   *
-   * @example
-   * // Basic usage - one line to get a fully configured SDK-Gen client!
-   * const sdkGenClient = legacyClient.getSdkGenClient();
-   * const user = await sdkGenClient.users.getUserMe();
-   *
-   * @example
-   * // With custom options
-   * const sdkGenClient = legacyClient.getSdkGenClient({
-   *   authOptions: { tokenStorage: myTokenStorage },
-   *   networkOptions: {
-   *     additionalHeaders: { 'X-Request-ID': 'tracking-123' },
-   *     retryStrategy: customRetryStrategy
-   *   }
-   * });
    */
   getSdkGenClient(options?: {
     authOptions?: {
@@ -1065,9 +1019,6 @@ class BoxClient {
       additionalHeaders?: { [key: string]: string };
     };
   }): any {
-    // Import sdk-gen BoxClient dynamically to avoid circular dependencies
-    const { BoxClient: SdkGenBoxClient } = require('./sdk-gen/client');
-
     // Get authentication using getAuthentication() method
     const auth = this.getAuthentication(options?.authOptions);
 
