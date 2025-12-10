@@ -108,7 +108,7 @@ describe('getSdkGenClient()', function () {
     mockery.disable();
   });
 
-  describe('Basic SDK-Gen client creation', function () {
+  describe('Basic SDK-Gen client creation (Developer token)', function () {
     it('should return an SDK-Gen BoxClient instance for BasicAPISession', function () {
       var config = new Config(defaultParams);
       var session = new BasicAPISession('test-token', tokenManagerFake);
@@ -118,6 +118,10 @@ describe('getSdkGenClient()', function () {
       var sdkGenClient = basicClient.getSdkGenClient();
 
       assert.isObject(sdkGenClient);
+      // Verify auth and networkSession are configured
+      assert.property(sdkGenClient, 'auth');
+      assert.property(sdkGenClient, 'networkSession');
+      // Verify resource managers are present
       assert.property(sdkGenClient, 'users');
       assert.property(sdkGenClient, 'folders');
       assert.property(sdkGenClient, 'files');
@@ -143,6 +147,8 @@ describe('getSdkGenClient()', function () {
       var sdkGenClient = basicClient.getSdkGenClient();
 
       assert.isObject(sdkGenClient);
+      assert.property(sdkGenClient, 'auth');
+      assert.property(sdkGenClient, 'networkSession');
       assert.property(sdkGenClient, 'users');
       assert.property(sdkGenClient, 'folders');
       assert.property(sdkGenClient, 'files');
@@ -162,6 +168,8 @@ describe('getSdkGenClient()', function () {
       var sdkGenClient = basicClient.getSdkGenClient();
 
       assert.isObject(sdkGenClient);
+      assert.property(sdkGenClient, 'auth');
+      assert.property(sdkGenClient, 'networkSession');
       assert.property(sdkGenClient, 'users');
       assert.property(sdkGenClient, 'folders');
       assert.property(sdkGenClient, 'files');
@@ -176,6 +184,8 @@ describe('getSdkGenClient()', function () {
       var sdkGenClient = basicClient.getSdkGenClient();
 
       assert.isObject(sdkGenClient);
+      assert.property(sdkGenClient, 'auth');
+      assert.property(sdkGenClient, 'networkSession');
       assert.property(sdkGenClient, 'users');
       assert.property(sdkGenClient, 'folders');
       assert.property(sdkGenClient, 'files');
