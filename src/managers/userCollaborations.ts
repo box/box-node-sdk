@@ -239,7 +239,11 @@ export interface UpdateCollaborationByIdRequestBody {
    * Only an owner or co-owners can invite collaborators with a `can_view_path` of
    * `true`. Only an owner can update `can_view_path` on existing collaborations.
    *
-   * `can_view_path` can only be used for folder collaborations. */
+   * `can_view_path` can only be used for folder collaborations.
+   *
+   * When you delete a folder with `can_view_path=true`, collaborators may still see the parent path.
+   * For instructions on how to remove this, see
+   * [Even though a folder invited via can_view_path is deleted, the path remains displayed](https://support.box.com/hc/en-us/articles/37472814319891-Even-though-a-folder-invited-via-can-view-path-is-deleted-the-path-remains-displayed). */
   readonly canViewPath?: boolean;
   readonly rawData?: SerializedData;
 }
@@ -357,7 +361,11 @@ export interface CreateCollaborationRequestBody {
    * Only an owner or co-owners can invite collaborators with a `can_view_path` of
    * `true`. Only an owner can update `can_view_path` on existing collaborations.
    *
-   * `can_view_path` can only be used for folder collaborations. */
+   * `can_view_path` can only be used for folder collaborations.
+   *
+   * When you delete a folder with `can_view_path=true`, collaborators may still see the parent path.
+   * For instructions on how to remove this, see
+   * [Even though a folder invited via can_view_path is deleted, the path remains displayed](https://support.box.com/hc/en-us/articles/37472814319891-Even-though-a-folder-invited-via-can-view-path-is-deleted-the-path-remains-displayed). */
   readonly canViewPath?: boolean;
   /**
    * Set the expiration date for the collaboration. At this date, the
