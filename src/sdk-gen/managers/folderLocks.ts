@@ -42,7 +42,7 @@ export class GetFolderLocksOptionals {
 }
 export interface GetFolderLocksOptionalsInput {
   readonly headers?: GetFolderLocksHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFolderLockOptionals {
   readonly headers: CreateFolderLockHeaders = new CreateFolderLockHeaders({});
@@ -61,7 +61,7 @@ export class CreateFolderLockOptionals {
 }
 export interface CreateFolderLockOptionalsInput {
   readonly headers?: CreateFolderLockHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFolderLockByIdOptionals {
   readonly headers: DeleteFolderLockByIdHeaders =
@@ -86,7 +86,7 @@ export class DeleteFolderLockByIdOptionals {
 }
 export interface DeleteFolderLockByIdOptionalsInput {
   readonly headers?: DeleteFolderLockByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetFolderLocksQueryParams {
   /**
@@ -120,11 +120,9 @@ export class GetFolderLocksHeaders {
 export interface GetFolderLocksHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateFolderLockRequestBodyLockedOperationsField {
   /**
@@ -174,11 +172,9 @@ export class CreateFolderLockHeaders {
 export interface CreateFolderLockHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFolderLockByIdHeaders {
   /**
@@ -198,11 +194,9 @@ export class DeleteFolderLockByIdHeaders {
 export interface DeleteFolderLockByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FolderLocksManager {
   readonly auth?: Authentication;

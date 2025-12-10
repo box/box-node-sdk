@@ -49,7 +49,7 @@ export class GetSignTemplateByIdOptionals {
 }
 export interface GetSignTemplateByIdOptionalsInput {
   readonly headers?: GetSignTemplateByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetSignTemplatesQueryParams {
   /**
@@ -80,11 +80,9 @@ export class GetSignTemplatesHeaders {
 export interface GetSignTemplatesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetSignTemplateByIdHeaders {
   /**
@@ -104,11 +102,9 @@ export class GetSignTemplateByIdHeaders {
 export interface GetSignTemplateByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SignTemplatesManager {
   readonly auth?: Authentication;

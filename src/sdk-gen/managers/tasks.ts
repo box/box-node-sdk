@@ -45,7 +45,7 @@ export class GetFileTasksOptionals {
 }
 export interface GetFileTasksOptionalsInput {
   readonly headers?: GetFileTasksHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateTaskOptionals {
   readonly headers: CreateTaskHeaders = new CreateTaskHeaders({});
@@ -64,7 +64,7 @@ export class CreateTaskOptionals {
 }
 export interface CreateTaskOptionalsInput {
   readonly headers?: CreateTaskHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetTaskByIdOptionals {
   readonly headers: GetTaskByIdHeaders = new GetTaskByIdHeaders({});
@@ -83,7 +83,7 @@ export class GetTaskByIdOptionals {
 }
 export interface GetTaskByIdOptionalsInput {
   readonly headers?: GetTaskByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateTaskByIdOptionals {
   readonly requestBody: UpdateTaskByIdRequestBody =
@@ -116,7 +116,7 @@ export class UpdateTaskByIdOptionals {
 export interface UpdateTaskByIdOptionalsInput {
   readonly requestBody?: UpdateTaskByIdRequestBody;
   readonly headers?: UpdateTaskByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteTaskByIdOptionals {
   readonly headers: DeleteTaskByIdHeaders = new DeleteTaskByIdHeaders({});
@@ -135,7 +135,7 @@ export class DeleteTaskByIdOptionals {
 }
 export interface DeleteTaskByIdOptionalsInput {
   readonly headers?: DeleteTaskByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileTasksHeaders {
   /**
@@ -155,11 +155,9 @@ export class GetFileTasksHeaders {
 export interface GetFileTasksHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateTaskRequestBodyItemTypeField = 'file';
 export interface CreateTaskRequestBodyItemField {
@@ -223,11 +221,9 @@ export class CreateTaskHeaders {
 export interface CreateTaskHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetTaskByIdHeaders {
   /**
@@ -247,11 +243,9 @@ export class GetTaskByIdHeaders {
 export interface GetTaskByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateTaskByIdRequestBodyActionField =
   | 'review'
@@ -304,11 +298,9 @@ export class UpdateTaskByIdHeaders {
 export interface UpdateTaskByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteTaskByIdHeaders {
   /**
@@ -328,11 +320,9 @@ export class DeleteTaskByIdHeaders {
 export interface DeleteTaskByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TasksManager {
   readonly auth?: Authentication;

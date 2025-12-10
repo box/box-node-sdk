@@ -46,7 +46,7 @@ export class CreateAiAgentOptionals {
 }
 export interface CreateAiAgentOptionalsInput {
   readonly headers?: CreateAiAgentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateAiAgentByIdOptionals {
   readonly headers: UpdateAiAgentByIdHeaders = new UpdateAiAgentByIdHeaders({});
@@ -65,7 +65,7 @@ export class UpdateAiAgentByIdOptionals {
 }
 export interface UpdateAiAgentByIdOptionalsInput {
   readonly headers?: UpdateAiAgentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetAiAgentByIdOptionals {
   readonly queryParams: GetAiAgentByIdQueryParams =
@@ -98,7 +98,7 @@ export class GetAiAgentByIdOptionals {
 export interface GetAiAgentByIdOptionalsInput {
   readonly queryParams?: GetAiAgentByIdQueryParams;
   readonly headers?: GetAiAgentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteAiAgentByIdOptionals {
   readonly headers: DeleteAiAgentByIdHeaders = new DeleteAiAgentByIdHeaders({});
@@ -117,7 +117,7 @@ export class DeleteAiAgentByIdOptionals {
 }
 export interface DeleteAiAgentByIdOptionalsInput {
   readonly headers?: DeleteAiAgentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetAiAgentsQueryParams {
   /**
@@ -157,11 +157,9 @@ export class GetAiAgentsHeaders {
 export interface GetAiAgentsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateAiAgentHeaders {
   /**
@@ -181,11 +179,9 @@ export class CreateAiAgentHeaders {
 export interface CreateAiAgentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UpdateAiAgentByIdHeaders {
   /**
@@ -205,11 +201,9 @@ export class UpdateAiAgentByIdHeaders {
 export interface UpdateAiAgentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetAiAgentByIdQueryParams {
   /**
@@ -234,11 +228,9 @@ export class GetAiAgentByIdHeaders {
 export interface GetAiAgentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteAiAgentByIdHeaders {
   /**
@@ -258,11 +250,9 @@ export class DeleteAiAgentByIdHeaders {
 export interface DeleteAiAgentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class AiStudioManager {
   readonly auth?: Authentication;

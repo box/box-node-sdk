@@ -42,7 +42,7 @@ export class GetWorkflowsOptionals {
 }
 export interface GetWorkflowsOptionalsInput {
   readonly headers?: GetWorkflowsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class StartWorkflowOptionals {
   readonly headers: StartWorkflowHeaders = new StartWorkflowHeaders({});
@@ -61,7 +61,7 @@ export class StartWorkflowOptionals {
 }
 export interface StartWorkflowOptionalsInput {
   readonly headers?: StartWorkflowHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetWorkflowsQueryParams {
   /**
@@ -107,11 +107,9 @@ export class GetWorkflowsHeaders {
 export interface GetWorkflowsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type StartWorkflowRequestBodyTypeField = 'workflow_parameters';
 export interface StartWorkflowRequestBodyFlowField {
@@ -180,11 +178,9 @@ export class StartWorkflowHeaders {
 export interface StartWorkflowHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class WorkflowsManager {
   readonly auth?: Authentication;

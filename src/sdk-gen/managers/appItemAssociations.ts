@@ -54,7 +54,7 @@ export class GetFileAppItemAssociationsOptionals {
 export interface GetFileAppItemAssociationsOptionalsInput {
   readonly queryParams?: GetFileAppItemAssociationsQueryParams;
   readonly headers?: GetFileAppItemAssociationsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFolderAppItemAssociationsOptionals {
   readonly queryParams: GetFolderAppItemAssociationsQueryParams =
@@ -88,7 +88,7 @@ export class GetFolderAppItemAssociationsOptionals {
 export interface GetFolderAppItemAssociationsOptionalsInput {
   readonly queryParams?: GetFolderAppItemAssociationsQueryParams;
   readonly headers?: GetFolderAppItemAssociationsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetFileAppItemAssociationsQueryParams {
   /**
@@ -122,11 +122,9 @@ export class GetFileAppItemAssociationsHeaders {
 export interface GetFileAppItemAssociationsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetFolderAppItemAssociationsQueryParams {
   /**
@@ -160,11 +158,9 @@ export class GetFolderAppItemAssociationsHeaders {
 export interface GetFolderAppItemAssociationsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class AppItemAssociationsManager {
   readonly auth?: Authentication;

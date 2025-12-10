@@ -51,7 +51,7 @@ export class CreateArchiveV2025R0Optionals {
 }
 export interface CreateArchiveV2025R0OptionalsInput {
   readonly headers?: CreateArchiveV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteArchiveByIdV2025R0Optionals {
   readonly headers: DeleteArchiveByIdV2025R0Headers =
@@ -76,7 +76,7 @@ export class DeleteArchiveByIdV2025R0Optionals {
 }
 export interface DeleteArchiveByIdV2025R0OptionalsInput {
   readonly headers?: DeleteArchiveByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateArchiveByIdV2025R0Optionals {
   readonly requestBody: UpdateArchiveByIdV2025R0RequestBody =
@@ -110,7 +110,7 @@ export class UpdateArchiveByIdV2025R0Optionals {
 export interface UpdateArchiveByIdV2025R0OptionalsInput {
   readonly requestBody?: UpdateArchiveByIdV2025R0RequestBody;
   readonly headers?: UpdateArchiveByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetArchivesV2025R0QueryParams {
   /**
@@ -149,11 +149,9 @@ export interface GetArchivesV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateArchiveV2025R0RequestBody {
   /**
@@ -195,11 +193,9 @@ export interface CreateArchiveV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteArchiveByIdV2025R0Headers {
   /**
@@ -234,11 +230,9 @@ export interface DeleteArchiveByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateArchiveByIdV2025R0RequestBody {
   /**
@@ -282,11 +276,9 @@ export interface UpdateArchiveByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ArchivesManager {
   readonly auth?: Authentication;

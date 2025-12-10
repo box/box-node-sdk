@@ -212,7 +212,7 @@ export interface JwtConfigInput {
   /**
    * User ID */
   readonly userId?: string;
-  readonly algorithm?: undefined | JwtAlgorithm;
+  readonly algorithm?: JwtAlgorithm;
   readonly tokenStorage?: TokenStorage;
   readonly privateKeyDecryptor?: PrivateKeyDecryptor;
 }

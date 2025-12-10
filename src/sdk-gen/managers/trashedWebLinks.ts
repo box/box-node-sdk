@@ -63,7 +63,7 @@ export interface RestoreWeblinkFromTrashOptionalsInput {
   readonly requestBody?: RestoreWeblinkFromTrashRequestBody;
   readonly queryParams?: RestoreWeblinkFromTrashQueryParams;
   readonly headers?: RestoreWeblinkFromTrashHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetTrashedWebLinkByIdOptionals {
   readonly queryParams: GetTrashedWebLinkByIdQueryParams =
@@ -97,7 +97,7 @@ export class GetTrashedWebLinkByIdOptionals {
 export interface GetTrashedWebLinkByIdOptionalsInput {
   readonly queryParams?: GetTrashedWebLinkByIdQueryParams;
   readonly headers?: GetTrashedWebLinkByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteTrashedWebLinkByIdOptionals {
   readonly headers: DeleteTrashedWebLinkByIdHeaders =
@@ -122,7 +122,7 @@ export class DeleteTrashedWebLinkByIdOptionals {
 }
 export interface DeleteTrashedWebLinkByIdOptionalsInput {
   readonly headers?: DeleteTrashedWebLinkByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface RestoreWeblinkFromTrashRequestBodyParentField {
   /**
@@ -168,11 +168,9 @@ export class RestoreWeblinkFromTrashHeaders {
 export interface RestoreWeblinkFromTrashHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetTrashedWebLinkByIdQueryParams {
   /**
@@ -205,11 +203,9 @@ export class GetTrashedWebLinkByIdHeaders {
 export interface GetTrashedWebLinkByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteTrashedWebLinkByIdHeaders {
   /**
@@ -229,11 +225,9 @@ export class DeleteTrashedWebLinkByIdHeaders {
 export interface DeleteTrashedWebLinkByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TrashedWebLinksManager {
   readonly auth?: Authentication;

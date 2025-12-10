@@ -40,7 +40,7 @@ export class GetUserAvatarOptionals {
 }
 export interface GetUserAvatarOptionalsInput {
   readonly headers?: GetUserAvatarHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateUserAvatarOptionals {
   readonly headers: CreateUserAvatarHeaders = new CreateUserAvatarHeaders({});
@@ -59,7 +59,7 @@ export class CreateUserAvatarOptionals {
 }
 export interface CreateUserAvatarOptionalsInput {
   readonly headers?: CreateUserAvatarHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteUserAvatarOptionals {
   readonly headers: DeleteUserAvatarHeaders = new DeleteUserAvatarHeaders({});
@@ -78,7 +78,7 @@ export class DeleteUserAvatarOptionals {
 }
 export interface DeleteUserAvatarOptionalsInput {
   readonly headers?: DeleteUserAvatarHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetUserAvatarHeaders {
   /**
@@ -98,11 +98,9 @@ export class GetUserAvatarHeaders {
 export interface GetUserAvatarHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateUserAvatarRequestBody {
   /**
@@ -131,11 +129,9 @@ export class CreateUserAvatarHeaders {
 export interface CreateUserAvatarHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteUserAvatarHeaders {
   /**
@@ -155,11 +151,9 @@ export class DeleteUserAvatarHeaders {
 export interface DeleteUserAvatarHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class AvatarsManager {
   readonly auth?: Authentication;

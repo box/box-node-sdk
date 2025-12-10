@@ -49,7 +49,7 @@ export class GetUserEmailAliasesOptionals {
 }
 export interface GetUserEmailAliasesOptionalsInput {
   readonly headers?: GetUserEmailAliasesHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateUserEmailAliasOptionals {
   readonly headers: CreateUserEmailAliasHeaders =
@@ -74,7 +74,7 @@ export class CreateUserEmailAliasOptionals {
 }
 export interface CreateUserEmailAliasOptionalsInput {
   readonly headers?: CreateUserEmailAliasHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteUserEmailAliasByIdOptionals {
   readonly headers: DeleteUserEmailAliasByIdHeaders =
@@ -99,7 +99,7 @@ export class DeleteUserEmailAliasByIdOptionals {
 }
 export interface DeleteUserEmailAliasByIdOptionalsInput {
   readonly headers?: DeleteUserEmailAliasByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetUserEmailAliasesHeaders {
   /**
@@ -119,11 +119,9 @@ export class GetUserEmailAliasesHeaders {
 export interface GetUserEmailAliasesHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateUserEmailAliasRequestBody {
   /**
@@ -155,11 +153,9 @@ export class CreateUserEmailAliasHeaders {
 export interface CreateUserEmailAliasHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteUserEmailAliasByIdHeaders {
   /**
@@ -179,11 +175,9 @@ export class DeleteUserEmailAliasByIdHeaders {
 export interface DeleteUserEmailAliasByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class EmailAliasesManager {
   readonly auth?: Authentication;

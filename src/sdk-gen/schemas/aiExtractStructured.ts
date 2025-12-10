@@ -75,6 +75,9 @@ export interface AiExtractStructured {
    * The fields to be extracted from the provided items.
    * For your request to work, you must provide either `metadata_template` or `fields`, but not both. */
   readonly fields?: readonly AiExtractStructuredFieldsField[];
+  /**
+   * A flag to indicate whether confidence scores for every extracted field should be returned. */
+  readonly includeConfidenceScore?: boolean;
   readonly aiAgent?: AiExtractStructuredAgent;
   readonly rawData?: SerializedData;
 }
@@ -282,6 +285,7 @@ export function serializeAiExtractStructured(
           ): SerializedData {
             return serializeAiExtractStructuredFieldsField(item);
           }) as readonly any[]),
+    ['include_confidence_score']: val.includeConfidenceScore,
     ['ai_agent']:
       val.aiAgent == void 0
         ? val.aiAgent
@@ -332,6 +336,19 @@ export function deserializeAiExtractStructured(
             return deserializeAiExtractStructuredFieldsField(itm);
           }) as readonly any[])
         : [];
+  if (
+    !(val.include_confidence_score == void 0) &&
+    !sdIsBoolean(val.include_confidence_score)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "include_confidence_score" of type "AiExtractStructured"',
+    });
+  }
+  const includeConfidenceScore: undefined | boolean =
+    val.include_confidence_score == void 0
+      ? void 0
+      : val.include_confidence_score;
   const aiAgent: undefined | AiExtractStructuredAgent =
     val.ai_agent == void 0
       ? void 0
@@ -340,6 +357,7 @@ export function deserializeAiExtractStructured(
     items: items,
     metadataTemplate: metadataTemplate,
     fields: fields,
+    includeConfidenceScore: includeConfidenceScore,
     aiAgent: aiAgent,
   } satisfies AiExtractStructured;
 }

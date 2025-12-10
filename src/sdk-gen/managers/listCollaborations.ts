@@ -57,7 +57,7 @@ export class GetFileCollaborationsOptionals {
 export interface GetFileCollaborationsOptionalsInput {
   readonly queryParams?: GetFileCollaborationsQueryParams;
   readonly headers?: GetFileCollaborationsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFolderCollaborationsOptionals {
   readonly queryParams: GetFolderCollaborationsQueryParams =
@@ -91,7 +91,7 @@ export class GetFolderCollaborationsOptionals {
 export interface GetFolderCollaborationsOptionalsInput {
   readonly queryParams?: GetFolderCollaborationsQueryParams;
   readonly headers?: GetFolderCollaborationsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetCollaborationsOptionals {
   readonly headers: GetCollaborationsHeaders = new GetCollaborationsHeaders({});
@@ -110,7 +110,7 @@ export class GetCollaborationsOptionals {
 }
 export interface GetCollaborationsOptionalsInput {
   readonly headers?: GetCollaborationsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetGroupCollaborationsOptionals {
   readonly queryParams: GetGroupCollaborationsQueryParams =
@@ -144,7 +144,7 @@ export class GetGroupCollaborationsOptionals {
 export interface GetGroupCollaborationsOptionalsInput {
   readonly queryParams?: GetGroupCollaborationsQueryParams;
   readonly headers?: GetGroupCollaborationsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetFileCollaborationsQueryParams {
   /**
@@ -186,11 +186,9 @@ export class GetFileCollaborationsHeaders {
 export interface GetFileCollaborationsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetFolderCollaborationsQueryParams {
   /**
@@ -232,11 +230,9 @@ export class GetFolderCollaborationsHeaders {
 export interface GetFolderCollaborationsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetCollaborationsQueryParamsStatusField = 'pending' | string;
 export interface GetCollaborationsQueryParams {
@@ -283,11 +279,9 @@ export class GetCollaborationsHeaders {
 export interface GetCollaborationsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetGroupCollaborationsQueryParams {
   /**
@@ -319,11 +313,9 @@ export class GetGroupCollaborationsHeaders {
 export interface GetGroupCollaborationsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ListCollaborationsManager {
   readonly auth?: Authentication;
