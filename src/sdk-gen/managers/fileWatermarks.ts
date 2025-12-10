@@ -39,7 +39,7 @@ export class GetFileWatermarkOptionals {
 }
 export interface GetFileWatermarkOptionalsInput {
   readonly headers?: GetFileWatermarkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFileWatermarkOptionals {
   readonly headers: UpdateFileWatermarkHeaders = new UpdateFileWatermarkHeaders(
@@ -65,7 +65,7 @@ export class UpdateFileWatermarkOptionals {
 }
 export interface UpdateFileWatermarkOptionalsInput {
   readonly headers?: UpdateFileWatermarkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFileWatermarkOptionals {
   readonly headers: DeleteFileWatermarkHeaders = new DeleteFileWatermarkHeaders(
@@ -91,7 +91,7 @@ export class DeleteFileWatermarkOptionals {
 }
 export interface DeleteFileWatermarkOptionalsInput {
   readonly headers?: DeleteFileWatermarkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileWatermarkHeaders {
   /**
@@ -111,11 +111,9 @@ export class GetFileWatermarkHeaders {
 export interface GetFileWatermarkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateFileWatermarkRequestBodyWatermarkImprintField =
   | 'default'
@@ -172,11 +170,9 @@ export class UpdateFileWatermarkHeaders {
 export interface UpdateFileWatermarkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFileWatermarkHeaders {
   /**
@@ -196,11 +192,9 @@ export class DeleteFileWatermarkHeaders {
 export interface DeleteFileWatermarkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FileWatermarksManager {
   readonly auth?: Authentication;

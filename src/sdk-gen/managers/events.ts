@@ -47,11 +47,9 @@ export class GetEventsWithLongPollingHeaders {
 export interface GetEventsWithLongPollingHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetEventsQueryParamsStreamTypeField =
   | 'all'
@@ -248,11 +246,9 @@ export class GetEventsHeaders {
 export interface GetEventsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetEventStreamQueryParamsStreamTypeField =
   | 'all'
@@ -449,11 +445,9 @@ export class GetEventStreamHeaders {
 export interface GetEventStreamHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class EventsManager {
   readonly auth?: Authentication;

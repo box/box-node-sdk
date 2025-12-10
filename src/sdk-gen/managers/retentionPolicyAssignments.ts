@@ -60,7 +60,7 @@ export class GetRetentionPolicyAssignmentsOptionals {
 export interface GetRetentionPolicyAssignmentsOptionalsInput {
   readonly queryParams?: GetRetentionPolicyAssignmentsQueryParams;
   readonly headers?: GetRetentionPolicyAssignmentsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateRetentionPolicyAssignmentOptionals {
   readonly headers: CreateRetentionPolicyAssignmentHeaders =
@@ -88,7 +88,7 @@ export class CreateRetentionPolicyAssignmentOptionals {
 }
 export interface CreateRetentionPolicyAssignmentOptionalsInput {
   readonly headers?: CreateRetentionPolicyAssignmentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetRetentionPolicyAssignmentByIdOptionals {
   readonly queryParams: GetRetentionPolicyAssignmentByIdQueryParams =
@@ -122,7 +122,7 @@ export class GetRetentionPolicyAssignmentByIdOptionals {
 export interface GetRetentionPolicyAssignmentByIdOptionalsInput {
   readonly queryParams?: GetRetentionPolicyAssignmentByIdQueryParams;
   readonly headers?: GetRetentionPolicyAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteRetentionPolicyAssignmentByIdOptionals {
   readonly headers: DeleteRetentionPolicyAssignmentByIdHeaders =
@@ -150,7 +150,7 @@ export class DeleteRetentionPolicyAssignmentByIdOptionals {
 }
 export interface DeleteRetentionPolicyAssignmentByIdOptionalsInput {
   readonly headers?: DeleteRetentionPolicyAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFilesUnderRetentionPolicyAssignmentOptionals {
   readonly queryParams: GetFilesUnderRetentionPolicyAssignmentQueryParams =
@@ -184,7 +184,7 @@ export class GetFilesUnderRetentionPolicyAssignmentOptionals {
 export interface GetFilesUnderRetentionPolicyAssignmentOptionalsInput {
   readonly queryParams?: GetFilesUnderRetentionPolicyAssignmentQueryParams;
   readonly headers?: GetFilesUnderRetentionPolicyAssignmentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetRetentionPolicyAssignmentsQueryParamsTypeField =
   | 'folder'
@@ -231,11 +231,9 @@ export class GetRetentionPolicyAssignmentsHeaders {
 export interface GetRetentionPolicyAssignmentsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateRetentionPolicyAssignmentRequestBodyAssignToTypeField =
   | 'enterprise'
@@ -301,11 +299,9 @@ export class CreateRetentionPolicyAssignmentHeaders {
 export interface CreateRetentionPolicyAssignmentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetRetentionPolicyAssignmentByIdQueryParams {
   /**
@@ -338,11 +334,9 @@ export class GetRetentionPolicyAssignmentByIdHeaders {
 export interface GetRetentionPolicyAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteRetentionPolicyAssignmentByIdHeaders {
   /**
@@ -362,11 +356,9 @@ export class DeleteRetentionPolicyAssignmentByIdHeaders {
 export interface DeleteRetentionPolicyAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetFilesUnderRetentionPolicyAssignmentQueryParams {
   /**
@@ -402,11 +394,9 @@ export class GetFilesUnderRetentionPolicyAssignmentHeaders {
 export interface GetFilesUnderRetentionPolicyAssignmentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class RetentionPolicyAssignmentsManager {
   readonly auth?: Authentication;

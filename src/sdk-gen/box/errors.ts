@@ -9,6 +9,8 @@ export class BoxSdkError extends GeneratedCodeError {
   constructor(fields: Pick<BoxSdkError, 'message' | 'timestamp' | 'error'>) {
     super(fields);
     this.name = 'BoxSdkError';
+    this.timestamp = fields.timestamp;
+    this.error = fields.error;
     Object.setPrototypeOf(this, BoxSdkError.prototype);
   }
 }

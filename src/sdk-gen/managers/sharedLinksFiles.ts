@@ -37,7 +37,7 @@ export class FindFileForSharedLinkOptionals {
   }
 }
 export interface FindFileForSharedLinkOptionalsInput {
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetSharedLinkForFileOptionals {
   readonly headers: GetSharedLinkForFileHeaders =
@@ -62,7 +62,7 @@ export class GetSharedLinkForFileOptionals {
 }
 export interface GetSharedLinkForFileOptionalsInput {
   readonly headers?: GetSharedLinkForFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class AddShareLinkToFileOptionals {
   readonly headers: AddShareLinkToFileHeaders = new AddShareLinkToFileHeaders(
@@ -85,7 +85,7 @@ export class AddShareLinkToFileOptionals {
 }
 export interface AddShareLinkToFileOptionalsInput {
   readonly headers?: AddShareLinkToFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateSharedLinkOnFileOptionals {
   readonly headers: UpdateSharedLinkOnFileHeaders =
@@ -110,7 +110,7 @@ export class UpdateSharedLinkOnFileOptionals {
 }
 export interface UpdateSharedLinkOnFileOptionalsInput {
   readonly headers?: UpdateSharedLinkOnFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class RemoveSharedLinkFromFileOptionals {
   readonly headers: RemoveSharedLinkFromFileHeaders =
@@ -135,7 +135,7 @@ export class RemoveSharedLinkFromFileOptionals {
 }
 export interface RemoveSharedLinkFromFileOptionalsInput {
   readonly headers?: RemoveSharedLinkFromFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface FindFileForSharedLinkQueryParams {
   /**
@@ -206,11 +206,9 @@ export interface FindFileForSharedLinkHeadersInput {
   readonly boxapi: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetSharedLinkForFileQueryParams {
   /**
@@ -236,11 +234,9 @@ export class GetSharedLinkForFileHeaders {
 export interface GetSharedLinkForFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type AddShareLinkToFileRequestBodySharedLinkAccessField =
   | 'open'
@@ -339,11 +335,9 @@ export class AddShareLinkToFileHeaders {
 export interface AddShareLinkToFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateSharedLinkOnFileRequestBodySharedLinkAccessField =
   | 'open'
@@ -440,11 +434,9 @@ export class UpdateSharedLinkOnFileHeaders {
 export interface UpdateSharedLinkOnFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface RemoveSharedLinkFromFileRequestBodySharedLinkField {
   readonly rawData?: SerializedData;
@@ -480,11 +472,9 @@ export class RemoveSharedLinkFromFileHeaders {
 export interface RemoveSharedLinkFromFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SharedLinksFilesManager {
   readonly auth?: Authentication;

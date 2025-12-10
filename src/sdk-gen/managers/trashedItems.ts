@@ -98,11 +98,9 @@ export class GetTrashedItemsHeaders {
 export interface GetTrashedItemsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class TrashedItemsManager {
   readonly auth?: Authentication;

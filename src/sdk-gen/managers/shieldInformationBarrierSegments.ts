@@ -54,7 +54,7 @@ export class GetShieldInformationBarrierSegmentByIdOptionals {
 }
 export interface GetShieldInformationBarrierSegmentByIdOptionalsInput {
   readonly headers?: GetShieldInformationBarrierSegmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteShieldInformationBarrierSegmentByIdOptionals {
   readonly headers: DeleteShieldInformationBarrierSegmentByIdHeaders =
@@ -82,7 +82,7 @@ export class DeleteShieldInformationBarrierSegmentByIdOptionals {
 }
 export interface DeleteShieldInformationBarrierSegmentByIdOptionalsInput {
   readonly headers?: DeleteShieldInformationBarrierSegmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateShieldInformationBarrierSegmentByIdOptionals {
   readonly requestBody: UpdateShieldInformationBarrierSegmentByIdRequestBody =
@@ -116,7 +116,7 @@ export class UpdateShieldInformationBarrierSegmentByIdOptionals {
 export interface UpdateShieldInformationBarrierSegmentByIdOptionalsInput {
   readonly requestBody?: UpdateShieldInformationBarrierSegmentByIdRequestBody;
   readonly headers?: UpdateShieldInformationBarrierSegmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetShieldInformationBarrierSegmentsOptionals {
   readonly headers: GetShieldInformationBarrierSegmentsHeaders =
@@ -144,7 +144,7 @@ export class GetShieldInformationBarrierSegmentsOptionals {
 }
 export interface GetShieldInformationBarrierSegmentsOptionalsInput {
   readonly headers?: GetShieldInformationBarrierSegmentsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateShieldInformationBarrierSegmentOptionals {
   readonly headers: CreateShieldInformationBarrierSegmentHeaders =
@@ -172,7 +172,7 @@ export class CreateShieldInformationBarrierSegmentOptionals {
 }
 export interface CreateShieldInformationBarrierSegmentOptionalsInput {
   readonly headers?: CreateShieldInformationBarrierSegmentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetShieldInformationBarrierSegmentByIdHeaders {
   /**
@@ -197,11 +197,9 @@ export class GetShieldInformationBarrierSegmentByIdHeaders {
 export interface GetShieldInformationBarrierSegmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteShieldInformationBarrierSegmentByIdHeaders {
   /**
@@ -226,11 +224,9 @@ export class DeleteShieldInformationBarrierSegmentByIdHeaders {
 export interface DeleteShieldInformationBarrierSegmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateShieldInformationBarrierSegmentByIdRequestBody {
   /**
@@ -265,11 +261,9 @@ export class UpdateShieldInformationBarrierSegmentByIdHeaders {
 export interface UpdateShieldInformationBarrierSegmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetShieldInformationBarrierSegmentsQueryParams {
   /**
@@ -303,11 +297,9 @@ export class GetShieldInformationBarrierSegmentsHeaders {
 export interface GetShieldInformationBarrierSegmentsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateShieldInformationBarrierSegmentRequestBody {
   readonly shieldInformationBarrier: ShieldInformationBarrierBase;
@@ -339,11 +331,9 @@ export class CreateShieldInformationBarrierSegmentHeaders {
 export interface CreateShieldInformationBarrierSegmentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ShieldInformationBarrierSegmentsManager {
   readonly auth?: Authentication;

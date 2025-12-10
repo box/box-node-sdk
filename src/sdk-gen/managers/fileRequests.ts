@@ -49,7 +49,7 @@ export class GetFileRequestByIdOptionals {
 }
 export interface GetFileRequestByIdOptionalsInput {
   readonly headers?: GetFileRequestByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFileRequestByIdOptionals {
   readonly headers: UpdateFileRequestByIdHeaders =
@@ -74,7 +74,7 @@ export class UpdateFileRequestByIdOptionals {
 }
 export interface UpdateFileRequestByIdOptionalsInput {
   readonly headers?: UpdateFileRequestByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFileRequestByIdOptionals {
   readonly headers: DeleteFileRequestByIdHeaders =
@@ -99,7 +99,7 @@ export class DeleteFileRequestByIdOptionals {
 }
 export interface DeleteFileRequestByIdOptionalsInput {
   readonly headers?: DeleteFileRequestByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateFileRequestCopyOptionals {
   readonly headers: CreateFileRequestCopyHeaders =
@@ -124,7 +124,7 @@ export class CreateFileRequestCopyOptionals {
 }
 export interface CreateFileRequestCopyOptionalsInput {
   readonly headers?: CreateFileRequestCopyHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileRequestByIdHeaders {
   /**
@@ -144,11 +144,9 @@ export class GetFileRequestByIdHeaders {
 export interface GetFileRequestByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UpdateFileRequestByIdHeaders {
   /**
@@ -189,11 +187,9 @@ export interface UpdateFileRequestByIdHeadersInput {
   readonly ifMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFileRequestByIdHeaders {
   /**
@@ -213,11 +209,9 @@ export class DeleteFileRequestByIdHeaders {
 export interface DeleteFileRequestByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class CreateFileRequestCopyHeaders {
   /**
@@ -237,11 +231,9 @@ export class CreateFileRequestCopyHeaders {
 export interface CreateFileRequestCopyHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FileRequestsManager {
   readonly auth?: Authentication;

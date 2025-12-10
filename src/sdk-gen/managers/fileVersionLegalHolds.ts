@@ -51,7 +51,7 @@ export class GetFileVersionLegalHoldByIdOptionals {
 }
 export interface GetFileVersionLegalHoldByIdOptionalsInput {
   readonly headers?: GetFileVersionLegalHoldByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileVersionLegalHoldsOptionals {
   readonly headers: GetFileVersionLegalHoldsHeaders =
@@ -76,7 +76,7 @@ export class GetFileVersionLegalHoldsOptionals {
 }
 export interface GetFileVersionLegalHoldsOptionalsInput {
   readonly headers?: GetFileVersionLegalHoldsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileVersionLegalHoldByIdHeaders {
   /**
@@ -96,11 +96,9 @@ export class GetFileVersionLegalHoldByIdHeaders {
 export interface GetFileVersionLegalHoldByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetFileVersionLegalHoldsQueryParams {
   /**
@@ -135,11 +133,9 @@ export class GetFileVersionLegalHoldsHeaders {
 export interface GetFileVersionLegalHoldsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FileVersionLegalHoldsManager {
   readonly auth?: Authentication;

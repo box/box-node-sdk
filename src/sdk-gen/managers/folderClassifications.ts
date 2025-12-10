@@ -48,7 +48,7 @@ export class GetClassificationOnFolderOptionals {
 }
 export interface GetClassificationOnFolderOptionalsInput {
   readonly headers?: GetClassificationOnFolderHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class AddClassificationToFolderOptionals {
   readonly requestBody: AddClassificationToFolderRequestBody =
@@ -82,7 +82,7 @@ export class AddClassificationToFolderOptionals {
 export interface AddClassificationToFolderOptionalsInput {
   readonly requestBody?: AddClassificationToFolderRequestBody;
   readonly headers?: AddClassificationToFolderHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateClassificationOnFolderOptionals {
   readonly headers: UpdateClassificationOnFolderHeaders =
@@ -110,7 +110,7 @@ export class UpdateClassificationOnFolderOptionals {
 }
 export interface UpdateClassificationOnFolderOptionalsInput {
   readonly headers?: UpdateClassificationOnFolderHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteClassificationFromFolderOptionals {
   readonly headers: DeleteClassificationFromFolderHeaders =
@@ -138,7 +138,7 @@ export class DeleteClassificationFromFolderOptionals {
 }
 export interface DeleteClassificationFromFolderOptionalsInput {
   readonly headers?: DeleteClassificationFromFolderHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetClassificationOnFolderHeaders {
   /**
@@ -158,11 +158,9 @@ export class GetClassificationOnFolderHeaders {
 export interface GetClassificationOnFolderHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface AddClassificationToFolderRequestBody {
   /**
@@ -193,11 +191,9 @@ export class AddClassificationToFolderHeaders {
 export interface AddClassificationToFolderHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateClassificationOnFolderRequestBodyOpField = 'replace' | string;
 export type UpdateClassificationOnFolderRequestBodyPathField =
@@ -276,11 +272,9 @@ export class UpdateClassificationOnFolderHeaders {
 export interface UpdateClassificationOnFolderHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteClassificationFromFolderHeaders {
   /**
@@ -300,11 +294,9 @@ export class DeleteClassificationFromFolderHeaders {
 export interface DeleteClassificationFromFolderHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FolderClassificationsManager {
   readonly auth?: Authentication;

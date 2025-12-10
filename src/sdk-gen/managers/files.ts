@@ -59,7 +59,7 @@ export class GetFileByIdOptionals {
 export interface GetFileByIdOptionalsInput {
   readonly queryParams?: GetFileByIdQueryParams;
   readonly headers?: GetFileByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateFileByIdOptionals {
   readonly requestBody: UpdateFileByIdRequestBody =
@@ -98,7 +98,7 @@ export interface UpdateFileByIdOptionalsInput {
   readonly requestBody?: UpdateFileByIdRequestBody;
   readonly queryParams?: UpdateFileByIdQueryParams;
   readonly headers?: UpdateFileByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteFileByIdOptionals {
   readonly headers: DeleteFileByIdHeaders = new DeleteFileByIdHeaders({});
@@ -117,7 +117,7 @@ export class DeleteFileByIdOptionals {
 }
 export interface DeleteFileByIdOptionalsInput {
   readonly headers?: DeleteFileByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CopyFileOptionals {
   readonly queryParams: CopyFileQueryParams = {} satisfies CopyFileQueryParams;
@@ -146,7 +146,7 @@ export class CopyFileOptionals {
 export interface CopyFileOptionalsInput {
   readonly queryParams?: CopyFileQueryParams;
   readonly headers?: CopyFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileThumbnailUrlOptionals {
   readonly queryParams: GetFileThumbnailUrlQueryParams =
@@ -181,7 +181,7 @@ export class GetFileThumbnailUrlOptionals {
 export interface GetFileThumbnailUrlOptionalsInput {
   readonly queryParams?: GetFileThumbnailUrlQueryParams;
   readonly headers?: GetFileThumbnailUrlHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetFileThumbnailByIdOptionals {
   readonly queryParams: GetFileThumbnailByIdQueryParams =
@@ -215,7 +215,7 @@ export class GetFileThumbnailByIdOptionals {
 export interface GetFileThumbnailByIdOptionalsInput {
   readonly queryParams?: GetFileThumbnailByIdQueryParams;
   readonly headers?: GetFileThumbnailByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetFileByIdQueryParams {
   /**
@@ -344,11 +344,9 @@ export interface GetFileByIdHeadersInput {
   readonly xRepHints?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface UpdateFileByIdRequestBodyParentField {
   /**
@@ -558,11 +556,9 @@ export interface UpdateFileByIdHeadersInput {
   readonly ifMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteFileByIdHeaders {
   /**
@@ -603,11 +599,9 @@ export interface DeleteFileByIdHeadersInput {
   readonly ifMatch?: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CopyFileRequestBodyParentField {
   /**
@@ -664,11 +658,9 @@ export class CopyFileHeaders {
 export interface CopyFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetFileThumbnailUrlExtension = 'png' | 'jpg' | string;
 export interface GetFileThumbnailUrlQueryParams {
@@ -703,11 +695,9 @@ export class GetFileThumbnailUrlHeaders {
 export interface GetFileThumbnailUrlHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type GetFileThumbnailByIdExtension = 'png' | 'jpg' | string;
 export interface GetFileThumbnailByIdQueryParams {
@@ -742,11 +732,9 @@ export class GetFileThumbnailByIdHeaders {
 export interface GetFileThumbnailByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class FilesManager {
   readonly auth?: Authentication;

@@ -34,7 +34,7 @@ export class FindAppItemForSharedLinkOptionals {
   }
 }
 export interface FindAppItemForSharedLinkOptionalsInput {
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class FindAppItemForSharedLinkHeaders {
   /**
@@ -69,11 +69,9 @@ export interface FindAppItemForSharedLinkHeadersInput {
   readonly boxapi: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SharedLinksAppItemsManager {
   readonly auth?: Authentication;

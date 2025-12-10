@@ -37,7 +37,7 @@ export class FindWebLinkForSharedLinkOptionals {
   }
 }
 export interface FindWebLinkForSharedLinkOptionalsInput {
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetSharedLinkForWebLinkOptionals {
   readonly headers: GetSharedLinkForWebLinkHeaders =
@@ -62,7 +62,7 @@ export class GetSharedLinkForWebLinkOptionals {
 }
 export interface GetSharedLinkForWebLinkOptionalsInput {
   readonly headers?: GetSharedLinkForWebLinkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class AddShareLinkToWebLinkOptionals {
   readonly headers: AddShareLinkToWebLinkHeaders =
@@ -87,7 +87,7 @@ export class AddShareLinkToWebLinkOptionals {
 }
 export interface AddShareLinkToWebLinkOptionalsInput {
   readonly headers?: AddShareLinkToWebLinkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateSharedLinkOnWebLinkOptionals {
   readonly headers: UpdateSharedLinkOnWebLinkHeaders =
@@ -115,7 +115,7 @@ export class UpdateSharedLinkOnWebLinkOptionals {
 }
 export interface UpdateSharedLinkOnWebLinkOptionalsInput {
   readonly headers?: UpdateSharedLinkOnWebLinkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class RemoveSharedLinkFromWebLinkOptionals {
   readonly headers: RemoveSharedLinkFromWebLinkHeaders =
@@ -143,7 +143,7 @@ export class RemoveSharedLinkFromWebLinkOptionals {
 }
 export interface RemoveSharedLinkFromWebLinkOptionalsInput {
   readonly headers?: RemoveSharedLinkFromWebLinkHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface FindWebLinkForSharedLinkQueryParams {
   /**
@@ -214,11 +214,9 @@ export interface FindWebLinkForSharedLinkHeadersInput {
   readonly boxapi: string;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetSharedLinkForWebLinkQueryParams {
   /**
@@ -244,11 +242,9 @@ export class GetSharedLinkForWebLinkHeaders {
 export interface GetSharedLinkForWebLinkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type AddShareLinkToWebLinkRequestBodySharedLinkAccessField =
   | 'open'
@@ -344,11 +340,9 @@ export class AddShareLinkToWebLinkHeaders {
 export interface AddShareLinkToWebLinkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateSharedLinkOnWebLinkRequestBodySharedLinkAccessField =
   | 'open'
@@ -441,11 +435,9 @@ export class UpdateSharedLinkOnWebLinkHeaders {
 export interface UpdateSharedLinkOnWebLinkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface RemoveSharedLinkFromWebLinkRequestBodySharedLinkField {
   readonly rawData?: SerializedData;
@@ -481,11 +473,9 @@ export class RemoveSharedLinkFromWebLinkHeaders {
 export interface RemoveSharedLinkFromWebLinkHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SharedLinksWebLinksManager {
   readonly auth?: Authentication;

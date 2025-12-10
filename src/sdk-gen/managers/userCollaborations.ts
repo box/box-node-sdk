@@ -57,7 +57,7 @@ export class GetCollaborationByIdOptionals {
 export interface GetCollaborationByIdOptionalsInput {
   readonly queryParams?: GetCollaborationByIdQueryParams;
   readonly headers?: GetCollaborationByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateCollaborationByIdOptionals {
   readonly requestBody: UpdateCollaborationByIdRequestBody =
@@ -91,7 +91,7 @@ export class UpdateCollaborationByIdOptionals {
 export interface UpdateCollaborationByIdOptionalsInput {
   readonly requestBody?: UpdateCollaborationByIdRequestBody;
   readonly headers?: UpdateCollaborationByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteCollaborationByIdOptionals {
   readonly headers: DeleteCollaborationByIdHeaders =
@@ -116,7 +116,7 @@ export class DeleteCollaborationByIdOptionals {
 }
 export interface DeleteCollaborationByIdOptionalsInput {
   readonly headers?: DeleteCollaborationByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateCollaborationOptionals {
   readonly queryParams: CreateCollaborationQueryParams =
@@ -151,7 +151,7 @@ export class CreateCollaborationOptionals {
 export interface CreateCollaborationOptionalsInput {
   readonly queryParams?: CreateCollaborationQueryParams;
   readonly headers?: CreateCollaborationHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetCollaborationByIdQueryParams {
   /**
@@ -184,11 +184,9 @@ export class GetCollaborationByIdHeaders {
 export interface GetCollaborationByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateCollaborationByIdRequestBodyRoleField =
   | 'editor'
@@ -238,8 +236,8 @@ export interface UpdateCollaborationByIdRequestBody {
    * invitee's **All Files** page. We recommend you limit the number of
    * collaborations with `can_view_path` enabled to 1,000 per user.
    *
-   * Only owner or co-owners can invite collaborators with a `can_view_path` of
-   * `true`.
+   * Only an owner or co-owners can invite collaborators with a `can_view_path` of
+   * `true`. Only an owner can update `can_view_path` on existing collaborations.
    *
    * `can_view_path` can only be used for folder collaborations. */
   readonly canViewPath?: boolean;
@@ -263,11 +261,9 @@ export class UpdateCollaborationByIdHeaders {
 export interface UpdateCollaborationByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteCollaborationByIdHeaders {
   /**
@@ -287,11 +283,9 @@ export class DeleteCollaborationByIdHeaders {
 export interface DeleteCollaborationByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateCollaborationRequestBodyItemTypeField = 'file' | 'folder';
 export interface CreateCollaborationRequestBodyItemField {
@@ -360,8 +354,8 @@ export interface CreateCollaborationRequestBody {
    * invitee's **All Files** page. We recommend you limit the number of
    * collaborations with `can_view_path` enabled to 1,000 per user.
    *
-   * Only owner or co-owners can invite collaborators with a `can_view_path` of
-   * `true`.
+   * Only an owner or co-owners can invite collaborators with a `can_view_path` of
+   * `true`. Only an owner can update `can_view_path` on existing collaborations.
    *
    * `can_view_path` can only be used for folder collaborations. */
   readonly canViewPath?: boolean;
@@ -413,11 +407,9 @@ export class CreateCollaborationHeaders {
 export interface CreateCollaborationHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class UserCollaborationsManager {
   readonly auth?: Authentication;

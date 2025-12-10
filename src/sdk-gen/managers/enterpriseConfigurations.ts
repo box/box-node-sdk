@@ -51,7 +51,7 @@ export class GetEnterpriseConfigurationByIdV2025R0Optionals {
 }
 export interface GetEnterpriseConfigurationByIdV2025R0OptionalsInput {
   readonly headers?: GetEnterpriseConfigurationByIdV2025R0Headers;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export interface GetEnterpriseConfigurationByIdV2025R0QueryParams {
   /**
@@ -95,11 +95,9 @@ export interface GetEnterpriseConfigurationByIdV2025R0HeadersInput {
   readonly boxVersion?: BoxVersionHeaderV2025R0;
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class EnterpriseConfigurationsManager {
   readonly auth?: Authentication;

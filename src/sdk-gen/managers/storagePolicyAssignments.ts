@@ -51,7 +51,7 @@ export class GetStoragePolicyAssignmentsOptionals {
 }
 export interface GetStoragePolicyAssignmentsOptionalsInput {
   readonly headers?: GetStoragePolicyAssignmentsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateStoragePolicyAssignmentOptionals {
   readonly headers: CreateStoragePolicyAssignmentHeaders =
@@ -79,7 +79,7 @@ export class CreateStoragePolicyAssignmentOptionals {
 }
 export interface CreateStoragePolicyAssignmentOptionalsInput {
   readonly headers?: CreateStoragePolicyAssignmentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetStoragePolicyAssignmentByIdOptionals {
   readonly headers: GetStoragePolicyAssignmentByIdHeaders =
@@ -107,7 +107,7 @@ export class GetStoragePolicyAssignmentByIdOptionals {
 }
 export interface GetStoragePolicyAssignmentByIdOptionalsInput {
   readonly headers?: GetStoragePolicyAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateStoragePolicyAssignmentByIdOptionals {
   readonly headers: UpdateStoragePolicyAssignmentByIdHeaders =
@@ -135,7 +135,7 @@ export class UpdateStoragePolicyAssignmentByIdOptionals {
 }
 export interface UpdateStoragePolicyAssignmentByIdOptionalsInput {
   readonly headers?: UpdateStoragePolicyAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteStoragePolicyAssignmentByIdOptionals {
   readonly headers: DeleteStoragePolicyAssignmentByIdHeaders =
@@ -163,7 +163,7 @@ export class DeleteStoragePolicyAssignmentByIdOptionals {
 }
 export interface DeleteStoragePolicyAssignmentByIdOptionalsInput {
   readonly headers?: DeleteStoragePolicyAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetStoragePolicyAssignmentsQueryParamsResolvedForTypeField =
   | 'user'
@@ -201,11 +201,9 @@ export class GetStoragePolicyAssignmentsHeaders {
 export interface GetStoragePolicyAssignmentsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateStoragePolicyAssignmentRequestBodyStoragePolicyTypeField =
   'storage_policy';
@@ -288,11 +286,9 @@ export class CreateStoragePolicyAssignmentHeaders {
 export interface CreateStoragePolicyAssignmentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetStoragePolicyAssignmentByIdHeaders {
   /**
@@ -312,11 +308,9 @@ export class GetStoragePolicyAssignmentByIdHeaders {
 export interface GetStoragePolicyAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateStoragePolicyAssignmentByIdRequestBodyStoragePolicyTypeField =
   'storage_policy';
@@ -386,11 +380,9 @@ export class UpdateStoragePolicyAssignmentByIdHeaders {
 export interface UpdateStoragePolicyAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteStoragePolicyAssignmentByIdHeaders {
   /**
@@ -410,11 +402,9 @@ export class DeleteStoragePolicyAssignmentByIdHeaders {
 export interface DeleteStoragePolicyAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class StoragePolicyAssignmentsManager {
   readonly auth?: Authentication;

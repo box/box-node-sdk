@@ -60,7 +60,7 @@ export class GetBoxSkillCardsOnFileOptionals {
 }
 export interface GetBoxSkillCardsOnFileOptionalsInput {
   readonly headers?: GetBoxSkillCardsOnFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateBoxSkillCardsOnFileOptionals {
   readonly headers: CreateBoxSkillCardsOnFileHeaders =
@@ -88,7 +88,7 @@ export class CreateBoxSkillCardsOnFileOptionals {
 }
 export interface CreateBoxSkillCardsOnFileOptionalsInput {
   readonly headers?: CreateBoxSkillCardsOnFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateBoxSkillCardsOnFileOptionals {
   readonly headers: UpdateBoxSkillCardsOnFileHeaders =
@@ -116,7 +116,7 @@ export class UpdateBoxSkillCardsOnFileOptionals {
 }
 export interface UpdateBoxSkillCardsOnFileOptionalsInput {
   readonly headers?: UpdateBoxSkillCardsOnFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteBoxSkillCardsFromFileOptionals {
   readonly headers: DeleteBoxSkillCardsFromFileHeaders =
@@ -144,7 +144,7 @@ export class DeleteBoxSkillCardsFromFileOptionals {
 }
 export interface DeleteBoxSkillCardsFromFileOptionalsInput {
   readonly headers?: DeleteBoxSkillCardsFromFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class UpdateAllSkillCardsOnFileOptionals {
   readonly headers: UpdateAllSkillCardsOnFileHeaders =
@@ -172,7 +172,7 @@ export class UpdateAllSkillCardsOnFileOptionals {
 }
 export interface UpdateAllSkillCardsOnFileOptionalsInput {
   readonly headers?: UpdateAllSkillCardsOnFileHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetBoxSkillCardsOnFileHeaders {
   /**
@@ -192,11 +192,9 @@ export class GetBoxSkillCardsOnFileHeaders {
 export interface GetBoxSkillCardsOnFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface CreateBoxSkillCardsOnFileRequestBody {
   /**
@@ -222,11 +220,9 @@ export class CreateBoxSkillCardsOnFileHeaders {
 export interface CreateBoxSkillCardsOnFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateBoxSkillCardsOnFileRequestBodyOpField = 'replace' | string;
 export interface UpdateBoxSkillCardsOnFileRequestBody {
@@ -259,11 +255,9 @@ export class UpdateBoxSkillCardsOnFileHeaders {
 export interface UpdateBoxSkillCardsOnFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteBoxSkillCardsFromFileHeaders {
   /**
@@ -283,11 +277,9 @@ export class DeleteBoxSkillCardsFromFileHeaders {
 export interface DeleteBoxSkillCardsFromFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type UpdateAllSkillCardsOnFileRequestBodyStatusField =
   | 'invoked'
@@ -373,11 +365,9 @@ export class UpdateAllSkillCardsOnFileHeaders {
 export interface UpdateAllSkillCardsOnFileHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class SkillsManager {
   readonly auth?: Authentication;

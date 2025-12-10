@@ -45,7 +45,7 @@ export class CreateZipDownloadOptionals {
 }
 export interface CreateZipDownloadOptionalsInput {
   readonly headers?: CreateZipDownloadHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetZipDownloadContentOptionals {
   readonly headers: GetZipDownloadContentHeaders =
@@ -70,7 +70,7 @@ export class GetZipDownloadContentOptionals {
 }
 export interface GetZipDownloadContentOptionalsInput {
   readonly headers?: GetZipDownloadContentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetZipDownloadStatusOptionals {
   readonly headers: GetZipDownloadStatusHeaders =
@@ -95,7 +95,7 @@ export class GetZipDownloadStatusOptionals {
 }
 export interface GetZipDownloadStatusOptionalsInput {
   readonly headers?: GetZipDownloadStatusHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DownloadZipOptionals {
   readonly headers: DownloadZipHeaders = new DownloadZipHeaders({});
@@ -114,7 +114,7 @@ export class DownloadZipOptionals {
 }
 export interface DownloadZipOptionalsInput {
   readonly headers?: DownloadZipHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateZipDownloadHeaders {
   /**
@@ -134,11 +134,9 @@ export class CreateZipDownloadHeaders {
 export interface CreateZipDownloadHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetZipDownloadContentHeaders {
   /**
@@ -158,11 +156,9 @@ export class GetZipDownloadContentHeaders {
 export interface GetZipDownloadContentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetZipDownloadStatusHeaders {
   /**
@@ -182,11 +178,9 @@ export class GetZipDownloadStatusHeaders {
 export interface GetZipDownloadStatusHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DownloadZipHeaders {
   /**
@@ -206,11 +200,9 @@ export class DownloadZipHeaders {
 export interface DownloadZipHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class ZipDownloadsManager {
   readonly auth?: Authentication;

@@ -54,7 +54,7 @@ export class GetLegalHoldPolicyAssignmentsOptionals {
 }
 export interface GetLegalHoldPolicyAssignmentsOptionalsInput {
   readonly headers?: GetLegalHoldPolicyAssignmentsHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class CreateLegalHoldPolicyAssignmentOptionals {
   readonly headers: CreateLegalHoldPolicyAssignmentHeaders =
@@ -82,7 +82,7 @@ export class CreateLegalHoldPolicyAssignmentOptionals {
 }
 export interface CreateLegalHoldPolicyAssignmentOptionalsInput {
   readonly headers?: CreateLegalHoldPolicyAssignmentHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetLegalHoldPolicyAssignmentByIdOptionals {
   readonly headers: GetLegalHoldPolicyAssignmentByIdHeaders =
@@ -110,7 +110,7 @@ export class GetLegalHoldPolicyAssignmentByIdOptionals {
 }
 export interface GetLegalHoldPolicyAssignmentByIdOptionalsInput {
   readonly headers?: GetLegalHoldPolicyAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class DeleteLegalHoldPolicyAssignmentByIdOptionals {
   readonly headers: DeleteLegalHoldPolicyAssignmentByIdHeaders =
@@ -138,7 +138,7 @@ export class DeleteLegalHoldPolicyAssignmentByIdOptionals {
 }
 export interface DeleteLegalHoldPolicyAssignmentByIdOptionalsInput {
   readonly headers?: DeleteLegalHoldPolicyAssignmentByIdHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export class GetLegalHoldPolicyAssignmentFileOnHoldOptionals {
   readonly queryParams: GetLegalHoldPolicyAssignmentFileOnHoldQueryParams =
@@ -172,7 +172,7 @@ export class GetLegalHoldPolicyAssignmentFileOnHoldOptionals {
 export interface GetLegalHoldPolicyAssignmentFileOnHoldOptionalsInput {
   readonly queryParams?: GetLegalHoldPolicyAssignmentFileOnHoldQueryParams;
   readonly headers?: GetLegalHoldPolicyAssignmentFileOnHoldHeaders;
-  readonly cancellationToken?: undefined | CancellationToken;
+  readonly cancellationToken?: CancellationToken;
 }
 export type GetLegalHoldPolicyAssignmentsQueryParamsAssignToTypeField =
   | 'file'
@@ -233,11 +233,9 @@ export class GetLegalHoldPolicyAssignmentsHeaders {
 export interface GetLegalHoldPolicyAssignmentsHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export type CreateLegalHoldPolicyAssignmentRequestBodyAssignToTypeField =
   | 'file'
@@ -282,11 +280,9 @@ export class CreateLegalHoldPolicyAssignmentHeaders {
 export interface CreateLegalHoldPolicyAssignmentHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class GetLegalHoldPolicyAssignmentByIdHeaders {
   /**
@@ -306,11 +302,9 @@ export class GetLegalHoldPolicyAssignmentByIdHeaders {
 export interface GetLegalHoldPolicyAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class DeleteLegalHoldPolicyAssignmentByIdHeaders {
   /**
@@ -330,11 +324,9 @@ export class DeleteLegalHoldPolicyAssignmentByIdHeaders {
 export interface DeleteLegalHoldPolicyAssignmentByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export interface GetLegalHoldPolicyAssignmentFileOnHoldQueryParams {
   /**
@@ -381,11 +373,9 @@ export class GetLegalHoldPolicyAssignmentFileOnHoldHeaders {
 export interface GetLegalHoldPolicyAssignmentFileOnHoldHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
-  readonly extraHeaders?:
-    | undefined
-    | {
-        readonly [key: string]: undefined | string;
-      };
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
 }
 export class LegalHoldPolicyAssignmentsManager {
   readonly auth?: Authentication;
