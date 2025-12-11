@@ -34,7 +34,7 @@ var CCG_SESSION_PATH = '@/lib/sessions/ccg-session';
 // Default config for tests
 var defaultParams = {
   clientID: 'abc123',
-  clientSecret: 'xyz987',
+  clientSecret: 'xyz456',
   apiRootURL: 'https://api.box.com',
   uploadAPIRootURL: 'https://upload.box.com/api',
   authorizeRootURL: 'https://account.box.com/api',
@@ -43,7 +43,7 @@ var defaultParams = {
   retryIntervalMS: 2000,
   request: {
     headers: {
-      'User-Agent': 'Box Node.js SDK',
+      'User-Agent': 'Box Node SDK',
     },
     agentOptions: {
       keepAlive: true,
@@ -404,5 +404,350 @@ describe('getSdkGenClient()', function () {
       assert.notStrictEqual(sdkGenClient1, sdkGenClient2);
     });
   });
-  
+
+  describe('Configuration transfer from legacy to SDK-Gen', function () {
+    it('should transfer base URLs from legacy config to SDK-Gen networkSession', function () {
+      var config = new Config(defaultParams);
+      var tokenInfo = {
+        accessToken: 'oauth-token',
+        refreshToken: 'refresh-token',
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify base URLs match the ones from legacy sdk config
+      assert.equal(
+        sdkGenClient.networkSession.baseUrls.baseUrl,
+        defaultParams.apiRootURL
+      );
+      assert.equal(
+        sdkGenClient.networkSession.baseUrls.uploadUrl,
+        defaultParams.uploadAPIRootURL
+      );
+    });
+
+    it('should transfer retry strategy settings from legacy config to SDK-Gen networkSession', function () {
+      var config = new Config(defaultParams);
+      var tokenInfo = {
+        accessToken: 'oauth-token',
+        refreshToken: 'refresh-token',
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify retry settings match legacy config
+      assert.equal(
+        sdkGenClient.networkSession.retryStrategy.maxAttempts,
+        defaultParams.numMaxRetries
+      );
+      assert.equal(
+        sdkGenClient.networkSession.retryStrategy.retryBaseInterval,
+        defaultParams.retryIntervalMS/1000
+      );
+    });
+
+    it('should transfer headers from legacy config to SDK-Gen networkSession', function () {
+      var config = new Config(defaultParams);
+      var tokenInfo = {
+        accessToken: 'oauth-token',
+        refreshToken: 'refresh-token',
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify headers from legacy config are transferred
+      assert.equal(
+        sdkGenClient.networkSession.additionalHeaders['User-Agent'],
+        defaultParams.request.headers['User-Agent']
+      );
+    });
+
+    it('should transfer client credentials from legacy to SDK-Gen auth (OAuth)', function () {
+      var config = new Config(defaultParams);
+      var tokenInfo = {
+        accessToken: 'oauth-token',
+        refreshToken: 'refresh-token',
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify auth has the correct client credentials
+      assert.equal(sdkGenClient.auth.config.clientId, defaultParams.clientID);
+      assert.equal(
+        sdkGenClient.auth.config.clientSecret,
+        defaultParams.clientSecret
+      );
+    });
+
+    it('should transfer JWT config from legacy to SDK-Gen auth (JWT)', function () {
+      var config = new Config(jwtParams);
+      var session = new AppAuthSession(
+        'enterprise',
+        'ent123',
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify JWT auth has correct config
+      assert.equal(sdkGenClient.auth.config.clientId, jwtParams.clientID);
+      assert.equal(sdkGenClient.auth.config.jwtKeyId, jwtParams.appAuth.keyID);
+      assert.equal(sdkGenClient.auth.config.enterpriseId, 'ent123');
+    });
+
+    it('should transfer CCG config from legacy to SDK-Gen auth (CCG)', function () {
+      var config = new Config(ccgParams);
+      var session = new CCGAPISession(config, tokenManagerFake);
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify CCG auth has correct config
+      assert.equal(sdkGenClient.auth.config.clientId, ccgParams.clientID);
+      assert.equal(
+        sdkGenClient.auth.config.enterpriseId,
+        ccgParams.boxSubjectId
+      );
+    });
+
+    it('should transfer proxy config from legacy to SDK-Gen networkSession', function () {
+      var configWithProxy = {
+        ...defaultParams,
+        proxy: {
+          url: 'http://proxy.example.com:8080',
+          username: 'proxyuser',
+          password: 'proxypass',
+        },
+      };
+      var config = new Config(configWithProxy);
+      var tokenInfo = {
+        accessToken: 'oauth-token',
+        refreshToken: 'refresh-token',
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify proxy config is transferred
+      assert.isObject(sdkGenClient.networkSession.proxyConfig);
+      assert.equal(
+        sdkGenClient.networkSession.proxyConfig.url,
+        'http://proxy.example.com:8080'
+      );
+      assert.equal(
+        sdkGenClient.networkSession.proxyConfig.username,
+        'proxyuser'
+      );
+      assert.equal(
+        sdkGenClient.networkSession.proxyConfig.password,
+        'proxypass'
+      );
+    });
+
+    it('should transfer custom URLs from legacy to SDK-Gen networkSession', function () {
+      var customUrlConfig = {
+        ...defaultParams,
+        apiRootURL: 'https://custom-api.box.com',
+        uploadAPIRootURL: 'https://custom-upload.box.com/api',
+        authorizeRootURL: 'https://custom-account.box.com/api',
+      };
+      var config = new Config(customUrlConfig);
+      var tokenInfo = {
+        accessToken: 'oauth-token',
+        refreshToken: 'refresh-token',
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Verify custom URLs are transferred
+      assert.equal(
+        sdkGenClient.networkSession.baseUrls.baseUrl,
+        'https://custom-api.box.com'
+      );
+      assert.equal(
+        sdkGenClient.networkSession.baseUrls.uploadUrl,
+        'https://custom-upload.box.com/api'
+      );
+      assert.equal(
+        sdkGenClient.networkSession.baseUrls.oauth2Url,
+        'https://custom-account.box.com/api/oauth2'
+      );
+    });
+  });
+
+  describe('Token sharing between legacy and SDK-Gen', function () {
+    it('should share access token from legacy OAuth session to SDK-Gen auth', async function () {
+      var config = new Config(defaultParams);
+      var legacyAccessToken = 'shared-oauth-access-token-12345';
+      var tokenInfo = {
+        accessToken: legacyAccessToken,
+        refreshToken: 'shared-refresh-token',
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Get token from SDK-Gen auth's token storage
+      var sdkGenToken = await sdkGenClient.auth.config.tokenStorage.get();
+
+      assert.isObject(sdkGenToken);
+      assert.equal(sdkGenToken.accessToken, legacyAccessToken);
+    });
+
+    it('should share access token from legacy BasicAPISession to SDK-Gen auth', function () {
+      var config = new Config(defaultParams);
+      var legacyAccessToken = 'shared-developer-token';
+      var session = new BasicAPISession(legacyAccessToken, tokenManagerFake);
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      assert.equal(sdkGenClient.auth.token, legacyAccessToken);
+    });
+
+    it('should share access token from legacy JWT session to SDK-Gen auth', async function () {
+      var config = new Config(jwtParams);
+      var session = new AppAuthSession(
+        'enterprise',
+        'ent123',
+        config,
+        tokenManagerFake
+      );
+      var legacyAccessToken = 'shared-jwt-access-token';
+      session._tokenInfo = {
+        accessToken: legacyAccessToken,
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Get token from SDK-Gen auth's token storage
+      var sdkGenToken = await sdkGenClient.auth.config.tokenStorage.get();
+
+      assert.isObject(sdkGenToken);
+      assert.equal(sdkGenToken.accessToken, legacyAccessToken);
+    });
+
+    it('should share access token from legacy CCG session to SDK-Gen auth', async function () {
+      var config = new Config(ccgParams);
+      var session = new CCGAPISession(config, tokenManagerFake);
+      var legacyAccessToken = 'shared-ccg-access-token';
+      session._tokenInfo = {
+        accessToken: legacyAccessToken,
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Get token from SDK-Gen auth's token storage
+      var sdkGenToken = await sdkGenClient.auth.config.tokenStorage.get();
+      assert.isObject(sdkGenToken);
+      assert.equal(sdkGenToken.accessToken, legacyAccessToken);
+    });
+
+    it('should share refresh token from legacy OAuth session to SDK-Gen auth', async function () {
+      var config = new Config(defaultParams);
+      var legacyRefreshToken = 'shared-refresh-token';
+      var tokenInfo = {
+        accessToken: 'access-token',
+        refreshToken: legacyRefreshToken,
+        accessTokenTTLMS: 3600000,
+        acquiredAtMS: Date.now(),
+      };
+      var session = new PersistentAPISession(
+        tokenInfo,
+        null,
+        config,
+        tokenManagerFake
+      );
+
+      basicClient = new BasicClient(session, config, requestManagerFake);
+
+      var sdkGenClient = basicClient.getSdkGenClient();
+
+      // Get token from SDK-Gen auth's token storage
+      var sdkGenToken = await sdkGenClient.auth.config.tokenStorage.get();
+      assert.isObject(sdkGenToken);
+      assert.equal(sdkGenToken.refreshToken, legacyRefreshToken);
+    });
+  });
 });
