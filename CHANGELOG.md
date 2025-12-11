@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/box/box-node-sdk/compare/v4.1.1...v4.2.0) (2025-12-10)
+
+
+### Bug Fixes
+
+* **boxsdkgen:** Remove duplicated  in union type (box/box-codegen[#898](https://github.com/box/box-node-sdk/issues/898)) ([#1241](https://github.com/box/box-node-sdk/issues/1241)) ([c56f808](https://github.com/box/box-node-sdk/commit/c56f808315fab6da134de17517bbb33067523859))
+* bump `jsonwebtoken` dependency ([#1244](https://github.com/box/box-node-sdk/issues/1244)) ([49692e3](https://github.com/box/box-node-sdk/commit/49692e3724c9aa40a855f85a7b0771db1c984b6f))
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** Remove `confidence_score` and `include_confidence_score` from AI extract (box/box-openapi[#567](https://github.com/box/box-node-sdk/issues/567)) ([#1245](https://github.com/box/box-node-sdk/issues/1245)) ([3a74388](https://github.com/box/box-node-sdk/commit/3a74388b46e4842708c11ada8f931b810c0b3230))
+* **boxsdkgen:** support `includeConfidenceScore` and `includeConfidenceScore` fields in AI extract structured (box/box-openapi[#566](https://github.com/box/box-node-sdk/issues/566)) ([#1227](https://github.com/box/box-node-sdk/issues/1227)) ([8e2b109](https://github.com/box/box-node-sdk/commit/8e2b109ebacd48ed268a9310cb01d8f6ae5ebca4))
+* **boxsdkgen:** Support new sign request metadata (box/box-openapi[#565](https://github.com/box/box-node-sdk/issues/565)) ([#1225](https://github.com/box/box-node-sdk/issues/1225)) ([955b6ba](https://github.com/box/box-node-sdk/commit/955b6ba5df942c5c1c0340c307cefad70549db53))
+* **boxsdkgen:** update error message on exception (box/box-codegen[#896](https://github.com/box/box-node-sdk/issues/896)) ([#1232](https://github.com/box/box-node-sdk/issues/1232)) ([b140428](https://github.com/box/box-node-sdk/commit/b140428c303de789bc1cee49c1e8c03139602c65))
+
 ### [4.1.1](https://github.com/box/box-node-sdk/compare/v4.1.0...v4.1.1) (2025-11-12)
 
 
