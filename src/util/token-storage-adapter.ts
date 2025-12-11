@@ -1,9 +1,9 @@
 /**
  * @fileoverview Token Storage Adapter
  * 
- * Provides utilities to convert between:
- * 1. Legacy TokenStore (callback-based) ↔ SDK-Gen TokenStorage (promise-based)
- * 2. Legacy TokenInfo structure ↔ SDK-Gen AccessToken structure
+ * Provides the method to convert between:
+ * 1. Legacy TokenStore (callback-based) to SDK-Gen TokenStorage (promise-based)
+ * 2. Legacy TokenInfo structure to sdk-gen AccessToken structure
  */
 
 import { AccessToken } from '../sdk-gen/schemas/accessToken';
@@ -28,25 +28,6 @@ export interface LegacyTokenStore {
   clear(callback: (err: Error | null) => void): void;
 }
 
-/**
- * Convert legacy TokenInfo to sdk-gen AccessToken
- * 
- * Legacy format:
- * {
- *   accessToken: string,
- *   refreshToken?: string,
- *   accessTokenTTLMS: number,  // milliseconds until expiration
- *   acquiredAtMS: number        // timestamp when acquired
- * }
- * 
- * SDK-Gen format:
- * {
- *   accessToken?: string,
- *   refreshToken?: string,
- *   expiresIn?: number,         // seconds until expiration
- *   tokenType?: string
- * }
- */
 export function convertLegacyTokenInfoToAccessToken(
   legacyTokenInfo: LegacyTokenInfo | null
 ): AccessToken | undefined {
