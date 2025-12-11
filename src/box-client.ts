@@ -781,10 +781,9 @@ class BoxClient {
    * @throws {Error} If the authentication type cannot be determined or is not supported
    */
   getAuthentication(options?: { tokenStorage?: any }): any {
-    // Determine token storage to use
+
     let tokenStorage = options?.tokenStorage;
 
-    //BasicAPISession (simple access token)
     if (this._session instanceof BasicAPISession) {
 
       if (!tokenStorage) {
@@ -802,17 +801,13 @@ class BoxClient {
       });
     }
 
-    //PersistentAPISession (OAuth with refresh token)
     if (this._session instanceof PersistentAPISession) {
       const session = this._session as any;
 
-      // Get token storage - either provided or wrap the legacy one
       if (!tokenStorage) {
         if (session._tokenStore) {
-          // Wrap legacy token store
           tokenStorage = wrapLegacyTokenStore(session._tokenStore);
         } else {
-          // Create in-memory storage with current tokens
           const currentToken = convertLegacyTokenInfoToAccessToken(
             session._tokenInfo
           );
@@ -831,7 +826,6 @@ class BoxClient {
       return new BoxOAuth({ config });
     }
 
-    //AppAuthSession (JWT App Auth)
     if (this._session instanceof AppAuthSession) {
       const session = this._session as any;
       const appAuthConfig = session._config.appAuth;
@@ -842,12 +836,10 @@ class BoxClient {
         );
       }
 
-      // Get token storage - either provided or wrap the legacy one
       if (!tokenStorage) {
         if (session._tokenStore) {
           tokenStorage = wrapLegacyTokenStore(session._tokenStore);
         } else {
-          // Pre-populate with existing token if available to avoid unnecessary token generation
           const existingToken = session._tokenInfo
             ? convertLegacyTokenInfoToAccessToken(session._tokenInfo)
             : undefined;
@@ -871,13 +863,10 @@ class BoxClient {
 
       return new BoxJwtAuth({ config: jwtConfig });
     }
-
-    //CCGAPISession (Client Credentials Grant)
     if (this._session instanceof CCGAPISession) {
       const session = this._session as any;
 
       if (!tokenStorage) {
-        // Pre-populate with existing token if available to avoid unnecessary token request
         const existingToken = session._tokenInfo
           ? convertLegacyTokenInfoToAccessToken(session._tokenInfo)
           : undefined;
@@ -886,7 +875,6 @@ class BoxClient {
         });
       }
 
-      // Determine enterprise or user ID from config
       const config = session._config;
       const ccgConfig = new CcgConfig({
         clientId: config.clientID,
@@ -917,7 +905,7 @@ class BoxClient {
    * @param {RetryStrategy} [options.retryStrategy] Custom retry strategy
    * @param {DataSanitizer} [options.dataSanitizer] Custom data sanitizer
    * @param {Interceptor[]} [options.interceptors] Request interceptors
-   * @param {Object} [options.additionalHeaders] Extra headers
+   * @param {Object} [options.additionalHeaders] Additional headers
    * @returns {NetworkSession} Configured NetworkSession for sdk-gen
    */
   getNetworkSession(options?: {
@@ -928,7 +916,6 @@ class BoxClient {
     additionalHeaders?: { [key: string]: string };
   }): any {
 
-    // Get config from session
     const session = this._session as any;
     const config = session._config || {};
 
@@ -948,7 +935,6 @@ class BoxClient {
       oauth2Url: oauth2Url,
     });
 
-    //Build ProxyConfig from legacy config
     let proxyConfig:
       | { url: string; username?: string; password?: string }
       | undefined;
@@ -960,14 +946,12 @@ class BoxClient {
       };
     }
 
-    //Build additionalHeaders from legacy request.headers
     const legacyHeaders = config.request?.headers || {};
     const additionalHeaders = {
       ...legacyHeaders,
       ...(options?.additionalHeaders || {}),
     };
 
-    //Build RetryStrategy from legacy config or use provided
     const retryStrategy =
       options?.retryStrategy ||
       new BoxRetryStrategy({
@@ -975,10 +959,8 @@ class BoxClient {
         retryBaseInterval: (config.retryIntervalMS || 2000) / 1000,
       });
 
-    //Extract agent options from legacy config
     const agentOptions = config.request?.agentOptions || { keepAlive: true };
 
-    //Create and return NetworkSession
     return new NetworkSession({
       additionalHeaders: additionalHeaders,
       baseUrls: baseUrls,
@@ -1004,7 +986,7 @@ class BoxClient {
    * @param {RetryStrategy} [options.networkOptions.retryStrategy] Custom retry strategy
    * @param {DataSanitizer} [options.networkOptions.dataSanitizer] Custom data sanitizer
    * @param {Interceptor[]} [options.networkOptions.interceptors] Request interceptors
-   * @param {Object} [options.networkOptions.additionalHeaders] Extra headers
+   * @param {Object} [options.networkOptions.additionalHeaders] Additional headers
    * @returns {BoxClient} A fully configured sdk-gen BoxClient
    */
   getSdkGenClient(options?: {
