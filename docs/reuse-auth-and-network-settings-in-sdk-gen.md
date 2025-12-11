@@ -1,14 +1,6 @@
 # Resuse Authentication and Netowrk Settings from Legacy Node SDK in SDK Gen
 
-This guide explains three methods that help you migrate from the legacy Box Node.js SDK to the new SDK-Gen package by reusing your existing configuration.
-
-## Overview
-
-| Method | Purpose | Returns |
-|--------|---------|---------|
-| `getAuthentication()` | Extract authentication settings | SDK-Gen `Authentication` object |
-| `getNetworkSession()` | Extract network settings | SDK-Gen `NetworkSession` object |
-| `getSdkGenClient()` | Get a fully configured SDK-Gen client | SDK-Gen `BoxClient` |
+This guide explains three methods that help you migrate from the legacy Box Node.js SDK to the new SDK-Gen package by reusing your existing authentication and network configuration.
 
 ## Quick Start
 
@@ -67,7 +59,7 @@ const user = await sdkGenClient.users.getUserMe();
 const folder = await sdkGenClient.folders.getFolderById('0');
 ```
 
-### With Custom Options
+### With Custom Authentication and Network Settings
 
 ```javascript
 // Custom token storage
@@ -79,7 +71,7 @@ const sdkGenClient = legacyClient.getSdkGenClient({
   },
   networkOptions: {
     additionalHeaders: {
-      'X-Request-ID': 'my-tracking-id',
+      'X-Request-ID': 'request-id',
     },
   },
 });

@@ -9,9 +9,6 @@
 import { AccessToken } from '../sdk-gen/schemas/accessToken';
 import { TokenStorage } from '../sdk-gen/box/tokenStorage';
 
-/**
- * Legacy TokenInfo structure from the old SDK
- */
 export interface LegacyTokenInfo {
   accessToken: string;
   refreshToken?: string;
@@ -19,9 +16,6 @@ export interface LegacyTokenInfo {
   acquiredAtMS: number;
 }
 
-/**
- * Legacy TokenStore interface (callback-based)
- */
 export interface LegacyTokenStore {
   read(callback: (err: Error | null, tokenInfo: LegacyTokenInfo | null) => void): void;
   write(tokenInfo: LegacyTokenInfo, callback: (err: Error | null) => void): void;
