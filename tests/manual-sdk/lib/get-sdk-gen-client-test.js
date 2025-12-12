@@ -77,24 +77,18 @@ var ccgParams = {
 describe('getSdkGenClient()', function () {
   var tokenManagerFake, requestManagerFake;
 
-  beforeEach(function () {
-    tokenManagerFake = leche.fake(TokenManager.prototype);
-    requestManagerFake = {};
-
-    // Setup Mockery
+  // Load modules once before all tests (faster CI)
+  before(function () {
     mockery.enable({
-      useCleanCache: true,
       warnOnUnregistered: false,
     });
 
-    // Register allowed modules
     mockery.registerAllowable(MODULE_FILE_PATH, true);
     mockery.registerAllowable(BASIC_SESSION_PATH, true);
     mockery.registerAllowable(PERSISTENT_SESSION_PATH, true);
     mockery.registerAllowable(APP_AUTH_SESSION_PATH, true);
     mockery.registerAllowable(CCG_SESSION_PATH, true);
 
-    // Load modules
     BasicClient = require(MODULE_FILE_PATH).default;
     BasicAPISession = require(BASIC_SESSION_PATH).default;
     PersistentAPISession = require(PERSISTENT_SESSION_PATH).default;
@@ -102,10 +96,19 @@ describe('getSdkGenClient()', function () {
     CCGAPISession = require(CCG_SESSION_PATH).default;
   });
 
-  afterEach(function () {
-    sandbox.verifyAndRestore();
+  after(function () {
     mockery.deregisterAll();
     mockery.disable();
+  });
+
+  // Reset fakes before each test
+  beforeEach(function () {
+    tokenManagerFake = leche.fake(TokenManager.prototype);
+    requestManagerFake = {};
+  });
+
+  afterEach(function () {
+    sandbox.verifyAndRestore();
   });
 
   describe('Basic SDK-Gen client creation (Developer token)', function () {
