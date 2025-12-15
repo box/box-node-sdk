@@ -80,6 +80,30 @@ import PagingIterator from './util/paging-iterator';
 const pkg = require('../package.json');
 
 // ------------------------------------------------------------------------------
+// SDK-Gen Imports (for getAuthentication, getNetworkSession, getSdkGenClient)
+// ------------------------------------------------------------------------------
+import { BoxDeveloperTokenAuth } from './sdk-gen/box/developerTokenAuth';
+import { BoxOAuth, OAuthConfig } from './sdk-gen/box/oauth';
+import { BoxJwtAuth, JwtConfig } from './sdk-gen/box/jwtAuth';
+import { BoxCcgAuth, CcgConfig } from './sdk-gen/box/ccgAuth';
+import { InMemoryTokenStorage } from './sdk-gen/box/tokenStorage';
+import {
+  wrapLegacyTokenStore,
+  convertLegacyTokenInfoToAccessToken,
+} from './util/token-storage-adapter';
+import BasicAPISession from './sessions/basic-session';
+import PersistentAPISession from './sessions/persistent-session';
+import AppAuthSession from './sessions/app-auth-session';
+import CCGAPISession from './sessions/ccg-session';
+import { NetworkSession } from './sdk-gen/networking/network';
+import { BaseUrls } from './sdk-gen/networking/baseUrls';
+import { BoxRetryStrategy } from './sdk-gen/networking/retries';
+import { BoxNetworkClient } from './sdk-gen/networking/boxNetworkClient';
+import { DataSanitizer } from './sdk-gen/internal/logging';
+import { createAgent } from './sdk-gen/internal/utils';
+import { BoxClient as SdkGenBoxClient } from './sdk-gen/client';
+
+// ------------------------------------------------------------------------------
 // Private
 // ------------------------------------------------------------------------------
 
@@ -745,6 +769,249 @@ class BoxClient {
 
     // Create plugin and export plugin onto client.
     (this as any)[name] = plugin(this, options);
+  }
+
+  /**
+   * Get an sdk-gen Authentication object configured with the current client's authentication settings.
+   * This allows reusing authentication configuration between the legacy SDK and sdk-gen SDK.
+   * 
+   * @param {Object} [options] Optional configuration
+   * @param {TokenStorage} [options.tokenStorage] Optional custom token storage (sdk-gen format)
+   * @returns {Authentication} A configured sdk-gen Authentication object
+   * @throws {Error} If the authentication type cannot be determined or is not supported
+   */
+  getAuthentication(options?: { tokenStorage?: any }): any {
+
+    let tokenStorage = options?.tokenStorage;
+
+    if (this._session instanceof BasicAPISession) {
+
+      if (!tokenStorage) {
+        tokenStorage = new InMemoryTokenStorage({
+          token: { accessToken: (this._session as any)._accessToken },
+        });
+      }
+
+      return new BoxDeveloperTokenAuth({
+        token: (this._session as any)._accessToken,
+        config: {
+          clientId: (this._session as any)._tokenManager?._config?.clientID || '',
+          clientSecret: (this._session as any)._tokenManager?._config?.clientSecret || '',
+        },
+      });
+    }
+
+    if (this._session instanceof PersistentAPISession) {
+      const session = this._session as any;
+
+      if (!tokenStorage) {
+        if (session._tokenStore) {
+          tokenStorage = wrapLegacyTokenStore(session._tokenStore);
+        } else {
+          const currentToken = convertLegacyTokenInfoToAccessToken(
+            session._tokenInfo
+          );
+          tokenStorage = new InMemoryTokenStorage({
+            token: currentToken,
+          });
+        }
+      }
+
+      const config = new OAuthConfig({
+        clientId: session._config.clientID,
+        clientSecret: session._config.clientSecret,
+        tokenStorage: tokenStorage,
+      });
+
+      return new BoxOAuth({ config });
+    }
+
+    if (this._session instanceof AppAuthSession) {
+      const session = this._session as any;
+      const appAuthConfig = session._config.appAuth;
+
+      if (!appAuthConfig) {
+        throw new Error(
+          'AppAuth configuration not found. Cannot create Authentication object.'
+        );
+      }
+
+      if (!tokenStorage) {
+        if (session._tokenStore) {
+          tokenStorage = wrapLegacyTokenStore(session._tokenStore);
+        } else {
+          const existingToken = session._tokenInfo
+            ? convertLegacyTokenInfoToAccessToken(session._tokenInfo)
+            : undefined;
+          tokenStorage = new InMemoryTokenStorage({
+            token: existingToken,
+          });
+        }
+      }
+
+      const jwtConfig = new JwtConfig({
+        clientId: session._config.clientID,
+        clientSecret: session._config.clientSecret,
+        jwtKeyId: appAuthConfig.keyID,
+        privateKey: appAuthConfig.privateKey,
+        privateKeyPassphrase: appAuthConfig.passphrase,
+        enterpriseId:
+          session._type === 'enterprise' ? session._id : undefined,
+        userId: session._type === 'user' ? session._id : undefined,
+        tokenStorage: tokenStorage,
+      });
+
+      return new BoxJwtAuth({ config: jwtConfig });
+    }
+    if (this._session instanceof CCGAPISession) {
+      const session = this._session as any;
+
+      if (!tokenStorage) {
+        const existingToken = session._tokenInfo
+          ? convertLegacyTokenInfoToAccessToken(session._tokenInfo)
+          : undefined;
+        tokenStorage = new InMemoryTokenStorage({
+          token: existingToken,
+        });
+      }
+
+      const config = session._config;
+      const ccgConfig = new CcgConfig({
+        clientId: config.clientID,
+        clientSecret: config.clientSecret,
+        enterpriseId:
+          config.boxSubjectType === 'enterprise'
+            ? config.boxSubjectId
+            : undefined,
+        userId:
+          config.boxSubjectType === 'user' ? config.boxSubjectId : undefined,
+        tokenStorage: tokenStorage,
+      });
+
+      return new BoxCcgAuth({ config: ccgConfig });
+    }
+
+    // Unknown session type
+    throw new Error(
+      `Unknown session type. Cannot create Authentication object from ${this._session?.constructor?.name || 'unknown session'}.`
+    );
+  }
+
+  /**
+   * Get an sdk-gen NetworkSession configured with the current SDK's network settings.
+   * This allows reusing network configuration between the legacy SDK and sdk-gen SDK.
+   * @param {Object} [options] Optional configuration for SDK-Gen-only properties
+   * @param {NetworkClient} [options.networkClient] Custom network client
+   * @param {RetryStrategy} [options.retryStrategy] Custom retry strategy
+   * @param {DataSanitizer} [options.dataSanitizer] Custom data sanitizer
+   * @param {Interceptor[]} [options.interceptors] Request interceptors
+   * @param {Object} [options.additionalHeaders] Additional headers
+   * @returns {NetworkSession} Configured NetworkSession for sdk-gen
+   */
+  getNetworkSession(options?: {
+    networkClient?: any;
+    retryStrategy?: any;
+    dataSanitizer?: any;
+    interceptors?: any[];
+    additionalHeaders?: { [key: string]: string };
+  }): any {
+
+    const session = this._session as any;
+    const config = session._config || {};
+
+    // Build BaseUrls from legacy config
+    // Legacy authorizeRootURL is 'https://account.box.com/api'
+    // SDK-Gen oauth2Url should be 'https://account.box.com/api/oauth2'
+    let oauth2Url = 'https://account.box.com/api/oauth2';
+    if (config.authorizeRootURL) {
+      oauth2Url = config.authorizeRootURL.endsWith('/oauth2')
+        ? config.authorizeRootURL
+        : `${config.authorizeRootURL}/oauth2`;
+    }
+
+    const baseUrls = new BaseUrls({
+      baseUrl: config.apiRootURL || 'https://api.box.com',
+      uploadUrl: config.uploadAPIRootURL || 'https://upload.box.com/api',
+      oauth2Url: oauth2Url,
+    });
+
+    let proxyConfig:
+      | { url: string; username?: string; password?: string }
+      | undefined;
+    if (config.proxy?.url) {
+      proxyConfig = {
+        url: config.proxy.url,
+        username: config.proxy.username || undefined,
+        password: config.proxy.password || undefined,
+      };
+    }
+
+    const legacyHeaders = config.request?.headers || {};
+    const additionalHeaders = {
+      ...legacyHeaders,
+      ...(options?.additionalHeaders || {}),
+    };
+
+    const retryStrategy =
+      options?.retryStrategy ||
+      new BoxRetryStrategy({
+        maxAttempts: config.numMaxRetries || 5,
+        retryBaseInterval: (config.retryIntervalMS || 2000) / 1000,
+      });
+
+    const agentOptions = config.request?.agentOptions || { keepAlive: true };
+
+    return new NetworkSession({
+      additionalHeaders: additionalHeaders,
+      baseUrls: baseUrls,
+      interceptors: options?.interceptors || [],
+      agent: createAgent(agentOptions, proxyConfig),
+      agentOptions: agentOptions,
+      proxyConfig: proxyConfig,
+      networkClient: options?.networkClient || new BoxNetworkClient({}),
+      retryStrategy: retryStrategy,
+      dataSanitizer: options?.dataSanitizer || new DataSanitizer({}),
+    });
+  }
+
+  /**
+   * Get a fully configured sdk-gen BoxClient that shares authentication and
+   * network settings with this legacy client.
+   *
+   * @param {Object} [options] Optional configuration
+   * @param {Object} [options.authOptions] Options to pass to getAuthentication()
+   * @param {TokenStorage} [options.authOptions.tokenStorage] Custom token storage
+   * @param {Object} [options.networkOptions] Options to pass to getNetworkSession()
+   * @param {NetworkClient} [options.networkOptions.networkClient] Custom network client
+   * @param {RetryStrategy} [options.networkOptions.retryStrategy] Custom retry strategy
+   * @param {DataSanitizer} [options.networkOptions.dataSanitizer] Custom data sanitizer
+   * @param {Interceptor[]} [options.networkOptions.interceptors] Request interceptors
+   * @param {Object} [options.networkOptions.additionalHeaders] Additional headers
+   * @returns {BoxClient} A fully configured sdk-gen BoxClient
+   */
+  getSdkGenClient(options?: {
+    authOptions?: {
+      tokenStorage?: any;
+    };
+    networkOptions?: {
+      networkClient?: any;
+      retryStrategy?: any;
+      dataSanitizer?: any;
+      interceptors?: any[];
+      additionalHeaders?: { [key: string]: string };
+    };
+  }): any {
+    // Get authentication using getAuthentication() method
+    const auth = this.getAuthentication(options?.authOptions);
+
+    // Get network session using getNetworkSession() method
+    const networkSession = this.getNetworkSession(options?.networkOptions);
+
+    // Create and return the fully configured sdk-gen BoxClient
+    return new SdkGenBoxClient({
+      auth: auth,
+      networkSession: networkSession,
+    });
   }
 }
 
