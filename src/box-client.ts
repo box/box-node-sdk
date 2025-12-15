@@ -774,18 +774,16 @@ class BoxClient {
   /**
    * Get an sdk-gen Authentication object configured with the current client's authentication settings.
    * This allows reusing authentication configuration between the legacy SDK and sdk-gen SDK.
-   * 
+   *
    * @param {Object} [options] Optional configuration
    * @param {TokenStorage} [options.tokenStorage] Optional custom token storage (sdk-gen format)
    * @returns {Authentication} A configured sdk-gen Authentication object
    * @throws {Error} If the authentication type cannot be determined or is not supported
    */
   getAuthentication(options?: { tokenStorage?: any }): any {
-
     let tokenStorage = options?.tokenStorage;
 
     if (this._session instanceof BasicAPISession) {
-
       if (!tokenStorage) {
         tokenStorage = new InMemoryTokenStorage({
           token: { accessToken: (this._session as any)._accessToken },
@@ -795,8 +793,10 @@ class BoxClient {
       return new BoxDeveloperTokenAuth({
         token: (this._session as any)._accessToken,
         config: {
-          clientId: (this._session as any)._tokenManager?._config?.clientID || '',
-          clientSecret: (this._session as any)._tokenManager?._config?.clientSecret || '',
+          clientId:
+            (this._session as any)._tokenManager?._config?.clientID || '',
+          clientSecret:
+            (this._session as any)._tokenManager?._config?.clientSecret || '',
         },
       });
     }
@@ -855,8 +855,7 @@ class BoxClient {
         jwtKeyId: appAuthConfig.keyID,
         privateKey: appAuthConfig.privateKey,
         privateKeyPassphrase: appAuthConfig.passphrase,
-        enterpriseId:
-          session._type === 'enterprise' ? session._id : undefined,
+        enterpriseId: session._type === 'enterprise' ? session._id : undefined,
         userId: session._type === 'user' ? session._id : undefined,
         tokenStorage: tokenStorage,
       });
@@ -915,7 +914,6 @@ class BoxClient {
     interceptors?: any[];
     additionalHeaders?: { [key: string]: string };
   }): any {
-
     const session = this._session as any;
     const config = session._config || {};
 

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Token Storage Adapter
- * 
+ *
  * Provides the method to convert between:
  * 1. Legacy TokenStore (callback-based) to SDK-Gen TokenStorage (promise-based)
  * 2. Legacy TokenInfo structure to sdk-gen AccessToken structure
@@ -17,8 +17,13 @@ export interface LegacyTokenInfo {
 }
 
 export interface LegacyTokenStore {
-  read(callback: (err: Error | null, tokenInfo: LegacyTokenInfo | null) => void): void;
-  write(tokenInfo: LegacyTokenInfo, callback: (err: Error | null) => void): void;
+  read(
+    callback: (err: Error | null, tokenInfo: LegacyTokenInfo | null) => void
+  ): void;
+  write(
+    tokenInfo: LegacyTokenInfo,
+    callback: (err: Error | null) => void
+  ): void;
   clear(callback: (err: Error | null) => void): void;
 }
 
@@ -31,7 +36,8 @@ export function convertLegacyTokenInfoToAccessToken(
 
   // Calculate expiresIn (seconds) from TTL and acquired time
   const currentTimeMS = Date.now();
-  const expiresAtMS = legacyTokenInfo.acquiredAtMS + legacyTokenInfo.accessTokenTTLMS;
+  const expiresAtMS =
+    legacyTokenInfo.acquiredAtMS + legacyTokenInfo.accessTokenTTLMS;
   const remainingMS = expiresAtMS - currentTimeMS;
   const expiresInSeconds = Math.max(0, Math.floor(remainingMS / 1000));
 
@@ -45,7 +51,7 @@ export function convertLegacyTokenInfoToAccessToken(
 
 /**
  * Convert sdk-gen AccessToken to legacy TokenInfo
- * 
+ *
  * @param accessToken The sdk-gen AccessToken
  * @param acquiredAtMS Optional timestamp of when token was acquired (defaults to now)
  */
@@ -85,7 +91,7 @@ export class LegacyTokenStoreAdapter implements TokenStorage {
    */
   async store(token: AccessToken): Promise<undefined> {
     const legacyTokenInfo = convertAccessTokenToLegacyTokenInfo(token);
-    
+
     if (!legacyTokenInfo) {
       throw new Error('Cannot store invalid token');
     }
@@ -110,7 +116,8 @@ export class LegacyTokenStoreAdapter implements TokenStorage {
         if (err) {
           reject(err);
         } else {
-          const accessToken = convertLegacyTokenInfoToAccessToken(legacyTokenInfo);
+          const accessToken =
+            convertLegacyTokenInfoToAccessToken(legacyTokenInfo);
           resolve(accessToken);
         }
       });
@@ -141,5 +148,3 @@ export function wrapLegacyTokenStore(
 ): TokenStorage {
   return new LegacyTokenStoreAdapter(legacyStore);
 }
-
-
