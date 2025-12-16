@@ -73,25 +73,16 @@ export function serializeSignRequestSignerInputValidation(
           'Expecting "validationType" of type "SignRequestSignerInputCustomValidation" to be defined',
       });
     }
-    if (val.customRegex == void 0) {
-      throw new BoxSdkError({
-        message:
-          'Expecting "customRegex" of type "SignRequestSignerInputCustomValidation" to be defined',
-      });
-    }
-    if (!sdIsString(val.customRegex)) {
+    if (!(val.customRegex == void 0) && !sdIsString(val.customRegex)) {
       throw new BoxSdkError({
         message:
           'Expecting string for "customRegex" of type "SignRequestSignerInputCustomValidation"',
       });
     }
-    if (val.customErrorMessage == void 0) {
-      throw new BoxSdkError({
-        message:
-          'Expecting "customErrorMessage" of type "SignRequestSignerInputCustomValidation" to be defined',
-      });
-    }
-    if (!sdIsString(val.customErrorMessage)) {
+    if (
+      !(val.customErrorMessage == void 0) &&
+      !sdIsString(val.customErrorMessage)
+    ) {
       throw new BoxSdkError({
         message:
           'Expecting string for "customErrorMessage" of type "SignRequestSignerInputCustomValidation"',
