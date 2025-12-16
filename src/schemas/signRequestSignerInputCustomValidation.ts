@@ -17,10 +17,10 @@ export class SignRequestSignerInputCustomValidation {
     'custom' as SignRequestSignerInputCustomValidationValidationTypeField;
   /**
    * Regular expression used for validation. */
-  readonly customRegex!: string | null;
+  readonly customRegex?: string | null;
   /**
    * Error message shown if input fails custom regular expression validation. */
-  readonly customErrorMessage!: string | null;
+  readonly customErrorMessage?: string | null;
   readonly rawData?: SerializedData;
   constructor(
     fields: Omit<SignRequestSignerInputCustomValidation, 'validationType'> &
@@ -47,10 +47,10 @@ export interface SignRequestSignerInputCustomValidationInput {
   readonly validationType?: SignRequestSignerInputCustomValidationValidationTypeField;
   /**
    * Regular expression used for validation. */
-  readonly customRegex: string | null;
+  readonly customRegex?: string | null;
   /**
    * Error message shown if input fails custom regular expression validation. */
-  readonly customErrorMessage: string | null;
+  readonly customErrorMessage?: string | null;
   readonly rawData?: SerializedData;
 }
 export function serializeSignRequestSignerInputCustomValidationValidationTypeField(
@@ -102,32 +102,25 @@ export function deserializeSignRequestSignerInputCustomValidation(
     deserializeSignRequestSignerInputCustomValidationValidationTypeField(
       val.validation_type,
     );
-  if (val.custom_regex == void 0) {
-    throw new BoxSdkError({
-      message:
-        'Expecting "custom_regex" of type "SignRequestSignerInputCustomValidation" to be defined',
-    });
-  }
-  if (!sdIsString(val.custom_regex)) {
+  if (!(val.custom_regex == void 0) && !sdIsString(val.custom_regex)) {
     throw new BoxSdkError({
       message:
         'Expecting string for "custom_regex" of type "SignRequestSignerInputCustomValidation"',
     });
   }
-  const customRegex: string = val.custom_regex;
-  if (val.custom_error_message == void 0) {
-    throw new BoxSdkError({
-      message:
-        'Expecting "custom_error_message" of type "SignRequestSignerInputCustomValidation" to be defined',
-    });
-  }
-  if (!sdIsString(val.custom_error_message)) {
+  const customRegex: undefined | string =
+    val.custom_regex == void 0 ? void 0 : val.custom_regex;
+  if (
+    !(val.custom_error_message == void 0) &&
+    !sdIsString(val.custom_error_message)
+  ) {
     throw new BoxSdkError({
       message:
         'Expecting string for "custom_error_message" of type "SignRequestSignerInputCustomValidation"',
     });
   }
-  const customErrorMessage: string = val.custom_error_message;
+  const customErrorMessage: undefined | string =
+    val.custom_error_message == void 0 ? void 0 : val.custom_error_message;
   return {
     validationType: validationType,
     customRegex: customRegex,
@@ -165,32 +158,25 @@ export function deserializeSignRequestSignerInputCustomValidationInput(
       : deserializeSignRequestSignerInputCustomValidationValidationTypeField(
           val.validationType,
         );
-  if (val.custom_regex == void 0) {
-    throw new BoxSdkError({
-      message:
-        'Expecting "custom_regex" of type "SignRequestSignerInputCustomValidationInput" to be defined',
-    });
-  }
-  if (!sdIsString(val.custom_regex)) {
+  if (!(val.custom_regex == void 0) && !sdIsString(val.custom_regex)) {
     throw new BoxSdkError({
       message:
         'Expecting string for "custom_regex" of type "SignRequestSignerInputCustomValidationInput"',
     });
   }
-  const customRegex: string = val.custom_regex;
-  if (val.custom_error_message == void 0) {
-    throw new BoxSdkError({
-      message:
-        'Expecting "custom_error_message" of type "SignRequestSignerInputCustomValidationInput" to be defined',
-    });
-  }
-  if (!sdIsString(val.custom_error_message)) {
+  const customRegex: undefined | string =
+    val.custom_regex == void 0 ? void 0 : val.custom_regex;
+  if (
+    !(val.custom_error_message == void 0) &&
+    !sdIsString(val.custom_error_message)
+  ) {
     throw new BoxSdkError({
       message:
         'Expecting string for "custom_error_message" of type "SignRequestSignerInputCustomValidationInput"',
     });
   }
-  const customErrorMessage: string = val.custom_error_message;
+  const customErrorMessage: undefined | string =
+    val.custom_error_message == void 0 ? void 0 : val.custom_error_message;
   return {
     validationType: validationType,
     customRegex: customRegex,
