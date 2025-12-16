@@ -104,7 +104,7 @@ See the endpoint docs at
 
 ```ts
 await client.docgen.createDocgenBatchV2025R0({
-  file: new FileReferenceV2025R0({ id: uploadedFile.id }),
+  file: new FileReferenceV2025R0({ id: uploadedFileDocx.id }),
   inputSource: 'api',
   destinationFolder: new DocGenBatchCreateRequestV2025R0DestinationFolderField({
     id: folder.id,

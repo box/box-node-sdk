@@ -1,5 +1,7 @@
 import { serializeFileFull } from '@/schemas/fileFull';
 import { deserializeFileFull } from '@/schemas/fileFull';
+import { serializeUpdateFileByIdRequestBody } from '@/managers/files';
+import { deserializeUpdateFileByIdRequestBody } from '@/managers/files';
 import { serializeFolderFull } from '@/schemas/folderFull';
 import { deserializeFolderFull } from '@/schemas/folderFull';
 import { serializeDocGenTemplateBaseV2025R0 } from '@/schemas/v2025R0/docGenTemplateBaseV2025R0';
@@ -24,8 +26,11 @@ import { serializeDocGenJobFullV2025R0 } from '@/schemas/v2025R0/docGenJobFullV2
 import { deserializeDocGenJobFullV2025R0 } from '@/schemas/v2025R0/docGenJobFullV2025R0';
 import { serializeDocGenJobV2025R0 } from '@/schemas/v2025R0/docGenJobV2025R0';
 import { deserializeDocGenJobV2025R0 } from '@/schemas/v2025R0/docGenJobV2025R0';
+import { UpdateFileByIdOptionalsInput } from '@/managers/files';
+import { UpdateFileByIdOptionals } from '@/managers/files';
 import { BoxClient } from '@/client';
 import { FileFull } from '@/schemas/fileFull';
+import { UpdateFileByIdRequestBody } from '@/managers/files';
 import { FolderFull } from '@/schemas/folderFull';
 import { DocGenTemplateBaseV2025R0 } from '@/schemas/v2025R0/docGenTemplateBaseV2025R0';
 import { DocGenTemplateCreateRequestV2025R0 } from '@/schemas/v2025R0/docGenTemplateCreateRequestV2025R0';
@@ -53,15 +58,23 @@ import { sdIsList } from '@/serialization/json';
 import { sdIsMap } from '@/serialization/json';
 export const client: BoxClient = getDefaultClient();
 test('testDocgenBatchAndJobs', async function testDocgenBatchAndJobs(): Promise<any> {
-  const uploadedFile: FileFull = await uploadNewFile();
+  const uploadedFilePdf: FileFull = await uploadNewFile();
+  const uploadedFileDocx: FileFull = await client.files.updateFileById(
+    uploadedFilePdf.id,
+    {
+      requestBody: {
+        name: ''.concat(uploadedFilePdf.name!, '.docx') as string,
+      } satisfies UpdateFileByIdRequestBody,
+    } satisfies UpdateFileByIdOptionalsInput,
+  );
   const folder: FolderFull = await createNewFolder();
   const createdDocgenTemplate: DocGenTemplateBaseV2025R0 =
     await client.docgenTemplate.createDocgenTemplateV2025R0({
-      file: new FileReferenceV2025R0({ id: uploadedFile.id }),
+      file: new FileReferenceV2025R0({ id: uploadedFileDocx.id }),
     } satisfies DocGenTemplateCreateRequestV2025R0);
   const docgenBatch: DocGenBatchBaseV2025R0 =
     await client.docgen.createDocgenBatchV2025R0({
-      file: new FileReferenceV2025R0({ id: uploadedFile.id }),
+      file: new FileReferenceV2025R0({ id: uploadedFileDocx.id }),
       inputSource: 'api',
       destinationFolder:
         new DocGenBatchCreateRequestV2025R0DestinationFolderField({
@@ -100,7 +113,7 @@ test('testDocgenBatchAndJobs', async function testDocgenBatchAndJobs(): Promise<
   if (!!((toString(docgenBatchJobs.entries![0].status) as string) == '')) {
     throw new Error('Assertion failed');
   }
-  if (!(docgenBatchJobs.entries![0].templateFile.id == uploadedFile.id)) {
+  if (!(docgenBatchJobs.entries![0].templateFile.id == uploadedFileDocx.id)) {
     throw new Error('Assertion failed');
   }
   if (!(docgenBatchJobs.entries![0].batch.id == docgenBatch.id)) {
@@ -193,6 +206,6 @@ test('testDocgenBatchAndJobs', async function testDocgenBatchAndJobs(): Promise<
     throw new Error('Assertion failed');
   }
   await client.folders.deleteFolderById(folder.id);
-  await client.files.deleteFileById(uploadedFile.id);
+  await client.files.deleteFileById(uploadedFileDocx.id);
 });
 export {};
