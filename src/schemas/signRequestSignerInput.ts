@@ -1,9 +1,45 @@
 import { serializeDate } from '../internal/utils';
 import { deserializeDate } from '../internal/utils';
+import { serializeSignRequestSignerInputEmailValidation } from './signRequestSignerInputEmailValidation';
+import { deserializeSignRequestSignerInputEmailValidation } from './signRequestSignerInputEmailValidation';
+import { serializeSignRequestSignerInputCustomValidation } from './signRequestSignerInputCustomValidation';
+import { deserializeSignRequestSignerInputCustomValidation } from './signRequestSignerInputCustomValidation';
+import { serializeSignRequestSignerInputZipValidation } from './signRequestSignerInputZipValidation';
+import { deserializeSignRequestSignerInputZipValidation } from './signRequestSignerInputZipValidation';
+import { serializeSignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
+import { deserializeSignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
+import { serializeSignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
+import { deserializeSignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
+import { serializeSignRequestSignerInputNumberWithPeriodValidation } from './signRequestSignerInputNumberWithPeriodValidation';
+import { deserializeSignRequestSignerInputNumberWithPeriodValidation } from './signRequestSignerInputNumberWithPeriodValidation';
+import { serializeSignRequestSignerInputNumberWithCommaValidation } from './signRequestSignerInputNumberWithCommaValidation';
+import { deserializeSignRequestSignerInputNumberWithCommaValidation } from './signRequestSignerInputNumberWithCommaValidation';
+import { serializeSignRequestSignerInputDateIsoValidation } from './signRequestSignerInputDateIsoValidation';
+import { deserializeSignRequestSignerInputDateIsoValidation } from './signRequestSignerInputDateIsoValidation';
+import { serializeSignRequestSignerInputDateUsValidation } from './signRequestSignerInputDateUsValidation';
+import { deserializeSignRequestSignerInputDateUsValidation } from './signRequestSignerInputDateUsValidation';
+import { serializeSignRequestSignerInputDateEuValidation } from './signRequestSignerInputDateEuValidation';
+import { deserializeSignRequestSignerInputDateEuValidation } from './signRequestSignerInputDateEuValidation';
+import { serializeSignRequestSignerInputDateAsiaValidation } from './signRequestSignerInputDateAsiaValidation';
+import { deserializeSignRequestSignerInputDateAsiaValidation } from './signRequestSignerInputDateAsiaValidation';
 import { serializeSignRequestPrefillTag } from './signRequestPrefillTag';
 import { deserializeSignRequestPrefillTag } from './signRequestPrefillTag';
+import { serializeSignRequestSignerInputValidation } from './signRequestSignerInputValidation';
+import { deserializeSignRequestSignerInputValidation } from './signRequestSignerInputValidation';
 import { Date } from '../internal/utils';
+import { SignRequestSignerInputEmailValidation } from './signRequestSignerInputEmailValidation';
+import { SignRequestSignerInputCustomValidation } from './signRequestSignerInputCustomValidation';
+import { SignRequestSignerInputZipValidation } from './signRequestSignerInputZipValidation';
+import { SignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
+import { SignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
+import { SignRequestSignerInputNumberWithPeriodValidation } from './signRequestSignerInputNumberWithPeriodValidation';
+import { SignRequestSignerInputNumberWithCommaValidation } from './signRequestSignerInputNumberWithCommaValidation';
+import { SignRequestSignerInputDateIsoValidation } from './signRequestSignerInputDateIsoValidation';
+import { SignRequestSignerInputDateUsValidation } from './signRequestSignerInputDateUsValidation';
+import { SignRequestSignerInputDateEuValidation } from './signRequestSignerInputDateEuValidation';
+import { SignRequestSignerInputDateAsiaValidation } from './signRequestSignerInputDateAsiaValidation';
 import { SignRequestPrefillTag } from './signRequestPrefillTag';
+import { SignRequestSignerInputValidation } from './signRequestSignerInputValidation';
 import { BoxSdkError } from '../box/errors';
 import { SerializedData } from '../serialization/json';
 import { sdIsEmpty } from '../serialization/json';
@@ -47,8 +83,12 @@ export type SignRequestSignerInput = SignRequestPrefillTag & {
    * Index of page that the input is on. */
   readonly pageIndex: number;
   /**
-   * Whether this input was defined as read-only(immutable by signers) or not. */
+   * Indicates whether this input is read-only (cannot be modified by signers). */
   readonly readOnly?: boolean;
+  /**
+   * Specifies the formatting rules that signers must follow for text field inputs.
+   * If set, this validation is mandatory. */
+  readonly validation?: SignRequestSignerInputValidation;
 };
 export function serializeSignRequestSignerInputTypeField(
   val: SignRequestSignerInputTypeField,
@@ -162,6 +202,10 @@ export function serializeSignRequestSignerInput(
           : serializeSignRequestSignerInputContentTypeField(val.contentType),
       ['page_index']: val.pageIndex,
       ['read_only']: val.readOnly,
+      ['validation']:
+        val.validation == void 0
+          ? val.validation
+          : serializeSignRequestSignerInputValidation(val.validation),
     },
   };
 }
@@ -202,6 +246,10 @@ export function deserializeSignRequestSignerInput(
   }
   const readOnly: undefined | boolean =
     val.read_only == void 0 ? void 0 : val.read_only;
+  const validation: SignRequestSignerInputValidation | undefined =
+    val.validation == void 0
+      ? void 0
+      : deserializeSignRequestSignerInputValidation(val.validation);
   if (!(val.document_tag_id == void 0) && !sdIsString(val.document_tag_id)) {
     throw new BoxSdkError({
       message:
@@ -239,6 +287,7 @@ export function deserializeSignRequestSignerInput(
     contentType: contentType,
     pageIndex: pageIndex,
     readOnly: readOnly,
+    validation: validation,
     documentTagId: documentTagId,
     textValue: textValue,
     checkboxValue: checkboxValue,
