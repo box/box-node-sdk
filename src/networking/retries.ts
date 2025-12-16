@@ -118,7 +118,9 @@ export class BoxRetryStrategy implements RetryStrategy {
     attemptNumber: number,
   ): number {
     const retryAfterHeader: undefined | string =
-      fetchResponse.headers['Retry-After'];
+      'Retry-After' in fetchResponse.headers
+        ? fetchResponse.headers['Retry-After']
+        : void 0;
     if (!(retryAfterHeader == void 0)) {
       return parseFloat(retryAfterHeader!) as number;
     }
