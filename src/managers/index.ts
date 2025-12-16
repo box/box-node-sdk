@@ -70,6 +70,7 @@ export * from './signTemplates';
 export * from './integrationMappings';
 export * from './ai';
 export * from './aiStudio';
+export * from './metadataTaxonomies';
 export * from './docgenTemplate';
 export * from './docgen';
 export * from './enterpriseConfigurations';
