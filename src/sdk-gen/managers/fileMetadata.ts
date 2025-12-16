@@ -32,12 +32,25 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export class GetFileMetadataOptionals {
+  readonly queryParams: GetFileMetadataQueryParams =
+    {} satisfies GetFileMetadataQueryParams;
   readonly headers: GetFileMetadataHeaders = new GetFileMetadataHeaders({});
   readonly cancellationToken?: CancellationToken = void 0;
   constructor(
-    fields: Omit<GetFileMetadataOptionals, 'headers' | 'cancellationToken'> &
-      Partial<Pick<GetFileMetadataOptionals, 'headers' | 'cancellationToken'>>
+    fields: Omit<
+      GetFileMetadataOptionals,
+      'queryParams' | 'headers' | 'cancellationToken'
+    > &
+      Partial<
+        Pick<
+          GetFileMetadataOptionals,
+          'queryParams' | 'headers' | 'cancellationToken'
+        >
+      >
   ) {
+    if (fields.queryParams !== undefined) {
+      this.queryParams = fields.queryParams;
+    }
     if (fields.headers !== undefined) {
       this.headers = fields.headers;
     }
@@ -47,10 +60,13 @@ export class GetFileMetadataOptionals {
   }
 }
 export interface GetFileMetadataOptionalsInput {
+  readonly queryParams?: GetFileMetadataQueryParams;
   readonly headers?: GetFileMetadataHeaders;
   readonly cancellationToken?: CancellationToken;
 }
 export class GetFileMetadataByIdOptionals {
+  readonly queryParams: GetFileMetadataByIdQueryParams =
+    {} satisfies GetFileMetadataByIdQueryParams;
   readonly headers: GetFileMetadataByIdHeaders = new GetFileMetadataByIdHeaders(
     {}
   );
@@ -58,12 +74,18 @@ export class GetFileMetadataByIdOptionals {
   constructor(
     fields: Omit<
       GetFileMetadataByIdOptionals,
-      'headers' | 'cancellationToken'
+      'queryParams' | 'headers' | 'cancellationToken'
     > &
       Partial<
-        Pick<GetFileMetadataByIdOptionals, 'headers' | 'cancellationToken'>
+        Pick<
+          GetFileMetadataByIdOptionals,
+          'queryParams' | 'headers' | 'cancellationToken'
+        >
       >
   ) {
+    if (fields.queryParams !== undefined) {
+      this.queryParams = fields.queryParams;
+    }
     if (fields.headers !== undefined) {
       this.headers = fields.headers;
     }
@@ -73,6 +95,7 @@ export class GetFileMetadataByIdOptionals {
   }
 }
 export interface GetFileMetadataByIdOptionalsInput {
+  readonly queryParams?: GetFileMetadataByIdQueryParams;
   readonly headers?: GetFileMetadataByIdHeaders;
   readonly cancellationToken?: CancellationToken;
 }
@@ -151,6 +174,15 @@ export interface DeleteFileMetadataByIdOptionalsInput {
   readonly headers?: DeleteFileMetadataByIdHeaders;
   readonly cancellationToken?: CancellationToken;
 }
+export interface GetFileMetadataQueryParams {
+  /**
+   * Taxonomy field values are returned in `API view` by default, meaning
+   * the value is represented with a taxonomy node identifier.
+   * To retrieve the `Hydrated view`, where taxonomy values are represented
+   * with the full taxonomy node information, set this parameter to `hydrated`.
+   * This is the only supported value for this parameter. */
+  readonly view?: string;
+}
 export class GetFileMetadataHeaders {
   /**
    * Extra headers that will be included in the HTTP request. */
@@ -174,6 +206,15 @@ export interface GetFileMetadataHeadersInput {
   };
 }
 export type GetFileMetadataByIdScope = 'global' | 'enterprise' | string;
+export interface GetFileMetadataByIdQueryParams {
+  /**
+   * Taxonomy field values are returned in `API view` by default, meaning
+   * the value is represented with a taxonomy node identifier.
+   * To retrieve the `Hydrated view`, where taxonomy values are represented
+   * with the full taxonomy node information, set this parameter to `hydrated`.
+   * This is the only supported value for this parameter. */
+  readonly view?: string;
+}
 export class GetFileMetadataByIdHeaders {
   /**
    * Extra headers that will be included in the HTTP request. */
@@ -338,11 +379,16 @@ export class FileMetadataManager {
     optionalsInput: GetFileMetadataOptionalsInput = {}
   ): Promise<Metadatas> {
     const optionals: GetFileMetadataOptionals = new GetFileMetadataOptionals({
+      queryParams: optionalsInput.queryParams,
       headers: optionalsInput.headers,
       cancellationToken: optionalsInput.cancellationToken,
     });
+    const queryParams: any = optionals.queryParams;
     const headers: any = optionals.headers;
     const cancellationToken: any = optionals.cancellationToken;
+    const queryParamsMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ['view']: toString(queryParams.view) as string });
     const headersMap: {
       readonly [key: string]: string;
     } = prepareParams({ ...{}, ...headers.extraHeaders });
@@ -356,6 +402,7 @@ export class FileMetadataManager {
             '/metadata'
           ) as string,
           method: 'GET',
+          params: queryParamsMap,
           headers: headersMap,
           responseFormat: 'json' as ResponseFormat,
           auth: this.auth,
@@ -394,11 +441,16 @@ export class FileMetadataManager {
   ): Promise<MetadataFull> {
     const optionals: GetFileMetadataByIdOptionals =
       new GetFileMetadataByIdOptionals({
+        queryParams: optionalsInput.queryParams,
         headers: optionalsInput.headers,
         cancellationToken: optionalsInput.cancellationToken,
       });
+    const queryParams: any = optionals.queryParams;
     const headers: any = optionals.headers;
     const cancellationToken: any = optionals.cancellationToken;
+    const queryParamsMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ['view']: toString(queryParams.view) as string });
     const headersMap: {
       readonly [key: string]: string;
     } = prepareParams({ ...{}, ...headers.extraHeaders });
@@ -415,6 +467,7 @@ export class FileMetadataManager {
             toString(templateKey) as string
           ) as string,
           method: 'GET',
+          params: queryParamsMap,
           headers: headersMap,
           responseFormat: 'json' as ResponseFormat,
           auth: this.auth,

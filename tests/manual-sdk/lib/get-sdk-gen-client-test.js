@@ -465,7 +465,7 @@ describe('getSdkGenClient()', function () {
       );
       assert.equal(
         sdkGenClient.networkSession.retryStrategy.retryBaseInterval,
-        defaultParams.retryIntervalMS/1000
+        defaultParams.retryIntervalMS / 1000
       );
     });
 

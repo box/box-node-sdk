@@ -32,12 +32,25 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export class GetFolderMetadataOptionals {
+  readonly queryParams: GetFolderMetadataQueryParams =
+    {} satisfies GetFolderMetadataQueryParams;
   readonly headers: GetFolderMetadataHeaders = new GetFolderMetadataHeaders({});
   readonly cancellationToken?: CancellationToken = void 0;
   constructor(
-    fields: Omit<GetFolderMetadataOptionals, 'headers' | 'cancellationToken'> &
-      Partial<Pick<GetFolderMetadataOptionals, 'headers' | 'cancellationToken'>>
+    fields: Omit<
+      GetFolderMetadataOptionals,
+      'queryParams' | 'headers' | 'cancellationToken'
+    > &
+      Partial<
+        Pick<
+          GetFolderMetadataOptionals,
+          'queryParams' | 'headers' | 'cancellationToken'
+        >
+      >
   ) {
+    if (fields.queryParams !== undefined) {
+      this.queryParams = fields.queryParams;
+    }
     if (fields.headers !== undefined) {
       this.headers = fields.headers;
     }
@@ -47,6 +60,7 @@ export class GetFolderMetadataOptionals {
   }
 }
 export interface GetFolderMetadataOptionalsInput {
+  readonly queryParams?: GetFolderMetadataQueryParams;
   readonly headers?: GetFolderMetadataHeaders;
   readonly cancellationToken?: CancellationToken;
 }
@@ -149,6 +163,15 @@ export class DeleteFolderMetadataByIdOptionals {
 export interface DeleteFolderMetadataByIdOptionalsInput {
   readonly headers?: DeleteFolderMetadataByIdHeaders;
   readonly cancellationToken?: CancellationToken;
+}
+export interface GetFolderMetadataQueryParams {
+  /**
+   * Taxonomy field values are returned in `API view` by default, meaning
+   * the value is represented with a taxonomy node identifier.
+   * To retrieve the `Hydrated view`, where taxonomy values are represented
+   * with the full taxonomy node information, set this parameter to `hydrated`.
+   * This is the only supported value for this parameter. */
+  readonly view?: string;
 }
 export class GetFolderMetadataHeaders {
   /**
@@ -342,11 +365,16 @@ export class FolderMetadataManager {
   ): Promise<Metadatas> {
     const optionals: GetFolderMetadataOptionals =
       new GetFolderMetadataOptionals({
+        queryParams: optionalsInput.queryParams,
         headers: optionalsInput.headers,
         cancellationToken: optionalsInput.cancellationToken,
       });
+    const queryParams: any = optionals.queryParams;
     const headers: any = optionals.headers;
     const cancellationToken: any = optionals.cancellationToken;
+    const queryParamsMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ['view']: toString(queryParams.view) as string });
     const headersMap: {
       readonly [key: string]: string;
     } = prepareParams({ ...{}, ...headers.extraHeaders });
@@ -360,6 +388,7 @@ export class FolderMetadataManager {
             '/metadata'
           ) as string,
           method: 'GET',
+          params: queryParamsMap,
           headers: headersMap,
           responseFormat: 'json' as ResponseFormat,
           auth: this.auth,

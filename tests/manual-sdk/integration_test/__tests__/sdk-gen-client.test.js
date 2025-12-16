@@ -103,7 +103,7 @@ describe('getSdkGenClient() Integration Tests', () => {
       const fileInfo = await context.sdkGenClient.files.getFileById(
         testFile.id
       );
-      
+
       expect(fileInfo).toBeDefined();
       expect(fileInfo.id).toBe(testFile.id);
       expect(fileInfo.type).toBe('file');
@@ -143,7 +143,4 @@ describe('getSdkGenClient() Integration Tests', () => {
     expect(user).toBeDefined();
     expect(user.id).toBe(context.user.id);
   });
-
 });
-
-
