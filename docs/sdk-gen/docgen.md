@@ -106,7 +106,7 @@ See the endpoint docs at
 
 <!-- sample post_docgen_batches_v2025.0 -->
 ```ts
-await client.docgen.createDocgenBatchV2025R0({ file: new FileReferenceV2025R0({ id: uploadedFile.id }), inputSource: "api", destinationFolder: new DocGenBatchCreateRequestV2025R0DestinationFolderField({ id: folder.id }), outputType: "pdf", documentGenerationData: [{ generatedFileName: "test", userInput: { ["abc"]: "xyz" } } satisfies DocGenDocumentGenerationDataV2025R0] } satisfies DocGenBatchCreateRequestV2025R0)
+await client.docgen.createDocgenBatchV2025R0({ file: new FileReferenceV2025R0({ id: uploadedFileDocx.id }), inputSource: "api", destinationFolder: new DocGenBatchCreateRequestV2025R0DestinationFolderField({ id: folder.id }), outputType: "pdf", documentGenerationData: [{ generatedFileName: "test", userInput: { ["abc"]: "xyz" } } satisfies DocGenDocumentGenerationDataV2025R0] } satisfies DocGenBatchCreateRequestV2025R0)
 ```
 
 ### Arguments
