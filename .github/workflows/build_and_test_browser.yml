@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '18'
       - name: Remove not Smoke Tests
-        if: "!startsWith(github.head_ref, 'codegen-release')"
+        if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'codegen-release') }}
         run: |
           TEST_ROOT="./src/test"
           KEEP_LIST=(
@@ -54,7 +54,7 @@ jobs:
           npm install
           npm run build
       - name: All Tests
-        if: startsWith(github.head_ref, 'codegen-release')
+        if: ${{ github.actor != 'dependabot[bot]' && startsWith(github.head_ref, 'codegen-release') }}
         run: |
           cd test-browser
           npm install
@@ -78,7 +78,7 @@ jobs:
           SLACK_ORG_ID: ${{ secrets.SLACK_ORG_ID }}
           SLACK_PARTNER_ITEM_ID: ${{ secrets.SLACK_PARTNER_ITEM_ID }}
       - name: Smoke Tests
-        if: "!startsWith(github.head_ref, 'codegen-release')"
+        if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'codegen-release') }}
         run: |
           cd test-browser
           npm install
@@ -90,3 +90,10 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           USER_ID: ${{ secrets.USER_ID }}
           ENTERPRISE_ID: ${{ secrets.ENTERPRISE_ID }}
+
+      - name: Build test-browser (Dependabot only, no tests)
+        if: ${{ github.actor == 'dependabot[bot]' }}
+        run: |
+          cd test-browser
+          npm install
+          npm run build
