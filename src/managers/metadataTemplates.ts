@@ -429,7 +429,8 @@ export type CreateMetadataTemplateRequestBodyFieldsTypeField =
   | 'float'
   | 'date'
   | 'enum'
-  | 'multiSelect';
+  | 'multiSelect'
+  | 'taxonomy';
 export interface CreateMetadataTemplateRequestBodyFieldsOptionsField {
   /**
    * The text value of the option. This represents both the display name of the
@@ -437,15 +438,28 @@ export interface CreateMetadataTemplateRequestBodyFieldsOptionsField {
   readonly key: string;
   readonly rawData?: SerializedData;
 }
+export interface CreateMetadataTemplateRequestBodyFieldsOptionsRulesField {
+  /**
+   * Whether to allow users to select multiple values. */
+  readonly multiSelect?: boolean;
+  /**
+   * An array of integers defining which levels of the taxonomy are
+   * selectable by users. */
+  readonly selectableLevels?: readonly number[];
+  readonly rawData?: SerializedData;
+}
 export interface CreateMetadataTemplateRequestBodyFieldsField {
   /**
    * The type of field. The basic fields are a `string` field for text, a
-   * `float` field for numbers, and a `date` fields to present the user with a
+   * `float` field for numbers, and a `date` field to present the user with a
    * date-time picker.
    *
    * Additionally, metadata templates support an `enum` field for a basic list
    * of items, and ` multiSelect` field for a similar list of items where the
-   * user can select more than one value. */
+   * user can select more than one value.
+   *
+   * Metadata taxonomies are also supported as a `taxonomy` field type
+   * with a specific set of additional properties, which describe its structure. */
   readonly type: CreateMetadataTemplateRequestBodyFieldsTypeField;
   /**
    * A unique identifier for the field. The identifier must
@@ -466,6 +480,18 @@ export interface CreateMetadataTemplateRequestBodyFieldsField {
    * A list of options for this field. This is used in combination with the
    * `enum` and `multiSelect` field types. */
   readonly options?: readonly CreateMetadataTemplateRequestBodyFieldsOptionsField[];
+  /**
+   * The unique key of the metadata taxonomy to use for this taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly taxonomyKey?: string;
+  /**
+   * The namespace of the metadata taxonomy to use for this taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly namespace?: string;
+  /**
+   * An object defining additional rules for the options of the taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly optionsRules?: CreateMetadataTemplateRequestBodyFieldsOptionsRulesField;
   readonly rawData?: SerializedData;
 }
 export interface CreateMetadataTemplateRequestBody {
@@ -1274,6 +1300,9 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsTypeField(
   if (val == 'multiSelect') {
     return val;
   }
+  if (val == 'taxonomy') {
+    return val;
+  }
   throw new BoxSdkError({
     message:
       "Can't deserialize CreateMetadataTemplateRequestBodyFieldsTypeField",
@@ -1310,6 +1339,61 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsOptionsField(
     key: key,
   } satisfies CreateMetadataTemplateRequestBodyFieldsOptionsField;
 }
+export function serializeCreateMetadataTemplateRequestBodyFieldsOptionsRulesField(
+  val: CreateMetadataTemplateRequestBodyFieldsOptionsRulesField,
+): SerializedData {
+  return {
+    ['multiSelect']: val.multiSelect,
+    ['selectableLevels']:
+      val.selectableLevels == void 0
+        ? val.selectableLevels
+        : (val.selectableLevels.map(function (item: number): SerializedData {
+            return item;
+          }) as readonly any[]),
+  };
+}
+export function deserializeCreateMetadataTemplateRequestBodyFieldsOptionsRulesField(
+  val: SerializedData,
+): CreateMetadataTemplateRequestBodyFieldsOptionsRulesField {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting a map for "CreateMetadataTemplateRequestBodyFieldsOptionsRulesField"',
+    });
+  }
+  if (!(val.multiSelect == void 0) && !sdIsBoolean(val.multiSelect)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "multiSelect" of type "CreateMetadataTemplateRequestBodyFieldsOptionsRulesField"',
+    });
+  }
+  const multiSelect: undefined | boolean =
+    val.multiSelect == void 0 ? void 0 : val.multiSelect;
+  if (!(val.selectableLevels == void 0) && !sdIsList(val.selectableLevels)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "selectableLevels" of type "CreateMetadataTemplateRequestBodyFieldsOptionsRulesField"',
+    });
+  }
+  const selectableLevels: undefined | readonly number[] =
+    val.selectableLevels == void 0
+      ? void 0
+      : sdIsList(val.selectableLevels)
+        ? (val.selectableLevels.map(function (itm: SerializedData): number {
+            if (!sdIsNumber(itm)) {
+              throw new BoxSdkError({
+                message:
+                  'Expecting number for "CreateMetadataTemplateRequestBodyFieldsOptionsRulesField"',
+              });
+            }
+            return itm;
+          }) as readonly any[])
+        : [];
+  return {
+    multiSelect: multiSelect,
+    selectableLevels: selectableLevels,
+  } satisfies CreateMetadataTemplateRequestBodyFieldsOptionsRulesField;
+}
 export function serializeCreateMetadataTemplateRequestBodyFieldsField(
   val: CreateMetadataTemplateRequestBodyFieldsField,
 ): SerializedData {
@@ -1331,6 +1415,14 @@ export function serializeCreateMetadataTemplateRequestBodyFieldsField(
               item,
             );
           }) as readonly any[]),
+    ['taxonomyKey']: val.taxonomyKey,
+    ['namespace']: val.namespace,
+    ['optionsRules']:
+      val.optionsRules == void 0
+        ? val.optionsRules
+        : serializeCreateMetadataTemplateRequestBodyFieldsOptionsRulesField(
+            val.optionsRules,
+          ),
   };
 }
 export function deserializeCreateMetadataTemplateRequestBodyFieldsField(
@@ -1412,6 +1504,30 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsField(
             );
           }) as readonly any[])
         : [];
+  if (!(val.taxonomyKey == void 0) && !sdIsString(val.taxonomyKey)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "taxonomyKey" of type "CreateMetadataTemplateRequestBodyFieldsField"',
+    });
+  }
+  const taxonomyKey: undefined | string =
+    val.taxonomyKey == void 0 ? void 0 : val.taxonomyKey;
+  if (!(val.namespace == void 0) && !sdIsString(val.namespace)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "namespace" of type "CreateMetadataTemplateRequestBodyFieldsField"',
+    });
+  }
+  const namespace: undefined | string =
+    val.namespace == void 0 ? void 0 : val.namespace;
+  const optionsRules:
+    | undefined
+    | CreateMetadataTemplateRequestBodyFieldsOptionsRulesField =
+    val.optionsRules == void 0
+      ? void 0
+      : deserializeCreateMetadataTemplateRequestBodyFieldsOptionsRulesField(
+          val.optionsRules,
+        );
   return {
     type: type,
     key: key,
@@ -1419,6 +1535,9 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsField(
     description: description,
     hidden: hidden,
     options: options,
+    taxonomyKey: taxonomyKey,
+    namespace: namespace,
+    optionsRules: optionsRules,
   } satisfies CreateMetadataTemplateRequestBodyFieldsField;
 }
 export function serializeCreateMetadataTemplateRequestBody(

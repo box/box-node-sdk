@@ -74,6 +74,7 @@ import { SignTemplatesManager } from './managers/signTemplates';
 import { IntegrationMappingsManager } from './managers/integrationMappings';
 import { AiManager } from './managers/ai';
 import { AiStudioManager } from './managers/aiStudio';
+import { MetadataTaxonomiesManager } from './managers/metadataTaxonomies';
 import { DocgenTemplateManager } from './managers/docgenTemplate';
 import { DocgenManager } from './managers/docgen';
 import { EnterpriseConfigurationsManager } from './managers/enterpriseConfigurations';
@@ -176,6 +177,7 @@ export class BoxClient {
   readonly integrationMappings: IntegrationMappingsManager;
   readonly ai: AiManager;
   readonly aiStudio: AiStudioManager;
+  readonly metadataTaxonomies: MetadataTaxonomiesManager;
   readonly docgenTemplate: DocgenTemplateManager;
   readonly docgen: DocgenManager;
   readonly enterpriseConfigurations: EnterpriseConfigurationsManager;
@@ -260,6 +262,7 @@ export class BoxClient {
       | 'integrationMappings'
       | 'ai'
       | 'aiStudio'
+      | 'metadataTaxonomies'
       | 'docgenTemplate'
       | 'docgen'
       | 'enterpriseConfigurations'
@@ -578,6 +581,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.aiStudio = new AiStudioManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.metadataTaxonomies = new MetadataTaxonomiesManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });
