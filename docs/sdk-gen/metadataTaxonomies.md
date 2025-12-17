@@ -27,7 +27,10 @@ This operation is performed by calling function `createMetadataTaxonomy`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/post-metadata-taxonomies/).
 
-*Currently we don't have an example for calling `createMetadataTaxonomy` in integration tests*
+<!-- sample post_metadata_taxonomies -->
+```ts
+await client.metadataTaxonomies.createMetadataTaxonomy({ displayName: displayName, key: taxonomyKey, namespace: namespace } satisfies CreateMetadataTaxonomyRequestBody)
+```
 
 ### Arguments
 
@@ -53,7 +56,10 @@ This operation is performed by calling function `getMetadataTaxonomies`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/get-metadata-taxonomies-id/).
 
-*Currently we don't have an example for calling `getMetadataTaxonomies` in integration tests*
+<!-- sample get_metadata_taxonomies_id -->
+```ts
+await client.metadataTaxonomies.getMetadataTaxonomies(namespace)
+```
 
 ### Arguments
 
@@ -80,7 +86,10 @@ This operation is performed by calling function `getMetadataTaxonomyByKey`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/get-metadata-taxonomies-id-id/).
 
-*Currently we don't have an example for calling `getMetadataTaxonomyByKey` in integration tests*
+<!-- sample get_metadata_taxonomies_id_id -->
+```ts
+await client.metadataTaxonomies.getMetadataTaxonomyByKey(namespace, taxonomyKey)
+```
 
 ### Arguments
 
@@ -108,7 +117,10 @@ This operation is performed by calling function `updateMetadataTaxonomy`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/patch-metadata-taxonomies-id-id/).
 
-*Currently we don't have an example for calling `updateMetadataTaxonomy` in integration tests*
+<!-- sample patch_metadata_taxonomies_id_id -->
+```ts
+await client.metadataTaxonomies.updateMetadataTaxonomy(namespace, taxonomyKey, { displayName: updatedDisplayName } satisfies UpdateMetadataTaxonomyRequestBody)
+```
 
 ### Arguments
 
@@ -139,7 +151,10 @@ This operation is performed by calling function `deleteMetadataTaxonomy`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/delete-metadata-taxonomies-id-id/).
 
-*Currently we don't have an example for calling `deleteMetadataTaxonomy` in integration tests*
+<!-- sample delete_metadata_taxonomies_id_id -->
+```ts
+await client.metadataTaxonomies.deleteMetadataTaxonomy(namespace, taxonomyKey)
+```
 
 ### Arguments
 
@@ -167,7 +182,10 @@ This operation is performed by calling function `createMetadataTaxonomyLevel`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/post-metadata-taxonomies-id-id-levels/).
 
-*Currently we don't have an example for calling `createMetadataTaxonomyLevel` in integration tests*
+<!-- sample post_metadata_taxonomies_id_id_levels -->
+```ts
+await client.metadataTaxonomies.createMetadataTaxonomyLevel(namespace, taxonomyKey, [{ displayName: "Continent", description: "Continent Level" } satisfies MetadataTaxonomyLevel, { displayName: "Country", description: "Country Level" } satisfies MetadataTaxonomyLevel])
+```
 
 ### Arguments
 
@@ -230,7 +248,10 @@ This operation is performed by calling function `addMetadataTaxonomyLevel`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/post-metadata-taxonomies-id-id-levels:append/).
 
-*Currently we don't have an example for calling `addMetadataTaxonomyLevel` in integration tests*
+<!-- sample post_metadata_taxonomies_id_id_levels:append -->
+```ts
+await client.metadataTaxonomies.addMetadataTaxonomyLevel(namespace, taxonomyKey, { displayName: "Region", description: "Region Description" } satisfies AddMetadataTaxonomyLevelRequestBody)
+```
 
 ### Arguments
 
@@ -260,7 +281,10 @@ This operation is performed by calling function `deleteMetadataTaxonomyLevel`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/post-metadata-taxonomies-id-id-levels:trim/).
 
-*Currently we don't have an example for calling `deleteMetadataTaxonomyLevel` in integration tests*
+<!-- sample post_metadata_taxonomies_id_id_levels:trim -->
+```ts
+await client.metadataTaxonomies.deleteMetadataTaxonomyLevel(namespace, taxonomyKey)
+```
 
 ### Arguments
 
@@ -290,7 +314,10 @@ This operation is performed by calling function `getMetadataTaxonomyNodes`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/get-metadata-taxonomies-id-id-nodes/).
 
-*Currently we don't have an example for calling `getMetadataTaxonomyNodes` in integration tests*
+<!-- sample get_metadata_taxonomies_id_id_nodes -->
+```ts
+await client.metadataTaxonomies.getMetadataTaxonomyNodes(namespace, taxonomyKey)
+```
 
 ### Arguments
 
@@ -318,7 +345,10 @@ This operation is performed by calling function `createMetadataTaxonomyNode`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/post-metadata-taxonomies-id-id-nodes/).
 
-*Currently we don't have an example for calling `createMetadataTaxonomyNode` in integration tests*
+<!-- sample post_metadata_taxonomies_id_id_nodes -->
+```ts
+await client.metadataTaxonomies.createMetadataTaxonomyNode(namespace, taxonomyKey, { displayName: "Europe", level: 1 } satisfies CreateMetadataTaxonomyNodeRequestBody)
+```
 
 ### Arguments
 
@@ -348,7 +378,10 @@ This operation is performed by calling function `getMetadataTaxonomyNodeById`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/get-metadata-taxonomies-id-id-nodes-id/).
 
-*Currently we don't have an example for calling `getMetadataTaxonomyNodeById` in integration tests*
+<!-- sample get_metadata_taxonomies_id_id_nodes_id -->
+```ts
+await client.metadataTaxonomies.getMetadataTaxonomyNodeById(namespace, taxonomyKey, countryNode.id)
+```
 
 ### Arguments
 
@@ -378,7 +411,10 @@ This operation is performed by calling function `updateMetadataTaxonomyNode`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/patch-metadata-taxonomies-id-id-nodes-id/).
 
-*Currently we don't have an example for calling `updateMetadataTaxonomyNode` in integration tests*
+<!-- sample patch_metadata_taxonomies_id_id_nodes_id -->
+```ts
+await client.metadataTaxonomies.updateMetadataTaxonomyNode(namespace, taxonomyKey, countryNode.id, { requestBody: { displayName: "Poland UPDATED" } satisfies UpdateMetadataTaxonomyNodeRequestBody } satisfies UpdateMetadataTaxonomyNodeOptionalsInput)
+```
 
 ### Arguments
 
@@ -410,7 +446,10 @@ This operation is performed by calling function `deleteMetadataTaxonomyNode`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/delete-metadata-taxonomies-id-id-nodes-id/).
 
-*Currently we don't have an example for calling `deleteMetadataTaxonomyNode` in integration tests*
+<!-- sample delete_metadata_taxonomies_id_id_nodes_id -->
+```ts
+await client.metadataTaxonomies.deleteMetadataTaxonomyNode(namespace, taxonomyKey, countryNode.id)
+```
 
 ### Arguments
 
