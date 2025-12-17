@@ -519,7 +519,7 @@ export interface UpdateFolderByIdRequestBody {
    * Passing an empty array `[]` or `null` will remove
    * the folder from all collections.
    *
-   * [1]: e://get-collections */
+   * [1]: https://developer.box.com/reference/get-collections */
   readonly collections?:
     | readonly UpdateFolderByIdRequestBodyCollectionsField[]
     | null;
@@ -955,10 +955,10 @@ export class FoldersManager {
      * Passing `sort`, `direction`, `offset`, and `limit`
      * parameters in query allows you to manage the
      * list of returned
-     * [folder items](r://folder--full#param-item-collection).
+     * [folder items](https://developer.box.com/reference/resources/folder--full#param-item-collection).
      *
      * To fetch more items within the folder, use the
-     * [Get items in a folder](e://get-folders-id-items) endpoint.
+     * [Get items in a folder](https://developer.box.com/reference/get-folders-id-items) endpoint.
      * @param {string} folderId The unique identifier that represent a folder.
     
     The ID for any folder can be determined

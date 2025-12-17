@@ -488,7 +488,7 @@ export interface UpdateFileByIdRequestBody {
    * Passing an empty array `[]` or `null` will remove
    * the file from all collections.
    *
-   * [1]: e://get-collections */
+   * [1]: https://developer.box.com/reference/get-collections */
   readonly collections?:
     | readonly UpdateFileByIdRequestBodyCollectionsField[]
     | null;

@@ -314,7 +314,7 @@ export interface SearchForContentQueryParams {
    * When this parameter has been set to true,
    * the format of the response of this API changes to return
    * a list of [Search Results with
-   * Shared Links](r://search_results_with_shared_links). */
+   * Shared Links](https://developer.box.com/reference/resources/search-results-with-shared-links). */
   readonly includeRecentSharedLinks?: boolean;
   /**
    * A comma-separated list of attributes to include in the
