@@ -18,6 +18,8 @@ export const testConfig = {
   // Not supported in browser
   testGetEventsWithLongPolling: 'skip',
   testGetEventStream: 'skip',
+  testMetadataTaxonomiesCRUD: 'skip',
+  testMetadataTaxonomiesNodes: 'skip',
 };
 
 export const testEnvList = [
