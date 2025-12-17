@@ -15,10 +15,10 @@ in the folder.
 Passing `sort`, `direction`, `offset`, and `limit`
 parameters in query allows you to manage the
 list of returned
-[folder items](r://folder--full#param-item-collection).
+[folder items](https://developer.box.com/reference/resources/folder--full#param-item-collection).
 
 To fetch more items within the folder, use the
-[Get items in a folder](e://get-folders-id-items) endpoint.
+[Get items in a folder](https://developer.box.com/reference/get-folders-id-items) endpoint.
 
 This operation is performed by calling function `getFolderById`.
 
@@ -47,7 +47,7 @@ If you used query parameters like
 the _folder items list_ will be affected accordingly.
 
 To fetch more items within the folder, use the
-[Get items in a folder](e://get-folders-id-items)) endpoint.
+[Get items in a folder](https://developer.box.com/reference/get-folders-id-items)) endpoint.
 
 Not all available fields are returned by default. Use the
 [fields](#param-fields) query parameter to explicitly request

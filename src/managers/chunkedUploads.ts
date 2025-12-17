@@ -1052,7 +1052,7 @@ export class ChunkedUploadsManager {
    * This allows to always upload your content to the closest Box data center and can significantly improve upload speed.
    *  Return information about an upload session.
    *
-   * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions) endpoint.
+   * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions) endpoint.
    * @param {string} url URL of getFileUploadSessionById method
    * @param {GetFileUploadSessionByUrlOptionalsInput} optionalsInput
    * @returns {Promise<UploadSession>}
@@ -1091,7 +1091,7 @@ export class ChunkedUploadsManager {
   /**
      * Return information about an upload session.
      *
-     * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions) endpoint.
+     * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions) endpoint.
      * @param {string} uploadSessionId The ID of the upload session.
     Example: "D5E3F7A"
      * @param {GetFileUploadSessionByIdOptionalsInput} optionalsInput
@@ -1137,8 +1137,8 @@ export class ChunkedUploadsManager {
    * This allows to always upload your content to the closest Box data center and can significantly improve upload speed.
    *  Uploads a chunk of a file for an upload session.
    *
-   * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-   * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+   * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+   * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
    * @param {string} url URL of uploadFilePart method
    * @param {ByteStream} requestBody Request body of uploadFilePart method
    * @param {UploadFilePartByUrlHeadersInput} headersInput Headers of uploadFilePart method
@@ -1192,8 +1192,8 @@ export class ChunkedUploadsManager {
   /**
      * Uploads a chunk of a file for an upload session.
      *
-     * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-     * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+     * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+     * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
      * @param {string} uploadSessionId The ID of the upload session.
     Example: "D5E3F7A"
      * @param {ByteStream} requestBody Request body of uploadFilePart method
@@ -1255,8 +1255,8 @@ export class ChunkedUploadsManager {
    *
    * This cannot be reversed.
    *
-   * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-   * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+   * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+   * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
    * @param {string} url URL of deleteFileUploadSessionById method
    * @param {DeleteFileUploadSessionByUrlOptionalsInput} optionalsInput
    * @returns {Promise<undefined>}
@@ -1294,8 +1294,8 @@ export class ChunkedUploadsManager {
      *
      * This cannot be reversed.
      *
-     * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-     * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+     * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+     * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
      * @param {string} uploadSessionId The ID of the upload session.
     Example: "D5E3F7A"
      * @param {DeleteFileUploadSessionByIdOptionalsInput} optionalsInput
@@ -1338,8 +1338,8 @@ export class ChunkedUploadsManager {
    * This allows to always upload your content to the closest Box data center and can significantly improve upload speed.
    *  Return a list of the chunks uploaded to the upload session so far.
    *
-   * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-   * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+   * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+   * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
    * @param {string} url URL of getFileUploadSessionParts method
    * @param {GetFileUploadSessionPartsByUrlOptionalsInput} optionalsInput
    * @returns {Promise<UploadParts>}
@@ -1387,8 +1387,8 @@ export class ChunkedUploadsManager {
   /**
      * Return a list of the chunks uploaded to the upload session so far.
      *
-     * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-     * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+     * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+     * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
      * @param {string} uploadSessionId The ID of the upload session.
     Example: "D5E3F7A"
      * @param {GetFileUploadSessionPartsOptionalsInput} optionalsInput
@@ -1444,8 +1444,8 @@ export class ChunkedUploadsManager {
    * This allows to always upload your content to the closest Box data center and can significantly improve upload speed.
    *  Close an upload session and create a file from the uploaded chunks.
    *
-   * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-   * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+   * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+   * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
    * @param {string} url URL of createFileUploadSessionCommit method
    * @param {CreateFileUploadSessionCommitByUrlRequestBody} requestBody Request body of createFileUploadSessionCommit method
    * @param {CreateFileUploadSessionCommitByUrlHeadersInput} headersInput Headers of createFileUploadSessionCommit method
@@ -1505,8 +1505,8 @@ export class ChunkedUploadsManager {
   /**
      * Close an upload session and create a file from the uploaded chunks.
      *
-     * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-     * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+     * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+     * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
      * @param {string} uploadSessionId The ID of the upload session.
     Example: "D5E3F7A"
      * @param {CreateFileUploadSessionCommitRequestBody} requestBody Request body of createFileUploadSessionCommit method
