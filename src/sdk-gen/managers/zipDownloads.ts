@@ -293,7 +293,7 @@ export class ZipDownloadsManager {
      * be created.
      *
      * The URL of this endpoint should not be considered as fixed. Instead, use
-     * the [Create zip download](e://post_zip_downloads) API to request to create a
+     * the [Create zip download](https://developer.box.com/reference/post-zip-downloads) API to request to create a
      * `zip` archive, and then follow the `download_url` field in the response to
      * this endpoint.
      * @param {string} downloadUrl The URL that can be used to download created `zip` archive.
@@ -339,7 +339,7 @@ export class ZipDownloadsManager {
      * download.
      *
      * The URL of this endpoint should not be considered as fixed. Instead, use
-     * the [Create zip download](e://post_zip_downloads) API to request to create a
+     * the [Create zip download](https://developer.box.com/reference/post-zip-downloads) API to request to create a
      * `zip` archive, and then follow the `status_url` field in the response to
      * this endpoint.
      * @param {string} statusUrl The URL that can be used to get the status of the `zip` archive being downloaded.

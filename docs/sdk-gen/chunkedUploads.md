@@ -77,7 +77,7 @@ Returns a new upload session.
 
 Return information about an upload session.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions) endpoint.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions) endpoint.
 
 This operation is performed by calling function `getFileUploadSessionByUrl`.
 
@@ -108,7 +108,7 @@ Returns an upload session object.
 
 Return information about an upload session.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions) endpoint.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions) endpoint.
 
 This operation is performed by calling function `getFileUploadSessionById`.
 
@@ -139,8 +139,8 @@ Returns an upload session object.
 
 Uploads a chunk of a file for an upload session.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `uploadFilePartByUrl`.
 
@@ -175,8 +175,8 @@ Chunk has been uploaded successfully.
 
 Uploads a chunk of a file for an upload session.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `uploadFilePart`.
 
@@ -213,8 +213,8 @@ Abort an upload session and discard all data uploaded.
 
 This cannot be reversed.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `deleteFileUploadSessionByUrl`.
 
@@ -248,8 +248,8 @@ Abort an upload session and discard all data uploaded.
 
 This cannot be reversed.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `deleteFileUploadSessionById`.
 
@@ -281,8 +281,8 @@ successfully aborted.
 
 Return a list of the chunks uploaded to the upload session so far.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `getFileUploadSessionPartsByUrl`.
 
@@ -313,8 +313,8 @@ Returns a list of parts that have been uploaded.
 
 Return a list of the chunks uploaded to the upload session so far.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `getFileUploadSessionParts`.
 
@@ -345,8 +345,8 @@ Returns a list of parts that have been uploaded.
 
 Close an upload session and create a file from the uploaded chunks.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `createFileUploadSessionCommitByUrl`.
 
@@ -385,8 +385,8 @@ when all chunks have processed.
 
 Close an upload session and create a file from the uploaded chunks.
 
-The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
 
 This operation is performed by calling function `createFileUploadSessionCommit`.
 
