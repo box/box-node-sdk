@@ -13,7 +13,8 @@ export type MetadataTemplateFieldsTypeField =
   | 'date'
   | 'enum'
   | 'multiSelect'
-  | 'integer';
+  | 'integer'
+  | 'taxonomy';
 export interface MetadataTemplateFieldsOptionsField {
   /**
    * The text value of the option. This represents both the display name of the
@@ -208,6 +209,9 @@ export function deserializeMetadataTemplateFieldsTypeField(
     return val;
   }
   if (val == 'integer') {
+    return val;
+  }
+  if (val == 'taxonomy') {
     return val;
   }
   throw new BoxSdkError({
