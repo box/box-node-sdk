@@ -165,7 +165,7 @@ export interface AddClassificationToFileRequestBody {
    *
    * To list the available classifications in an enterprise,
    * use the classification API to retrieve the
-   * [classification template](e://get_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema)
+   * [classification template](https://developer.box.com/reference/get-metadata-templates-enterprise-securityClassification-6VMVochwUWo-schema)
    * which lists all available classification keys. */
   readonly boxSecurityClassificationKey?: string;
   readonly rawData?: SerializedData;
@@ -211,7 +211,7 @@ export class UpdateClassificationOnFileRequestBody {
    *
    * To list the available classifications in an enterprise,
    * use the classification API to retrieve the
-   * [classification template](e://get_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema)
+   * [classification template](https://developer.box.com/reference/get-metadata-templates-enterprise-securityClassification-6VMVochwUWo-schema)
    * which lists all available classification keys. */
   readonly value!: string;
   readonly rawData?: SerializedData;
@@ -246,7 +246,7 @@ export interface UpdateClassificationOnFileRequestBodyInput {
    *
    * To list the available classifications in an enterprise,
    * use the classification API to retrieve the
-   * [classification template](e://get_metadata_templates_enterprise_securityClassification-6VMVochwUWo_schema)
+   * [classification template](https://developer.box.com/reference/get-metadata-templates-enterprise-securityClassification-6VMVochwUWo-schema)
    * which lists all available classification keys. */
   readonly value: string;
   readonly rawData?: SerializedData;

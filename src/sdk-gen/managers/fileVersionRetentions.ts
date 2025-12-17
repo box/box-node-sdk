@@ -158,7 +158,7 @@ export class FileVersionRetentionsManager {
    * **Note**:
    * File retention API is now **deprecated**.
    * To get information about files and file versions under retention,
-   * see [files under retention](e://get-retention-policy-assignments-id-files-under-retention) or [file versions under retention](e://get-retention-policy-assignments-id-file-versions-under-retention) endpoints.
+   * see [files under retention](https://developer.box.com/reference/get-retention-policy-assignments-id-files-under-retention) or [file versions under retention](https://developer.box.com/reference/get-retention-policy-assignments-id-file-versions-under-retention) endpoints.
    * @param {GetFileVersionRetentionsQueryParams} queryParams Query parameters of getFileVersionRetentions method
    * @param {GetFileVersionRetentionsHeadersInput} headersInput Headers of getFileVersionRetentions method
    * @param {CancellationToken} cancellationToken Token used for request cancellation.
@@ -217,7 +217,7 @@ export class FileVersionRetentionsManager {
      * **Note**:
      * File retention API is now **deprecated**.
      * To get information about files and file versions under retention,
-     * see [files under retention](e://get-retention-policy-assignments-id-files-under-retention) or [file versions under retention](e://get-retention-policy-assignments-id-file-versions-under-retention) endpoints.
+     * see [files under retention](https://developer.box.com/reference/get-retention-policy-assignments-id-files-under-retention) or [file versions under retention](https://developer.box.com/reference/get-retention-policy-assignments-id-file-versions-under-retention) endpoints.
      * @param {string} fileVersionRetentionId The ID of the file version retention.
     Example: "3424234"
      * @param {GetFileVersionRetentionByIdOptionalsInput} optionalsInput

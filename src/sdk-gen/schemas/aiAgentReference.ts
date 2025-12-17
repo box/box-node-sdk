@@ -15,7 +15,7 @@ export class AiAgentReference {
   /**
    * The ID of an Agent. This can be a numeric ID for custom agents (for example, `14031`)
    * or a unique identifier for pre-built agents (for example, `enhanced_extract_agent`
-   * for the [Enhanced Extract Agent](g://box-ai/ai-tutorials/extract-metadata-structured/#enhanced-extract-agent)). */
+   * for the [Enhanced Extract Agent](https://developer.box.com/guides/box-ai/ai-tutorials/extract-metadata-structured#enhanced-extract-agent)). */
   readonly id?: string;
   readonly rawData?: SerializedData;
   constructor(
@@ -40,7 +40,7 @@ export interface AiAgentReferenceInput {
   /**
    * The ID of an Agent. This can be a numeric ID for custom agents (for example, `14031`)
    * or a unique identifier for pre-built agents (for example, `enhanced_extract_agent`
-   * for the [Enhanced Extract Agent](g://box-ai/ai-tutorials/extract-metadata-structured/#enhanced-extract-agent)). */
+   * for the [Enhanced Extract Agent](https://developer.box.com/guides/box-ai/ai-tutorials/extract-metadata-structured#enhanced-extract-agent)). */
   readonly id?: string;
   readonly rawData?: SerializedData;
 }
