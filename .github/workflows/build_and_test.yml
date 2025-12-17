@@ -25,7 +25,7 @@ jobs:
       - name: npm install
         run: npm install
       - name: All Tests
-        if: startsWith(github.head_ref, 'codegen-release')
+        if: ${{ github.actor != 'dependabot[bot]' && startsWith(github.head_ref, 'codegen-release') }}
         run: npm run test -- --coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
           SLACK_ORG_ID: ${{ secrets.SLACK_ORG_ID }}
           SLACK_PARTNER_ITEM_ID: ${{ secrets.SLACK_PARTNER_ITEM_ID }}
       - name: Smoke tests
-        if: "!startsWith(github.head_ref, 'codegen-release')"
+        if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'codegen-release') }}
         run: npm run test -- src/test/auth.test.ts src/test/files.test.ts src/test/downloads.test.ts src/test/uploads.test.ts
         env:
           JWT_CONFIG_BASE_64: ${{ secrets.JWT_CONFIG_BASE_64 }}
@@ -54,3 +54,7 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           USER_ID: ${{ secrets.USER_ID }}
           ENTERPRISE_ID: ${{ secrets.ENTERPRISE_ID }}
+
+      - name: Build (Dependabot only, no tests)
+        if: ${{ github.actor == 'dependabot[bot]' }}
+        run: npm run build
