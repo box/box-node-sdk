@@ -341,7 +341,7 @@ export class FolderLocksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folder_locks/',
-            toString(folderLockId) as string,
+            (toString(folderLockId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,

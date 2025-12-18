@@ -379,7 +379,7 @@ export class TasksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/tasks',
           ) as string,
           method: 'GET',
@@ -463,7 +463,7 @@ export class TasksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/tasks/',
-            toString(taskId) as string,
+            (toString(taskId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -507,7 +507,7 @@ export class TasksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/tasks/',
-            toString(taskId) as string,
+            (toString(taskId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -550,7 +550,7 @@ export class TasksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/tasks/',
-            toString(taskId) as string,
+            (toString(taskId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,

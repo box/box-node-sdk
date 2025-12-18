@@ -541,7 +541,7 @@ export class WebhooksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/webhooks/',
-            toString(webhookId) as string,
+            (toString(webhookId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -585,7 +585,7 @@ export class WebhooksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/webhooks/',
-            toString(webhookId) as string,
+            (toString(webhookId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -629,7 +629,7 @@ export class WebhooksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/webhooks/',
-            toString(webhookId) as string,
+            (toString(webhookId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,

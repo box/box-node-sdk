@@ -630,7 +630,7 @@ export class IntegrationMappingsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/integration_mappings/slack/',
-            toString(integrationMappingId) as string,
+            (toString(integrationMappingId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -680,7 +680,7 @@ export class IntegrationMappingsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/integration_mappings/slack/',
-            toString(integrationMappingId) as string,
+            (toString(integrationMappingId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -821,7 +821,7 @@ export class IntegrationMappingsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/integration_mappings/teams/',
-            toString(integrationMappingId) as string,
+            (toString(integrationMappingId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -869,7 +869,7 @@ export class IntegrationMappingsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/integration_mappings/teams/',
-            toString(integrationMappingId) as string,
+            (toString(integrationMappingId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,

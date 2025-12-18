@@ -227,7 +227,7 @@ export class AppItemAssociationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/app_item_associations',
           ) as string,
           method: 'GET',
@@ -293,7 +293,7 @@ export class AppItemAssociationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/app_item_associations',
           ) as string,
           method: 'GET',

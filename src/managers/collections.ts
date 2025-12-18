@@ -306,7 +306,7 @@ export class CollectionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collections/',
-            toString(collectionId) as string,
+            (toString(collectionId) as string)!,
             '/items',
           ) as string,
           method: 'GET',
@@ -350,7 +350,7 @@ export class CollectionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collections/',
-            toString(collectionId) as string,
+            (toString(collectionId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,

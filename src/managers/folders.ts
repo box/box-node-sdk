@@ -1011,7 +1011,7 @@ export class FoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -1077,7 +1077,7 @@ export class FoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
           ) as string,
           method: 'PUT',
           params: queryParamsMap,
@@ -1141,7 +1141,7 @@ export class FoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
           ) as string,
           method: 'DELETE',
           params: queryParamsMap,
@@ -1211,7 +1211,7 @@ export class FoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/items',
           ) as string,
           method: 'GET',
@@ -1326,7 +1326,7 @@ export class FoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/copy',
           ) as string,
           method: 'POST',

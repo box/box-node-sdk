@@ -354,7 +354,7 @@ export class FileClassificationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/enterprise/securityClassification-6VMVochwUWo',
           ) as string,
           method: 'GET',
@@ -410,7 +410,7 @@ export class FileClassificationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/enterprise/securityClassification-6VMVochwUWo',
           ) as string,
           method: 'POST',
@@ -467,7 +467,7 @@ export class FileClassificationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/enterprise/securityClassification-6VMVochwUWo',
           ) as string,
           method: 'PUT',
@@ -524,7 +524,7 @@ export class FileClassificationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/enterprise/securityClassification-6VMVochwUWo',
           ) as string,
           method: 'DELETE',

@@ -545,7 +545,7 @@ export class StoragePolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/storage_policy_assignments/',
-            toString(storagePolicyAssignmentId) as string,
+            (toString(storagePolicyAssignmentId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -589,7 +589,7 @@ export class StoragePolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/storage_policy_assignments/',
-            toString(storagePolicyAssignmentId) as string,
+            (toString(storagePolicyAssignmentId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -642,7 +642,7 @@ export class StoragePolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/storage_policy_assignments/',
-            toString(storagePolicyAssignmentId) as string,
+            (toString(storagePolicyAssignmentId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,

@@ -254,7 +254,7 @@ export class FolderWatermarksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/watermark',
           ) as string,
           method: 'GET',
@@ -308,7 +308,7 @@ export class FolderWatermarksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/watermark',
           ) as string,
           method: 'PUT',
@@ -362,7 +362,7 @@ export class FolderWatermarksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/watermark',
           ) as string,
           method: 'DELETE',

@@ -477,7 +477,7 @@ export class LegalHoldPoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/legal_hold_policies/',
-            toString(legalHoldPolicyId) as string,
+            (toString(legalHoldPolicyId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -521,7 +521,7 @@ export class LegalHoldPoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/legal_hold_policies/',
-            toString(legalHoldPolicyId) as string,
+            (toString(legalHoldPolicyId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -568,7 +568,7 @@ export class LegalHoldPoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/legal_hold_policies/',
-            toString(legalHoldPolicyId) as string,
+            (toString(legalHoldPolicyId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,

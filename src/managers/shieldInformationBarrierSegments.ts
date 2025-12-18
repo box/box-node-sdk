@@ -384,7 +384,7 @@ export class ShieldInformationBarrierSegmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_information_barrier_segments/',
-            toString(shieldInformationBarrierSegmentId) as string,
+            (toString(shieldInformationBarrierSegmentId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -427,7 +427,7 @@ export class ShieldInformationBarrierSegmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_information_barrier_segments/',
-            toString(shieldInformationBarrierSegmentId) as string,
+            (toString(shieldInformationBarrierSegmentId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -468,7 +468,7 @@ export class ShieldInformationBarrierSegmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_information_barrier_segments/',
-            toString(shieldInformationBarrierSegmentId) as string,
+            (toString(shieldInformationBarrierSegmentId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,

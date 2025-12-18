@@ -278,7 +278,7 @@ export class ShieldInformationBarriersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_information_barriers/',
-            toString(shieldInformationBarrierId) as string,
+            (toString(shieldInformationBarrierId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
