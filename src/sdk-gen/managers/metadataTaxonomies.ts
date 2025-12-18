@@ -873,10 +873,6 @@ export interface DeleteMetadataTaxonomyNodeHeadersInput {
     readonly [key: string]: undefined | string;
   };
 }
-export type GetMetadataTemplateFieldOptionsScope =
-  | 'global'
-  | 'enterprise'
-  | string;
 export interface GetMetadataTemplateFieldOptionsQueryParams {
   /**
    * Filters results by taxonomy level. Multiple values can be provided.
@@ -1704,8 +1700,8 @@ export class MetadataTaxonomiesManager {
      * on its configuration and the parameters specified.
      * Results are sorted in lexicographic order unless a `query` parameter is passed.
      * With a `query` parameter specified, results are sorted in order of relevance.
-     * @param {GetMetadataTemplateFieldOptionsScope} scope The scope of the metadata template.
-    Example: "global"
+     * @param {string} namespace The namespace of the metadata taxonomy.
+    Example: "enterprise_123456"
      * @param {string} templateKey The name of the metadata template.
     Example: "properties"
      * @param {string} fieldKey The key of the metadata taxonomy field in the template.
@@ -1714,7 +1710,7 @@ export class MetadataTaxonomiesManager {
      * @returns {Promise<MetadataTaxonomyNodes>}
      */
   async getMetadataTemplateFieldOptions(
-    scope: GetMetadataTemplateFieldOptionsScope,
+    namespace: string,
     templateKey: string,
     fieldKey: string,
     optionalsInput: GetMetadataTemplateFieldOptionsOptionalsInput = {}
@@ -1759,7 +1755,7 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_templates/',
-            toString(scope) as string,
+            toString(namespace) as string,
             '/',
             toString(templateKey) as string,
             '/fields/',
@@ -2031,25 +2027,4 @@ export function deserializeUpdateMetadataTaxonomyNodeRequestBody(
   return {
     displayName: displayName,
   } satisfies UpdateMetadataTaxonomyNodeRequestBody;
-}
-export function serializeGetMetadataTemplateFieldOptionsScope(
-  val: GetMetadataTemplateFieldOptionsScope
-): SerializedData {
-  return val;
-}
-export function deserializeGetMetadataTemplateFieldOptionsScope(
-  val: SerializedData
-): GetMetadataTemplateFieldOptionsScope {
-  if (val == 'global') {
-    return val;
-  }
-  if (val == 'enterprise') {
-    return val;
-  }
-  if (sdIsString(val)) {
-    return val;
-  }
-  throw new BoxSdkError({
-    message: "Can't deserialize GetMetadataTemplateFieldOptionsScope",
-  });
 }

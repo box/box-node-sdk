@@ -486,8 +486,8 @@ See the endpoint docs at
 
 ### Arguments
 
-- scope `GetMetadataTemplateFieldOptionsScope`
-  - The scope of the metadata template. Example: "global"
+- namespace `string`
+  - The namespace of the metadata taxonomy. Example: "enterprise_123456"
 - templateKey `string`
   - The name of the metadata template. Example: "properties"
 - fieldKey `string`
