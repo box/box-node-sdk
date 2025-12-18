@@ -195,7 +195,7 @@ export class TransferManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/folders/0'
           ) as string,
           method: 'PUT',

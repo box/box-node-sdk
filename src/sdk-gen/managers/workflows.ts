@@ -282,7 +282,7 @@ export class WorkflowsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/workflows/',
-            toString(workflowId) as string,
+            (toString(workflowId) as string)!,
             '/start'
           ) as string,
           method: 'POST',

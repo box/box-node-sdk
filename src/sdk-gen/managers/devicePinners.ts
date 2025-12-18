@@ -242,7 +242,7 @@ export class DevicePinnersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/device_pinners/',
-            toString(devicePinnerId) as string
+            (toString(devicePinnerId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -284,7 +284,7 @@ export class DevicePinnersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/device_pinners/',
-            toString(devicePinnerId) as string
+            (toString(devicePinnerId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -335,7 +335,7 @@ export class DevicePinnersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/enterprises/',
-            toString(enterpriseId) as string,
+            (toString(enterpriseId) as string)!,
             '/device_pinners'
           ) as string,
           method: 'GET',

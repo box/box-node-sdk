@@ -460,7 +460,7 @@ export class CommentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/comments'
           ) as string,
           method: 'GET',
@@ -513,7 +513,7 @@ export class CommentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/comments/',
-            toString(commentId) as string
+            (toString(commentId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -567,7 +567,7 @@ export class CommentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/comments/',
-            toString(commentId) as string
+            (toString(commentId) as string)!
           ) as string,
           method: 'PUT',
           params: queryParamsMap,
@@ -612,7 +612,7 @@ export class CommentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/comments/',
-            toString(commentId) as string
+            (toString(commentId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

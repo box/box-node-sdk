@@ -302,7 +302,7 @@ export class DownloadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/content'
           ) as string,
           method: 'GET',
@@ -379,7 +379,7 @@ export class DownloadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/content'
           ) as string,
           method: 'GET',

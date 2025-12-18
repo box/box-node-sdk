@@ -388,7 +388,7 @@ export class CollaborationAllowlistExemptTargetsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collaboration_whitelist_exempt_targets/',
-            toString(collaborationWhitelistExemptTargetId) as string
+            (toString(collaborationWhitelistExemptTargetId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -431,7 +431,7 @@ export class CollaborationAllowlistExemptTargetsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collaboration_whitelist_exempt_targets/',
-            toString(collaborationWhitelistExemptTargetId) as string
+            (toString(collaborationWhitelistExemptTargetId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

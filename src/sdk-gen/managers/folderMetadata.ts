@@ -384,7 +384,7 @@ export class FolderMetadataManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/metadata'
           ) as string,
           method: 'GET',
@@ -444,11 +444,11 @@ export class FolderMetadataManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/metadata/',
-            toString(scope) as string,
+            (toString(scope) as string)!,
             '/',
-            toString(templateKey) as string
+            (toString(templateKey) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -515,11 +515,11 @@ export class FolderMetadataManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/metadata/',
-            toString(scope) as string,
+            (toString(scope) as string)!,
             '/',
-            toString(templateKey) as string
+            (toString(templateKey) as string)!
           ) as string,
           method: 'POST',
           headers: headersMap,
@@ -587,11 +587,11 @@ export class FolderMetadataManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/metadata/',
-            toString(scope) as string,
+            (toString(scope) as string)!,
             '/',
-            toString(templateKey) as string
+            (toString(templateKey) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -652,11 +652,11 @@ export class FolderMetadataManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/metadata/',
-            toString(scope) as string,
+            (toString(scope) as string)!,
             '/',
-            toString(templateKey) as string
+            (toString(templateKey) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

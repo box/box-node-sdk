@@ -10,6 +10,8 @@ import { serializeMetadataTaxonomyLevels } from '@/schemas/metadataTaxonomyLevel
 import { deserializeMetadataTaxonomyLevels } from '@/schemas/metadataTaxonomyLevels';
 import { serializeMetadataTaxonomyLevel } from '@/schemas/metadataTaxonomyLevel';
 import { deserializeMetadataTaxonomyLevel } from '@/schemas/metadataTaxonomyLevel';
+import { serializeUpdateMetadataTaxonomyLevelByIdRequestBody } from '@/managers/metadataTaxonomies';
+import { deserializeUpdateMetadataTaxonomyLevelByIdRequestBody } from '@/managers/metadataTaxonomies';
 import { serializeAddMetadataTaxonomyLevelRequestBody } from '@/managers/metadataTaxonomies';
 import { deserializeAddMetadataTaxonomyLevelRequestBody } from '@/managers/metadataTaxonomies';
 import { serializeMetadataTaxonomyNode } from '@/schemas/metadataTaxonomyNode';
@@ -20,6 +22,18 @@ import { serializeMetadataTaxonomyNodes } from '@/schemas/metadataTaxonomyNodes'
 import { deserializeMetadataTaxonomyNodes } from '@/schemas/metadataTaxonomyNodes';
 import { serializeUpdateMetadataTaxonomyNodeRequestBody } from '@/managers/metadataTaxonomies';
 import { deserializeUpdateMetadataTaxonomyNodeRequestBody } from '@/managers/metadataTaxonomies';
+import { serializeMetadataTemplate } from '@/schemas/metadataTemplate';
+import { deserializeMetadataTemplate } from '@/schemas/metadataTemplate';
+import { serializeCreateMetadataTemplateRequestBody } from '@/managers/metadataTemplates';
+import { deserializeCreateMetadataTemplateRequestBody } from '@/managers/metadataTemplates';
+import { serializeCreateMetadataTemplateRequestBodyFieldsField } from '@/managers/metadataTemplates';
+import { deserializeCreateMetadataTemplateRequestBodyFieldsField } from '@/managers/metadataTemplates';
+import { serializeCreateMetadataTemplateRequestBodyFieldsTypeField } from '@/managers/metadataTemplates';
+import { deserializeCreateMetadataTemplateRequestBodyFieldsTypeField } from '@/managers/metadataTemplates';
+import { serializeCreateMetadataTemplateRequestBodyFieldsOptionsRulesField } from '@/managers/metadataTemplates';
+import { deserializeCreateMetadataTemplateRequestBodyFieldsOptionsRulesField } from '@/managers/metadataTemplates';
+import { serializeDeleteMetadataTemplateScope } from '@/managers/metadataTemplates';
+import { deserializeDeleteMetadataTemplateScope } from '@/managers/metadataTemplates';
 import { UpdateMetadataTaxonomyNodeOptionalsInput } from '@/managers/metadataTaxonomies';
 import { UpdateMetadataTaxonomyNodeOptionals } from '@/managers/metadataTaxonomies';
 import { BoxClient } from '@/client';
@@ -29,15 +43,24 @@ import { MetadataTaxonomies } from '@/schemas/metadataTaxonomies';
 import { UpdateMetadataTaxonomyRequestBody } from '@/managers/metadataTaxonomies';
 import { MetadataTaxonomyLevels } from '@/schemas/metadataTaxonomyLevels';
 import { MetadataTaxonomyLevel } from '@/schemas/metadataTaxonomyLevel';
+import { UpdateMetadataTaxonomyLevelByIdRequestBody } from '@/managers/metadataTaxonomies';
 import { AddMetadataTaxonomyLevelRequestBody } from '@/managers/metadataTaxonomies';
 import { MetadataTaxonomyNode } from '@/schemas/metadataTaxonomyNode';
 import { CreateMetadataTaxonomyNodeRequestBody } from '@/managers/metadataTaxonomies';
 import { MetadataTaxonomyNodes } from '@/schemas/metadataTaxonomyNodes';
 import { UpdateMetadataTaxonomyNodeRequestBody } from '@/managers/metadataTaxonomies';
+import { MetadataTemplate } from '@/schemas/metadataTemplate';
+import { CreateMetadataTemplateRequestBody } from '@/managers/metadataTemplates';
+import { CreateMetadataTemplateRequestBodyFieldsField } from '@/managers/metadataTemplates';
+import { CreateMetadataTemplateRequestBodyFieldsTypeField } from '@/managers/metadataTemplates';
+import { CreateMetadataTemplateRequestBodyFieldsOptionsRulesField } from '@/managers/metadataTemplates';
+import { DeleteMetadataTemplateScope } from '@/managers/metadataTemplates';
 import { getUuid } from '@/internal/utils';
 import { getEnvVar } from '@/internal/utils';
 import { delayInSeconds } from '@/internal/utils';
 import { getDefaultClient } from './commons';
+import { toString } from '@/internal/utils';
+import { sdToJson } from '@/serialization/json';
 import { SerializedData } from '@/serialization/json';
 import { sdIsEmpty } from '@/serialization/json';
 import { sdIsBoolean } from '@/serialization/json';
@@ -164,6 +187,25 @@ test('testMetadataTaxonomiesNodes', async function testMetadataTaxonomiesNodes()
   if (!(taxonomyLevels.entries![1].displayName == 'Country')) {
     throw new Error('Assertion failed');
   }
+  const updatedTaxonomyLevels: MetadataTaxonomyLevel =
+    await client.metadataTaxonomies.updateMetadataTaxonomyLevelById(
+      namespace,
+      taxonomyKey,
+      1,
+      {
+        displayName: 'Continent UPDATED',
+        description: 'Continent Level UPDATED',
+      } satisfies UpdateMetadataTaxonomyLevelByIdRequestBody
+    );
+  if (!(updatedTaxonomyLevels.displayName == 'Continent UPDATED')) {
+    throw new Error('Assertion failed');
+  }
+  if (!(updatedTaxonomyLevels.description == 'Continent Level UPDATED')) {
+    throw new Error('Assertion failed');
+  }
+  if (!(updatedTaxonomyLevels.level == taxonomyLevels.entries![0].level)) {
+    throw new Error('Assertion failed');
+  }
   const taxonomyLevelsAfterAddition: MetadataTaxonomyLevels =
     await client.metadataTaxonomies.addMetadataTaxonomyLevel(
       namespace,
@@ -187,7 +229,11 @@ test('testMetadataTaxonomiesNodes', async function testMetadataTaxonomiesNodes()
   if (!(taxonomyLevelsAfterDeletion.entries!.length == 2)) {
     throw new Error('Assertion failed');
   }
-  if (!(taxonomyLevelsAfterDeletion.entries![0].displayName == 'Continent')) {
+  if (
+    !(
+      taxonomyLevelsAfterDeletion.entries![0].displayName == 'Continent UPDATED'
+    )
+  ) {
     throw new Error('Assertion failed');
   }
   if (!(taxonomyLevelsAfterDeletion.entries![1].displayName == 'Country')) {
@@ -271,6 +317,54 @@ test('testMetadataTaxonomiesNodes', async function testMetadataTaxonomiesNodes()
   if (!(getCountryNode.id == countryNode.id)) {
     throw new Error('Assertion failed');
   }
+  const metadataTemplateKey: string = ''.concat(
+    'templateKey',
+    getUuid()
+  ) as string;
+  const metadataTemplate: MetadataTemplate =
+    await client.metadataTemplates.createMetadataTemplate({
+      scope: 'enterprise',
+      displayName: metadataTemplateKey,
+      templateKey: metadataTemplateKey,
+      fields: [
+        {
+          type: 'taxonomy' as CreateMetadataTemplateRequestBodyFieldsTypeField,
+          key: 'taxonomy',
+          displayName: 'taxonomy',
+          taxonomyKey: taxonomyKey,
+          namespace: namespace,
+          optionsRules: {
+            multiSelect: true,
+            selectableLevels: [1],
+          } satisfies CreateMetadataTemplateRequestBodyFieldsOptionsRulesField,
+        } satisfies CreateMetadataTemplateRequestBodyFieldsField,
+      ],
+    } satisfies CreateMetadataTemplateRequestBody);
+  if (!(metadataTemplate.templateKey == metadataTemplateKey)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.displayName == metadataTemplateKey)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.fields!.length == 1)) {
+    throw new Error('Assertion failed');
+  }
+  if (!((toString(metadataTemplate.fields![0].type) as string) == 'taxonomy')) {
+    throw new Error('Assertion failed');
+  }
+  const options: MetadataTaxonomyNodes =
+    await client.metadataTaxonomies.getMetadataTemplateFieldOptions(
+      namespace,
+      metadataTemplateKey,
+      'taxonomy'
+    );
+  if (!(options.entries!.length == 1)) {
+    throw new Error('Assertion failed');
+  }
+  await client.metadataTemplates.deleteMetadataTemplate(
+    'enterprise' as DeleteMetadataTemplateScope,
+    metadataTemplateKey
+  );
   await client.metadataTaxonomies.deleteMetadataTaxonomyNode(
     namespace,
     taxonomyKey,

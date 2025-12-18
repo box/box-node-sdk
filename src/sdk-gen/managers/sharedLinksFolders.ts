@@ -605,7 +605,7 @@ export class SharedLinksFoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '#get_shared_link'
           ) as string,
           method: 'GET',
@@ -665,7 +665,7 @@ export class SharedLinksFoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '#add_shared_link'
           ) as string,
           method: 'PUT',
@@ -727,7 +727,7 @@ export class SharedLinksFoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '#update_shared_link'
           ) as string,
           method: 'PUT',
@@ -789,7 +789,7 @@ export class SharedLinksFoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '#remove_shared_link'
           ) as string,
           method: 'PUT',

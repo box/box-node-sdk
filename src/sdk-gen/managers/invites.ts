@@ -290,7 +290,7 @@ export class InvitesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/invites/',
-            toString(inviteId) as string
+            (toString(inviteId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,

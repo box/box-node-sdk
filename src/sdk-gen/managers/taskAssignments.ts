@@ -393,7 +393,7 @@ export class TaskAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/tasks/',
-            toString(taskId) as string,
+            (toString(taskId) as string)!,
             '/assignments'
           ) as string,
           method: 'GET',
@@ -481,7 +481,7 @@ export class TaskAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/task_assignments/',
-            toString(taskAssignmentId) as string
+            (toString(taskAssignmentId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -526,7 +526,7 @@ export class TaskAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/task_assignments/',
-            toString(taskAssignmentId) as string
+            (toString(taskAssignmentId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -570,7 +570,7 @@ export class TaskAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/task_assignments/',
-            toString(taskAssignmentId) as string
+            (toString(taskAssignmentId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

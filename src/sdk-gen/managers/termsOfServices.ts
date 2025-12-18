@@ -373,7 +373,7 @@ export class TermsOfServicesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/terms_of_services/',
-            toString(termsOfServiceId) as string
+            (toString(termsOfServiceId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -417,7 +417,7 @@ export class TermsOfServicesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/terms_of_services/',
-            toString(termsOfServiceId) as string
+            (toString(termsOfServiceId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,

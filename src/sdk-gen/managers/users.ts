@@ -847,7 +847,7 @@ export class UsersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string
+            (toString(userId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -902,7 +902,7 @@ export class UsersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string
+            (toString(userId) as string)!
           ) as string,
           method: 'PUT',
           params: queryParamsMap,
@@ -957,7 +957,7 @@ export class UsersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string
+            (toString(userId) as string)!
           ) as string,
           method: 'DELETE',
           params: queryParamsMap,

@@ -616,7 +616,7 @@ export class GroupsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/groups/',
-            toString(groupId) as string
+            (toString(groupId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -671,7 +671,7 @@ export class GroupsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/groups/',
-            toString(groupId) as string
+            (toString(groupId) as string)!
           ) as string,
           method: 'PUT',
           params: queryParamsMap,
@@ -716,7 +716,7 @@ export class GroupsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/groups/',
-            toString(groupId) as string
+            (toString(groupId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

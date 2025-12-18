@@ -197,7 +197,7 @@ export class SignTemplatesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/sign_templates/',
-            toString(templateId) as string
+            (toString(templateId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,

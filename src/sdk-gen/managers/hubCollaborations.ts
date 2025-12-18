@@ -541,7 +541,7 @@ export class HubCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hub_collaborations/',
-            toString(hubCollaborationId) as string
+            (toString(hubCollaborationId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -589,7 +589,7 @@ export class HubCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hub_collaborations/',
-            toString(hubCollaborationId) as string
+            (toString(hubCollaborationId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -636,7 +636,7 @@ export class HubCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hub_collaborations/',
-            toString(hubCollaborationId) as string
+            (toString(hubCollaborationId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

@@ -1025,7 +1025,7 @@ export class ChunkedUploadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.uploadUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/upload_sessions'
           ) as string,
           method: 'POST',
@@ -1115,7 +1115,7 @@ export class ChunkedUploadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.uploadUrl,
             '/2.0/files/upload_sessions/',
-            toString(uploadSessionId) as string
+            (toString(uploadSessionId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -1229,7 +1229,7 @@ export class ChunkedUploadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.uploadUrl,
             '/2.0/files/upload_sessions/',
-            toString(uploadSessionId) as string
+            (toString(uploadSessionId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -1319,7 +1319,7 @@ export class ChunkedUploadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.uploadUrl,
             '/2.0/files/upload_sessions/',
-            toString(uploadSessionId) as string
+            (toString(uploadSessionId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -1420,7 +1420,7 @@ export class ChunkedUploadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.uploadUrl,
             '/2.0/files/upload_sessions/',
-            toString(uploadSessionId) as string,
+            (toString(uploadSessionId) as string)!,
             '/parts'
           ) as string,
           method: 'GET',
@@ -1546,7 +1546,7 @@ export class ChunkedUploadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.uploadUrl,
             '/2.0/files/upload_sessions/',
-            toString(uploadSessionId) as string,
+            (toString(uploadSessionId) as string)!,
             '/commit'
           ) as string,
           method: 'POST',

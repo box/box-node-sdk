@@ -269,7 +269,7 @@ export class HubItemsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hubs/',
-            toString(hubId) as string,
+            (toString(hubId) as string)!,
             '/manage_items'
           ) as string,
           method: 'POST',

@@ -243,7 +243,7 @@ export class FileVersionRetentionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/file_version_retentions/',
-            toString(fileVersionRetentionId) as string
+            (toString(fileVersionRetentionId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,

@@ -227,7 +227,7 @@ export class EmailAliasesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/email_aliases'
           ) as string,
           method: 'GET',
@@ -272,7 +272,7 @@ export class EmailAliasesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/email_aliases'
           ) as string,
           method: 'POST',
@@ -320,9 +320,9 @@ export class EmailAliasesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/email_aliases/',
-            toString(emailAliasId) as string
+            (toString(emailAliasId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

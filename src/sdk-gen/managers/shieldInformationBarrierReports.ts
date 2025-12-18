@@ -333,7 +333,7 @@ export class ShieldInformationBarrierReportsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_information_barrier_reports/',
-            toString(shieldInformationBarrierReportId) as string
+            (toString(shieldInformationBarrierReportId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,

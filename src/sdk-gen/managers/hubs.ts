@@ -641,7 +641,7 @@ export class HubsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hubs/',
-            toString(hubId) as string
+            (toString(hubId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -694,7 +694,7 @@ export class HubsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hubs/',
-            toString(hubId) as string
+            (toString(hubId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -747,7 +747,7 @@ export class HubsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hubs/',
-            toString(hubId) as string
+            (toString(hubId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -798,7 +798,7 @@ export class HubsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/hubs/',
-            toString(hubId) as string,
+            (toString(hubId) as string)!,
             '/copy'
           ) as string,
           method: 'POST',

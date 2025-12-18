@@ -199,18 +199,18 @@ export interface CreateMetadataTaxonomyLevelOptionalsInput {
   readonly headers?: CreateMetadataTaxonomyLevelHeaders;
   readonly cancellationToken?: CancellationToken;
 }
-export class PatchMetadataTaxonomiesIdIdLevelsIdOptionals {
-  readonly headers: PatchMetadataTaxonomiesIdIdLevelsIdHeaders =
-    new PatchMetadataTaxonomiesIdIdLevelsIdHeaders({});
+export class UpdateMetadataTaxonomyLevelByIdOptionals {
+  readonly headers: UpdateMetadataTaxonomyLevelByIdHeaders =
+    new UpdateMetadataTaxonomyLevelByIdHeaders({});
   readonly cancellationToken?: CancellationToken = void 0;
   constructor(
     fields: Omit<
-      PatchMetadataTaxonomiesIdIdLevelsIdOptionals,
+      UpdateMetadataTaxonomyLevelByIdOptionals,
       'headers' | 'cancellationToken'
     > &
       Partial<
         Pick<
-          PatchMetadataTaxonomiesIdIdLevelsIdOptionals,
+          UpdateMetadataTaxonomyLevelByIdOptionals,
           'headers' | 'cancellationToken'
         >
       >
@@ -223,8 +223,8 @@ export class PatchMetadataTaxonomiesIdIdLevelsIdOptionals {
     }
   }
 }
-export interface PatchMetadataTaxonomiesIdIdLevelsIdOptionalsInput {
-  readonly headers?: PatchMetadataTaxonomiesIdIdLevelsIdHeaders;
+export interface UpdateMetadataTaxonomyLevelByIdOptionalsInput {
+  readonly headers?: UpdateMetadataTaxonomyLevelByIdHeaders;
   readonly cancellationToken?: CancellationToken;
 }
 export class AddMetadataTaxonomyLevelOptionals {
@@ -630,7 +630,7 @@ export interface CreateMetadataTaxonomyLevelHeadersInput {
     readonly [key: string]: undefined | string;
   };
 }
-export interface PatchMetadataTaxonomiesIdIdLevelsIdRequestBody {
+export interface UpdateMetadataTaxonomyLevelByIdRequestBody {
   /**
    * The display name of the taxonomy level. */
   readonly displayName: string;
@@ -639,22 +639,22 @@ export interface PatchMetadataTaxonomiesIdIdLevelsIdRequestBody {
   readonly description?: string;
   readonly rawData?: SerializedData;
 }
-export class PatchMetadataTaxonomiesIdIdLevelsIdHeaders {
+export class UpdateMetadataTaxonomyLevelByIdHeaders {
   /**
    * Extra headers that will be included in the HTTP request. */
   readonly extraHeaders?: {
     readonly [key: string]: undefined | string;
   } = {};
   constructor(
-    fields: Omit<PatchMetadataTaxonomiesIdIdLevelsIdHeaders, 'extraHeaders'> &
-      Partial<Pick<PatchMetadataTaxonomiesIdIdLevelsIdHeaders, 'extraHeaders'>>
+    fields: Omit<UpdateMetadataTaxonomyLevelByIdHeaders, 'extraHeaders'> &
+      Partial<Pick<UpdateMetadataTaxonomyLevelByIdHeaders, 'extraHeaders'>>
   ) {
     if (fields.extraHeaders !== undefined) {
       this.extraHeaders = fields.extraHeaders;
     }
   }
 }
-export interface PatchMetadataTaxonomiesIdIdLevelsIdHeadersInput {
+export interface UpdateMetadataTaxonomyLevelByIdHeadersInput {
   /**
    * Extra headers that will be included in the HTTP request. */
   readonly extraHeaders?: {
@@ -943,7 +943,7 @@ export class MetadataTaxonomiesManager {
       | 'updateMetadataTaxonomy'
       | 'deleteMetadataTaxonomy'
       | 'createMetadataTaxonomyLevel'
-      | 'patchMetadataTaxonomiesIdIdLevelsId'
+      | 'updateMetadataTaxonomyLevelById'
       | 'addMetadataTaxonomyLevel'
       | 'deleteMetadataTaxonomyLevel'
       | 'getMetadataTaxonomyNodes'
@@ -1040,7 +1040,7 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string
+            (toString(namespace) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -1086,9 +1086,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string
+            (toString(taxonomyKey) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -1135,9 +1135,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string
+            (toString(taxonomyKey) as string)!
           ) as string,
           method: 'PATCH',
           headers: headersMap,
@@ -1185,9 +1185,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string
+            (toString(taxonomyKey) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -1231,9 +1231,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/levels'
           ) as string,
           method: 'POST',
@@ -1261,19 +1261,19 @@ export class MetadataTaxonomiesManager {
     Example: "geography"
      * @param {number} levelIndex The index of the metadata taxonomy level.
     Example: 1
-     * @param {PatchMetadataTaxonomiesIdIdLevelsIdRequestBody} requestBody Request body of patchMetadataTaxonomiesIdIdLevelsId method
-     * @param {PatchMetadataTaxonomiesIdIdLevelsIdOptionalsInput} optionalsInput
+     * @param {UpdateMetadataTaxonomyLevelByIdRequestBody} requestBody Request body of updateMetadataTaxonomyLevelById method
+     * @param {UpdateMetadataTaxonomyLevelByIdOptionalsInput} optionalsInput
      * @returns {Promise<MetadataTaxonomyLevel>}
      */
-  async patchMetadataTaxonomiesIdIdLevelsId(
+  async updateMetadataTaxonomyLevelById(
     namespace: string,
     taxonomyKey: string,
     levelIndex: number,
-    requestBody: PatchMetadataTaxonomiesIdIdLevelsIdRequestBody,
-    optionalsInput: PatchMetadataTaxonomiesIdIdLevelsIdOptionalsInput = {}
+    requestBody: UpdateMetadataTaxonomyLevelByIdRequestBody,
+    optionalsInput: UpdateMetadataTaxonomyLevelByIdOptionalsInput = {}
   ): Promise<MetadataTaxonomyLevel> {
-    const optionals: PatchMetadataTaxonomiesIdIdLevelsIdOptionals =
-      new PatchMetadataTaxonomiesIdIdLevelsIdOptionals({
+    const optionals: UpdateMetadataTaxonomyLevelByIdOptionals =
+      new UpdateMetadataTaxonomyLevelByIdOptionals({
         headers: optionalsInput.headers,
         cancellationToken: optionalsInput.cancellationToken,
       });
@@ -1288,15 +1288,15 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/levels/',
-            toString(levelIndex) as string
+            (toString(levelIndex) as string)!
           ) as string,
           method: 'PATCH',
           headers: headersMap,
-          data: serializePatchMetadataTaxonomiesIdIdLevelsIdRequestBody(
+          data: serializeUpdateMetadataTaxonomyLevelByIdRequestBody(
             requestBody
           ),
           contentType: 'application/json',
@@ -1344,9 +1344,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/levels:append'
           ) as string,
           method: 'POST',
@@ -1394,9 +1394,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/levels:trim'
           ) as string,
           method: 'POST',
@@ -1465,9 +1465,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/nodes'
           ) as string,
           method: 'GET',
@@ -1516,9 +1516,9 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/nodes'
           ) as string,
           method: 'POST',
@@ -1569,11 +1569,11 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/nodes/',
-            toString(nodeId) as string
+            (toString(nodeId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -1623,11 +1623,11 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/nodes/',
-            toString(nodeId) as string
+            (toString(nodeId) as string)!
           ) as string,
           method: 'PATCH',
           headers: headersMap,
@@ -1679,11 +1679,11 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_taxonomies/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(taxonomyKey) as string,
+            (toString(taxonomyKey) as string)!,
             '/nodes/',
-            toString(nodeId) as string
+            (toString(nodeId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -1755,11 +1755,11 @@ export class MetadataTaxonomiesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_templates/',
-            toString(namespace) as string,
+            (toString(namespace) as string)!,
             '/',
-            toString(templateKey) as string,
+            (toString(templateKey) as string)!,
             '/fields/',
-            toString(fieldKey) as string,
+            (toString(fieldKey) as string)!,
             '/options'
           ) as string,
           method: 'GET',
@@ -1867,37 +1867,37 @@ export function deserializeUpdateMetadataTaxonomyRequestBody(
     displayName: displayName,
   } satisfies UpdateMetadataTaxonomyRequestBody;
 }
-export function serializePatchMetadataTaxonomiesIdIdLevelsIdRequestBody(
-  val: PatchMetadataTaxonomiesIdIdLevelsIdRequestBody
+export function serializeUpdateMetadataTaxonomyLevelByIdRequestBody(
+  val: UpdateMetadataTaxonomyLevelByIdRequestBody
 ): SerializedData {
   return { ['displayName']: val.displayName, ['description']: val.description };
 }
-export function deserializePatchMetadataTaxonomiesIdIdLevelsIdRequestBody(
+export function deserializeUpdateMetadataTaxonomyLevelByIdRequestBody(
   val: SerializedData
-): PatchMetadataTaxonomiesIdIdLevelsIdRequestBody {
+): UpdateMetadataTaxonomyLevelByIdRequestBody {
   if (!sdIsMap(val)) {
     throw new BoxSdkError({
       message:
-        'Expecting a map for "PatchMetadataTaxonomiesIdIdLevelsIdRequestBody"',
+        'Expecting a map for "UpdateMetadataTaxonomyLevelByIdRequestBody"',
     });
   }
   if (val.displayName == void 0) {
     throw new BoxSdkError({
       message:
-        'Expecting "displayName" of type "PatchMetadataTaxonomiesIdIdLevelsIdRequestBody" to be defined',
+        'Expecting "displayName" of type "UpdateMetadataTaxonomyLevelByIdRequestBody" to be defined',
     });
   }
   if (!sdIsString(val.displayName)) {
     throw new BoxSdkError({
       message:
-        'Expecting string for "displayName" of type "PatchMetadataTaxonomiesIdIdLevelsIdRequestBody"',
+        'Expecting string for "displayName" of type "UpdateMetadataTaxonomyLevelByIdRequestBody"',
     });
   }
   const displayName: string = val.displayName;
   if (!(val.description == void 0) && !sdIsString(val.description)) {
     throw new BoxSdkError({
       message:
-        'Expecting string for "description" of type "PatchMetadataTaxonomiesIdIdLevelsIdRequestBody"',
+        'Expecting string for "description" of type "UpdateMetadataTaxonomyLevelByIdRequestBody"',
     });
   }
   const description: undefined | string =
@@ -1905,7 +1905,7 @@ export function deserializePatchMetadataTaxonomiesIdIdLevelsIdRequestBody(
   return {
     displayName: displayName,
     description: description,
-  } satisfies PatchMetadataTaxonomiesIdIdLevelsIdRequestBody;
+  } satisfies UpdateMetadataTaxonomyLevelByIdRequestBody;
 }
 export function serializeAddMetadataTaxonomyLevelRequestBody(
   val: AddMetadataTaxonomyLevelRequestBody

@@ -556,7 +556,7 @@ export class UploadsManager {
           url: ''.concat(
             this.networkSession.baseUrls.uploadUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/content'
           ) as string,
           method: 'POST',

@@ -201,7 +201,7 @@ export class AvatarsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/avatar'
           ) as string,
           method: 'GET',
@@ -242,7 +242,7 @@ export class AvatarsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/avatar'
           ) as string,
           method: 'POST',
@@ -294,7 +294,7 @@ export class AvatarsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/avatar'
           ) as string,
           method: 'DELETE',

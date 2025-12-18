@@ -367,7 +367,7 @@ export class CollaborationAllowlistEntriesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collaboration_whitelist_entries/',
-            toString(collaborationWhitelistEntryId) as string
+            (toString(collaborationWhitelistEntryId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -410,7 +410,7 @@ export class CollaborationAllowlistEntriesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collaboration_whitelist_entries/',
-            toString(collaborationWhitelistEntryId) as string
+            (toString(collaborationWhitelistEntryId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

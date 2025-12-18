@@ -155,7 +155,7 @@ export class EnterpriseConfigurationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/enterprise_configurations/',
-            toString(enterpriseId) as string
+            (toString(enterpriseId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,

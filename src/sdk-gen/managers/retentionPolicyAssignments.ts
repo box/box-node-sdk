@@ -460,7 +460,7 @@ export class RetentionPolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/retention_policies/',
-            toString(retentionPolicyId) as string,
+            (toString(retentionPolicyId) as string)!,
             '/assignments'
           ) as string,
           method: 'GET',
@@ -557,7 +557,7 @@ export class RetentionPolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/retention_policy_assignments/',
-            toString(retentionPolicyAssignmentId) as string
+            (toString(retentionPolicyAssignmentId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -601,7 +601,7 @@ export class RetentionPolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/retention_policy_assignments/',
-            toString(retentionPolicyAssignmentId) as string
+            (toString(retentionPolicyAssignmentId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -648,7 +648,7 @@ export class RetentionPolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/retention_policy_assignments/',
-            toString(retentionPolicyAssignmentId) as string,
+            (toString(retentionPolicyAssignmentId) as string)!,
             '/files_under_retention'
           ) as string,
           method: 'GET',

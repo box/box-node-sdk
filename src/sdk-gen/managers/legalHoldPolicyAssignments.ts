@@ -523,7 +523,7 @@ export class LegalHoldPolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/legal_hold_policy_assignments/',
-            toString(legalHoldPolicyAssignmentId) as string
+            (toString(legalHoldPolicyAssignmentId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -568,7 +568,7 @@ export class LegalHoldPolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/legal_hold_policy_assignments/',
-            toString(legalHoldPolicyAssignmentId) as string
+            (toString(legalHoldPolicyAssignmentId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -636,7 +636,7 @@ export class LegalHoldPolicyAssignmentsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/legal_hold_policy_assignments/',
-            toString(legalHoldPolicyAssignmentId) as string,
+            (toString(legalHoldPolicyAssignmentId) as string)!,
             '/files_on_hold'
           ) as string,
           method: 'GET',
