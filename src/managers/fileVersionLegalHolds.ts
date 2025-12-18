@@ -184,7 +184,7 @@ export class FileVersionLegalHoldsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/file_version_legal_holds/',
-            toString(fileVersionLegalHoldId) as string,
+            (toString(fileVersionLegalHoldId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,

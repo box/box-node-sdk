@@ -433,7 +433,7 @@ export class ArchivesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/archives/',
-            toString(archiveId) as string,
+            (toString(archiveId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -479,7 +479,7 @@ export class ArchivesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/archives/',
-            toString(archiveId) as string,
+            (toString(archiveId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,

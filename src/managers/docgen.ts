@@ -337,7 +337,7 @@ export class DocgenManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/docgen_jobs/',
-            toString(jobId) as string,
+            (toString(jobId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -442,7 +442,7 @@ export class DocgenManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/docgen_batch_jobs/',
-            toString(batchId) as string,
+            (toString(batchId) as string)!,
           ) as string,
           method: 'GET',
           params: queryParamsMap,

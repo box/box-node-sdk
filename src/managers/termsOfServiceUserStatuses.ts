@@ -421,7 +421,7 @@ export class TermsOfServiceUserStatusesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/terms_of_service_user_statuses/',
-            toString(termsOfServiceUserStatusId) as string,
+            (toString(termsOfServiceUserStatusId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,

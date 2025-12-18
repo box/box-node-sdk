@@ -294,7 +294,7 @@ export class SignRequestsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/sign_requests/',
-            toString(signRequestId) as string,
+            (toString(signRequestId) as string)!,
             '/cancel',
           ) as string,
           method: 'POST',
@@ -337,7 +337,7 @@ export class SignRequestsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/sign_requests/',
-            toString(signRequestId) as string,
+            (toString(signRequestId) as string)!,
             '/resend',
           ) as string,
           method: 'POST',
@@ -377,7 +377,7 @@ export class SignRequestsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/sign_requests/',
-            toString(signRequestId) as string,
+            (toString(signRequestId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,

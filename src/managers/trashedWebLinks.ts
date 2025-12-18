@@ -290,7 +290,7 @@ export class TrashedWebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string,
+            (toString(webLinkId) as string)!,
           ) as string,
           method: 'POST',
           params: queryParamsMap,
@@ -344,7 +344,7 @@ export class TrashedWebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string,
+            (toString(webLinkId) as string)!,
             '/trash',
           ) as string,
           method: 'GET',
@@ -389,7 +389,7 @@ export class TrashedWebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string,
+            (toString(webLinkId) as string)!,
             '/trash',
           ) as string,
           method: 'DELETE',

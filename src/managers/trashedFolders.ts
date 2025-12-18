@@ -306,7 +306,7 @@ export class TrashedFoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
           ) as string,
           method: 'POST',
           params: queryParamsMap,
@@ -379,7 +379,7 @@ export class TrashedFoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/trash',
           ) as string,
           method: 'GET',
@@ -433,7 +433,7 @@ export class TrashedFoldersManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/trash',
           ) as string,
           method: 'DELETE',

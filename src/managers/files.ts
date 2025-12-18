@@ -807,7 +807,7 @@ export class FilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -870,7 +870,7 @@ export class FilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
           ) as string,
           method: 'PUT',
           params: queryParamsMap,
@@ -927,7 +927,7 @@ export class FilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -982,7 +982,7 @@ export class FilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/copy',
           ) as string,
           method: 'POST',
@@ -1058,9 +1058,9 @@ export class FilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/thumbnail.',
-            toString(extension) as string,
+            (toString(extension) as string)!,
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -1145,9 +1145,9 @@ export class FilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/thumbnail.',
-            toString(extension) as string,
+            (toString(extension) as string)!,
           ) as string,
           method: 'GET',
           params: queryParamsMap,

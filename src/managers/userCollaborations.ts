@@ -476,7 +476,7 @@ export class UserCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collaborations/',
-            toString(collaborationId) as string,
+            (toString(collaborationId) as string)!,
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -523,7 +523,7 @@ export class UserCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collaborations/',
-            toString(collaborationId) as string,
+            (toString(collaborationId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -570,7 +570,7 @@ export class UserCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/collaborations/',
-            toString(collaborationId) as string,
+            (toString(collaborationId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,

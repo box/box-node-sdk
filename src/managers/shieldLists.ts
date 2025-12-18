@@ -464,7 +464,7 @@ export class ShieldListsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_lists/',
-            toString(shieldListId) as string,
+            (toString(shieldListId) as string)!,
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -511,7 +511,7 @@ export class ShieldListsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_lists/',
-            toString(shieldListId) as string,
+            (toString(shieldListId) as string)!,
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -557,7 +557,7 @@ export class ShieldListsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_lists/',
-            toString(shieldListId) as string,
+            (toString(shieldListId) as string)!,
           ) as string,
           method: 'PUT',
           headers: headersMap,
