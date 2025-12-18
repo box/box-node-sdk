@@ -552,7 +552,7 @@ export class MembershipsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/users/',
-            toString(userId) as string,
+            (toString(userId) as string)!,
             '/memberships'
           ) as string,
           method: 'GET',
@@ -606,7 +606,7 @@ export class MembershipsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/groups/',
-            toString(groupId) as string,
+            (toString(groupId) as string)!,
             '/memberships'
           ) as string,
           method: 'GET',
@@ -714,7 +714,7 @@ export class MembershipsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/group_memberships/',
-            toString(groupMembershipId) as string
+            (toString(groupMembershipId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -770,7 +770,7 @@ export class MembershipsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/group_memberships/',
-            toString(groupMembershipId) as string
+            (toString(groupMembershipId) as string)!
           ) as string,
           method: 'PUT',
           params: queryParamsMap,
@@ -817,7 +817,7 @@ export class MembershipsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/group_memberships/',
-            toString(groupMembershipId) as string
+            (toString(groupMembershipId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

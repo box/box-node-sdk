@@ -661,9 +661,9 @@ export class MetadataTemplatesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_templates/',
-            toString(scope) as string,
+            (toString(scope) as string)!,
             '/',
-            toString(templateKey) as string,
+            (toString(templateKey) as string)!,
             '/schema'
           ) as string,
           method: 'GET',
@@ -717,9 +717,9 @@ export class MetadataTemplatesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_templates/',
-            toString(scope) as string,
+            (toString(scope) as string)!,
             '/',
-            toString(templateKey) as string,
+            (toString(templateKey) as string)!,
             '/schema'
           ) as string,
           method: 'PUT',
@@ -770,9 +770,9 @@ export class MetadataTemplatesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_templates/',
-            toString(scope) as string,
+            (toString(scope) as string)!,
             '/',
-            toString(templateKey) as string,
+            (toString(templateKey) as string)!,
             '/schema'
           ) as string,
           method: 'DELETE',
@@ -812,7 +812,7 @@ export class MetadataTemplatesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_templates/',
-            toString(templateId) as string
+            (toString(templateId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,

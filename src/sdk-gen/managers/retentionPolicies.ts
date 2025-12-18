@@ -603,7 +603,7 @@ export class RetentionPoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/retention_policies/',
-            toString(retentionPolicyId) as string
+            (toString(retentionPolicyId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -648,7 +648,7 @@ export class RetentionPoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/retention_policies/',
-            toString(retentionPolicyId) as string
+            (toString(retentionPolicyId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -692,7 +692,7 @@ export class RetentionPoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/retention_policies/',
-            toString(retentionPolicyId) as string
+            (toString(retentionPolicyId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

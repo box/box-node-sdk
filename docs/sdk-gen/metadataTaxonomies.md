@@ -210,12 +210,15 @@ Returns an array of all taxonomy levels.
 
 Updates an existing metadata taxonomy level.
 
-This operation is performed by calling function `patchMetadataTaxonomiesIdIdLevelsId`.
+This operation is performed by calling function `updateMetadataTaxonomyLevelById`.
 
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/patch-metadata-taxonomies-id-id-levels-id/).
 
-*Currently we don't have an example for calling `patchMetadataTaxonomiesIdIdLevelsId` in integration tests*
+<!-- sample patch_metadata_taxonomies_id_id_levels_id -->
+```ts
+await client.metadataTaxonomies.updateMetadataTaxonomyLevelById(namespace, taxonomyKey, 1, { displayName: "Continent UPDATED", description: "Continent Level UPDATED" } satisfies UpdateMetadataTaxonomyLevelByIdRequestBody)
+```
 
 ### Arguments
 
@@ -225,9 +228,9 @@ See the endpoint docs at
   - The key of the metadata taxonomy. Example: "geography"
 - levelIndex `number`
   - The index of the metadata taxonomy level. Example: 1
-- requestBody `PatchMetadataTaxonomiesIdIdLevelsIdRequestBody`
-  - Request body of patchMetadataTaxonomiesIdIdLevelsId method
-- optionalsInput `PatchMetadataTaxonomiesIdIdLevelsIdOptionalsInput`
+- requestBody `UpdateMetadataTaxonomyLevelByIdRequestBody`
+  - Request body of updateMetadataTaxonomyLevelById method
+- optionalsInput `UpdateMetadataTaxonomyLevelByIdOptionalsInput`
   
 
 
@@ -482,12 +485,15 @@ This operation is performed by calling function `getMetadataTemplateFieldOptions
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/get-metadata-templates-id-id-fields-id-options/).
 
-*Currently we don't have an example for calling `getMetadataTemplateFieldOptions` in integration tests*
+<!-- sample get_metadata_templates_id_id_fields_id_options -->
+```ts
+await client.metadataTaxonomies.getMetadataTemplateFieldOptions(namespace, metadataTemplateKey, "taxonomy")
+```
 
 ### Arguments
 
-- scope `GetMetadataTemplateFieldOptionsScope`
-  - The scope of the metadata template. Example: "global"
+- namespace `string`
+  - The namespace of the metadata taxonomy. Example: "enterprise_123456"
 - templateKey `string`
   - The name of the metadata template. Example: "properties"
 - fieldKey `string`

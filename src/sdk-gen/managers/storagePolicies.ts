@@ -210,7 +210,7 @@ export class StoragePoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/storage_policies/',
-            toString(storagePolicyId) as string
+            (toString(storagePolicyId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,

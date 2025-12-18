@@ -423,7 +423,7 @@ export class AiStudioManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/ai_agents/',
-            toString(agentId) as string
+            (toString(agentId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -475,7 +475,7 @@ export class AiStudioManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/ai_agents/',
-            toString(agentId) as string
+            (toString(agentId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -518,7 +518,7 @@ export class AiStudioManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/ai_agents/',
-            toString(agentId) as string
+            (toString(agentId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

@@ -413,7 +413,7 @@ export class WebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string
+            (toString(webLinkId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -457,7 +457,7 @@ export class WebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string
+            (toString(webLinkId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -501,7 +501,7 @@ export class WebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string
+            (toString(webLinkId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

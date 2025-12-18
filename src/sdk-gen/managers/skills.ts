@@ -424,7 +424,7 @@ export class SkillsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/global/boxSkillsCards'
           ) as string,
           method: 'GET',
@@ -475,7 +475,7 @@ export class SkillsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/global/boxSkillsCards'
           ) as string,
           method: 'POST',
@@ -528,7 +528,7 @@ export class SkillsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/global/boxSkillsCards'
           ) as string,
           method: 'PUT',
@@ -581,7 +581,7 @@ export class SkillsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/metadata/global/boxSkillsCards'
           ) as string,
           method: 'DELETE',
@@ -624,7 +624,7 @@ export class SkillsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/skill_invocations/',
-            toString(skillId) as string
+            (toString(skillId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,

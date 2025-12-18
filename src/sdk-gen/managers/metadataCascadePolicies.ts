@@ -500,7 +500,7 @@ export class MetadataCascadePoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_cascade_policies/',
-            toString(metadataCascadePolicyId) as string
+            (toString(metadataCascadePolicyId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -542,7 +542,7 @@ export class MetadataCascadePoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_cascade_policies/',
-            toString(metadataCascadePolicyId) as string
+            (toString(metadataCascadePolicyId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -586,7 +586,7 @@ export class MetadataCascadePoliciesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/metadata_cascade_policies/',
-            toString(metadataCascadePolicyId) as string,
+            (toString(metadataCascadePolicyId) as string)!,
             '/apply'
           ) as string,
           method: 'POST',

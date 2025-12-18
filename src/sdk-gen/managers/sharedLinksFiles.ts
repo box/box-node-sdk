@@ -605,7 +605,7 @@ export class SharedLinksFilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '#get_shared_link'
           ) as string,
           method: 'GET',
@@ -662,7 +662,7 @@ export class SharedLinksFilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '#add_shared_link'
           ) as string,
           method: 'PUT',
@@ -721,7 +721,7 @@ export class SharedLinksFilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '#update_shared_link'
           ) as string,
           method: 'PUT',
@@ -780,7 +780,7 @@ export class SharedLinksFilesManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '#remove_shared_link'
           ) as string,
           method: 'PUT',

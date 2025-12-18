@@ -597,7 +597,7 @@ export class SharedLinksWebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string,
+            (toString(webLinkId) as string)!,
             '#get_shared_link'
           ) as string,
           method: 'GET',
@@ -648,7 +648,7 @@ export class SharedLinksWebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string,
+            (toString(webLinkId) as string)!,
             '#add_shared_link'
           ) as string,
           method: 'PUT',
@@ -701,7 +701,7 @@ export class SharedLinksWebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string,
+            (toString(webLinkId) as string)!,
             '#update_shared_link'
           ) as string,
           method: 'PUT',
@@ -754,7 +754,7 @@ export class SharedLinksWebLinksManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/web_links/',
-            toString(webLinkId) as string,
+            (toString(webLinkId) as string)!,
             '#remove_shared_link'
           ) as string,
           method: 'PUT',

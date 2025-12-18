@@ -609,7 +609,7 @@ export class DocgenTemplateManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/docgen_templates/',
-            toString(templateId) as string
+            (toString(templateId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -651,7 +651,7 @@ export class DocgenTemplateManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/docgen_templates/',
-            toString(templateId) as string
+            (toString(templateId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -707,7 +707,7 @@ export class DocgenTemplateManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/docgen_templates/',
-            toString(templateId) as string,
+            (toString(templateId) as string)!,
             '/tags'
           ) as string,
           method: 'GET',
@@ -762,7 +762,7 @@ export class DocgenTemplateManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/docgen_template_jobs/',
-            toString(templateId) as string
+            (toString(templateId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,

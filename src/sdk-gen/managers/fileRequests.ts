@@ -289,7 +289,7 @@ export class FileRequestsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/file_requests/',
-            toString(fileRequestId) as string
+            (toString(fileRequestId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -343,7 +343,7 @@ export class FileRequestsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/file_requests/',
-            toString(fileRequestId) as string
+            (toString(fileRequestId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -393,7 +393,7 @@ export class FileRequestsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/file_requests/',
-            toString(fileRequestId) as string
+            (toString(fileRequestId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -441,7 +441,7 @@ export class FileRequestsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/file_requests/',
-            toString(fileRequestId) as string,
+            (toString(fileRequestId) as string)!,
             '/copy'
           ) as string,
           method: 'POST',

@@ -417,7 +417,7 @@ export class ShieldInformationBarrierSegmentRestrictionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_information_barrier_segment_restrictions/',
-            toString(shieldInformationBarrierSegmentRestrictionId) as string
+            (toString(shieldInformationBarrierSegmentRestrictionId) as string)!
           ) as string,
           method: 'GET',
           headers: headersMap,
@@ -460,7 +460,7 @@ export class ShieldInformationBarrierSegmentRestrictionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/shield_information_barrier_segment_restrictions/',
-            toString(shieldInformationBarrierSegmentRestrictionId) as string
+            (toString(shieldInformationBarrierSegmentRestrictionId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,

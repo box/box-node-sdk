@@ -458,7 +458,7 @@ export class FileVersionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/versions'
           ) as string,
           method: 'GET',
@@ -522,9 +522,9 @@ export class FileVersionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/versions/',
-            toString(fileVersionId) as string
+            (toString(fileVersionId) as string)!
           ) as string,
           method: 'GET',
           params: queryParamsMap,
@@ -581,9 +581,9 @@ export class FileVersionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/versions/',
-            toString(fileVersionId) as string
+            (toString(fileVersionId) as string)!
           ) as string,
           method: 'DELETE',
           headers: headersMap,
@@ -636,9 +636,9 @@ export class FileVersionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/versions/',
-            toString(fileVersionId) as string
+            (toString(fileVersionId) as string)!
           ) as string,
           method: 'PUT',
           headers: headersMap,
@@ -714,7 +714,7 @@ export class FileVersionsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/versions/current'
           ) as string,
           method: 'POST',

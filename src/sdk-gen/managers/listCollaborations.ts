@@ -384,7 +384,7 @@ export class ListCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/files/',
-            toString(fileId) as string,
+            (toString(fileId) as string)!,
             '/collaborations'
           ) as string,
           method: 'GET',
@@ -447,7 +447,7 @@ export class ListCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/folders/',
-            toString(folderId) as string,
+            (toString(folderId) as string)!,
             '/collaborations'
           ) as string,
           method: 'GET',
@@ -554,7 +554,7 @@ export class ListCollaborationsManager {
           url: ''.concat(
             this.networkSession.baseUrls.baseUrl,
             '/2.0/groups/',
-            toString(groupId) as string,
+            (toString(groupId) as string)!,
             '/collaborations'
           ) as string,
           method: 'GET',
