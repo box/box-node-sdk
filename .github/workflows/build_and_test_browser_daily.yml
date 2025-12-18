@@ -2,6 +2,10 @@ name: Build and Test browser daily
 on:
   schedule:
     - cron: '50 0 * * 1-5'
+
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
