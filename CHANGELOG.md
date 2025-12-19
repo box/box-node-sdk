@@ -7,7 +7,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* **boxsdkgen:** add taxonomy to Metadata Field (read) definition (box/box-openapi[#572](https://github.com/box/box-node-sdk/issues/572)) ([#1274](https://github.com/box/box-node-sdk/issues/1274)) ([3850e6b](https://github.com/box/box-node-sdk/commit/3850e6bf164d1a8778258afb54342833366a0b03))
 * **boxsdkgen:** fix `RetryAfter` function when there's no `Retry-After` header (box/box-codegen[#903](https://github.com/box/box-node-sdk/issues/903)) ([#1250](https://github.com/box/box-node-sdk/issues/1250)) ([cd917ee](https://github.com/box/box-node-sdk/commit/cd917eec7f785627952cebc32313ec192ade982f))
 
 
@@ -15,7 +14,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **boxsdkgen:** add Metadata Taxonomies api (box/box-openapi[#569](https://github.com/box/box-node-sdk/issues/569)) ([#1256](https://github.com/box/box-node-sdk/issues/1256)) ([12d8c9f](https://github.com/box/box-node-sdk/commit/12d8c9f5a9748f871b1ca492b3acd388d103039f))
 * **boxsdkgen:** text input validation for Box Sign (box/box-openapi[#568](https://github.com/box/box-node-sdk/issues/568)) ([#1253](https://github.com/box/box-node-sdk/issues/1253)) ([5d4f8bf](https://github.com/box/box-node-sdk/commit/5d4f8bf8ea3ca433c18150a0d4b474ec85ddc0ef))
-* **boxsdkgen:** Treat `nullable` fields as Optional (box/box-codegen[#906](https://github.com/box/box-node-sdk/issues/906)) ([#1259](https://github.com/box/box-node-sdk/issues/1259)) ([50d7080](https://github.com/box/box-node-sdk/commit/50d70806c4e40ed56b2f8cfea5f5bcec7ec56159))
 * Reuse auth and network settings between legacy and sdk-gen ([#1242](https://github.com/box/box-node-sdk/issues/1242)) ([320c35e](https://github.com/box/box-node-sdk/commit/320c35e8d4add6407cebc0d43bb7522fa980e9cf))
 
 ## [4.2.0](https://github.com/box/box-node-sdk/compare/v4.1.1...v4.2.0) (2025-12-10)
