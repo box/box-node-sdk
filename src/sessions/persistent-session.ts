@@ -36,10 +36,10 @@ type TokenRequestOptions = Record<string, any> /* FIXME */;
 function isObjectValidTokenInfo(obj: Record<string, any>) {
   return Boolean(
     obj &&
-    obj.accessToken &&
-    obj.refreshToken &&
-    obj.accessTokenTTLMS &&
-    obj.acquiredAtMS
+      obj.accessToken &&
+      obj.refreshToken &&
+      obj.accessTokenTTLMS &&
+      obj.acquiredAtMS
   );
 }
 
