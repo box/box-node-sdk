@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.3.0](https://github.com/box/box-node-sdk/compare/v10.2.0...v10.3.0) (2025-12-19)
+
+
+### Bug Fixes
+
+* add taxonomy to Metadata Field (read) definition (box/box-openapi[#572](https://github.com/box/box-node-sdk/issues/572)) ([#1275](https://github.com/box/box-node-sdk/issues/1275)) ([0935d71](https://github.com/box/box-node-sdk/commit/0935d7116e0c5f7e0e4bc38f6a9f46344acaccba))
+* fix `RetryAfter` function when there's no `Retry-After` header (box/box-codegen[#903](https://github.com/box/box-node-sdk/issues/903)) ([#1251](https://github.com/box/box-node-sdk/issues/1251)) ([a334d81](https://github.com/box/box-node-sdk/commit/a334d81190d9f90c7c1cec5cee8187f1cd18dac9))
+
+
+### New Features and Enhancements
+
+* add Metadata Taxonomies api (box/box-openapi[#569](https://github.com/box/box-node-sdk/issues/569)) ([#1263](https://github.com/box/box-node-sdk/issues/1263)) ([ee11f67](https://github.com/box/box-node-sdk/commit/ee11f678724912ebf862edc47c4ab1a2ea348f2b))
+* text input validation for Box Sign (box/box-openapi[#568](https://github.com/box/box-node-sdk/issues/568)) ([#1260](https://github.com/box/box-node-sdk/issues/1260)) ([8686901](https://github.com/box/box-node-sdk/commit/868690186705d657b2af07d8fb45a4e4b99b7877))
+* Treat `nullable` fields as Optional (box/box-codegen[#906](https://github.com/box/box-node-sdk/issues/906)) ([#1265](https://github.com/box/box-node-sdk/issues/1265)) ([91d0c74](https://github.com/box/box-node-sdk/commit/91d0c74f488948772e29116e668b69d2bdbbc1c8))
+
 ## [10.2.0](https://github.com/box/box-node-sdk/compare/v10.1.0...v10.2.0) (2025-12-10)
 
 
