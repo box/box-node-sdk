@@ -86,7 +86,7 @@ test('testCreateGetUpdateDeleteShieldList', async function testCreateGetUpdateDe
       description: 'A list of things that are shielded',
       content: new ShieldListContentEmailV2025R0({
         type: 'email' as ShieldListContentEmailV2025R0TypeField,
-        emailAddresses: ['test@box.com', 'test@example.com'],
+        emailAddresses: ['test@boxdemo.com', 'test@example.com'],
       }),
     } satisfies ShieldListsCreateV2025R0);
   const shieldListContentIpName: string = ''.concat(
