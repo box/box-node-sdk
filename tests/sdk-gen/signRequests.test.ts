@@ -50,7 +50,7 @@ import { sdIsList } from '@/serialization/json';
 import { sdIsMap } from '@/serialization/json';
 export const client: BoxClient = getDefaultClient();
 test('testCreateGetCancelAndListSignRequest', async function testCreateGetCancelAndListSignRequest(): Promise<any> {
-  const signerEmail: string = ''.concat(getUuid(), '@box.com') as string;
+  const signerEmail: string = ''.concat(getUuid(), '@boxdemo.com') as string;
   const fileToSign: FileFull = await uploadNewFile();
   const destinationFolder: FolderFull = await createNewFolder();
   const createdSignRequest: SignRequest =
@@ -193,8 +193,8 @@ test('testCreateGetCancelAndListSignRequest', async function testCreateGetCancel
   await client.files.deleteFileById(fileToSign.id);
 });
 test('testCreateSignRequestWithSignerGroupId', async function testCreateSignRequestWithSignerGroupId(): Promise<any> {
-  const signer1Email: string = ''.concat(getUuid(), '@box.com') as string;
-  const signer2Email: string = ''.concat(getUuid(), '@box.com') as string;
+  const signer1Email: string = ''.concat(getUuid(), '@boxdemo.com') as string;
+  const signer2Email: string = ''.concat(getUuid(), '@boxdemo.com') as string;
   const fileToSign: FileFull = await uploadNewFile();
   const destinationFolder: FolderFull = await createNewFolder();
   const createdSignRequest: SignRequest =
