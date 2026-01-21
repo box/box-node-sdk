@@ -87,6 +87,9 @@ export interface FileFullPermissionsField {
    * Specifies if the user view annotations placed by themselves
    * on this file. */
   readonly canViewAnnotationsSelf: boolean;
+  /**
+   * Specifies if the user can apply a watermark to this file. */
+  readonly canApplyWatermark?: boolean;
   readonly rawData?: SerializedData;
 }
 export type FileFullLockTypeField = 'lock';
@@ -147,6 +150,12 @@ export interface FileFullWatermarkInfoField {
   /**
    * Specifies if this item has a watermark applied. */
   readonly isWatermarked?: boolean;
+  /**
+   * Specifies if the watermark is inherited from any parent folder in the hierarchy. */
+  readonly isWatermarkInherited?: boolean;
+  /**
+   * Specifies if the watermark is enforced by an access policy. */
+  readonly isWatermarkedByAccessPolicy?: boolean;
   readonly rawData?: SerializedData;
 }
 export type FileFullAllowedInviteeRolesField =
@@ -390,6 +399,7 @@ export function serializeFileFullPermissionsField(
     ['can_upload']: val.canUpload,
     ['can_view_annotations_all']: val.canViewAnnotationsAll,
     ['can_view_annotations_self']: val.canViewAnnotationsSelf,
+    ['can_apply_watermark']: val.canApplyWatermark,
   };
 }
 export function deserializeFileFullPermissionsField(
@@ -556,6 +566,17 @@ export function deserializeFileFullPermissionsField(
     });
   }
   const canViewAnnotationsSelf: boolean = val.can_view_annotations_self;
+  if (
+    !(val.can_apply_watermark == void 0) &&
+    !sdIsBoolean(val.can_apply_watermark)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "can_apply_watermark" of type "FileFullPermissionsField"',
+    });
+  }
+  const canApplyWatermark: undefined | boolean =
+    val.can_apply_watermark == void 0 ? void 0 : val.can_apply_watermark;
   return {
     canDelete: canDelete,
     canDownload: canDownload,
@@ -569,6 +590,7 @@ export function deserializeFileFullPermissionsField(
     canUpload: canUpload,
     canViewAnnotationsAll: canViewAnnotationsAll,
     canViewAnnotationsSelf: canViewAnnotationsSelf,
+    canApplyWatermark: canApplyWatermark,
   } satisfies FileFullPermissionsField;
 }
 export function serializeFileFullLockTypeField(
@@ -791,7 +813,11 @@ export function deserializeFileFullExpiringEmbedLinkField(
 export function serializeFileFullWatermarkInfoField(
   val: FileFullWatermarkInfoField,
 ): SerializedData {
-  return { ['is_watermarked']: val.isWatermarked };
+  return {
+    ['is_watermarked']: val.isWatermarked,
+    ['is_watermark_inherited']: val.isWatermarkInherited,
+    ['is_watermarked_by_access_policy']: val.isWatermarkedByAccessPolicy,
+  };
 }
 export function deserializeFileFullWatermarkInfoField(
   val: SerializedData,
@@ -809,7 +835,35 @@ export function deserializeFileFullWatermarkInfoField(
   }
   const isWatermarked: undefined | boolean =
     val.is_watermarked == void 0 ? void 0 : val.is_watermarked;
-  return { isWatermarked: isWatermarked } satisfies FileFullWatermarkInfoField;
+  if (
+    !(val.is_watermark_inherited == void 0) &&
+    !sdIsBoolean(val.is_watermark_inherited)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_watermark_inherited" of type "FileFullWatermarkInfoField"',
+    });
+  }
+  const isWatermarkInherited: undefined | boolean =
+    val.is_watermark_inherited == void 0 ? void 0 : val.is_watermark_inherited;
+  if (
+    !(val.is_watermarked_by_access_policy == void 0) &&
+    !sdIsBoolean(val.is_watermarked_by_access_policy)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_watermarked_by_access_policy" of type "FileFullWatermarkInfoField"',
+    });
+  }
+  const isWatermarkedByAccessPolicy: undefined | boolean =
+    val.is_watermarked_by_access_policy == void 0
+      ? void 0
+      : val.is_watermarked_by_access_policy;
+  return {
+    isWatermarked: isWatermarked,
+    isWatermarkInherited: isWatermarkInherited,
+    isWatermarkedByAccessPolicy: isWatermarkedByAccessPolicy,
+  } satisfies FileFullWatermarkInfoField;
 }
 export function serializeFileFullAllowedInviteeRolesField(
   val: FileFullAllowedInviteeRolesField,
