@@ -73,6 +73,9 @@ export interface FolderFullPermissionsField {
   /**
    * Specifies if the user can upload into this folder. */
   readonly canUpload: boolean;
+  /**
+   * Specifies if the user can apply a watermark to this folder and its contents. */
+  readonly canApplyWatermark?: boolean;
   readonly rawData?: SerializedData;
 }
 export interface FolderFullMetadataField {
@@ -101,6 +104,12 @@ export interface FolderFullWatermarkInfoField {
   /**
    * Specifies if this item has a watermark applied. */
   readonly isWatermarked?: boolean;
+  /**
+   * Specifies if the watermark is inherited from any parent folder in the hierarchy. */
+  readonly isWatermarkInherited?: boolean;
+  /**
+   * Specifies if the watermark is enforced by an access policy. */
+  readonly isWatermarkedByAccessPolicy?: boolean;
   readonly rawData?: SerializedData;
 }
 export interface FolderFullClassificationField {
@@ -218,6 +227,7 @@ export function serializeFolderFullPermissionsField(
     ['can_set_share_access']: val.canSetShareAccess,
     ['can_share']: val.canShare,
     ['can_upload']: val.canUpload,
+    ['can_apply_watermark']: val.canApplyWatermark,
   };
 }
 export function deserializeFolderFullPermissionsField(
@@ -319,6 +329,17 @@ export function deserializeFolderFullPermissionsField(
     });
   }
   const canUpload: boolean = val.can_upload;
+  if (
+    !(val.can_apply_watermark == void 0) &&
+    !sdIsBoolean(val.can_apply_watermark)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "can_apply_watermark" of type "FolderFullPermissionsField"',
+    });
+  }
+  const canApplyWatermark: undefined | boolean =
+    val.can_apply_watermark == void 0 ? void 0 : val.can_apply_watermark;
   return {
     canDelete: canDelete,
     canDownload: canDownload,
@@ -327,6 +348,7 @@ export function deserializeFolderFullPermissionsField(
     canSetShareAccess: canSetShareAccess,
     canShare: canShare,
     canUpload: canUpload,
+    canApplyWatermark: canApplyWatermark,
   } satisfies FolderFullPermissionsField;
 }
 export function serializeFolderFullMetadataField(
@@ -443,7 +465,11 @@ export function deserializeFolderFullAllowedInviteeRolesField(
 export function serializeFolderFullWatermarkInfoField(
   val: FolderFullWatermarkInfoField
 ): SerializedData {
-  return { ['is_watermarked']: val.isWatermarked };
+  return {
+    ['is_watermarked']: val.isWatermarked,
+    ['is_watermark_inherited']: val.isWatermarkInherited,
+    ['is_watermarked_by_access_policy']: val.isWatermarkedByAccessPolicy,
+  };
 }
 export function deserializeFolderFullWatermarkInfoField(
   val: SerializedData
@@ -461,8 +487,34 @@ export function deserializeFolderFullWatermarkInfoField(
   }
   const isWatermarked: undefined | boolean =
     val.is_watermarked == void 0 ? void 0 : val.is_watermarked;
+  if (
+    !(val.is_watermark_inherited == void 0) &&
+    !sdIsBoolean(val.is_watermark_inherited)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_watermark_inherited" of type "FolderFullWatermarkInfoField"',
+    });
+  }
+  const isWatermarkInherited: undefined | boolean =
+    val.is_watermark_inherited == void 0 ? void 0 : val.is_watermark_inherited;
+  if (
+    !(val.is_watermarked_by_access_policy == void 0) &&
+    !sdIsBoolean(val.is_watermarked_by_access_policy)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_watermarked_by_access_policy" of type "FolderFullWatermarkInfoField"',
+    });
+  }
+  const isWatermarkedByAccessPolicy: undefined | boolean =
+    val.is_watermarked_by_access_policy == void 0
+      ? void 0
+      : val.is_watermarked_by_access_policy;
   return {
     isWatermarked: isWatermarked,
+    isWatermarkInherited: isWatermarkInherited,
+    isWatermarkedByAccessPolicy: isWatermarkedByAccessPolicy,
   } satisfies FolderFullWatermarkInfoField;
 }
 export function serializeFolderFullClassificationField(
