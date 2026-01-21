@@ -287,7 +287,7 @@ export interface CreateUserRequestBody {
   readonly role?: CreateUserRequestBodyRoleField;
   /**
    * The language of the user, formatted in modified version of the
-   * [ISO 639-1](/guides/api-calls/language-codes) format. */
+   * [ISO 639-1](https://developer.box.com/guides/api-calls/language-codes) format. */
   readonly language?: string;
   /**
    * Whether the user can use Box Sync. */
@@ -479,7 +479,7 @@ export interface UpdateUserByIdRequestBody {
   readonly role?: UpdateUserByIdRequestBodyRoleField;
   /**
    * The language of the user, formatted in modified version of the
-   * [ISO 639-1](/guides/api-calls/language-codes) format. */
+   * [ISO 639-1](https://developer.box.com/guides/api-calls/language-codes) format. */
   readonly language?: string;
   /**
    * Whether the user can use Box Sync. */
