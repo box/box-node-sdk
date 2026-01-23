@@ -19,7 +19,7 @@ export interface RealtimeServer {
   /**
    * The maximum number of retries this server will
    * allow before a new long poll should be started by
-   * getting a [new list of server](#options-events). */
+   * getting a [new list of server](https://developer.box.com/reference/options-events). */
   readonly maxRetries?: string;
   /**
    * The maximum number of seconds without a response
