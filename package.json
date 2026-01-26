@@ -17,8 +17,9 @@
   "types": "./lib/index.d.ts",
   "browser": {
     "./src/internal/utilsNode.ts": "./src/internal/utilsBrowser.ts",
-    "./lib/internal/utilsNode.js": "./lib/internal/utilsBrowser.js",
     "./src/box/eventStream.ts": "./src/box/eventStreamBrowser.ts",
+    "./lib/internal/utilsNode.js": "./lib/internal/utilsBrowser.js",
+    "./lib/box/eventStream.js": "./lib/box/eventStreamBrowser.js",
     "./lib-esm/box/eventStream.js": "./lib-esm/box/eventStreamBrowser.js",
     "./lib-esm/internal/utilsNode.js": "./lib-esm/internal/utilsBrowser.js"
   },
@@ -126,6 +127,7 @@
     "build:cjs": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "build:esm": "tsc --project tsconfig.esm.json && tsc-alias -p tsconfig.esm.json",
     "postbuild": "rollup -c",
+    "postbuild:esm": "node ./scripts/update-esm.mjs",
     "start": "echo \"Error: no start specified\" && exit 1",
     "test": "jest"
   },
