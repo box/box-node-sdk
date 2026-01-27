@@ -1,4 +1,4 @@
-import BoxSDK from 'sdk';
+import * as BoxSDK from 'sdk';
 import { BoxClient, BoxDeveloperTokenAuth } from 'sdk';
 import { FileFull } from 'sdk/schemas';
 import { File } from 'sdk/schemas/file';
