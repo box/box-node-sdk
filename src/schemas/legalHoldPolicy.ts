@@ -26,7 +26,7 @@ export type LegalHoldPolicyStatusField =
   | string;
 export interface LegalHoldPolicyAssignmentCountsField {
   /**
-   * The number of users this policy is applied to. */
+   * The number of users this policy is applied to with the `access` type assignment. */
   readonly user?: number;
   /**
    * The number of folders this policy is applied to. */
@@ -37,6 +37,12 @@ export interface LegalHoldPolicyAssignmentCountsField {
   /**
    * The number of file versions this policy is applied to. */
   readonly fileVersion?: number;
+  /**
+   * The number of users this policy is applied to with the `ownership` type assignment. */
+  readonly ownership?: number;
+  /**
+   * The number of users this policy is applied to with the `interactions` type assignment. */
+  readonly interactions?: number;
   readonly rawData?: SerializedData;
 }
 export class LegalHoldPolicy extends LegalHoldPolicyMini {
@@ -123,6 +129,8 @@ export function serializeLegalHoldPolicyAssignmentCountsField(
     ['folder']: val.folder,
     ['file']: val.file,
     ['file_version']: val.fileVersion,
+    ['ownership']: val.ownership,
+    ['interactions']: val.interactions,
   };
 }
 export function deserializeLegalHoldPolicyAssignmentCountsField(
@@ -162,11 +170,29 @@ export function deserializeLegalHoldPolicyAssignmentCountsField(
   }
   const fileVersion: undefined | number =
     val.file_version == void 0 ? void 0 : val.file_version;
+  if (!(val.ownership == void 0) && !sdIsNumber(val.ownership)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting number for "ownership" of type "LegalHoldPolicyAssignmentCountsField"',
+    });
+  }
+  const ownership: undefined | number =
+    val.ownership == void 0 ? void 0 : val.ownership;
+  if (!(val.interactions == void 0) && !sdIsNumber(val.interactions)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting number for "interactions" of type "LegalHoldPolicyAssignmentCountsField"',
+    });
+  }
+  const interactions: undefined | number =
+    val.interactions == void 0 ? void 0 : val.interactions;
   return {
     user: user,
     folder: folder,
     file: file,
     fileVersion: fileVersion,
+    ownership: ownership,
+    interactions: interactions,
   } satisfies LegalHoldPolicyAssignmentCountsField;
 }
 export function serializeLegalHoldPolicy(val: LegalHoldPolicy): SerializedData {

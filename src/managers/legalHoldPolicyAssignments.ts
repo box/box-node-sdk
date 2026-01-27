@@ -243,7 +243,7 @@ export type CreateLegalHoldPolicyAssignmentRequestBodyAssignToTypeField =
   | 'folder'
   | 'user'
   | 'ownership'
-  | 'interaction';
+  | 'interactions';
 export interface CreateLegalHoldPolicyAssignmentRequestBodyAssignToField {
   /**
    * The type of item to assign the policy to. */
@@ -453,7 +453,7 @@ export class LegalHoldPolicyAssignmentsManager {
     };
   }
   /**
-   * Assign a legal hold to a file, file version, folder, or user.
+   * Assign a legal hold to an item type of: file, file version, folder, user, ownership, or interactions.
    * @param {CreateLegalHoldPolicyAssignmentRequestBody} requestBody Request body of createLegalHoldPolicyAssignment method
    * @param {CreateLegalHoldPolicyAssignmentOptionalsInput} optionalsInput
    * @returns {Promise<LegalHoldPolicyAssignment>}
@@ -715,7 +715,7 @@ export function deserializeCreateLegalHoldPolicyAssignmentRequestBodyAssignToTyp
   if (val == 'ownership') {
     return val;
   }
-  if (val == 'interaction') {
+  if (val == 'interactions') {
     return val;
   }
   throw new BoxSdkError({
