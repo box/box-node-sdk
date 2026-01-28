@@ -225,6 +225,7 @@ await client.ai.createAiExtractStructured({
     } satisfies AiExtractStructuredFieldsField,
   ],
   items: [new AiItemBase({ id: file.id })],
+  includeConfidenceScore: true,
   aiAgent: aiExtractStructuredAgentBasicTextConfig,
 } satisfies AiExtractStructured);
 ```
