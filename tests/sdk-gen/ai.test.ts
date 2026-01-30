@@ -360,7 +360,10 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
       parent: { id: '0' } satisfies UploadFileRequestBodyAttributesParentField,
     } satisfies UploadFileRequestBodyAttributesField,
     file: stringToByteStream(
-      'My name is John Doe. I was born in 4th July 1990. I am 34 years old. My hobby is guitar.'
+      ''.concat(
+        'My name is John Doe. I was born in 4th July 1990. I am 34 years old. My hobby is guitar. My UUID is ',
+        getUuid()
+      ) as string
     ),
   } satisfies UploadFileRequestBody);
   const file: FileFull = uploadedFiles.entries![0];
@@ -409,8 +412,12 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
         } satisfies AiExtractStructuredFieldsField,
       ],
       items: [new AiItemBase({ id: file.id })],
+      includeConfidenceScore: true,
       aiAgent: aiExtractStructuredAgentBasicTextConfig,
     } satisfies AiExtractStructured);
+  if (!!(response.confidenceScore == void 0)) {
+    throw new Error('Assertion failed');
+  }
   if (
     !(
       (toString(response.answer.hobby) as string) ==
@@ -443,7 +450,10 @@ test('testAIExtractStructuredWithMetadataTemplate', async function testAIExtract
       parent: { id: '0' } satisfies UploadFileRequestBodyAttributesParentField,
     } satisfies UploadFileRequestBodyAttributesField,
     file: stringToByteStream(
-      'My name is John Doe. I was born in 4th July 1990. I am 34 years old. My hobby is guitar.'
+      ''.concat(
+        'My name is John Doe. I was born in 4th July 1990. I am 34 years old. My hobby is guitar. My UUID is ',
+        getUuid()
+      ) as string
     ),
   } satisfies UploadFileRequestBody);
   const file: FileFull = uploadedFiles.entries![0];
