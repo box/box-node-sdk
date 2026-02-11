@@ -24,7 +24,7 @@ export interface AiExtractStructuredResponse {
    * The reason the response finishes. */
   readonly completionReason?: string;
   /**
-   * The confidence score numeric values for each extracted field as a JSON dictionary. This can be empty if no field could be extracted. */
+   * The confidence score levels and numeric values for each extracted field as a JSON dictionary. This can be empty if no field could be extracted. */
   readonly confidenceScore?: {
     readonly [key: string]: any;
   };

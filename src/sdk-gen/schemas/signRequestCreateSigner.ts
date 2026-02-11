@@ -74,6 +74,10 @@ export interface SignRequestCreateSigner {
   /**
    * If true, no emails about the sign request will be sent. */
   readonly suppressNotifications?: boolean | null;
+  /**
+   * The language of the user, formatted in modified version of the
+   * [ISO 639-1](https://developer.box.com/guides/api-calls/language-codes) format. */
+  readonly language?: string | null;
   readonly rawData?: SerializedData;
 }
 export function serializeSignRequestCreateSignerRoleField(
@@ -119,6 +123,7 @@ export function serializeSignRequestCreateSigner(
     ['password']: val.password,
     ['signer_group_id']: val.signerGroupId,
     ['suppress_notifications']: val.suppressNotifications,
+    ['language']: val.language,
   };
 }
 export function deserializeSignRequestCreateSigner(
@@ -233,6 +238,14 @@ export function deserializeSignRequestCreateSigner(
   }
   const suppressNotifications: undefined | boolean =
     val.suppress_notifications == void 0 ? void 0 : val.suppress_notifications;
+  if (!(val.language == void 0) && !sdIsString(val.language)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "language" of type "SignRequestCreateSigner"',
+    });
+  }
+  const language: undefined | string =
+    val.language == void 0 ? void 0 : val.language;
   return {
     email: email,
     role: role,
@@ -246,5 +259,6 @@ export function deserializeSignRequestCreateSigner(
     password: password,
     signerGroupId: signerGroupId,
     suppressNotifications: suppressNotifications,
+    language: language,
   } satisfies SignRequestCreateSigner;
 }
