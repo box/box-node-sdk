@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.4.0](https://github.com/box/box-node-sdk/compare/v10.3.0...v10.4.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* Correct enum value for legal hold policy changes (box/box-openapi[#581](https://github.com/box/box-node-sdk/issues/581)) ([#1319](https://github.com/box/box-node-sdk/issues/1319)) ([c14bb0d](https://github.com/box/box-node-sdk/commit/c14bb0d84c92cbd8b86749b00b51d29a394858c5))
+* Fix config to make `esm` build `esm` compatible (box/box-codegen[#915](https://github.com/box/box-node-sdk/issues/915)) ([#1315](https://github.com/box/box-node-sdk/issues/1315)) ([ecb8967](https://github.com/box/box-node-sdk/commit/ecb89678f13ac2a2f0505f9531e1cb44a97da1ff))
+
+
+### New Features and Enhancements
+
+* add confidence scores for structured extract (box/box-openapi[#582](https://github.com/box/box-node-sdk/issues/582)) ([#1321](https://github.com/box/box-node-sdk/issues/1321)) ([e7738ba](https://github.com/box/box-node-sdk/commit/e7738bac1d598bf619697a9aa32c2ed463e653e8))
+* add signer language, cancel sign request reason (box/box-openapi[#584](https://github.com/box/box-node-sdk/issues/584)) ([#1343](https://github.com/box/box-node-sdk/issues/1343)) ([f4def35](https://github.com/box/box-node-sdk/commit/f4def35f3e06c0ff01922dc6bc0cb344d01b63c0))
+* Add watermarking permissions and sources information (box/box-openapi[#579](https://github.com/box/box-node-sdk/issues/579)) ([#1312](https://github.com/box/box-node-sdk/issues/1312)) ([92a3ed4](https://github.com/box/box-node-sdk/commit/92a3ed4cc9f82cae7133a4e4eeefdf8181d7fe81))
+
 ## [10.3.0](https://github.com/box/box-node-sdk/compare/v10.2.0...v10.3.0) (2025-12-19)
 
 
