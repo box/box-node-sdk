@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.0](https://github.com/box/box-node-sdk/compare/v4.3.0...v4.4.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* **boxsdk:** Bump `cypress/request` to fix `CVE-2025-15284` ([#1309](https://github.com/box/box-node-sdk/issues/1309)) ([bbd6b88](https://github.com/box/box-node-sdk/commit/bbd6b88df606cc8c496b7a943a72ebb8f02f159c))
+* **boxsdkgen:** Correct enum value for legal hold policy changes (box/box-openapi[#581](https://github.com/box/box-node-sdk/issues/581)) ([#1318](https://github.com/box/box-node-sdk/issues/1318)) ([00305a0](https://github.com/box/box-node-sdk/commit/00305a0d2c346bb23fa0039265933c5c7dd792c6))
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** add confidence scores for structured extract (box/box-openapi[#582](https://github.com/box/box-node-sdk/issues/582)) ([#1320](https://github.com/box/box-node-sdk/issues/1320)) ([e8435d0](https://github.com/box/box-node-sdk/commit/e8435d02ff7700bc0c3638c48a851f46d6a2bdec))
+* **boxsdkgen:** add signer language, cancel sign request reason (box/box-openapi[#584](https://github.com/box/box-node-sdk/issues/584)) ([#1342](https://github.com/box/box-node-sdk/issues/1342)) ([f77ee6b](https://github.com/box/box-node-sdk/commit/f77ee6b454c4f1ecfa15e74085921c4efe72b84c))
+* **boxsdkgen:** Add watermarking permissions and sources information (box/box-openapi[#579](https://github.com/box/box-node-sdk/issues/579)) ([#1310](https://github.com/box/box-node-sdk/issues/1310)) ([4c89711](https://github.com/box/box-node-sdk/commit/4c89711d2840e904f297b9b84d999cd9bd482a82))
+
 ## [4.3.0](https://github.com/box/box-node-sdk/compare/v4.2.0...v4.3.0) (2025-12-19)
 
 
