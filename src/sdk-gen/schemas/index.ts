@@ -138,6 +138,7 @@ export * from './shieldInformationBarrierReportDetails';
 export * from './shieldInformationBarrierSegmentMemberBase';
 export * from './shieldInformationBarrierSegmentRestrictionBase';
 export * from './shieldInformationBarrierSegmentRestrictionMini';
+export * from './signRequestCancelRequest';
 export * from './signRequestCreateSigner';
 export * from './signRequestPrefillTag';
 export * from './signRequestBase';
