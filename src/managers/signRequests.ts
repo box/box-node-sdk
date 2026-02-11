@@ -2,6 +2,8 @@ import { serializeSignRequest } from '../schemas/signRequest';
 import { deserializeSignRequest } from '../schemas/signRequest';
 import { serializeClientError } from '../schemas/clientError';
 import { deserializeClientError } from '../schemas/clientError';
+import { serializeSignRequestCancelRequest } from '../schemas/signRequestCancelRequest';
+import { deserializeSignRequestCancelRequest } from '../schemas/signRequestCancelRequest';
 import { serializeSignRequests } from '../schemas/signRequests';
 import { deserializeSignRequests } from '../schemas/signRequests';
 import { serializeSignRequestCreateRequest } from '../schemas/signRequestCreateRequest';
@@ -9,6 +11,7 @@ import { deserializeSignRequestCreateRequest } from '../schemas/signRequestCreat
 import { ResponseFormat } from '../networking/fetchOptions';
 import { SignRequest } from '../schemas/signRequest';
 import { ClientError } from '../schemas/clientError';
+import { SignRequestCancelRequest } from '../schemas/signRequestCancelRequest';
 import { SignRequests } from '../schemas/signRequests';
 import { SignRequestCreateRequest } from '../schemas/signRequestCreateRequest';
 import { BoxSdkError } from '../box/errors';
@@ -29,14 +32,24 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export class CancelSignRequestOptionals {
+  readonly requestBody?: SignRequestCancelRequest = void 0;
   readonly headers: CancelSignRequestHeaders = new CancelSignRequestHeaders({});
   readonly cancellationToken?: CancellationToken = void 0;
   constructor(
-    fields: Omit<CancelSignRequestOptionals, 'headers' | 'cancellationToken'> &
+    fields: Omit<
+      CancelSignRequestOptionals,
+      'requestBody' | 'headers' | 'cancellationToken'
+    > &
       Partial<
-        Pick<CancelSignRequestOptionals, 'headers' | 'cancellationToken'>
+        Pick<
+          CancelSignRequestOptionals,
+          'requestBody' | 'headers' | 'cancellationToken'
+        >
       >,
   ) {
+    if (fields.requestBody !== undefined) {
+      this.requestBody = fields.requestBody;
+    }
     if (fields.headers !== undefined) {
       this.headers = fields.headers;
     }
@@ -46,6 +59,7 @@ export class CancelSignRequestOptionals {
   }
 }
 export interface CancelSignRequestOptionalsInput {
+  readonly requestBody?: SignRequestCancelRequest;
   readonly headers?: CancelSignRequestHeaders;
   readonly cancellationToken?: CancellationToken;
 }
@@ -280,9 +294,11 @@ export class SignRequestsManager {
   ): Promise<SignRequest> {
     const optionals: CancelSignRequestOptionals =
       new CancelSignRequestOptionals({
+        requestBody: optionalsInput.requestBody,
         headers: optionalsInput.headers,
         cancellationToken: optionalsInput.cancellationToken,
       });
+    const requestBody: any = optionals.requestBody;
     const headers: any = optionals.headers;
     const cancellationToken: any = optionals.cancellationToken;
     const headersMap: {
@@ -299,6 +315,10 @@ export class SignRequestsManager {
           ) as string,
           method: 'POST',
           headers: headersMap,
+          data: !(requestBody == void 0)
+            ? serializeSignRequestCancelRequest(requestBody)
+            : void 0,
+          contentType: 'application/json',
           responseFormat: 'json' as ResponseFormat,
           auth: this.auth,
           networkSession: this.networkSession,

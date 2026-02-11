@@ -336,6 +336,13 @@ export function deserializeSignRequestSigner(
   }
   const suppressNotifications: undefined | boolean =
     val.suppress_notifications == void 0 ? void 0 : val.suppress_notifications;
+  if (!(val.language == void 0) && !sdIsString(val.language)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "language" of type "SignRequestSigner"',
+    });
+  }
+  const language: undefined | string =
+    val.language == void 0 ? void 0 : val.language;
   return {
     hasViewedDocument: hasViewedDocument,
     signerDecision: signerDecision,
@@ -355,5 +362,6 @@ export function deserializeSignRequestSigner(
     password: password,
     signerGroupId: signerGroupId,
     suppressNotifications: suppressNotifications,
+    language: language,
   } satisfies SignRequestSigner;
 }
