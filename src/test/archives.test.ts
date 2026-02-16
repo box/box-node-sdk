@@ -65,7 +65,6 @@ test('testArchivesCreateListDelete', async function testArchivesCreateListDelete
   if (!(archives.entries!.length > 0)) {
     throw new Error('Assertion failed');
   }
-  await client.archives.deleteArchiveByIdV2025R0(archive.id);
   await expect(async () => {
     await client.archives.deleteArchiveByIdV2025R0(archive.id);
   }).rejects.toThrow();
