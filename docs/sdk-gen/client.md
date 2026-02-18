@@ -17,6 +17,7 @@ divided across resource managers.
 - [Custom Base URLs](#custom-base-urls)
 - [Custom Agent Options](#custom-agent-options)
 - [Interceptors](#interceptors)
+- [Use Timeouts for API calls](#use-timeouts-for-api-calls)
 - [Use Proxy for API calls](#use-proxy-for-api-calls)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -180,6 +181,20 @@ const clientWithInterceptor: BoxClient = client.withInterceptors([
   },
 ]);
 ```
+
+# Use Timeouts for API calls
+
+In order to configure timeout for API calls, call `client.withTimeouts(config)` to create a new client with timeout settings, leaving the original client unmodified.
+
+`timeoutMs` is in milliseconds and is applied to each request attempt.
+
+```js
+const newClient = client.withTimeouts({
+  timeoutMs: 30000,
+});
+```
+
+If `timeoutMs` is not provided or is less than or equal to `0`, no SDK timeout is applied.
 
 # Use Proxy for API calls
 
