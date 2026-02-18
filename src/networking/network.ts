@@ -5,6 +5,7 @@ import { Agent } from '../internal/utils';
 import { AgentOptions } from '../internal/utils';
 import { createAgent } from '../internal/utils';
 import { ProxyConfig } from './proxyConfig';
+import { TimeoutConfig } from './timeoutConfig';
 import { BoxNetworkClient } from './boxNetworkClient';
 import { NetworkClient } from './networkClient';
 import { RetryStrategy } from './retries';
@@ -22,6 +23,7 @@ export class NetworkSession {
   readonly networkClient: NetworkClient = new BoxNetworkClient({});
   readonly retryStrategy: RetryStrategy = new BoxRetryStrategy({});
   readonly dataSanitizer: DataSanitizer = new DataSanitizer({});
+  readonly timeoutConfig?: TimeoutConfig;
   constructor(
     fields: Omit<
       NetworkSession,
@@ -40,6 +42,7 @@ export class NetworkSession {
       | 'withNetworkClient'
       | 'withRetryStrategy'
       | 'withDataSanitizer'
+      | 'withTimeoutConfig'
     > &
       Partial<
         Pick<
@@ -80,6 +83,9 @@ export class NetworkSession {
     }
     if (fields.dataSanitizer !== undefined) {
       this.dataSanitizer = fields.dataSanitizer;
+    }
+    if (fields.timeoutConfig !== undefined) {
+      this.timeoutConfig = fields.timeoutConfig;
     }
   }
   /**
@@ -122,6 +128,7 @@ export class NetworkSession {
       networkClient: this.networkClient,
       retryStrategy: this.retryStrategy,
       dataSanitizer: this.dataSanitizer,
+      timeoutConfig: this.timeoutConfig,
     });
   }
   /**
@@ -140,6 +147,7 @@ export class NetworkSession {
       networkClient: this.networkClient,
       retryStrategy: this.retryStrategy,
       dataSanitizer: this.dataSanitizer,
+      timeoutConfig: this.timeoutConfig,
     });
   }
   /**
@@ -158,6 +166,7 @@ export class NetworkSession {
       networkClient: this.networkClient,
       retryStrategy: this.retryStrategy,
       dataSanitizer: this.dataSanitizer,
+      timeoutConfig: this.timeoutConfig,
     });
   }
   /**
@@ -176,6 +185,7 @@ export class NetworkSession {
       networkClient: this.networkClient,
       retryStrategy: this.retryStrategy,
       dataSanitizer: this.dataSanitizer,
+      timeoutConfig: this.timeoutConfig,
     });
   }
   /**
@@ -194,6 +204,7 @@ export class NetworkSession {
       networkClient: networkClient,
       retryStrategy: this.retryStrategy,
       dataSanitizer: this.dataSanitizer,
+      timeoutConfig: this.timeoutConfig,
     });
   }
   /**
@@ -212,6 +223,7 @@ export class NetworkSession {
       networkClient: this.networkClient,
       retryStrategy: retryStrategy,
       dataSanitizer: this.dataSanitizer,
+      timeoutConfig: this.timeoutConfig,
     });
   }
   /**
@@ -231,6 +243,26 @@ export class NetworkSession {
       networkClient: this.networkClient,
       retryStrategy: this.retryStrategy,
       dataSanitizer: dataSanitizer,
+      timeoutConfig: this.timeoutConfig,
+    });
+  }
+  /**
+   * Generate a fresh network session by duplicating the existing configuration and network parameters, while also applying timeout config
+   * @param {TimeoutConfig} timeoutConfig
+   * @returns {NetworkSession}
+   */
+  withTimeoutConfig(timeoutConfig: TimeoutConfig): NetworkSession {
+    return new NetworkSession({
+      additionalHeaders: this.additionalHeaders,
+      baseUrls: this.baseUrls,
+      interceptors: this.interceptors,
+      agent: this.agent,
+      agentOptions: this.agentOptions,
+      proxyConfig: this.proxyConfig,
+      networkClient: this.networkClient,
+      retryStrategy: this.retryStrategy,
+      dataSanitizer: this.dataSanitizer,
+      timeoutConfig: timeoutConfig,
     });
   }
 }
@@ -246,4 +278,5 @@ export interface NetworkSessionInput {
   readonly networkClient?: NetworkClient;
   readonly retryStrategy?: RetryStrategy;
   readonly dataSanitizer?: DataSanitizer;
+  readonly timeoutConfig?: TimeoutConfig;
 }
