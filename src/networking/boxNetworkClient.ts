@@ -263,7 +263,7 @@ export class BoxNetworkClient implements NetworkClient {
         fetchResponse,
         attemptForRetry,
       );
-      await new Promise((resolve) => setTimeout(resolve, retryTimeout));
+      await new Promise((resolve) => setTimeout(resolve, retryTimeout * 1000));
       return this.fetch({
         ...options,
         attemptNumber: attemptNumber + 1,
