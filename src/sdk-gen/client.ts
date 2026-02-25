@@ -90,6 +90,7 @@ import { BoxSdkError } from './box/errors';
 import { FetchOptions } from './networking/fetchOptions';
 import { FetchResponse } from './networking/fetchResponse';
 import { BaseUrls } from './networking/baseUrls';
+import { TimeoutConfig } from './networking/timeoutConfig';
 import { ProxyConfig } from './networking/proxyConfig';
 import { AgentOptions } from './internal/utils';
 import { Interceptor } from './networking/interceptors';
@@ -279,6 +280,7 @@ export class BoxClient {
       | 'withExtraHeaders'
       | 'withCustomBaseUrls'
       | 'withProxy'
+      | 'withTimeouts'
       | 'withCustomAgentOptions'
       | 'withInterceptors'
     > &
@@ -737,6 +739,17 @@ export class BoxClient {
     return new BoxClient({
       auth: this.auth,
       networkSession: this.networkSession.withProxy(config),
+    });
+  }
+  /**
+   * Create a new client with custom timeouts that will be used for every API call
+   * @param {TimeoutConfig} config Timeout configuration.
+   * @returns {BoxClient}
+   */
+  withTimeouts(config: TimeoutConfig): BoxClient {
+    return new BoxClient({
+      auth: this.auth,
+      networkSession: this.networkSession.withTimeoutConfig(config),
     });
   }
   /**
