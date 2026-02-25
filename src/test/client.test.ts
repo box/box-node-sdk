@@ -37,6 +37,7 @@ import { FileFull } from '@/schemas/fileFull';
 import { ResponseFormat } from '@/networking/fetchOptions';
 import { UserFull } from '@/schemas/userFull';
 import { CreateUserRequestBody } from '@/managers/users';
+import { TimeoutConfig } from '@/networking/timeoutConfig';
 import { getUuid } from '@/internal/utils';
 import { generateByteStream } from '@/internal/utils';
 import { bufferEquals } from '@/internal/utils';
@@ -367,6 +368,22 @@ test('testWithCustomBaseUrls', async function testWithCustomBaseUrls(): Promise<
   await expect(async () => {
     await customBaseClient.users.getUserMe();
   }).rejects.toThrow();
+});
+test('testWithTimeoutWhenTimeoutOccurs', async function testWithTimeoutWhenTimeoutOccurs(): Promise<any> {
+  const timeoutMs: number = 1;
+  const clientWithTimeout: BoxClient = client.withTimeouts({
+    timeoutMs: timeoutMs,
+  } satisfies TimeoutConfig);
+  await expect(async () => {
+    await clientWithTimeout.users.getUserMe();
+  }).rejects.toThrow();
+});
+test('testWithTimeoutWhenTimeoutDoesNotOccur', async function testWithTimeoutWhenTimeoutDoesNotOccur(): Promise<any> {
+  const timeoutMs: number = 10000;
+  const clientWithTimeout: BoxClient = client.withTimeouts({
+    timeoutMs: timeoutMs,
+  } satisfies TimeoutConfig);
+  await clientWithTimeout.users.getUserMe();
 });
 test('testWithInterceptors', async function testWithInterceptors(): Promise<any> {
   const user: UserFull = await client.users.getUserMe();
