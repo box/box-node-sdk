@@ -405,6 +405,10 @@ export class ArchivesManager {
      * Permanently deletes an archive.
      *
      * To learn more about the archive APIs, see the [Archive API Guide](https://developer.box.com/guides/archives).
+     *
+     * <Danger>
+     * This endpoint is currently unavailable. Please contact support for assistance.
+     * </Danger>
      * @param {string} archiveId The ID of the archive.
     Example: "982312"
      * @param {DeleteArchiveByIdV2025R0OptionalsInput} optionalsInput
