@@ -13,6 +13,7 @@
   - [Network Exception Handling](#network-exception-handling)
   - [Customizing Retry Parameters](#customizing-retry-parameters)
   - [Custom Retry Strategy](#custom-retry-strategy)
+- [Timeouts](#timeouts)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -174,3 +175,24 @@ const networkSession = new NetworkSession({
 });
 const client = new BoxClient({ auth, networkSession });
 ```
+
+## Timeouts
+
+You can configure request timeout using `timeoutConfig` on `NetworkSession`.
+`timeoutMs` is in milliseconds and applies to each HTTP request attempt.
+
+```js
+const auth = new BoxDeveloperTokenAuth({ token: 'DEVELOPER_TOKEN_GOES_HERE' });
+const networkSession = new NetworkSession({
+  timeoutConfig: { timeoutMs: 30000 },
+});
+const client = new BoxClient({ auth, networkSession });
+```
+
+How timeout handling works:
+
+- The SDK applies timeout only when `timeoutMs` is provided and greater than `0`.
+- To disable SDK timeout handling, set `timeoutMs` to `0` (or a negative value), or omit `timeoutMs`.
+- On timeout, the request is aborted and treated as a network error (`Connection timeout after <timeoutMs>ms`); if retries are exhausted, the SDK throws `BoxSdkError`.
+- Timeout failures are handled as request exceptions, then retry behavior is controlled by the configured retry strategy.
+- Timeout applies to a single HTTP request attempt to the Box API (not the total time across all retries).
