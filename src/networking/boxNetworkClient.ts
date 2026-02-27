@@ -40,6 +40,55 @@ export const shouldIncludeBoxUaHeader = (options: FetchOptions) => {
   );
 };
 
+function createAbortSignalWithTimeout(
+  baseSignal: RequestInit['signal'],
+  timeoutMs: number,
+): {
+  signal: AbortSignal;
+  clearTimeout: () => void;
+  didTimeout: () => boolean;
+} {
+  const controller = new AbortController();
+  const upstream = baseSignal as unknown as AbortSignal | undefined;
+  let timedOut = false;
+
+  const abortFromUpstream = () => {
+    try {
+      (controller as any).abort((upstream as any)?.reason);
+    } catch {
+      controller.abort();
+    }
+  };
+
+  if (upstream) {
+    if (upstream.aborted) {
+      abortFromUpstream();
+    } else {
+      upstream.addEventListener('abort', abortFromUpstream, { once: true });
+    }
+  }
+
+  const timeoutId = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, timeoutMs);
+
+  // Node.js timers keep the event loop alive. If the only pending work is this
+  // watchdog timeout, we don't want it to prevent process exit (e.g. short CLI
+  // runs, tests, scripts). `unref()` detaches the timer from the event loop.
+  // It’s a no-op in environments where `unref` isn’t available.
+  (timeoutId as any)?.unref?.();
+
+  return {
+    signal: controller.signal,
+    clearTimeout: () => {
+      clearTimeout(timeoutId);
+      if (upstream) upstream.removeEventListener('abort', abortFromUpstream);
+    },
+    didTimeout: () => timedOut,
+  };
+}
+
 type FetchOptionsExtended = FetchOptions & {
   attemptNumber?: number;
   numberOfRetriesOnException?: number;
@@ -193,19 +242,33 @@ export class BoxNetworkClient implements NetworkClient {
         : void 0,
     });
 
-    try {
-      const response = await nodeFetch(
-        ''.concat(
-          fetchOptions.url,
-          Object.keys(params).length === 0 || fetchOptions.url.endsWith('?')
-            ? ''
-            : '?',
-          new URLSearchParams(params).toString(),
-        ),
-        { ...requestInit, redirect: isBrowser() ? 'follow' : 'manual' },
-      );
+    const timeoutConfig = fetchOptions.networkSession?.timeoutConfig;
+    const timeoutMs = timeoutConfig?.timeoutMs;
 
-      const contentType = response.headers.get('content-type') ?? '';
+    const requestTimeout =
+      timeoutMs != null && timeoutMs > 0
+        ? createAbortSignalWithTimeout(requestInit.signal, timeoutMs)
+        : undefined;
+    const requestInitWithTimeout: RequestInit = requestTimeout
+      ? {
+          ...requestInit,
+          signal: requestTimeout.signal as unknown as RequestInit['signal'],
+        }
+      : requestInit;
+
+    try {
+      const requestUrl = ''.concat(
+        fetchOptions.url,
+        Object.keys(params).length === 0 || fetchOptions.url.endsWith('?')
+          ? ''
+          : '?',
+        new URLSearchParams(params).toString(),
+      );
+      const response = await nodeFetch(requestUrl, {
+        ...requestInitWithTimeout,
+        redirect: isBrowser() ? 'follow' : 'manual',
+      });
+
       const ignoreResponseBody = fetchOptions.followRedirects === false;
 
       let data: SerializedData | undefined;
@@ -244,8 +307,14 @@ export class BoxNetworkClient implements NetworkClient {
     } catch (error) {
       isExceptionCase = true;
       numberOfRetriesOnException++;
-      caughtError = error instanceof Error ? error : new Error(String(error));
+      if (requestTimeout?.didTimeout()) {
+        caughtError = new Error(`Connection timeout after ${timeoutMs}ms`);
+      } else {
+        caughtError = error instanceof Error ? error : new Error(String(error));
+      }
       fetchResponse = fetchResponse ?? { status: 0, headers: {} };
+    } finally {
+      requestTimeout?.clearTimeout();
     }
     const attemptForRetry = isExceptionCase
       ? numberOfRetriesOnException
@@ -325,7 +394,7 @@ export class BoxNetworkClient implements NetworkClient {
       : [];
     if (fetchResponse.status === 0) {
       throw new BoxSdkError({
-        message: `Unexpected Error occurred`,
+        message: caughtError?.message || `Unexpected Error occurred`,
         timestamp: `${Date.now()}`,
         error: caughtError,
       });
