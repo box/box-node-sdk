@@ -81,6 +81,7 @@ import { EnterpriseConfigurationsManager } from './managers/enterpriseConfigurat
 import { HubsManager } from './managers/hubs';
 import { HubCollaborationsManager } from './managers/hubCollaborations';
 import { HubItemsManager } from './managers/hubItems';
+import { HubDocumentManager } from './managers/hubDocument';
 import { ShieldListsManager } from './managers/shieldLists';
 import { ArchivesManager } from './managers/archives';
 import { ExternalUsersManager } from './managers/externalUsers';
@@ -185,6 +186,7 @@ export class BoxClient {
   readonly hubs: HubsManager;
   readonly hubCollaborations: HubCollaborationsManager;
   readonly hubItems: HubItemsManager;
+  readonly hubDocument: HubDocumentManager;
   readonly shieldLists: ShieldListsManager;
   readonly archives: ArchivesManager;
   readonly externalUsers: ExternalUsersManager;
@@ -270,6 +272,7 @@ export class BoxClient {
       | 'hubs'
       | 'hubCollaborations'
       | 'hubItems'
+      | 'hubDocument'
       | 'shieldLists'
       | 'archives'
       | 'externalUsers'
@@ -611,6 +614,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.hubItems = new HubItemsManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.hubDocument = new HubDocumentManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });
