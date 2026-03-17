@@ -25,6 +25,9 @@ export interface HubUpdateRequestV2025R0 {
   /**
    * Indicates if a shared link can be created for the Box Hub. */
   readonly canSharedLinkBeCreated?: boolean;
+  /**
+   * Indicates if a public shared link can be created for the Box Hub. */
+  readonly canPublicSharedLinkBeCreated?: boolean;
   readonly rawData?: SerializedData;
 }
 export function serializeHubUpdateRequestV2025R0(
@@ -38,6 +41,7 @@ export function serializeHubUpdateRequestV2025R0(
       val.isCollaborationRestrictedToEnterprise,
     ['can_non_owners_invite']: val.canNonOwnersInvite,
     ['can_shared_link_be_created']: val.canSharedLinkBeCreated,
+    ['can_public_shared_link_be_created']: val.canPublicSharedLinkBeCreated,
   };
 }
 export function deserializeHubUpdateRequestV2025R0(
@@ -107,6 +111,19 @@ export function deserializeHubUpdateRequestV2025R0(
     val.can_shared_link_be_created == void 0
       ? void 0
       : val.can_shared_link_be_created;
+  if (
+    !(val.can_public_shared_link_be_created == void 0) &&
+    !sdIsBoolean(val.can_public_shared_link_be_created)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "can_public_shared_link_be_created" of type "HubUpdateRequestV2025R0"',
+    });
+  }
+  const canPublicSharedLinkBeCreated: undefined | boolean =
+    val.can_public_shared_link_be_created == void 0
+      ? void 0
+      : val.can_public_shared_link_be_created;
   return {
     title: title,
     description: description,
@@ -115,5 +132,6 @@ export function deserializeHubUpdateRequestV2025R0(
       isCollaborationRestrictedToEnterprise,
     canNonOwnersInvite: canNonOwnersInvite,
     canSharedLinkBeCreated: canSharedLinkBeCreated,
+    canPublicSharedLinkBeCreated: canPublicSharedLinkBeCreated,
   } satisfies HubUpdateRequestV2025R0;
 }
