@@ -30,6 +30,7 @@ export class HubV2025R0 extends HubBaseV2025R0 {
   readonly isCollaborationRestrictedToEnterprise?: boolean;
   readonly canNonOwnersInvite?: boolean;
   readonly canSharedLinkBeCreated?: boolean;
+  readonly canPublicSharedLinkBeCreated?: boolean;
   constructor(fields: HubV2025R0) {
     super(fields);
     if (fields.title !== undefined) {
@@ -66,6 +67,9 @@ export class HubV2025R0 extends HubBaseV2025R0 {
     if (fields.canSharedLinkBeCreated !== undefined) {
       this.canSharedLinkBeCreated = fields.canSharedLinkBeCreated;
     }
+    if (fields.canPublicSharedLinkBeCreated !== undefined) {
+      this.canPublicSharedLinkBeCreated = fields.canPublicSharedLinkBeCreated;
+    }
   }
 }
 export function serializeHubV2025R0(val: HubV2025R0): SerializedData {
@@ -100,6 +104,7 @@ export function serializeHubV2025R0(val: HubV2025R0): SerializedData {
         val.isCollaborationRestrictedToEnterprise,
       ['can_non_owners_invite']: val.canNonOwnersInvite,
       ['can_shared_link_be_created']: val.canSharedLinkBeCreated,
+      ['can_public_shared_link_be_created']: val.canPublicSharedLinkBeCreated,
     },
   };
 }
@@ -193,6 +198,19 @@ export function deserializeHubV2025R0(val: SerializedData): HubV2025R0 {
     val.can_shared_link_be_created == void 0
       ? void 0
       : val.can_shared_link_be_created;
+  if (
+    !(val.can_public_shared_link_be_created == void 0) &&
+    !sdIsBoolean(val.can_public_shared_link_be_created)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "can_public_shared_link_be_created" of type "HubV2025R0"',
+    });
+  }
+  const canPublicSharedLinkBeCreated: undefined | boolean =
+    val.can_public_shared_link_be_created == void 0
+      ? void 0
+      : val.can_public_shared_link_be_created;
   if (val.id == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "id" of type "HubV2025R0" to be defined',
@@ -225,6 +243,7 @@ export function deserializeHubV2025R0(val: SerializedData): HubV2025R0 {
       isCollaborationRestrictedToEnterprise,
     canNonOwnersInvite: canNonOwnersInvite,
     canSharedLinkBeCreated: canSharedLinkBeCreated,
+    canPublicSharedLinkBeCreated: canPublicSharedLinkBeCreated,
     id: id,
     type: type,
   } satisfies HubV2025R0;
