@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.5.0](https://github.com/box/box-node-sdk/compare/v10.4.0...v10.5.0) (2026-03-18)
+
+
+### Bug Fixes
+
+* Convert `retryAfter` seconds to milliseconds for `setTimeout` (box/box-codegen[#926](https://github.com/box/box-node-sdk/issues/926)) ([#1356](https://github.com/box/box-node-sdk/issues/1356)) ([fca811e](https://github.com/box/box-node-sdk/commit/fca811ef89a277b5a88fc78cf348e85c0697bc34))
+
+
+### New Features and Enhancements
+
+* add `canPublicSharedLinkBeCreated` to `Hubs` (box/box-codegen[#928](https://github.com/box/box-node-sdk/issues/928)) ([#1367](https://github.com/box/box-node-sdk/issues/1367)) ([389f8d9](https://github.com/box/box-node-sdk/commit/389f8d9b739928a78aaeb1dac9cbf025c04e304d))
+* Add configurable timeouts for SDKs (box/box-codegen[#924](https://github.com/box/box-node-sdk/issues/924)) ([#1360](https://github.com/box/box-node-sdk/issues/1360)) ([8d77753](https://github.com/box/box-node-sdk/commit/8d77753ac13aa509ee60d9abd6a4d2621d1d581a))
+
 ## [10.4.0](https://github.com/box/box-node-sdk/compare/v10.3.0...v10.4.0) (2026-02-11)
 
 
