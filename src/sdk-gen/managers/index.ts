@@ -77,7 +77,6 @@ export * from './enterpriseConfigurations';
 export * from './hubs';
 export * from './hubCollaborations';
 export * from './hubItems';
-export * from './hubDocument';
 export * from './shieldLists';
 export * from './archives';
 export * from './externalUsers';
