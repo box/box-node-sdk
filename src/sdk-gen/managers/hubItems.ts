@@ -90,6 +90,13 @@ export interface GetHubItemsV2025R0QueryParams {
    * the `hub_id` is `123`. */
   readonly hubId: string;
   /**
+   * The unique identifier of an item list block within the Box Hub.
+   *
+   * When provided, the response will only include items that belong
+   * to the specified item list, allowing you to filter results to
+   * items on a specific page or section. */
+  readonly parentId?: string;
+  /**
    * Defines the position marker at which to begin returning results. This is
    * used when paginating using marker-based pagination.
    *
@@ -201,6 +208,7 @@ export class HubItemsManager {
       readonly [key: string]: string;
     } = prepareParams({
       ['hub_id']: toString(queryParams.hubId) as string,
+      ['parent_id']: toString(queryParams.parentId) as string,
       ['marker']: toString(queryParams.marker) as string,
       ['limit']: toString(queryParams.limit) as string,
     });
