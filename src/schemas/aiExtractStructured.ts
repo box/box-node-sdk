@@ -78,6 +78,9 @@ export interface AiExtractStructured {
   /**
    * A flag to indicate whether confidence scores for every extracted field should be returned. */
   readonly includeConfidenceScore?: boolean;
+  /**
+   * A flag to indicate whether references for every extracted field should be returned. */
+  readonly includeReference?: boolean;
   readonly aiAgent?: AiExtractStructuredAgent;
   readonly rawData?: SerializedData;
 }
@@ -286,6 +289,7 @@ export function serializeAiExtractStructured(
             return serializeAiExtractStructuredFieldsField(item);
           }) as readonly any[]),
     ['include_confidence_score']: val.includeConfidenceScore,
+    ['include_reference']: val.includeReference,
     ['ai_agent']:
       val.aiAgent == void 0
         ? val.aiAgent
@@ -349,6 +353,17 @@ export function deserializeAiExtractStructured(
     val.include_confidence_score == void 0
       ? void 0
       : val.include_confidence_score;
+  if (
+    !(val.include_reference == void 0) &&
+    !sdIsBoolean(val.include_reference)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "include_reference" of type "AiExtractStructured"',
+    });
+  }
+  const includeReference: undefined | boolean =
+    val.include_reference == void 0 ? void 0 : val.include_reference;
   const aiAgent: undefined | AiExtractStructuredAgent =
     val.ai_agent == void 0
       ? void 0
@@ -358,6 +373,7 @@ export function deserializeAiExtractStructured(
     metadataTemplate: metadataTemplate,
     fields: fields,
     includeConfidenceScore: includeConfidenceScore,
+    includeReference: includeReference,
     aiAgent: aiAgent,
   } satisfies AiExtractStructured;
 }
