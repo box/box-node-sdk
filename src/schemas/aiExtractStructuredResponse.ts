@@ -28,6 +28,11 @@ export interface AiExtractStructuredResponse {
   readonly confidenceScore?: {
     readonly [key: string]: any;
   };
+  /**
+   * The reference for each extracted field as a JSON dictionary. This can be empty if no field could be extracted. */
+  readonly reference?: {
+    readonly [key: string]: any;
+  };
   readonly aiAgentInfo?: AiAgentInfo;
   readonly rawData?: SerializedData;
 }
@@ -43,6 +48,19 @@ export function serializeAiExtractStructuredResponse(
         ? val.confidenceScore
         : (Object.fromEntries(
             Object.entries(val.confidenceScore).map(([k, v]: [string, any]) => [
+              k,
+              (function (v: any): any {
+                return v;
+              })(v),
+            ]),
+          ) as {
+            readonly [key: string]: any;
+          }),
+    ['reference']:
+      val.reference == void 0
+        ? val.reference
+        : (Object.fromEntries(
+            Object.entries(val.reference).map(([k, v]: [string, any]) => [
               k,
               (function (v: any): any {
                 return v;
@@ -123,6 +141,31 @@ export function deserializeAiExtractStructuredResponse(
             readonly [key: string]: any;
           })
         : {};
+  if (!(val.reference == void 0) && !sdIsMap(val.reference)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting object for "reference" of type "AiExtractStructuredResponse"',
+    });
+  }
+  const reference:
+    | undefined
+    | {
+        readonly [key: string]: any;
+      } =
+    val.reference == void 0
+      ? void 0
+      : sdIsMap(val.reference)
+        ? (Object.fromEntries(
+            Object.entries(val.reference).map(([k, v]: [string, any]) => [
+              k,
+              (function (v: any): any {
+                return v;
+              })(v),
+            ]),
+          ) as {
+            readonly [key: string]: any;
+          })
+        : {};
   const aiAgentInfo: undefined | AiAgentInfo =
     val.ai_agent_info == void 0
       ? void 0
@@ -132,6 +175,7 @@ export function deserializeAiExtractStructuredResponse(
     createdAt: createdAt,
     completionReason: completionReason,
     confidenceScore: confidenceScore,
+    reference: reference,
     aiAgentInfo: aiAgentInfo,
   } satisfies AiExtractStructuredResponse;
 }

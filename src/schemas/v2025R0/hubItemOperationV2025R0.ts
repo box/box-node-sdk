@@ -24,6 +24,9 @@ export interface HubItemOperationV2025R0 {
    * The action to perform on a Box Hub item. */
   readonly action: HubItemOperationV2025R0ActionField;
   readonly item: HubItemReferenceV2025R0;
+  /**
+   * The ID of the parent block to add the item to. Must be an Item List block. If not provided, the item will be added to the first page's first Item List block. */
+  readonly parentId?: string;
   readonly rawData?: SerializedData;
 }
 export function serializeHubItemOperationV2025R0ActionField(
@@ -53,6 +56,7 @@ export function serializeHubItemOperationV2025R0(
   return {
     ['action']: serializeHubItemOperationV2025R0ActionField(val.action),
     ['item']: serializeHubItemReferenceV2025R0(val.item),
+    ['parent_id']: val.parentId,
   };
 }
 export function deserializeHubItemOperationV2025R0(
@@ -80,5 +84,17 @@ export function deserializeHubItemOperationV2025R0(
   const item: HubItemReferenceV2025R0 = deserializeHubItemReferenceV2025R0(
     val.item,
   );
-  return { action: action, item: item } satisfies HubItemOperationV2025R0;
+  if (!(val.parent_id == void 0) && !sdIsString(val.parent_id)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "parent_id" of type "HubItemOperationV2025R0"',
+    });
+  }
+  const parentId: undefined | string =
+    val.parent_id == void 0 ? void 0 : val.parent_id;
+  return {
+    action: action,
+    item: item,
+    parentId: parentId,
+  } satisfies HubItemOperationV2025R0;
 }
