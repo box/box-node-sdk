@@ -93,7 +93,7 @@ export type SearchForContentQueryParamsContentTypesField =
   | 'description'
   | 'file_content'
   | 'comments'
-  | 'tag'
+  | 'tags'
   | string;
 export type SearchForContentQueryParamsTypeField =
   | 'file'
@@ -595,7 +595,7 @@ export function deserializeSearchForContentQueryParamsContentTypesField(
   if (val == 'comments') {
     return val;
   }
-  if (val == 'tag') {
+  if (val == 'tags') {
     return val;
   }
   if (sdIsString(val)) {
