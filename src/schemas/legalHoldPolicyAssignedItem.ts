@@ -1,12 +1,3 @@
-import { serializeFile } from './file';
-import { deserializeFile } from './file';
-import { serializeFolder } from './folder';
-import { deserializeFolder } from './folder';
-import { serializeWebLink } from './webLink';
-import { deserializeWebLink } from './webLink';
-import { File } from './file';
-import { Folder } from './folder';
-import { WebLink } from './webLink';
 import { BoxSdkError } from '../box/errors';
 import { SerializedData } from '../serialization/json';
 import { sdIsEmpty } from '../serialization/json';
@@ -15,18 +6,59 @@ import { sdIsNumber } from '../serialization/json';
 import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
-export type LegalHoldPolicyAssignedItem = File | Folder | WebLink;
-export function serializeLegalHoldPolicyAssignedItem(val: any): SerializedData {
-  if (val.type == 'file') {
-    return serializeFile(val);
+export type LegalHoldPolicyAssignedItemTypeField =
+  | 'file'
+  | 'file_version'
+  | 'folder'
+  | 'user'
+  | 'ownership'
+  | 'interactions';
+export interface LegalHoldPolicyAssignedItem {
+  /**
+   * The type of item the policy is assigned to. */
+  readonly type: LegalHoldPolicyAssignedItemTypeField;
+  /**
+   * The ID of the item the policy is assigned to. */
+  readonly id: string;
+  readonly rawData?: SerializedData;
+}
+export function serializeLegalHoldPolicyAssignedItemTypeField(
+  val: LegalHoldPolicyAssignedItemTypeField,
+): SerializedData {
+  return val;
+}
+export function deserializeLegalHoldPolicyAssignedItemTypeField(
+  val: SerializedData,
+): LegalHoldPolicyAssignedItemTypeField {
+  if (val == 'file') {
+    return val;
   }
-  if (val.type == 'folder') {
-    return serializeFolder(val);
+  if (val == 'file_version') {
+    return val;
   }
-  if (val.type == 'web_link') {
-    return serializeWebLink(val);
+  if (val == 'folder') {
+    return val;
   }
-  throw new BoxSdkError({ message: 'unknown type' });
+  if (val == 'user') {
+    return val;
+  }
+  if (val == 'ownership') {
+    return val;
+  }
+  if (val == 'interactions') {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize LegalHoldPolicyAssignedItemTypeField",
+  });
+}
+export function serializeLegalHoldPolicyAssignedItem(
+  val: LegalHoldPolicyAssignedItem,
+): SerializedData {
+  return {
+    ['type']: serializeLegalHoldPolicyAssignedItemTypeField(val.type),
+    ['id']: val.id,
+  };
 }
 export function deserializeLegalHoldPolicyAssignedItem(
   val: SerializedData,
@@ -36,16 +68,26 @@ export function deserializeLegalHoldPolicyAssignedItem(
       message: 'Expecting a map for "LegalHoldPolicyAssignedItem"',
     });
   }
-  if (val.type == 'file') {
-    return deserializeFile(val);
+  if (val.type == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "type" of type "LegalHoldPolicyAssignedItem" to be defined',
+    });
   }
-  if (val.type == 'folder') {
-    return deserializeFolder(val);
+  const type: LegalHoldPolicyAssignedItemTypeField =
+    deserializeLegalHoldPolicyAssignedItemTypeField(val.type);
+  if (val.id == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "id" of type "LegalHoldPolicyAssignedItem" to be defined',
+    });
   }
-  if (val.type == 'web_link') {
-    return deserializeWebLink(val);
+  if (!sdIsString(val.id)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "id" of type "LegalHoldPolicyAssignedItem"',
+    });
   }
-  throw new BoxSdkError({
-    message: "Can't deserialize LegalHoldPolicyAssignedItem",
-  });
+  const id: string = val.id;
+  return { type: type, id: id } satisfies LegalHoldPolicyAssignedItem;
 }
