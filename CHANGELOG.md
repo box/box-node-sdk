@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.6.0](https://github.com/box/box-node-sdk/compare/v10.5.0...v10.6.0) (2026-04-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* Align `LegalHoldPolicyAssignedItem` with API (box/box-openapi#1554) (box/box-openapi#590) (#1378)
+
+### Bug Fixes
+
+* Align `LegalHoldPolicyAssignedItem` with API (box/box-openapi[#1554](https://github.com/box/box-node-sdk/issues/1554)) (box/box-openapi[#590](https://github.com/box/box-node-sdk/issues/590)) ([#1378](https://github.com/box/box-node-sdk/issues/1378)) ([466d6cf](https://github.com/box/box-node-sdk/commit/466d6cf61113bf5bac8eef14644d047124f6ef03))
+* Correct search content type 'tags' to match API (box/box-openapi[#591](https://github.com/box/box-node-sdk/issues/591)) ([#1382](https://github.com/box/box-node-sdk/issues/1382)) ([6f5d307](https://github.com/box/box-node-sdk/commit/6f5d3071116113ee6e3afe082cfb6554f44c6156))
+
+
+### New Features and Enhancements
+
+* Add `reference` to `AI` and `parent_id` to `HubsItems` (box/box-openapi[#588](https://github.com/box/box-node-sdk/issues/588)) ([#1372](https://github.com/box/box-node-sdk/issues/1372)) ([e55c51f](https://github.com/box/box-node-sdk/commit/e55c51f32227e5d0d4ab7b29a51e996867a39b15))
+* Support Hub Document API (box/box-codegen[#930](https://github.com/box/box-node-sdk/issues/930)) ([#1388](https://github.com/box/box-node-sdk/issues/1388)) ([0b5fbeb](https://github.com/box/box-node-sdk/commit/0b5fbebf18e582a36a17d84c3584ab80f880ea04))
+
 ## [10.5.0](https://github.com/box/box-node-sdk/compare/v10.4.0...v10.5.0) (2026-03-18)
 
 
