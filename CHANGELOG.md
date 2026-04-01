@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.0](https://github.com/box/box-node-sdk/compare/v4.5.0...v4.6.0) (2026-04-01)
+
+
+### Bug Fixes
+
+* **boxsdkgen:** Correct search content type 'tags' to match API (box/box-openapi[#591](https://github.com/box/box-node-sdk/issues/591)) ([#1383](https://github.com/box/box-node-sdk/issues/1383)) ([d6bca72](https://github.com/box/box-node-sdk/commit/d6bca725910f2539bfb8ac984295e0c19b610191))
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** Add `reference` to `AI` and `parent_id` to `HubsItems` (box/box-openapi[#588](https://github.com/box/box-node-sdk/issues/588)) ([#1371](https://github.com/box/box-node-sdk/issues/1371)) ([5c299f0](https://github.com/box/box-node-sdk/commit/5c299f09268c546528c1748ea6e0774312a3f9f0))
+* **boxsdkgen:** Support Hub Document API (box/box-codegen[#930](https://github.com/box/box-node-sdk/issues/930)) ([#1385](https://github.com/box/box-node-sdk/issues/1385)) ([306c96c](https://github.com/box/box-node-sdk/commit/306c96cb988f0091fb146e1a4b15c12284f6d572))
+
 ## [4.5.0](https://github.com/box/box-node-sdk/compare/v4.4.0...v4.5.0) (2026-03-18)
 
 
