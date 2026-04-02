@@ -216,6 +216,9 @@ export type CreateRetentionPolicyRequestBodyDispositionActionField =
   | 'permanently_delete'
   | 'remove_retention'
   | string;
+export type CreateRetentionPolicyRequestBodyRetentionLengthField =
+  | string
+  | number;
 export type CreateRetentionPolicyRequestBodyRetentionTypeField =
   | 'modifiable'
   | 'non_modifiable'
@@ -249,7 +252,7 @@ export interface CreateRetentionPolicyRequestBody {
    * content.  If the policy has a `policy_type` of
    * `indefinite`, the `retention_length` will also be
    * `indefinite`. */
-  readonly retentionLength?: string;
+  readonly retentionLength?: CreateRetentionPolicyRequestBodyRetentionLengthField;
   /**
    * Specifies the retention type:
    *
@@ -338,6 +341,9 @@ export interface GetRetentionPolicyByIdHeadersInput {
     readonly [key: string]: undefined | string;
   };
 }
+export type UpdateRetentionPolicyByIdRequestBodyRetentionLengthField =
+  | string
+  | number;
 export interface UpdateRetentionPolicyByIdRequestBody {
   /**
    * The name for the retention policy. */
@@ -383,7 +389,7 @@ export interface UpdateRetentionPolicyByIdRequestBody {
    * content.  If the policy has a `policy_type` of
    * `indefinite`, the `retention_length` will also be
    * `indefinite`. */
-  readonly retentionLength?: string;
+  readonly retentionLength?: UpdateRetentionPolicyByIdRequestBodyRetentionLengthField;
   /**
    * Used to retire a retention policy.
    *
@@ -774,6 +780,25 @@ export function deserializeCreateRetentionPolicyRequestBodyDispositionActionFiel
       "Can't deserialize CreateRetentionPolicyRequestBodyDispositionActionField",
   });
 }
+export function serializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+  val: any
+): SerializedData {
+  return val;
+}
+export function deserializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+  val: SerializedData
+): CreateRetentionPolicyRequestBodyRetentionLengthField {
+  if (sdIsString(val)) {
+    return val;
+  }
+  if (sdIsNumber(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message:
+      "Can't deserialize CreateRetentionPolicyRequestBodyRetentionLengthField",
+  });
+}
 export function serializeCreateRetentionPolicyRequestBodyRetentionTypeField(
   val: CreateRetentionPolicyRequestBodyRetentionTypeField
 ): SerializedData {
@@ -809,7 +834,12 @@ export function serializeCreateRetentionPolicyRequestBody(
       serializeCreateRetentionPolicyRequestBodyDispositionActionField(
         val.dispositionAction
       ),
-    ['retention_length']: val.retentionLength,
+    ['retention_length']:
+      val.retentionLength == void 0
+        ? val.retentionLength
+        : serializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+            val.retentionLength
+          ),
     ['retention_type']:
       val.retentionType == void 0
         ? val.retentionType
@@ -875,14 +905,14 @@ export function deserializeCreateRetentionPolicyRequestBody(
     deserializeCreateRetentionPolicyRequestBodyDispositionActionField(
       val.disposition_action
     );
-  if (!(val.retention_length == void 0) && !sdIsString(val.retention_length)) {
-    throw new BoxSdkError({
-      message:
-        'Expecting string for "retention_length" of type "CreateRetentionPolicyRequestBody"',
-    });
-  }
-  const retentionLength: undefined | string =
-    val.retention_length == void 0 ? void 0 : val.retention_length;
+  const retentionLength:
+    | undefined
+    | CreateRetentionPolicyRequestBodyRetentionLengthField =
+    val.retention_length == void 0
+      ? void 0
+      : deserializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+          val.retention_length
+        );
   const retentionType:
     | undefined
     | CreateRetentionPolicyRequestBodyRetentionTypeField =
@@ -946,6 +976,25 @@ export function deserializeCreateRetentionPolicyRequestBody(
     customNotificationRecipients: customNotificationRecipients,
   } satisfies CreateRetentionPolicyRequestBody;
 }
+export function serializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+  val: any
+): SerializedData {
+  return val;
+}
+export function deserializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+  val: SerializedData
+): UpdateRetentionPolicyByIdRequestBodyRetentionLengthField {
+  if (sdIsString(val)) {
+    return val;
+  }
+  if (sdIsNumber(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message:
+      "Can't deserialize UpdateRetentionPolicyByIdRequestBodyRetentionLengthField",
+  });
+}
 export function serializeUpdateRetentionPolicyByIdRequestBody(
   val: UpdateRetentionPolicyByIdRequestBody
 ): SerializedData {
@@ -954,7 +1003,12 @@ export function serializeUpdateRetentionPolicyByIdRequestBody(
     ['description']: val.description,
     ['disposition_action']: val.dispositionAction,
     ['retention_type']: val.retentionType,
-    ['retention_length']: val.retentionLength,
+    ['retention_length']:
+      val.retentionLength == void 0
+        ? val.retentionLength
+        : serializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+            val.retentionLength
+          ),
     ['status']: val.status,
     ['can_owner_extend_retention']: val.canOwnerExtendRetention,
     ['are_owners_notified']: val.areOwnersNotified,
@@ -1011,14 +1065,14 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
   }
   const retentionType: undefined | string =
     val.retention_type == void 0 ? void 0 : val.retention_type;
-  if (!(val.retention_length == void 0) && !sdIsString(val.retention_length)) {
-    throw new BoxSdkError({
-      message:
-        'Expecting string for "retention_length" of type "UpdateRetentionPolicyByIdRequestBody"',
-    });
-  }
-  const retentionLength: undefined | string =
-    val.retention_length == void 0 ? void 0 : val.retention_length;
+  const retentionLength:
+    | undefined
+    | UpdateRetentionPolicyByIdRequestBodyRetentionLengthField =
+    val.retention_length == void 0
+      ? void 0
+      : deserializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+          val.retention_length
+        );
   if (!(val.status == void 0) && !sdIsString(val.status)) {
     throw new BoxSdkError({
       message:
