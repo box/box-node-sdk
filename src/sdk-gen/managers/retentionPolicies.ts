@@ -1,17 +1,23 @@
+import { serializeRetentionPolicyMaxExtensionLengthRequestEnum } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
+import { deserializeRetentionPolicyMaxExtensionLengthRequestEnum } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { serializeRetentionPolicies } from '../schemas/retentionPolicies';
 import { deserializeRetentionPolicies } from '../schemas/retentionPolicies';
 import { serializeClientError } from '../schemas/clientError';
 import { deserializeClientError } from '../schemas/clientError';
 import { serializeRetentionPolicy } from '../schemas/retentionPolicy';
 import { deserializeRetentionPolicy } from '../schemas/retentionPolicy';
+import { serializeRetentionPolicyMaxExtensionLengthRequest } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
+import { deserializeRetentionPolicyMaxExtensionLengthRequest } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { serializeUserMini } from '../schemas/userMini';
 import { deserializeUserMini } from '../schemas/userMini';
 import { serializeUserBase } from '../schemas/userBase';
 import { deserializeUserBase } from '../schemas/userBase';
+import { RetentionPolicyMaxExtensionLengthRequestEnum } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { ResponseFormat } from '../networking/fetchOptions';
 import { RetentionPolicies } from '../schemas/retentionPolicies';
 import { ClientError } from '../schemas/clientError';
 import { RetentionPolicy } from '../schemas/retentionPolicy';
+import { RetentionPolicyMaxExtensionLengthRequest } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { UserMini } from '../schemas/userMini';
 import { UserBase } from '../schemas/userBase';
 import { BoxSdkError } from '../box/errors';
@@ -274,6 +280,7 @@ export interface CreateRetentionPolicyRequestBody {
    * Whether the owner of a file will be allowed to
    * extend the retention. */
   readonly canOwnerExtendRetention?: boolean;
+  readonly maxExtensionLength?: RetentionPolicyMaxExtensionLengthRequest;
   /**
    * Whether owner and co-owners of a file are notified
    * when the policy nears expiration. */
@@ -401,6 +408,7 @@ export interface UpdateRetentionPolicyByIdRequestBody {
    * can extend the retention when the original retention
    * duration is about to end. */
   readonly canOwnerExtendRetention?: boolean | null;
+  readonly maxExtensionLength?: RetentionPolicyMaxExtensionLengthRequest;
   /**
    * Determines if owners and co-owners of items
    * under the policy are notified when
@@ -847,6 +855,12 @@ export function serializeCreateRetentionPolicyRequestBody(
             val.retentionType
           ),
     ['can_owner_extend_retention']: val.canOwnerExtendRetention,
+    ['max_extension_length']:
+      val.maxExtensionLength == void 0
+        ? val.maxExtensionLength
+        : serializeRetentionPolicyMaxExtensionLengthRequest(
+            val.maxExtensionLength
+          ),
     ['are_owners_notified']: val.areOwnersNotified,
     ['custom_notification_recipients']:
       val.customNotificationRecipients == void 0
@@ -934,6 +948,14 @@ export function deserializeCreateRetentionPolicyRequestBody(
     val.can_owner_extend_retention == void 0
       ? void 0
       : val.can_owner_extend_retention;
+  const maxExtensionLength:
+    | undefined
+    | RetentionPolicyMaxExtensionLengthRequest =
+    val.max_extension_length == void 0
+      ? void 0
+      : deserializeRetentionPolicyMaxExtensionLengthRequest(
+          val.max_extension_length
+        );
   if (
     !(val.are_owners_notified == void 0) &&
     !sdIsBoolean(val.are_owners_notified)
@@ -972,6 +994,7 @@ export function deserializeCreateRetentionPolicyRequestBody(
     retentionLength: retentionLength,
     retentionType: retentionType,
     canOwnerExtendRetention: canOwnerExtendRetention,
+    maxExtensionLength: maxExtensionLength,
     areOwnersNotified: areOwnersNotified,
     customNotificationRecipients: customNotificationRecipients,
   } satisfies CreateRetentionPolicyRequestBody;
@@ -1011,6 +1034,12 @@ export function serializeUpdateRetentionPolicyByIdRequestBody(
           ),
     ['status']: val.status,
     ['can_owner_extend_retention']: val.canOwnerExtendRetention,
+    ['max_extension_length']:
+      val.maxExtensionLength == void 0
+        ? val.maxExtensionLength
+        : serializeRetentionPolicyMaxExtensionLengthRequest(
+            val.maxExtensionLength
+          ),
     ['are_owners_notified']: val.areOwnersNotified,
     ['custom_notification_recipients']:
       val.customNotificationRecipients == void 0
@@ -1093,6 +1122,14 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
     val.can_owner_extend_retention == void 0
       ? void 0
       : val.can_owner_extend_retention;
+  const maxExtensionLength:
+    | undefined
+    | RetentionPolicyMaxExtensionLengthRequest =
+    val.max_extension_length == void 0
+      ? void 0
+      : deserializeRetentionPolicyMaxExtensionLengthRequest(
+          val.max_extension_length
+        );
   if (
     !(val.are_owners_notified == void 0) &&
     !sdIsBoolean(val.are_owners_notified)
@@ -1131,6 +1168,7 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
     retentionLength: retentionLength,
     status: status,
     canOwnerExtendRetention: canOwnerExtendRetention,
+    maxExtensionLength: maxExtensionLength,
     areOwnersNotified: areOwnersNotified,
     customNotificationRecipients: customNotificationRecipients,
   } satisfies UpdateRetentionPolicyByIdRequestBody;
