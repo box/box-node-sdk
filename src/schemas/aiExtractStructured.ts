@@ -38,7 +38,7 @@ export interface AiExtractStructuredMetadataTemplateField {
 }
 export interface AiExtractStructuredFieldsOptionsField {
   /**
-   * A unique identifier for the field. */
+   * A unique identifier for the option. */
   readonly key: string;
   readonly rawData?: SerializedData;
 }
@@ -56,10 +56,10 @@ export interface AiExtractStructuredFieldsField {
    * The context about the key that may include how to find and format it. */
   readonly prompt?: string;
   /**
-   * The type of the field. It include but is not limited to string, float, date, enum, and multiSelect. */
+   * The type of the field. It can include but is not limited to `string`, `float`, `date`, `enum`, and `multiSelect`. */
   readonly type?: string;
   /**
-   * A list of options for this field. This is most often used in combination with the enum and multiSelect field types. */
+   * A list of options for this field. This is most often used in combination with the `enum` and `multiSelect` field types. */
   readonly options?: readonly AiExtractStructuredFieldsOptionsField[];
   readonly rawData?: SerializedData;
 }
@@ -75,13 +75,13 @@ export interface AiExtractStructured {
    * The fields to be extracted from the provided items.
    * For your request to work, you must provide either `metadata_template` or `fields`, but not both. */
   readonly fields?: readonly AiExtractStructuredFieldsField[];
+  readonly aiAgent?: AiExtractStructuredAgent;
   /**
    * A flag to indicate whether confidence scores for every extracted field should be returned. */
   readonly includeConfidenceScore?: boolean;
   /**
    * A flag to indicate whether references for every extracted field should be returned. */
   readonly includeReference?: boolean;
-  readonly aiAgent?: AiExtractStructuredAgent;
   readonly rawData?: SerializedData;
 }
 export function serializeAiExtractStructuredMetadataTemplateTypeField(
@@ -288,12 +288,12 @@ export function serializeAiExtractStructured(
           ): SerializedData {
             return serializeAiExtractStructuredFieldsField(item);
           }) as readonly any[]),
-    ['include_confidence_score']: val.includeConfidenceScore,
-    ['include_reference']: val.includeReference,
     ['ai_agent']:
       val.aiAgent == void 0
         ? val.aiAgent
         : serializeAiExtractStructuredAgent(val.aiAgent),
+    ['include_confidence_score']: val.includeConfidenceScore,
+    ['include_reference']: val.includeReference,
   };
 }
 export function deserializeAiExtractStructured(
@@ -340,6 +340,10 @@ export function deserializeAiExtractStructured(
             return deserializeAiExtractStructuredFieldsField(itm);
           }) as readonly any[])
         : [];
+  const aiAgent: undefined | AiExtractStructuredAgent =
+    val.ai_agent == void 0
+      ? void 0
+      : deserializeAiExtractStructuredAgent(val.ai_agent);
   if (
     !(val.include_confidence_score == void 0) &&
     !sdIsBoolean(val.include_confidence_score)
@@ -364,16 +368,12 @@ export function deserializeAiExtractStructured(
   }
   const includeReference: undefined | boolean =
     val.include_reference == void 0 ? void 0 : val.include_reference;
-  const aiAgent: undefined | AiExtractStructuredAgent =
-    val.ai_agent == void 0
-      ? void 0
-      : deserializeAiExtractStructuredAgent(val.ai_agent);
   return {
     items: items,
     metadataTemplate: metadataTemplate,
     fields: fields,
+    aiAgent: aiAgent,
     includeConfidenceScore: includeConfidenceScore,
     includeReference: includeReference,
-    aiAgent: aiAgent,
   } satisfies AiExtractStructured;
 }

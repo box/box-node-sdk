@@ -126,6 +126,8 @@ export * from './postOAuth2TokenRefreshAccessToken';
 export * from './realtimeServer';
 export * from './realtimeServers';
 export * from './retentionPolicyBase';
+export * from './retentionPolicyMaxExtensionLengthRequest';
+export * from './retentionPolicyMaxExtensionLengthResponse';
 export * from './retentionPolicyMini';
 export * from './fileVersionRetention';
 export * from './fileVersionRetentions';

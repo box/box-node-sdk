@@ -1,9 +1,15 @@
 import { serializeRetentionPolicyBaseTypeField } from './retentionPolicyBase';
 import { deserializeRetentionPolicyBaseTypeField } from './retentionPolicyBase';
+import { serializeRetentionPolicyMaxExtensionLengthResponseEnum } from './retentionPolicyMaxExtensionLengthResponse';
+import { deserializeRetentionPolicyMaxExtensionLengthResponseEnum } from './retentionPolicyMaxExtensionLengthResponse';
 import { serializeRetentionPolicyBase } from './retentionPolicyBase';
 import { deserializeRetentionPolicyBase } from './retentionPolicyBase';
+import { serializeRetentionPolicyMaxExtensionLengthResponse } from './retentionPolicyMaxExtensionLengthResponse';
+import { deserializeRetentionPolicyMaxExtensionLengthResponse } from './retentionPolicyMaxExtensionLengthResponse';
 import { RetentionPolicyBaseTypeField } from './retentionPolicyBase';
+import { RetentionPolicyMaxExtensionLengthResponseEnum } from './retentionPolicyMaxExtensionLengthResponse';
 import { RetentionPolicyBase } from './retentionPolicyBase';
+import { RetentionPolicyMaxExtensionLengthResponse } from './retentionPolicyMaxExtensionLengthResponse';
 import { BoxSdkError } from '../box/errors';
 import { SerializedData } from '../serialization/json';
 import { sdIsEmpty } from '../serialization/json';
@@ -20,6 +26,7 @@ export class RetentionPolicyMini extends RetentionPolicyBase {
   readonly policyName?: string;
   readonly retentionLength?: string;
   readonly dispositionAction?: RetentionPolicyMiniDispositionActionField;
+  readonly maxExtensionLength?: RetentionPolicyMaxExtensionLengthResponse;
   constructor(fields: RetentionPolicyMini) {
     super(fields);
     if (fields.policyName !== undefined) {
@@ -30,6 +37,9 @@ export class RetentionPolicyMini extends RetentionPolicyBase {
     }
     if (fields.dispositionAction !== undefined) {
       this.dispositionAction = fields.dispositionAction;
+    }
+    if (fields.maxExtensionLength !== undefined) {
+      this.maxExtensionLength = fields.maxExtensionLength;
     }
   }
 }
@@ -74,6 +84,12 @@ export function serializeRetentionPolicyMini(
           : serializeRetentionPolicyMiniDispositionActionField(
               val.dispositionAction,
             ),
+      ['max_extension_length']:
+        val.maxExtensionLength == void 0
+          ? val.maxExtensionLength
+          : serializeRetentionPolicyMaxExtensionLengthResponse(
+              val.maxExtensionLength,
+            ),
     },
   };
 }
@@ -109,6 +125,14 @@ export function deserializeRetentionPolicyMini(
       : deserializeRetentionPolicyMiniDispositionActionField(
           val.disposition_action,
         );
+  const maxExtensionLength:
+    | undefined
+    | RetentionPolicyMaxExtensionLengthResponse =
+    val.max_extension_length == void 0
+      ? void 0
+      : deserializeRetentionPolicyMaxExtensionLengthResponse(
+          val.max_extension_length,
+        );
   if (val.id == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "id" of type "RetentionPolicyMini" to be defined',
@@ -131,6 +155,7 @@ export function deserializeRetentionPolicyMini(
     policyName: policyName,
     retentionLength: retentionLength,
     dispositionAction: dispositionAction,
+    maxExtensionLength: maxExtensionLength,
     id: id,
     type: type,
   } satisfies RetentionPolicyMini;
