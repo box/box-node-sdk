@@ -4,6 +4,10 @@ import { serializeRetentionPolicyBase } from './retentionPolicyBase';
 import { deserializeRetentionPolicyBase } from './retentionPolicyBase';
 import { serializeRetentionPolicyMiniDispositionActionField } from './retentionPolicyMini';
 import { deserializeRetentionPolicyMiniDispositionActionField } from './retentionPolicyMini';
+import { serializeRetentionPolicyMaxExtensionLengthResponseEnum } from './retentionPolicyMaxExtensionLengthResponse';
+import { deserializeRetentionPolicyMaxExtensionLengthResponseEnum } from './retentionPolicyMaxExtensionLengthResponse';
+import { serializeRetentionPolicyMaxExtensionLengthResponse } from './retentionPolicyMaxExtensionLengthResponse';
+import { deserializeRetentionPolicyMaxExtensionLengthResponse } from './retentionPolicyMaxExtensionLengthResponse';
 import { serializeRetentionPolicyMini } from './retentionPolicyMini';
 import { deserializeRetentionPolicyMini } from './retentionPolicyMini';
 import { serializeUserMini } from './userMini';
@@ -13,6 +17,8 @@ import { deserializeDateTime } from '../internal/utils';
 import { RetentionPolicyBaseTypeField } from './retentionPolicyBase';
 import { RetentionPolicyBase } from './retentionPolicyBase';
 import { RetentionPolicyMiniDispositionActionField } from './retentionPolicyMini';
+import { RetentionPolicyMaxExtensionLengthResponseEnum } from './retentionPolicyMaxExtensionLengthResponse';
+import { RetentionPolicyMaxExtensionLengthResponse } from './retentionPolicyMaxExtensionLengthResponse';
 import { RetentionPolicyMini } from './retentionPolicyMini';
 import { UserMini } from './userMini';
 import { BoxSdkError } from '../box/errors';
@@ -364,6 +370,14 @@ export function deserializeRetentionPolicy(
       : deserializeRetentionPolicyMiniDispositionActionField(
           val.disposition_action,
         );
+  const maxExtensionLength:
+    | undefined
+    | RetentionPolicyMaxExtensionLengthResponse =
+    val.max_extension_length == void 0
+      ? void 0
+      : deserializeRetentionPolicyMaxExtensionLengthResponse(
+          val.max_extension_length,
+        );
   if (val.id == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "id" of type "RetentionPolicy" to be defined',
@@ -397,6 +411,7 @@ export function deserializeRetentionPolicy(
     policyName: policyName,
     retentionLength: retentionLength,
     dispositionAction: dispositionAction,
+    maxExtensionLength: maxExtensionLength,
     id: id,
     type: type,
   } satisfies RetentionPolicy;
