@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.7.0](https://github.com/box/box-node-sdk/compare/v4.6.0...v4.7.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* **boxsdkgen:** Update `retentionLength` field to accept both string and number (box/box-codegen[#932](https://github.com/box/box-node-sdk/issues/932)) ([#1396](https://github.com/box/box-node-sdk/issues/1396)) ([556f4a6](https://github.com/box/box-node-sdk/commit/556f4a6244e8a754c9c332da4b04dd548a57c631))
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** Add `max_extension_length` field to Retention Policies (box/box-openapi[#593](https://github.com/box/box-node-sdk/issues/593)) ([#1412](https://github.com/box/box-node-sdk/issues/1412)) ([a9a3fce](https://github.com/box/box-node-sdk/commit/a9a3fce3432bf6e89e759123b52f43b2e174360d))
+
 ## [4.6.0](https://github.com/box/box-node-sdk/compare/v4.5.0...v4.6.0) (2026-04-01)
 
 
