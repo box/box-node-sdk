@@ -191,6 +191,7 @@ const client = new BoxClient({ auth, networkSession });
 
 How timeout handling works:
 
+- The SDK does not apply any timeout by default. Without explicit configuration, requests will wait indefinitely for a response.
 - The SDK applies timeout only when `timeoutMs` is provided and greater than `0`.
 - To disable SDK timeout handling, set `timeoutMs` to `0` (or a negative value), or omit `timeoutMs`.
 - On timeout, the request is aborted and treated as a network error (`Connection timeout after <timeoutMs>ms`); if retries are exhausted, the SDK throws `BoxSdkError`.
