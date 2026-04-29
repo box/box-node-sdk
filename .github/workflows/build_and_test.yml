@@ -45,6 +45,7 @@ jobs:
           SLACK_AUTOMATION_USER_ID: ${{ secrets.SLACK_AUTOMATION_USER_ID }}
           SLACK_ORG_ID: ${{ secrets.SLACK_ORG_ID }}
           SLACK_PARTNER_ITEM_ID: ${{ secrets.SLACK_PARTNER_ITEM_ID }}
+          AUTOMATE_WORKFLOW_FOLDER_ID: ${{ secrets.AUTOMATE_WORKFLOW_FOLDER_ID }}
       - name: Smoke tests
         if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'codegen-release') }}
         run: npm run test -- src/test/auth.test.ts src/test/files.test.ts src/test/downloads.test.ts src/test/uploads.test.ts

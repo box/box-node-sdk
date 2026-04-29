@@ -39,4 +39,5 @@ export const testEnvList = [
   'SLACK_AUTOMATION_USER_ID',
   'SLACK_ORG_ID',
   'SLACK_PARTNER_ITEM_ID',
+  'AUTOMATE_WORKFLOW_FOLDER_ID',
 ];

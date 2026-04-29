@@ -77,6 +77,7 @@ jobs:
           SLACK_AUTOMATION_USER_ID: ${{ secrets.SLACK_AUTOMATION_USER_ID }}
           SLACK_ORG_ID: ${{ secrets.SLACK_ORG_ID }}
           SLACK_PARTNER_ITEM_ID: ${{ secrets.SLACK_PARTNER_ITEM_ID }}
+          AUTOMATE_WORKFLOW_FOLDER_ID: ${{ secrets.AUTOMATE_WORKFLOW_FOLDER_ID }}
       - name: Smoke Tests
         if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'codegen-release') }}
         run: |
