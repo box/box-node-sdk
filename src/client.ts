@@ -85,6 +85,7 @@ import { HubDocumentManager } from './managers/hubDocument';
 import { ShieldListsManager } from './managers/shieldLists';
 import { ArchivesManager } from './managers/archives';
 import { ExternalUsersManager } from './managers/externalUsers';
+import { AutomateWorkflowsManager } from './managers/automateWorkflows';
 import { Authentication } from './networking/auth';
 import { NetworkSession } from './networking/network';
 import { BoxSdkError } from './box/errors';
@@ -190,6 +191,7 @@ export class BoxClient {
   readonly shieldLists: ShieldListsManager;
   readonly archives: ArchivesManager;
   readonly externalUsers: ExternalUsersManager;
+  readonly automateWorkflows: AutomateWorkflowsManager;
   constructor(
     fields: Omit<
       BoxClient,
@@ -276,6 +278,7 @@ export class BoxClient {
       | 'shieldLists'
       | 'archives'
       | 'externalUsers'
+      | 'automateWorkflows'
       | 'networkSession'
       | 'makeRequest'
       | 'withAsUserHeader'
@@ -630,6 +633,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.externalUsers = new ExternalUsersManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.automateWorkflows = new AutomateWorkflowsManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });
