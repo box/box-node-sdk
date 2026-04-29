@@ -144,7 +144,7 @@
     "node-fetch": "^2.6.3",
     "proxy-agent": "^6.4.0",
     "tslib": "^2.6.2",
-    "uuid": "^9.0.0"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
