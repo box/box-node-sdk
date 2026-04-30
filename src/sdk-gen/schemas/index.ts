@@ -297,3 +297,4 @@ export * from './zipDownload';
 export * from './zipDownloadRequest';
 export * from './zipDownloadStatus';
 export * from './v2025R0';
+export * from './v2026R0';
