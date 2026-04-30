@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.8.0](https://github.com/box/box-node-sdk/compare/v4.7.0...v4.8.0) (2026-04-30)
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** Support Automate API (box/box-openapi[#594](https://github.com/box/box-node-sdk/issues/594)) ([#1432](https://github.com/box/box-node-sdk/issues/1432)) ([010fcdc](https://github.com/box/box-node-sdk/commit/010fcdc947003675403b4acc9d9a1485ee9c4bac))
+
 ## [4.7.0](https://github.com/box/box-node-sdk/compare/v4.6.0...v4.7.0) (2026-04-22)
 
 
