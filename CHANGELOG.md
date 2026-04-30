@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.8.0](https://github.com/box/box-node-sdk/compare/v10.7.0...v10.8.0) (2026-04-30)
+
+
+### New Features and Enhancements
+
+* Automate Public API (box/box-openapi[#594](https://github.com/box/box-node-sdk/issues/594)) ([#1429](https://github.com/box/box-node-sdk/issues/1429)) ([ab49fe5](https://github.com/box/box-node-sdk/commit/ab49fe5d7fcb97d5295d813008f1f1cf113134b8))
+
 ## [10.7.0](https://github.com/box/box-node-sdk/compare/v10.6.0...v10.7.0) (2026-04-22)
 
 
