@@ -16,7 +16,7 @@ export class AiAgentReference {
    * The ID of an Agent. This can be a numeric ID for custom agents (for example, `14031`)
    * or a unique identifier for pre-built agents (for example, `enhanced_extract_agent`
    * for the [Enhanced Extract Agent](https://developer.box.com/guides/box-ai/ai-tutorials/extract-metadata-structured#enhanced-extract-agent)). */
-  readonly id?: string;
+  readonly id!: string;
   readonly rawData?: SerializedData;
   constructor(
     fields: Omit<AiAgentReference, 'type'> &
@@ -41,7 +41,7 @@ export interface AiAgentReferenceInput {
    * The ID of an Agent. This can be a numeric ID for custom agents (for example, `14031`)
    * or a unique identifier for pre-built agents (for example, `enhanced_extract_agent`
    * for the [Enhanced Extract Agent](https://developer.box.com/guides/box-ai/ai-tutorials/extract-metadata-structured#enhanced-extract-agent)). */
-  readonly id?: string;
+  readonly id: string;
   readonly rawData?: SerializedData;
 }
 export function serializeAiAgentReferenceTypeField(
@@ -83,12 +83,17 @@ export function deserializeAiAgentReference(
   const type: AiAgentReferenceTypeField = deserializeAiAgentReferenceTypeField(
     val.type,
   );
-  if (!(val.id == void 0) && !sdIsString(val.id)) {
+  if (val.id == void 0) {
+    throw new BoxSdkError({
+      message: 'Expecting "id" of type "AiAgentReference" to be defined',
+    });
+  }
+  if (!sdIsString(val.id)) {
     throw new BoxSdkError({
       message: 'Expecting string for "id" of type "AiAgentReference"',
     });
   }
-  const id: undefined | string = val.id == void 0 ? void 0 : val.id;
+  const id: string = val.id;
   return { type: type, id: id } satisfies AiAgentReference;
 }
 export function serializeAiAgentReferenceInput(
@@ -114,11 +119,16 @@ export function deserializeAiAgentReferenceInput(
     val.type == void 0
       ? void 0
       : deserializeAiAgentReferenceTypeField(val.type);
-  if (!(val.id == void 0) && !sdIsString(val.id)) {
+  if (val.id == void 0) {
+    throw new BoxSdkError({
+      message: 'Expecting "id" of type "AiAgentReferenceInput" to be defined',
+    });
+  }
+  if (!sdIsString(val.id)) {
     throw new BoxSdkError({
       message: 'Expecting string for "id" of type "AiAgentReferenceInput"',
     });
   }
-  const id: undefined | string = val.id == void 0 ? void 0 : val.id;
+  const id: string = val.id;
   return { type: type, id: id } satisfies AiAgentReferenceInput;
 }
