@@ -455,7 +455,7 @@ export interface CreateMetadataTemplateRequestBodyFieldsField {
    * date-time picker.
    *
    * Additionally, metadata templates support an `enum` field for a basic list
-   * of items, and ` multiSelect` field for a similar list of items where the
+   * of items, and `multiSelect` field for a similar list of items where the
    * user can select more than one value.
    *
    * Metadata taxonomies are also supported as a `taxonomy` field type
@@ -484,6 +484,10 @@ export interface CreateMetadataTemplateRequestBodyFieldsField {
    * The unique key of the metadata taxonomy to use for this taxonomy field.
    * This property is required when the field `type` is set to `taxonomy`. */
   readonly taxonomyKey?: string;
+  /**
+   * The unique ID of the metadata taxonomy to use for this taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly taxonomyId?: string;
   /**
    * The namespace of the metadata taxonomy to use for this taxonomy field.
    * This property is required when the field `type` is set to `taxonomy`. */
@@ -1416,6 +1420,7 @@ export function serializeCreateMetadataTemplateRequestBodyFieldsField(
             );
           }) as readonly any[]),
     ['taxonomyKey']: val.taxonomyKey,
+    ['taxonomyId']: val.taxonomyId,
     ['namespace']: val.namespace,
     ['optionsRules']:
       val.optionsRules == void 0
@@ -1512,6 +1517,14 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsField(
   }
   const taxonomyKey: undefined | string =
     val.taxonomyKey == void 0 ? void 0 : val.taxonomyKey;
+  if (!(val.taxonomyId == void 0) && !sdIsString(val.taxonomyId)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "taxonomyId" of type "CreateMetadataTemplateRequestBodyFieldsField"',
+    });
+  }
+  const taxonomyId: undefined | string =
+    val.taxonomyId == void 0 ? void 0 : val.taxonomyId;
   if (!(val.namespace == void 0) && !sdIsString(val.namespace)) {
     throw new BoxSdkError({
       message:
@@ -1536,6 +1549,7 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsField(
     hidden: hidden,
     options: options,
     taxonomyKey: taxonomyKey,
+    taxonomyId: taxonomyId,
     namespace: namespace,
     optionsRules: optionsRules,
   } satisfies CreateMetadataTemplateRequestBodyFieldsField;
