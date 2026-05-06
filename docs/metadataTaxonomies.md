@@ -529,7 +529,7 @@ See the endpoint docs at
 await client.metadataTaxonomies.getMetadataTemplateFieldOptions(
   namespace,
   metadataTemplateKey,
-  'taxonomy',
+  fieldKey,
 );
 ```
 
