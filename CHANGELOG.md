@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.9.0](https://github.com/box/box-node-sdk/compare/v10.8.0...v10.9.0) (2026-05-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* Mark `id` field of `AIAgentReference` required (box/box-openapi[#1629](https://github.com/box/box-node-sdk/issues/1629)) (box/box-openapi[#595](https://github.com/box/box-node-sdk/issues/595)) ([#1440](https://github.com/box/box-node-sdk/issues/1440)) ([3082fc3](https://github.com/box/box-node-sdk/commit/3082fc30d5e32c1290063a1a5d732c2549a03db3))
+
+### Bug Fixes
+
+* Fix metadata template schema (box/box-openapi[#596](https://github.com/box/box-node-sdk/issues/596)) ([#1441](https://github.com/box/box-node-sdk/issues/1441)) ([be3b952](https://github.com/box/box-node-sdk/commit/be3b952a91329605f4cb7fb2474f039201263d07))
+* Mark `id` field of `AIAgentReference` required (box/box-openapi[#1629](https://github.com/box/box-node-sdk/issues/1629)) (box/box-openapi[#595](https://github.com/box/box-node-sdk/issues/595)) ([#1440](https://github.com/box/box-node-sdk/issues/1440)) ([3082fc3](https://github.com/box/box-node-sdk/commit/3082fc30d5e32c1290063a1a5d732c2549a03db3))
+
 ## [10.8.0](https://github.com/box/box-node-sdk/compare/v10.7.0...v10.8.0) (2026-04-30)
 
 
