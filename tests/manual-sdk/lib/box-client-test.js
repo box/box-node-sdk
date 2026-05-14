@@ -170,6 +170,84 @@ describe('box-client', function () {
       return client._makeRequest({});
     });
 
+    it('should attach bundle info in X-Box-UA header when NPM_BOX_VERSION env var is set', function () {
+      var originalEnvValue = process.env.NPM_BOX_VERSION;
+      process.env.NPM_BOX_VERSION = '1.2.3';
+
+      sandbox
+        .stub(apiSessionFake, 'getAccessToken')
+        .returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+
+      var expectedHeader = `agent=box-node-sdk/${pkg.version}; env=Node/${process.version.slice(1)}; bundle=box/1.2.3`;
+
+      sandbox
+        .mock(requestManagerFake)
+        .expects('makeRequest')
+        .withArgs({
+          headers: sinon.match({
+            'X-Box-UA': expectedHeader,
+          }),
+        })
+        .returns(Promise.resolve(fakeOKResponse));
+
+      var promise = basicClient._makeRequest({});
+
+      // Clean up after the promise completes
+      return promise.then(function() {
+        if (originalEnvValue !== undefined) {
+          process.env.NPM_BOX_VERSION = originalEnvValue;
+        } else {
+          delete process.env.NPM_BOX_VERSION;
+        }
+      }).catch(function(err) {
+        if (originalEnvValue !== undefined) {
+          process.env.NPM_BOX_VERSION = originalEnvValue;
+        } else {
+          delete process.env.NPM_BOX_VERSION;
+        }
+        throw err;
+      });
+    });
+
+    it('should attach bundle info in X-Box-UA header when __BOX_PACKAGE_VERSION global is set', function () {
+      var originalGlobalValue = globalThis.__BOX_PACKAGE_VERSION;
+      globalThis.__BOX_PACKAGE_VERSION = '2.3.4';
+
+      sandbox
+        .stub(apiSessionFake, 'getAccessToken')
+        .returns(Promise.resolve(FAKE_ACCESS_TOKEN));
+
+      var expectedHeader = `agent=box-node-sdk/${pkg.version}; env=Node/${process.version.slice(1)}; bundle=box/2.3.4`;
+
+      sandbox
+        .mock(requestManagerFake)
+        .expects('makeRequest')
+        .withArgs({
+          headers: sinon.match({
+            'X-Box-UA': expectedHeader,
+          }),
+        })
+        .returns(Promise.resolve(fakeOKResponse));
+
+      var promise = basicClient._makeRequest({});
+
+      // Clean up after the promise completes
+      return promise.then(function() {
+        if (originalGlobalValue !== undefined) {
+          globalThis.__BOX_PACKAGE_VERSION = originalGlobalValue;
+        } else {
+          delete globalThis.__BOX_PACKAGE_VERSION;
+        }
+      }).catch(function(err) {
+        if (originalGlobalValue !== undefined) {
+          globalThis.__BOX_PACKAGE_VERSION = originalGlobalValue;
+        } else {
+          delete globalThis.__BOX_PACKAGE_VERSION;
+        }
+        throw err;
+      });
+    });
+
     it('should not overwrite the "BoxAPI" header when it already exists', function () {
       var explicitBoxApiHeader =
           'shared_link=box.com/alreadyset&shared_link_password=456',

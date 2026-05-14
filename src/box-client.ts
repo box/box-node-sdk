@@ -172,6 +172,25 @@ function getFullURL(defaultBasePath: string, url: string) {
 }
 
 /**
+ * Get the box bundle version from environment or global variable
+ * @returns {string|null} The bundle version or null if not found
+ */
+function getBoxBundleVersion(): string | null {
+  if (typeof process !== 'undefined' && process.env?.NPM_BOX_VERSION) {
+    return process.env.NPM_BOX_VERSION;
+  }
+
+  if (
+    typeof globalThis !== 'undefined' &&
+    (globalThis as any).__BOX_PACKAGE_VERSION
+  ) {
+    return (globalThis as any).__BOX_PACKAGE_VERSION;
+  }
+
+  return null;
+}
+
+/**
  * Construct the X-Box-UA header to send analytics identifiers
  * @param {Object} [client] Analytics client information
  * @returns {string} The header value
@@ -184,6 +203,12 @@ function constructBoxUAHeader(client: any /* FIXME */) {
 
   if (client) {
     analyticsIdentifiers.client = `${client.name}/${client.version}`;
+  }
+
+  // Add bundle information if box-node-sdk is used through npm-box meta-package
+  const bundleVersion = getBoxBundleVersion();
+  if (bundleVersion) {
+    analyticsIdentifiers['bundle'] = `box/${bundleVersion}`;
   }
 
   return Object.keys(analyticsIdentifiers)
