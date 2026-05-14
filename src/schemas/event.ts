@@ -39,9 +39,15 @@ export type EventEventTypeField =
   | 'ADD_DEVICE_ASSOCIATION'
   | 'ADD_LOGIN_ACTIVITY_DEVICE'
   | 'ADMIN_LOGIN'
+  | 'AI_SECURITY_DETECTION'
+  | 'ANNOTATIONV2_CREATE'
+  | 'ANNOTATIONV2_DELETE'
+  | 'ANNOTATIONV2_EDIT'
   | 'APPLICATION_CREATED'
   | 'APPLICATION_PUBLIC_KEY_ADDED'
   | 'APPLICATION_PUBLIC_KEY_DELETED'
+  | 'BOX_AI_USER_FAILED_REQUEST'
+  | 'BOX_AI_USER_REQUEST'
   | 'CHANGE_ADMIN_ROLE'
   | 'CHANGE_FOLDER_PERMISSION'
   | 'COLLABORATION_ACCEPT'
@@ -53,9 +59,18 @@ export type EventEventTypeField =
   | 'COLLAB_INVITE_COLLABORATOR'
   | 'COLLAB_REMOVE_COLLABORATOR'
   | 'COLLAB_ROLE_CHANGE'
+  | 'COLLECTION_CREATE'
+  | 'COLLECTION_DELETE'
+  | 'COLLECTION_ITEM_CREATE'
+  | 'COLLECTION_ITEM_DELETE'
+  | 'COLLECTION_ITEM_UPDATE'
+  | 'COLLECTION_UPDATE'
   | 'COMMENT_CREATE'
   | 'COMMENT_DELETE'
   | 'CONTENT_ACCESS'
+  | 'CONTENT_RECOVERY_REPORT_CREATE'
+  | 'CONTENT_RECOVERY_REPORT_DELETE'
+  | 'CONTENT_RECOVERY_REPORT_INITIATE'
   | 'CONTENT_WORKFLOW_ABNORMAL_DOWNLOAD_ACTIVITY'
   | 'CONTENT_WORKFLOW_AUTOMATION_ADD'
   | 'CONTENT_WORKFLOW_AUTOMATION_DELETE'
@@ -68,29 +83,38 @@ export type EventEventTypeField =
   | 'DELETE'
   | 'DELETE_USER'
   | 'DEVICE_TRUST_CHECK_FAILED'
+  | 'DISABLE_MULTI_FACTOR_AUTH'
   | 'DOWNLOAD'
   | 'EDIT'
   | 'EDIT_USER'
-  | 'EDR_CROWDSTRIKE_DEVICE_DETECTED'
-  | 'EDR_CROWDSTRIKE_NO_BOX_TOOLS'
-  | 'EDR_CROWDSTRIKE_BOX_TOOLS_OUTDATED'
-  | 'EDR_CROWDSTRIKE_DRIVE_OUTDATED'
   | 'EDR_CROWDSTRIKE_ACCESS_ALLOWED_NO_CROWDSTRIKE_DEVICE'
   | 'EDR_CROWDSTRIKE_ACCESS_REVOKED'
+  | 'EDR_CROWDSTRIKE_BOX_TOOLS_OUTDATED'
+  | 'EDR_CROWDSTRIKE_DEVICE_DETECTED'
+  | 'EDR_CROWDSTRIKE_DRIVE_OUTDATED'
+  | 'EDR_CROWDSTRIKE_NO_BOX_TOOLS'
   | 'EMAIL_ALIAS_CONFIRM'
   | 'EMAIL_ALIAS_REMOVE'
+  | 'ENABLE_MULTI_FACTOR_AUTH'
   | 'ENABLE_TWO_FACTOR_AUTH'
   | 'ENTERPRISE_APP_AUTHORIZATION_UPDATE'
+  | 'EXTERNAL_COLLAB_SECURITY_SETTINGS'
   | 'FAILED_LOGIN'
   | 'FILE_MARKED_MALICIOUS'
   | 'FILE_WATERMARKED_DOWNLOAD'
   | 'GROUP_ADD_ITEM'
   | 'GROUP_ADD_USER'
+  | 'GROUP_ADMIN_CREATED'
+  | 'GROUP_ADMIN_DELETED'
+  | 'GROUP_ADMIN_PERMISSIONS_UPDATED'
   | 'GROUP_CREATION'
   | 'GROUP_DELETION'
   | 'GROUP_EDITED'
   | 'GROUP_REMOVE_ITEM'
   | 'GROUP_REMOVE_USER'
+  | 'ITEM_ASSOCIATION_CREATED'
+  | 'ITEM_ASSOCIATION_DELETED'
+  | 'ITEM_ASSOCIATION_UPDATED'
   | 'ITEM_COPY'
   | 'ITEM_CREATE'
   | 'ITEM_DOWNLOAD'
@@ -129,19 +153,35 @@ export type EventEventTypeField =
   | 'METADATA_TEMPLATE_UPDATE'
   | 'MOVE'
   | 'NEW_USER'
+  | 'OAUTH2_ACCESS_TOKEN_REVOKE'
   | 'PREVIEW'
   | 'REMOVE_DEVICE_ASSOCIATION'
   | 'REMOVE_LOGIN_ACTIVITY_DEVICE'
   | 'RENAME'
   | 'RETENTION_POLICY_ASSIGNMENT_ADD'
   | 'SHARE'
+  | 'SHARED_LINK_REDIRECT_OUT_OF_SHARED_CONTEXT'
   | 'SHARED_LINK_SEND'
   | 'SHARE_EXPIRATION'
+  | 'SHIELD_ACCESS_POLICY_CREATED'
+  | 'SHIELD_ACCESS_POLICY_DELETED'
+  | 'SHIELD_ACCESS_POLICY_UPDATED'
   | 'SHIELD_ALERT'
+  | 'SHIELD_DOWNLOAD_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED_MISSING_JUSTIFICATION'
   | 'SHIELD_EXTERNAL_COLLAB_INVITE_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_INVITE_BLOCKED_MISSING_JUSTIFICATION'
+  | 'SHIELD_EXTERNAL_COLLAB_INVITE_JUSTIFIED'
+  | 'SHIELD_INFORMATION_BARRIER_COLLAB_BLOCKED'
+  | 'SHIELD_INFORMATION_BARRIER_DISABLED'
+  | 'SHIELD_INFORMATION_BARRIER_ENABLED'
+  | 'SHIELD_INFORMATION_BARRIER_GROUP_ADD_USER_BLOCKED'
+  | 'SHIELD_INFORMATION_BARRIER_ITEM_COPY_BLOCKED'
+  | 'SHIELD_INFORMATION_BARRIER_ITEM_MOVE_BLOCKED'
+  | 'SHIELD_INFORMATION_BARRIER_ITEM_OWNER_TRANSFER_BLOCKED'
+  | 'SHIELD_INFORMATION_BARRIER_PENDING'
+  | 'SHIELD_INFORMATION_BARRIER_SHARED_ITEM_ACCESS_BLOCKED'
   | 'SHIELD_JUSTIFICATION_APPROVAL'
   | 'SHIELD_SHARED_LINK_ACCESS_BLOCKED'
   | 'SHIELD_SHARED_LINK_STATUS_RESTRICTED_ON_CREATE'
@@ -155,6 +195,7 @@ export type EventEventTypeField =
   | 'SIGN_DOCUMENT_EXPIRED'
   | 'SIGN_DOCUMENT_SIGNED'
   | 'SIGN_DOCUMENT_VIEWED_BY_SIGNED'
+  | 'SIGN_DOCUMENT_VIEWED_BY_SIGNER'
   | 'SIGNER_DOWNLOADED'
   | 'SIGNER_FORWARDED'
   | 'STORAGE_EXPIRATION'
@@ -231,6 +272,18 @@ export function deserializeEventEventTypeField(
   if (val == 'ADMIN_LOGIN') {
     return val;
   }
+  if (val == 'AI_SECURITY_DETECTION') {
+    return val;
+  }
+  if (val == 'ANNOTATIONV2_CREATE') {
+    return val;
+  }
+  if (val == 'ANNOTATIONV2_DELETE') {
+    return val;
+  }
+  if (val == 'ANNOTATIONV2_EDIT') {
+    return val;
+  }
   if (val == 'APPLICATION_CREATED') {
     return val;
   }
@@ -238,6 +291,12 @@ export function deserializeEventEventTypeField(
     return val;
   }
   if (val == 'APPLICATION_PUBLIC_KEY_DELETED') {
+    return val;
+  }
+  if (val == 'BOX_AI_USER_FAILED_REQUEST') {
+    return val;
+  }
+  if (val == 'BOX_AI_USER_REQUEST') {
     return val;
   }
   if (val == 'CHANGE_ADMIN_ROLE') {
@@ -273,6 +332,24 @@ export function deserializeEventEventTypeField(
   if (val == 'COLLAB_ROLE_CHANGE') {
     return val;
   }
+  if (val == 'COLLECTION_CREATE') {
+    return val;
+  }
+  if (val == 'COLLECTION_DELETE') {
+    return val;
+  }
+  if (val == 'COLLECTION_ITEM_CREATE') {
+    return val;
+  }
+  if (val == 'COLLECTION_ITEM_DELETE') {
+    return val;
+  }
+  if (val == 'COLLECTION_ITEM_UPDATE') {
+    return val;
+  }
+  if (val == 'COLLECTION_UPDATE') {
+    return val;
+  }
   if (val == 'COMMENT_CREATE') {
     return val;
   }
@@ -280,6 +357,15 @@ export function deserializeEventEventTypeField(
     return val;
   }
   if (val == 'CONTENT_ACCESS') {
+    return val;
+  }
+  if (val == 'CONTENT_RECOVERY_REPORT_CREATE') {
+    return val;
+  }
+  if (val == 'CONTENT_RECOVERY_REPORT_DELETE') {
+    return val;
+  }
+  if (val == 'CONTENT_RECOVERY_REPORT_INITIATE') {
     return val;
   }
   if (val == 'CONTENT_WORKFLOW_ABNORMAL_DOWNLOAD_ACTIVITY') {
@@ -318,6 +404,9 @@ export function deserializeEventEventTypeField(
   if (val == 'DEVICE_TRUST_CHECK_FAILED') {
     return val;
   }
+  if (val == 'DISABLE_MULTI_FACTOR_AUTH') {
+    return val;
+  }
   if (val == 'DOWNLOAD') {
     return val;
   }
@@ -327,22 +416,22 @@ export function deserializeEventEventTypeField(
   if (val == 'EDIT_USER') {
     return val;
   }
-  if (val == 'EDR_CROWDSTRIKE_DEVICE_DETECTED') {
+  if (val == 'EDR_CROWDSTRIKE_ACCESS_ALLOWED_NO_CROWDSTRIKE_DEVICE') {
     return val;
   }
-  if (val == 'EDR_CROWDSTRIKE_NO_BOX_TOOLS') {
+  if (val == 'EDR_CROWDSTRIKE_ACCESS_REVOKED') {
     return val;
   }
   if (val == 'EDR_CROWDSTRIKE_BOX_TOOLS_OUTDATED') {
     return val;
   }
+  if (val == 'EDR_CROWDSTRIKE_DEVICE_DETECTED') {
+    return val;
+  }
   if (val == 'EDR_CROWDSTRIKE_DRIVE_OUTDATED') {
     return val;
   }
-  if (val == 'EDR_CROWDSTRIKE_ACCESS_ALLOWED_NO_CROWDSTRIKE_DEVICE') {
-    return val;
-  }
-  if (val == 'EDR_CROWDSTRIKE_ACCESS_REVOKED') {
+  if (val == 'EDR_CROWDSTRIKE_NO_BOX_TOOLS') {
     return val;
   }
   if (val == 'EMAIL_ALIAS_CONFIRM') {
@@ -351,10 +440,16 @@ export function deserializeEventEventTypeField(
   if (val == 'EMAIL_ALIAS_REMOVE') {
     return val;
   }
+  if (val == 'ENABLE_MULTI_FACTOR_AUTH') {
+    return val;
+  }
   if (val == 'ENABLE_TWO_FACTOR_AUTH') {
     return val;
   }
   if (val == 'ENTERPRISE_APP_AUTHORIZATION_UPDATE') {
+    return val;
+  }
+  if (val == 'EXTERNAL_COLLAB_SECURITY_SETTINGS') {
     return val;
   }
   if (val == 'FAILED_LOGIN') {
@@ -372,6 +467,15 @@ export function deserializeEventEventTypeField(
   if (val == 'GROUP_ADD_USER') {
     return val;
   }
+  if (val == 'GROUP_ADMIN_CREATED') {
+    return val;
+  }
+  if (val == 'GROUP_ADMIN_DELETED') {
+    return val;
+  }
+  if (val == 'GROUP_ADMIN_PERMISSIONS_UPDATED') {
+    return val;
+  }
   if (val == 'GROUP_CREATION') {
     return val;
   }
@@ -385,6 +489,15 @@ export function deserializeEventEventTypeField(
     return val;
   }
   if (val == 'GROUP_REMOVE_USER') {
+    return val;
+  }
+  if (val == 'ITEM_ASSOCIATION_CREATED') {
+    return val;
+  }
+  if (val == 'ITEM_ASSOCIATION_DELETED') {
+    return val;
+  }
+  if (val == 'ITEM_ASSOCIATION_UPDATED') {
     return val;
   }
   if (val == 'ITEM_COPY') {
@@ -501,6 +614,9 @@ export function deserializeEventEventTypeField(
   if (val == 'NEW_USER') {
     return val;
   }
+  if (val == 'OAUTH2_ACCESS_TOKEN_REVOKE') {
+    return val;
+  }
   if (val == 'PREVIEW') {
     return val;
   }
@@ -519,13 +635,28 @@ export function deserializeEventEventTypeField(
   if (val == 'SHARE') {
     return val;
   }
+  if (val == 'SHARED_LINK_REDIRECT_OUT_OF_SHARED_CONTEXT') {
+    return val;
+  }
   if (val == 'SHARED_LINK_SEND') {
     return val;
   }
   if (val == 'SHARE_EXPIRATION') {
     return val;
   }
+  if (val == 'SHIELD_ACCESS_POLICY_CREATED') {
+    return val;
+  }
+  if (val == 'SHIELD_ACCESS_POLICY_DELETED') {
+    return val;
+  }
+  if (val == 'SHIELD_ACCESS_POLICY_UPDATED') {
+    return val;
+  }
   if (val == 'SHIELD_ALERT') {
+    return val;
+  }
+  if (val == 'SHIELD_DOWNLOAD_BLOCKED') {
     return val;
   }
   if (val == 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED') {
@@ -538,6 +669,36 @@ export function deserializeEventEventTypeField(
     return val;
   }
   if (val == 'SHIELD_EXTERNAL_COLLAB_INVITE_BLOCKED_MISSING_JUSTIFICATION') {
+    return val;
+  }
+  if (val == 'SHIELD_EXTERNAL_COLLAB_INVITE_JUSTIFIED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_COLLAB_BLOCKED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_DISABLED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_ENABLED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_GROUP_ADD_USER_BLOCKED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_ITEM_COPY_BLOCKED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_ITEM_MOVE_BLOCKED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_ITEM_OWNER_TRANSFER_BLOCKED') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_PENDING') {
+    return val;
+  }
+  if (val == 'SHIELD_INFORMATION_BARRIER_SHARED_ITEM_ACCESS_BLOCKED') {
     return val;
   }
   if (val == 'SHIELD_JUSTIFICATION_APPROVAL') {
@@ -577,6 +738,9 @@ export function deserializeEventEventTypeField(
     return val;
   }
   if (val == 'SIGN_DOCUMENT_VIEWED_BY_SIGNED') {
+    return val;
+  }
+  if (val == 'SIGN_DOCUMENT_VIEWED_BY_SIGNER') {
     return val;
   }
   if (val == 'SIGNER_DOWNLOADED') {
