@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.10.0](https://github.com/box/box-node-sdk/compare/v4.9.0...v4.10.0) (2026-05-15)
+
+
+### Bug Fixes
+
+* Bump `uuid` version ([#1464](https://github.com/box/box-node-sdk/issues/1464)) ([162b075](https://github.com/box/box-node-sdk/commit/162b075c19b9c8ebe1e3b8c17a72d3f9b6b09b87))
+
+
+### New Features and Enhancements
+
+* **boxsdk:** Bundle analytics header combined SDK ([#1459](https://github.com/box/box-node-sdk/issues/1459)) ([c09168d](https://github.com/box/box-node-sdk/commit/c09168dfdef9d675ef4934490b51e421a854ed20))
+* **boxsdkgen:** Sanitize request body in `BoxAPIError` (box/box-codegen[#948](https://github.com/box/box-node-sdk/issues/948)) ([#1461](https://github.com/box/box-node-sdk/issues/1461)) ([68ab417](https://github.com/box/box-node-sdk/commit/68ab41727ce9c8846adfdbac85b5cbb7f4164c8a))
+* **boxsdkgen:** Setup bundle analytics header (box/box-codegen[#949](https://github.com/box/box-node-sdk/issues/949)) ([#1454](https://github.com/box/box-node-sdk/issues/1454)) ([10c7f1e](https://github.com/box/box-node-sdk/commit/10c7f1eecfee803c0f22a747d31e2f8f85e251be))
+* **boxsdkgen:** Update events box/box-openapi[#1671](https://github.com/box/box-node-sdk/issues/1671) (box/box-openapi[#597](https://github.com/box/box-node-sdk/issues/597)) ([#1453](https://github.com/box/box-node-sdk/issues/1453)) ([89a9877](https://github.com/box/box-node-sdk/commit/89a9877b01ca6a16b156234baae279ee9910597f))
+
 ## [4.9.0](https://github.com/box/box-node-sdk/compare/v4.8.0...v4.9.0) (2026-05-06)
 
 
