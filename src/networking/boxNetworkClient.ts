@@ -411,6 +411,7 @@ export class BoxNetworkClient implements NetworkClient {
       message: errorMessage,
       timestamp: `${Date.now()}`,
       requestInfo: {
+        contentType: fetchOptions.contentType,
         method: requestInit.method!,
         url: fetchOptions.url,
         queryParams: params,

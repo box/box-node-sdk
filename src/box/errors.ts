@@ -15,6 +15,7 @@ export class BoxSdkError extends GeneratedCodeError {
   }
 }
 export interface RequestInfo {
+  readonly contentType?: string;
   readonly method: string;
   readonly url: string;
   readonly queryParams: {
@@ -46,13 +47,9 @@ export class BoxApiError extends BoxSdkError {
   constructor(
     fields: Pick<
       BoxApiError,
-      | 'message'
-      | 'timestamp'
-      | 'error'
-      | 'requestInfo'
-      | 'responseInfo'
-      | 'dataSanitizer'
-    >,
+      'message' | 'timestamp' | 'error' | 'requestInfo' | 'responseInfo'
+    > &
+      Partial<Pick<BoxApiError, 'dataSanitizer'>>,
   ) {
     super(fields);
     this.name = 'BoxApiError';
@@ -83,7 +80,13 @@ export class BoxApiError extends BoxSdkError {
         url: this.requestInfo.url,
         queryParams: this.requestInfo.queryParams,
         headers: this.dataSanitizer.sanitizeHeaders(this.requestInfo.headers),
-        body: this.requestInfo.body,
+        body:
+          typeof this.requestInfo.body === 'string'
+            ? this.dataSanitizer.sanitizeStringBody(
+                this.requestInfo.body,
+                this.requestInfo.contentType,
+              )
+            : this.requestInfo.body,
       },
       responseInfo: {
         statusCode: this.responseInfo.statusCode,
