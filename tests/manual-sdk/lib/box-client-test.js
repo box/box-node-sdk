@@ -193,20 +193,22 @@ describe('box-client', function () {
       var promise = basicClient._makeRequest({});
 
       // Clean up after the promise completes
-      return promise.then(function() {
-        if (originalEnvValue !== undefined) {
-          process.env.NPM_BOX_VERSION = originalEnvValue;
-        } else {
-          delete process.env.NPM_BOX_VERSION;
-        }
-      }).catch(function(err) {
-        if (originalEnvValue !== undefined) {
-          process.env.NPM_BOX_VERSION = originalEnvValue;
-        } else {
-          delete process.env.NPM_BOX_VERSION;
-        }
-        throw err;
-      });
+      return promise
+        .then(function () {
+          if (originalEnvValue !== undefined) {
+            process.env.NPM_BOX_VERSION = originalEnvValue;
+          } else {
+            delete process.env.NPM_BOX_VERSION;
+          }
+        })
+        .catch(function (err) {
+          if (originalEnvValue !== undefined) {
+            process.env.NPM_BOX_VERSION = originalEnvValue;
+          } else {
+            delete process.env.NPM_BOX_VERSION;
+          }
+          throw err;
+        });
     });
 
     it('should attach bundle info in X-Box-UA header when __BOX_PACKAGE_VERSION global is set', function () {
@@ -232,20 +234,22 @@ describe('box-client', function () {
       var promise = basicClient._makeRequest({});
 
       // Clean up after the promise completes
-      return promise.then(function() {
-        if (originalGlobalValue !== undefined) {
-          globalThis.__BOX_PACKAGE_VERSION = originalGlobalValue;
-        } else {
-          delete globalThis.__BOX_PACKAGE_VERSION;
-        }
-      }).catch(function(err) {
-        if (originalGlobalValue !== undefined) {
-          globalThis.__BOX_PACKAGE_VERSION = originalGlobalValue;
-        } else {
-          delete globalThis.__BOX_PACKAGE_VERSION;
-        }
-        throw err;
-      });
+      return promise
+        .then(function () {
+          if (originalGlobalValue !== undefined) {
+            globalThis.__BOX_PACKAGE_VERSION = originalGlobalValue;
+          } else {
+            delete globalThis.__BOX_PACKAGE_VERSION;
+          }
+        })
+        .catch(function (err) {
+          if (originalGlobalValue !== undefined) {
+            globalThis.__BOX_PACKAGE_VERSION = originalGlobalValue;
+          } else {
+            delete globalThis.__BOX_PACKAGE_VERSION;
+          }
+          throw err;
+        });
     });
 
     it('should not overwrite the "BoxAPI" header when it already exists', function () {
