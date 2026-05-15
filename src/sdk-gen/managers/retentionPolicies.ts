@@ -1,17 +1,23 @@
+import { serializeRetentionPolicyMaxExtensionLengthRequestEnum } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
+import { deserializeRetentionPolicyMaxExtensionLengthRequestEnum } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { serializeRetentionPolicies } from '../schemas/retentionPolicies';
 import { deserializeRetentionPolicies } from '../schemas/retentionPolicies';
 import { serializeClientError } from '../schemas/clientError';
 import { deserializeClientError } from '../schemas/clientError';
 import { serializeRetentionPolicy } from '../schemas/retentionPolicy';
 import { deserializeRetentionPolicy } from '../schemas/retentionPolicy';
+import { serializeRetentionPolicyMaxExtensionLengthRequest } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
+import { deserializeRetentionPolicyMaxExtensionLengthRequest } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { serializeUserMini } from '../schemas/userMini';
 import { deserializeUserMini } from '../schemas/userMini';
 import { serializeUserBase } from '../schemas/userBase';
 import { deserializeUserBase } from '../schemas/userBase';
+import { RetentionPolicyMaxExtensionLengthRequestEnum } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { ResponseFormat } from '../networking/fetchOptions';
 import { RetentionPolicies } from '../schemas/retentionPolicies';
 import { ClientError } from '../schemas/clientError';
 import { RetentionPolicy } from '../schemas/retentionPolicy';
+import { RetentionPolicyMaxExtensionLengthRequest } from '../schemas/retentionPolicyMaxExtensionLengthRequest';
 import { UserMini } from '../schemas/userMini';
 import { UserBase } from '../schemas/userBase';
 import { BoxSdkError } from '../box/errors';
@@ -216,6 +222,9 @@ export type CreateRetentionPolicyRequestBodyDispositionActionField =
   | 'permanently_delete'
   | 'remove_retention'
   | string;
+export type CreateRetentionPolicyRequestBodyRetentionLengthField =
+  | string
+  | number;
 export type CreateRetentionPolicyRequestBodyRetentionTypeField =
   | 'modifiable'
   | 'non_modifiable'
@@ -249,7 +258,7 @@ export interface CreateRetentionPolicyRequestBody {
    * content.  If the policy has a `policy_type` of
    * `indefinite`, the `retention_length` will also be
    * `indefinite`. */
-  readonly retentionLength?: string;
+  readonly retentionLength?: CreateRetentionPolicyRequestBodyRetentionLengthField;
   /**
    * Specifies the retention type:
    *
@@ -271,6 +280,7 @@ export interface CreateRetentionPolicyRequestBody {
    * Whether the owner of a file will be allowed to
    * extend the retention. */
   readonly canOwnerExtendRetention?: boolean;
+  readonly maxExtensionLength?: RetentionPolicyMaxExtensionLengthRequest;
   /**
    * Whether owner and co-owners of a file are notified
    * when the policy nears expiration. */
@@ -338,6 +348,9 @@ export interface GetRetentionPolicyByIdHeadersInput {
     readonly [key: string]: undefined | string;
   };
 }
+export type UpdateRetentionPolicyByIdRequestBodyRetentionLengthField =
+  | string
+  | number;
 export interface UpdateRetentionPolicyByIdRequestBody {
   /**
    * The name for the retention policy. */
@@ -383,7 +396,7 @@ export interface UpdateRetentionPolicyByIdRequestBody {
    * content.  If the policy has a `policy_type` of
    * `indefinite`, the `retention_length` will also be
    * `indefinite`. */
-  readonly retentionLength?: string;
+  readonly retentionLength?: UpdateRetentionPolicyByIdRequestBodyRetentionLengthField;
   /**
    * Used to retire a retention policy.
    *
@@ -395,6 +408,7 @@ export interface UpdateRetentionPolicyByIdRequestBody {
    * can extend the retention when the original retention
    * duration is about to end. */
   readonly canOwnerExtendRetention?: boolean | null;
+  readonly maxExtensionLength?: RetentionPolicyMaxExtensionLengthRequest;
   /**
    * Determines if owners and co-owners of items
    * under the policy are notified when
@@ -774,6 +788,25 @@ export function deserializeCreateRetentionPolicyRequestBodyDispositionActionFiel
       "Can't deserialize CreateRetentionPolicyRequestBodyDispositionActionField",
   });
 }
+export function serializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+  val: any
+): SerializedData {
+  return val;
+}
+export function deserializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+  val: SerializedData
+): CreateRetentionPolicyRequestBodyRetentionLengthField {
+  if (sdIsString(val)) {
+    return val;
+  }
+  if (sdIsNumber(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message:
+      "Can't deserialize CreateRetentionPolicyRequestBodyRetentionLengthField",
+  });
+}
 export function serializeCreateRetentionPolicyRequestBodyRetentionTypeField(
   val: CreateRetentionPolicyRequestBodyRetentionTypeField
 ): SerializedData {
@@ -809,7 +842,12 @@ export function serializeCreateRetentionPolicyRequestBody(
       serializeCreateRetentionPolicyRequestBodyDispositionActionField(
         val.dispositionAction
       ),
-    ['retention_length']: val.retentionLength,
+    ['retention_length']:
+      val.retentionLength == void 0
+        ? val.retentionLength
+        : serializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+            val.retentionLength
+          ),
     ['retention_type']:
       val.retentionType == void 0
         ? val.retentionType
@@ -817,6 +855,12 @@ export function serializeCreateRetentionPolicyRequestBody(
             val.retentionType
           ),
     ['can_owner_extend_retention']: val.canOwnerExtendRetention,
+    ['max_extension_length']:
+      val.maxExtensionLength == void 0
+        ? val.maxExtensionLength
+        : serializeRetentionPolicyMaxExtensionLengthRequest(
+            val.maxExtensionLength
+          ),
     ['are_owners_notified']: val.areOwnersNotified,
     ['custom_notification_recipients']:
       val.customNotificationRecipients == void 0
@@ -875,14 +919,14 @@ export function deserializeCreateRetentionPolicyRequestBody(
     deserializeCreateRetentionPolicyRequestBodyDispositionActionField(
       val.disposition_action
     );
-  if (!(val.retention_length == void 0) && !sdIsString(val.retention_length)) {
-    throw new BoxSdkError({
-      message:
-        'Expecting string for "retention_length" of type "CreateRetentionPolicyRequestBody"',
-    });
-  }
-  const retentionLength: undefined | string =
-    val.retention_length == void 0 ? void 0 : val.retention_length;
+  const retentionLength:
+    | undefined
+    | CreateRetentionPolicyRequestBodyRetentionLengthField =
+    val.retention_length == void 0
+      ? void 0
+      : deserializeCreateRetentionPolicyRequestBodyRetentionLengthField(
+          val.retention_length
+        );
   const retentionType:
     | undefined
     | CreateRetentionPolicyRequestBodyRetentionTypeField =
@@ -904,6 +948,14 @@ export function deserializeCreateRetentionPolicyRequestBody(
     val.can_owner_extend_retention == void 0
       ? void 0
       : val.can_owner_extend_retention;
+  const maxExtensionLength:
+    | undefined
+    | RetentionPolicyMaxExtensionLengthRequest =
+    val.max_extension_length == void 0
+      ? void 0
+      : deserializeRetentionPolicyMaxExtensionLengthRequest(
+          val.max_extension_length
+        );
   if (
     !(val.are_owners_notified == void 0) &&
     !sdIsBoolean(val.are_owners_notified)
@@ -942,9 +994,29 @@ export function deserializeCreateRetentionPolicyRequestBody(
     retentionLength: retentionLength,
     retentionType: retentionType,
     canOwnerExtendRetention: canOwnerExtendRetention,
+    maxExtensionLength: maxExtensionLength,
     areOwnersNotified: areOwnersNotified,
     customNotificationRecipients: customNotificationRecipients,
   } satisfies CreateRetentionPolicyRequestBody;
+}
+export function serializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+  val: any
+): SerializedData {
+  return val;
+}
+export function deserializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+  val: SerializedData
+): UpdateRetentionPolicyByIdRequestBodyRetentionLengthField {
+  if (sdIsString(val)) {
+    return val;
+  }
+  if (sdIsNumber(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message:
+      "Can't deserialize UpdateRetentionPolicyByIdRequestBodyRetentionLengthField",
+  });
 }
 export function serializeUpdateRetentionPolicyByIdRequestBody(
   val: UpdateRetentionPolicyByIdRequestBody
@@ -954,9 +1026,20 @@ export function serializeUpdateRetentionPolicyByIdRequestBody(
     ['description']: val.description,
     ['disposition_action']: val.dispositionAction,
     ['retention_type']: val.retentionType,
-    ['retention_length']: val.retentionLength,
+    ['retention_length']:
+      val.retentionLength == void 0
+        ? val.retentionLength
+        : serializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+            val.retentionLength
+          ),
     ['status']: val.status,
     ['can_owner_extend_retention']: val.canOwnerExtendRetention,
+    ['max_extension_length']:
+      val.maxExtensionLength == void 0
+        ? val.maxExtensionLength
+        : serializeRetentionPolicyMaxExtensionLengthRequest(
+            val.maxExtensionLength
+          ),
     ['are_owners_notified']: val.areOwnersNotified,
     ['custom_notification_recipients']:
       val.customNotificationRecipients == void 0
@@ -1011,14 +1094,14 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
   }
   const retentionType: undefined | string =
     val.retention_type == void 0 ? void 0 : val.retention_type;
-  if (!(val.retention_length == void 0) && !sdIsString(val.retention_length)) {
-    throw new BoxSdkError({
-      message:
-        'Expecting string for "retention_length" of type "UpdateRetentionPolicyByIdRequestBody"',
-    });
-  }
-  const retentionLength: undefined | string =
-    val.retention_length == void 0 ? void 0 : val.retention_length;
+  const retentionLength:
+    | undefined
+    | UpdateRetentionPolicyByIdRequestBodyRetentionLengthField =
+    val.retention_length == void 0
+      ? void 0
+      : deserializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
+          val.retention_length
+        );
   if (!(val.status == void 0) && !sdIsString(val.status)) {
     throw new BoxSdkError({
       message:
@@ -1039,6 +1122,14 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
     val.can_owner_extend_retention == void 0
       ? void 0
       : val.can_owner_extend_retention;
+  const maxExtensionLength:
+    | undefined
+    | RetentionPolicyMaxExtensionLengthRequest =
+    val.max_extension_length == void 0
+      ? void 0
+      : deserializeRetentionPolicyMaxExtensionLengthRequest(
+          val.max_extension_length
+        );
   if (
     !(val.are_owners_notified == void 0) &&
     !sdIsBoolean(val.are_owners_notified)
@@ -1077,6 +1168,7 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
     retentionLength: retentionLength,
     status: status,
     canOwnerExtendRetention: canOwnerExtendRetention,
+    maxExtensionLength: maxExtensionLength,
     areOwnersNotified: areOwnersNotified,
     customNotificationRecipients: customNotificationRecipients,
   } satisfies UpdateRetentionPolicyByIdRequestBody;

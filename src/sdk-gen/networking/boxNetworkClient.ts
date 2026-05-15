@@ -411,6 +411,7 @@ export class BoxNetworkClient implements NetworkClient {
       message: errorMessage,
       timestamp: `${Date.now()}`,
       requestInfo: {
+        contentType: fetchOptions.contentType,
         method: requestInit.method!,
         url: fetchOptions.url,
         queryParams: params,
@@ -433,6 +434,21 @@ export class BoxNetworkClient implements NetworkClient {
   }
 }
 
+function getBoxBundleVersion(): string | null {
+  if (typeof process !== 'undefined' && process.env?.NPM_BOX_VERSION) {
+    return process.env.NPM_BOX_VERSION;
+  }
+
+  if (
+    typeof globalThis !== 'undefined' &&
+    (globalThis as any).__BOX_PACKAGE_VERSION
+  ) {
+    return (globalThis as any).__BOX_PACKAGE_VERSION;
+  }
+
+  return null;
+}
+
 function constructBoxUAHeader() {
   const analyticsIdentifiers = {
     agent: `box-javascript-generated-sdk/${sdkVersion}`,
@@ -440,6 +456,12 @@ function constructBoxUAHeader() {
       ? navigator.userAgent
       : `Node/${process.version.replace('v', '')}`,
   } as Record<string, string>;
+
+  // Add bundle information if box-node-sdk is used through npm-box meta-package
+  const bundleVersion = getBoxBundleVersion();
+  if (bundleVersion) {
+    analyticsIdentifiers['bundle'] = `box/${bundleVersion}`;
+  }
 
   return Object.keys(analyticsIdentifiers)
     .map((k) => `${k}=${analyticsIdentifiers[k]}`)

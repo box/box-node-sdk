@@ -72,6 +72,32 @@ export function sanitizedValue(): string {
   return '---[redacted]---';
 }
 
+export function sanitizeFormEncodedBodyFromString(
+  body: string,
+  keysToSanitize: Record<string, string>
+): string {
+  return body
+    .split('&')
+    .map((parameter) => sanitizeFormEncodedParameter(parameter, keysToSanitize))
+    .join('&');
+}
+
+function sanitizeFormEncodedParameter(
+  parameter: string,
+  keysToSanitize: Record<string, string>
+): string {
+  const separatorIndex = parameter.indexOf('=');
+  if (separatorIndex < 0) {
+    return parameter;
+  }
+
+  const key = parameter.substring(0, separatorIndex);
+  const value = parameter.substring(separatorIndex + 1);
+  const sanitizedParameterValue =
+    key.toLowerCase() in keysToSanitize ? sanitizedValue() : value;
+  return `${key}=${sanitizedParameterValue}`;
+}
+
 /**
  * Sanitize serialized data by replacing sensitive values with a placeholder.
  * @param sd SerializedData to sanitize

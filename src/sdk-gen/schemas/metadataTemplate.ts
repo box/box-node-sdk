@@ -13,8 +13,8 @@ export type MetadataTemplateFieldsTypeField =
   | 'date'
   | 'enum'
   | 'multiSelect'
-  | 'integer'
-  | 'taxonomy';
+  | 'taxonomy'
+  | 'integer';
 export interface MetadataTemplateFieldsOptionsField {
   /**
    * The text value of the option. This represents both the display name of the
@@ -25,6 +25,16 @@ export interface MetadataTemplateFieldsOptionsField {
   readonly id?: string;
   readonly rawData?: SerializedData;
 }
+export interface MetadataTemplateFieldsOptionsRulesField {
+  /**
+   * Whether to allow users to select multiple values. */
+  readonly multiSelect?: boolean;
+  /**
+   * An array of integers defining which levels of the taxonomy are
+   * selectable by users. */
+  readonly selectableLevels?: readonly number[];
+  readonly rawData?: SerializedData;
+}
 export interface MetadataTemplateFieldsField {
   /**
    * The type of field. The basic fields are a `string` field for text, a
@@ -32,8 +42,11 @@ export interface MetadataTemplateFieldsField {
    * date-time picker.
    *
    * Additionally, metadata templates support an `enum` field for a basic list
-   * of items, and ` multiSelect` field for a similar list of items where the
+   * of items, and `multiSelect` field for a similar list of items where the
    * user can select more than one value.
+   *
+   * Metadata taxonomies are also supported as a `taxonomy` field type
+   * with a specific set of additional properties, which describe its structure.
    *
    * **Note**: The `integer` value is deprecated.
    * It is still present in the response,
@@ -58,6 +71,22 @@ export interface MetadataTemplateFieldsField {
    * A list of options for this field. This is used in combination
    * with the `enum` and `multiSelect` field types. */
   readonly options?: readonly MetadataTemplateFieldsOptionsField[];
+  /**
+   * The unique key of the metadata taxonomy to use for this taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly taxonomyKey?: string;
+  /**
+   * The unique ID of the metadata taxonomy to use for this taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly taxonomyId?: string;
+  /**
+   * The namespace of the metadata taxonomy to use for this taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly namespace?: string;
+  /**
+   * An object defining additional rules for the options of the taxonomy field.
+   * This property is required when the field `type` is set to `taxonomy`. */
+  readonly optionsRules?: MetadataTemplateFieldsOptionsRulesField;
   /**
    * The unique ID of the metadata template field. */
   readonly id?: string;
@@ -208,10 +237,10 @@ export function deserializeMetadataTemplateFieldsTypeField(
   if (val == 'multiSelect') {
     return val;
   }
-  if (val == 'integer') {
+  if (val == 'taxonomy') {
     return val;
   }
-  if (val == 'taxonomy') {
+  if (val == 'integer') {
     return val;
   }
   throw new BoxSdkError({
@@ -253,6 +282,60 @@ export function deserializeMetadataTemplateFieldsOptionsField(
   const id: undefined | string = val.id == void 0 ? void 0 : val.id;
   return { key: key, id: id } satisfies MetadataTemplateFieldsOptionsField;
 }
+export function serializeMetadataTemplateFieldsOptionsRulesField(
+  val: MetadataTemplateFieldsOptionsRulesField
+): SerializedData {
+  return {
+    ['multiSelect']: val.multiSelect,
+    ['selectableLevels']:
+      val.selectableLevels == void 0
+        ? val.selectableLevels
+        : (val.selectableLevels.map(function (item: number): SerializedData {
+            return item;
+          }) as readonly any[]),
+  };
+}
+export function deserializeMetadataTemplateFieldsOptionsRulesField(
+  val: SerializedData
+): MetadataTemplateFieldsOptionsRulesField {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "MetadataTemplateFieldsOptionsRulesField"',
+    });
+  }
+  if (!(val.multiSelect == void 0) && !sdIsBoolean(val.multiSelect)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "multiSelect" of type "MetadataTemplateFieldsOptionsRulesField"',
+    });
+  }
+  const multiSelect: undefined | boolean =
+    val.multiSelect == void 0 ? void 0 : val.multiSelect;
+  if (!(val.selectableLevels == void 0) && !sdIsList(val.selectableLevels)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "selectableLevels" of type "MetadataTemplateFieldsOptionsRulesField"',
+    });
+  }
+  const selectableLevels: undefined | readonly number[] =
+    val.selectableLevels == void 0
+      ? void 0
+      : sdIsList(val.selectableLevels)
+        ? (val.selectableLevels.map(function (itm: SerializedData): number {
+            if (!sdIsNumber(itm)) {
+              throw new BoxSdkError({
+                message:
+                  'Expecting number for "MetadataTemplateFieldsOptionsRulesField"',
+              });
+            }
+            return itm;
+          }) as readonly any[])
+        : [];
+  return {
+    multiSelect: multiSelect,
+    selectableLevels: selectableLevels,
+  } satisfies MetadataTemplateFieldsOptionsRulesField;
+}
 export function serializeMetadataTemplateFieldsField(
   val: MetadataTemplateFieldsField
 ): SerializedData {
@@ -270,6 +353,13 @@ export function serializeMetadataTemplateFieldsField(
           ): SerializedData {
             return serializeMetadataTemplateFieldsOptionsField(item);
           }) as readonly any[]),
+    ['taxonomyKey']: val.taxonomyKey,
+    ['taxonomyId']: val.taxonomyId,
+    ['namespace']: val.namespace,
+    ['optionsRules']:
+      val.optionsRules == void 0
+        ? val.optionsRules
+        : serializeMetadataTemplateFieldsOptionsRulesField(val.optionsRules),
     ['id']: val.id,
   };
 }
@@ -347,6 +437,34 @@ export function deserializeMetadataTemplateFieldsField(
             return deserializeMetadataTemplateFieldsOptionsField(itm);
           }) as readonly any[])
         : [];
+  if (!(val.taxonomyKey == void 0) && !sdIsString(val.taxonomyKey)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "taxonomyKey" of type "MetadataTemplateFieldsField"',
+    });
+  }
+  const taxonomyKey: undefined | string =
+    val.taxonomyKey == void 0 ? void 0 : val.taxonomyKey;
+  if (!(val.taxonomyId == void 0) && !sdIsString(val.taxonomyId)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "taxonomyId" of type "MetadataTemplateFieldsField"',
+    });
+  }
+  const taxonomyId: undefined | string =
+    val.taxonomyId == void 0 ? void 0 : val.taxonomyId;
+  if (!(val.namespace == void 0) && !sdIsString(val.namespace)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "namespace" of type "MetadataTemplateFieldsField"',
+    });
+  }
+  const namespace: undefined | string =
+    val.namespace == void 0 ? void 0 : val.namespace;
+  const optionsRules: undefined | MetadataTemplateFieldsOptionsRulesField =
+    val.optionsRules == void 0
+      ? void 0
+      : deserializeMetadataTemplateFieldsOptionsRulesField(val.optionsRules);
   if (!(val.id == void 0) && !sdIsString(val.id)) {
     throw new BoxSdkError({
       message:
@@ -361,6 +479,10 @@ export function deserializeMetadataTemplateFieldsField(
     description: description,
     hidden: hidden,
     options: options,
+    taxonomyKey: taxonomyKey,
+    taxonomyId: taxonomyId,
+    namespace: namespace,
+    optionsRules: optionsRules,
     id: id,
   } satisfies MetadataTemplateFieldsField;
 }

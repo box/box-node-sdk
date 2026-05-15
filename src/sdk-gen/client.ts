@@ -81,9 +81,11 @@ import { EnterpriseConfigurationsManager } from './managers/enterpriseConfigurat
 import { HubsManager } from './managers/hubs';
 import { HubCollaborationsManager } from './managers/hubCollaborations';
 import { HubItemsManager } from './managers/hubItems';
+import { HubDocumentManager } from './managers/hubDocument';
 import { ShieldListsManager } from './managers/shieldLists';
 import { ArchivesManager } from './managers/archives';
 import { ExternalUsersManager } from './managers/externalUsers';
+import { AutomateWorkflowsManager } from './managers/automateWorkflows';
 import { Authentication } from './networking/auth';
 import { NetworkSession } from './networking/network';
 import { BoxSdkError } from './box/errors';
@@ -185,9 +187,11 @@ export class BoxClient {
   readonly hubs: HubsManager;
   readonly hubCollaborations: HubCollaborationsManager;
   readonly hubItems: HubItemsManager;
+  readonly hubDocument: HubDocumentManager;
   readonly shieldLists: ShieldListsManager;
   readonly archives: ArchivesManager;
   readonly externalUsers: ExternalUsersManager;
+  readonly automateWorkflows: AutomateWorkflowsManager;
   constructor(
     fields: Omit<
       BoxClient,
@@ -270,9 +274,11 @@ export class BoxClient {
       | 'hubs'
       | 'hubCollaborations'
       | 'hubItems'
+      | 'hubDocument'
       | 'shieldLists'
       | 'archives'
       | 'externalUsers'
+      | 'automateWorkflows'
       | 'networkSession'
       | 'makeRequest'
       | 'withAsUserHeader'
@@ -614,6 +620,10 @@ export class BoxClient {
       auth: this.auth,
       networkSession: this.networkSession,
     });
+    this.hubDocument = new HubDocumentManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
     this.shieldLists = new ShieldListsManager({
       auth: this.auth,
       networkSession: this.networkSession,
@@ -623,6 +633,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.externalUsers = new ExternalUsersManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.automateWorkflows = new AutomateWorkflowsManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });

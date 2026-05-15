@@ -321,6 +321,8 @@ test('testMetadataTaxonomiesNodes', async function testMetadataTaxonomiesNodes()
     'templateKey',
     getUuid()
   ) as string;
+  const fieldDisplayName: string = 'testTaxonomy123';
+  const fieldKey: string = 'testTaxonomy321';
   const metadataTemplate: MetadataTemplate =
     await client.metadataTemplates.createMetadataTemplate({
       scope: 'enterprise',
@@ -329,8 +331,8 @@ test('testMetadataTaxonomiesNodes', async function testMetadataTaxonomiesNodes()
       fields: [
         {
           type: 'taxonomy' as CreateMetadataTemplateRequestBodyFieldsTypeField,
-          key: 'taxonomy',
-          displayName: 'taxonomy',
+          key: fieldKey,
+          displayName: fieldDisplayName,
           taxonomyKey: taxonomyKey,
           namespace: namespace,
           optionsRules: {
@@ -349,6 +351,33 @@ test('testMetadataTaxonomiesNodes', async function testMetadataTaxonomiesNodes()
   if (!(metadataTemplate.fields!.length == 1)) {
     throw new Error('Assertion failed');
   }
+  if (!(metadataTemplate.fields![0].displayName == fieldDisplayName)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.fields![0].hidden == false)) {
+    throw new Error('Assertion failed');
+  }
+  if (!!(metadataTemplate.fields![0].id == '')) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.fields![0].key == fieldKey)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.fields![0].namespace == namespace)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.fields![0].optionsRules!.multiSelect == true)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.fields![0].optionsRules!.selectableLevels![0] == 1)) {
+    throw new Error('Assertion failed');
+  }
+  if (!!(metadataTemplate.fields![0].taxonomyId == '')) {
+    throw new Error('Assertion failed');
+  }
+  if (!(metadataTemplate.fields![0].taxonomyKey == taxonomyKey)) {
+    throw new Error('Assertion failed');
+  }
   if (!((toString(metadataTemplate.fields![0].type) as string) == 'taxonomy')) {
     throw new Error('Assertion failed');
   }
@@ -356,7 +385,7 @@ test('testMetadataTaxonomiesNodes', async function testMetadataTaxonomiesNodes()
     await client.metadataTaxonomies.getMetadataTemplateFieldOptions(
       namespace,
       metadataTemplateKey,
-      'taxonomy'
+      fieldKey
     );
   if (!(options.entries!.length == 1)) {
     throw new Error('Assertion failed');

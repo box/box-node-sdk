@@ -24,6 +24,9 @@ export interface HubItemOperationResultV2025R0 {
   readonly action?: string;
   readonly item?: HubItemReferenceV2025R0;
   /**
+   * The ID of the parent block the item was added to. */
+  readonly parentId?: string;
+  /**
    * The HTTP status code of the operation. */
   readonly status?: number;
   /**
@@ -40,6 +43,7 @@ export function serializeHubItemOperationResultV2025R0(
       val.item == void 0
         ? val.item
         : serializeHubItemReferenceV2025R0(val.item),
+    ['parent_id']: val.parentId,
     ['status']: val.status,
     ['error']: val.error,
   };
@@ -61,6 +65,14 @@ export function deserializeHubItemOperationResultV2025R0(
   const action: undefined | string = val.action == void 0 ? void 0 : val.action;
   const item: undefined | HubItemReferenceV2025R0 =
     val.item == void 0 ? void 0 : deserializeHubItemReferenceV2025R0(val.item);
+  if (!(val.parent_id == void 0) && !sdIsString(val.parent_id)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "parent_id" of type "HubItemOperationResultV2025R0"',
+    });
+  }
+  const parentId: undefined | string =
+    val.parent_id == void 0 ? void 0 : val.parent_id;
   if (!(val.status == void 0) && !sdIsNumber(val.status)) {
     throw new BoxSdkError({
       message:
@@ -78,6 +90,7 @@ export function deserializeHubItemOperationResultV2025R0(
   return {
     action: action,
     item: item,
+    parentId: parentId,
     status: status,
     error: error,
   } satisfies HubItemOperationResultV2025R0;
