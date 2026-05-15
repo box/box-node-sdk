@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.10.0](https://github.com/box/box-node-sdk/compare/v10.9.0...v10.10.0) (2026-05-15)
+
+
+### Bug Fixes
+
+* Bump `next` and `uuid` versions (box/box-codegen[#950](https://github.com/box/box-node-sdk/issues/950)) ([#1462](https://github.com/box/box-node-sdk/issues/1462)) ([fe77f37](https://github.com/box/box-node-sdk/commit/fe77f376c71afd5fe726cdc4991a1f6e3f0cba6b))
+
+
+### New Features and Enhancements
+
+* Sanitize request body in `BoxAPIError` (box/box-codegen[#948](https://github.com/box/box-node-sdk/issues/948)) ([#1460](https://github.com/box/box-node-sdk/issues/1460)) ([d64ffc2](https://github.com/box/box-node-sdk/commit/d64ffc2309e68a21724c514dc7be63161971ba4a))
+* Setup bundle analytics header (box/box-codegen[#949](https://github.com/box/box-node-sdk/issues/949)) ([#1458](https://github.com/box/box-node-sdk/issues/1458)) ([f00b087](https://github.com/box/box-node-sdk/commit/f00b08726fc8fc2cce2b85ccb3a20107ec76dd38))
+
 ## [10.9.0](https://github.com/box/box-node-sdk/compare/v10.8.0...v10.9.0) (2026-05-06)
 
 
