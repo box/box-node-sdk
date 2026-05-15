@@ -144,7 +144,7 @@
     "node-fetch": "^2.6.3",
     "proxy-agent": "^6.4.0",
     "tslib": "^2.6.2",
-    "uuid": "^9.0.0"
+    "uuid": "^11.1.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
@@ -154,7 +154,7 @@
     "@types/jest": "^29.5.1",
     "@types/node": "*",
     "@types/node-fetch": "2.6.13",
-    "@types/uuid": "^9.0.1",
+    "@types/uuid": "^10.0.0",
     "jest": "^29.5.0",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.5.2",
