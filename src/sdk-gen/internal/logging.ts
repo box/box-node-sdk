@@ -1,6 +1,9 @@
 import { SerializedData } from '../serialization/json';
 import { sanitizeMap } from './utils';
 import { sanitizeSerializedData } from '../serialization/json';
+import { sanitizeFormEncodedBodyFromString } from '../serialization/json';
+import { jsonToSerializedData } from '../serialization/json';
+import { sdToJson } from '../serialization/json';
 export class DataSanitizer {
   readonly keysToSanitize: {
     readonly [key: string]: string;
@@ -21,7 +24,11 @@ export class DataSanitizer {
   constructor(
     fields: Omit<
       DataSanitizer,
-      'keysToSanitize' | 'sanitizeHeaders' | 'sanitizeBody'
+      | 'keysToSanitize'
+      | 'sanitizeHeaders'
+      | 'sanitizeBody'
+      | 'sanitizeFormEncodedBody'
+      | 'sanitizeStringBody'
     >
   ) {}
   /**
@@ -43,6 +50,35 @@ export class DataSanitizer {
    */
   sanitizeBody(body: SerializedData): SerializedData {
     return sanitizeSerializedData(body, this.keysToSanitize);
+  }
+  /**
+   * @param {string} body
+   * @returns {string}
+   */
+  sanitizeFormEncodedBody(body: string): string {
+    return sanitizeFormEncodedBodyFromString(body, this.keysToSanitize);
+  }
+  /**
+   * @param {string} body
+   * @param {string} contentType
+   * @returns {string}
+   */
+  sanitizeStringBody(body: string, contentType?: string): string {
+    if (
+      contentType == 'application/json' ||
+      contentType == 'application/json-patch+json'
+    ) {
+      try {
+        return sdToJson(this.sanitizeBody(jsonToSerializedData(body)));
+      } catch (error) {
+        return body;
+      } finally {
+      }
+    }
+    if (contentType == 'application/x-www-form-urlencoded') {
+      return this.sanitizeFormEncodedBody(body);
+    }
+    return body;
   }
 }
 export interface DataSanitizerInput {}
