@@ -172,6 +172,10 @@ client.users
   .catch((err) => console.log('Got an error!', err));
 ```
 
+> **Important:** The legacy manual SDK does **not** apply a default timeout for most API calls. Only upload requests use a default timeout (`uploadRequestTimeoutMS`, **60 seconds**).
+
+To configure upload timeouts, follow the instructions in [configuration.md](./docs/configuration.md#network-timeouts).
+
 # Authentication
 
 Both the manual and `sdk-gen` modules support multiple authentication methods, including
