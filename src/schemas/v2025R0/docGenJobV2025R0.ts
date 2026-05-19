@@ -28,6 +28,15 @@ export type DocGenJobV2025R0StatusField =
   | 'completed_with_error'
   | 'pending'
   | string;
+export interface DocGenJobV2025R0FailuresField {
+  /**
+   * A list of errors that occurred during document generation. */
+  readonly errors: readonly string[];
+  /**
+   * A list of warnings that occurred during document generation. */
+  readonly warnings: readonly string[];
+  readonly rawData?: SerializedData;
+}
 export class DocGenJobV2025R0 extends DocGenJobBaseV2025R0 {
   readonly batch!: DocGenBatchBaseV2025R0;
   readonly templateFile!: FileReferenceV2025R0;
@@ -36,6 +45,7 @@ export class DocGenJobV2025R0 extends DocGenJobBaseV2025R0 {
   readonly outputFileVersion?: FileVersionBaseV2025R0;
   readonly status!: DocGenJobV2025R0StatusField;
   readonly outputType!: string;
+  readonly failures?: DocGenJobV2025R0FailuresField | null;
   constructor(fields: DocGenJobV2025R0) {
     super(fields);
     if (fields.batch !== undefined) {
@@ -58,6 +68,9 @@ export class DocGenJobV2025R0 extends DocGenJobBaseV2025R0 {
     }
     if (fields.outputType !== undefined) {
       this.outputType = fields.outputType;
+    }
+    if (fields.failures !== undefined) {
+      this.failures = fields.failures;
     }
   }
 }
@@ -91,6 +104,75 @@ export function deserializeDocGenJobV2025R0StatusField(
     message: "Can't deserialize DocGenJobV2025R0StatusField",
   });
 }
+export function serializeDocGenJobV2025R0FailuresField(
+  val: DocGenJobV2025R0FailuresField,
+): SerializedData {
+  return {
+    ['errors']: val.errors.map(function (item: string): SerializedData {
+      return item;
+    }) as readonly any[],
+    ['warnings']: val.warnings.map(function (item: string): SerializedData {
+      return item;
+    }) as readonly any[],
+  };
+}
+export function deserializeDocGenJobV2025R0FailuresField(
+  val: SerializedData,
+): DocGenJobV2025R0FailuresField {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "DocGenJobV2025R0FailuresField"',
+    });
+  }
+  if (val.errors == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "errors" of type "DocGenJobV2025R0FailuresField" to be defined',
+    });
+  }
+  if (!sdIsList(val.errors)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "errors" of type "DocGenJobV2025R0FailuresField"',
+    });
+  }
+  const errors: readonly string[] = sdIsList(val.errors)
+    ? (val.errors.map(function (itm: SerializedData): string {
+        if (!sdIsString(itm)) {
+          throw new BoxSdkError({
+            message: 'Expecting string for "DocGenJobV2025R0FailuresField"',
+          });
+        }
+        return itm;
+      }) as readonly any[])
+    : [];
+  if (val.warnings == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "warnings" of type "DocGenJobV2025R0FailuresField" to be defined',
+    });
+  }
+  if (!sdIsList(val.warnings)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "warnings" of type "DocGenJobV2025R0FailuresField"',
+    });
+  }
+  const warnings: readonly string[] = sdIsList(val.warnings)
+    ? (val.warnings.map(function (itm: SerializedData): string {
+        if (!sdIsString(itm)) {
+          throw new BoxSdkError({
+            message: 'Expecting string for "DocGenJobV2025R0FailuresField"',
+          });
+        }
+        return itm;
+      }) as readonly any[])
+    : [];
+  return {
+    errors: errors,
+    warnings: warnings,
+  } satisfies DocGenJobV2025R0FailuresField;
+}
 export function serializeDocGenJobV2025R0(
   val: DocGenJobV2025R0,
 ): SerializedData {
@@ -118,6 +200,10 @@ export function serializeDocGenJobV2025R0(
           : serializeFileVersionBaseV2025R0(val.outputFileVersion),
       ['status']: serializeDocGenJobV2025R0StatusField(val.status),
       ['output_type']: val.outputType,
+      ['failures']:
+        val.failures == void 0
+          ? val.failures
+          : serializeDocGenJobV2025R0FailuresField(val.failures),
     },
   };
 }
@@ -181,6 +267,10 @@ export function deserializeDocGenJobV2025R0(
     });
   }
   const outputType: string = val.output_type;
+  const failures: undefined | DocGenJobV2025R0FailuresField =
+    val.failures == void 0
+      ? void 0
+      : deserializeDocGenJobV2025R0FailuresField(val.failures);
   if (val.id == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "id" of type "DocGenJobV2025R0" to be defined',
@@ -207,6 +297,7 @@ export function deserializeDocGenJobV2025R0(
     outputFileVersion: outputFileVersion,
     status: status,
     outputType: outputType,
+    failures: failures,
     id: id,
     type: type,
   } satisfies DocGenJobV2025R0;
