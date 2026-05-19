@@ -2,6 +2,15 @@
 
 The `BoxSDKNode` is the base object used to configure [client](./client.md).
 
+- [Configure Proxy](#configure-proxy)
+- [Network timeouts](#network-timeouts)
+  - [Default behavior](#default-behavior)
+  - [Timeout for API calls](#timeout-for-api-calls)
+  - [Upload request timeout](#upload-request-timeout)
+- [Configure retries](#configure-retries)
+- [Disable stream PassThrough for streaming responses](#disable-stream-passthrough-for-streaming-responses)
+- [Configure Base URL](#configure-base-url)
+
 ## Configure Proxy 
 
 To set up your proxy, add your proxy settings to the `BoxSDK` object as shown below. You must include the proxy url, which should contain the `protocol`, `url`, and `port`, which in the case below are `http`, `sample.proxyurl.com` and `80` respectively. While the port, username and password are optional, the protocol and url are required. If your proxy does not require authentication, you can set the username and password to null or omit the parameters completely. The supported proxy protocols are `http`, `https`, `socks`, `socks4`, `socks4a`, `socks5`, `socks5h`, `pac+data`, `pac+file`, `pac+ftp`, `pac+http` and `pac+https`.
@@ -18,28 +27,77 @@ let sdk = new BoxSDK({
 });
 ```
 
-## Configure how client retries calls and handles timeouts
+## Network timeouts
 
-You can confugure how many retries, how long to wait between retries or upload timeout:
+The legacy manual SDK uses the [`@cypress/request`](https://www.npmjs.com/package/@cypress/request) library for HTTP calls.
+
+### Default behavior
+
+> **Important:** The legacy manual SDK does **not** apply a default timeout for most API calls. Unless you configure a timeout, requests can wait indefinitely for a connection and response.
+
+The only SDK-specific timeout setting is for **file uploads** (see [Upload request timeout](#upload-request-timeout) below). For all other API calls, use the `request` options described in the next section.
+
+When a configured timeout is exceeded, the request is aborted and the promise rejects with a request error.
+
+### Timeout for API calls
+
+Non-upload API calls use the underlying `@cypress/request` options from the SDK `request` configuration. Set `timeout` (milliseconds) on that object to apply it to every API call made by clients created from this SDK instance.
+
+**At SDK initialization:**
+
+```javascript
+var sdk = new BoxSDK({
+  clientID: 'CLIENT_ID',
+  clientSecret: 'CLIENT_SECRET',
+  request: {
+    timeout: 30000, // 30 seconds
+  },
+});
+```
+
+**Or after initialization with `configure`:**
+
+```javascript
+sdk.configure({
+  request: {
+    timeout: 30000,
+  },
+});
+```
+
+`timeout` follows the [request library `timeout` option](https://github.com/request/request#requestoptions-callback) (a single number is the maximum time to wait for the full request; you can also use an object with `connect` and `socket` limits).
+
+This is separate from `uploadRequestTimeoutMS`, which applies only to upload requests.
+
+### Upload request timeout
+
+Use `uploadRequestTimeoutMS` on the SDK instance via [`configure`](https://github.com/box/box-node-sdk/blob/main/src/box-sdk-node.ts) to limit how long an upload request may run. The default is **`60000` ms** (60 seconds).
+
+```javascript
+sdk = BoxSDKNode.getPreconfiguredInstance(APP_SETTINGS);
+sdk.configure({
+  uploadRequestTimeoutMS: 90000,
+});
+```
+
+## Configure retries
+
+You can configure how many retries and how long to wait between retries:
 
 ```javascript
 sdk = BoxSDKNode.getPreconfiguredInstance(APP_SETTINGS);
 var additonalParams = {
-	numMaxRetries: 3,
-	retryIntervalMS: 3000,
-	uploadRequestTimeoutMS: 90000
+  numMaxRetries: 3,
+  retryIntervalMS: 3000,
 };
 sdk.configure(additonalParams);
 ```
 
-The `numMaxRetries` sets the maximum  number of retries when API request fails. Default value is `5`.
+The `numMaxRetries` sets the maximum number of retries when an API request fails. Default value is `5`.
 
-The `retryIntervalMS` is used to calculate the wait time between retries. It is a number of miliseconds. SDK uses `Exponential backoff` algorithm 
-to calculate the wait time. Default value is `2000` ms.
+The `retryIntervalMS` is used to calculate the wait time between retries. It is a number of milliseconds. The SDK uses an exponential backoff algorithm to calculate the wait time. Default value is `2000` ms.
 
-The `uploadRequestTimeoutMS` sets the timeout after which an upload request is aborted Default value is `60000` ms.
-
-The `configure` method appends config values to existing configuration. So if you want you can configure sdk in several steps:
+The `configure` method appends config values to existing configuration. You can configure the SDK in several steps:
 
 ```javascript
 sdk = BoxSDKNode.getPreconfiguredInstance(APP_SETTINGS);
