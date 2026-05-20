@@ -26,6 +26,7 @@ the SDK are available by topic:
 - [Collaboration allowlist exempt targets](collaborationAllowlistExemptTargets.md)
 - [Collections](collections.md)
 - [Comments](comments.md)
+- [Convert markdown to box note](convertMarkdownToBoxNote.md)
 - [Device pinners](devicePinners.md)
 - [Docgen](docgen.md)
 - [Docgen template](docgenTemplate.md)
