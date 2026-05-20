@@ -17,7 +17,7 @@ type ExpectFunction = {
 declare global {
   interface Window {
     expect: (
-      actual: unknown | (() => unknown | Promise<unknown>),
+      actual: unknown | (() => unknown | Promise<unknown>)
     ) => ExpectFunction;
   }
 }
@@ -25,7 +25,7 @@ declare global {
 export function setupExpect() {
   // @ts-expect-error - Ignore Mocha TestFunction type conflict
   window.expect = function (
-    actual: unknown | (() => unknown | Promise<unknown>),
+    actual: unknown | (() => unknown | Promise<unknown>)
   ): ExpectFunction {
     const assert = (condition: boolean, message: string) => {
       if (!condition) {
@@ -57,30 +57,30 @@ export function setupExpect() {
       toBeInstanceOf: (constructor: new (...args: unknown[]) => unknown) => {
         assert(
           actual instanceof constructor,
-          `Expected instance of ${constructor.name} but got ${actual}`,
+          `Expected instance of ${constructor.name} but got ${actual}`
         );
       },
       toHaveLength: (length: number) => {
         if (typeof actual !== 'string' && !Array.isArray(actual)) {
           throw new Error(
-            'toHaveLength can only be used with strings or arrays',
+            'toHaveLength can only be used with strings or arrays'
           );
         }
         assert(
           actual.length === length,
-          `Expected length ${length} but got ${actual.length}`,
+          `Expected length ${length} but got ${actual.length}`
         );
       },
       toContain: (item: unknown) => {
         if (typeof actual === 'string') {
           assert(
             actual.includes(String(item)),
-            `Expected to contain ${item} but got ${actual}`,
+            `Expected to contain ${item} but got ${actual}`
           );
         } else if (Array.isArray(actual)) {
           assert(
             actual.includes(item),
-            `Expected to contain ${item} but got ${actual}`,
+            `Expected to contain ${item} but got ${actual}`
           );
         } else {
           throw new Error('toContain can only be used with strings or arrays');
@@ -90,8 +90,8 @@ export function setupExpect() {
         assert(
           JSON.stringify(actual) === JSON.stringify(expected),
           `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(
-            actual,
-          )}`,
+            actual
+          )}`
         );
       },
       rejects: {
@@ -113,12 +113,12 @@ export function setupExpect() {
               if (typeof expectedError === 'string') {
                 assert(
                   errorMessage.includes(expectedError),
-                  `Expected error to contain "${expectedError}" but got "${errorMessage}"`,
+                  `Expected error to contain "${expectedError}" but got "${errorMessage}"`
                 );
               } else {
                 assert(
                   expectedError.test(errorMessage),
-                  `Expected error to match ${expectedError} but got "${errorMessage}"`,
+                  `Expected error to match ${expectedError} but got "${errorMessage}"`
                 );
               }
             }

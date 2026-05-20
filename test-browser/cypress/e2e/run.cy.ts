@@ -58,7 +58,7 @@ describe('Run test and report results', () => {
             Passed: ${passedTests}
             Failed: ${failedTests}
             Skipped: ${skippedTests}\n
-          `,
+          `
         );
         cy.get('tr')
           .each(($row) => {

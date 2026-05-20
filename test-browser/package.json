@@ -2,35 +2,28 @@
   "name": "box-node-sdk-browser-test",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "npm run prebuild && next dev --turbopack",
+    "dev": "npm run prebuild && vite",
     "prebuild": "tsx init.ts",
-    "build": "next build",
-    "build:dev": "NODE_ENV=development next build",
+    "build": "npm run prebuild && vite build",
+    "start": "vite preview",
     "build-run": "npm run build && npm run start",
-    "start": "next start",
-    "lint": "next lint",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:run:all": "npm run cypress:run:chrome && npm run cypress:run:firefox",
-    "cypress:run:chrome": "start-server-and-test build-run 3000 'cypress run --browser chrome'",
-    "cypress:run:firefox": "start-server-and-test build-run 3000 'cypress run --browser firefox'"
+    "cypress:run:chrome": "start-server-and-test 'npm run build-run' http://localhost:3000 'cypress run --browser chrome'",
+    "cypress:run:firefox": "start-server-and-test 'npm run build-run' http://localhost:3000 'cypress run --browser firefox'"
   },
   "dependencies": {
-    "box-node-sdk": "file:../",
-    "next": "15.5.18",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "box-node-sdk": "file:../"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "cypress": "^14.5.3",
-    "eslint": "^9",
-    "eslint-config-next": "15.4.10",
     "start-server-and-test": "^2.0.11",
     "tsx": "^4.20.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^6.0.0"
   }
 }

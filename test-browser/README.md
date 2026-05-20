@@ -1,6 +1,6 @@
 # Box TypeScript SDK Gen Browser Test Runner
 
-A browser-based test runner for Box TypeScript SDK, built with Next.js and Cypress.
+A browser-based test runner for Box TypeScript SDK, built with Vite and Cypress.
 
 ## Features
 

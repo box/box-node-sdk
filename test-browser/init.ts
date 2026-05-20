@@ -3,7 +3,7 @@ import fs from 'fs';
 
 const testDir = path.resolve(
   process.cwd(),
-  'node_modules/box-node-sdk/lib-esm/test',
+  'node_modules/box-node-sdk/lib-esm/test'
 );
 const files = fs.readdirSync(testDir);
 
