@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.11.0](https://github.com/box/box-node-sdk/compare/v4.10.0...v4.11.0) (2026-05-20)
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** add failure related fields to `DocGenJob` (box/box-openapi[#598](https://github.com/box/box-node-sdk/issues/598)) ([#1469](https://github.com/box/box-node-sdk/issues/1469)) ([e95d705](https://github.com/box/box-node-sdk/commit/e95d705f12d4921d0da284b90f6a81ecedbcadf2))
+
 ## [4.10.0](https://github.com/box/box-node-sdk/compare/v4.9.0...v4.10.0) (2026-05-15)
 
 
