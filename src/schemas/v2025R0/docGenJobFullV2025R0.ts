@@ -10,6 +10,8 @@ import { serializeFileVersionBaseV2025R0 } from './fileVersionBaseV2025R0';
 import { deserializeFileVersionBaseV2025R0 } from './fileVersionBaseV2025R0';
 import { serializeDocGenJobV2025R0StatusField } from './docGenJobV2025R0';
 import { deserializeDocGenJobV2025R0StatusField } from './docGenJobV2025R0';
+import { serializeDocGenJobV2025R0FailuresField } from './docGenJobV2025R0';
+import { deserializeDocGenJobV2025R0FailuresField } from './docGenJobV2025R0';
 import { serializeDocGenJobV2025R0 } from './docGenJobV2025R0';
 import { deserializeDocGenJobV2025R0 } from './docGenJobV2025R0';
 import { serializeUserBaseV2025R0 } from './userBaseV2025R0';
@@ -22,6 +24,7 @@ import { DocGenBatchBaseV2025R0 } from './docGenBatchBaseV2025R0';
 import { FileReferenceV2025R0 } from './fileReferenceV2025R0';
 import { FileVersionBaseV2025R0 } from './fileVersionBaseV2025R0';
 import { DocGenJobV2025R0StatusField } from './docGenJobV2025R0';
+import { DocGenJobV2025R0FailuresField } from './docGenJobV2025R0';
 import { DocGenJobV2025R0 } from './docGenJobV2025R0';
 import { UserBaseV2025R0 } from './userBaseV2025R0';
 import { EnterpriseReferenceV2025R0 } from './enterpriseReferenceV2025R0';
@@ -170,6 +173,10 @@ export function deserializeDocGenJobFullV2025R0(
     });
   }
   const outputType: string = val.output_type;
+  const failures: undefined | DocGenJobV2025R0FailuresField =
+    val.failures == void 0
+      ? void 0
+      : deserializeDocGenJobV2025R0FailuresField(val.failures);
   if (val.id == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "id" of type "DocGenJobFullV2025R0" to be defined',
@@ -200,6 +207,7 @@ export function deserializeDocGenJobFullV2025R0(
     outputFileVersion: outputFileVersion,
     status: status,
     outputType: outputType,
+    failures: failures,
     id: id,
     type: type,
   } satisfies DocGenJobFullV2025R0;
