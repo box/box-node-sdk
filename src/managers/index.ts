@@ -82,4 +82,4 @@ export * from './shieldLists';
 export * from './archives';
 export * from './externalUsers';
 export * from './automateWorkflows';
-export * from './convertMarkdownToBoxNote';
+export * from './notes';

@@ -91,15 +91,12 @@ export interface CreateNoteConvertV2026R0HeadersInput {
     readonly [key: string]: undefined | string;
   };
 }
-export class ConvertMarkdownToBoxNoteManager {
+export class NotesManager {
   readonly auth?: Authentication;
   readonly networkSession: NetworkSession = new NetworkSession({});
   constructor(
-    fields: Omit<
-      ConvertMarkdownToBoxNoteManager,
-      'networkSession' | 'createNoteConvertV2026R0'
-    > &
-      Partial<Pick<ConvertMarkdownToBoxNoteManager, 'networkSession'>>,
+    fields: Omit<NotesManager, 'networkSession' | 'createNoteConvertV2026R0'> &
+      Partial<Pick<NotesManager, 'networkSession'>>,
   ) {
     if (fields.auth !== undefined) {
       this.auth = fields.auth;
@@ -161,7 +158,7 @@ export class ConvertMarkdownToBoxNoteManager {
     };
   }
 }
-export interface ConvertMarkdownToBoxNoteManagerInput {
+export interface NotesManagerInput {
   readonly auth?: Authentication;
   readonly networkSession?: NetworkSession;
 }
