@@ -36,6 +36,7 @@ export type SignRequestStatusField =
   | 'signed'
   | 'cancelled'
   | 'declined'
+  | 'error'
   | 'error_converting'
   | 'error_sending'
   | 'expired'
@@ -149,6 +150,9 @@ export function deserializeSignRequestStatusField(
     return val;
   }
   if (val == 'declined') {
+    return val;
+  }
+  if (val == 'error') {
     return val;
   }
   if (val == 'error_converting') {
