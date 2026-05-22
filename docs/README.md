@@ -61,6 +61,7 @@ the SDK are available by topic:
 - [Metadata cascade policies](metadataCascadePolicies.md)
 - [Metadata taxonomies](metadataTaxonomies.md)
 - [Metadata templates](metadataTemplates.md)
+- [Notes](notes.md)
 - [Recent items](recentItems.md)
 - [Retention policies](retentionPolicies.md)
 - [Retention policy assignments](retentionPolicyAssignments.md)

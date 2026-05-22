@@ -30,7 +30,7 @@ jobs:
         run: |
           cd test-browser
           npm install
-          npx start-server-and-test build-run 3000 'cypress run --browser ${{ matrix.browser }}'
+          npx start-server-and-test 'npm run build-run' http://localhost:3000 'cypress run --browser ${{ matrix.browser }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JWT_CONFIG_BASE_64: ${{ secrets.JWT_CONFIG_BASE_64 }}
