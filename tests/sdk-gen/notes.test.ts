@@ -9,7 +9,6 @@ import { deserializeFolderReferenceV2026R0 } from '@/schemas/v2026R0/folderRefer
 import { serializeFileFull } from '@/schemas/fileFull';
 import { deserializeFileFull } from '@/schemas/fileFull';
 import { NotesConvertRequestBodyV2026R0Input } from '@/schemas/v2026R0/notesConvertRequestBodyV2026R0';
-import { AccessToken } from '@/schemas/accessToken';
 import { NotesConvertResponseV2026R0 } from '@/schemas/v2026R0/notesConvertResponseV2026R0';
 import { NotesConvertRequestBodyV2026R0 } from '@/schemas/v2026R0/notesConvertRequestBodyV2026R0';
 import { NotesConvertRequestBodyV2026R0ContentFormatField } from '@/schemas/v2026R0/notesConvertRequestBodyV2026R0';
@@ -18,7 +17,6 @@ import { FileFull } from '@/schemas/fileFull';
 import { getUuid } from '@/internal/utils';
 import { getEnvVar } from '@/internal/utils';
 import { BoxClient } from '@/client';
-import { BoxDeveloperTokenAuth } from '@/box/developerTokenAuth';
 import { getDefaultClientWithUserSubject } from './commons';
 import { toString } from '@/internal/utils';
 import { sdToJson } from '@/serialization/json';
@@ -35,17 +33,8 @@ export const client: BoxClient = getDefaultClientWithUserSubject(
 test('testConvertMarkdownToBoxNote', async function testConvertMarkdownToBoxNote(): Promise<any> {
   const noteName: string = getUuid();
   const markdownContent: string = '# Heading\\n\\nSome text';
-  const downscopedToken: AccessToken = await client.auth.downscopeToken(
-    ['item_upload'],
-    void 0,
-    void 0,
-    void 0
-  );
-  const downscopedClient: BoxClient = new BoxClient({
-    auth: new BoxDeveloperTokenAuth({ token: downscopedToken.accessToken! }),
-  });
   const response: NotesConvertResponseV2026R0 =
-    await downscopedClient.notes.createNoteConvertV2026R0({
+    await client.notes.createNoteConvertV2026R0({
       content: markdownContent,
       contentFormat:
         'markdown' as NotesConvertRequestBodyV2026R0ContentFormatField,
