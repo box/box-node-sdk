@@ -14,7 +14,7 @@ See the endpoint docs at
 <!-- sample post_notes_convert_v2026.0 -->
 
 ```ts
-await downscopedClient.notes.createNoteConvertV2026R0({
+await client.notes.createNoteConvertV2026R0({
   content: markdownContent,
   contentFormat: 'markdown' as NotesConvertRequestBodyV2026R0ContentFormatField,
   parent: new FolderReferenceV2026R0({ id: '0' }),
