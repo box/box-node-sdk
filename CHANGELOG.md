@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.11.0](https://github.com/box/box-node-sdk/compare/v10.10.0...v10.11.0) (2026-06-01)
+
+
+### New Features and Enhancements
+
+* Add Convert Note API (box/box-openapi[#5](https://github.com/box/box-node-sdk/issues/5) (box/box-openapi[#600](https://github.com/box/box-node-sdk/issues/600)) ([#1477](https://github.com/box/box-node-sdk/issues/1477)) ([6c97f58](https://github.com/box/box-node-sdk/commit/6c97f588952d6c6a8ad0d90b72ba0532bece57da))
+* add failure related fields to `DocGenJob` (box/box-openapi[#598](https://github.com/box/box-node-sdk/issues/598)) ([#1468](https://github.com/box/box-node-sdk/issues/1468)) ([1c4e465](https://github.com/box/box-node-sdk/commit/1c4e46516cef1fc0ce1657d4a4dc20c43a552065))
+
 ## [10.10.0](https://github.com/box/box-node-sdk/compare/v10.9.0...v10.10.0) (2026-05-15)
 
 
