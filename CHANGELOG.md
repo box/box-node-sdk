@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.11.1](https://github.com/box/box-node-sdk/compare/v4.11.0...v4.11.1) (2026-06-01)
+
+
+### Bug Fixes
+
+* bump `@cypress/request` to resolve deprecated packages ([#1487](https://github.com/box/box-node-sdk/issues/1487)) ([9e07cd5](https://github.com/box/box-node-sdk/commit/9e07cd50692ef5f5014065c8639dc1296e06000e))
+
 ## [4.11.0](https://github.com/box/box-node-sdk/compare/v4.10.0...v4.11.0) (2026-05-27)
 
 
