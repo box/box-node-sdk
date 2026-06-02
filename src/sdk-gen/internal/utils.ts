@@ -26,6 +26,8 @@ import {
   utilLib,
   PrivateKeyDecryptor,
   DefaultPrivateKeyDecryptor,
+  nodeFetch,
+  RequestInit,
 } from './utilsNode';
 import { MultipartItem } from '../networking';
 import { sanitizedValue } from '../serialization/json';
@@ -35,8 +37,10 @@ export type DigestHashType = 'base64';
 
 export type { JwtKey, JwtAlgorithm, JwtSignOptions, ByteStream };
 export type { PrivateKeyDecryptor };
+export type { RequestInit };
 
 export {
+  nodeFetch,
   Hash,
   generateByteBuffer,
   generateByteStreamFromBuffer,
