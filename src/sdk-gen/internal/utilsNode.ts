@@ -8,6 +8,8 @@ import { default as FormData } from 'form-data';
 import util from 'util';
 
 export { Buffer, Readable as ByteStream, FormData, util as utilLib };
+export { default as nodeFetch } from 'node-fetch';
+export type { RequestInit } from 'node-fetch';
 export type AgentOptions = any;
 export type Agent = any;
 export type HashName = 'sha1';

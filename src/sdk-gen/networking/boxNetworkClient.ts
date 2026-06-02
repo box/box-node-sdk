@@ -1,5 +1,3 @@
-import nodeFetch, { RequestInit } from 'node-fetch';
-
 import { BoxApiError, BoxSdkError } from '../box/errors';
 import {
   ByteStream,
@@ -10,6 +8,8 @@ import {
   calculateMD5Hash,
   multipartStreamToBuffer,
   multipartBufferToStream,
+  nodeFetch,
+  RequestInit,
 } from '../internal/utils';
 import { sdkVersion } from './version';
 import { NetworkClient } from './networkClient';
