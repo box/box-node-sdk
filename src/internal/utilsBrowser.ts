@@ -2,6 +2,8 @@ import { Buffer } from 'buffer';
 import { createHMAC, createSHA1, createSHA256, sha1 } from 'hash-wasm';
 
 export { Buffer };
+export const nodeFetch = fetch;
+export type RequestInit = globalThis.RequestInit & { agent?: unknown };
 export type ByteStream = ReadableStream;
 export class FormData {}
 export type AgentOptions = any;
