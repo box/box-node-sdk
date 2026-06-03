@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.11.1](https://github.com/box/box-node-sdk/compare/v10.11.0...v10.11.1) (2026-06-03)
+
+
+### Bug Fixes
+
+* bump `node-fetch` and `proxy-agent` (box/box-codegen[#961](https://github.com/box/box-node-sdk/issues/961)) ([#1502](https://github.com/box/box-node-sdk/issues/1502)) ([e8d61f9](https://github.com/box/box-node-sdk/commit/e8d61f92fc9c80e7f4063019638f65328c1a40f3))
+* Fix global not defined in browser (box/box-codegen[#959](https://github.com/box/box-node-sdk/issues/959)) ([#1498](https://github.com/box/box-node-sdk/issues/1498)) ([c128fbb](https://github.com/box/box-node-sdk/commit/c128fbb1bf7ad8885159400a9acd94eb734076fb))
+
 ## [10.11.0](https://github.com/box/box-node-sdk/compare/v10.10.0...v10.11.0) (2026-06-01)
 
 
