@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.11.2](https://github.com/box/box-node-sdk/compare/v4.11.1...v4.11.2) (2026-06-03)
+
+
+### Bug Fixes
+
+* **boxsdkgen:** Fix global not defined in browser (box/box-codegen[#959](https://github.com/box/box-node-sdk/issues/959)) ([#1494](https://github.com/box/box-node-sdk/issues/1494)) ([fef58ba](https://github.com/box/box-node-sdk/commit/fef58bac32de0c13d17b58170664fec52f5b91be))
+
 ### [4.11.1](https://github.com/box/box-node-sdk/compare/v4.11.0...v4.11.1) (2026-06-01)
 
 
