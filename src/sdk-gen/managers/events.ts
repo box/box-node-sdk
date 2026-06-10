@@ -64,6 +64,7 @@ export type GetEventsQueryParamsEventTypeField =
   | 'ADD_DEVICE_ASSOCIATION'
   | 'ADD_LOGIN_ACTIVITY_DEVICE'
   | 'ADMIN_LOGIN'
+  | 'ADVANCED_FOLDER_SETTINGS_UPDATE'
   | 'APPLICATION_CREATED'
   | 'APPLICATION_PUBLIC_KEY_ADDED'
   | 'APPLICATION_PUBLIC_KEY_DELETED'
@@ -76,6 +77,7 @@ export type GetEventsQueryParamsEventTypeField =
   | 'COLLABORATION_ROLE_CHANGE'
   | 'COMMENT_CREATE'
   | 'COMMENT_DELETE'
+  | 'COMMENT_EDIT'
   | 'CONTENT_WORKFLOW_ABNORMAL_DOWNLOAD_ACTIVITY'
   | 'CONTENT_WORKFLOW_AUTOMATION_ADD'
   | 'CONTENT_WORKFLOW_AUTOMATION_DELETE'
@@ -92,11 +94,19 @@ export type GetEventsQueryParamsEventTypeField =
   | 'EDIT'
   | 'EDIT_USER'
   | 'EMAIL_ALIAS_CONFIRM'
+  | 'EMAIL_ALIAS_PRIMARY'
   | 'EMAIL_ALIAS_REMOVE'
+  | 'EMAIL_UPLOAD_DISABLED'
+  | 'EMAIL_UPLOAD_ENABLED'
   | 'ENTERPRISE_APP_AUTHORIZATION_UPDATE'
   | 'EXTERNAL_COLLAB_SECURITY_SETTINGS'
   | 'FAILED_LOGIN'
+  | 'FAVORITE'
   | 'FILE_MARKED_MALICIOUS'
+  | 'FILE_REQUEST_CREATE'
+  | 'FILE_REQUEST_DELETE'
+  | 'FILE_REQUEST_UPDATE'
+  | 'FILE_VERSION_RESTORE'
   | 'FILE_WATERMARKED_DOWNLOAD'
   | 'GROUP_ADD_ITEM'
   | 'GROUP_ADD_USER'
@@ -105,6 +115,7 @@ export type GetEventsQueryParamsEventTypeField =
   | 'GROUP_EDITED'
   | 'GROUP_REMOVE_ITEM'
   | 'GROUP_REMOVE_USER'
+  | 'ILLEGAL_ITEM_OWNERSHIP_TRANSFER_BY_USER'
   | 'ITEM_EMAIL_SEND'
   | 'ITEM_MODIFY'
   | 'ITEM_OPEN'
@@ -118,6 +129,9 @@ export type GetEventsQueryParamsEventTypeField =
   | 'LEGAL_HOLD_POLICY_UPDATE'
   | 'LOCK'
   | 'LOGIN'
+  | 'METADATA_CASCADE_POLICY_APPLY'
+  | 'METADATA_CASCADE_POLICY_CREATE'
+  | 'METADATA_INSTANCE_COPY'
   | 'METADATA_INSTANCE_CREATE'
   | 'METADATA_INSTANCE_DELETE'
   | 'METADATA_INSTANCE_UPDATE'
@@ -127,6 +141,7 @@ export type GetEventsQueryParamsEventTypeField =
   | 'MOVE'
   | 'NEW_USER'
   | 'OAUTH2_ACCESS_TOKEN_REVOKE'
+  | 'OAUTH2_REFRESH_TOKEN_REVOKE'
   | 'PREVIEW'
   | 'REMOVE_DEVICE_ASSOCIATION'
   | 'REMOVE_LOGIN_ACTIVITY_DEVICE'
@@ -164,6 +179,7 @@ export type GetEventsQueryParamsEventTypeField =
   | 'TERMS_OF_SERVICE_ACCEPT'
   | 'TERMS_OF_SERVICE_REJECT'
   | 'UNDELETE'
+  | 'UNFAVORITE'
   | 'UNLOCK'
   | 'UNSHARE'
   | 'UPDATE_COLLABORATION_EXPIRATION'
@@ -172,6 +188,9 @@ export type GetEventsQueryParamsEventTypeField =
   | 'USER_AUTHENTICATE_OAUTH2_ACCESS_TOKEN_CREATE'
   | 'WATERMARK_LABEL_CREATE'
   | 'WATERMARK_LABEL_DELETE'
+  | 'WORKFLOW_AUTOMATION_CREATE'
+  | 'WORKFLOW_AUTOMATION_DELETE'
+  | 'WORKFLOW_AUTOMATION_UPDATE'
   | string;
 export interface GetEventsQueryParams {
   /**
@@ -263,6 +282,7 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'ADD_DEVICE_ASSOCIATION'
   | 'ADD_LOGIN_ACTIVITY_DEVICE'
   | 'ADMIN_LOGIN'
+  | 'ADVANCED_FOLDER_SETTINGS_UPDATE'
   | 'APPLICATION_CREATED'
   | 'APPLICATION_PUBLIC_KEY_ADDED'
   | 'APPLICATION_PUBLIC_KEY_DELETED'
@@ -275,6 +295,7 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'COLLABORATION_ROLE_CHANGE'
   | 'COMMENT_CREATE'
   | 'COMMENT_DELETE'
+  | 'COMMENT_EDIT'
   | 'CONTENT_WORKFLOW_ABNORMAL_DOWNLOAD_ACTIVITY'
   | 'CONTENT_WORKFLOW_AUTOMATION_ADD'
   | 'CONTENT_WORKFLOW_AUTOMATION_DELETE'
@@ -291,11 +312,19 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'EDIT'
   | 'EDIT_USER'
   | 'EMAIL_ALIAS_CONFIRM'
+  | 'EMAIL_ALIAS_PRIMARY'
   | 'EMAIL_ALIAS_REMOVE'
+  | 'EMAIL_UPLOAD_DISABLED'
+  | 'EMAIL_UPLOAD_ENABLED'
   | 'ENTERPRISE_APP_AUTHORIZATION_UPDATE'
   | 'EXTERNAL_COLLAB_SECURITY_SETTINGS'
   | 'FAILED_LOGIN'
+  | 'FAVORITE'
   | 'FILE_MARKED_MALICIOUS'
+  | 'FILE_REQUEST_CREATE'
+  | 'FILE_REQUEST_DELETE'
+  | 'FILE_REQUEST_UPDATE'
+  | 'FILE_VERSION_RESTORE'
   | 'FILE_WATERMARKED_DOWNLOAD'
   | 'GROUP_ADD_ITEM'
   | 'GROUP_ADD_USER'
@@ -304,6 +333,7 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'GROUP_EDITED'
   | 'GROUP_REMOVE_ITEM'
   | 'GROUP_REMOVE_USER'
+  | 'ILLEGAL_ITEM_OWNERSHIP_TRANSFER_BY_USER'
   | 'ITEM_EMAIL_SEND'
   | 'ITEM_MODIFY'
   | 'ITEM_OPEN'
@@ -317,6 +347,9 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'LEGAL_HOLD_POLICY_UPDATE'
   | 'LOCK'
   | 'LOGIN'
+  | 'METADATA_CASCADE_POLICY_APPLY'
+  | 'METADATA_CASCADE_POLICY_CREATE'
+  | 'METADATA_INSTANCE_COPY'
   | 'METADATA_INSTANCE_CREATE'
   | 'METADATA_INSTANCE_DELETE'
   | 'METADATA_INSTANCE_UPDATE'
@@ -326,6 +359,7 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'MOVE'
   | 'NEW_USER'
   | 'OAUTH2_ACCESS_TOKEN_REVOKE'
+  | 'OAUTH2_REFRESH_TOKEN_REVOKE'
   | 'PREVIEW'
   | 'REMOVE_DEVICE_ASSOCIATION'
   | 'REMOVE_LOGIN_ACTIVITY_DEVICE'
@@ -363,6 +397,7 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'TERMS_OF_SERVICE_ACCEPT'
   | 'TERMS_OF_SERVICE_REJECT'
   | 'UNDELETE'
+  | 'UNFAVORITE'
   | 'UNLOCK'
   | 'UNSHARE'
   | 'UPDATE_COLLABORATION_EXPIRATION'
@@ -371,6 +406,9 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'USER_AUTHENTICATE_OAUTH2_ACCESS_TOKEN_CREATE'
   | 'WATERMARK_LABEL_CREATE'
   | 'WATERMARK_LABEL_DELETE'
+  | 'WORKFLOW_AUTOMATION_CREATE'
+  | 'WORKFLOW_AUTOMATION_DELETE'
+  | 'WORKFLOW_AUTOMATION_UPDATE'
   | string;
 export interface GetEventStreamQueryParams {
   /**
@@ -682,6 +720,9 @@ export function deserializeGetEventsQueryParamsEventTypeField(
   if (val == 'ADMIN_LOGIN') {
     return val;
   }
+  if (val == 'ADVANCED_FOLDER_SETTINGS_UPDATE') {
+    return val;
+  }
   if (val == 'APPLICATION_CREATED') {
     return val;
   }
@@ -716,6 +757,9 @@ export function deserializeGetEventsQueryParamsEventTypeField(
     return val;
   }
   if (val == 'COMMENT_DELETE') {
+    return val;
+  }
+  if (val == 'COMMENT_EDIT') {
     return val;
   }
   if (val == 'CONTENT_WORKFLOW_ABNORMAL_DOWNLOAD_ACTIVITY') {
@@ -766,7 +810,16 @@ export function deserializeGetEventsQueryParamsEventTypeField(
   if (val == 'EMAIL_ALIAS_CONFIRM') {
     return val;
   }
+  if (val == 'EMAIL_ALIAS_PRIMARY') {
+    return val;
+  }
   if (val == 'EMAIL_ALIAS_REMOVE') {
+    return val;
+  }
+  if (val == 'EMAIL_UPLOAD_DISABLED') {
+    return val;
+  }
+  if (val == 'EMAIL_UPLOAD_ENABLED') {
     return val;
   }
   if (val == 'ENTERPRISE_APP_AUTHORIZATION_UPDATE') {
@@ -778,7 +831,22 @@ export function deserializeGetEventsQueryParamsEventTypeField(
   if (val == 'FAILED_LOGIN') {
     return val;
   }
+  if (val == 'FAVORITE') {
+    return val;
+  }
   if (val == 'FILE_MARKED_MALICIOUS') {
+    return val;
+  }
+  if (val == 'FILE_REQUEST_CREATE') {
+    return val;
+  }
+  if (val == 'FILE_REQUEST_DELETE') {
+    return val;
+  }
+  if (val == 'FILE_REQUEST_UPDATE') {
+    return val;
+  }
+  if (val == 'FILE_VERSION_RESTORE') {
     return val;
   }
   if (val == 'FILE_WATERMARKED_DOWNLOAD') {
@@ -803,6 +871,9 @@ export function deserializeGetEventsQueryParamsEventTypeField(
     return val;
   }
   if (val == 'GROUP_REMOVE_USER') {
+    return val;
+  }
+  if (val == 'ILLEGAL_ITEM_OWNERSHIP_TRANSFER_BY_USER') {
     return val;
   }
   if (val == 'ITEM_EMAIL_SEND') {
@@ -844,6 +915,15 @@ export function deserializeGetEventsQueryParamsEventTypeField(
   if (val == 'LOGIN') {
     return val;
   }
+  if (val == 'METADATA_CASCADE_POLICY_APPLY') {
+    return val;
+  }
+  if (val == 'METADATA_CASCADE_POLICY_CREATE') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE_COPY') {
+    return val;
+  }
   if (val == 'METADATA_INSTANCE_CREATE') {
     return val;
   }
@@ -869,6 +949,9 @@ export function deserializeGetEventsQueryParamsEventTypeField(
     return val;
   }
   if (val == 'OAUTH2_ACCESS_TOKEN_REVOKE') {
+    return val;
+  }
+  if (val == 'OAUTH2_REFRESH_TOKEN_REVOKE') {
     return val;
   }
   if (val == 'PREVIEW') {
@@ -982,6 +1065,9 @@ export function deserializeGetEventsQueryParamsEventTypeField(
   if (val == 'UNDELETE') {
     return val;
   }
+  if (val == 'UNFAVORITE') {
+    return val;
+  }
   if (val == 'UNLOCK') {
     return val;
   }
@@ -1004,6 +1090,15 @@ export function deserializeGetEventsQueryParamsEventTypeField(
     return val;
   }
   if (val == 'WATERMARK_LABEL_DELETE') {
+    return val;
+  }
+  if (val == 'WORKFLOW_AUTOMATION_CREATE') {
+    return val;
+  }
+  if (val == 'WORKFLOW_AUTOMATION_DELETE') {
+    return val;
+  }
+  if (val == 'WORKFLOW_AUTOMATION_UPDATE') {
     return val;
   }
   if (sdIsString(val)) {
@@ -1066,6 +1161,9 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
   if (val == 'ADMIN_LOGIN') {
     return val;
   }
+  if (val == 'ADVANCED_FOLDER_SETTINGS_UPDATE') {
+    return val;
+  }
   if (val == 'APPLICATION_CREATED') {
     return val;
   }
@@ -1100,6 +1198,9 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
     return val;
   }
   if (val == 'COMMENT_DELETE') {
+    return val;
+  }
+  if (val == 'COMMENT_EDIT') {
     return val;
   }
   if (val == 'CONTENT_WORKFLOW_ABNORMAL_DOWNLOAD_ACTIVITY') {
@@ -1150,7 +1251,16 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
   if (val == 'EMAIL_ALIAS_CONFIRM') {
     return val;
   }
+  if (val == 'EMAIL_ALIAS_PRIMARY') {
+    return val;
+  }
   if (val == 'EMAIL_ALIAS_REMOVE') {
+    return val;
+  }
+  if (val == 'EMAIL_UPLOAD_DISABLED') {
+    return val;
+  }
+  if (val == 'EMAIL_UPLOAD_ENABLED') {
     return val;
   }
   if (val == 'ENTERPRISE_APP_AUTHORIZATION_UPDATE') {
@@ -1162,7 +1272,22 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
   if (val == 'FAILED_LOGIN') {
     return val;
   }
+  if (val == 'FAVORITE') {
+    return val;
+  }
   if (val == 'FILE_MARKED_MALICIOUS') {
+    return val;
+  }
+  if (val == 'FILE_REQUEST_CREATE') {
+    return val;
+  }
+  if (val == 'FILE_REQUEST_DELETE') {
+    return val;
+  }
+  if (val == 'FILE_REQUEST_UPDATE') {
+    return val;
+  }
+  if (val == 'FILE_VERSION_RESTORE') {
     return val;
   }
   if (val == 'FILE_WATERMARKED_DOWNLOAD') {
@@ -1187,6 +1312,9 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
     return val;
   }
   if (val == 'GROUP_REMOVE_USER') {
+    return val;
+  }
+  if (val == 'ILLEGAL_ITEM_OWNERSHIP_TRANSFER_BY_USER') {
     return val;
   }
   if (val == 'ITEM_EMAIL_SEND') {
@@ -1228,6 +1356,15 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
   if (val == 'LOGIN') {
     return val;
   }
+  if (val == 'METADATA_CASCADE_POLICY_APPLY') {
+    return val;
+  }
+  if (val == 'METADATA_CASCADE_POLICY_CREATE') {
+    return val;
+  }
+  if (val == 'METADATA_INSTANCE_COPY') {
+    return val;
+  }
   if (val == 'METADATA_INSTANCE_CREATE') {
     return val;
   }
@@ -1253,6 +1390,9 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
     return val;
   }
   if (val == 'OAUTH2_ACCESS_TOKEN_REVOKE') {
+    return val;
+  }
+  if (val == 'OAUTH2_REFRESH_TOKEN_REVOKE') {
     return val;
   }
   if (val == 'PREVIEW') {
@@ -1366,6 +1506,9 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
   if (val == 'UNDELETE') {
     return val;
   }
+  if (val == 'UNFAVORITE') {
+    return val;
+  }
   if (val == 'UNLOCK') {
     return val;
   }
@@ -1388,6 +1531,15 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
     return val;
   }
   if (val == 'WATERMARK_LABEL_DELETE') {
+    return val;
+  }
+  if (val == 'WORKFLOW_AUTOMATION_CREATE') {
+    return val;
+  }
+  if (val == 'WORKFLOW_AUTOMATION_DELETE') {
+    return val;
+  }
+  if (val == 'WORKFLOW_AUTOMATION_UPDATE') {
     return val;
   }
   if (sdIsString(val)) {
