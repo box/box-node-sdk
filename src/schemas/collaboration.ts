@@ -123,7 +123,7 @@ export class Collaboration {
   readonly isAccessOnly?: boolean;
   /**
    * The status of the collaboration invitation. If the status
-   * is `pending`, `login` and `name` return an empty string. */
+   * is `pending`, `name` returns an empty string. */
   readonly status?: CollaborationStatusField;
   /**
    * When the `status` of the collaboration object changed to
@@ -221,7 +221,7 @@ export interface CollaborationInput {
   readonly isAccessOnly?: boolean;
   /**
    * The status of the collaboration invitation. If the status
-   * is `pending`, `login` and `name` return an empty string. */
+   * is `pending`, `name` returns an empty string. */
   readonly status?: CollaborationStatusField;
   /**
    * When the `status` of the collaboration object changed to
