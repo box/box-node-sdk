@@ -2,14 +2,29 @@ import { serializeAiAgentReference } from './aiAgentReference';
 import { deserializeAiAgentReference } from './aiAgentReference';
 import { serializeAiAgentExtractStructured } from './aiAgentExtractStructured';
 import { deserializeAiAgentExtractStructured } from './aiAgentExtractStructured';
+import { serializeAiTaxonomyReference } from './aiTaxonomyReference';
+import { deserializeAiTaxonomyReference } from './aiTaxonomyReference';
+import { serializeAiTaxonomyFileReference } from './aiTaxonomyFileReference';
+import { deserializeAiTaxonomyFileReference } from './aiTaxonomyFileReference';
 import { serializeAiItemBase } from './aiItemBase';
 import { deserializeAiItemBase } from './aiItemBase';
+import { serializeAiExtractSubField } from './aiExtractSubField';
+import { deserializeAiExtractSubField } from './aiExtractSubField';
+import { serializeAiOptionsRules } from './aiOptionsRules';
+import { deserializeAiOptionsRules } from './aiOptionsRules';
 import { serializeAiExtractStructuredAgent } from './aiExtractStructuredAgent';
 import { deserializeAiExtractStructuredAgent } from './aiExtractStructuredAgent';
+import { serializeAiTaxonomySource } from './aiTaxonomySource';
+import { deserializeAiTaxonomySource } from './aiTaxonomySource';
 import { AiAgentReference } from './aiAgentReference';
 import { AiAgentExtractStructured } from './aiAgentExtractStructured';
+import { AiTaxonomyReference } from './aiTaxonomyReference';
+import { AiTaxonomyFileReference } from './aiTaxonomyFileReference';
 import { AiItemBase } from './aiItemBase';
+import { AiExtractSubField } from './aiExtractSubField';
+import { AiOptionsRules } from './aiOptionsRules';
 import { AiExtractStructuredAgent } from './aiExtractStructuredAgent';
+import { AiTaxonomySource } from './aiTaxonomySource';
 import { BoxSdkError } from '../box/errors';
 import { SerializedData } from '../serialization/json';
 import { sdIsEmpty } from '../serialization/json';
@@ -56,11 +71,21 @@ export interface AiExtractStructuredFieldsField {
    * The context about the key that may include how to find and format it. */
   readonly prompt?: string;
   /**
-   * The type of the field. It can include but is not limited to `string`, `float`, `date`, `enum`, and `multiSelect`. */
+   * The type of the field. It can include but is not limited to `string`, `float`, `date`, `enum`, `multiSelect`,`taxonomy`, `struct`, and `table`. */
   readonly type?: string;
   /**
    * A list of options for this field. This is most often used in combination with the `enum` and `multiSelect` field types. */
   readonly options?: readonly AiExtractStructuredFieldsOptionsField[];
+  /**
+   * The nested fields for this field. Used with `struct` and `table` field types to define the nested structure. */
+  readonly fields?: readonly AiExtractSubField[];
+  /**
+   * The identifier for a taxonomy, which corresponds to the `key` of the taxonomy source. Required if using `taxonomy` type field. */
+  readonly taxonomyKey?: string;
+  /**
+   * The namespace of the taxonomy source. Required if using `taxonomy` type field from an existing taxonomy. */
+  readonly namespace?: string;
+  readonly optionsRules?: AiOptionsRules;
   readonly rawData?: SerializedData;
 }
 export interface AiExtractStructured {
@@ -82,6 +107,10 @@ export interface AiExtractStructured {
   /**
    * A flag to indicate whether references for every extracted field should be returned. */
   readonly includeReference?: boolean;
+  /**
+   * The taxonomy sources to be used for the structured extraction. They can either be an existing file or a taxonomy.
+   * For your request to work, `fields` must also be provided. `taxonomy_sources` is not supported with `metadata_template`. */
+  readonly taxonomySources?: readonly AiTaxonomySource[];
   readonly rawData?: SerializedData;
 }
 export function serializeAiExtractStructuredMetadataTemplateTypeField(
@@ -189,6 +218,18 @@ export function serializeAiExtractStructuredFieldsField(
           ): SerializedData {
             return serializeAiExtractStructuredFieldsOptionsField(item);
           }) as readonly any[]),
+    ['fields']:
+      val.fields == void 0
+        ? val.fields
+        : (val.fields.map(function (item: AiExtractSubField): SerializedData {
+            return serializeAiExtractSubField(item);
+          }) as readonly any[]),
+    ['taxonomy_key']: val.taxonomyKey,
+    ['namespace']: val.namespace,
+    ['options_rules']:
+      val.optionsRules == void 0
+        ? val.optionsRules
+        : serializeAiOptionsRules(val.optionsRules),
   };
 }
 export function deserializeAiExtractStructuredFieldsField(
@@ -258,6 +299,40 @@ export function deserializeAiExtractStructuredFieldsField(
             return deserializeAiExtractStructuredFieldsOptionsField(itm);
           }) as readonly any[])
         : [];
+  if (!(val.fields == void 0) && !sdIsList(val.fields)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "fields" of type "AiExtractStructuredFieldsField"',
+    });
+  }
+  const fields: undefined | readonly AiExtractSubField[] =
+    val.fields == void 0
+      ? void 0
+      : sdIsList(val.fields)
+        ? (val.fields.map(function (itm: SerializedData): AiExtractSubField {
+            return deserializeAiExtractSubField(itm);
+          }) as readonly any[])
+        : [];
+  if (!(val.taxonomy_key == void 0) && !sdIsString(val.taxonomy_key)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "taxonomy_key" of type "AiExtractStructuredFieldsField"',
+    });
+  }
+  const taxonomyKey: undefined | string =
+    val.taxonomy_key == void 0 ? void 0 : val.taxonomy_key;
+  if (!(val.namespace == void 0) && !sdIsString(val.namespace)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "namespace" of type "AiExtractStructuredFieldsField"',
+    });
+  }
+  const namespace: undefined | string =
+    val.namespace == void 0 ? void 0 : val.namespace;
+  const optionsRules: undefined | AiOptionsRules =
+    val.options_rules == void 0
+      ? void 0
+      : deserializeAiOptionsRules(val.options_rules);
   return {
     key: key,
     description: description,
@@ -265,6 +340,10 @@ export function deserializeAiExtractStructuredFieldsField(
     prompt: prompt,
     type: type,
     options: options,
+    fields: fields,
+    taxonomyKey: taxonomyKey,
+    namespace: namespace,
+    optionsRules: optionsRules,
   } satisfies AiExtractStructuredFieldsField;
 }
 export function serializeAiExtractStructured(
@@ -294,6 +373,14 @@ export function serializeAiExtractStructured(
         : serializeAiExtractStructuredAgent(val.aiAgent),
     ['include_confidence_score']: val.includeConfidenceScore,
     ['include_reference']: val.includeReference,
+    ['taxonomy_sources']:
+      val.taxonomySources == void 0
+        ? val.taxonomySources
+        : (val.taxonomySources.map(function (
+            item: AiTaxonomySource
+          ): SerializedData {
+            return serializeAiTaxonomySource(item);
+          }) as readonly any[]),
   };
 }
 export function deserializeAiExtractStructured(
@@ -368,6 +455,22 @@ export function deserializeAiExtractStructured(
   }
   const includeReference: undefined | boolean =
     val.include_reference == void 0 ? void 0 : val.include_reference;
+  if (!(val.taxonomy_sources == void 0) && !sdIsList(val.taxonomy_sources)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "taxonomy_sources" of type "AiExtractStructured"',
+    });
+  }
+  const taxonomySources: undefined | readonly AiTaxonomySource[] =
+    val.taxonomy_sources == void 0
+      ? void 0
+      : sdIsList(val.taxonomy_sources)
+        ? (val.taxonomy_sources.map(function (
+            itm: SerializedData
+          ): AiTaxonomySource {
+            return deserializeAiTaxonomySource(itm);
+          }) as readonly any[])
+        : [];
   return {
     items: items,
     metadataTemplate: metadataTemplate,
@@ -375,5 +478,6 @@ export function deserializeAiExtractStructured(
     aiAgent: aiAgent,
     includeConfidenceScore: includeConfidenceScore,
     includeReference: includeReference,
+    taxonomySources: taxonomySources,
   } satisfies AiExtractStructured;
 }
