@@ -104,6 +104,10 @@ export type SignRequest = SignRequestBase & {
    * Timestamp indicating when all signing actions completed. */
   readonly finishedAt?: DateTime | null;
   /**
+   * When the sign request is in an error state, identifies the specific
+   * reason. Null when no error code applies. */
+  readonly errorCode?: string | null;
+  /**
    * The email address of the sender of the sign request. */
   readonly senderEmail?: string | null;
   /**
@@ -285,6 +289,7 @@ export function serializeSignRequest(val: SignRequest): SerializedData {
         val.finishedAt == void 0
           ? val.finishedAt
           : serializeDateTime(val.finishedAt),
+      ['error_code']: val.errorCode,
       ['sender_email']: val.senderEmail,
       ['sender_id']: val.senderId,
     },
@@ -397,6 +402,13 @@ export function deserializeSignRequest(val: SerializedData): SignRequest {
   }
   const finishedAt: undefined | DateTime =
     val.finished_at == void 0 ? void 0 : deserializeDateTime(val.finished_at);
+  if (!(val.error_code == void 0) && !sdIsString(val.error_code)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "error_code" of type "SignRequest"',
+    });
+  }
+  const errorCode: undefined | string =
+    val.error_code == void 0 ? void 0 : val.error_code;
   if (!(val.sender_email == void 0) && !sdIsString(val.sender_email)) {
     throw new BoxSdkError({
       message: 'Expecting string for "sender_email" of type "SignRequest"',
@@ -549,6 +561,7 @@ export function deserializeSignRequest(val: SerializedData): SignRequest {
     shortId: shortId,
     createdAt: createdAt,
     finishedAt: finishedAt,
+    errorCode: errorCode,
     senderEmail: senderEmail,
     senderId: senderId,
     isDocumentPreparationNeeded: isDocumentPreparationNeeded,
