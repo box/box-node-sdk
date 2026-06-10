@@ -109,11 +109,9 @@ group IDs.
 If a collaboration is being created with a group, access to
 this endpoint is dependent on the group's ability to be invited.
 
-If collaboration is in `pending` status, the following fields
-are redacted:
-- `login` and `name` are hidden if a collaboration was created
-using `user_id`,
--  `name` is hidden if a collaboration was created using `login`.
+If collaboration is in `pending` status, field `name` is redacted when:
+- a collaboration was created using `user_id`,
+- a collaboration was created using `login`.
 
 This operation is performed by calling function `createCollaboration`.
 
