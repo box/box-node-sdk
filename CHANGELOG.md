@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.12.0](https://github.com/box/box-node-sdk/compare/v10.11.1...v10.12.0) (2026-06-11)
+
+
+### New Features and Enhancements
+
+* Add new event types (box/box-openapi[#1703](https://github.com/box/box-node-sdk/issues/1703)) (box/box-openapi[#605](https://github.com/box/box-node-sdk/issues/605)) ([#1513](https://github.com/box/box-node-sdk/issues/1513)) ([01cfe5a](https://github.com/box/box-node-sdk/commit/01cfe5a26e0f91b4d4913d83462c36af0d1ac979))
+* Add new parameters to ai extract structured method (box/box-openapi[#604](https://github.com/box/box-node-sdk/issues/604)) ([#1512](https://github.com/box/box-node-sdk/issues/1512)) ([f0d0196](https://github.com/box/box-node-sdk/commit/f0d019654867bf90d65e250206ddce99bc0a69f0))
+* Expose `errorCode` in sign request schemas (box/box-openapi[#601](https://github.com/box/box-node-sdk/issues/601)) ([#1511](https://github.com/box/box-node-sdk/issues/1511)) ([968c5cb](https://github.com/box/box-node-sdk/commit/968c5cb57e8565028472f3e43bafdb4240d3a156))
+
 ### [10.11.1](https://github.com/box/box-node-sdk/compare/v10.11.0...v10.11.1) (2026-06-03)
 
 
