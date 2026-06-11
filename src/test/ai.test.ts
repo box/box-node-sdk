@@ -64,6 +64,8 @@ import { serializeAiAgentExtract } from '@/schemas/aiAgentExtract';
 import { deserializeAiAgentExtract } from '@/schemas/aiAgentExtract';
 import { serializeAiAgentExtractStructured } from '@/schemas/aiAgentExtractStructured';
 import { deserializeAiAgentExtractStructured } from '@/schemas/aiAgentExtractStructured';
+import { serializeAiExtractSubField } from '@/schemas/aiExtractSubField';
+import { deserializeAiExtractSubField } from '@/schemas/aiExtractSubField';
 import { BoxClient } from '@/client';
 import { AiAgent } from '@/schemas/aiAgent';
 import { GetAiAgentDefaultConfigQueryParams } from '@/managers/ai';
@@ -106,6 +108,7 @@ import { AiAgentAsk } from '@/schemas/aiAgentAsk';
 import { AiAgentTextGen } from '@/schemas/aiAgentTextGen';
 import { AiAgentExtract } from '@/schemas/aiAgentExtract';
 import { AiAgentExtractStructured } from '@/schemas/aiAgentExtractStructured';
+import { AiExtractSubField } from '@/schemas/aiExtractSubField';
 import { toString } from '@/internal/utils';
 import { sdToJson } from '@/serialization/json';
 import { SerializedData } from '@/serialization/json';
@@ -361,7 +364,7 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
     } satisfies UploadFileRequestBodyAttributesField,
     file: stringToByteStream(
       ''.concat(
-        'My name is John Doe. I was born in 4th July 1990. I am 34 years old. My hobby is guitar. My UUID is ',
+        'My name is John Doe. I was born in 4th July 1990. I am 34 years old. My hobby is guitar. I live at 900 Jefferson Ave, Redwood City, CA 94063, US. My work history: Software Engineer at Box from 2020 to 2024. My UUID is ',
         getUuid(),
       ) as string,
     ),
@@ -410,12 +413,82 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
             { key: 'books' } satisfies AiExtractStructuredFieldsOptionsField,
           ],
         } satisfies AiExtractStructuredFieldsField,
+        {
+          key: 'address',
+          displayName: 'Address',
+          description: 'Person address',
+          type: 'struct',
+          prompt: 'Extract the full mailing address.',
+          fields: [
+            {
+              key: 'street',
+              displayName: 'Street',
+              type: 'string',
+            } satisfies AiExtractSubField,
+            {
+              key: 'city',
+              displayName: 'City',
+              type: 'string',
+            } satisfies AiExtractSubField,
+            {
+              key: 'state',
+              displayName: 'State',
+              type: 'string',
+            } satisfies AiExtractSubField,
+            {
+              key: 'zip',
+              displayName: 'Zip',
+              type: 'string',
+            } satisfies AiExtractSubField,
+            {
+              key: 'country',
+              displayName: 'Country',
+              type: 'string',
+            } satisfies AiExtractSubField,
+          ],
+        } satisfies AiExtractStructuredFieldsField,
+        {
+          key: 'work_history',
+          displayName: 'Work history',
+          description: 'Person work history',
+          type: 'table',
+          prompt: 'Extract each job as a row.',
+          fields: [
+            {
+              key: 'job_title',
+              displayName: 'Job title',
+              type: 'string',
+            } satisfies AiExtractSubField,
+            {
+              key: 'company',
+              displayName: 'Company',
+              type: 'string',
+            } satisfies AiExtractSubField,
+            {
+              key: 'start_year',
+              displayName: 'Start year',
+              type: 'string',
+            } satisfies AiExtractSubField,
+            {
+              key: 'end_year',
+              displayName: 'End year',
+              type: 'string',
+            } satisfies AiExtractSubField,
+          ],
+        } satisfies AiExtractStructuredFieldsField,
       ],
       items: [new AiItemBase({ id: file.id })],
       includeConfidenceScore: true,
+      includeReference: true,
       aiAgent: aiExtractStructuredAgentBasicTextConfig,
     } satisfies AiExtractStructured);
   if (!!(response.confidenceScore == void 0)) {
+    throw new Error('Assertion failed');
+  }
+  if (!!(response.reference == void 0)) {
+    throw new Error('Assertion failed');
+  }
+  if (!!(response.aiAgentInfo == void 0)) {
     throw new Error('Assertion failed');
   }
   if (
@@ -436,6 +509,32 @@ test('testAIExtractStructuredWithFields', async function testAIExtractStructured
     throw new Error('Assertion failed');
   }
   if (!((toString(response.answer.age) as string) == '34')) {
+    throw new Error('Assertion failed');
+  }
+  if (
+    !((toString(response.answer.address) as string)!.includes(
+      'Redwood City',
+    ) as boolean)
+  ) {
+    throw new Error('Assertion failed');
+  }
+  if (
+    !((toString(response.answer.address) as string)!.includes('CA') as boolean)
+  ) {
+    throw new Error('Assertion failed');
+  }
+  if (
+    !((toString(response.answer.address) as string)!.includes(
+      '94063',
+    ) as boolean)
+  ) {
+    throw new Error('Assertion failed');
+  }
+  if (
+    !((toString(response.answer.work_history) as string)!.includes(
+      'Box',
+    ) as boolean)
+  ) {
     throw new Error('Assertion failed');
   }
   if (!(response.completionReason == 'done')) {
