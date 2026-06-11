@@ -193,6 +193,12 @@ export function toString(value: any): string {
   if (typeof value === 'string' || value == null) {
     return value;
   }
+  if (Array.isArray(value)) {
+    return value.map(toString).join(',');
+  }
+  if (typeof value === 'object' && value.constructor === Object) {
+    return JSON.stringify(value, null, 2);
+  }
   return String(value);
 }
 
