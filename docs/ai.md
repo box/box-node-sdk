@@ -223,9 +223,73 @@ await client.ai.createAiExtractStructured({
         { key: 'books' } satisfies AiExtractStructuredFieldsOptionsField,
       ],
     } satisfies AiExtractStructuredFieldsField,
+    {
+      key: 'address',
+      displayName: 'Address',
+      description: 'Person address',
+      type: 'struct',
+      prompt: 'Extract the full mailing address.',
+      fields: [
+        {
+          key: 'street',
+          displayName: 'Street',
+          type: 'string',
+        } satisfies AiExtractSubField,
+        {
+          key: 'city',
+          displayName: 'City',
+          type: 'string',
+        } satisfies AiExtractSubField,
+        {
+          key: 'state',
+          displayName: 'State',
+          type: 'string',
+        } satisfies AiExtractSubField,
+        {
+          key: 'zip',
+          displayName: 'Zip',
+          type: 'string',
+        } satisfies AiExtractSubField,
+        {
+          key: 'country',
+          displayName: 'Country',
+          type: 'string',
+        } satisfies AiExtractSubField,
+      ],
+    } satisfies AiExtractStructuredFieldsField,
+    {
+      key: 'work_history',
+      displayName: 'Work history',
+      description: 'Person work history',
+      type: 'table',
+      prompt: 'Extract each job as a row.',
+      fields: [
+        {
+          key: 'job_title',
+          displayName: 'Job title',
+          type: 'string',
+        } satisfies AiExtractSubField,
+        {
+          key: 'company',
+          displayName: 'Company',
+          type: 'string',
+        } satisfies AiExtractSubField,
+        {
+          key: 'start_year',
+          displayName: 'Start year',
+          type: 'string',
+        } satisfies AiExtractSubField,
+        {
+          key: 'end_year',
+          displayName: 'End year',
+          type: 'string',
+        } satisfies AiExtractSubField,
+      ],
+    } satisfies AiExtractStructuredFieldsField,
   ],
   items: [new AiItemBase({ id: file.id })],
   includeConfidenceScore: true,
+  includeReference: true,
   aiAgent: aiExtractStructuredAgentBasicTextConfig,
 } satisfies AiExtractStructured);
 ```
