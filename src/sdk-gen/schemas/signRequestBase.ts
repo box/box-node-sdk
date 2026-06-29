@@ -49,6 +49,10 @@ export interface SignRequestBase {
   /**
    * Used as an optional system name to appear in the signature log next to the signers who have been assigned the `embed_url_external_id`. */
   readonly externalSystemName?: string | null;
+  /**
+   * The flow type of the sign request. Values can include `standard` or `cfr11`.
+   * When not specified during creation, a default is chosen based on admin settings. */
+  readonly requestFlow?: string | null;
   readonly rawData?: SerializedData;
 }
 export function serializeSignRequestBase(val: SignRequestBase): SerializedData {
@@ -73,6 +77,7 @@ export function serializeSignRequestBase(val: SignRequestBase): SerializedData {
     ['external_id']: val.externalId,
     ['template_id']: val.templateId,
     ['external_system_name']: val.externalSystemName,
+    ['request_flow']: val.requestFlow,
   };
 }
 export function deserializeSignRequestBase(
@@ -203,6 +208,13 @@ export function deserializeSignRequestBase(
   }
   const externalSystemName: undefined | string =
     val.external_system_name == void 0 ? void 0 : val.external_system_name;
+  if (!(val.request_flow == void 0) && !sdIsString(val.request_flow)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "request_flow" of type "SignRequestBase"',
+    });
+  }
+  const requestFlow: undefined | string =
+    val.request_flow == void 0 ? void 0 : val.request_flow;
   return {
     isDocumentPreparationNeeded: isDocumentPreparationNeeded,
     redirectUrl: redirectUrl,
@@ -217,5 +229,6 @@ export function deserializeSignRequestBase(
     externalId: externalId,
     templateId: templateId,
     externalSystemName: externalSystemName,
+    requestFlow: requestFlow,
   } satisfies SignRequestBase;
 }

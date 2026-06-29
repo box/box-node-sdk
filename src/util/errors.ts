@@ -36,11 +36,11 @@ const TRACE_ID_HEADER_NAME = 'box-request-id';
  * @private
  */
 class Request {
-  method: any /* FIXME */;
-  url: any /* FIXME */;
-  httpVersion: any /* FIXME */;
-  headers: any /* FIXME */;
-  body: any /* FIXME */;
+  method: any; /* FIXME */
+  url: any; /* FIXME */
+  httpVersion: any; /* FIXME */
+  headers: any; /* FIXME */
+  body: any; /* FIXME */
 
   constructor(req: any /* FIXME */) {
     this.method = req.method;

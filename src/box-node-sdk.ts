@@ -82,10 +82,10 @@ type CCGConfig = {
  * @constructor
  */
 class BoxSDKNode extends EventEmitter {
-  accessLevels: any /* FIXME */;
-  collaborationRoles: any /* FIXME */;
-  CURRENT_USER_ID: any /* FIXME */;
-  config: any /* FIXME */;
+  accessLevels: any; /* FIXME */
+  collaborationRoles: any; /* FIXME */
+  CURRENT_USER_ID: any; /* FIXME */
+  config: any; /* FIXME */
   _eventBus!: EventEmitter;
 
   requestManager!: APIRequestManager;
