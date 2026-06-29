@@ -49,12 +49,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputTypeField =
-  | 'signature'
-  | 'date'
-  | 'text'
-  | 'checkbox'
-  | 'radio'
-  | 'dropdown';
+  'signature' | 'date' | 'text' | 'checkbox' | 'radio' | 'dropdown';
 export type SignRequestSignerInputContentTypeField =
   | 'signature'
   | 'initial'
@@ -89,6 +84,15 @@ export type SignRequestSignerInput = SignRequestPrefillTag & {
    * Specifies the formatting rules that signers must follow for text field inputs.
    * If set, this validation is mandatory. */
   readonly validation?: SignRequestSignerInputValidation;
+  /**
+   * The reason for the signer's input, applicable to signature or initial content types
+   * in a `cfr11` request flow. The value is `null` when not applicable. */
+  readonly reason?: string | null;
+  /**
+   * Indicates whether the signer's input has been validated through re-authentication.
+   * Applicable only for signature or initial content types in a `cfr11` request flow.
+   * The value is `null` for standard request flows or non-applicable input types. */
+  readonly isValidated?: boolean | null;
 };
 export function serializeSignRequestSignerInputTypeField(
   val: SignRequestSignerInputTypeField,
@@ -206,6 +210,8 @@ export function serializeSignRequestSignerInput(
         val.validation == void 0
           ? val.validation
           : serializeSignRequestSignerInputValidation(val.validation),
+      ['reason']: val.reason,
+      ['is_validated']: val.isValidated,
     },
   };
 }
@@ -250,6 +256,20 @@ export function deserializeSignRequestSignerInput(
     val.validation == void 0
       ? void 0
       : deserializeSignRequestSignerInputValidation(val.validation);
+  if (!(val.reason == void 0) && !sdIsString(val.reason)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "reason" of type "SignRequestSignerInput"',
+    });
+  }
+  const reason: undefined | string = val.reason == void 0 ? void 0 : val.reason;
+  if (!(val.is_validated == void 0) && !sdIsBoolean(val.is_validated)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_validated" of type "SignRequestSignerInput"',
+    });
+  }
+  const isValidated: undefined | boolean =
+    val.is_validated == void 0 ? void 0 : val.is_validated;
   if (!(val.document_tag_id == void 0) && !sdIsString(val.document_tag_id)) {
     throw new BoxSdkError({
       message:
@@ -288,6 +308,8 @@ export function deserializeSignRequestSignerInput(
     pageIndex: pageIndex,
     readOnly: readOnly,
     validation: validation,
+    reason: reason,
+    isValidated: isValidated,
     documentTagId: documentTagId,
     textValue: textValue,
     checkboxValue: checkboxValue,

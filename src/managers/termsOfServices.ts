@@ -101,9 +101,7 @@ export interface UpdateTermsOfServiceByIdOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetTermsOfServiceQueryParamsTosTypeField =
-  | 'external'
-  | 'managed'
-  | string;
+  'external' | 'managed' | string;
 export interface GetTermsOfServiceQueryParams {
   /**
    * Limits the results to the terms of service of the given type. */
@@ -132,13 +130,9 @@ export interface GetTermsOfServiceHeadersInput {
   };
 }
 export type CreateTermsOfServiceRequestBodyStatusField =
-  | 'enabled'
-  | 'disabled'
-  | string;
+  'enabled' | 'disabled' | string;
 export type CreateTermsOfServiceRequestBodyTosTypeField =
-  | 'external'
-  | 'managed'
-  | string;
+  'external' | 'managed' | string;
 export interface CreateTermsOfServiceRequestBody {
   /**
    * Whether this terms of service is active. */
@@ -199,9 +193,7 @@ export interface GetTermsOfServiceByIdHeadersInput {
   };
 }
 export type UpdateTermsOfServiceByIdRequestBodyStatusField =
-  | 'enabled'
-  | 'disabled'
-  | string;
+  'enabled' | 'disabled' | string;
 export interface UpdateTermsOfServiceByIdRequestBody {
   /**
    * Whether this terms of service is active. */

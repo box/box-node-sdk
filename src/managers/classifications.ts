@@ -119,8 +119,7 @@ export interface GetClassificationTemplateHeadersInput {
 }
 export type AddClassificationRequestBodyOpField = 'addEnumOption' | string;
 export type AddClassificationRequestBodyFieldKeyField =
-  | 'Box__Security__Classification__Key'
-  | string;
+  'Box__Security__Classification__Key' | string;
 export interface AddClassificationRequestBodyDataStaticConfigClassificationField {
   /**
    * A longer description of the classification. */
@@ -232,8 +231,7 @@ export interface AddClassificationHeadersInput {
 }
 export type UpdateClassificationRequestBodyOpField = 'editEnumOption' | string;
 export type UpdateClassificationRequestBodyFieldKeyField =
-  | 'Box__Security__Classification__Key'
-  | string;
+  'Box__Security__Classification__Key' | string;
 export interface UpdateClassificationRequestBodyDataStaticConfigClassificationField {
   /**
    * A longer description of the classification. */
@@ -352,21 +350,16 @@ export interface UpdateClassificationHeadersInput {
   };
 }
 export type CreateClassificationTemplateRequestBodyScopeField =
-  | 'enterprise'
-  | string;
+  'enterprise' | string;
 export type CreateClassificationTemplateRequestBodyTemplateKeyField =
-  | 'securityClassification-6VMVochwUWo'
-  | string;
+  'securityClassification-6VMVochwUWo' | string;
 export type CreateClassificationTemplateRequestBodyDisplayNameField =
-  | 'Classification'
-  | string;
+  'Classification' | string;
 export type CreateClassificationTemplateRequestBodyFieldsTypeField = 'enum';
 export type CreateClassificationTemplateRequestBodyFieldsKeyField =
-  | 'Box__Security__Classification__Key'
-  | string;
+  'Box__Security__Classification__Key' | string;
 export type CreateClassificationTemplateRequestBodyFieldsDisplayNameField =
-  | 'Classification'
-  | string;
+  'Classification' | string;
 export interface CreateClassificationTemplateRequestBodyFieldsOptionsStaticConfigClassificationField {
   /**
    * A longer description of the classification. */
@@ -981,8 +974,7 @@ export function deserializeAddClassificationRequestBodyDataField(
   }
   const key: string = val.key;
   const staticConfig:
-    | undefined
-    | AddClassificationRequestBodyDataStaticConfigField =
+    undefined | AddClassificationRequestBodyDataStaticConfigField =
     val.staticConfig == void 0
       ? void 0
       : deserializeAddClassificationRequestBodyDataStaticConfigField(
@@ -1234,8 +1226,7 @@ export function deserializeUpdateClassificationRequestBodyDataField(
   }
   const key: string = val.key;
   const staticConfig:
-    | undefined
-    | UpdateClassificationRequestBodyDataStaticConfigField =
+    undefined | UpdateClassificationRequestBodyDataStaticConfigField =
     val.staticConfig == void 0
       ? void 0
       : deserializeUpdateClassificationRequestBodyDataStaticConfigField(
@@ -1744,8 +1735,7 @@ export function deserializeCreateClassificationTemplateRequestBodyFieldsFieldInp
     });
   }
   const type:
-    | undefined
-    | CreateClassificationTemplateRequestBodyFieldsTypeField =
+    undefined | CreateClassificationTemplateRequestBodyFieldsTypeField =
     val.type == void 0
       ? void 0
       : deserializeCreateClassificationTemplateRequestBodyFieldsTypeField(
@@ -1758,8 +1748,7 @@ export function deserializeCreateClassificationTemplateRequestBodyFieldsFieldInp
           val.key,
         );
   const displayName:
-    | undefined
-    | CreateClassificationTemplateRequestBodyFieldsDisplayNameField =
+    undefined | CreateClassificationTemplateRequestBodyFieldsDisplayNameField =
     val.displayName == void 0
       ? void 0
       : deserializeCreateClassificationTemplateRequestBodyFieldsDisplayNameField(
@@ -1956,16 +1945,14 @@ export function deserializeCreateClassificationTemplateRequestBodyInput(
       ? void 0
       : deserializeCreateClassificationTemplateRequestBodyScopeField(val.scope);
   const templateKey:
-    | undefined
-    | CreateClassificationTemplateRequestBodyTemplateKeyField =
+    undefined | CreateClassificationTemplateRequestBodyTemplateKeyField =
     val.templateKey == void 0
       ? void 0
       : deserializeCreateClassificationTemplateRequestBodyTemplateKeyField(
           val.templateKey,
         );
   const displayName:
-    | undefined
-    | CreateClassificationTemplateRequestBodyDisplayNameField =
+    undefined | CreateClassificationTemplateRequestBodyDisplayNameField =
     val.displayName == void 0
       ? void 0
       : deserializeCreateClassificationTemplateRequestBodyDisplayNameField(

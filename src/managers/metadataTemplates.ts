@@ -425,12 +425,7 @@ export interface GetEnterpriseMetadataTemplatesHeadersInput {
   };
 }
 export type CreateMetadataTemplateRequestBodyFieldsTypeField =
-  | 'string'
-  | 'float'
-  | 'date'
-  | 'enum'
-  | 'multiSelect'
-  | 'taxonomy';
+  'string' | 'float' | 'date' | 'enum' | 'multiSelect' | 'taxonomy';
 export interface CreateMetadataTemplateRequestBodyFieldsOptionsField {
   /**
    * The text value of the option. This represents both the display name of the
@@ -1496,8 +1491,7 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsField(
     });
   }
   const options:
-    | undefined
-    | readonly CreateMetadataTemplateRequestBodyFieldsOptionsField[] =
+    undefined | readonly CreateMetadataTemplateRequestBodyFieldsOptionsField[] =
     val.options == void 0
       ? void 0
       : sdIsList(val.options)
@@ -1534,8 +1528,7 @@ export function deserializeCreateMetadataTemplateRequestBodyFieldsField(
   const namespace: undefined | string =
     val.namespace == void 0 ? void 0 : val.namespace;
   const optionsRules:
-    | undefined
-    | CreateMetadataTemplateRequestBodyFieldsOptionsRulesField =
+    undefined | CreateMetadataTemplateRequestBodyFieldsOptionsRulesField =
     val.optionsRules == void 0
       ? void 0
       : deserializeCreateMetadataTemplateRequestBodyFieldsOptionsRulesField(
@@ -1630,8 +1623,7 @@ export function deserializeCreateMetadataTemplateRequestBody(
     });
   }
   const fields:
-    | undefined
-    | readonly CreateMetadataTemplateRequestBodyFieldsField[] =
+    undefined | readonly CreateMetadataTemplateRequestBodyFieldsField[] =
     val.fields == void 0
       ? void 0
       : sdIsList(val.fields)

@@ -21,8 +21,7 @@ import { sdIsMap } from '../serialization/json';
 export type WorkflowFlowsTypeField = 'flow';
 export type WorkflowFlowsTriggerTypeField = 'trigger';
 export type WorkflowFlowsTriggerTriggerTypeField =
-  | 'WORKFLOW_MANUAL_START'
-  | string;
+  'WORKFLOW_MANUAL_START' | string;
 export type WorkflowFlowsTriggerScopeTypeField = 'trigger_scope';
 export type WorkflowFlowsTriggerScopeObjectTypeField = 'folder';
 export interface WorkflowFlowsTriggerScopeObjectField {
@@ -689,8 +688,7 @@ export function deserializeWorkflowFlowsOutcomesField(
     });
   }
   const ifRejected:
-    | undefined
-    | readonly WorkflowFlowsOutcomesIfRejectedField[] =
+    undefined | readonly WorkflowFlowsOutcomesIfRejectedField[] =
     val.if_rejected == void 0
       ? void 0
       : sdIsList(val.if_rejected)

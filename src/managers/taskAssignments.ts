@@ -281,11 +281,7 @@ export interface GetTaskAssignmentByIdHeadersInput {
   };
 }
 export type UpdateTaskAssignmentByIdRequestBodyResolutionStateField =
-  | 'completed'
-  | 'incomplete'
-  | 'approved'
-  | 'rejected'
-  | string;
+  'completed' | 'incomplete' | 'approved' | 'rejected' | string;
 export interface UpdateTaskAssignmentByIdRequestBody {
   /**
    * An optional message by the assignee that can be added to the task. */
@@ -816,8 +812,7 @@ export function deserializeUpdateTaskAssignmentByIdRequestBody(
   const message: undefined | string =
     val.message == void 0 ? void 0 : val.message;
   const resolutionState:
-    | undefined
-    | UpdateTaskAssignmentByIdRequestBodyResolutionStateField =
+    undefined | UpdateTaskAssignmentByIdRequestBodyResolutionStateField =
     val.resolution_state == void 0
       ? void 0
       : deserializeUpdateTaskAssignmentByIdRequestBodyResolutionStateField(

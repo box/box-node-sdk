@@ -168,6 +168,9 @@ export interface SignTemplate {
    * Custom branding applied to notifications
    * and signature requests. */
   readonly customBranding?: SignTemplateCustomBrandingField | null;
+  /**
+   * The sign flow of sign requests created from the template. Values can include `standard` or `cfr11`. */
+  readonly requestFlow?: string | null;
   readonly rawData?: SerializedData;
 }
 export function serializeSignTemplateTypeField(
@@ -323,8 +326,7 @@ export function deserializeSignTemplateAdditionalInfoField(
     });
   }
   const nonEditable:
-    | undefined
-    | readonly SignTemplateAdditionalInfoNonEditableField[] =
+    undefined | readonly SignTemplateAdditionalInfoNonEditableField[] =
     val.non_editable == void 0
       ? void 0
       : sdIsList(val.non_editable)
@@ -525,6 +527,7 @@ export function serializeSignTemplate(val: SignTemplate): SerializedData {
       val.customBranding == void 0
         ? val.customBranding
         : serializeSignTemplateCustomBrandingField(val.customBranding),
+    ['request_flow']: val.requestFlow,
   };
 }
 export function deserializeSignTemplate(val: SerializedData): SignTemplate {
@@ -662,6 +665,13 @@ export function deserializeSignTemplate(val: SerializedData): SignTemplate {
     val.custom_branding == void 0
       ? void 0
       : deserializeSignTemplateCustomBrandingField(val.custom_branding);
+  if (!(val.request_flow == void 0) && !sdIsString(val.request_flow)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "request_flow" of type "SignTemplate"',
+    });
+  }
+  const requestFlow: undefined | string =
+    val.request_flow == void 0 ? void 0 : val.request_flow;
   return {
     type: type,
     id: id,
@@ -680,5 +690,6 @@ export function deserializeSignTemplate(val: SerializedData): SignTemplate {
     additionalInfo: additionalInfo,
     readySignLink: readySignLink,
     customBranding: customBranding,
+    requestFlow: requestFlow,
   } satisfies SignTemplate;
 }
