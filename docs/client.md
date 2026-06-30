@@ -186,15 +186,14 @@ const clientWithInterceptor: BoxClient = client.withInterceptors([
 
 In order to configure timeout for API calls, call `client.withTimeouts(config)` to create a new client with timeout settings, leaving the original client unmodified.
 
-`timeoutMs` is in milliseconds and is applied to each request attempt.
+All timeout values are in milliseconds and apply to each request attempt.
 
 ```js
 const newClient = client.withTimeouts({
-  timeoutMs: 30000,
+  connectionTimeoutMs: 5000,
+  timeoutMs: 60000,
 });
 ```
-
-If `timeoutMs` is not provided or is less than or equal to `0`, no SDK timeout is applied.
 
 # Use Proxy for API calls
 
