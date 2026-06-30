@@ -897,8 +897,7 @@ export function deserializeUpdateAllSkillCardsOnFileRequestBodyFileVersionField(
     });
   }
   const type:
-    | undefined
-    | UpdateAllSkillCardsOnFileRequestBodyFileVersionTypeField =
+    undefined | UpdateAllSkillCardsOnFileRequestBodyFileVersionTypeField =
     val.type == void 0
       ? void 0
       : deserializeUpdateAllSkillCardsOnFileRequestBodyFileVersionTypeField(
@@ -1005,8 +1004,7 @@ export function deserializeUpdateAllSkillCardsOnFileRequestBody(
   const file: UpdateAllSkillCardsOnFileRequestBodyFileField =
     deserializeUpdateAllSkillCardsOnFileRequestBodyFileField(val.file);
   const fileVersion:
-    | undefined
-    | UpdateAllSkillCardsOnFileRequestBodyFileVersionField =
+    undefined | UpdateAllSkillCardsOnFileRequestBodyFileVersionField =
     val.file_version == void 0
       ? void 0
       : deserializeUpdateAllSkillCardsOnFileRequestBodyFileVersionField(

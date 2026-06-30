@@ -210,11 +210,7 @@ export interface CreateAiTextGenHeadersInput {
   };
 }
 export type GetAiAgentDefaultConfigQueryParamsModeField =
-  | 'ask'
-  | 'text_gen'
-  | 'extract'
-  | 'extract_structured'
-  | string;
+  'ask' | 'text_gen' | 'extract' | 'extract_structured' | string;
 export interface GetAiAgentDefaultConfigQueryParams {
   /**
    * The mode to filter the agent config to return. */
@@ -317,6 +313,10 @@ export class AiManager {
   }
   /**
    * Sends an AI request to supported LLMs and returns an answer specifically focused on the user's question given the provided context.
+   *
+   * You can ask a question about a single file, several files, or the entire contents of a Box Hub. To search across and ask questions about everything in a Box Hub, send a single item with `type` set to `hubs` and the Hub's ID as the `id`. Box AI answers the question using the indexed content of all files in that Hub.
+   *
+   * Asking questions about a Box Hub requires Box AI for Hubs to be enabled in the Admin Console before the Hub is created, so that its content is indexed.
    * @param {AiAsk} requestBody Request body of createAiAsk method
    * @param {CreateAiAskOptionalsInput} optionalsInput
    * @returns {Promise<undefined | AiResponseFull>}

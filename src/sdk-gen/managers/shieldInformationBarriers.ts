@@ -135,9 +135,7 @@ export interface GetShieldInformationBarrierByIdHeadersInput {
   };
 }
 export type UpdateShieldInformationBarrierStatusRequestBodyStatusField =
-  | 'pending'
-  | 'disabled'
-  | string;
+  'pending' | 'disabled' | string;
 export interface UpdateShieldInformationBarrierStatusRequestBody {
   /**
    * The ID of the shield information barrier. */

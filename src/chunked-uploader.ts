@@ -101,7 +101,7 @@ class Chunk extends EventEmitter {
   offset: number;
   totalSize: number;
   options: ChunkedUploaderOptions;
-  data: any /* FIXME */;
+  data: any; /* FIXME */
   retry: number | NodeJS.Timeout | null;
   canceled: boolean;
 

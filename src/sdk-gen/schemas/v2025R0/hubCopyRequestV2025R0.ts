@@ -13,12 +13,20 @@ export interface HubCopyRequestV2025R0 {
   /**
    * Description of the Box Hub. */
   readonly description?: string;
+  /**
+   * If true, the items which the user has Editor or Owner access to in the original Box Hub will be copied to the new Box Hub.
+   * Defaults to false. */
+  readonly includeItems?: boolean;
   readonly rawData?: SerializedData;
 }
 export function serializeHubCopyRequestV2025R0(
   val: HubCopyRequestV2025R0
 ): SerializedData {
-  return { ['title']: val.title, ['description']: val.description };
+  return {
+    ['title']: val.title,
+    ['description']: val.description,
+    ['include_items']: val.includeItems,
+  };
 }
 export function deserializeHubCopyRequestV2025R0(
   val: SerializedData
@@ -42,8 +50,17 @@ export function deserializeHubCopyRequestV2025R0(
   }
   const description: undefined | string =
     val.description == void 0 ? void 0 : val.description;
+  if (!(val.include_items == void 0) && !sdIsBoolean(val.include_items)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "include_items" of type "HubCopyRequestV2025R0"',
+    });
+  }
+  const includeItems: undefined | boolean =
+    val.include_items == void 0 ? void 0 : val.include_items;
   return {
     title: title,
     description: description,
+    includeItems: includeItems,
   } satisfies HubCopyRequestV2025R0;
 }

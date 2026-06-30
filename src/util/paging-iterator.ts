@@ -71,15 +71,15 @@ class PagingIterator {
     return Boolean(isGetOrPostRequest && hasEntries && notEventStream);
   }
 
-  nextField: any /* FIXME */;
-  nextValue: any /* FIXME */;
-  limit: any /* FIXME */;
+  nextField: any; /* FIXME */
+  nextValue: any; /* FIXME */
+  limit: any; /* FIXME */
   done: boolean;
-  options: Record<string, any> /* FIMXE */;
+  options: Record<string, any>; /* FIMXE */
 
-  fetch: any /* FIXME */;
-  buffer: any /* FIXME */;
-  queue: any /* FIXME */;
+  fetch: any; /* FIXME */
+  buffer: any; /* FIXME */
+  queue: any; /* FIXME */
 
   /**
    * @constructor

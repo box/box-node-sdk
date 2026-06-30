@@ -124,7 +124,7 @@ enum tokenPaths {
 }
 
 // Timer used to track elapsed time starting with executing an async request and ending with emitting the response.
-var asyncRequestTimer: any /* FIXME */;
+var asyncRequestTimer: any; /* FIXME */
 
 // The XFF header label - Used to give the API better information for uploads, rate-limiting, etc.
 const HEADER_XFF = 'X-Forwarded-For';

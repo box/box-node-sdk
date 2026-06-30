@@ -293,7 +293,7 @@ class Events {
     }
 
     // Fix up optional arguments
-    callback = options as any /* FIXME */;
+    callback = options as any; /* FIXME */
     options = streamPosition;
     if (typeof options === 'function') {
       callback = options;
