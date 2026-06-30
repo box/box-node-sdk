@@ -114,8 +114,7 @@ export function deserializeFileVersionLegalHold(
     });
   }
   const legalHoldPolicyAssignments:
-    | undefined
-    | readonly LegalHoldPolicyAssignment[] =
+    undefined | readonly LegalHoldPolicyAssignment[] =
     val.legal_hold_policy_assignments == void 0
       ? void 0
       : sdIsList(val.legal_hold_policy_assignments)

@@ -71,8 +71,7 @@ export function deserializeShieldInformationBarrierSegmentRestrictions(
     });
   }
   const entries:
-    | undefined
-    | readonly ShieldInformationBarrierSegmentRestriction[] =
+    undefined | readonly ShieldInformationBarrierSegmentRestriction[] =
     val.entries == void 0
       ? void 0
       : sdIsList(val.entries)

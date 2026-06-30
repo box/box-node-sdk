@@ -569,104 +569,91 @@ export function deserializeEnterpriseConfigurationSecurityV2025R0(
     });
   }
   const isManagedUserSignupEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_managed_user_signup_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_managed_user_signup_enabled,
         );
   const isManagedUserSignupNotificationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_managed_user_signup_notification_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_managed_user_signup_notification_enabled,
         );
   const isManagedUserSignupCorporateEmailEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_managed_user_signup_corporate_email_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_managed_user_signup_corporate_email_enabled,
         );
   const isNewUserNotificationDailyDigestEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_new_user_notification_daily_digest_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_new_user_notification_daily_digest_enabled,
         );
   const isManagedUserEmailChangeDisabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_managed_user_email_change_disabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_managed_user_email_change_disabled,
         );
   const isMultiFactorAuthRequired:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_multi_factor_auth_required == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_multi_factor_auth_required,
         );
   const isWeakPasswordPreventionEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_weak_password_prevention_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_weak_password_prevention_enabled,
         );
   const isPasswordLeakDetectionEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_password_leak_detection_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_password_leak_detection_enabled,
         );
   const lastPasswordResetAt:
-    | undefined
-    | EnterpriseConfigurationSecurityV2025R0LastPasswordResetAtField =
+    undefined | EnterpriseConfigurationSecurityV2025R0LastPasswordResetAtField =
     val.last_password_reset_at == void 0
       ? void 0
       : deserializeEnterpriseConfigurationSecurityV2025R0LastPasswordResetAtField(
           val.last_password_reset_at,
         );
   const isPasswordRequestNotificationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_password_request_notification_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_password_request_notification_enabled,
         );
   const isPasswordChangeNotificationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_password_change_notification_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_password_change_notification_enabled,
         );
   const isStrongPasswordForExtCollabEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_strong_password_for_ext_collab_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_strong_password_for_ext_collab_enabled,
         );
   const isManagedUserMigrationDisabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_managed_user_migration_disabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
@@ -681,56 +668,49 @@ export function deserializeEnterpriseConfigurationSecurityV2025R0(
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(val.join_url);
   const failedLoginAttemptsToTriggerAdminNotification:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.failed_login_attempts_to_trigger_admin_notification == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.failed_login_attempts_to_trigger_admin_notification,
         );
   const passwordMinLength:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.password_min_length == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.password_min_length,
         );
   const passwordMinUppercaseCharacters:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.password_min_uppercase_characters == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.password_min_uppercase_characters,
         );
   const passwordMinNumericCharacters:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.password_min_numeric_characters == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.password_min_numeric_characters,
         );
   const passwordMinSpecialCharacters:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.password_min_special_characters == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.password_min_special_characters,
         );
   const passwordResetFrequency:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.password_reset_frequency == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.password_reset_frequency,
         );
   const previousPasswordReuseLimit:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.previous_password_reuse_limit == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
@@ -751,24 +731,21 @@ export function deserializeEnterpriseConfigurationSecurityV2025R0(
           val.external_collab_multi_factor_auth_settings,
         );
   const keysafe:
-    | undefined
-    | EnterpriseConfigurationSecurityV2025R0KeysafeField =
+    undefined | EnterpriseConfigurationSecurityV2025R0KeysafeField =
     val.keysafe == void 0
       ? void 0
       : deserializeEnterpriseConfigurationSecurityV2025R0KeysafeField(
           val.keysafe,
         );
   const isCustomSessionDurationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_custom_session_duration_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_custom_session_duration_enabled,
         );
   const customSessionDurationValue:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.custom_session_duration_value == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
@@ -783,8 +760,7 @@ export function deserializeEnterpriseConfigurationSecurityV2025R0(
           val.custom_session_duration_groups,
         );
   const multiFactorAuthType:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.multi_factor_auth_type == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(

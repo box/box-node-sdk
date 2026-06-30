@@ -545,6 +545,13 @@ export function deserializeSignRequest(val: SerializedData): SignRequest {
   }
   const externalSystemName: undefined | string =
     val.external_system_name == void 0 ? void 0 : val.external_system_name;
+  if (!(val.request_flow == void 0) && !sdIsString(val.request_flow)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "request_flow" of type "SignRequest"',
+    });
+  }
+  const requestFlow: undefined | string =
+    val.request_flow == void 0 ? void 0 : val.request_flow;
   return {
     type: type,
     sourceFiles: sourceFiles,
@@ -577,5 +584,6 @@ export function deserializeSignRequest(val: SerializedData): SignRequest {
     externalId: externalId,
     templateId: templateId,
     externalSystemName: externalSystemName,
+    requestFlow: requestFlow,
   } satisfies SignRequest;
 }

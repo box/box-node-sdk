@@ -9,10 +9,12 @@ import { sdIsMap } from '../serialization/json';
 export type AiItemAskTypeField = 'file' | 'hubs';
 export interface AiItemAsk {
   /**
-   * The ID of the file. */
+   * The ID of the file, or the ID of the Box Hub when `type` is `hubs`. */
   readonly id: string;
   /**
-   * The type of the item. A `hubs` item must be used as a single item. */
+   * The type of the item. Use `file` to ask a question about a file, or `hubs` to
+   * search across and ask a question about the entire contents of a Box Hub.
+   * A `hubs` item must be the only item in the request. */
   readonly type: AiItemAskTypeField;
   /**
    * The content of the item, often the text representation. */

@@ -742,8 +742,7 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
     });
   }
   const enterpriseFeatureSettings:
-    | undefined
-    | readonly EnterpriseFeatureSettingsItemV2025R0[] =
+    undefined | readonly EnterpriseFeatureSettingsItemV2025R0[] =
     val.enterprise_feature_settings == void 0
       ? void 0
       : sdIsList(val.enterprise_feature_settings)
@@ -760,8 +759,7 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.sharing_item_type,
         );
   const sharedLinkCompanyDefinition:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.shared_link_company_definition == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
@@ -774,8 +772,7 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.shared_link_access,
         );
   const sharedLinkDefaultAccess:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.shared_link_default_access == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
@@ -790,16 +787,14 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.shared_link_default_permissions_selected,
         );
   const isOpenCustomUrlsDisabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_open_custom_urls_disabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_open_custom_urls_disabled,
         );
   const isCustomDomainHiddenInSharedLink:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_custom_domain_hidden_in_shared_link == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
@@ -814,16 +809,14 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.collaboration_permissions,
         );
   const defaultCollaborationRole:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.default_collaboration_role == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.default_collaboration_role,
         );
   const isInvitePrivilegeRestricted:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_invite_privilege_restricted == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
@@ -838,24 +831,21 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.collaboration_restrictions,
         );
   const isCollaboratorInviteLinksDisabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_collaborator_invite_links_disabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_collaborator_invite_links_disabled,
         );
   const isInviteGroupCollaboratorDisabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_invite_group_collaborator_disabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_invite_group_collaborator_disabled,
         );
   const isOwnershipTransferRestricted:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_ownership_transfer_restricted == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
@@ -878,168 +868,147 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.external_collaboration_allowlist_users,
         );
   const isWatermarkingEnterpriseFeatureEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_watermarking_enterprise_feature_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_watermarking_enterprise_feature_enabled,
         );
   const isRootContentCreationRestricted:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_root_content_creation_restricted == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_root_content_creation_restricted,
         );
   const isTagCreationRestricted:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_tag_creation_restricted == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_tag_creation_restricted,
         );
   const tagCreationRestriction:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.tag_creation_restriction == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.tag_creation_restriction,
         );
   const isEmailUploadsEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_email_uploads_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_email_uploads_enabled,
         );
   const isCustomSettingsEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_custom_settings_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_custom_settings_enabled,
         );
   const isFormsLoginRequired:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_forms_login_required == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_forms_login_required,
         );
   const isFormsBrandingDefaultEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_forms_branding_default_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_forms_branding_default_enabled,
         );
   const isCcFreeTrialActive:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_cc_free_trial_active == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_cc_free_trial_active,
         );
   const isFileRequestEditorsAllowed:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_file_request_editors_allowed == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_file_request_editors_allowed,
         );
   const isFileRequestBrandingDefaultEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_file_request_branding_default_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_file_request_branding_default_enabled,
         );
   const isFileRequestLoginRequired:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_file_request_login_required == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_file_request_login_required,
         );
   const isSharedLinksExpirationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_shared_links_expiration_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_shared_links_expiration_enabled,
         );
   const sharedLinksExpirationDays:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.shared_links_expiration_days == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.shared_links_expiration_days,
         );
   const isPublicSharedLinksExpirationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_public_shared_links_expiration_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_public_shared_links_expiration_enabled,
         );
   const publicSharedLinksExpirationDays:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.public_shared_links_expiration_days == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.public_shared_links_expiration_days,
         );
   const sharedExpirationTarget:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.shared_expiration_target == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.shared_expiration_target,
         );
   const isSharedLinksExpirationNotificationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_shared_links_expiration_notification_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_shared_links_expiration_notification_enabled,
         );
   const sharedLinksExpirationNotificationDays:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.shared_links_expiration_notification_days == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.shared_links_expiration_notification_days,
         );
   const isSharedLinksExpirationNotificationPrevented:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_shared_links_expiration_notification_prevented == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_shared_links_expiration_notification_prevented,
         );
   const isAutoDeleteEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_auto_delete_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
@@ -1052,8 +1021,7 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.auto_delete_days,
         );
   const isAutoDeleteExpirationModificationPrevented:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_auto_delete_expiration_modification_prevented == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
@@ -1066,56 +1034,49 @@ export function deserializeEnterpriseConfigurationContentAndSharingV2025R0(
           val.auto_delete_target,
         );
   const isCollaborationExpirationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_collaboration_expiration_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_collaboration_expiration_enabled,
         );
   const collaborationExpirationDays:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.collaboration_expiration_days == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.collaboration_expiration_days,
         );
   const isCollaborationExpirationModificationPrevented:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_collaboration_expiration_modification_prevented == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_collaboration_expiration_modification_prevented,
         );
   const isCollaborationExpirationNotificationEnabled:
-    | undefined
-    | EnterpriseConfigurationItemBooleanV2025R0 =
+    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_collaboration_expiration_notification_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_collaboration_expiration_notification_enabled,
         );
   const collaborationExpirationTarget:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.collaboration_expiration_target == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.collaboration_expiration_target,
         );
   const trashAutoClearTime:
-    | undefined
-    | EnterpriseConfigurationItemIntegerV2025R0 =
+    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
     val.trash_auto_clear_time == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.trash_auto_clear_time,
         );
   const permanentDeletionAccess:
-    | undefined
-    | EnterpriseConfigurationItemStringV2025R0 =
+    undefined | EnterpriseConfigurationItemStringV2025R0 =
     val.permanent_deletion_access == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(

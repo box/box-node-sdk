@@ -11,12 +11,7 @@ import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShieldRuleItemV2025R0TypeField = 'shield_rule';
 export type ShieldRuleItemV2025R0PriorityField =
-  | 'informational'
-  | 'low'
-  | 'medium'
-  | 'high'
-  | 'critical'
-  | string;
+  'informational' | 'low' | 'medium' | 'high' | 'critical' | string;
 export interface ShieldRuleItemV2025R0 {
   /**
    * The identifier of the shield rule. */

@@ -18,6 +18,7 @@ import { sdIsNumber } from '../../serialization/json';
 import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
+export type HubV2025R0CopyHubAccessField = 'all' | 'company' | 'none' | string;
 export class HubV2025R0 extends HubBaseV2025R0 {
   readonly title?: string;
   readonly description?: string;
@@ -31,6 +32,7 @@ export class HubV2025R0 extends HubBaseV2025R0 {
   readonly canNonOwnersInvite?: boolean;
   readonly canSharedLinkBeCreated?: boolean;
   readonly canPublicSharedLinkBeCreated?: boolean;
+  readonly copyHubAccess?: HubV2025R0CopyHubAccessField;
   constructor(fields: HubV2025R0) {
     super(fields);
     if (fields.title !== undefined) {
@@ -70,7 +72,34 @@ export class HubV2025R0 extends HubBaseV2025R0 {
     if (fields.canPublicSharedLinkBeCreated !== undefined) {
       this.canPublicSharedLinkBeCreated = fields.canPublicSharedLinkBeCreated;
     }
+    if (fields.copyHubAccess !== undefined) {
+      this.copyHubAccess = fields.copyHubAccess;
+    }
   }
+}
+export function serializeHubV2025R0CopyHubAccessField(
+  val: HubV2025R0CopyHubAccessField,
+): SerializedData {
+  return val;
+}
+export function deserializeHubV2025R0CopyHubAccessField(
+  val: SerializedData,
+): HubV2025R0CopyHubAccessField {
+  if (val == 'all') {
+    return val;
+  }
+  if (val == 'company') {
+    return val;
+  }
+  if (val == 'none') {
+    return val;
+  }
+  if (sdIsString(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize HubV2025R0CopyHubAccessField",
+  });
 }
 export function serializeHubV2025R0(val: HubV2025R0): SerializedData {
   const base: any = serializeHubBaseV2025R0(val);
@@ -105,6 +134,10 @@ export function serializeHubV2025R0(val: HubV2025R0): SerializedData {
       ['can_non_owners_invite']: val.canNonOwnersInvite,
       ['can_shared_link_be_created']: val.canSharedLinkBeCreated,
       ['can_public_shared_link_be_created']: val.canPublicSharedLinkBeCreated,
+      ['copy_hub_access']:
+        val.copyHubAccess == void 0
+          ? val.copyHubAccess
+          : serializeHubV2025R0CopyHubAccessField(val.copyHubAccess),
     },
   };
 }
@@ -211,6 +244,10 @@ export function deserializeHubV2025R0(val: SerializedData): HubV2025R0 {
     val.can_public_shared_link_be_created == void 0
       ? void 0
       : val.can_public_shared_link_be_created;
+  const copyHubAccess: undefined | HubV2025R0CopyHubAccessField =
+    val.copy_hub_access == void 0
+      ? void 0
+      : deserializeHubV2025R0CopyHubAccessField(val.copy_hub_access);
   if (val.id == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "id" of type "HubV2025R0" to be defined',
@@ -244,6 +281,7 @@ export function deserializeHubV2025R0(val: SerializedData): HubV2025R0 {
     canNonOwnersInvite: canNonOwnersInvite,
     canSharedLinkBeCreated: canSharedLinkBeCreated,
     canPublicSharedLinkBeCreated: canPublicSharedLinkBeCreated,
+    copyHubAccess: copyHubAccess,
     id: id,
     type: type,
   } satisfies HubV2025R0;

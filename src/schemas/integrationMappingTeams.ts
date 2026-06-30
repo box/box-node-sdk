@@ -112,8 +112,7 @@ export function deserializeIntegrationMappingTeams(
     });
   }
   const integrationType:
-    | undefined
-    | IntegrationMappingTeamsIntegrationTypeField =
+    undefined | IntegrationMappingTeamsIntegrationTypeField =
     val.integration_type == void 0
       ? void 0
       : deserializeIntegrationMappingTeamsIntegrationTypeField(

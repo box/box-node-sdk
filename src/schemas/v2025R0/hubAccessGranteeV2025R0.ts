@@ -13,8 +13,7 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type HubAccessGranteeV2025R0 =
-  | HubCollaborationUserV2025R0
-  | GroupMiniV2025R0;
+  HubCollaborationUserV2025R0 | GroupMiniV2025R0;
 export function serializeHubAccessGranteeV2025R0(val: any): SerializedData {
   if (val.type == 'user') {
     return serializeHubCollaborationUserV2025R0(val);

@@ -22,10 +22,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestCreateRequestSignatureColorField =
-  | 'blue'
-  | 'black'
-  | 'red'
-  | string;
+  'blue' | 'black' | 'red' | string;
 export type SignRequestCreateRequest = SignRequestBase & {
   /**
    * List of files to create a signing document from. This is currently limited to ten files. Only the ID and type fields are required for each file. */
@@ -128,8 +125,7 @@ export function deserializeSignRequestCreateRequest(
           }) as readonly any[])
         : [];
   const signatureColor:
-    | undefined
-    | SignRequestCreateRequestSignatureColorField =
+    undefined | SignRequestCreateRequestSignatureColorField =
     val.signature_color == void 0
       ? void 0
       : deserializeSignRequestCreateRequestSignatureColorField(
@@ -285,6 +281,14 @@ export function deserializeSignRequestCreateRequest(
   }
   const externalSystemName: undefined | string =
     val.external_system_name == void 0 ? void 0 : val.external_system_name;
+  if (!(val.request_flow == void 0) && !sdIsString(val.request_flow)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "request_flow" of type "SignRequestCreateRequest"',
+    });
+  }
+  const requestFlow: undefined | string =
+    val.request_flow == void 0 ? void 0 : val.request_flow;
   return {
     sourceFiles: sourceFiles,
     signatureColor: signatureColor,
@@ -303,5 +307,6 @@ export function deserializeSignRequestCreateRequest(
     externalId: externalId,
     templateId: templateId,
     externalSystemName: externalSystemName,
+    requestFlow: requestFlow,
   } satisfies SignRequestCreateRequest;
 }

@@ -182,7 +182,7 @@ await WebhooksManager.validateMessage(
 - body `string`
   - The request body of the webhook message
 - headers `{
-    readonly [key: string]: string;
+  readonly [key: string]: string;
 }`
   - The headers of the webhook message
 - primaryKey `string`
