@@ -27,6 +27,9 @@ import { RetryStrategy } from './retries';
 import { BoxRetryStrategy } from './retries';
 import { DataSanitizer } from '../internal/logging';
 
+const DEFAULT_CONNECT_TIMEOUT_MS = 10000;
+const DEFAULT_REQUEST_TIMEOUT_MS = 21600000;
+
 export const userAgentHeader = `Box JavaScript generated SDK v${sdkVersion} (${
   isBrowser() ? navigator.userAgent : `Node ${process.version}`
 })`;
@@ -40,17 +43,22 @@ export const shouldIncludeBoxUaHeader = (options: FetchOptions) => {
   );
 };
 
-function createAbortSignalWithTimeout(
+function createPhasedTimeout(
   baseSignal: RequestInit['signal'],
-  timeoutMs: number
+  connectTimeoutMs: number | undefined,
+  requestTimeoutMs: number | undefined
 ): {
   signal: AbortSignal;
+  onHeadersReceived: () => void;
   clearTimeout: () => void;
-  didTimeout: () => boolean;
+  didConnectTimeout: () => boolean;
+  didTotalTimeout: () => boolean;
 } {
   const controller = new AbortController();
   const upstream = baseSignal as unknown as AbortSignal | undefined;
-  let timedOut = false;
+  let connectTimedOut = false;
+  let totalTimedOut = false;
+  let currentTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
   const abortFromUpstream = () => {
     try {
@@ -68,24 +76,54 @@ function createAbortSignalWithTimeout(
     }
   }
 
-  const timeoutId = setTimeout(() => {
-    timedOut = true;
-    controller.abort();
-  }, timeoutMs);
+  const setTimer = (ms: number, onTimeout: () => void) => {
+    if (currentTimeoutId !== undefined) {
+      clearTimeout(currentTimeoutId);
+    }
+    currentTimeoutId = setTimeout(onTimeout, ms);
+    (currentTimeoutId as any)?.unref?.();
+  };
 
-  // Node.js timers keep the event loop alive. If the only pending work is this
-  // watchdog timeout, we don't want it to prevent process exit (e.g. short CLI
-  // runs, tests, scripts). `unref()` detaches the timer from the event loop.
-  // It’s a no-op in environments where `unref` isn’t available.
-  (timeoutId as any)?.unref?.();
+  const initialTimeoutMs =
+    connectTimeoutMs != null && connectTimeoutMs > 0
+      ? connectTimeoutMs
+      : requestTimeoutMs;
+  if (initialTimeoutMs != null && initialTimeoutMs > 0) {
+    setTimer(initialTimeoutMs, () => {
+      if (connectTimeoutMs != null && connectTimeoutMs > 0) {
+        connectTimedOut = true;
+      } else {
+        totalTimedOut = true;
+      }
+      controller.abort();
+    });
+  }
 
   return {
     signal: controller.signal,
+    onHeadersReceived: () => {
+      if (connectTimeoutMs != null && connectTimeoutMs > 0) {
+        if (currentTimeoutId !== undefined) {
+          clearTimeout(currentTimeoutId);
+          currentTimeoutId = undefined;
+        }
+        if (requestTimeoutMs != null && requestTimeoutMs > 0) {
+          setTimer(requestTimeoutMs, () => {
+            totalTimedOut = true;
+            controller.abort();
+          });
+        }
+      }
+    },
     clearTimeout: () => {
-      clearTimeout(timeoutId);
+      if (currentTimeoutId !== undefined) {
+        clearTimeout(currentTimeoutId);
+        currentTimeoutId = undefined;
+      }
       if (upstream) upstream.removeEventListener('abort', abortFromUpstream);
     },
-    didTimeout: () => timedOut,
+    didConnectTimeout: () => connectTimedOut,
+    didTotalTimeout: () => totalTimedOut,
   };
 }
 
@@ -243,16 +281,27 @@ export class BoxNetworkClient implements NetworkClient {
     });
 
     const timeoutConfig = fetchOptions.networkSession?.timeoutConfig;
-    const timeoutMs = timeoutConfig?.timeoutMs;
+    const connectTimeoutMs = timeoutConfig
+      ? timeoutConfig.connectionTimeoutMs
+      : DEFAULT_CONNECT_TIMEOUT_MS;
+    const requestTimeoutMs = timeoutConfig
+      ? timeoutConfig.timeoutMs
+      : DEFAULT_REQUEST_TIMEOUT_MS;
 
-    const requestTimeout =
-      timeoutMs != null && timeoutMs > 0
-        ? createAbortSignalWithTimeout(requestInit.signal, timeoutMs)
-        : undefined;
-    const requestInitWithTimeout: RequestInit = requestTimeout
+    const hasTimeout =
+      (connectTimeoutMs != null && connectTimeoutMs > 0) ||
+      (requestTimeoutMs != null && requestTimeoutMs > 0);
+    const phasedTimeout = hasTimeout
+      ? createPhasedTimeout(
+          requestInit.signal,
+          connectTimeoutMs,
+          requestTimeoutMs
+        )
+      : undefined;
+    const requestInitWithTimeout: RequestInit = phasedTimeout
       ? {
           ...requestInit,
-          signal: requestTimeout.signal as unknown as RequestInit['signal'],
+          signal: phasedTimeout.signal as unknown as RequestInit['signal'],
         }
       : requestInit;
 
@@ -268,6 +317,8 @@ export class BoxNetworkClient implements NetworkClient {
         ...requestInitWithTimeout,
         redirect: isBrowser() ? 'follow' : 'manual',
       });
+
+      phasedTimeout?.onHeadersReceived();
 
       const ignoreResponseBody = fetchOptions.followRedirects === false;
 
@@ -307,14 +358,16 @@ export class BoxNetworkClient implements NetworkClient {
     } catch (error) {
       isExceptionCase = true;
       numberOfRetriesOnException++;
-      if (requestTimeout?.didTimeout()) {
-        caughtError = new Error(`Connection timeout after ${timeoutMs}ms`);
+      if (phasedTimeout?.didConnectTimeout()) {
+        caughtError = new Error(`Connect timeout after ${connectTimeoutMs}ms`);
+      } else if (phasedTimeout?.didTotalTimeout()) {
+        caughtError = new Error(`Request timeout after ${requestTimeoutMs}ms`);
       } else {
         caughtError = error instanceof Error ? error : new Error(String(error));
       }
       fetchResponse = fetchResponse ?? { status: 0, headers: {} };
     } finally {
-      requestTimeout?.clearTimeout();
+      phasedTimeout?.clearTimeout();
     }
     const attemptForRetry = isExceptionCase
       ? numberOfRetriesOnException
