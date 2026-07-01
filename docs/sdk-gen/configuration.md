@@ -178,22 +178,30 @@ const client = new BoxClient({ auth, networkSession });
 
 ## Timeouts
 
-You can configure request timeout using `timeoutConfig` on `NetworkSession`.
-`timeoutMs` is in milliseconds and applies to each HTTP request attempt.
+You can configure request timeouts using `timeoutConfig` on `NetworkSession`.
+The SDK supports the following timeout values, all in milliseconds:
+
+| Parameter             | Description                                                                                                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `connectionTimeoutMs` | Maximum time to wait for response headers (covers DNS, TCP, TLS, and server processing).                                                                                           |
+| `timeoutMs`           | Maximum time to read the response body after headers are received. When `connectionTimeoutMs` is not set, applies as a single timeout for the entire request from start to finish. |
 
 ```js
 const auth = new BoxDeveloperTokenAuth({ token: 'DEVELOPER_TOKEN_GOES_HERE' });
 const networkSession = new NetworkSession({
-  timeoutConfig: { timeoutMs: 30000 },
+  timeoutConfig: {
+    connectionTimeoutMs: 5000,
+    timeoutMs: 60000,
+  },
 });
 const client = new BoxClient({ auth, networkSession });
 ```
 
 How timeout handling works:
 
-- The SDK does not apply any timeout by default. Without explicit configuration, requests will wait indefinitely for a response.
-- The SDK applies timeout only when `timeoutMs` is provided and greater than `0`.
-- To disable SDK timeout handling, set `timeoutMs` to `0` (or a negative value), or omit `timeoutMs`.
-- On timeout, the request is aborted and treated as a network error (`Connection timeout after <timeoutMs>ms`); if retries are exhausted, the SDK throws `BoxSdkError`.
+- If timeout config is not provided, the SDK uses default timeouts: `connectionTimeoutMs: 10000` (10 seconds) and `timeoutMs: 21600000` (6 hours).
+- When both `connectionTimeoutMs` and `timeoutMs` are set, the SDK uses a phased timeout approach: `connectionTimeoutMs` is enforced first while waiting for response headers. Once headers are received, the timer is reset to `timeoutMs` for reading the response body.
+- If only `timeoutMs` is set (without `connectionTimeoutMs`), it applies as a single timeout for the entire request.
+- On connect timeout, the request is aborted with error `Connect timeout after <connectionTimeoutMs>ms`. On request timeout, the error is `Request timeout after <timeoutMs>ms`. If retries are exhausted, the SDK throws `BoxSdkError`.
 - Timeout failures are handled as request exceptions, then retry behavior is controlled by the configured retry strategy.
 - Timeout applies to a single HTTP request attempt to the Box API (not the total time across all retries).
