@@ -6,6 +6,8 @@
     "declaration": true,
     "sourceMap": true,
     "outDir": "lib-esm",
+    "rootDir": "src",
+    "baseUrl": ".",
     "isolatedModules": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
