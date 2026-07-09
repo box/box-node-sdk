@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.13.0](https://github.com/box/box-node-sdk/compare/v4.12.0...v4.13.0) (2026-07-09)
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** Add new fields to Hubs (box/box-openapi[#606](https://github.com/box/box-node-sdk/issues/606)) ([#1527](https://github.com/box/box-node-sdk/issues/1527)) ([7b69fd2](https://github.com/box/box-node-sdk/commit/7b69fd20aae212c3c2238de84911ef714355ace4))
+* **boxsdkgen:** Setup common default timeout (box/box-codegen[#965](https://github.com/box/box-node-sdk/issues/965)) ([#1533](https://github.com/box/box-node-sdk/issues/1533)) ([6075bed](https://github.com/box/box-node-sdk/commit/6075bedd5e5a7f84ae89d08496156d36d8764227))
+
 ## [4.12.0](https://github.com/box/box-node-sdk/compare/v4.11.2...v4.12.0) (2026-06-11)
 
 
