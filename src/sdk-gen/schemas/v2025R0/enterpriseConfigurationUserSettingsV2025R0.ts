@@ -253,7 +253,8 @@ export function deserializeEnterpriseConfigurationUserSettingsV2025R0(
     });
   }
   const enterpriseFeatureSettings:
-    undefined | readonly EnterpriseFeatureSettingsItemV2025R0[] =
+    | undefined
+    | readonly EnterpriseFeatureSettingsItemV2025R0[] =
     val.enterprise_feature_settings == void 0
       ? void 0
       : sdIsList(val.enterprise_feature_settings)
@@ -264,105 +265,120 @@ export function deserializeEnterpriseConfigurationUserSettingsV2025R0(
           }) as readonly any[])
         : [];
   const userInvitesExpirationTimeFrame:
-    undefined | EnterpriseConfigurationItemStringV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemStringV2025R0 =
     val.user_invites_expiration_time_frame == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.user_invites_expiration_time_frame
         );
   const isUsernameChangeRestricted:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_username_change_restricted == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_username_change_restricted
         );
   const isBoxSyncRestrictedForNewUsers:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_box_sync_restricted_for_new_users == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_box_sync_restricted_for_new_users
         );
   const isViewAllUsersEnabledForNewUsers:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_view_all_users_enabled_for_new_users == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_view_all_users_enabled_for_new_users
         );
   const isDeviceLimitExemptionEnabledForNewUsers:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_device_limit_exemption_enabled_for_new_users == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_device_limit_exemption_enabled_for_new_users
         );
   const isExternalCollaborationRestrictedForNewUsers:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_external_collaboration_restricted_for_new_users == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_external_collaboration_restricted_for_new_users
         );
   const isUnlimitedStorageEnabledForNewUsers:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_unlimited_storage_enabled_for_new_users == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_unlimited_storage_enabled_for_new_users
         );
   const newUserDefaultStorageLimit:
-    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemIntegerV2025R0 =
     val.new_user_default_storage_limit == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.new_user_default_storage_limit
         );
   const newUserDefaultTimezone:
-    undefined | EnterpriseConfigurationItemStringV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemStringV2025R0 =
     val.new_user_default_timezone == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.new_user_default_timezone
         );
   const newUserDefaultLanguage:
-    undefined | EnterpriseConfigurationItemStringV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemStringV2025R0 =
     val.new_user_default_language == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemStringV2025R0(
           val.new_user_default_language
         );
   const isEnterpriseSsoRequired:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_enterprise_sso_required == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_enterprise_sso_required
         );
   const isEnterpriseSsoInTesting:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_enterprise_sso_in_testing == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_enterprise_sso_in_testing
         );
   const isSsoAutoAddGroupsEnabled:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_sso_auto_add_groups_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_sso_auto_add_groups_enabled
         );
   const isSsoAutoAddUserToGroupsEnabled:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_sso_auto_add_user_to_groups_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
           val.is_sso_auto_add_user_to_groups_enabled
         );
   const isSsoAutoRemoveUserFromGroupsEnabled:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_sso_auto_remove_user_from_groups_enabled == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(
@@ -377,14 +393,16 @@ export function deserializeEnterpriseConfigurationUserSettingsV2025R0(
           val.user_tracking_codes
         );
   const numberOfUserTrackingCodesRemaining:
-    undefined | EnterpriseConfigurationItemIntegerV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemIntegerV2025R0 =
     val.number_of_user_tracking_codes_remaining == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemIntegerV2025R0(
           val.number_of_user_tracking_codes_remaining
         );
   const isInstantLoginRestricted:
-    undefined | EnterpriseConfigurationItemBooleanV2025R0 =
+    | undefined
+    | EnterpriseConfigurationItemBooleanV2025R0 =
     val.is_instant_login_restricted == void 0
       ? void 0
       : deserializeEnterpriseConfigurationItemBooleanV2025R0(

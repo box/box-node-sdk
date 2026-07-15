@@ -32,7 +32,9 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type RetentionPolicyPolicyTypeField = 'finite' | 'indefinite' | string;
 export type RetentionPolicyRetentionTypeField =
-  'modifiable' | 'non_modifiable' | string;
+  | 'modifiable'
+  | 'non_modifiable'
+  | string;
 export type RetentionPolicyStatusField = 'active' | 'retired' | string;
 export interface RetentionPolicyAssignmentCountsField {
   /**
@@ -361,14 +363,16 @@ export function deserializeRetentionPolicy(
   const retentionLength: undefined | string =
     val.retention_length == void 0 ? void 0 : val.retention_length;
   const dispositionAction:
-    undefined | RetentionPolicyMiniDispositionActionField =
+    | undefined
+    | RetentionPolicyMiniDispositionActionField =
     val.disposition_action == void 0
       ? void 0
       : deserializeRetentionPolicyMiniDispositionActionField(
           val.disposition_action
         );
   const maxExtensionLength:
-    undefined | RetentionPolicyMaxExtensionLengthResponse =
+    | undefined
+    | RetentionPolicyMaxExtensionLengthResponse =
     val.max_extension_length == void 0
       ? void 0
       : deserializeRetentionPolicyMaxExtensionLengthResponse(

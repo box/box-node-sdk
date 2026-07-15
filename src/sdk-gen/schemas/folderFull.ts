@@ -43,7 +43,10 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type FolderFullSyncStateField =
-  'synced' | 'not_synced' | 'partially_synced' | string;
+  | 'synced'
+  | 'not_synced'
+  | 'partially_synced'
+  | string;
 export interface FolderFullPermissionsField {
   /**
    * Specifies if the current user can delete this item. */
@@ -84,7 +87,10 @@ export interface FolderFullMetadataField {
   readonly rawData?: SerializedData;
 }
 export type FolderFullAllowedSharedLinkAccessLevelsField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export type FolderFullAllowedInviteeRolesField =
   | 'editor'
   | 'viewer'
@@ -709,7 +715,8 @@ export function deserializeFolderFull(val: SerializedData): FolderFull {
     });
   }
   const allowedSharedLinkAccessLevels:
-    undefined | readonly FolderFullAllowedSharedLinkAccessLevelsField[] =
+    | undefined
+    | readonly FolderFullAllowedSharedLinkAccessLevelsField[] =
     val.allowed_shared_link_access_levels == void 0
       ? void 0
       : sdIsList(val.allowed_shared_link_access_levels)
@@ -729,7 +736,8 @@ export function deserializeFolderFull(val: SerializedData): FolderFull {
     });
   }
   const allowedInviteeRoles:
-    undefined | readonly FolderFullAllowedInviteeRolesField[] =
+    | undefined
+    | readonly FolderFullAllowedInviteeRolesField[] =
     val.allowed_invitee_roles == void 0
       ? void 0
       : sdIsList(val.allowed_invitee_roles)

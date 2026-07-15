@@ -94,7 +94,11 @@ export interface FileFullPermissionsField {
 }
 export type FileFullLockTypeField = 'lock';
 export type FileFullLockAppTypeField =
-  'gsuite' | 'office_wopi' | 'office_wopiplus' | 'other' | string;
+  | 'gsuite'
+  | 'office_wopi'
+  | 'office_wopiplus'
+  | 'other'
+  | string;
 export interface FileFullLockField {
   /**
    * The unique identifier for this lock. */
@@ -224,7 +228,11 @@ export interface FileFullRepresentationsEntriesPropertiesField {
   readonly rawData?: SerializedData;
 }
 export type FileFullRepresentationsEntriesStatusStateField =
-  'success' | 'viewable' | 'pending' | 'none' | string;
+  | 'success'
+  | 'viewable'
+  | 'pending'
+  | 'none'
+  | string;
 export interface FileFullRepresentationsEntriesStatusField {
   /**
    * The status of the representation.
@@ -280,7 +288,10 @@ export interface FileFullClassificationField {
   readonly rawData?: SerializedData;
 }
 export type FileFullSharedLinkPermissionOptionsField =
-  'can_preview' | 'can_download' | 'can_edit' | string;
+  | 'can_preview'
+  | 'can_download'
+  | 'can_edit'
+  | string;
 export class FileFull extends File {
   readonly versionNumber?: string;
   readonly commentCount?: number;
@@ -302,7 +313,8 @@ export class FileFull extends File {
   readonly uploaderDisplayName?: string;
   readonly dispositionAt?: DateTime | null;
   readonly sharedLinkPermissionOptions?:
-    readonly FileFullSharedLinkPermissionOptionsField[] | null;
+    | readonly FileFullSharedLinkPermissionOptionsField[]
+    | null;
   readonly isAssociatedWithAppItem?: boolean;
   constructor(fields: FileFull) {
     super(fields);
@@ -1424,7 +1436,8 @@ export function deserializeFileFull(val: SerializedData): FileFull {
     });
   }
   const allowedInviteeRoles:
-    undefined | readonly FileFullAllowedInviteeRolesField[] =
+    | undefined
+    | readonly FileFullAllowedInviteeRolesField[] =
     val.allowed_invitee_roles == void 0
       ? void 0
       : sdIsList(val.allowed_invitee_roles)
@@ -1503,7 +1516,8 @@ export function deserializeFileFull(val: SerializedData): FileFull {
     });
   }
   const sharedLinkPermissionOptions:
-    undefined | readonly FileFullSharedLinkPermissionOptionsField[] =
+    | undefined
+    | readonly FileFullSharedLinkPermissionOptionsField[] =
     val.shared_link_permission_options == void 0
       ? void 0
       : sdIsList(val.shared_link_permission_options)

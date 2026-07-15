@@ -34,11 +34,21 @@ export interface WebLinkPathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type WebLinkSharedLinkAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export type WebLinkSharedLinkEffectiveAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export type WebLinkSharedLinkEffectivePermissionField =
-  'can_edit' | 'can_download' | 'can_preview' | 'no_access' | string;
+  | 'can_edit'
+  | 'can_download'
+  | 'can_preview'
+  | 'no_access'
+  | string;
 export interface WebLinkSharedLinkPermissionsField {
   /**
    * Defines if the shared link allows for the item to be downloaded. For

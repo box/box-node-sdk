@@ -26,7 +26,10 @@ export interface TrashFolderRestoredPathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type TrashFolderRestoredItemStatusField =
-  'active' | 'trashed' | 'deleted' | string;
+  | 'active'
+  | 'trashed'
+  | 'deleted'
+  | string;
 export interface TrashFolderRestored {
   /**
    * The unique identifier that represent a folder.
