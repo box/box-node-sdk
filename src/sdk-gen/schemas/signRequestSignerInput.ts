@@ -49,12 +49,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputTypeField =
-  | 'signature'
-  | 'date'
-  | 'text'
-  | 'checkbox'
-  | 'radio'
-  | 'dropdown';
+  'signature' | 'date' | 'text' | 'checkbox' | 'radio' | 'dropdown';
 export type SignRequestSignerInputContentTypeField =
   | 'signature'
   | 'initial'

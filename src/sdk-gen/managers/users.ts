@@ -167,10 +167,7 @@ export interface DeleteUserByIdOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetUsersQueryParamsUserTypeField =
-  | 'all'
-  | 'managed'
-  | 'external'
-  | string;
+  'all' | 'managed' | 'external' | string;
 export interface GetUsersQueryParams {
   /**
    * Limits the results to only users who's `name` or
@@ -1571,8 +1568,7 @@ export function deserializeUpdateUserByIdRequestBody(
   const spaceAmount: undefined | number =
     val.space_amount == void 0 ? void 0 : val.space_amount;
   const notificationEmail:
-    | undefined
-    | UpdateUserByIdRequestBodyNotificationEmailField =
+    undefined | UpdateUserByIdRequestBodyNotificationEmailField =
     val.notification_email == void 0
       ? void 0
       : deserializeUpdateUserByIdRequestBodyNotificationEmailField(
