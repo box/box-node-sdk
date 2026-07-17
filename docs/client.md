@@ -190,7 +190,7 @@ All timeout values are in milliseconds and apply to each request attempt.
 
 ```js
 const newClient = client.withTimeouts({
-  connectionTimeoutMs: 5000,
+  responseHeadersTimeout: 5000,
   timeoutMs: 60000,
 });
 ```
