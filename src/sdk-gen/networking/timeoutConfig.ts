@@ -1,4 +1,4 @@
 export interface TimeoutConfig {
-  readonly connectionTimeoutMs?: number;
+  readonly responseHeadersTimeout?: number;
   readonly timeoutMs?: number;
 }
