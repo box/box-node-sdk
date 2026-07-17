@@ -27,7 +27,7 @@ import { RetryStrategy } from './retries';
 import { BoxRetryStrategy } from './retries';
 import { DataSanitizer } from '../internal/logging';
 
-const DEFAULT_CONNECT_TIMEOUT_MS = 10000;
+const DEFAULT_RESPONSE_HEADERS_TIMEOUT_MS = 60000;
 const DEFAULT_REQUEST_TIMEOUT_MS = 21600000;
 
 export const userAgentHeader = `Box JavaScript generated SDK v${sdkVersion} (${
@@ -45,18 +45,18 @@ export const shouldIncludeBoxUaHeader = (options: FetchOptions) => {
 
 function createPhasedTimeout(
   baseSignal: RequestInit['signal'],
-  connectTimeoutMs: number | undefined,
+  responseHeadersTimeoutMs: number | undefined,
   requestTimeoutMs: number | undefined
 ): {
   signal: AbortSignal;
   onHeadersReceived: () => void;
   clearTimeout: () => void;
-  didConnectTimeout: () => boolean;
+  didResponseHeadersTimeout: () => boolean;
   didTotalTimeout: () => boolean;
 } {
   const controller = new AbortController();
   const upstream = baseSignal as unknown as AbortSignal | undefined;
-  let connectTimedOut = false;
+  let responseHeadersTimedOut = false;
   let totalTimedOut = false;
   let currentTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
@@ -85,13 +85,13 @@ function createPhasedTimeout(
   };
 
   const initialTimeoutMs =
-    connectTimeoutMs != null && connectTimeoutMs > 0
-      ? connectTimeoutMs
+    responseHeadersTimeoutMs != null && responseHeadersTimeoutMs > 0
+      ? responseHeadersTimeoutMs
       : requestTimeoutMs;
   if (initialTimeoutMs != null && initialTimeoutMs > 0) {
     setTimer(initialTimeoutMs, () => {
-      if (connectTimeoutMs != null && connectTimeoutMs > 0) {
-        connectTimedOut = true;
+      if (responseHeadersTimeoutMs != null && responseHeadersTimeoutMs > 0) {
+        responseHeadersTimedOut = true;
       } else {
         totalTimedOut = true;
       }
@@ -102,7 +102,7 @@ function createPhasedTimeout(
   return {
     signal: controller.signal,
     onHeadersReceived: () => {
-      if (connectTimeoutMs != null && connectTimeoutMs > 0) {
+      if (responseHeadersTimeoutMs != null && responseHeadersTimeoutMs > 0) {
         if (currentTimeoutId !== undefined) {
           clearTimeout(currentTimeoutId);
           currentTimeoutId = undefined;
@@ -122,7 +122,7 @@ function createPhasedTimeout(
       }
       if (upstream) upstream.removeEventListener('abort', abortFromUpstream);
     },
-    didConnectTimeout: () => connectTimedOut,
+    didResponseHeadersTimeout: () => responseHeadersTimedOut,
     didTotalTimeout: () => totalTimedOut,
   };
 }
@@ -281,20 +281,20 @@ export class BoxNetworkClient implements NetworkClient {
     });
 
     const timeoutConfig = fetchOptions.networkSession?.timeoutConfig;
-    const connectTimeoutMs = timeoutConfig
-      ? timeoutConfig.connectionTimeoutMs
-      : DEFAULT_CONNECT_TIMEOUT_MS;
+    const responseHeadersTimeoutMs = timeoutConfig
+      ? timeoutConfig.responseHeadersTimeout
+      : DEFAULT_RESPONSE_HEADERS_TIMEOUT_MS;
     const requestTimeoutMs = timeoutConfig
       ? timeoutConfig.timeoutMs
       : DEFAULT_REQUEST_TIMEOUT_MS;
 
     const hasTimeout =
-      (connectTimeoutMs != null && connectTimeoutMs > 0) ||
+      (responseHeadersTimeoutMs != null && responseHeadersTimeoutMs > 0) ||
       (requestTimeoutMs != null && requestTimeoutMs > 0);
     const phasedTimeout = hasTimeout
       ? createPhasedTimeout(
           requestInit.signal,
-          connectTimeoutMs,
+          responseHeadersTimeoutMs,
           requestTimeoutMs
         )
       : undefined;
@@ -358,8 +358,10 @@ export class BoxNetworkClient implements NetworkClient {
     } catch (error) {
       isExceptionCase = true;
       numberOfRetriesOnException++;
-      if (phasedTimeout?.didConnectTimeout()) {
-        caughtError = new Error(`Connect timeout after ${connectTimeoutMs}ms`);
+      if (phasedTimeout?.didResponseHeadersTimeout()) {
+        caughtError = new Error(
+          `Response headers timeout after ${responseHeadersTimeoutMs}ms`
+        );
       } else if (phasedTimeout?.didTotalTimeout()) {
         caughtError = new Error(`Request timeout after ${requestTimeoutMs}ms`);
       } else {
