@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.13.0](https://github.com/box/box-node-sdk/compare/v10.12.0...v10.13.0) (2026-07-17)
+
+
+### Bug Fixes
+
+* Define TypeScript SDK `tsconfig` roots (box/box-codegen[#970](https://github.com/box/box-node-sdk/issues/970)) ([#1538](https://github.com/box/box-node-sdk/issues/1538)) ([2848a20](https://github.com/box/box-node-sdk/commit/2848a2042be615c782cc8c79ea2cde432a488b77))
+
+
+### New Features and Enhancements
+
+* Add new fields to Hubs (box/box-openapi[#606](https://github.com/box/box-node-sdk/issues/606)) ([#1528](https://github.com/box/box-node-sdk/issues/1528)) ([41fc72e](https://github.com/box/box-node-sdk/commit/41fc72eebc0dcd3de31ed54dbf9ba2ea4d6ec7c2))
+* Rename `connectionTimeout` in typescript to `responseHeadersTimeout` and raise default to 60 seconds (box/box-codegen[#973](https://github.com/box/box-node-sdk/issues/973)) ([#1555](https://github.com/box/box-node-sdk/issues/1555)) ([189073b](https://github.com/box/box-node-sdk/commit/189073b8632b9d494274c28b6e805338651bea85))
+* Setup common default timeout (box/box-codegen[#965](https://github.com/box/box-node-sdk/issues/965)) ([#1534](https://github.com/box/box-node-sdk/issues/1534)) ([5eb3c68](https://github.com/box/box-node-sdk/commit/5eb3c68eae4b156c85fb6402ec669836ba8fe438))
+
 ## [10.12.0](https://github.com/box/box-node-sdk/compare/v10.11.1...v10.12.0) (2026-06-11)
 
 
