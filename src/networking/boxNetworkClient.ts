@@ -17,6 +17,7 @@ import {
   SerializedData,
   jsonToSerializedData,
   sdIsMap,
+  sdIsString,
   sdToJson,
   sdToUrlParams,
 } from '../serialization/json';
@@ -436,15 +437,31 @@ export class BoxNetworkClient implements NetworkClient {
       errorDescription,
     ] = sdIsMap(fetchResponse.data)
       ? [
-          sdToJson(fetchResponse.data['code']),
+          // Read the scalar error fields as raw strings. `sdToJson` JSON-encodes its
+          // input, which wraps strings in quotes (e.g. `storage_limit_exceeded`
+          // becomes `"storage_limit_exceeded"`), corrupting both `responseInfo.code`
+          // and the composed error message.
+          sdIsString(fetchResponse.data['code'])
+            ? fetchResponse.data['code']
+            : undefined,
           sdIsMap(fetchResponse.data['context_info'])
             ? fetchResponse.data['context_info']
             : undefined,
-          sdToJson(fetchResponse.data['request_id']),
-          sdToJson(fetchResponse.data['help_url']),
-          sdToJson(fetchResponse.data['message']),
-          sdToJson(fetchResponse.data['error']),
-          sdToJson(fetchResponse.data['error_description']),
+          sdIsString(fetchResponse.data['request_id'])
+            ? fetchResponse.data['request_id']
+            : undefined,
+          sdIsString(fetchResponse.data['help_url'])
+            ? fetchResponse.data['help_url']
+            : undefined,
+          sdIsString(fetchResponse.data['message'])
+            ? fetchResponse.data['message']
+            : undefined,
+          sdIsString(fetchResponse.data['error'])
+            ? fetchResponse.data['error']
+            : undefined,
+          sdIsString(fetchResponse.data['error_description'])
+            ? fetchResponse.data['error_description']
+            : undefined,
         ]
       : [];
     if (fetchResponse.status === 0) {
