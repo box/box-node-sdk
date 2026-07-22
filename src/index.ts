@@ -7,4 +7,6 @@ export {
   BoxOAuth,
   OAuthConfig,
 } from './box';
+export { BoxApiError, BoxSdkError } from './box';
+export type { RequestInfo, ResponseInfo } from './box';
 export { BoxClient } from './client';
