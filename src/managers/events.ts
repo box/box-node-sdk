@@ -146,11 +146,13 @@ export type GetEventsQueryParamsEventTypeField =
   | 'SHARED_LINK_SEND'
   | 'SHARE_EXPIRATION'
   | 'SHIELD_ALERT'
+  | 'SHIELD_DOWNLOAD_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED_MISSING_JUSTIFICATION'
   | 'SHIELD_EXTERNAL_COLLAB_INVITE_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_INVITE_BLOCKED_MISSING_JUSTIFICATION'
   | 'SHIELD_JUSTIFICATION_APPROVAL'
+  | 'SHIELD_PREVIEW_BLOCKED'
   | 'SHIELD_SHARED_LINK_ACCESS_BLOCKED'
   | 'SHIELD_SHARED_LINK_STATUS_RESTRICTED_ON_CREATE'
   | 'SHIELD_SHARED_LINK_STATUS_RESTRICTED_ON_UPDATE'
@@ -359,11 +361,13 @@ export type GetEventStreamQueryParamsEventTypeField =
   | 'SHARED_LINK_SEND'
   | 'SHARE_EXPIRATION'
   | 'SHIELD_ALERT'
+  | 'SHIELD_DOWNLOAD_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED_MISSING_JUSTIFICATION'
   | 'SHIELD_EXTERNAL_COLLAB_INVITE_BLOCKED'
   | 'SHIELD_EXTERNAL_COLLAB_INVITE_BLOCKED_MISSING_JUSTIFICATION'
   | 'SHIELD_JUSTIFICATION_APPROVAL'
+  | 'SHIELD_PREVIEW_BLOCKED'
   | 'SHIELD_SHARED_LINK_ACCESS_BLOCKED'
   | 'SHIELD_SHARED_LINK_STATUS_RESTRICTED_ON_CREATE'
   | 'SHIELD_SHARED_LINK_STATUS_RESTRICTED_ON_UPDATE'
@@ -971,6 +975,9 @@ export function deserializeGetEventsQueryParamsEventTypeField(
   if (val == 'SHIELD_ALERT') {
     return val;
   }
+  if (val == 'SHIELD_DOWNLOAD_BLOCKED') {
+    return val;
+  }
   if (val == 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED') {
     return val;
   }
@@ -984,6 +991,9 @@ export function deserializeGetEventsQueryParamsEventTypeField(
     return val;
   }
   if (val == 'SHIELD_JUSTIFICATION_APPROVAL') {
+    return val;
+  }
+  if (val == 'SHIELD_PREVIEW_BLOCKED') {
     return val;
   }
   if (val == 'SHIELD_SHARED_LINK_ACCESS_BLOCKED') {
@@ -1412,6 +1422,9 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
   if (val == 'SHIELD_ALERT') {
     return val;
   }
+  if (val == 'SHIELD_DOWNLOAD_BLOCKED') {
+    return val;
+  }
   if (val == 'SHIELD_EXTERNAL_COLLAB_ACCESS_BLOCKED') {
     return val;
   }
@@ -1425,6 +1438,9 @@ export function deserializeGetEventStreamQueryParamsEventTypeField(
     return val;
   }
   if (val == 'SHIELD_JUSTIFICATION_APPROVAL') {
+    return val;
+  }
+  if (val == 'SHIELD_PREVIEW_BLOCKED') {
     return val;
   }
   if (val == 'SHIELD_SHARED_LINK_ACCESS_BLOCKED') {
