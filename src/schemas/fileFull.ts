@@ -22,6 +22,8 @@ import { serializeResourceScope } from './resourceScope';
 import { deserializeResourceScope } from './resourceScope';
 import { serializeMetadataFull } from './metadataFull';
 import { deserializeMetadataFull } from './metadataFull';
+import { serializeCollection } from './collection';
+import { deserializeCollection } from './collection';
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
 import { FileBaseTypeField } from './fileBase';
@@ -36,6 +38,7 @@ import { File } from './file';
 import { UserMini } from './userMini';
 import { ResourceScope } from './resourceScope';
 import { MetadataFull } from './metadataFull';
+import { Collection } from './collection';
 import { BoxSdkError } from '../box/errors';
 import { DateTime } from '../internal/utils';
 import { SerializedData } from '../serialization/json';
@@ -281,6 +284,8 @@ export interface FileFullClassificationField {
 }
 export type FileFullSharedLinkPermissionOptionsField =
   'can_preview' | 'can_download' | 'can_edit' | string;
+export type FileFullAllowedSharedLinkAccessLevelsField =
+  'open' | 'company' | 'collaborators' | string;
 export class FileFull extends File {
   readonly versionNumber?: string;
   readonly commentCount?: number;
@@ -304,6 +309,11 @@ export class FileFull extends File {
   readonly sharedLinkPermissionOptions?:
     readonly FileFullSharedLinkPermissionOptionsField[] | null;
   readonly isAssociatedWithAppItem?: boolean;
+  readonly collections?: readonly Collection[];
+  readonly isDownloadAvailable?: boolean;
+  readonly downloadUrl?: string;
+  readonly authenticatedDownloadUrl?: string;
+  readonly allowedSharedLinkAccessLevels?: readonly FileFullAllowedSharedLinkAccessLevelsField[];
   constructor(fields: FileFull) {
     super(fields);
     if (fields.versionNumber !== undefined) {
@@ -368,6 +378,21 @@ export class FileFull extends File {
     }
     if (fields.isAssociatedWithAppItem !== undefined) {
       this.isAssociatedWithAppItem = fields.isAssociatedWithAppItem;
+    }
+    if (fields.collections !== undefined) {
+      this.collections = fields.collections;
+    }
+    if (fields.isDownloadAvailable !== undefined) {
+      this.isDownloadAvailable = fields.isDownloadAvailable;
+    }
+    if (fields.downloadUrl !== undefined) {
+      this.downloadUrl = fields.downloadUrl;
+    }
+    if (fields.authenticatedDownloadUrl !== undefined) {
+      this.authenticatedDownloadUrl = fields.authenticatedDownloadUrl;
+    }
+    if (fields.allowedSharedLinkAccessLevels !== undefined) {
+      this.allowedSharedLinkAccessLevels = fields.allowedSharedLinkAccessLevels;
     }
   }
 }
@@ -1262,6 +1287,30 @@ export function deserializeFileFullSharedLinkPermissionOptionsField(
     message: "Can't deserialize FileFullSharedLinkPermissionOptionsField",
   });
 }
+export function serializeFileFullAllowedSharedLinkAccessLevelsField(
+  val: FileFullAllowedSharedLinkAccessLevelsField,
+): SerializedData {
+  return val;
+}
+export function deserializeFileFullAllowedSharedLinkAccessLevelsField(
+  val: SerializedData,
+): FileFullAllowedSharedLinkAccessLevelsField {
+  if (val == 'open') {
+    return val;
+  }
+  if (val == 'company') {
+    return val;
+  }
+  if (val == 'collaborators') {
+    return val;
+  }
+  if (sdIsString(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize FileFullAllowedSharedLinkAccessLevelsField",
+  });
+}
 export function serializeFileFull(val: FileFull): SerializedData {
   const base: any = serializeFile(val);
   if (!sdIsMap(base)) {
@@ -1335,6 +1384,23 @@ export function serializeFileFull(val: FileFull): SerializedData {
               return serializeFileFullSharedLinkPermissionOptionsField(item);
             }) as readonly any[]),
       ['is_associated_with_app_item']: val.isAssociatedWithAppItem,
+      ['collections']:
+        val.collections == void 0
+          ? val.collections
+          : (val.collections.map(function (item: Collection): SerializedData {
+              return serializeCollection(item);
+            }) as readonly any[]),
+      ['is_download_available']: val.isDownloadAvailable,
+      ['download_url']: val.downloadUrl,
+      ['authenticated_download_url']: val.authenticatedDownloadUrl,
+      ['allowed_shared_link_access_levels']:
+        val.allowedSharedLinkAccessLevels == void 0
+          ? val.allowedSharedLinkAccessLevels
+          : (val.allowedSharedLinkAccessLevels.map(function (
+              item: FileFullAllowedSharedLinkAccessLevelsField,
+            ): SerializedData {
+              return serializeFileFullAllowedSharedLinkAccessLevelsField(item);
+            }) as readonly any[]),
     },
   };
 }
@@ -1526,6 +1592,70 @@ export function deserializeFileFull(val: SerializedData): FileFull {
     val.is_associated_with_app_item == void 0
       ? void 0
       : val.is_associated_with_app_item;
+  if (!(val.collections == void 0) && !sdIsList(val.collections)) {
+    throw new BoxSdkError({
+      message: 'Expecting array for "collections" of type "FileFull"',
+    });
+  }
+  const collections: undefined | readonly Collection[] =
+    val.collections == void 0
+      ? void 0
+      : sdIsList(val.collections)
+        ? (val.collections.map(function (itm: SerializedData): Collection {
+            return deserializeCollection(itm);
+          }) as readonly any[])
+        : [];
+  if (
+    !(val.is_download_available == void 0) &&
+    !sdIsBoolean(val.is_download_available)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_download_available" of type "FileFull"',
+    });
+  }
+  const isDownloadAvailable: undefined | boolean =
+    val.is_download_available == void 0 ? void 0 : val.is_download_available;
+  if (!(val.download_url == void 0) && !sdIsString(val.download_url)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "download_url" of type "FileFull"',
+    });
+  }
+  const downloadUrl: undefined | string =
+    val.download_url == void 0 ? void 0 : val.download_url;
+  if (
+    !(val.authenticated_download_url == void 0) &&
+    !sdIsString(val.authenticated_download_url)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "authenticated_download_url" of type "FileFull"',
+    });
+  }
+  const authenticatedDownloadUrl: undefined | string =
+    val.authenticated_download_url == void 0
+      ? void 0
+      : val.authenticated_download_url;
+  if (
+    !(val.allowed_shared_link_access_levels == void 0) &&
+    !sdIsList(val.allowed_shared_link_access_levels)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "allowed_shared_link_access_levels" of type "FileFull"',
+    });
+  }
+  const allowedSharedLinkAccessLevels:
+    undefined | readonly FileFullAllowedSharedLinkAccessLevelsField[] =
+    val.allowed_shared_link_access_levels == void 0
+      ? void 0
+      : sdIsList(val.allowed_shared_link_access_levels)
+        ? (val.allowed_shared_link_access_levels.map(function (
+            itm: SerializedData,
+          ): FileFullAllowedSharedLinkAccessLevelsField {
+            return deserializeFileFullAllowedSharedLinkAccessLevelsField(itm);
+          }) as readonly any[])
+        : [];
   if (!(val.description == void 0) && !sdIsString(val.description)) {
     throw new BoxSdkError({
       message: 'Expecting string for "description" of type "FileFull"',
@@ -1679,6 +1809,11 @@ export function deserializeFileFull(val: SerializedData): FileFull {
     dispositionAt: dispositionAt,
     sharedLinkPermissionOptions: sharedLinkPermissionOptions,
     isAssociatedWithAppItem: isAssociatedWithAppItem,
+    collections: collections,
+    isDownloadAvailable: isDownloadAvailable,
+    downloadUrl: downloadUrl,
+    authenticatedDownloadUrl: authenticatedDownloadUrl,
+    allowedSharedLinkAccessLevels: allowedSharedLinkAccessLevels,
     description: description,
     size: size,
     pathCollection: pathCollection,
