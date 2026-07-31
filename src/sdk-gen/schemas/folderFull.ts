@@ -22,6 +22,8 @@ import { serializeFolder } from './folder';
 import { deserializeFolder } from './folder';
 import { serializeMetadataFull } from './metadataFull';
 import { deserializeMetadataFull } from './metadataFull';
+import { serializeCollection } from './collection';
+import { deserializeCollection } from './collection';
 import { FolderBaseTypeField } from './folderBase';
 import { FolderBase } from './folderBase';
 import { FolderMini } from './folderMini';
@@ -34,6 +36,7 @@ import { FolderItemStatusField } from './folder';
 import { Items } from './items';
 import { Folder } from './folder';
 import { MetadataFull } from './metadataFull';
+import { Collection } from './collection';
 import { BoxSdkError } from '../box/errors';
 import { SerializedData } from '../serialization/json';
 import { sdIsEmpty } from '../serialization/json';
@@ -136,6 +139,7 @@ export class FolderFull extends Folder {
   readonly canNonOwnersViewCollaborators?: boolean;
   readonly classification?: FolderFullClassificationField;
   readonly isAssociatedWithAppItem?: boolean;
+  readonly collections?: readonly Collection[];
   constructor(fields: FolderFull) {
     super(fields);
     if (fields.syncState !== undefined) {
@@ -183,6 +187,9 @@ export class FolderFull extends Folder {
     }
     if (fields.isAssociatedWithAppItem !== undefined) {
       this.isAssociatedWithAppItem = fields.isAssociatedWithAppItem;
+    }
+    if (fields.collections !== undefined) {
+      this.collections = fields.collections;
     }
   }
 }
@@ -616,6 +623,12 @@ export function serializeFolderFull(val: FolderFull): SerializedData {
           ? val.classification
           : serializeFolderFullClassificationField(val.classification),
       ['is_associated_with_app_item']: val.isAssociatedWithAppItem,
+      ['collections']:
+        val.collections == void 0
+          ? val.collections
+          : (val.collections.map(function (item: Collection): SerializedData {
+              return serializeCollection(item);
+            }) as readonly any[]),
     },
   };
 }
@@ -786,6 +799,19 @@ export function deserializeFolderFull(val: SerializedData): FolderFull {
     val.is_associated_with_app_item == void 0
       ? void 0
       : val.is_associated_with_app_item;
+  if (!(val.collections == void 0) && !sdIsList(val.collections)) {
+    throw new BoxSdkError({
+      message: 'Expecting array for "collections" of type "FolderFull"',
+    });
+  }
+  const collections: undefined | readonly Collection[] =
+    val.collections == void 0
+      ? void 0
+      : sdIsList(val.collections)
+        ? (val.collections.map(function (itm: SerializedData): Collection {
+            return deserializeCollection(itm);
+          }) as readonly any[])
+        : [];
   if (!(val.created_at == void 0) && !sdIsString(val.created_at)) {
     throw new BoxSdkError({
       message: 'Expecting string for "created_at" of type "FolderFull"',
@@ -933,6 +959,7 @@ export function deserializeFolderFull(val: SerializedData): FolderFull {
     canNonOwnersViewCollaborators: canNonOwnersViewCollaborators,
     classification: classification,
     isAssociatedWithAppItem: isAssociatedWithAppItem,
+    collections: collections,
     createdAt: createdAt,
     modifiedAt: modifiedAt,
     description: description,

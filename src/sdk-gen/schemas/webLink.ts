@@ -8,6 +8,8 @@ import { serializeFolderMini } from './folderMini';
 import { deserializeFolderMini } from './folderMini';
 import { serializeUserMini } from './userMini';
 import { deserializeUserMini } from './userMini';
+import { serializeCollection } from './collection';
+import { deserializeCollection } from './collection';
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
 import { WebLinkBaseTypeField } from './webLinkBase';
@@ -15,6 +17,7 @@ import { WebLinkBase } from './webLinkBase';
 import { WebLinkMini } from './webLinkMini';
 import { FolderMini } from './folderMini';
 import { UserMini } from './userMini';
+import { Collection } from './collection';
 import { BoxSdkError } from '../box/errors';
 import { DateTime } from '../internal/utils';
 import { SerializedData } from '../serialization/json';
@@ -129,6 +132,8 @@ export interface WebLinkSharedLinkField {
   readonly rawData?: SerializedData;
 }
 export type WebLinkItemStatusField = 'active' | 'trashed' | 'deleted' | string;
+export type WebLinkAllowedSharedLinkAccessLevelsField =
+  'open' | 'company' | 'collaborators' | string;
 export class WebLink extends WebLinkMini {
   readonly parent?: FolderMini;
   readonly description?: string;
@@ -142,6 +147,8 @@ export class WebLink extends WebLinkMini {
   readonly ownedBy?: UserMini;
   readonly sharedLink?: WebLinkSharedLinkField;
   readonly itemStatus?: WebLinkItemStatusField;
+  readonly collections?: readonly Collection[];
+  readonly allowedSharedLinkAccessLevels?: readonly WebLinkAllowedSharedLinkAccessLevelsField[];
   constructor(fields: WebLink) {
     super(fields);
     if (fields.parent !== undefined) {
@@ -179,6 +186,12 @@ export class WebLink extends WebLinkMini {
     }
     if (fields.itemStatus !== undefined) {
       this.itemStatus = fields.itemStatus;
+    }
+    if (fields.collections !== undefined) {
+      this.collections = fields.collections;
+    }
+    if (fields.allowedSharedLinkAccessLevels !== undefined) {
+      this.allowedSharedLinkAccessLevels = fields.allowedSharedLinkAccessLevels;
     }
   }
 }
@@ -559,6 +572,30 @@ export function deserializeWebLinkItemStatusField(
     message: "Can't deserialize WebLinkItemStatusField",
   });
 }
+export function serializeWebLinkAllowedSharedLinkAccessLevelsField(
+  val: WebLinkAllowedSharedLinkAccessLevelsField
+): SerializedData {
+  return val;
+}
+export function deserializeWebLinkAllowedSharedLinkAccessLevelsField(
+  val: SerializedData
+): WebLinkAllowedSharedLinkAccessLevelsField {
+  if (val == 'open') {
+    return val;
+  }
+  if (val == 'company') {
+    return val;
+  }
+  if (val == 'collaborators') {
+    return val;
+  }
+  if (sdIsString(val)) {
+    return val;
+  }
+  throw new BoxSdkError({
+    message: "Can't deserialize WebLinkAllowedSharedLinkAccessLevelsField",
+  });
+}
 export function serializeWebLink(val: WebLink): SerializedData {
   const base: any = serializeWebLinkMini(val);
   if (!sdIsMap(base)) {
@@ -606,6 +643,20 @@ export function serializeWebLink(val: WebLink): SerializedData {
         val.itemStatus == void 0
           ? val.itemStatus
           : serializeWebLinkItemStatusField(val.itemStatus),
+      ['collections']:
+        val.collections == void 0
+          ? val.collections
+          : (val.collections.map(function (item: Collection): SerializedData {
+              return serializeCollection(item);
+            }) as readonly any[]),
+      ['allowed_shared_link_access_levels']:
+        val.allowedSharedLinkAccessLevels == void 0
+          ? val.allowedSharedLinkAccessLevels
+          : (val.allowedSharedLinkAccessLevels.map(function (
+              item: WebLinkAllowedSharedLinkAccessLevelsField
+            ): SerializedData {
+              return serializeWebLinkAllowedSharedLinkAccessLevelsField(item);
+            }) as readonly any[]),
     },
   };
 }
@@ -668,6 +719,39 @@ export function deserializeWebLink(val: SerializedData): WebLink {
     val.item_status == void 0
       ? void 0
       : deserializeWebLinkItemStatusField(val.item_status);
+  if (!(val.collections == void 0) && !sdIsList(val.collections)) {
+    throw new BoxSdkError({
+      message: 'Expecting array for "collections" of type "WebLink"',
+    });
+  }
+  const collections: undefined | readonly Collection[] =
+    val.collections == void 0
+      ? void 0
+      : sdIsList(val.collections)
+        ? (val.collections.map(function (itm: SerializedData): Collection {
+            return deserializeCollection(itm);
+          }) as readonly any[])
+        : [];
+  if (
+    !(val.allowed_shared_link_access_levels == void 0) &&
+    !sdIsList(val.allowed_shared_link_access_levels)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "allowed_shared_link_access_levels" of type "WebLink"',
+    });
+  }
+  const allowedSharedLinkAccessLevels:
+    undefined | readonly WebLinkAllowedSharedLinkAccessLevelsField[] =
+    val.allowed_shared_link_access_levels == void 0
+      ? void 0
+      : sdIsList(val.allowed_shared_link_access_levels)
+        ? (val.allowed_shared_link_access_levels.map(function (
+            itm: SerializedData
+          ): WebLinkAllowedSharedLinkAccessLevelsField {
+            return deserializeWebLinkAllowedSharedLinkAccessLevelsField(itm);
+          }) as readonly any[])
+        : [];
   if (!(val.url == void 0) && !sdIsString(val.url)) {
     throw new BoxSdkError({
       message: 'Expecting string for "url" of type "WebLink"',
@@ -723,6 +807,8 @@ export function deserializeWebLink(val: SerializedData): WebLink {
     ownedBy: ownedBy,
     sharedLink: sharedLink,
     itemStatus: itemStatus,
+    collections: collections,
+    allowedSharedLinkAccessLevels: allowedSharedLinkAccessLevels,
     url: url,
     sequenceId: sequenceId,
     name: name,
