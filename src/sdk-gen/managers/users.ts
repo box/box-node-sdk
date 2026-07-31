@@ -517,6 +517,11 @@ export interface UpdateUserByIdRequestBody {
    * Whether the user is required to reset their password. */
   readonly isPasswordResetRequired?: boolean;
   /**
+   * Whether collaborators can access content owned by the user when
+   * the user is inactive. This setting preserves existing
+   * collaborator access and does not grant new permissions. */
+  readonly isCollaboratedContentAvailableWhenOwnerInactive?: boolean;
+  /**
    * The user's account status. */
   readonly status?: UpdateUserByIdRequestBodyStatusField;
   /**
@@ -1375,6 +1380,8 @@ export function serializeUpdateUserByIdRequestBody(
     ['is_exempt_from_device_limits']: val.isExemptFromDeviceLimits,
     ['is_exempt_from_login_verification']: val.isExemptFromLoginVerification,
     ['is_password_reset_required']: val.isPasswordResetRequired,
+    ['is_collaborated_content_available_when_owner_inactive']:
+      val.isCollaboratedContentAvailableWhenOwnerInactive,
     ['status']:
       val.status == void 0
         ? val.status
@@ -1555,6 +1562,19 @@ export function deserializeUpdateUserByIdRequestBody(
     val.is_password_reset_required == void 0
       ? void 0
       : val.is_password_reset_required;
+  if (
+    !(val.is_collaborated_content_available_when_owner_inactive == void 0) &&
+    !sdIsBoolean(val.is_collaborated_content_available_when_owner_inactive)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_collaborated_content_available_when_owner_inactive" of type "UpdateUserByIdRequestBody"',
+    });
+  }
+  const isCollaboratedContentAvailableWhenOwnerInactive: undefined | boolean =
+    val.is_collaborated_content_available_when_owner_inactive == void 0
+      ? void 0
+      : val.is_collaborated_content_available_when_owner_inactive;
   const status: undefined | UpdateUserByIdRequestBodyStatusField =
     val.status == void 0
       ? void 0
@@ -1603,6 +1623,8 @@ export function deserializeUpdateUserByIdRequestBody(
     isExemptFromDeviceLimits: isExemptFromDeviceLimits,
     isExemptFromLoginVerification: isExemptFromLoginVerification,
     isPasswordResetRequired: isPasswordResetRequired,
+    isCollaboratedContentAvailableWhenOwnerInactive:
+      isCollaboratedContentAvailableWhenOwnerInactive,
     status: status,
     spaceAmount: spaceAmount,
     notificationEmail: notificationEmail,
