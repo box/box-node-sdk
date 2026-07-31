@@ -14,7 +14,21 @@ This operation is performed by calling function `createQueryV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-query/).
 
-_Currently we don't have an example for calling `createQueryV2026R0` in integration tests_
+<!-- sample post_query_v2026.0 -->
+
+```ts
+await client.query.createQueryV2026R0({
+  query: {
+    predicate: predicate,
+    params: { ['name']: 'John', ['age']: 50 },
+    ancestors: [
+      { id: '0', type: 'folder' } satisfies QueryAncestorReferenceV2026R0,
+    ],
+  } satisfies QueryRequestBodyV2026R0QueryField,
+  limit: 10,
+  fields: ['box:item:name', searchFrom],
+} satisfies QueryRequestBodyV2026R0);
+```
 
 ### Arguments
 
@@ -40,7 +54,26 @@ This operation is performed by calling function `createQueryInsightV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-query-insights/).
 
-_Currently we don't have an example for calling `createQueryInsightV2026R0` in integration tests_
+<!-- sample post_query_insights_v2026.0 -->
+
+```ts
+await client.query.createQueryInsightV2026R0({
+  query: {
+    predicate: predicate,
+    params: { ['minAmount']: 0 },
+    ancestors: [
+      { id: '0', type: 'folder' } satisfies QueryAncestorReferenceV2026R0,
+    ],
+    groupBy: [
+      {
+        field: ''.concat(mdPrefix, '.category') as string,
+        bucketLimit: 5,
+      } satisfies QueryInsightsGroupByV2026R0,
+    ],
+  } satisfies QueryInsightsRequestBodyV2026R0QueryField,
+  metrics: metrics,
+} satisfies QueryInsightsRequestBodyV2026R0);
+```
 
 ### Arguments
 
