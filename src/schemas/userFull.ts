@@ -52,6 +52,7 @@ export class UserFull extends User {
   readonly isExternalCollabRestricted?: boolean;
   readonly isExemptFromDeviceLimits?: boolean;
   readonly isExemptFromLoginVerification?: boolean;
+  readonly isCollaboratedContentAvailableWhenOwnerInactive?: boolean;
   readonly enterprise?: UserFullEnterpriseField;
   readonly myTags?: readonly string[];
   readonly hostname?: string;
@@ -79,6 +80,10 @@ export class UserFull extends User {
     }
     if (fields.isExemptFromLoginVerification !== undefined) {
       this.isExemptFromLoginVerification = fields.isExemptFromLoginVerification;
+    }
+    if (fields.isCollaboratedContentAvailableWhenOwnerInactive !== undefined) {
+      this.isCollaboratedContentAvailableWhenOwnerInactive =
+        fields.isCollaboratedContentAvailableWhenOwnerInactive;
     }
     if (fields.enterprise !== undefined) {
       this.enterprise = fields.enterprise;
@@ -195,6 +200,8 @@ export function serializeUserFull(val: UserFull): SerializedData {
       ['is_external_collab_restricted']: val.isExternalCollabRestricted,
       ['is_exempt_from_device_limits']: val.isExemptFromDeviceLimits,
       ['is_exempt_from_login_verification']: val.isExemptFromLoginVerification,
+      ['is_collaborated_content_available_when_owner_inactive']:
+        val.isCollaboratedContentAvailableWhenOwnerInactive,
       ['enterprise']:
         val.enterprise == void 0
           ? val.enterprise
@@ -287,6 +294,19 @@ export function deserializeUserFull(val: SerializedData): UserFull {
     val.is_exempt_from_login_verification == void 0
       ? void 0
       : val.is_exempt_from_login_verification;
+  if (
+    !(val.is_collaborated_content_available_when_owner_inactive == void 0) &&
+    !sdIsBoolean(val.is_collaborated_content_available_when_owner_inactive)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting boolean for "is_collaborated_content_available_when_owner_inactive" of type "UserFull"',
+    });
+  }
+  const isCollaboratedContentAvailableWhenOwnerInactive: undefined | boolean =
+    val.is_collaborated_content_available_when_owner_inactive == void 0
+      ? void 0
+      : val.is_collaborated_content_available_when_owner_inactive;
   const enterprise: undefined | UserFullEnterpriseField =
     val.enterprise == void 0
       ? void 0
@@ -458,6 +478,8 @@ export function deserializeUserFull(val: SerializedData): UserFull {
     isExternalCollabRestricted: isExternalCollabRestricted,
     isExemptFromDeviceLimits: isExemptFromDeviceLimits,
     isExemptFromLoginVerification: isExemptFromLoginVerification,
+    isCollaboratedContentAvailableWhenOwnerInactive:
+      isCollaboratedContentAvailableWhenOwnerInactive,
     enterprise: enterprise,
     myTags: myTags,
     hostname: hostname,
