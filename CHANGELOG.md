@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.14.0](https://github.com/box/box-node-sdk/compare/v4.13.0...v4.14.0) (2026-08-05)
+
+
+### Bug Fixes
+
+* **boxsdkgen:** Added two missing event types (box/box-openapi[#611](https://github.com/box/box-node-sdk/issues/611)) ([#1565](https://github.com/box/box-node-sdk/issues/1565)) ([24650c0](https://github.com/box/box-node-sdk/commit/24650c02bad20615fe6dc98ac57b1ac96c0fa337))
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** add `is_collaborated_content_available_when_owner_inactive` property (box/box-openapi[#613](https://github.com/box/box-node-sdk/issues/613)) ([#1571](https://github.com/box/box-node-sdk/issues/1571)) ([b8dd5fa](https://github.com/box/box-node-sdk/commit/b8dd5fae2a6f5e04716a3d38acbc599dc70d2a9d))
+* **boxsdkgen:** export error types from the package root (box/box-codegen[#976](https://github.com/box/box-node-sdk/issues/976)) ([#1569](https://github.com/box/box-node-sdk/issues/1569)) ([4d9d485](https://github.com/box/box-node-sdk/commit/4d9d4850817c7d8bc75ade54314dfeb4b476f135))
+* **boxsdkgen:** Support query APIs (box/box-openapi[#610](https://github.com/box/box-node-sdk/issues/610)) ([#1562](https://github.com/box/box-node-sdk/issues/1562)) ([493563f](https://github.com/box/box-node-sdk/commit/493563ff1fbab11f0cae5460434f5933343def20))
+
 ## [4.13.0](https://github.com/box/box-node-sdk/compare/v4.12.0...v4.13.0) (2026-07-17)
 
 
