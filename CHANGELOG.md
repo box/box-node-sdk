@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.14.0](https://github.com/box/box-node-sdk/compare/v10.13.0...v10.14.0) (2026-08-05)
+
+
+### Bug Fixes
+
+* Added two missing event types (box/box-openapi[#611](https://github.com/box/box-node-sdk/issues/611)) ([#1566](https://github.com/box/box-node-sdk/issues/1566)) ([84d0bb2](https://github.com/box/box-node-sdk/commit/84d0bb21fd6e965d8072fe95158576bcf635942b))
+
+
+### New Features and Enhancements
+
+* add `is_collaborated_content_available_when_owner_inactive` property (box/box-openapi[#613](https://github.com/box/box-node-sdk/issues/613)) ([#1572](https://github.com/box/box-node-sdk/issues/1572)) ([3e7ab94](https://github.com/box/box-node-sdk/commit/3e7ab94f95b0cc6280eb5a51e9b2769c879300cd))
+* export error types from the package root (box/box-codegen[#976](https://github.com/box/box-node-sdk/issues/976)) ([#1570](https://github.com/box/box-node-sdk/issues/1570)) ([12df4fe](https://github.com/box/box-node-sdk/commit/12df4febc769625f77541cd4578227d39526471a))
+* Support query APIs (box/box-openapi[#610](https://github.com/box/box-node-sdk/issues/610)) ([#1563](https://github.com/box/box-node-sdk/issues/1563)) ([a584d0a](https://github.com/box/box-node-sdk/commit/a584d0a654b8e6bf750be71a8866f10a68c6840b))
+
 ## [10.13.0](https://github.com/box/box-node-sdk/compare/v10.12.0...v10.13.0) (2026-07-17)
 
 
