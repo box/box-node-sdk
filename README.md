@@ -224,9 +224,7 @@ We use a modified version of [Semantic Versioning](https://semver.org/) for all 
 
 Currently, we support versions v10 and v4 of the SDK. New features and functionality are added to v10, while the manually written portion of v4 receives bug fixes and security updates only.
 
-A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.  
-Instead of stating a release date for a new feature, we set a fixed minor or patch release cadence of maximum 2-3 months (while we may release more often).
-At the same time, there is no schedule for major or breaking release. Instead, we will communicate one quarter in advance the upcoming breaking change to allow customers to plan for the upgrade.
+A current release is on the leading edge of our SDK development, and is intended for customers who are in active development and want the latest and greatest features.
 
 We always recommend that all users run the latest available minor release for whatever major version is in use.
 We highly recommend upgrading to the latest SDK major release at the earliest convenient time and before the EOL date.
