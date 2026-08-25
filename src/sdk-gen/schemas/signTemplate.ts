@@ -326,7 +326,8 @@ export function deserializeSignTemplateAdditionalInfoField(
     });
   }
   const nonEditable:
-    undefined | readonly SignTemplateAdditionalInfoNonEditableField[] =
+    | undefined
+    | readonly SignTemplateAdditionalInfoNonEditableField[] =
     val.non_editable == void 0
       ? void 0
       : sdIsList(val.non_editable)

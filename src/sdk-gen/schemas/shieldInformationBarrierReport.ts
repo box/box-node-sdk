@@ -25,7 +25,11 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type ShieldInformationBarrierReportStatusField =
-  'pending' | 'error' | 'done' | 'cancelled' | string;
+  | 'pending'
+  | 'error'
+  | 'done'
+  | 'cancelled'
+  | string;
 export type ShieldInformationBarrierReport =
   ShieldInformationBarrierReportBase & {
     readonly shieldInformationBarrier?: ShieldInformationBarrierReference;
@@ -120,7 +124,8 @@ export function deserializeShieldInformationBarrierReport(
     });
   }
   const shieldInformationBarrier:
-    undefined | ShieldInformationBarrierReference =
+    | undefined
+    | ShieldInformationBarrierReference =
     val.shield_information_barrier == void 0
       ? void 0
       : deserializeShieldInformationBarrierReference(

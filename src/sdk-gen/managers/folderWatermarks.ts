@@ -118,7 +118,8 @@ export interface GetFolderWatermarkHeadersInput {
   };
 }
 export type UpdateFolderWatermarkRequestBodyWatermarkImprintField =
-  'default' | string;
+  | 'default'
+  | string;
 export class UpdateFolderWatermarkRequestBodyWatermarkField {
   /**
    * The type of watermark to apply.
@@ -452,7 +453,8 @@ export function deserializeUpdateFolderWatermarkRequestBodyWatermarkFieldInput(
     });
   }
   const imprint:
-    undefined | UpdateFolderWatermarkRequestBodyWatermarkImprintField =
+    | undefined
+    | UpdateFolderWatermarkRequestBodyWatermarkImprintField =
     val.imprint == void 0
       ? void 0
       : deserializeUpdateFolderWatermarkRequestBodyWatermarkImprintField(

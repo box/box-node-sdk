@@ -17,7 +17,11 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type TaskAssignmentTypeField = 'task_assignment';
 export type TaskAssignmentResolutionStateField =
-  'completed' | 'incomplete' | 'approved' | 'rejected' | string;
+  | 'completed'
+  | 'incomplete'
+  | 'approved'
+  | 'rejected'
+  | string;
 export interface TaskAssignment {
   /**
    * The unique identifier for this task assignment. */
