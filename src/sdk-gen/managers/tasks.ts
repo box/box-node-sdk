@@ -171,7 +171,9 @@ export interface CreateTaskRequestBodyItemField {
 }
 export type CreateTaskRequestBodyActionField = 'review' | 'complete' | string;
 export type CreateTaskRequestBodyCompletionRuleField =
-  'all_assignees' | 'any_assignee' | string;
+  | 'all_assignees'
+  | 'any_assignee'
+  | string;
 export interface CreateTaskRequestBody {
   /**
    * The file to attach the task to. */
@@ -246,9 +248,13 @@ export interface GetTaskByIdHeadersInput {
   };
 }
 export type UpdateTaskByIdRequestBodyActionField =
-  'review' | 'complete' | string;
+  | 'review'
+  | 'complete'
+  | string;
 export type UpdateTaskByIdRequestBodyCompletionRuleField =
-  'all_assignees' | 'any_assignee' | string;
+  | 'all_assignees'
+  | 'any_assignee'
+  | string;
 export interface UpdateTaskByIdRequestBody {
   /**
    * The action the task assignee will be prompted to do. Must be
@@ -803,7 +809,8 @@ export function deserializeUpdateTaskByIdRequestBody(
   const dueAt: undefined | DateTime =
     val.due_at == void 0 ? void 0 : deserializeDateTime(val.due_at);
   const completionRule:
-    undefined | UpdateTaskByIdRequestBodyCompletionRuleField =
+    | undefined
+    | UpdateTaskByIdRequestBodyCompletionRuleField =
     val.completion_rule == void 0
       ? void 0
       : deserializeUpdateTaskByIdRequestBodyCompletionRuleField(
