@@ -8,9 +8,12 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type CompletionRuleVariableTypeField = 'variable';
 export type CompletionRuleVariableVariableTypeField =
-  'task_completion_rule' | string;
+  | 'task_completion_rule'
+  | string;
 export type CompletionRuleVariableVariableValueField =
-  'all_assignees' | 'any_assignees' | string;
+  | 'all_assignees'
+  | 'any_assignees'
+  | string;
 export class CompletionRuleVariable {
   /**
    * Completion
