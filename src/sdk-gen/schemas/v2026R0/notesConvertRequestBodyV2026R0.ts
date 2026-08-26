@@ -10,8 +10,7 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type NotesConvertRequestBodyV2026R0ContentFormatField =
-  | 'markdown'
-  | string;
+  'markdown' | string;
 export class NotesConvertRequestBodyV2026R0 {
   /**
    * The content to convert to a note. See the `content_format` field for supported formats. */
@@ -188,8 +187,7 @@ export function deserializeNotesConvertRequestBodyV2026R0Input(
   }
   const content: string = val.content;
   const contentFormat:
-    | undefined
-    | NotesConvertRequestBodyV2026R0ContentFormatField =
+    undefined | NotesConvertRequestBodyV2026R0ContentFormatField =
     val.contentFormat == void 0
       ? void 0
       : deserializeNotesConvertRequestBodyV2026R0ContentFormatField(
