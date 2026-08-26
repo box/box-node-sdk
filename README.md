@@ -101,7 +101,9 @@ If you use yarn, please do this instead:
 yarn add box-node-sdk@<version>
 ```
 
-Where `VERSION` is the version of the SDK you want to use. The next generation of the SDK starts with version `10.0.0`.
+> **Warning:** The npm `latest` tag currently resolves to the legacy v4 line, not the current generated v10 SDK. Running `npm install box-node-sdk` or `yarn add box-node-sdk` without a version pin silently installs the hand-written v4 package, whose API differs significantly from v10. Always pin the major version explicitly — for example `box-node-sdk@^10` for new applications, or `box-node-sdk@^4` if you still need the combined v4 package.
+
+The next generation of the SDK starts with version `10.0.0`. See [Which Version Should I Use?](#which-version-should-i-use) to choose the right major version.
 
 # Getting Started
 
