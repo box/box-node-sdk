@@ -7,8 +7,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type IntegrationMappingPartnerItemTeamsCreateRequestTypeField =
-  | 'channel'
-  | 'team';
+  'channel' | 'team';
 export interface IntegrationMappingPartnerItemTeamsCreateRequest {
   /**
    * Type of the mapped item referenced in `id`. */
