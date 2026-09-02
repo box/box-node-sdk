@@ -19,7 +19,10 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SkillCard =
-  KeywordSkillCard | TimelineSkillCard | TranscriptSkillCard | StatusSkillCard;
+  | KeywordSkillCard
+  | TimelineSkillCard
+  | TranscriptSkillCard
+  | StatusSkillCard;
 export function serializeSkillCard(val: any): SerializedData {
   if (val.skillCardType == 'keyword') {
     return serializeKeywordSkillCard(val);
