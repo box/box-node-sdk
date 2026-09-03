@@ -163,6 +163,7 @@ export * from './signRequestSignerInputNumberWithCommaValidation';
 export * from './signRequestSignerInputNumberWithPeriodValidation';
 export * from './signRequestSignerInputSsnValidation';
 export * from './signRequestSignerInputZip4Validation';
+export * from './signRequestSignerInputZipjpValidation';
 export * from './signRequestSignerInputZipValidation';
 export * from './signRequestSignerInputValidation';
 export * from './templateSignerInput';
