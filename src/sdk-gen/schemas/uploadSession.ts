@@ -12,6 +12,10 @@ import { sdIsMap } from '../serialization/json';
 export type UploadSessionTypeField = 'upload_session';
 export interface UploadSessionSessionEndpointsField {
   /**
+   * The URL used to plan the upload session by checking which parts
+   * already exist on the server. */
+  readonly plan?: string;
+  /**
    * The URL to upload parts to. */
   readonly uploadPart?: string;
   /**
@@ -80,6 +84,7 @@ export function serializeUploadSessionSessionEndpointsField(
   val: UploadSessionSessionEndpointsField
 ): SerializedData {
   return {
+    ['plan']: val.plan,
     ['upload_part']: val.uploadPart,
     ['commit']: val.commit,
     ['abort']: val.abort,
@@ -96,6 +101,13 @@ export function deserializeUploadSessionSessionEndpointsField(
       message: 'Expecting a map for "UploadSessionSessionEndpointsField"',
     });
   }
+  if (!(val.plan == void 0) && !sdIsString(val.plan)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "plan" of type "UploadSessionSessionEndpointsField"',
+    });
+  }
+  const plan: undefined | string = val.plan == void 0 ? void 0 : val.plan;
   if (!(val.upload_part == void 0) && !sdIsString(val.upload_part)) {
     throw new BoxSdkError({
       message:
@@ -142,6 +154,7 @@ export function deserializeUploadSessionSessionEndpointsField(
   const logEvent: undefined | string =
     val.log_event == void 0 ? void 0 : val.log_event;
   return {
+    plan: plan,
     uploadPart: uploadPart,
     commit: commit,
     abort: abort,
