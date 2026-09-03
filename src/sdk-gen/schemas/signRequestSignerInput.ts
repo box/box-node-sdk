@@ -8,6 +8,8 @@ import { serializeSignRequestSignerInputZipValidation } from './signRequestSigne
 import { deserializeSignRequestSignerInputZipValidation } from './signRequestSignerInputZipValidation';
 import { serializeSignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
 import { deserializeSignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
+import { serializeSignRequestSignerInputZipjpValidation } from './signRequestSignerInputZipjpValidation';
+import { deserializeSignRequestSignerInputZipjpValidation } from './signRequestSignerInputZipjpValidation';
 import { serializeSignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
 import { deserializeSignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
 import { serializeSignRequestSignerInputNumberWithPeriodValidation } from './signRequestSignerInputNumberWithPeriodValidation';
@@ -31,6 +33,7 @@ import { SignRequestSignerInputEmailValidation } from './signRequestSignerInputE
 import { SignRequestSignerInputCustomValidation } from './signRequestSignerInputCustomValidation';
 import { SignRequestSignerInputZipValidation } from './signRequestSignerInputZipValidation';
 import { SignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
+import { SignRequestSignerInputZipjpValidation } from './signRequestSignerInputZipjpValidation';
 import { SignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
 import { SignRequestSignerInputNumberWithPeriodValidation } from './signRequestSignerInputNumberWithPeriodValidation';
 import { SignRequestSignerInputNumberWithCommaValidation } from './signRequestSignerInputNumberWithCommaValidation';
@@ -49,12 +52,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputTypeField =
-  | 'signature'
-  | 'date'
-  | 'text'
-  | 'checkbox'
-  | 'radio'
-  | 'dropdown';
+  'signature' | 'date' | 'text' | 'checkbox' | 'radio' | 'dropdown';
 export type SignRequestSignerInputContentTypeField =
   | 'signature'
   | 'initial'
