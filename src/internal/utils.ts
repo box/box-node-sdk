@@ -68,9 +68,11 @@ export type Iterator<T = any> = AsyncIterator<T>;
 export type AgentOptions = any;
 export type Agent = any;
 
-export function isBrowser() {
+export function isBrowser(): boolean {
   return (
-    typeof window === 'object' && typeof document === 'object' && window.crypto
+    typeof window === 'object' &&
+    typeof document === 'object' &&
+    !!window.crypto
   );
 }
 
