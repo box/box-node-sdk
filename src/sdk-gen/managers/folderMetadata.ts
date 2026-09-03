@@ -246,7 +246,13 @@ export interface CreateFolderMetadataByIdHeadersInput {
 }
 export type UpdateFolderMetadataByIdScope = 'global' | 'enterprise' | string;
 export type UpdateFolderMetadataByIdRequestBodyOpField =
-  'add' | 'replace' | 'remove' | 'test' | 'move' | 'copy' | string;
+  | 'add'
+  | 'replace'
+  | 'remove'
+  | 'test'
+  | 'move'
+  | 'copy'
+  | string;
 export interface UpdateFolderMetadataByIdRequestBody {
   /**
    * The type of change to perform on the template. Some

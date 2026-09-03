@@ -12,7 +12,10 @@ import { sdIsMap } from '../serialization/json';
 export type CollaborationAllowlistEntryTypeField =
   'collaboration_whitelist_entry';
 export type CollaborationAllowlistEntryDirectionField =
-  'inbound' | 'outbound' | 'both' | string;
+  | 'inbound'
+  | 'outbound'
+  | 'both'
+  | string;
 export type CollaborationAllowlistEntryEnterpriseTypeField = 'enterprise';
 export interface CollaborationAllowlistEntryEnterpriseField {
   /**
