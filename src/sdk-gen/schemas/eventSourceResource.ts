@@ -25,12 +25,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type EventSourceResource =
-  | User
-  | EventSource
-  | File
-  | Folder
-  | GenericSource
-  | AppItemEventSource;
+  User | EventSource | File | Folder | GenericSource | AppItemEventSource;
 export function serializeEventSourceResource(val: any): SerializedData {
   if (val.type == 'user') {
     return serializeUser(val);

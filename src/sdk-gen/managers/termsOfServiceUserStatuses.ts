@@ -531,8 +531,7 @@ export function deserializeCreateTermsOfServiceStatusForUserRequestBodyTosFieldI
     });
   }
   const type:
-    | undefined
-    | CreateTermsOfServiceStatusForUserRequestBodyTosTypeField =
+    undefined | CreateTermsOfServiceStatusForUserRequestBodyTosTypeField =
     val.type == void 0
       ? void 0
       : deserializeCreateTermsOfServiceStatusForUserRequestBodyTosTypeField(
@@ -643,8 +642,7 @@ export function deserializeCreateTermsOfServiceStatusForUserRequestBodyUserField
     });
   }
   const type:
-    | undefined
-    | CreateTermsOfServiceStatusForUserRequestBodyUserTypeField =
+    undefined | CreateTermsOfServiceStatusForUserRequestBodyUserTypeField =
     val.type == void 0
       ? void 0
       : deserializeCreateTermsOfServiceStatusForUserRequestBodyUserTypeField(

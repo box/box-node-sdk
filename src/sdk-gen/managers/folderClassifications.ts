@@ -197,8 +197,7 @@ export interface AddClassificationToFolderHeadersInput {
 }
 export type UpdateClassificationOnFolderRequestBodyOpField = 'replace' | string;
 export type UpdateClassificationOnFolderRequestBodyPathField =
-  | '/Box__Security__Classification__Key'
-  | string;
+  '/Box__Security__Classification__Key' | string;
 export class UpdateClassificationOnFolderRequestBody {
   /**
    * The value will always be `replace`. */

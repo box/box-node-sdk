@@ -6,6 +6,8 @@ import { serializeSignRequestSignerInputZipValidation } from './signRequestSigne
 import { deserializeSignRequestSignerInputZipValidation } from './signRequestSignerInputZipValidation';
 import { serializeSignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
 import { deserializeSignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
+import { serializeSignRequestSignerInputZipjpValidation } from './signRequestSignerInputZipjpValidation';
+import { deserializeSignRequestSignerInputZipjpValidation } from './signRequestSignerInputZipjpValidation';
 import { serializeSignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
 import { deserializeSignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
 import { serializeSignRequestSignerInputNumberWithPeriodValidation } from './signRequestSignerInputNumberWithPeriodValidation';
@@ -24,6 +26,7 @@ import { SignRequestSignerInputEmailValidation } from './signRequestSignerInputE
 import { SignRequestSignerInputCustomValidation } from './signRequestSignerInputCustomValidation';
 import { SignRequestSignerInputZipValidation } from './signRequestSignerInputZipValidation';
 import { SignRequestSignerInputZip4Validation } from './signRequestSignerInputZip4Validation';
+import { SignRequestSignerInputZipjpValidation } from './signRequestSignerInputZipjpValidation';
 import { SignRequestSignerInputSsnValidation } from './signRequestSignerInputSsnValidation';
 import { SignRequestSignerInputNumberWithPeriodValidation } from './signRequestSignerInputNumberWithPeriodValidation';
 import { SignRequestSignerInputNumberWithCommaValidation } from './signRequestSignerInputNumberWithCommaValidation';
@@ -44,6 +47,7 @@ export type SignRequestSignerInputValidation =
   | SignRequestSignerInputCustomValidation
   | SignRequestSignerInputZipValidation
   | SignRequestSignerInputZip4Validation
+  | SignRequestSignerInputZipjpValidation
   | SignRequestSignerInputSsnValidation
   | SignRequestSignerInputNumberWithPeriodValidation
   | SignRequestSignerInputNumberWithCommaValidation
@@ -113,6 +117,18 @@ export function serializeSignRequestSignerInputValidation(
       });
     }
     return serializeSignRequestSignerInputZip4Validation(val);
+  } catch (error) {
+    void 0;
+  } finally {
+  }
+  try {
+    if (val.validationType == void 0) {
+      throw new BoxSdkError({
+        message:
+          'Expecting "validationType" of type "SignRequestSignerInputZipjpValidation" to be defined',
+      });
+    }
+    return serializeSignRequestSignerInputZipjpValidation(val);
   } catch (error) {
     void 0;
   } finally {
@@ -192,6 +208,12 @@ export function deserializeSignRequestSignerInputValidation(
   }
   try {
     return deserializeSignRequestSignerInputZip4Validation(val);
+  } catch (error) {
+    void 0;
+  } finally {
+  }
+  try {
+    return deserializeSignRequestSignerInputZipjpValidation(val);
   } catch (error) {
     void 0;
   } finally {
