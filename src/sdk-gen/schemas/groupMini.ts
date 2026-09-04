@@ -13,9 +13,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type GroupMiniGroupTypeField =
-  | 'managed_group'
-  | 'all_users_group'
-  | string;
+  'managed_group' | 'all_users_group' | string;
 export class GroupMini extends GroupBase {
   readonly name?: string;
   readonly groupType?: GroupMiniGroupTypeField;

@@ -358,10 +358,7 @@ export interface UpdateFileByIdRequestBodyParentField {
   readonly rawData?: SerializedData;
 }
 export type UpdateFileByIdRequestBodySharedLinkAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export interface UpdateFileByIdRequestBodySharedLinkPermissionsField {
   /**
    * If the shared link allows for downloading of files.
@@ -422,9 +419,7 @@ export interface UpdateFileByIdRequestBodyLockField {
   readonly rawData?: SerializedData;
 }
 export type UpdateFileByIdRequestBodyPermissionsCanDownloadField =
-  | 'open'
-  | 'company'
-  | string;
+  'open' | 'company' | string;
 export interface UpdateFileByIdRequestBodyPermissionsField {
   /**
    * Defines who is allowed to download this file. The possible
@@ -490,8 +485,7 @@ export interface UpdateFileByIdRequestBody {
    *
    * [1]: https://developer.box.com/reference/get-collections */
   readonly collections?:
-    | readonly UpdateFileByIdRequestBodyCollectionsField[]
-    | null;
+    readonly UpdateFileByIdRequestBodyCollectionsField[] | null;
   /**
    * The tags for this item. These tags are shown in
    * the Box web app and mobile apps next to an item.
@@ -1310,8 +1304,7 @@ export function deserializeUpdateFileByIdRequestBodySharedLinkField(
   const unsharedAt: undefined | DateTime =
     val.unshared_at == void 0 ? void 0 : deserializeDateTime(val.unshared_at);
   const permissions:
-    | undefined
-    | UpdateFileByIdRequestBodySharedLinkPermissionsField =
+    undefined | UpdateFileByIdRequestBodySharedLinkPermissionsField =
     val.permissions == void 0
       ? void 0
       : deserializeUpdateFileByIdRequestBodySharedLinkPermissionsField(
@@ -1439,8 +1432,7 @@ export function deserializeUpdateFileByIdRequestBodyPermissionsField(
     });
   }
   const canDownload:
-    | undefined
-    | UpdateFileByIdRequestBodyPermissionsCanDownloadField =
+    undefined | UpdateFileByIdRequestBodyPermissionsCanDownloadField =
     val.can_download == void 0
       ? void 0
       : deserializeUpdateFileByIdRequestBodyPermissionsCanDownloadField(
@@ -1581,8 +1573,7 @@ export function deserializeUpdateFileByIdRequestBody(
     });
   }
   const collections:
-    | undefined
-    | readonly UpdateFileByIdRequestBodyCollectionsField[] =
+    undefined | readonly UpdateFileByIdRequestBodyCollectionsField[] =
     val.collections == void 0
       ? void 0
       : sdIsList(val.collections)
