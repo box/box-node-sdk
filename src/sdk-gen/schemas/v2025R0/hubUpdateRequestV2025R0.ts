@@ -7,10 +7,7 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type HubUpdateRequestV2025R0CopyHubAccessField =
-  | 'all'
-  | 'company'
-  | 'none'
-  | string;
+  'all' | 'company' | 'none' | string;
 export interface HubUpdateRequestV2025R0 {
   /**
    * Title of the Box Hub. It cannot be empty and should be less than 50 characters. */
