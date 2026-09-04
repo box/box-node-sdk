@@ -236,7 +236,9 @@ export interface CreateHubV2025R0HeadersInput {
   };
 }
 export type GetEnterpriseHubsV2025R0QueryParamsDirectionField =
-  'ASC' | 'DESC' | string;
+  | 'ASC'
+  | 'DESC'
+  | string;
 export interface GetEnterpriseHubsV2025R0QueryParams {
   /**
    * The query string to search for Box Hubs. */

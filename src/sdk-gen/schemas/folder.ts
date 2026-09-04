@@ -34,11 +34,21 @@ export interface FolderPathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type FolderSharedLinkAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export type FolderSharedLinkEffectiveAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export type FolderSharedLinkEffectivePermissionField =
-  'can_edit' | 'can_download' | 'can_preview' | 'no_access' | string;
+  | 'can_edit'
+  | 'can_download'
+  | 'can_preview'
+  | 'no_access'
+  | string;
 export interface FolderSharedLinkPermissionsField {
   /**
    * Defines if the shared link allows for the item to be downloaded. For
@@ -129,7 +139,9 @@ export interface FolderSharedLinkField {
   readonly rawData?: SerializedData;
 }
 export type FolderFolderUploadEmailAccessField =
-  'open' | 'collaborators' | string;
+  | 'open'
+  | 'collaborators'
+  | string;
 export interface FolderFolderUploadEmailField {
   /**
    * When this parameter has been set, users can email files

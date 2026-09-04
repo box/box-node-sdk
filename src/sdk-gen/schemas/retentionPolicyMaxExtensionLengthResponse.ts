@@ -8,7 +8,8 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type RetentionPolicyMaxExtensionLengthResponseEnum = 'none' | string;
 export type RetentionPolicyMaxExtensionLengthResponse =
-  RetentionPolicyMaxExtensionLengthResponseEnum | string;
+  | RetentionPolicyMaxExtensionLengthResponseEnum
+  | string;
 export function serializeRetentionPolicyMaxExtensionLengthResponseEnum(
   val: RetentionPolicyMaxExtensionLengthResponseEnum
 ): SerializedData {
