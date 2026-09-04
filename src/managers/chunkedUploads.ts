@@ -6,6 +6,10 @@ import { serializeUploadedPart } from '../schemas/uploadedPart';
 import { deserializeUploadedPart } from '../schemas/uploadedPart';
 import { serializeUploadParts } from '../schemas/uploadParts';
 import { deserializeUploadParts } from '../schemas/uploadParts';
+import { serializeUploadSessionPlanResponse } from '../schemas/uploadSessionPlanResponse';
+import { deserializeUploadSessionPlanResponse } from '../schemas/uploadSessionPlanResponse';
+import { serializeUploadSessionPlanRequest } from '../schemas/uploadSessionPlanRequest';
+import { deserializeUploadSessionPlanRequest } from '../schemas/uploadSessionPlanRequest';
 import { serializeFiles } from '../schemas/files';
 import { deserializeFiles } from '../schemas/files';
 import { serializeUploadPart } from '../schemas/uploadPart';
@@ -20,6 +24,8 @@ import { UploadSession } from '../schemas/uploadSession';
 import { ClientError } from '../schemas/clientError';
 import { UploadedPart } from '../schemas/uploadedPart';
 import { UploadParts } from '../schemas/uploadParts';
+import { UploadSessionPlanResponse } from '../schemas/uploadSessionPlanResponse';
+import { UploadSessionPlanRequest } from '../schemas/uploadSessionPlanRequest';
 import { Files } from '../schemas/files';
 import { UploadPart } from '../schemas/uploadPart';
 import { BoxSdkError } from '../box/errors';
@@ -303,6 +309,62 @@ export class GetFileUploadSessionPartsOptionals {
 export interface GetFileUploadSessionPartsOptionalsInput {
   readonly queryParams?: GetFileUploadSessionPartsQueryParams;
   readonly headers?: GetFileUploadSessionPartsHeaders;
+  readonly cancellationToken?: CancellationToken;
+}
+export class CreateFileUploadSessionPlanByUrlOptionals {
+  readonly headers: CreateFileUploadSessionPlanByUrlHeaders =
+    new CreateFileUploadSessionPlanByUrlHeaders({});
+  readonly cancellationToken?: CancellationToken = void 0;
+  constructor(
+    fields: Omit<
+      CreateFileUploadSessionPlanByUrlOptionals,
+      'headers' | 'cancellationToken'
+    > &
+      Partial<
+        Pick<
+          CreateFileUploadSessionPlanByUrlOptionals,
+          'headers' | 'cancellationToken'
+        >
+      >,
+  ) {
+    if (fields.headers !== undefined) {
+      this.headers = fields.headers;
+    }
+    if (fields.cancellationToken !== undefined) {
+      this.cancellationToken = fields.cancellationToken;
+    }
+  }
+}
+export interface CreateFileUploadSessionPlanByUrlOptionalsInput {
+  readonly headers?: CreateFileUploadSessionPlanByUrlHeaders;
+  readonly cancellationToken?: CancellationToken;
+}
+export class CreateFileUploadSessionPlanOptionals {
+  readonly headers: CreateFileUploadSessionPlanHeaders =
+    new CreateFileUploadSessionPlanHeaders({});
+  readonly cancellationToken?: CancellationToken = void 0;
+  constructor(
+    fields: Omit<
+      CreateFileUploadSessionPlanOptionals,
+      'headers' | 'cancellationToken'
+    > &
+      Partial<
+        Pick<
+          CreateFileUploadSessionPlanOptionals,
+          'headers' | 'cancellationToken'
+        >
+      >,
+  ) {
+    if (fields.headers !== undefined) {
+      this.headers = fields.headers;
+    }
+    if (fields.cancellationToken !== undefined) {
+      this.cancellationToken = fields.cancellationToken;
+    }
+  }
+}
+export interface CreateFileUploadSessionPlanOptionalsInput {
+  readonly headers?: CreateFileUploadSessionPlanHeaders;
   readonly cancellationToken?: CancellationToken;
 }
 export class CreateFileUploadSessionCommitByUrlOptionals {
@@ -741,6 +803,50 @@ export interface GetFileUploadSessionPartsHeadersInput {
     readonly [key: string]: undefined | string;
   };
 }
+export class CreateFileUploadSessionPlanByUrlHeaders {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<CreateFileUploadSessionPlanByUrlHeaders, 'extraHeaders'> &
+      Partial<Pick<CreateFileUploadSessionPlanByUrlHeaders, 'extraHeaders'>>,
+  ) {
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface CreateFileUploadSessionPlanByUrlHeadersInput {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
+}
+export class CreateFileUploadSessionPlanHeaders {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  } = {};
+  constructor(
+    fields: Omit<CreateFileUploadSessionPlanHeaders, 'extraHeaders'> &
+      Partial<Pick<CreateFileUploadSessionPlanHeaders, 'extraHeaders'>>,
+  ) {
+    if (fields.extraHeaders !== undefined) {
+      this.extraHeaders = fields.extraHeaders;
+    }
+  }
+}
+export interface CreateFileUploadSessionPlanHeadersInput {
+  /**
+   * Extra headers that will be included in the HTTP request. */
+  readonly extraHeaders?: {
+    readonly [key: string]: undefined | string;
+  };
+}
 export interface CreateFileUploadSessionCommitByUrlRequestBody {
   /**
    * The list details for the uploaded parts. */
@@ -936,6 +1042,8 @@ export class ChunkedUploadsManager {
       | 'deleteFileUploadSessionById'
       | 'getFileUploadSessionPartsByUrl'
       | 'getFileUploadSessionParts'
+      | 'createFileUploadSessionPlanByUrl'
+      | 'createFileUploadSessionPlan'
       | 'createFileUploadSessionCommitByUrl'
       | 'createFileUploadSessionCommit'
       | 'reducer'
@@ -1436,6 +1544,106 @@ export class ChunkedUploadsManager {
       );
     return {
       ...deserializeUploadParts(response.data!),
+      rawData: response.data!,
+    };
+  }
+  /**
+   * Using this method with urls provided in response when creating a new upload session is preferred to use over CreateFileUploadSessionPlan method.
+   * This allows to always upload your content to the closest Box data center and can significantly improve upload speed.
+   *  Plan an upload session by checking which parts already exist on the server.
+   * This endpoint allows clients to optimize uploads by skipping parts that
+   * have already been uploaded (cache hits) and only uploading missing parts.
+   *
+   * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
+   * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+   * @param {string} url URL of createFileUploadSessionPlan method
+   * @param {UploadSessionPlanRequest} requestBody Request body of createFileUploadSessionPlan method
+   * @param {CreateFileUploadSessionPlanByUrlOptionalsInput} optionalsInput
+   * @returns {Promise<UploadSessionPlanResponse>}
+   */
+  async createFileUploadSessionPlanByUrl(
+    url: string,
+    requestBody: UploadSessionPlanRequest,
+    optionalsInput: CreateFileUploadSessionPlanByUrlOptionalsInput = {},
+  ): Promise<UploadSessionPlanResponse> {
+    const optionals: CreateFileUploadSessionPlanByUrlOptionals =
+      new CreateFileUploadSessionPlanByUrlOptionals({
+        headers: optionalsInput.headers,
+        cancellationToken: optionalsInput.cancellationToken,
+      });
+    const headers: any = optionals.headers;
+    const cancellationToken: any = optionals.cancellationToken;
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ...{}, ...headers.extraHeaders });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: url,
+          method: 'POST',
+          headers: headersMap,
+          data: serializeUploadSessionPlanRequest(requestBody),
+          contentType: 'application/json',
+          responseFormat: 'json' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        }),
+      );
+    return {
+      ...deserializeUploadSessionPlanResponse(response.data!),
+      rawData: response.data!,
+    };
+  }
+  /**
+     * Plan an upload session by checking which parts already exist on the server.
+     * This endpoint allows clients to optimize uploads by skipping parts that
+     * have already been uploaded (cache hits) and only uploading missing parts.
+     *
+     * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
+     * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+     * @param {string} uploadSessionId The ID of the upload session.
+    Example: "D5E3F7A"
+     * @param {UploadSessionPlanRequest} requestBody Request body of createFileUploadSessionPlan method
+     * @param {CreateFileUploadSessionPlanOptionalsInput} optionalsInput
+     * @returns {Promise<UploadSessionPlanResponse>}
+     */
+  async createFileUploadSessionPlan(
+    uploadSessionId: string,
+    requestBody: UploadSessionPlanRequest,
+    optionalsInput: CreateFileUploadSessionPlanOptionalsInput = {},
+  ): Promise<UploadSessionPlanResponse> {
+    const optionals: CreateFileUploadSessionPlanOptionals =
+      new CreateFileUploadSessionPlanOptionals({
+        headers: optionalsInput.headers,
+        cancellationToken: optionalsInput.cancellationToken,
+      });
+    const headers: any = optionals.headers;
+    const cancellationToken: any = optionals.cancellationToken;
+    const headersMap: {
+      readonly [key: string]: string;
+    } = prepareParams({ ...{}, ...headers.extraHeaders });
+    const response: FetchResponse =
+      await this.networkSession.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            this.networkSession.baseUrls.uploadUrl,
+            '/2.0/files/upload_sessions/',
+            (toString(uploadSessionId) as string)!,
+            '/plan',
+          ) as string,
+          method: 'POST',
+          headers: headersMap,
+          data: serializeUploadSessionPlanRequest(requestBody),
+          contentType: 'application/json',
+          responseFormat: 'json' as ResponseFormat,
+          auth: this.auth,
+          networkSession: this.networkSession,
+          cancellationToken: cancellationToken,
+        }),
+      );
+    return {
+      ...deserializeUploadSessionPlanResponse(response.data!),
       rawData: response.data!,
     };
   }
