@@ -12,6 +12,8 @@ This is a manager for chunked uploads (allowed for files at least 20MB).
 - [Remove upload session](#remove-upload-session)
 - [List parts by URL](#list-parts-by-url)
 - [List parts](#list-parts)
+- [Plan upload session by URL](#plan-upload-session-by-url)
+- [Plan upload session](#plan-upload-session)
 - [Commit upload session by URL](#commit-upload-session-by-url)
 - [Commit upload session](#commit-upload-session)
 - [Upload big file](#upload-big-file)
@@ -339,6 +341,74 @@ await client.chunkedUploads.getFileUploadSessionParts(uploadSessionId)
 This function returns a value of type `UploadParts`.
 
 Returns a list of parts that have been uploaded.
+
+
+## Plan upload session by URL
+
+Plan an upload session by checking which parts already exist on the server.
+This endpoint allows clients to optimize uploads by skipping parts that
+have already been uploaded (cache hits) and only uploading missing parts.
+
+The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
+and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+
+This operation is performed by calling function `createFileUploadSessionPlanByUrl`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-files-upload-sessions-id-plan/).
+
+*Currently we don't have an example for calling `createFileUploadSessionPlanByUrl` in integration tests*
+
+### Arguments
+
+- url `string`
+  - URL of createFileUploadSessionPlan method
+- requestBody `UploadSessionPlanRequest`
+  - Request body of createFileUploadSessionPlan method
+- optionalsInput `CreateFileUploadSessionPlanByUrlOptionalsInput`
+  
+
+
+### Returns
+
+This function returns a value of type `UploadSessionPlanResponse`.
+
+Returns information about which parts already exist (hits)
+and which parts need to be uploaded (misses).
+
+
+## Plan upload session
+
+Plan an upload session by checking which parts already exist on the server.
+This endpoint allows clients to optimize uploads by skipping parts that
+have already been uploaded (cache hits) and only uploading missing parts.
+
+The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
+and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+
+This operation is performed by calling function `createFileUploadSessionPlan`.
+
+See the endpoint docs at
+[API Reference](https://developer.box.com/reference/post-files-upload-sessions-id-plan/).
+
+*Currently we don't have an example for calling `createFileUploadSessionPlan` in integration tests*
+
+### Arguments
+
+- uploadSessionId `string`
+  - The ID of the upload session. Example: "D5E3F7A"
+- requestBody `UploadSessionPlanRequest`
+  - Request body of createFileUploadSessionPlan method
+- optionalsInput `CreateFileUploadSessionPlanOptionalsInput`
+  
+
+
+### Returns
+
+This function returns a value of type `UploadSessionPlanResponse`.
+
+Returns information about which parts already exist (hits)
+and which parts need to be uploaded (misses).
 
 
 ## Commit upload session by URL
