@@ -7,8 +7,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputEmailValidationValidationTypeField =
-  | 'email'
-  | string;
+  'email' | string;
 export class SignRequestSignerInputEmailValidation {
   /**
    * Validates that the text input is an email address. */
@@ -106,8 +105,7 @@ export function deserializeSignRequestSignerInputEmailValidationInput(
     });
   }
   const validationType:
-    | undefined
-    | SignRequestSignerInputEmailValidationValidationTypeField =
+    undefined | SignRequestSignerInputEmailValidationValidationTypeField =
     val.validationType == void 0
       ? void 0
       : deserializeSignRequestSignerInputEmailValidationValidationTypeField(

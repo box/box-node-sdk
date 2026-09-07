@@ -238,12 +238,7 @@ export interface GetLegalHoldPolicyAssignmentsHeadersInput {
   };
 }
 export type CreateLegalHoldPolicyAssignmentRequestBodyAssignToTypeField =
-  | 'file'
-  | 'file_version'
-  | 'folder'
-  | 'user'
-  | 'ownership'
-  | 'interactions';
+  'file' | 'file_version' | 'folder' | 'user' | 'ownership' | 'interactions';
 export interface CreateLegalHoldPolicyAssignmentRequestBodyAssignToField {
   /**
    * The type of item to assign the policy to. */

@@ -116,8 +116,7 @@ export interface GetFileWatermarkHeadersInput {
   };
 }
 export type UpdateFileWatermarkRequestBodyWatermarkImprintField =
-  | 'default'
-  | string;
+  'default' | string;
 export class UpdateFileWatermarkRequestBodyWatermarkField {
   /**
    * The type of watermark to apply.
@@ -439,8 +438,7 @@ export function deserializeUpdateFileWatermarkRequestBodyWatermarkFieldInput(
     });
   }
   const imprint:
-    | undefined
-    | UpdateFileWatermarkRequestBodyWatermarkImprintField =
+    undefined | UpdateFileWatermarkRequestBodyWatermarkImprintField =
     val.imprint == void 0
       ? void 0
       : deserializeUpdateFileWatermarkRequestBodyWatermarkImprintField(

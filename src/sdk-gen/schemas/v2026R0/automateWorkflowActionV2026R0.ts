@@ -17,8 +17,7 @@ import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type AutomateWorkflowActionV2026R0TypeField = 'workflow_action';
 export type AutomateWorkflowActionV2026R0ActionTypeField =
-  | 'run_workflow'
-  | string;
+  'run_workflow' | string;
 export class AutomateWorkflowActionV2026R0 {
   /**
    * The identifier for the Automate action. */

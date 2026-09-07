@@ -22,10 +22,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestCreateRequestSignatureColorField =
-  | 'blue'
-  | 'black'
-  | 'red'
-  | string;
+  'blue' | 'black' | 'red' | string;
 export type SignRequestCreateRequest = SignRequestBase & {
   /**
    * List of files to create a signing document from. This is currently limited to ten files. Only the ID and type fields are required for each file. */
@@ -128,8 +125,7 @@ export function deserializeSignRequestCreateRequest(
           }) as readonly any[])
         : [];
   const signatureColor:
-    | undefined
-    | SignRequestCreateRequestSignatureColorField =
+    undefined | SignRequestCreateRequestSignatureColorField =
     val.signature_color == void 0
       ? void 0
       : deserializeSignRequestCreateRequestSignatureColorField(

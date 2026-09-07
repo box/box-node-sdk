@@ -227,11 +227,9 @@ export interface DeleteTeamsIntegrationMappingByIdOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetSlackIntegrationMappingQueryParamsPartnerItemTypeField =
-  | 'channel'
-  | string;
+  'channel' | string;
 export type GetSlackIntegrationMappingQueryParamsBoxItemTypeField =
-  | 'folder'
-  | string;
+  'folder' | string;
 export interface GetSlackIntegrationMappingQueryParams {
   /**
    * Defines the position marker at which to begin returning results. This is
@@ -354,12 +352,9 @@ export interface DeleteSlackIntegrationMappingByIdHeadersInput {
   };
 }
 export type GetTeamsIntegrationMappingQueryParamsPartnerItemTypeField =
-  | 'channel'
-  | 'team'
-  | string;
+  'channel' | 'team' | string;
 export type GetTeamsIntegrationMappingQueryParamsBoxItemTypeField =
-  | 'folder'
-  | string;
+  'folder' | string;
 export interface GetTeamsIntegrationMappingQueryParams {
   /**
    * Mapped item type, for which the mapping should be returned. */

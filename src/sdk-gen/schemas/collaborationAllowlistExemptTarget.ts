@@ -107,8 +107,7 @@ export function deserializeCollaborationAllowlistExemptTargetEnterpriseField(
   }
   const id: undefined | string = val.id == void 0 ? void 0 : val.id;
   const type:
-    | undefined
-    | CollaborationAllowlistExemptTargetEnterpriseTypeField =
+    undefined | CollaborationAllowlistExemptTargetEnterpriseTypeField =
     val.type == void 0
       ? void 0
       : deserializeCollaborationAllowlistExemptTargetEnterpriseTypeField(
@@ -173,8 +172,7 @@ export function deserializeCollaborationAllowlistExemptTarget(
       ? void 0
       : deserializeCollaborationAllowlistExemptTargetTypeField(val.type);
   const enterprise:
-    | undefined
-    | CollaborationAllowlistExemptTargetEnterpriseField =
+    undefined | CollaborationAllowlistExemptTargetEnterpriseField =
     val.enterprise == void 0
       ? void 0
       : deserializeCollaborationAllowlistExemptTargetEnterpriseField(

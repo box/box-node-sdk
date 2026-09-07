@@ -54,9 +54,7 @@ export interface GetFileVersionRetentionByIdOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetFileVersionRetentionsQueryParamsDispositionActionField =
-  | 'permanently_delete'
-  | 'remove_retention'
-  | string;
+  'permanently_delete' | 'remove_retention' | string;
 export interface GetFileVersionRetentionsQueryParams {
   /**
    * Filters results by files with this ID. */

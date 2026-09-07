@@ -1,5 +1,11 @@
 import { Buffer } from 'buffer';
-import { createHMAC, createSHA1, createSHA256, sha1 } from 'hash-wasm';
+import {
+  createHMAC,
+  createSHA1,
+  createSHA256,
+  createSHA512,
+  sha1,
+} from 'hash-wasm';
 
 export { Buffer };
 export const nodeFetch = fetch;
@@ -8,8 +14,8 @@ export type ByteStream = ReadableStream;
 export class FormData {}
 export type AgentOptions = any;
 export type Agent = any;
-export type HashName = 'sha1';
-export type DigestHashType = 'base64';
+export type HashName = 'sha1' | 'sha512';
+export type DigestHashType = 'base64' | 'hex';
 
 export class utilLib {
   static inspect = {
@@ -32,6 +38,10 @@ export class Hash {
         this.hash = await createSHA1();
         this.hash.init();
         break;
+      case 'sha512':
+        this.hash = await createSHA512();
+        this.hash.init();
+        break;
       default:
         throw new Error(`Unsupported algorithm: ${this.algorithm}`);
     }
@@ -52,6 +62,8 @@ export class Hash {
     switch (encoding) {
       case 'base64':
         return Buffer.from(d).toString('base64');
+      case 'hex':
+        return Buffer.from(d).toString('hex');
       default:
         throw new Error(`Unsupported encoding: ${encoding}`);
     }

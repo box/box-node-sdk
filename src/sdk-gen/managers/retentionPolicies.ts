@@ -159,9 +159,7 @@ export interface DeleteRetentionPolicyByIdOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetRetentionPoliciesQueryParamsPolicyTypeField =
-  | 'finite'
-  | 'indefinite'
-  | string;
+  'finite' | 'indefinite' | string;
 export interface GetRetentionPoliciesQueryParams {
   /**
    * Filters results by a case sensitive prefix of the name of
@@ -215,20 +213,13 @@ export interface GetRetentionPoliciesHeadersInput {
   };
 }
 export type CreateRetentionPolicyRequestBodyPolicyTypeField =
-  | 'finite'
-  | 'indefinite'
-  | string;
+  'finite' | 'indefinite' | string;
 export type CreateRetentionPolicyRequestBodyDispositionActionField =
-  | 'permanently_delete'
-  | 'remove_retention'
-  | string;
+  'permanently_delete' | 'remove_retention' | string;
 export type CreateRetentionPolicyRequestBodyRetentionLengthField =
-  | string
-  | number;
+  string | number;
 export type CreateRetentionPolicyRequestBodyRetentionTypeField =
-  | 'modifiable'
-  | 'non_modifiable'
-  | string;
+  'modifiable' | 'non_modifiable' | string;
 export interface CreateRetentionPolicyRequestBody {
   /**
    * The name for the retention policy. */
@@ -349,8 +340,7 @@ export interface GetRetentionPolicyByIdHeadersInput {
   };
 }
 export type UpdateRetentionPolicyByIdRequestBodyRetentionLengthField =
-  | string
-  | number;
+  string | number;
 export interface UpdateRetentionPolicyByIdRequestBody {
   /**
    * The name for the retention policy. */
@@ -920,16 +910,14 @@ export function deserializeCreateRetentionPolicyRequestBody(
       val.disposition_action
     );
   const retentionLength:
-    | undefined
-    | CreateRetentionPolicyRequestBodyRetentionLengthField =
+    undefined | CreateRetentionPolicyRequestBodyRetentionLengthField =
     val.retention_length == void 0
       ? void 0
       : deserializeCreateRetentionPolicyRequestBodyRetentionLengthField(
           val.retention_length
         );
   const retentionType:
-    | undefined
-    | CreateRetentionPolicyRequestBodyRetentionTypeField =
+    undefined | CreateRetentionPolicyRequestBodyRetentionTypeField =
     val.retention_type == void 0
       ? void 0
       : deserializeCreateRetentionPolicyRequestBodyRetentionTypeField(
@@ -949,8 +937,7 @@ export function deserializeCreateRetentionPolicyRequestBody(
       ? void 0
       : val.can_owner_extend_retention;
   const maxExtensionLength:
-    | undefined
-    | RetentionPolicyMaxExtensionLengthRequest =
+    undefined | RetentionPolicyMaxExtensionLengthRequest =
     val.max_extension_length == void 0
       ? void 0
       : deserializeRetentionPolicyMaxExtensionLengthRequest(
@@ -1095,8 +1082,7 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
   const retentionType: undefined | string =
     val.retention_type == void 0 ? void 0 : val.retention_type;
   const retentionLength:
-    | undefined
-    | UpdateRetentionPolicyByIdRequestBodyRetentionLengthField =
+    undefined | UpdateRetentionPolicyByIdRequestBodyRetentionLengthField =
     val.retention_length == void 0
       ? void 0
       : deserializeUpdateRetentionPolicyByIdRequestBodyRetentionLengthField(
@@ -1123,8 +1109,7 @@ export function deserializeUpdateRetentionPolicyByIdRequestBody(
       ? void 0
       : val.can_owner_extend_retention;
   const maxExtensionLength:
-    | undefined
-    | RetentionPolicyMaxExtensionLengthRequest =
+    undefined | RetentionPolicyMaxExtensionLengthRequest =
     val.max_extension_length == void 0
       ? void 0
       : deserializeRetentionPolicyMaxExtensionLengthRequest(

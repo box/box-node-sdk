@@ -166,9 +166,7 @@ export interface DeleteStoragePolicyAssignmentByIdOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetStoragePolicyAssignmentsQueryParamsResolvedForTypeField =
-  | 'user'
-  | 'enterprise'
-  | string;
+  'user' | 'enterprise' | string;
 export interface GetStoragePolicyAssignmentsQueryParams {
   /**
    * Defines the position marker at which to begin returning results. This is
@@ -246,8 +244,7 @@ export interface CreateStoragePolicyAssignmentRequestBodyStoragePolicyFieldInput
   readonly rawData?: SerializedData;
 }
 export type CreateStoragePolicyAssignmentRequestBodyAssignedToTypeField =
-  | 'user'
-  | 'enterprise';
+  'user' | 'enterprise';
 export interface CreateStoragePolicyAssignmentRequestBodyAssignedToField {
   /**
    * The type to assign the policy to. */
@@ -768,8 +765,7 @@ export function deserializeCreateStoragePolicyAssignmentRequestBodyStoragePolicy
     });
   }
   const type:
-    | undefined
-    | CreateStoragePolicyAssignmentRequestBodyStoragePolicyTypeField =
+    undefined | CreateStoragePolicyAssignmentRequestBodyStoragePolicyTypeField =
     val.type == void 0
       ? void 0
       : deserializeCreateStoragePolicyAssignmentRequestBodyStoragePolicyTypeField(

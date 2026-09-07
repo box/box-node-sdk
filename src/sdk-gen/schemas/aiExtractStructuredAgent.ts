@@ -13,8 +13,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type AiExtractStructuredAgent =
-  | AiAgentReference
-  | AiAgentExtractStructured;
+  AiAgentReference | AiAgentExtractStructured;
 export function serializeAiExtractStructuredAgent(val: any): SerializedData {
   if (val.type == 'ai_agent_id') {
     return serializeAiAgentReference(val);

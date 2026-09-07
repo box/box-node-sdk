@@ -37,21 +37,11 @@ export interface FilePathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type FileSharedLinkAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export type FileSharedLinkEffectiveAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export type FileSharedLinkEffectivePermissionField =
-  | 'can_edit'
-  | 'can_download'
-  | 'can_preview'
-  | 'no_access'
-  | string;
+  'can_edit' | 'can_download' | 'can_preview' | 'no_access' | string;
 export interface FileSharedLinkPermissionsField {
   /**
    * Defines if the shared link allows for the item to be downloaded. For

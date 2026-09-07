@@ -143,10 +143,7 @@ export interface GetCollaborationWhitelistEntriesHeadersInput {
   };
 }
 export type CreateCollaborationWhitelistEntryRequestBodyDirectionField =
-  | 'inbound'
-  | 'outbound'
-  | 'both'
-  | string;
+  'inbound' | 'outbound' | 'both' | string;
 export interface CreateCollaborationWhitelistEntryRequestBody {
   /**
    * The domain to add to the list of allowed domains. */

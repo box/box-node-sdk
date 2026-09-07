@@ -52,12 +52,7 @@ export interface GetEventsWithLongPollingHeadersInput {
   };
 }
 export type GetEventsQueryParamsStreamTypeField =
-  | 'all'
-  | 'changes'
-  | 'sync'
-  | 'admin_logs'
-  | 'admin_logs_streaming'
-  | string;
+  'all' | 'changes' | 'sync' | 'admin_logs' | 'admin_logs_streaming' | string;
 export type GetEventsQueryParamsEventTypeField =
   | 'ACCESS_GRANTED'
   | 'ACCESS_REVOKED'
@@ -272,12 +267,7 @@ export interface GetEventsHeadersInput {
   };
 }
 export type GetEventStreamQueryParamsStreamTypeField =
-  | 'all'
-  | 'changes'
-  | 'sync'
-  | 'admin_logs'
-  | 'admin_logs_streaming'
-  | string;
+  'all' | 'changes' | 'sync' | 'admin_logs' | 'admin_logs_streaming' | string;
 export type GetEventStreamQueryParamsEventTypeField =
   | 'ACCESS_GRANTED'
   | 'ACCESS_REVOKED'
