@@ -4,16 +4,26 @@ import { serializeCreateFileUploadSessionCommitRequestBody } from '@/managers/ch
 import { deserializeCreateFileUploadSessionCommitRequestBody } from '@/managers/chunkedUploads';
 import { serializeCreateFileUploadSessionCommitByUrlRequestBody } from '@/managers/chunkedUploads';
 import { deserializeCreateFileUploadSessionCommitByUrlRequestBody } from '@/managers/chunkedUploads';
+import { serializeCreateFileUploadSessionForExistingFileRequestBody } from '@/managers/chunkedUploads';
+import { deserializeCreateFileUploadSessionForExistingFileRequestBody } from '@/managers/chunkedUploads';
+import { serializeUploadSessionPlanRequest } from '@/schemas/uploadSessionPlanRequest';
+import { deserializeUploadSessionPlanRequest } from '@/schemas/uploadSessionPlanRequest';
+import { serializeUploadPartPlanHit } from '@/schemas/uploadPartPlanHit';
+import { deserializeUploadPartPlanHit } from '@/schemas/uploadPartPlanHit';
 import { serializeFile } from '@/schemas/file';
 import { deserializeFile } from '@/schemas/file';
 import { serializeUploadSession } from '@/schemas/uploadSession';
 import { deserializeUploadSession } from '@/schemas/uploadSession';
 import { serializeUploadPart } from '@/schemas/uploadPart';
 import { deserializeUploadPart } from '@/schemas/uploadPart';
+import { serializeUploadPartPlan } from '@/schemas/uploadPartPlan';
+import { deserializeUploadPartPlan } from '@/schemas/uploadPartPlan';
 import { serializeUploadParts } from '@/schemas/uploadParts';
 import { deserializeUploadParts } from '@/schemas/uploadParts';
 import { serializeUploadedPart } from '@/schemas/uploadedPart';
 import { deserializeUploadedPart } from '@/schemas/uploadedPart';
+import { serializeUploadSessionPlanResponse } from '@/schemas/uploadSessionPlanResponse';
+import { deserializeUploadSessionPlanResponse } from '@/schemas/uploadSessionPlanResponse';
 import { serializeFiles } from '@/schemas/files';
 import { deserializeFiles } from '@/schemas/files';
 import { UploadFilePartHeadersInput } from '@/managers/chunkedUploads';
@@ -30,6 +40,9 @@ import { CreateFileUploadSessionCommitHeaders } from '@/managers/chunkedUploads'
 import { UploadFilePartByUrlHeaders } from '@/managers/chunkedUploads';
 import { CreateFileUploadSessionCommitByUrlRequestBody } from '@/managers/chunkedUploads';
 import { CreateFileUploadSessionCommitByUrlHeaders } from '@/managers/chunkedUploads';
+import { CreateFileUploadSessionForExistingFileRequestBody } from '@/managers/chunkedUploads';
+import { UploadSessionPlanRequest } from '@/schemas/uploadSessionPlanRequest';
+import { UploadPartPlanHit } from '@/schemas/uploadPartPlanHit';
 import { generateByteStreamFromBuffer } from '@/internal/utils';
 import { hexToBase64 } from '@/internal/utils';
 import { iterateChunks } from '@/internal/utils';
@@ -40,12 +53,15 @@ import { bufferLength } from '@/internal/utils';
 import { getUuid } from '@/internal/utils';
 import { generateByteStream } from '@/internal/utils';
 import { ByteStream } from '@/internal/utils';
+import { delayInSeconds } from '@/internal/utils';
 import { getDefaultClient } from './commons';
 import { File } from '@/schemas/file';
 import { UploadSession } from '@/schemas/uploadSession';
 import { UploadPart } from '@/schemas/uploadPart';
+import { UploadPartPlan } from '@/schemas/uploadPartPlan';
 import { UploadParts } from '@/schemas/uploadParts';
 import { UploadedPart } from '@/schemas/uploadedPart';
+import { UploadSessionPlanResponse } from '@/schemas/uploadSessionPlanResponse';
 import { Files } from '@/schemas/files';
 import { BoxClient } from '@/client';
 import { toString } from '@/internal/utils';
@@ -214,6 +230,35 @@ async function reducerByUrl(
     fileHash: acc.fileHash,
   });
 }
+interface TestPartPlanAccumulator {
+  readonly lastIndex: number;
+  readonly parts: readonly UploadPartPlan[];
+  readonly fileSize: number;
+}
+async function reducerForUploadSessionPlan(
+  acc: TestPartPlanAccumulator,
+  chunk: ByteStream,
+): Promise<TestPartPlanAccumulator> {
+  const lastIndex: number = acc.lastIndex;
+  const parts: readonly UploadPartPlan[] = acc.parts;
+  const chunkBuffer: Buffer = await readByteStream(chunk);
+  const hash: Hash = new Hash({ algorithm: 'sha512' as HashName });
+  await hash.updateHash(chunkBuffer);
+  const sha512: string = await hash.digestHash('hex');
+  const chunkSize: number = bufferLength(chunkBuffer);
+  const bytesStart: number = lastIndex + 1;
+  const bytesEnd: number = lastIndex + chunkSize;
+  const part: UploadPartPlan = {
+    offset: bytesStart,
+    size: chunkSize,
+    sha512: sha512,
+  } satisfies UploadPartPlan;
+  return {
+    lastIndex: bytesEnd,
+    parts: parts.concat([part]),
+    fileSize: acc.fileSize,
+  } satisfies TestPartPlanAccumulator;
+}
 test('testChunkedManualProcessById', async function testChunkedManualProcessById(): Promise<any> {
   const fileSize: number = 20 * 1024 * 1024;
   const fileByteStream: ByteStream = generateByteStream(fileSize);
@@ -342,6 +387,75 @@ test('testChunkedManualProcessByUrl', async function testChunkedManualProcessByU
     throw new Error('Assertion failed');
   }
   await client.chunkedUploads.deleteFileUploadSessionByUrl(abortUrl);
+});
+test('testUploadSessionPlan', async function testUploadSessionPlan(): Promise<any> {
+  const fileSize: number = 20 * 1024 * 1024;
+  const fileName: string = getUuid();
+  const parentFolderId: string = '0';
+  const fileContentStream: ByteStream = generateByteStream(fileSize);
+  const fileBuffer: Buffer = await readByteStream(fileContentStream);
+  const uploadedFile: File = await client.chunkedUploads.uploadBigFile(
+    generateByteStreamFromBuffer(fileBuffer),
+    fileName,
+    fileSize,
+    parentFolderId,
+  );
+  await delayInSeconds(5);
+  const uploadSession: UploadSession =
+    await client.chunkedUploads.createFileUploadSessionForExistingFile(
+      uploadedFile.id,
+      {
+        fileSize: fileSize,
+      } satisfies CreateFileUploadSessionForExistingFileRequestBody,
+    );
+  const uploadSessionId: string = uploadSession.id!;
+  const planUrl: string = uploadSession.sessionEndpoints!.plan!;
+  const partSize: number = uploadSession.partSize!;
+  const totalParts: number = uploadSession.totalParts!;
+  const chunksIterator: Iterator = iterateChunks(
+    generateByteStreamFromBuffer(fileBuffer),
+    partSize,
+    fileSize,
+  );
+  const results: TestPartPlanAccumulator = await reduceIterator(
+    chunksIterator,
+    reducerForUploadSessionPlan,
+    {
+      lastIndex: -1,
+      parts: [],
+      fileSize: fileSize,
+    } satisfies TestPartPlanAccumulator,
+  );
+  const parts: readonly UploadPartPlan[] = results.parts;
+  const plan: UploadSessionPlanResponse =
+    await client.chunkedUploads.createFileUploadSessionPlanByUrl(planUrl, {
+      parts: parts,
+    } satisfies UploadSessionPlanRequest);
+  if (!(plan.uploadSessionId == uploadSessionId)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(plan.hits.length == totalParts)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(plan.misses.length == 0)) {
+    throw new Error('Assertion failed');
+  }
+  const firstPart: UploadPartPlan = parts[0];
+  const firstHit: UploadPartPlanHit = plan.hits[0];
+  if (!(firstHit.offset == firstPart.offset)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(firstHit.size == firstPart.size)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(firstHit.sha512 == firstPart.sha512)) {
+    throw new Error('Assertion failed');
+  }
+  if (!!(firstHit.partId == '')) {
+    throw new Error('Assertion failed');
+  }
+  await client.chunkedUploads.deleteFileUploadSessionById(uploadSessionId);
+  await client.files.deleteFileById(uploadedFile.id);
 });
 test('testChunkedUploadConvenienceMethod', async function testChunkedUploadConvenienceMethod(): Promise<any> {
   const fileSize: number = 20 * 1024 * 1024;

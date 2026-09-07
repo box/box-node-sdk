@@ -58,7 +58,16 @@ This operation is performed by calling function `createFileUploadSessionForExist
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/post-files-id-upload-sessions/).
 
-_Currently we don't have an example for calling `createFileUploadSessionForExistingFile` in integration tests_
+<!-- sample post_files_id_upload_sessions -->
+
+```ts
+await client.chunkedUploads.createFileUploadSessionForExistingFile(
+  uploadedFile.id,
+  {
+    fileSize: fileSize,
+  } satisfies CreateFileUploadSessionForExistingFileRequestBody,
+);
+```
 
 ### Arguments
 
@@ -354,7 +363,13 @@ This operation is performed by calling function `createFileUploadSessionPlanByUr
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/post-files-upload-sessions-id-plan/).
 
-_Currently we don't have an example for calling `createFileUploadSessionPlanByUrl` in integration tests_
+<!-- sample post_files_upload_sessions_id_plan -->
+
+```ts
+await client.chunkedUploads.createFileUploadSessionPlanByUrl(planUrl, {
+  parts: parts,
+} satisfies UploadSessionPlanRequest);
+```
 
 ### Arguments
 
@@ -494,7 +509,7 @@ This operation is performed by calling function `uploadBigFile`.
 
 ```ts
 await client.chunkedUploads.uploadBigFile(
-  fileByteStream,
+  generateByteStreamFromBuffer(fileBuffer),
   fileName,
   fileSize,
   parentFolderId,
