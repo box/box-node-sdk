@@ -32,8 +32,8 @@ import {
 import { MultipartItem } from '../networking';
 import { sanitizedValue } from '../serialization/json';
 
-export type HashName = 'sha1';
-export type DigestHashType = 'base64';
+export type HashName = 'sha1' | 'sha512';
+export type DigestHashType = 'base64' | 'hex';
 
 export type { JwtKey, JwtAlgorithm, JwtSignOptions, ByteStream };
 export type { PrivateKeyDecryptor };

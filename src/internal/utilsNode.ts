@@ -12,8 +12,8 @@ export { default as nodeFetch } from 'node-fetch';
 export type { RequestInit } from 'node-fetch';
 export type AgentOptions = any;
 export type Agent = any;
-export type HashName = 'sha1';
-export type DigestHashType = 'base64';
+export type HashName = 'sha1' | 'sha512';
+export type DigestHashType = 'base64' | 'hex';
 
 export class Hash {
   hash: any;
