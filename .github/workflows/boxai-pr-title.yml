@@ -1,0 +1,20 @@
+name: Box AI PR Title
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  rename-pr:
+    if: github.event.label.name == 'boxai-rename'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate and apply PR title
+        uses: congminh1254/boxai-rename-pr@main
+        with:
+          box-jwt-config: ${{ secrets.JWT_CONFIG_BASE_64 }}
+          remove-label: boxai-rename
