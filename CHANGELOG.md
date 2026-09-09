@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.15.0](https://github.com/box/box-node-sdk/compare/v10.14.0...v10.15.0) (2026-09-09)
+
+
+### Bug Fixes
+
+* Fix type declarations that break `tsc` under `Node-only` `tsconfig` (box/box-codegen[#983](https://github.com/box/box-node-sdk/issues/983)) ([#1602](https://github.com/box/box-node-sdk/issues/1602)) ([874246d](https://github.com/box/box-node-sdk/commit/874246d84713b1aa48b65305bf8c1fdc14496e04))
+* stop double-JSON-encoding error fields in Box API errors (box/box-codegen[#985](https://github.com/box/box-node-sdk/issues/985)) ([#1608](https://github.com/box/box-node-sdk/issues/1608)) ([a517b3d](https://github.com/box/box-node-sdk/commit/a517b3d019085695ad73042ed34983a969fdd779))
+
+
+### New Features and Enhancements
+
+* add Japanese ZIP code validation to sign request (box/box-openapi[#615](https://github.com/box/box-node-sdk/issues/615)) ([#1598](https://github.com/box/box-node-sdk/issues/1598)) ([be0d1ff](https://github.com/box/box-node-sdk/commit/be0d1ff043075f7edd7b54f0c6cfaafce6b8cf4f))
+* Support chunk upload session plan API (box/box-openapi[#616](https://github.com/box/box-node-sdk/issues/616)) ([#1601](https://github.com/box/box-node-sdk/issues/1601)) ([f28a496](https://github.com/box/box-node-sdk/commit/f28a496f0843d666c2d5430029df5cfb4472addf))
+
 ## [10.14.0](https://github.com/box/box-node-sdk/compare/v10.13.0...v10.14.0) (2026-08-05)
 
 
