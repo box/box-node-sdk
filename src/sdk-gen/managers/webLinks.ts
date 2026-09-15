@@ -218,7 +218,10 @@ export interface UpdateWebLinkByIdRequestBodyParentField {
   readonly rawData?: SerializedData;
 }
 export type UpdateWebLinkByIdRequestBodySharedLinkAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export interface UpdateWebLinkByIdRequestBodySharedLinkField {
   /**
    * The level of access for the shared link. This can be

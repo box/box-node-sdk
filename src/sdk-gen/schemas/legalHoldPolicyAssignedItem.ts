@@ -7,7 +7,12 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type LegalHoldPolicyAssignedItemTypeField =
-  'file' | 'file_version' | 'folder' | 'user' | 'ownership' | 'interactions';
+  | 'file'
+  | 'file_version'
+  | 'folder'
+  | 'user'
+  | 'ownership'
+  | 'interactions';
 export interface LegalHoldPolicyAssignedItem {
   /**
    * The type of item the policy is assigned to. */

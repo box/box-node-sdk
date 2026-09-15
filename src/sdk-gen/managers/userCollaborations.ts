@@ -199,7 +199,10 @@ export type UpdateCollaborationByIdRequestBodyRoleField =
   | 'owner'
   | string;
 export type UpdateCollaborationByIdRequestBodyStatusField =
-  'pending' | 'accepted' | 'rejected' | string;
+  | 'pending'
+  | 'accepted'
+  | 'rejected'
+  | string;
 export interface UpdateCollaborationByIdRequestBody {
   /**
    * The level of access granted. */
@@ -300,7 +303,8 @@ export interface CreateCollaborationRequestBodyItemField {
   readonly rawData?: SerializedData;
 }
 export type CreateCollaborationRequestBodyAccessibleByTypeField =
-  'user' | 'group';
+  | 'user'
+  | 'group';
 export interface CreateCollaborationRequestBodyAccessibleByField {
   /**
    * The type of collaborator to invite. */

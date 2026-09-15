@@ -218,7 +218,8 @@ export function deserializeShieldInformationBarrierSegmentRestrictionMini(
       val.restricted_segment
     );
   const type:
-    undefined | ShieldInformationBarrierSegmentRestrictionBaseTypeField =
+    | undefined
+    | ShieldInformationBarrierSegmentRestrictionBaseTypeField =
     val.type == void 0
       ? void 0
       : deserializeShieldInformationBarrierSegmentRestrictionBaseTypeField(

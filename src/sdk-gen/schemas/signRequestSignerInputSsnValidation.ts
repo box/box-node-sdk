@@ -7,7 +7,8 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputSsnValidationValidationTypeField =
-  'ssn' | string;
+  | 'ssn'
+  | string;
 export class SignRequestSignerInputSsnValidation {
   /**
    * Validates that the text input is a Social Security Number (SSN). */
@@ -104,7 +105,8 @@ export function deserializeSignRequestSignerInputSsnValidationInput(
     });
   }
   const validationType:
-    undefined | SignRequestSignerInputSsnValidationValidationTypeField =
+    | undefined
+    | SignRequestSignerInputSsnValidationValidationTypeField =
     val.validationType == void 0
       ? void 0
       : deserializeSignRequestSignerInputSsnValidationValidationTypeField(

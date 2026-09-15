@@ -85,15 +85,29 @@ export interface SearchByMetadataQueryHeadersInput {
   };
 }
 export type SearchForContentQueryParamsScopeField =
-  'user_content' | 'enterprise_content' | string;
+  | 'user_content'
+  | 'enterprise_content'
+  | string;
 export type SearchForContentQueryParamsContentTypesField =
-  'name' | 'description' | 'file_content' | 'comments' | 'tags' | string;
+  | 'name'
+  | 'description'
+  | 'file_content'
+  | 'comments'
+  | 'tags'
+  | string;
 export type SearchForContentQueryParamsTypeField =
-  'file' | 'folder' | 'web_link';
+  | 'file'
+  | 'folder'
+  | 'web_link';
 export type SearchForContentQueryParamsTrashContentField =
-  'non_trashed_only' | 'trashed_only' | 'all_items' | string;
+  | 'non_trashed_only'
+  | 'trashed_only'
+  | 'all_items'
+  | string;
 export type SearchForContentQueryParamsSortField =
-  'modified_at' | 'relevance' | string;
+  | 'modified_at'
+  | 'relevance'
+  | string;
 export type SearchForContentQueryParamsDirectionField = 'DESC' | 'ASC' | string;
 export interface SearchForContentQueryParams {
   /**

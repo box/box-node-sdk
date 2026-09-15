@@ -13,7 +13,9 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type GroupMiniV2025R0GroupTypeField =
-  'managed_group' | 'all_users_group' | string;
+  | 'managed_group'
+  | 'all_users_group'
+  | string;
 export class GroupMiniV2025R0 extends GroupBaseV2025R0 {
   readonly name?: string;
   readonly groupType?: GroupMiniV2025R0GroupTypeField;

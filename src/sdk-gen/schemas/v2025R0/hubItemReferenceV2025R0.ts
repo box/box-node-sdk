@@ -16,7 +16,9 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type HubItemReferenceV2025R0 =
-  FileReferenceV2025R0 | FolderReferenceV2025R0 | WeblinkReferenceV2025R0;
+  | FileReferenceV2025R0
+  | FolderReferenceV2025R0
+  | WeblinkReferenceV2025R0;
 export function serializeHubItemReferenceV2025R0(val: any): SerializedData {
   if (val.type == 'file') {
     return serializeFileReferenceV2025R0(val);

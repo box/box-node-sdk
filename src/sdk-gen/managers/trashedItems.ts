@@ -24,7 +24,10 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type GetTrashedItemsQueryParamsDirectionField = 'ASC' | 'DESC' | string;
 export type GetTrashedItemsQueryParamsSortField =
-  'name' | 'date' | 'size' | string;
+  | 'name'
+  | 'date'
+  | 'size'
+  | string;
 export interface GetTrashedItemsQueryParams {
   /**
    * A comma-separated list of attributes to include in the

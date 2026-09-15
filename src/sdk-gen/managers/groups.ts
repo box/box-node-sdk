@@ -199,9 +199,15 @@ export interface GetGroupsHeadersInput {
   };
 }
 export type CreateGroupRequestBodyInvitabilityLevelField =
-  'admins_only' | 'admins_and_members' | 'all_managed_users' | string;
+  | 'admins_only'
+  | 'admins_and_members'
+  | 'all_managed_users'
+  | string;
 export type CreateGroupRequestBodyMemberViewabilityLevelField =
-  'admins_only' | 'admins_and_members' | 'all_managed_users' | string;
+  | 'admins_only'
+  | 'admins_and_members'
+  | 'all_managed_users'
+  | string;
 export interface CreateGroupRequestBody {
   /**
    * The name of the new group to be created. This name must be unique
@@ -328,9 +334,15 @@ export interface GetGroupByIdHeadersInput {
   };
 }
 export type UpdateGroupByIdRequestBodyInvitabilityLevelField =
-  'admins_only' | 'admins_and_members' | 'all_managed_users' | string;
+  | 'admins_only'
+  | 'admins_and_members'
+  | 'all_managed_users'
+  | string;
 export type UpdateGroupByIdRequestBodyMemberViewabilityLevelField =
-  'admins_only' | 'admins_and_members' | 'all_managed_users' | string;
+  | 'admins_only'
+  | 'admins_and_members'
+  | 'all_managed_users'
+  | string;
 export interface UpdateGroupByIdRequestBody {
   /**
    * The name of the new group to be created. Must be unique within the
@@ -842,14 +854,16 @@ export function deserializeCreateGroupRequestBody(
   const description: undefined | string =
     val.description == void 0 ? void 0 : val.description;
   const invitabilityLevel:
-    undefined | CreateGroupRequestBodyInvitabilityLevelField =
+    | undefined
+    | CreateGroupRequestBodyInvitabilityLevelField =
     val.invitability_level == void 0
       ? void 0
       : deserializeCreateGroupRequestBodyInvitabilityLevelField(
           val.invitability_level
         );
   const memberViewabilityLevel:
-    undefined | CreateGroupRequestBodyMemberViewabilityLevelField =
+    | undefined
+    | CreateGroupRequestBodyMemberViewabilityLevelField =
     val.member_viewability_level == void 0
       ? void 0
       : deserializeCreateGroupRequestBodyMemberViewabilityLevelField(
@@ -981,14 +995,16 @@ export function deserializeUpdateGroupByIdRequestBody(
   const description: undefined | string =
     val.description == void 0 ? void 0 : val.description;
   const invitabilityLevel:
-    undefined | UpdateGroupByIdRequestBodyInvitabilityLevelField =
+    | undefined
+    | UpdateGroupByIdRequestBodyInvitabilityLevelField =
     val.invitability_level == void 0
       ? void 0
       : deserializeUpdateGroupByIdRequestBodyInvitabilityLevelField(
           val.invitability_level
         );
   const memberViewabilityLevel:
-    undefined | UpdateGroupByIdRequestBodyMemberViewabilityLevelField =
+    | undefined
+    | UpdateGroupByIdRequestBodyMemberViewabilityLevelField =
     val.member_viewability_level == void 0
       ? void 0
       : deserializeUpdateGroupByIdRequestBodyMemberViewabilityLevelField(

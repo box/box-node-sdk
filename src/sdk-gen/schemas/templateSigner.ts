@@ -10,7 +10,10 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type TemplateSignerRoleField =
-  'signer' | 'approver' | 'final_copy_reader' | string;
+  | 'signer'
+  | 'approver'
+  | 'final_copy_reader'
+  | string;
 export interface TemplateSigner {
   readonly inputs?: readonly TemplateSignerInput[];
   /**

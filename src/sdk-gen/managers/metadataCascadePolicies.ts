@@ -215,7 +215,9 @@ export interface GetMetadataCascadePoliciesHeadersInput {
   };
 }
 export type CreateMetadataCascadePolicyRequestBodyScopeField =
-  'global' | 'enterprise' | string;
+  | 'global'
+  | 'enterprise'
+  | string;
 export interface CreateMetadataCascadePolicyRequestBody {
   /**
    * The ID of the folder to apply the policy to. This folder will
@@ -312,7 +314,9 @@ export interface DeleteMetadataCascadePolicyByIdHeadersInput {
   };
 }
 export type ApplyMetadataCascadePolicyRequestBodyConflictResolutionField =
-  'none' | 'overwrite' | string;
+  | 'none'
+  | 'overwrite'
+  | string;
 export interface ApplyMetadataCascadePolicyRequestBody {
   /**
    * Describes the desired behavior when dealing with the conflict

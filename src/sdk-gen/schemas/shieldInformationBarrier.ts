@@ -17,7 +17,12 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type ShieldInformationBarrierTypeField = 'shield_information_barrier';
 export type ShieldInformationBarrierStatusField =
-  'draft' | 'pending' | 'disabled' | 'enabled' | 'invalid' | string;
+  | 'draft'
+  | 'pending'
+  | 'disabled'
+  | 'enabled'
+  | 'invalid'
+  | string;
 export interface ShieldInformationBarrier {
   /**
    * The unique identifier for the shield information barrier. */
