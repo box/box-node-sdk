@@ -1,3 +1,7 @@
+import { serializeUploadPartPlan } from '../schemas/uploadPartPlan';
+import { deserializeUploadPartPlan } from '../schemas/uploadPartPlan';
+import { serializeUploadPartPlanHit } from '../schemas/uploadPartPlanHit';
+import { deserializeUploadPartPlanHit } from '../schemas/uploadPartPlanHit';
 import { serializeUploadSession } from '../schemas/uploadSession';
 import { deserializeUploadSession } from '../schemas/uploadSession';
 import { serializeClientError } from '../schemas/clientError';
@@ -20,6 +24,8 @@ import { ResponseFormat } from '../networking/fetchOptions';
 import { Buffer } from '../internal/utils';
 import { HashName } from '../internal/utils';
 import { Iterator } from '../internal/utils';
+import { UploadPartPlan } from '../schemas/uploadPartPlan';
+import { UploadPartPlanHit } from '../schemas/uploadPartPlanHit';
 import { UploadSession } from '../schemas/uploadSession';
 import { ClientError } from '../schemas/clientError';
 import { UploadedPart } from '../schemas/uploadedPart';
@@ -400,12 +406,44 @@ export class CreateFileUploadSessionCommitOptionals {
 export interface CreateFileUploadSessionCommitOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
-interface PartAccumulator {
+export class PartAccumulator {
+  readonly lastIndex!: number;
+  readonly parts!: readonly UploadPart[];
+  readonly fileSize!: number;
+  readonly uploadPartUrl!: string;
+  readonly fileHash!: Hash;
+  readonly planUrl: string = '';
+  constructor(
+    fields: Omit<PartAccumulator, 'planUrl'> &
+      Partial<Pick<PartAccumulator, 'planUrl'>>
+  ) {
+    if (fields.lastIndex !== undefined) {
+      this.lastIndex = fields.lastIndex;
+    }
+    if (fields.parts !== undefined) {
+      this.parts = fields.parts;
+    }
+    if (fields.fileSize !== undefined) {
+      this.fileSize = fields.fileSize;
+    }
+    if (fields.uploadPartUrl !== undefined) {
+      this.uploadPartUrl = fields.uploadPartUrl;
+    }
+    if (fields.fileHash !== undefined) {
+      this.fileHash = fields.fileHash;
+    }
+    if (fields.planUrl !== undefined) {
+      this.planUrl = fields.planUrl;
+    }
+  }
+}
+export interface PartAccumulatorInput {
   readonly lastIndex: number;
   readonly parts: readonly UploadPart[];
   readonly fileSize: number;
   readonly uploadPartUrl: string;
   readonly fileHash: Hash;
+  readonly planUrl?: string;
 }
 export interface CreateFileUploadSessionRequestBody {
   /**
@@ -1046,6 +1084,9 @@ export class ChunkedUploadsManager {
       | 'createFileUploadSessionCommit'
       | 'reducer'
       | 'uploadBigFile'
+      | 'getCachedUploadPart'
+      | 'reducerForFileVersion'
+      | 'uploadBigFileVersion'
     > &
       Partial<Pick<ChunkedUploadsManager, 'networkSession'>>
   ) {
@@ -1776,14 +1817,22 @@ export class ChunkedUploadsManager {
     };
   }
   /**
-   * @param {PartAccumulator} acc
+   * @param {PartAccumulatorInput} accInput
    * @param {ByteStream} chunk
    * @returns {Promise<PartAccumulator>}
    */
   async reducer(
-    acc: PartAccumulator,
+    accInput: PartAccumulatorInput,
     chunk: ByteStream
   ): Promise<PartAccumulator> {
+    const acc: PartAccumulator = new PartAccumulator({
+      lastIndex: accInput.lastIndex,
+      parts: accInput.parts,
+      fileSize: accInput.fileSize,
+      uploadPartUrl: accInput.uploadPartUrl,
+      fileHash: accInput.fileHash,
+      planUrl: accInput.planUrl,
+    });
     const lastIndex: number = acc.lastIndex;
     const parts: readonly UploadPart[] = acc.parts;
     const chunkBuffer: Buffer = await readByteStream(chunk);
@@ -1822,13 +1871,14 @@ export class ChunkedUploadsManager {
       throw new Error('Assertion failed');
     }
     await acc.fileHash.updateHash(chunkBuffer);
-    return {
+    return new PartAccumulator({
       lastIndex: bytesEnd,
       parts: parts.concat([part]),
       fileSize: acc.fileSize,
       uploadPartUrl: acc.uploadPartUrl,
       fileHash: acc.fileHash,
-    } satisfies PartAccumulator;
+      planUrl: acc.planUrl,
+    });
   }
   /**
    * Starts the process of chunk uploading a big file. Should return a File object representing uploaded file.
@@ -1873,13 +1923,13 @@ export class ChunkedUploadsManager {
     const results: PartAccumulator = await reduceIterator(
       chunksIterator,
       this.reducer.bind(this),
-      {
+      new PartAccumulator({
         lastIndex: -1,
         parts: [],
         fileSize: fileSize,
         uploadPartUrl: uploadPartUrl,
         fileHash: fileHash,
-      } satisfies PartAccumulator
+      })
     );
     const parts: readonly UploadPart[] = results.parts;
     const processedSessionParts: UploadParts =
@@ -1906,6 +1956,197 @@ export class ChunkedUploadsManager {
           cancellationToken: cancellationToken,
         } satisfies CreateFileUploadSessionCommitByUrlOptionalsInput
       );
+    return committedSession!.entries![0];
+  }
+  /**
+   * @param {string} planUrl
+   * @param {number} offset
+   * @param {number} size
+   * @param {string} sha512
+   * @returns {Promise<undefined | UploadPart>}
+   */
+  async getCachedUploadPart(
+    planUrl: string,
+    offset: number,
+    size: number,
+    sha512: string
+  ): Promise<undefined | UploadPart> {
+    const plan: UploadSessionPlanResponse =
+      await this.createFileUploadSessionPlanByUrl(planUrl, {
+        parts: [
+          {
+            offset: offset,
+            size: size,
+            sha512: sha512,
+          } satisfies UploadPartPlan,
+        ],
+      } satisfies UploadSessionPlanRequest);
+    if (plan.hits.length > 0) {
+      const hit: UploadPartPlanHit = plan.hits[0];
+      return {
+        partId: hit.partId,
+        offset: hit.offset,
+        size: hit.size,
+      } satisfies UploadPart;
+    }
+    return void 0;
+  }
+  /**
+   * @param {PartAccumulatorInput} accInput
+   * @param {ByteStream} chunk
+   * @returns {Promise<PartAccumulator>}
+   */
+  async reducerForFileVersion(
+    accInput: PartAccumulatorInput,
+    chunk: ByteStream
+  ): Promise<PartAccumulator> {
+    const acc: PartAccumulator = new PartAccumulator({
+      lastIndex: accInput.lastIndex,
+      parts: accInput.parts,
+      fileSize: accInput.fileSize,
+      uploadPartUrl: accInput.uploadPartUrl,
+      fileHash: accInput.fileHash,
+      planUrl: accInput.planUrl,
+    });
+    const lastIndex: number = acc.lastIndex;
+    const parts: readonly UploadPart[] = acc.parts;
+    const chunkBuffer: Buffer = await readByteStream(chunk);
+    const hash: Hash = new Hash({ algorithm: 'sha1' as HashName });
+    await hash.updateHash(chunkBuffer);
+    const sha1: string = await hash.digestHash('base64');
+    const digest: string = ''.concat('sha=', sha1) as string;
+    const chunkSize: number = bufferLength(chunkBuffer);
+    const bytesStart: number = lastIndex + 1;
+    const bytesEnd: number = lastIndex + chunkSize;
+    const contentRange: string = ''.concat(
+      'bytes ',
+      (toString(bytesStart) as string)!,
+      '-',
+      (toString(bytesEnd) as string)!,
+      '/',
+      (toString(acc.fileSize) as string)!
+    ) as string;
+    const sha512Hash: Hash = new Hash({ algorithm: 'sha512' as HashName });
+    await sha512Hash.updateHash(chunkBuffer);
+    const sha512: string = await sha512Hash.digestHash('hex');
+    const cachedPart: undefined | UploadPart = await this.getCachedUploadPart(
+      acc.planUrl,
+      bytesStart,
+      chunkSize,
+      sha512
+    );
+    if (!(cachedPart == void 0)) {
+      await acc.fileHash.updateHash(chunkBuffer);
+      return new PartAccumulator({
+        lastIndex: bytesEnd,
+        parts: parts.concat([cachedPart!]),
+        fileSize: acc.fileSize,
+        uploadPartUrl: acc.uploadPartUrl,
+        fileHash: acc.fileHash,
+        planUrl: acc.planUrl,
+      });
+    }
+    const uploadedPart: UploadedPart = await this.uploadFilePartByUrl(
+      acc.uploadPartUrl,
+      generateByteStreamFromBuffer(chunkBuffer),
+      {
+        digest: digest,
+        contentRange: contentRange,
+      } satisfies UploadFilePartByUrlHeadersInput
+    );
+    const part: UploadPart = uploadedPart.part!;
+    const partSha1: string = hexToBase64(part.sha1!);
+    if (!(partSha1 == sha1)) {
+      throw new Error('Assertion failed');
+    }
+    if (!(part.size! == chunkSize)) {
+      throw new Error('Assertion failed');
+    }
+    if (!(part.offset! == bytesStart)) {
+      throw new Error('Assertion failed');
+    }
+    await acc.fileHash.updateHash(chunkBuffer);
+    return new PartAccumulator({
+      lastIndex: bytesEnd,
+      parts: parts.concat([part]),
+      fileSize: acc.fileSize,
+      uploadPartUrl: acc.uploadPartUrl,
+      fileHash: acc.fileHash,
+      planUrl: acc.planUrl,
+    });
+  }
+  /**
+   * Starts the process of chunk uploading a new version of a big file. Should return a File object representing the uploaded file version. Returns nothing when commit responds with 202 because the file did not change.
+   * @param {string} fileId The ID of the file to upload a new version of.
+   * @param {ByteStream} file The stream of the file to upload.
+   * @param {number} fileSize The total size of the file for the chunked upload in bytes.
+   * @param {string} fileName The optional new name of the file.
+   * @param {CancellationToken} cancellationToken Token used for request cancellation.
+   * @returns {Promise<undefined | FileFull>}
+   */
+  async uploadBigFileVersion(
+    fileId: string,
+    file: ByteStream,
+    fileSize: number,
+    fileName?: string,
+    cancellationToken?: CancellationToken
+  ): Promise<undefined | FileFull> {
+    const uploadSession: UploadSession =
+      await this.createFileUploadSessionForExistingFile(
+        fileId,
+        {
+          fileSize: fileSize,
+          fileName: fileName,
+        } satisfies CreateFileUploadSessionForExistingFileRequestBody,
+        {
+          headers: new CreateFileUploadSessionForExistingFileHeaders({}),
+          cancellationToken: cancellationToken,
+        } satisfies CreateFileUploadSessionForExistingFileOptionalsInput
+      );
+    const uploadPartUrl: string = uploadSession.sessionEndpoints!.uploadPart!;
+    const commitUrl: string = uploadSession.sessionEndpoints!.commit!;
+    const planUrl: string = uploadSession.sessionEndpoints!.plan!;
+    const partSize: number = uploadSession.partSize!;
+    const totalParts: number = uploadSession.totalParts!;
+    if (!(partSize * totalParts >= fileSize)) {
+      throw new Error('Assertion failed');
+    }
+    if (!(uploadSession.numPartsProcessed == 0)) {
+      throw new Error('Assertion failed');
+    }
+    const fileHash: Hash = new Hash({ algorithm: 'sha1' as HashName });
+    const chunksIterator: Iterator = iterateChunks(file, partSize, fileSize);
+    const results: PartAccumulator = await reduceIterator(
+      chunksIterator,
+      this.reducerForFileVersion.bind(this),
+      new PartAccumulator({
+        lastIndex: -1,
+        parts: [],
+        fileSize: fileSize,
+        uploadPartUrl: uploadPartUrl,
+        fileHash: fileHash,
+        planUrl: planUrl,
+      })
+    );
+    const parts: readonly UploadPart[] = results.parts;
+    const sha1: string = await fileHash.digestHash('base64');
+    const digest: string = ''.concat('sha=', sha1) as string;
+    const committedSession: undefined | Files =
+      await this.createFileUploadSessionCommitByUrl(
+        commitUrl,
+        {
+          parts: parts,
+        } satisfies CreateFileUploadSessionCommitByUrlRequestBody,
+        {
+          digest: digest,
+        } satisfies CreateFileUploadSessionCommitByUrlHeadersInput,
+        {
+          cancellationToken: cancellationToken,
+        } satisfies CreateFileUploadSessionCommitByUrlOptionalsInput
+      );
+    if (committedSession == void 0) {
+      return void 0;
+    }
     return committedSession!.entries![0];
   }
 }
