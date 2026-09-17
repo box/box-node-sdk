@@ -17,6 +17,7 @@ This is a manager for chunked uploads (allowed for files at least 20MB).
 - [Commit upload session by URL](#commit-upload-session-by-url)
 - [Commit upload session](#commit-upload-session)
 - [Upload big file](#upload-big-file)
+- [Upload big file version](#upload-big-file-version)
 
 ## Create upload session
 
@@ -526,6 +527,39 @@ await client.chunkedUploads.uploadBigFile(generateByteStreamFromBuffer(fileBuffe
 ### Returns
 
 This function returns a value of type `FileFull`.
+
+
+
+
+## Upload big file version
+
+Starts the process of chunk uploading a new version of a big file. Should return a File object representing the uploaded file version. Returns nothing when commit responds with 202 because the file did not change.
+
+This operation is performed by calling function `uploadBigFileVersion`.
+
+
+
+```ts
+await client.chunkedUploads.uploadBigFileVersion(uploadedFile.id, generateByteStream(versionFileSize), versionFileSize, versionName)
+```
+
+### Arguments
+
+- fileId `string`
+  - The ID of the file to upload a new version of.
+- file `ByteStream`
+  - The stream of the file to upload.
+- fileSize `number`
+  - The total size of the file for the chunked upload in bytes.
+- fileName `undefined | string`
+  - The optional new name of the file.
+- cancellationToken `undefined | CancellationToken`
+  - Token used for request cancellation.
+
+
+### Returns
+
+This function returns a value of type `undefined | FileFull`.
 
 
 

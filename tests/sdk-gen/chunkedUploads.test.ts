@@ -10,6 +10,8 @@ import { serializeUploadSessionPlanRequest } from '@/schemas/uploadSessionPlanRe
 import { deserializeUploadSessionPlanRequest } from '@/schemas/uploadSessionPlanRequest';
 import { serializeUploadPartPlanHit } from '@/schemas/uploadPartPlanHit';
 import { deserializeUploadPartPlanHit } from '@/schemas/uploadPartPlanHit';
+import { serializeFileFull } from '@/schemas/fileFull';
+import { deserializeFileFull } from '@/schemas/fileFull';
 import { serializeFile } from '@/schemas/file';
 import { deserializeFile } from '@/schemas/file';
 import { serializeUploadSession } from '@/schemas/uploadSession';
@@ -43,6 +45,7 @@ import { CreateFileUploadSessionCommitByUrlHeaders } from '@/managers/chunkedUpl
 import { CreateFileUploadSessionForExistingFileRequestBody } from '@/managers/chunkedUploads';
 import { UploadSessionPlanRequest } from '@/schemas/uploadSessionPlanRequest';
 import { UploadPartPlanHit } from '@/schemas/uploadPartPlanHit';
+import { FileFull } from '@/schemas/fileFull';
 import { generateByteStreamFromBuffer } from '@/internal/utils';
 import { hexToBase64 } from '@/internal/utils';
 import { iterateChunks } from '@/internal/utils';
@@ -475,6 +478,51 @@ test('testChunkedUploadConvenienceMethod', async function testChunkedUploadConve
     throw new Error('Assertion failed');
   }
   if (!(uploadedFile.parent!.id == parentFolderId)) {
+    throw new Error('Assertion failed');
+  }
+  await client.files.deleteFileById(uploadedFile.id);
+});
+test('testChunkedUploadFileVersionConvenienceMethod', async function testChunkedUploadFileVersionConvenienceMethod(): Promise<any> {
+  const fileName: string = getUuid();
+  const fileSize: number = 20 * 1024 * 1024;
+  const parentFolderId: string = '0';
+  const uploadedFile: File = await client.chunkedUploads.uploadBigFile(
+    generateByteStream(fileSize),
+    fileName,
+    fileSize,
+    parentFolderId
+  );
+  if (!(uploadedFile.name! == fileName)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(uploadedFile.size! == fileSize)) {
+    throw new Error('Assertion failed');
+  }
+  const versionFileSize: number = 21 * 1024 * 1024;
+  const versionName: string = getUuid();
+  const uploadedFileVersion: undefined | FileFull =
+    await client.chunkedUploads.uploadBigFileVersion(
+      uploadedFile.id,
+      generateByteStream(versionFileSize),
+      versionFileSize,
+      versionName
+    );
+  if (!!(uploadedFileVersion == void 0)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(uploadedFileVersion!.id == uploadedFile.id)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(uploadedFileVersion!.name! == versionName)) {
+    throw new Error('Assertion failed');
+  }
+  if (!(uploadedFileVersion!.size! == versionFileSize)) {
+    throw new Error('Assertion failed');
+  }
+  if (!!(uploadedFileVersion!.name! == fileName)) {
+    throw new Error('Assertion failed');
+  }
+  if (!!(uploadedFileVersion!.size! == uploadedFile.size)) {
     throw new Error('Assertion failed');
   }
   await client.files.deleteFileById(uploadedFile.id);
