@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.16.0](https://github.com/box/box-node-sdk/compare/v10.15.0...v10.16.0) (2026-09-23)
+
+
+### New Features and Enhancements
+
+* Support upload big file version convenience method (box/box-codegen[#988](https://github.com/box/box-node-sdk/issues/988)) ([365afee](https://github.com/box/box-node-sdk/commit/365afee47a4bac68af510e4a52f547a986504e0d))
+
 ## [10.15.0](https://github.com/box/box-node-sdk/compare/v10.14.0...v10.15.0) (2026-09-09)
 
 
