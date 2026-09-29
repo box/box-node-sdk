@@ -303,7 +303,7 @@ export class FileFull extends File {
   readonly metadata?: FileFullMetadataField;
   readonly expiresAt?: DateTime | null;
   readonly representations?: FileFullRepresentationsField;
-  readonly classification?: FileFullClassificationField;
+  readonly classification?: FileFullClassificationField | null;
   readonly uploaderDisplayName?: string;
   readonly dispositionAt?: DateTime | null;
   readonly sharedLinkPermissionOptions?:
