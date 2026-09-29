@@ -145,7 +145,7 @@ export class WebLink extends WebLinkMini {
   readonly createdBy?: UserMini;
   readonly modifiedBy?: UserMini;
   readonly ownedBy?: UserMini;
-  readonly sharedLink?: WebLinkSharedLinkField;
+  readonly sharedLink?: WebLinkSharedLinkField | null;
   readonly itemStatus?: WebLinkItemStatusField;
   readonly collections?: readonly Collection[];
   readonly allowedSharedLinkAccessLevels?: readonly WebLinkAllowedSharedLinkAccessLevelsField[];

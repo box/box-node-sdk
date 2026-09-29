@@ -102,10 +102,10 @@ export interface AiExtractStructured {
   readonly fields?: readonly AiExtractStructuredFieldsField[];
   readonly aiAgent?: AiExtractStructuredAgent;
   /**
-   * A flag to indicate whether confidence scores for every extracted field should be returned. */
+   * A flag to indicate whether confidence scores for every extracted field should be returned. Estimates the likelihood that an extracted metadata field value is accurate and correct. Displays a numerical and categorical confidence score to help users and automated systems quickly determine extraction reliability. */
   readonly includeConfidenceScore?: boolean;
   /**
-   * A flag to indicate whether references for every extracted field should be returned. */
+   * A flag to indicate whether references for every extracted field should be returned. References and bounding boxes show where the agent extracted the metadata from. They help you check for accuracy and fix any mistakes. References are short, exact quotes from the original document used to verify results. Bounding boxes highlight the specific areas on the page where that text is found. */
   readonly includeReference?: boolean;
   /**
    * The taxonomy sources to be used for the structured extraction. They can either be an existing file or a taxonomy.
