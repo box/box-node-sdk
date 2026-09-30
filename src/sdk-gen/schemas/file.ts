@@ -145,7 +145,7 @@ export class File extends FileMini {
   readonly createdBy?: UserMini;
   readonly modifiedBy?: UserMini;
   readonly ownedBy?: UserMini;
-  readonly sharedLink?: FileSharedLinkField;
+  readonly sharedLink?: FileSharedLinkField | null;
   readonly parent?: FolderMini | null;
   readonly itemStatus?: FileItemStatusField;
   constructor(fields: File) {
