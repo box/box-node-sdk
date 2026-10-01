@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.17.0](https://github.com/box/box-node-sdk/compare/v10.16.0...v10.17.0) (2026-10-01)
+
+### ⚠ BREAKING CHANGES
+
+* use `FileMini`/`FolderMini`/`WebLinkMini` in `CollaborationItem` (box/box-openapi[#619](https://github.com/box/box-openapi/pull/619)) ([3f31be2](https://github.com/box/box-node-sdk/commit/3f31be2c9ae3e9379df08e2f5de5259442ad7a49))
+
+### Bug Fixes
+
+* use `FileMini`/`FolderMini`/`WebLinkMini` in `CollaborationItem` (box/box-openapi[#619](https://github.com/box/box-openapi/pull/619)) ([3f31be2](https://github.com/box/box-node-sdk/commit/3f31be2c9ae3e9379df08e2f5de5259442ad7a49))
+
 ## [10.16.0](https://github.com/box/box-node-sdk/compare/v10.15.0...v10.16.0) (2026-09-23)
 
 
