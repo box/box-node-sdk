@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [4.17.0](https://github.com/box/box-node-sdk/compare/v4.16.0...v4.17.0) (2026-10-01)
 
+* **boxsdkgen:** use `FileMini`/`FolderMini`/`WebLinkMini` in `CollaborationItem` (box/box-openapi[#619](https://github.com/box/box-openapi/pull/619)) ([10521f5](https://github.com/box/box-node-sdk/commit/10521f509b61d4b616d7af50735b31bf4ce33fc8))
+
+### Bug Fixes
+
+* **boxsdkgen:** use `FileMini`/`FolderMini`/`WebLinkMini` in `CollaborationItem` (box/box-openapi[#619](https://github.com/box/box-openapi/pull/619)) ([10521f5](https://github.com/box/box-node-sdk/commit/10521f509b61d4b616d7af50735b31bf4ce33fc8))
+
 ## [4.16.0](https://github.com/box/box-node-sdk/compare/v4.15.0...v4.16.0) (2026-09-23)
 
 
