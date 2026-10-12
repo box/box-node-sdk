@@ -13,13 +13,17 @@ export type UploadPart = UploadPartMini & {
   /**
    * The SHA1 hash of the chunk. */
   readonly sha1?: string;
+  /**
+   * The `SHA-512` hash of the chunk, as a hex string
+   * of 128 lower case characters. */
+  readonly sha512?: string;
 };
 export function serializeUploadPart(val: UploadPart): SerializedData {
   const base: any = serializeUploadPartMini(val);
   if (!sdIsMap(base)) {
     throw new BoxSdkError({ message: 'Expecting a map for "UploadPart"' });
   }
-  return { ...base, ...{ ['sha1']: val.sha1 } };
+  return { ...base, ...{ ['sha1']: val.sha1, ['sha512']: val.sha512 } };
 }
 export function deserializeUploadPart(val: SerializedData): UploadPart {
   if (!sdIsMap(val)) {
@@ -31,6 +35,12 @@ export function deserializeUploadPart(val: SerializedData): UploadPart {
     });
   }
   const sha1: undefined | string = val.sha1 == void 0 ? void 0 : val.sha1;
+  if (!(val.sha512 == void 0) && !sdIsString(val.sha512)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "sha512" of type "UploadPart"',
+    });
+  }
+  const sha512: undefined | string = val.sha512 == void 0 ? void 0 : val.sha512;
   if (!(val.part_id == void 0) && !sdIsString(val.part_id)) {
     throw new BoxSdkError({
       message: 'Expecting string for "part_id" of type "UploadPart"',
@@ -52,6 +62,7 @@ export function deserializeUploadPart(val: SerializedData): UploadPart {
   const size: undefined | number = val.size == void 0 ? void 0 : val.size;
   return {
     sha1: sha1,
+    sha512: sha512,
     partId: partId,
     offset: offset,
     size: size,
