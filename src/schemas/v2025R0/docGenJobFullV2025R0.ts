@@ -119,6 +119,14 @@ export function deserializeDocGenJobFullV2025R0(
     });
   }
   const source: string = val.source;
+  if (!(val.external_id == void 0) && !sdIsString(val.external_id)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "external_id" of type "DocGenJobFullV2025R0"',
+    });
+  }
+  const externalId: undefined | string =
+    val.external_id == void 0 ? void 0 : val.external_id;
   if (val.batch == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "batch" of type "DocGenJobFullV2025R0" to be defined',
@@ -200,6 +208,7 @@ export function deserializeDocGenJobFullV2025R0(
     createdBy: createdBy,
     enterprise: enterprise,
     source: source,
+    externalId: externalId,
     batch: batch,
     templateFile: templateFile,
     templateFileVersion: templateFileVersion,

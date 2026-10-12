@@ -20,6 +20,7 @@ export type ClientErrorCodeField =
   | 'method_not_allowed'
   | 'conflict'
   | 'precondition_failed'
+  | 'unprocessable_entity'
   | 'too_many_requests'
   | 'internal_server_error'
   | 'unavailable'
@@ -110,6 +111,9 @@ export function deserializeClientErrorCodeField(
     return val;
   }
   if (val == 'precondition_failed') {
+    return val;
+  }
+  if (val == 'unprocessable_entity') {
     return val;
   }
   if (val == 'too_many_requests') {
