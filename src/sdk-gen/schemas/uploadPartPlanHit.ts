@@ -16,7 +16,8 @@ export interface UploadPartPlanHit {
    * The size of the chunk in bytes. */
   readonly size: number;
   /**
-   * The `SHA-512` hash of the chunk. */
+   * The `SHA-512` hash of the chunk, as a hex string
+   * of 128 lower case characters. */
   readonly sha512: string;
   /**
    * The unique ID of the chunk. */
