@@ -38,6 +38,7 @@ export interface DocGenJobV2025R0FailuresField {
   readonly rawData?: SerializedData;
 }
 export class DocGenJobV2025R0 extends DocGenJobBaseV2025R0 {
+  readonly externalId?: string;
   readonly batch!: DocGenBatchBaseV2025R0;
   readonly templateFile!: FileReferenceV2025R0;
   readonly templateFileVersion!: FileVersionBaseV2025R0;
@@ -48,6 +49,9 @@ export class DocGenJobV2025R0 extends DocGenJobBaseV2025R0 {
   readonly failures?: DocGenJobV2025R0FailuresField | null;
   constructor(fields: DocGenJobV2025R0) {
     super(fields);
+    if (fields.externalId !== undefined) {
+      this.externalId = fields.externalId;
+    }
     if (fields.batch !== undefined) {
       this.batch = fields.batch;
     }
@@ -185,6 +189,7 @@ export function serializeDocGenJobV2025R0(
   return {
     ...base,
     ...{
+      ['external_id']: val.externalId,
       ['batch']: serializeDocGenBatchBaseV2025R0(val.batch),
       ['template_file']: serializeFileReferenceV2025R0(val.templateFile),
       ['template_file_version']: serializeFileVersionBaseV2025R0(
@@ -215,6 +220,13 @@ export function deserializeDocGenJobV2025R0(
       message: 'Expecting a map for "DocGenJobV2025R0"',
     });
   }
+  if (!(val.external_id == void 0) && !sdIsString(val.external_id)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "external_id" of type "DocGenJobV2025R0"',
+    });
+  }
+  const externalId: undefined | string =
+    val.external_id == void 0 ? void 0 : val.external_id;
   if (val.batch == void 0) {
     throw new BoxSdkError({
       message: 'Expecting "batch" of type "DocGenJobV2025R0" to be defined',
@@ -290,6 +302,7 @@ export function deserializeDocGenJobV2025R0(
   const type: DocGenJobBaseV2025R0TypeField =
     deserializeDocGenJobBaseV2025R0TypeField(val.type);
   return {
+    externalId: externalId,
     batch: batch,
     templateFile: templateFile,
     templateFileVersion: templateFileVersion,

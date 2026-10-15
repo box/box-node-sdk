@@ -13,6 +13,12 @@ export interface DocGenDocumentGenerationDataV2025R0 {
   readonly userInput: {
     readonly [key: string]: any;
   };
+  /**
+   * An optional identifier supplied by the caller for this Box Doc Gen job.
+   * The value is returned on job responses for correlation only. It is not
+   * a Box resource ID, is not required to be unique, and cannot be used to
+   * look up the job. */
+  readonly externalId?: string;
   readonly rawData?: SerializedData;
 }
 export function serializeDocGenDocumentGenerationDataV2025R0(
@@ -30,6 +36,7 @@ export function serializeDocGenDocumentGenerationDataV2025R0(
     ) as {
       readonly [key: string]: any;
     },
+    ['external_id']: val.externalId,
   };
 }
 export function deserializeDocGenDocumentGenerationDataV2025R0(
@@ -79,8 +86,17 @@ export function deserializeDocGenDocumentGenerationDataV2025R0(
         readonly [key: string]: any;
       })
     : {};
+  if (!(val.external_id == void 0) && !sdIsString(val.external_id)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "external_id" of type "DocGenDocumentGenerationDataV2025R0"',
+    });
+  }
+  const externalId: undefined | string =
+    val.external_id == void 0 ? void 0 : val.external_id;
   return {
     generatedFileName: generatedFileName,
     userInput: userInput,
+    externalId: externalId,
   } satisfies DocGenDocumentGenerationDataV2025R0;
 }

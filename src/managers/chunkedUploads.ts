@@ -565,15 +565,18 @@ export class UploadFilePartByUrlHeaders {
   /**
    * The [RFC3230][1] message digest of the chunk uploaded.
    *
-   * Only SHA1 is supported. The SHA1 digest must be base64
+   * `SHA-1` and `SHA-512` ([RFC5843][2]) are supported. The digest must be base64
    * encoded. The format of this header is as
-   * `sha=BASE64_ENCODED_DIGEST`.
+   * `sha=BASE64_ENCODED_DIGEST` for `SHA-1`, or
+   * `sha-512=BASE64_ENCODED_DIGEST` for `SHA-512`.
    *
-   * To get the value for the `SHA` digest, use the
+   * To get the value for the digest, use the
    * openSSL command to encode the file part:
-   * `openssl sha1 -binary <FILE_PART_NAME> | base64`.
+   * `openssl sha1 -binary <FILE_PART_NAME> | base64` for `SHA-1`, or
+   * `openssl sha512 -binary <FILE_PART_NAME> | base64` for `SHA-512`.
    *
-   * [1]: https://tools.ietf.org/html/rfc3230 */
+   * [1]: https://tools.ietf.org/html/rfc3230
+   * [2]: https://tools.ietf.org/html/rfc5843 */
   readonly digest!: string;
   /**
    * The byte range of the chunk.
@@ -614,15 +617,18 @@ export interface UploadFilePartByUrlHeadersInput {
   /**
    * The [RFC3230][1] message digest of the chunk uploaded.
    *
-   * Only SHA1 is supported. The SHA1 digest must be base64
+   * `SHA-1` and `SHA-512` ([RFC5843][2]) are supported. The digest must be base64
    * encoded. The format of this header is as
-   * `sha=BASE64_ENCODED_DIGEST`.
+   * `sha=BASE64_ENCODED_DIGEST` for `SHA-1`, or
+   * `sha-512=BASE64_ENCODED_DIGEST` for `SHA-512`.
    *
-   * To get the value for the `SHA` digest, use the
+   * To get the value for the digest, use the
    * openSSL command to encode the file part:
-   * `openssl sha1 -binary <FILE_PART_NAME> | base64`.
+   * `openssl sha1 -binary <FILE_PART_NAME> | base64` for `SHA-1`, or
+   * `openssl sha512 -binary <FILE_PART_NAME> | base64` for `SHA-512`.
    *
-   * [1]: https://tools.ietf.org/html/rfc3230 */
+   * [1]: https://tools.ietf.org/html/rfc3230
+   * [2]: https://tools.ietf.org/html/rfc5843 */
   readonly digest: string;
   /**
    * The byte range of the chunk.
@@ -649,15 +655,18 @@ export class UploadFilePartHeaders {
   /**
    * The [RFC3230][1] message digest of the chunk uploaded.
    *
-   * Only SHA1 is supported. The SHA1 digest must be base64
+   * `SHA-1` and `SHA-512` ([RFC5843][2]) are supported. The digest must be base64
    * encoded. The format of this header is as
-   * `sha=BASE64_ENCODED_DIGEST`.
+   * `sha=BASE64_ENCODED_DIGEST` for `SHA-1`, or
+   * `sha-512=BASE64_ENCODED_DIGEST` for `SHA-512`.
    *
-   * To get the value for the `SHA` digest, use the
+   * To get the value for the digest, use the
    * openSSL command to encode the file part:
-   * `openssl sha1 -binary <FILE_PART_NAME> | base64`.
+   * `openssl sha1 -binary <FILE_PART_NAME> | base64` for `SHA-1`, or
+   * `openssl sha512 -binary <FILE_PART_NAME> | base64` for `SHA-512`.
    *
-   * [1]: https://tools.ietf.org/html/rfc3230 */
+   * [1]: https://tools.ietf.org/html/rfc3230
+   * [2]: https://tools.ietf.org/html/rfc5843 */
   readonly digest!: string;
   /**
    * The byte range of the chunk.
@@ -698,15 +707,18 @@ export interface UploadFilePartHeadersInput {
   /**
    * The [RFC3230][1] message digest of the chunk uploaded.
    *
-   * Only SHA1 is supported. The SHA1 digest must be base64
+   * `SHA-1` and `SHA-512` ([RFC5843][2]) are supported. The digest must be base64
    * encoded. The format of this header is as
-   * `sha=BASE64_ENCODED_DIGEST`.
+   * `sha=BASE64_ENCODED_DIGEST` for `SHA-1`, or
+   * `sha-512=BASE64_ENCODED_DIGEST` for `SHA-512`.
    *
-   * To get the value for the `SHA` digest, use the
+   * To get the value for the digest, use the
    * openSSL command to encode the file part:
-   * `openssl sha1 -binary <FILE_PART_NAME> | base64`.
+   * `openssl sha1 -binary <FILE_PART_NAME> | base64` for `SHA-1`, or
+   * `openssl sha512 -binary <FILE_PART_NAME> | base64` for `SHA-512`.
    *
-   * [1]: https://tools.ietf.org/html/rfc3230 */
+   * [1]: https://tools.ietf.org/html/rfc3230
+   * [2]: https://tools.ietf.org/html/rfc5843 */
   readonly digest: string;
   /**
    * The byte range of the chunk.
@@ -887,7 +899,18 @@ export interface CreateFileUploadSessionPlanHeadersInput {
 }
 export interface CreateFileUploadSessionCommitByUrlRequestBody {
   /**
-   * The list details for the uploaded parts. */
+   * The list details for the uploaded parts.
+   *
+   * Each entry can include `sha1` or `sha512`. Include `sha512`
+   * on every entry or on none of them. A request where only
+   * some entries include `sha512` is rejected.
+   *
+   * Include parts that the server already has, returned as
+   * `hits` by the [`Plan upload session`](https://developer.box.com/reference/post-files-upload-sessions-id-plan)
+   * endpoint. Use the `part_id`, `offset`, and `size` from the
+   * plan response. If the other entries include `sha512`,
+   * include the `sha512` value from the plan response.
+   * Otherwise, leave the hash out of these entries. */
   readonly parts: readonly UploadPart[];
   readonly rawData?: SerializedData;
 }
@@ -898,6 +921,9 @@ export class CreateFileUploadSessionCommitByUrlHeaders {
    * Only SHA1 is supported. The SHA1 digest must be Base64
    * encoded. The format of this header is as
    * `sha=BASE64_ENCODED_DIGEST`.
+   *
+   * `SHA-512` is not supported for the whole-file digest, even if
+   * the parts were uploaded with `SHA-512` digests.
    *
    * [1]: https://tools.ietf.org/html/rfc3230 */
   readonly digest!: string;
@@ -949,6 +975,9 @@ export interface CreateFileUploadSessionCommitByUrlHeadersInput {
    * encoded. The format of this header is as
    * `sha=BASE64_ENCODED_DIGEST`.
    *
+   * `SHA-512` is not supported for the whole-file digest, even if
+   * the parts were uploaded with `SHA-512` digests.
+   *
    * [1]: https://tools.ietf.org/html/rfc3230 */
   readonly digest: string;
   /**
@@ -976,7 +1005,18 @@ export interface CreateFileUploadSessionCommitByUrlHeadersInput {
 }
 export interface CreateFileUploadSessionCommitRequestBody {
   /**
-   * The list details for the uploaded parts. */
+   * The list details for the uploaded parts.
+   *
+   * Each entry can include `sha1` or `sha512`. Include `sha512`
+   * on every entry or on none of them. A request where only
+   * some entries include `sha512` is rejected.
+   *
+   * Include parts that the server already has, returned as
+   * `hits` by the [`Plan upload session`](https://developer.box.com/reference/post-files-upload-sessions-id-plan)
+   * endpoint. Use the `part_id`, `offset`, and `size` from the
+   * plan response. If the other entries include `sha512`,
+   * include the `sha512` value from the plan response.
+   * Otherwise, leave the hash out of these entries. */
   readonly parts: readonly UploadPart[];
   readonly rawData?: SerializedData;
 }
@@ -987,6 +1027,9 @@ export class CreateFileUploadSessionCommitHeaders {
    * Only SHA1 is supported. The SHA1 digest must be Base64
    * encoded. The format of this header is as
    * `sha=BASE64_ENCODED_DIGEST`.
+   *
+   * `SHA-512` is not supported for the whole-file digest, even if
+   * the parts were uploaded with `SHA-512` digests.
    *
    * [1]: https://tools.ietf.org/html/rfc3230 */
   readonly digest!: string;
@@ -1037,6 +1080,9 @@ export interface CreateFileUploadSessionCommitHeadersInput {
    * Only SHA1 is supported. The SHA1 digest must be Base64
    * encoded. The format of this header is as
    * `sha=BASE64_ENCODED_DIGEST`.
+   *
+   * `SHA-512` is not supported for the whole-file digest, even if
+   * the parts were uploaded with `SHA-512` digests.
    *
    * [1]: https://tools.ietf.org/html/rfc3230 */
   readonly digest: string;
@@ -1595,8 +1641,8 @@ export class ChunkedUploadsManager {
    * This endpoint allows clients to optimize uploads by skipping parts that
    * have already been uploaded (cache hits) and only uploading missing parts.
    *
-   * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-   * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+   * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+   * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
    * @param {string} url URL of createFileUploadSessionPlan method
    * @param {UploadSessionPlanRequest} requestBody Request body of createFileUploadSessionPlan method
    * @param {CreateFileUploadSessionPlanByUrlOptionalsInput} optionalsInput
@@ -1641,8 +1687,8 @@ export class ChunkedUploadsManager {
      * This endpoint allows clients to optimize uploads by skipping parts that
      * have already been uploaded (cache hits) and only uploading missing parts.
      *
-     * The actual endpoint URL is returned by the [`Create upload session`](e://post-files-upload-sessions)
-     * and [`Get upload session`](e://get-files-upload-sessions-id) endpoints.
+     * The actual endpoint URL is returned by the [`Create upload session`](https://developer.box.com/reference/post-files-upload-sessions)
+     * and [`Get upload session`](https://developer.box.com/reference/get-files-upload-sessions-id) endpoints.
      * @param {string} uploadSessionId The ID of the upload session.
     Example: "D5E3F7A"
      * @param {UploadSessionPlanRequest} requestBody Request body of createFileUploadSessionPlan method
