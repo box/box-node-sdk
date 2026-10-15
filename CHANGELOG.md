@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.18.0](https://github.com/box/box-node-sdk/compare/v4.17.0...v4.18.0) (2026-10-15)
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** support `sha512` for chunked uploads and add `externalId` (box/box-openapi[#620](https://github.com/box/box-node-sdk/issues/620)) ([3d41cea](https://github.com/box/box-node-sdk/commit/3d41cea0a7b47b391701a5d634dc9193cbb2f62a))
+
 ## [4.17.0](https://github.com/box/box-node-sdk/compare/v4.16.0...v4.17.0) (2026-10-01)
 
 * **boxsdkgen:** use `FileMini`/`FolderMini`/`WebLinkMini` in `CollaborationItem` (box/box-openapi[#619](https://github.com/box/box-openapi/pull/619)) ([10521f5](https://github.com/box/box-node-sdk/commit/10521f509b61d4b616d7af50735b31bf4ce33fc8))
