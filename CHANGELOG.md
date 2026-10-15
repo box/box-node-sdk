@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.18.0](https://github.com/box/box-node-sdk/compare/v10.17.0...v10.18.0) (2026-10-15)
+
+
+### New Features and Enhancements
+
+* update chunked upload to support `sha512` and add `external_id` to DocGen (box/box-openapi[#620](https://github.com/box/box-node-sdk/issues/620)) ([52ba9cc](https://github.com/box/box-node-sdk/commit/52ba9cc6c2b49cfb6953120dd3e07dca2ad0c48b))
+
 ## [10.17.0](https://github.com/box/box-node-sdk/compare/v10.16.0...v10.17.0) (2026-10-01)
 
 ### ⚠ BREAKING CHANGES
