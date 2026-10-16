@@ -87,6 +87,7 @@ import { ArchivesManager } from './managers/archives';
 import { ExternalUsersManager } from './managers/externalUsers';
 import { AutomateWorkflowsManager } from './managers/automateWorkflows';
 import { NotesManager } from './managers/notes';
+import { DocumentSplitManager } from './managers/documentSplit';
 import { QueryManager } from './managers/query';
 import { Authentication } from './networking/auth';
 import { NetworkSession } from './networking/network';
@@ -195,6 +196,7 @@ export class BoxClient {
   readonly externalUsers: ExternalUsersManager;
   readonly automateWorkflows: AutomateWorkflowsManager;
   readonly notes: NotesManager;
+  readonly documentSplit: DocumentSplitManager;
   readonly query: QueryManager;
   constructor(
     fields: Omit<
@@ -284,6 +286,7 @@ export class BoxClient {
       | 'externalUsers'
       | 'automateWorkflows'
       | 'notes'
+      | 'documentSplit'
       | 'query'
       | 'networkSession'
       | 'makeRequest'
@@ -647,6 +650,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.notes = new NotesManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.documentSplit = new DocumentSplitManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });

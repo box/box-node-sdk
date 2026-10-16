@@ -83,4 +83,5 @@ export * from './archives';
 export * from './externalUsers';
 export * from './automateWorkflows';
 export * from './notes';
+export * from './documentSplit';
 export * from './query';
