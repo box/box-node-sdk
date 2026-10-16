@@ -1,12 +1,24 @@
+import { serializeSharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { deserializeSharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { serializeSharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { deserializeSharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { serializeSharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
+import { deserializeSharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
 import { serializeWebLink } from '../schemas/webLink';
 import { deserializeWebLink } from '../schemas/webLink';
 import { serializeClientError } from '../schemas/clientError';
 import { deserializeClientError } from '../schemas/clientError';
+import { serializeSharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
+import { deserializeSharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
+import { SharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { SharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { SharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
 import { ResponseFormat } from '../networking/fetchOptions';
 import { WebLink } from '../schemas/webLink';
 import { ClientError } from '../schemas/clientError';
+import { SharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
 import { BoxSdkError } from '../box/errors';
 import { Authentication } from '../networking/auth';
 import { NetworkSession } from '../networking/network';
@@ -302,6 +314,7 @@ export interface AddShareLinkToWebLinkRequestBodySharedLinkField {
    * current date and time. */
   readonly unsharedAt?: DateTime;
   readonly permissions?: AddShareLinkToWebLinkRequestBodySharedLinkPermissionsField;
+  readonly oneTimePasscode?: SharedLinkOtpWritable;
   readonly rawData?: SerializedData;
 }
 export interface AddShareLinkToWebLinkRequestBody {
@@ -397,6 +410,7 @@ export interface UpdateSharedLinkOnWebLinkRequestBodySharedLinkField {
    * current date and time. */
   readonly unsharedAt?: DateTime;
   readonly permissions?: UpdateSharedLinkOnWebLinkRequestBodySharedLinkPermissionsField;
+  readonly oneTimePasscode?: SharedLinkOtpWritable;
   readonly rawData?: SerializedData;
 }
 export interface UpdateSharedLinkOnWebLinkRequestBody {
@@ -867,6 +881,10 @@ export function serializeAddShareLinkToWebLinkRequestBodySharedLinkField(
         : serializeAddShareLinkToWebLinkRequestBodySharedLinkPermissionsField(
             val.permissions
           ),
+    ['one_time_passcode']:
+      val.oneTimePasscode == void 0
+        ? val.oneTimePasscode
+        : serializeSharedLinkOtpWritable(val.oneTimePasscode),
   };
 }
 export function deserializeAddShareLinkToWebLinkRequestBodySharedLinkField(
@@ -916,12 +934,17 @@ export function deserializeAddShareLinkToWebLinkRequestBodySharedLinkField(
       : deserializeAddShareLinkToWebLinkRequestBodySharedLinkPermissionsField(
           val.permissions
         );
+  const oneTimePasscode: undefined | SharedLinkOtpWritable =
+    val.one_time_passcode == void 0
+      ? void 0
+      : deserializeSharedLinkOtpWritable(val.one_time_passcode);
   return {
     access: access,
     password: password,
     vanityName: vanityName,
     unsharedAt: unsharedAt,
     permissions: permissions,
+    oneTimePasscode: oneTimePasscode,
   } satisfies AddShareLinkToWebLinkRequestBodySharedLinkField;
 }
 export function serializeAddShareLinkToWebLinkRequestBody(
@@ -1048,6 +1071,10 @@ export function serializeUpdateSharedLinkOnWebLinkRequestBodySharedLinkField(
         : serializeUpdateSharedLinkOnWebLinkRequestBodySharedLinkPermissionsField(
             val.permissions
           ),
+    ['one_time_passcode']:
+      val.oneTimePasscode == void 0
+        ? val.oneTimePasscode
+        : serializeSharedLinkOtpWritable(val.oneTimePasscode),
   };
 }
 export function deserializeUpdateSharedLinkOnWebLinkRequestBodySharedLinkField(
@@ -1097,12 +1124,17 @@ export function deserializeUpdateSharedLinkOnWebLinkRequestBodySharedLinkField(
       : deserializeUpdateSharedLinkOnWebLinkRequestBodySharedLinkPermissionsField(
           val.permissions
         );
+  const oneTimePasscode: undefined | SharedLinkOtpWritable =
+    val.one_time_passcode == void 0
+      ? void 0
+      : deserializeSharedLinkOtpWritable(val.one_time_passcode);
   return {
     access: access,
     password: password,
     vanityName: vanityName,
     unsharedAt: unsharedAt,
     permissions: permissions,
+    oneTimePasscode: oneTimePasscode,
   } satisfies UpdateSharedLinkOnWebLinkRequestBodySharedLinkField;
 }
 export function serializeUpdateSharedLinkOnWebLinkRequestBody(
