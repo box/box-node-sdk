@@ -89,6 +89,7 @@ import { AutomateWorkflowsManager } from './managers/automateWorkflows';
 import { NotesManager } from './managers/notes';
 import { DocumentSplitManager } from './managers/documentSplit';
 import { QueryManager } from './managers/query';
+import { ShuttleManager } from './managers/shuttle';
 import { Authentication } from './networking/auth';
 import { NetworkSession } from './networking/network';
 import { BoxSdkError } from './box/errors';
@@ -198,6 +199,7 @@ export class BoxClient {
   readonly notes: NotesManager;
   readonly documentSplit: DocumentSplitManager;
   readonly query: QueryManager;
+  readonly shuttle: ShuttleManager;
   constructor(
     fields: Omit<
       BoxClient,
@@ -288,6 +290,7 @@ export class BoxClient {
       | 'notes'
       | 'documentSplit'
       | 'query'
+      | 'shuttle'
       | 'networkSession'
       | 'makeRequest'
       | 'withAsUserHeader'
@@ -658,6 +661,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.query = new QueryManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.shuttle = new ShuttleManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });
