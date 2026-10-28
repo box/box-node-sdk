@@ -167,7 +167,10 @@ export interface DeleteUserByIdOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetUsersQueryParamsUserTypeField =
-  'all' | 'managed' | 'external' | string;
+  | 'all'
+  | 'managed'
+  | 'external'
+  | string;
 export interface GetUsersQueryParams {
   /**
    * Limits the results to only users who's `name` or
@@ -587,7 +590,13 @@ export interface DeleteUserByIdQueryParams {
    * the deletion. */
   readonly notify?: boolean;
   /**
-   * Specifies whether to delete the user even if they still own files. */
+   * Specifies whether to delete the user even if they still own files.
+   *
+   * If the user owns content and the enterprise has a retention policy,
+   * including a retired one, or a legal hold that is not fully released,
+   * setting `force` to `true` doesn't delete the user. The request returns
+   * a `403` error, and you must transfer the user's content before deleting
+   * the user. */
   readonly force?: boolean;
 }
 export class DeleteUserByIdHeaders {
@@ -926,6 +935,12 @@ export class UsersManager {
      * still owns any content.
      * To proceed, move their owned content first, or use the `force` parameter to delete
      * the user and their files.
+     *
+     * If the enterprise has a retention policy, including a retired one, or a
+     * legal hold that is not fully released, you can't delete a user who owns
+     * content, even with `force`. Transfer the user's content first by using the
+     * [Transfer owned folders](https://developer.box.com/reference/put-users-id-folders-0)
+     * endpoint.
      * @param {string} userId The ID of the user.
     Example: "12345"
      * @param {DeleteUserByIdOptionalsInput} optionalsInput
@@ -1588,7 +1603,8 @@ export function deserializeUpdateUserByIdRequestBody(
   const spaceAmount: undefined | number =
     val.space_amount == void 0 ? void 0 : val.space_amount;
   const notificationEmail:
-    undefined | UpdateUserByIdRequestBodyNotificationEmailField =
+    | undefined
+    | UpdateUserByIdRequestBodyNotificationEmailField =
     val.notification_email == void 0
       ? void 0
       : deserializeUpdateUserByIdRequestBodyNotificationEmailField(

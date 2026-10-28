@@ -19,7 +19,11 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type LegalHoldPolicyStatusField =
-  'active' | 'applying' | 'releasing' | 'released' | string;
+  | 'active'
+  | 'applying'
+  | 'releasing'
+  | 'released'
+  | string;
 export interface LegalHoldPolicyAssignmentCountsField {
   /**
    * The number of users this policy is applied to with the `access` type assignment. */

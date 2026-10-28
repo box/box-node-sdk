@@ -7,7 +7,8 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type ClassificationTemplateField =
-  'securityClassification-6VMVochwUWo' | string;
+  | 'securityClassification-6VMVochwUWo'
+  | string;
 export interface Classification {
   /**
    * The name of the classification applied to the item. */

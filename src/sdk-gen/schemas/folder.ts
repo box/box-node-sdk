@@ -6,6 +6,8 @@ import { serializeFolderMini } from './folderMini';
 import { deserializeFolderMini } from './folderMini';
 import { serializeUserMini } from './userMini';
 import { deserializeUserMini } from './userMini';
+import { serializeSharedLinkOtpAllowlistEntry } from './sharedLinkOtpAllowlistEntry';
+import { deserializeSharedLinkOtpAllowlistEntry } from './sharedLinkOtpAllowlistEntry';
 import { serializeItems } from './items';
 import { deserializeItems } from './items';
 import { serializeDateTime } from '../internal/utils';
@@ -14,6 +16,7 @@ import { FolderBaseTypeField } from './folderBase';
 import { FolderBase } from './folderBase';
 import { FolderMini } from './folderMini';
 import { UserMini } from './userMini';
+import { SharedLinkOtpAllowlistEntry } from './sharedLinkOtpAllowlistEntry';
 import { Items } from './items';
 import { BoxSdkError } from '../box/errors';
 import { DateTime } from '../internal/utils';
@@ -34,11 +37,21 @@ export interface FolderPathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type FolderSharedLinkAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export type FolderSharedLinkEffectiveAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export type FolderSharedLinkEffectivePermissionField =
-  'can_edit' | 'can_download' | 'can_preview' | 'no_access' | string;
+  | 'can_edit'
+  | 'can_download'
+  | 'can_preview'
+  | 'no_access'
+  | string;
 export interface FolderSharedLinkPermissionsField {
   /**
    * Defines if the shared link allows for the item to be downloaded. For
@@ -59,6 +72,35 @@ export interface FolderSharedLinkPermissionsField {
    * This value can only be `true` if `can_download` is also `true` and if
    * the item has a type of `file`. */
   readonly canEdit: boolean;
+  readonly rawData?: SerializedData;
+}
+export interface FolderSharedLinkOneTimePasscodeField {
+  /**
+   * The current OTP enforcement mode for the shared link.
+   *
+   * * `none` - OTP enforcement is turned off. The shared link is accessible
+   *   without any one-time-passcode verification.
+   * * `open` - Any anonymous recipient can request a one-time-passcode to
+   *   any email address and access the shared link after verifying it.
+   *   Collaborators and registered Box users access the link without
+   *   being prompted.
+   * * `allowlist` - Anonymous recipients can request a one-time-passcode
+   *   only when they enter an email that matches an entry on the
+   *   `allowlist`. */
+  readonly mode: string;
+  /**
+   * The list of email and domain entries that are permitted to access the
+   * shared link when `mode` is `allowlist`. Anonymous users whose
+   * email matches an entry can request and verify a one-time-passcode.
+   *
+   * Because the entries carry recipient email addresses and the identity
+   * of the user who added them, this field is only returned to users
+   * with owner, co-owner, or editor access on the item. For viewer
+   * collaborators and below the field is omitted.
+   *
+   * An allowlist contains at most 1000 entries, matching the limit
+   * enforced when setting the allowlist on a shared link. */
+  readonly allowlist?: readonly SharedLinkOtpAllowlistEntry[];
   readonly rawData?: SerializedData;
 }
 export interface FolderSharedLinkField {
@@ -126,10 +168,13 @@ export interface FolderSharedLinkField {
   /**
    * The number of times this item has been previewed. */
   readonly previewCount: number;
+  readonly oneTimePasscode: FolderSharedLinkOneTimePasscodeField;
   readonly rawData?: SerializedData;
 }
 export type FolderFolderUploadEmailAccessField =
-  'open' | 'collaborators' | string;
+  | 'open'
+  | 'collaborators'
+  | string;
 export interface FolderFolderUploadEmailField {
   /**
    * When this parameter has been set, users can email files
@@ -415,6 +460,63 @@ export function deserializeFolderSharedLinkPermissionsField(
     canEdit: canEdit,
   } satisfies FolderSharedLinkPermissionsField;
 }
+export function serializeFolderSharedLinkOneTimePasscodeField(
+  val: FolderSharedLinkOneTimePasscodeField
+): SerializedData {
+  return {
+    ['mode']: val.mode,
+    ['allowlist']:
+      val.allowlist == void 0
+        ? val.allowlist
+        : (val.allowlist.map(function (
+            item: SharedLinkOtpAllowlistEntry
+          ): SerializedData {
+            return serializeSharedLinkOtpAllowlistEntry(item);
+          }) as readonly any[]),
+  };
+}
+export function deserializeFolderSharedLinkOneTimePasscodeField(
+  val: SerializedData
+): FolderSharedLinkOneTimePasscodeField {
+  if (!sdIsMap(val)) {
+    throw new BoxSdkError({
+      message: 'Expecting a map for "FolderSharedLinkOneTimePasscodeField"',
+    });
+  }
+  if (val.mode == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "mode" of type "FolderSharedLinkOneTimePasscodeField" to be defined',
+    });
+  }
+  if (!sdIsString(val.mode)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting string for "mode" of type "FolderSharedLinkOneTimePasscodeField"',
+    });
+  }
+  const mode: string = val.mode;
+  if (!(val.allowlist == void 0) && !sdIsList(val.allowlist)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "allowlist" of type "FolderSharedLinkOneTimePasscodeField"',
+    });
+  }
+  const allowlist: undefined | readonly SharedLinkOtpAllowlistEntry[] =
+    val.allowlist == void 0
+      ? void 0
+      : sdIsList(val.allowlist)
+        ? (val.allowlist.map(function (
+            itm: SerializedData
+          ): SharedLinkOtpAllowlistEntry {
+            return deserializeSharedLinkOtpAllowlistEntry(itm);
+          }) as readonly any[])
+        : [];
+  return {
+    mode: mode,
+    allowlist: allowlist,
+  } satisfies FolderSharedLinkOneTimePasscodeField;
+}
 export function serializeFolderSharedLinkField(
   val: FolderSharedLinkField
 ): SerializedData {
@@ -444,6 +546,9 @@ export function serializeFolderSharedLinkField(
         : serializeFolderSharedLinkPermissionsField(val.permissions),
     ['download_count']: val.downloadCount,
     ['preview_count']: val.previewCount,
+    ['one_time_passcode']: serializeFolderSharedLinkOneTimePasscodeField(
+      val.oneTimePasscode
+    ),
   };
 }
 export function deserializeFolderSharedLinkField(
@@ -562,6 +667,14 @@ export function deserializeFolderSharedLinkField(
     });
   }
   const previewCount: number = val.preview_count;
+  if (val.one_time_passcode == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "one_time_passcode" of type "FolderSharedLinkField" to be defined',
+    });
+  }
+  const oneTimePasscode: FolderSharedLinkOneTimePasscodeField =
+    deserializeFolderSharedLinkOneTimePasscodeField(val.one_time_passcode);
   return {
     url: url,
     downloadUrl: downloadUrl,
@@ -575,6 +688,7 @@ export function deserializeFolderSharedLinkField(
     permissions: permissions,
     downloadCount: downloadCount,
     previewCount: previewCount,
+    oneTimePasscode: oneTimePasscode,
   } satisfies FolderSharedLinkField;
 }
 export function serializeFolderFolderUploadEmailAccessField(

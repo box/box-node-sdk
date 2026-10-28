@@ -244,7 +244,13 @@ export type OpenAPISchema = {
    * Value MUST be a string. Multiple types via an array are not supported.
    */
   type:
-    'string' | 'number' | 'integer' | 'object' | 'array' | 'boolean' | 'null';
+    | 'string'
+    | 'number'
+    | 'integer'
+    | 'object'
+    | 'array'
+    | 'boolean'
+    | 'null';
 
   /** used with type: 'array' */
   items?: OpenAPISchema | OpenAPIReference;

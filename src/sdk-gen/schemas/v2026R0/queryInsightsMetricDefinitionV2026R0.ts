@@ -7,7 +7,11 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type QueryInsightsMetricDefinitionV2026R0TypeField =
-  'sum' | 'avg' | 'min' | 'max' | 'count';
+  | 'sum'
+  | 'avg'
+  | 'min'
+  | 'max'
+  | 'count';
 export interface QueryInsightsMetricDefinitionV2026R0 {
   /**
    * The aggregation function to apply. */

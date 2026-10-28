@@ -1,12 +1,24 @@
+import { serializeSharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { deserializeSharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { serializeSharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { deserializeSharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { serializeSharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
+import { deserializeSharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
 import { serializeFolderFull } from '../schemas/folderFull';
 import { deserializeFolderFull } from '../schemas/folderFull';
 import { serializeClientError } from '../schemas/clientError';
 import { deserializeClientError } from '../schemas/clientError';
+import { serializeSharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
+import { deserializeSharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
+import { SharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { SharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { SharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
 import { ResponseFormat } from '../networking/fetchOptions';
 import { FolderFull } from '../schemas/folderFull';
 import { ClientError } from '../schemas/clientError';
+import { SharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
 import { BoxSdkError } from '../box/errors';
 import { Authentication } from '../networking/auth';
 import { NetworkSession } from '../networking/network';
@@ -244,7 +256,10 @@ export interface GetSharedLinkForFolderHeadersInput {
   };
 }
 export type AddShareLinkToFolderRequestBodySharedLinkAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export interface AddShareLinkToFolderRequestBodySharedLinkPermissionsField {
   /**
    * If the shared link allows for downloading of files.
@@ -300,6 +315,7 @@ export interface AddShareLinkToFolderRequestBodySharedLinkField {
    * current date and time. */
   readonly unsharedAt?: DateTime;
   readonly permissions?: AddShareLinkToFolderRequestBodySharedLinkPermissionsField;
+  readonly oneTimePasscode?: SharedLinkOtpWritable;
   readonly rawData?: SerializedData;
 }
 export interface AddShareLinkToFolderRequestBody {
@@ -340,7 +356,10 @@ export interface AddShareLinkToFolderHeadersInput {
   };
 }
 export type UpdateSharedLinkOnFolderRequestBodySharedLinkAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export interface UpdateSharedLinkOnFolderRequestBodySharedLinkPermissionsField {
   /**
    * If the shared link allows for downloading of files.
@@ -396,6 +415,7 @@ export interface UpdateSharedLinkOnFolderRequestBodySharedLinkField {
    * current date and time. */
   readonly unsharedAt?: DateTime;
   readonly permissions?: UpdateSharedLinkOnFolderRequestBodySharedLinkPermissionsField;
+  readonly oneTimePasscode?: SharedLinkOtpWritable;
   readonly rawData?: SerializedData;
 }
 export interface UpdateSharedLinkOnFolderRequestBody {
@@ -902,6 +922,10 @@ export function serializeAddShareLinkToFolderRequestBodySharedLinkField(
         : serializeAddShareLinkToFolderRequestBodySharedLinkPermissionsField(
             val.permissions
           ),
+    ['one_time_passcode']:
+      val.oneTimePasscode == void 0
+        ? val.oneTimePasscode
+        : serializeSharedLinkOtpWritable(val.oneTimePasscode),
   };
 }
 export function deserializeAddShareLinkToFolderRequestBodySharedLinkField(
@@ -914,7 +938,8 @@ export function deserializeAddShareLinkToFolderRequestBodySharedLinkField(
     });
   }
   const access:
-    undefined | AddShareLinkToFolderRequestBodySharedLinkAccessField =
+    | undefined
+    | AddShareLinkToFolderRequestBodySharedLinkAccessField =
     val.access == void 0
       ? void 0
       : deserializeAddShareLinkToFolderRequestBodySharedLinkAccessField(
@@ -945,18 +970,24 @@ export function deserializeAddShareLinkToFolderRequestBodySharedLinkField(
   const unsharedAt: undefined | DateTime =
     val.unshared_at == void 0 ? void 0 : deserializeDateTime(val.unshared_at);
   const permissions:
-    undefined | AddShareLinkToFolderRequestBodySharedLinkPermissionsField =
+    | undefined
+    | AddShareLinkToFolderRequestBodySharedLinkPermissionsField =
     val.permissions == void 0
       ? void 0
       : deserializeAddShareLinkToFolderRequestBodySharedLinkPermissionsField(
           val.permissions
         );
+  const oneTimePasscode: undefined | SharedLinkOtpWritable =
+    val.one_time_passcode == void 0
+      ? void 0
+      : deserializeSharedLinkOtpWritable(val.one_time_passcode);
   return {
     access: access,
     password: password,
     vanityName: vanityName,
     unsharedAt: unsharedAt,
     permissions: permissions,
+    oneTimePasscode: oneTimePasscode,
   } satisfies AddShareLinkToFolderRequestBodySharedLinkField;
 }
 export function serializeAddShareLinkToFolderRequestBody(
@@ -1082,6 +1113,10 @@ export function serializeUpdateSharedLinkOnFolderRequestBodySharedLinkField(
         : serializeUpdateSharedLinkOnFolderRequestBodySharedLinkPermissionsField(
             val.permissions
           ),
+    ['one_time_passcode']:
+      val.oneTimePasscode == void 0
+        ? val.oneTimePasscode
+        : serializeSharedLinkOtpWritable(val.oneTimePasscode),
   };
 }
 export function deserializeUpdateSharedLinkOnFolderRequestBodySharedLinkField(
@@ -1094,7 +1129,8 @@ export function deserializeUpdateSharedLinkOnFolderRequestBodySharedLinkField(
     });
   }
   const access:
-    undefined | UpdateSharedLinkOnFolderRequestBodySharedLinkAccessField =
+    | undefined
+    | UpdateSharedLinkOnFolderRequestBodySharedLinkAccessField =
     val.access == void 0
       ? void 0
       : deserializeUpdateSharedLinkOnFolderRequestBodySharedLinkAccessField(
@@ -1125,18 +1161,24 @@ export function deserializeUpdateSharedLinkOnFolderRequestBodySharedLinkField(
   const unsharedAt: undefined | DateTime =
     val.unshared_at == void 0 ? void 0 : deserializeDateTime(val.unshared_at);
   const permissions:
-    undefined | UpdateSharedLinkOnFolderRequestBodySharedLinkPermissionsField =
+    | undefined
+    | UpdateSharedLinkOnFolderRequestBodySharedLinkPermissionsField =
     val.permissions == void 0
       ? void 0
       : deserializeUpdateSharedLinkOnFolderRequestBodySharedLinkPermissionsField(
           val.permissions
         );
+  const oneTimePasscode: undefined | SharedLinkOtpWritable =
+    val.one_time_passcode == void 0
+      ? void 0
+      : deserializeSharedLinkOtpWritable(val.one_time_passcode);
   return {
     access: access,
     password: password,
     vanityName: vanityName,
     unsharedAt: unsharedAt,
     permissions: permissions,
+    oneTimePasscode: oneTimePasscode,
   } satisfies UpdateSharedLinkOnFolderRequestBodySharedLinkField;
 }
 export function serializeUpdateSharedLinkOnFolderRequestBody(
@@ -1160,7 +1202,8 @@ export function deserializeUpdateSharedLinkOnFolderRequestBody(
     });
   }
   const sharedLink:
-    undefined | UpdateSharedLinkOnFolderRequestBodySharedLinkField =
+    | undefined
+    | UpdateSharedLinkOnFolderRequestBodySharedLinkField =
     val.shared_link == void 0
       ? void 0
       : deserializeUpdateSharedLinkOnFolderRequestBodySharedLinkField(
@@ -1207,7 +1250,8 @@ export function deserializeRemoveSharedLinkFromFolderRequestBody(
     });
   }
   const sharedLink:
-    undefined | RemoveSharedLinkFromFolderRequestBodySharedLinkField =
+    | undefined
+    | RemoveSharedLinkFromFolderRequestBodySharedLinkField =
     val.shared_link == void 0
       ? void 0
       : deserializeRemoveSharedLinkFromFolderRequestBodySharedLinkField(
