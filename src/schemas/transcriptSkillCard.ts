@@ -145,7 +145,7 @@ export class TranscriptSkillCard {
    * `timeline`. */
   readonly duration?: number;
   /**
-   * An list of entries for the card. This represents the individual entries of
+   * A list of entries for the card. This represents the individual entries of
    * the transcription. */
   readonly entries!: readonly TranscriptSkillCardEntriesField[];
   readonly rawData?: SerializedData;
@@ -209,7 +209,7 @@ export interface TranscriptSkillCardInput {
    * `timeline`. */
   readonly duration?: number;
   /**
-   * An list of entries for the card. This represents the individual entries of
+   * A list of entries for the card. This represents the individual entries of
    * the transcription. */
   readonly entries: readonly TranscriptSkillCardEntriesField[];
   readonly rawData?: SerializedData;
