@@ -72,7 +72,9 @@ export interface SignRequestCreateSigner {
    * instead for signers in the same signer group. */
   readonly signerGroupId?: string | null;
   /**
-   * If true, no emails about the sign request will be sent. */
+   * If true, no emails about the sign request are sent.
+   * The `embed_url_external_user_id` parameter is required when using
+   * `suppress_notifications` for a signer. */
   readonly suppressNotifications?: boolean | null;
   /**
    * The language of the user, formatted in modified version of the
