@@ -193,8 +193,7 @@ export function deserializeShuttlePathMappingSharedSpaceLocationInputV2026R0Inpu
     });
   }
   const type:
-    | undefined
-    | ShuttlePathMappingSharedSpaceLocationInputV2026R0TypeField =
+    undefined | ShuttlePathMappingSharedSpaceLocationInputV2026R0TypeField =
     val.type == void 0
       ? void 0
       : deserializeShuttlePathMappingSharedSpaceLocationInputV2026R0TypeField(

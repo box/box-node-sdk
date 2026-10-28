@@ -113,8 +113,7 @@ export function deserializeAiAgentLongTextToolTextGenEmbeddingsField(
   }
   const model: undefined | string = val.model == void 0 ? void 0 : val.model;
   const strategy:
-    | undefined
-    | AiAgentLongTextToolTextGenEmbeddingsStrategyField =
+    undefined | AiAgentLongTextToolTextGenEmbeddingsStrategyField =
     val.strategy == void 0
       ? void 0
       : deserializeAiAgentLongTextToolTextGenEmbeddingsStrategyField(

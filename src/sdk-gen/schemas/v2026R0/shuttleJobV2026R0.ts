@@ -461,8 +461,7 @@ export function deserializeShuttleJobV2026R0AccountMappingField(
   }
   const isEnabled: boolean = val.is_enabled;
   const permissionConflictStrategy:
-    | ShuttleJobPermissionConflictStrategyV2026R0
-    | undefined =
+    ShuttleJobPermissionConflictStrategyV2026R0 | undefined =
     val.permission_conflict_strategy == void 0
       ? void 0
       : deserializeShuttleJobPermissionConflictStrategyV2026R0(

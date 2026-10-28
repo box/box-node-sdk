@@ -959,8 +959,7 @@ class BoxClient {
     });
 
     let proxyConfig:
-      | { url: string; username?: string; password?: string }
-      | undefined;
+      { url: string; username?: string; password?: string } | undefined;
     if (config.proxy?.url) {
       proxyConfig = {
         url: config.proxy.url,

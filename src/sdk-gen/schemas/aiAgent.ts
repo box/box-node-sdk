@@ -19,10 +19,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type AiAgent =
-  | AiAgentAsk
-  | AiAgentTextGen
-  | AiAgentExtract
-  | AiAgentExtractStructured;
+  AiAgentAsk | AiAgentTextGen | AiAgentExtract | AiAgentExtractStructured;
 export function serializeAiAgent(val: any): SerializedData {
   if (val.type == 'ai_agent_ask') {
     return serializeAiAgentAsk(val);

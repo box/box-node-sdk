@@ -187,9 +187,7 @@ export interface GetFilesUnderRetentionPolicyAssignmentOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetRetentionPolicyAssignmentsQueryParamsTypeField =
-  | 'folder'
-  | 'enterprise'
-  | 'metadata_template';
+  'folder' | 'enterprise' | 'metadata_template';
 export interface GetRetentionPolicyAssignmentsQueryParams {
   /**
    * The type of the retention policy assignment to retrieve. */
@@ -236,9 +234,7 @@ export interface GetRetentionPolicyAssignmentsHeadersInput {
   };
 }
 export type CreateRetentionPolicyAssignmentRequestBodyAssignToTypeField =
-  | 'enterprise'
-  | 'folder'
-  | 'metadata_template';
+  'enterprise' | 'folder' | 'metadata_template';
 export interface CreateRetentionPolicyAssignmentRequestBodyAssignToField {
   /**
    * The type of item to assign the policy to. */

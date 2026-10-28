@@ -57,8 +57,7 @@ export function deserializeShieldInformationBarrierSegmentRestrictionBase(
     });
   }
   const type:
-    | undefined
-    | ShieldInformationBarrierSegmentRestrictionBaseTypeField =
+    undefined | ShieldInformationBarrierSegmentRestrictionBaseTypeField =
     val.type == void 0
       ? void 0
       : deserializeShieldInformationBarrierSegmentRestrictionBaseTypeField(
