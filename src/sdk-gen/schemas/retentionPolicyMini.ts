@@ -19,7 +19,9 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type RetentionPolicyMiniDispositionActionField =
-  'permanently_delete' | 'remove_retention' | string;
+  | 'permanently_delete'
+  | 'remove_retention'
+  | string;
 export class RetentionPolicyMini extends RetentionPolicyBase {
   readonly policyName?: string;
   readonly retentionLength?: string;
@@ -116,14 +118,16 @@ export function deserializeRetentionPolicyMini(
   const retentionLength: undefined | string =
     val.retention_length == void 0 ? void 0 : val.retention_length;
   const dispositionAction:
-    undefined | RetentionPolicyMiniDispositionActionField =
+    | undefined
+    | RetentionPolicyMiniDispositionActionField =
     val.disposition_action == void 0
       ? void 0
       : deserializeRetentionPolicyMiniDispositionActionField(
           val.disposition_action
         );
   const maxExtensionLength:
-    undefined | RetentionPolicyMaxExtensionLengthResponse =
+    | undefined
+    | RetentionPolicyMaxExtensionLengthResponse =
     val.max_extension_length == void 0
       ? void 0
       : deserializeRetentionPolicyMaxExtensionLengthResponse(

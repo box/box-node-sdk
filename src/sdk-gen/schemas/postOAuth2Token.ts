@@ -14,9 +14,11 @@ export type PostOAuth2TokenGrantTypeField =
   | 'urn:ietf:params:oauth:grant-type:token-exchange'
   | string;
 export type PostOAuth2TokenSubjectTokenTypeField =
-  'urn:ietf:params:oauth:token-type:access_token' | string;
+  | 'urn:ietf:params:oauth:token-type:access_token'
+  | string;
 export type PostOAuth2TokenActorTokenTypeField =
-  'urn:ietf:params:oauth:token-type:id_token' | string;
+  | 'urn:ietf:params:oauth:token-type:id_token'
+  | string;
 export type PostOAuth2TokenBoxSubjectTypeField = 'enterprise' | 'user' | string;
 export interface PostOAuth2Token {
   /**

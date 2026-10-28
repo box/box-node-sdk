@@ -155,7 +155,8 @@ export function deserializeDocGenBatchCreateRequestV2025R0DestinationFolderField
     });
   }
   const type:
-    undefined | DocGenBatchCreateRequestV2025R0DestinationFolderTypeField =
+    | undefined
+    | DocGenBatchCreateRequestV2025R0DestinationFolderTypeField =
     val.type == void 0
       ? void 0
       : deserializeDocGenBatchCreateRequestV2025R0DestinationFolderTypeField(

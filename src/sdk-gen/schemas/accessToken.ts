@@ -11,7 +11,8 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type AccessTokenTokenTypeField = 'bearer' | string;
 export type AccessTokenIssuedTokenTypeField =
-  'urn:ietf:params:oauth:token-type:access_token' | string;
+  | 'urn:ietf:params:oauth:token-type:access_token'
+  | string;
 export interface AccessToken {
   /**
    * The requested access token. */

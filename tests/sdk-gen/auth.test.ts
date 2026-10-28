@@ -190,12 +190,14 @@ test('test_oauth_auth_authorizeUrl', function test_oauth_auth_authorizeUrl(): an
   });
   const auth: BoxOAuth = new BoxOAuth({ config: config });
   const authUrl: string = auth.getAuthorizeUrl();
-  if (!(
-    authUrl ==
-      'https://account.box.com/api/oauth2/authorize?client_id=OAUTH_CLIENT_ID&response_type=code' ||
-    authUrl ==
-      'https://account.box.com/api/oauth2/authorize?response_type=code&client_id=OAUTH_CLIENT_ID'
-  )) {
+  if (
+    !(
+      authUrl ==
+        'https://account.box.com/api/oauth2/authorize?client_id=OAUTH_CLIENT_ID&response_type=code' ||
+      authUrl ==
+        'https://account.box.com/api/oauth2/authorize?response_type=code&client_id=OAUTH_CLIENT_ID'
+    )
+  ) {
     throw new Error('Assertion failed');
   }
 });

@@ -155,7 +155,9 @@ export interface DeleteDevicePinnerByIdHeadersInput {
   };
 }
 export type GetEnterpriseDevicePinnersQueryParamsDirectionField =
-  'ASC' | 'DESC' | string;
+  | 'ASC'
+  | 'DESC'
+  | string;
 export interface GetEnterpriseDevicePinnersQueryParams {
   /**
    * Defines the position marker at which to begin returning results. This is

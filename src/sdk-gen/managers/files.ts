@@ -1,12 +1,24 @@
+import { serializeSharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { deserializeSharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { serializeSharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { deserializeSharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { serializeSharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
+import { deserializeSharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
 import { serializeFileFull } from '../schemas/fileFull';
 import { deserializeFileFull } from '../schemas/fileFull';
 import { serializeClientError } from '../schemas/clientError';
 import { deserializeClientError } from '../schemas/clientError';
+import { serializeSharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
+import { deserializeSharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
+import { SharedLinkOtpWritableNone } from '../schemas/sharedLinkOtpWritableNone';
+import { SharedLinkOtpWritableOpen } from '../schemas/sharedLinkOtpWritableOpen';
+import { SharedLinkOtpWritableAllowlist } from '../schemas/sharedLinkOtpWritableAllowlist';
 import { ResponseFormat } from '../networking/fetchOptions';
 import { FileFull } from '../schemas/fileFull';
 import { ClientError } from '../schemas/clientError';
+import { SharedLinkOtpWritable } from '../schemas/sharedLinkOtpWritable';
 import { BoxSdkError } from '../box/errors';
 import { Authentication } from '../networking/auth';
 import { NetworkSession } from '../networking/network';
@@ -358,7 +370,10 @@ export interface UpdateFileByIdRequestBodyParentField {
   readonly rawData?: SerializedData;
 }
 export type UpdateFileByIdRequestBodySharedLinkAccessField =
-  'open' | 'company' | 'collaborators' | string;
+  | 'open'
+  | 'company'
+  | 'collaborators'
+  | string;
 export interface UpdateFileByIdRequestBodySharedLinkPermissionsField {
   /**
    * If the shared link allows for downloading of files.
@@ -403,6 +418,7 @@ export interface UpdateFileByIdRequestBodySharedLinkField {
    * users with paid accounts. */
   readonly unsharedAt?: DateTime;
   readonly permissions?: UpdateFileByIdRequestBodySharedLinkPermissionsField;
+  readonly oneTimePasscode?: SharedLinkOtpWritable;
   readonly rawData?: SerializedData;
 }
 export type UpdateFileByIdRequestBodyLockAccessField = 'lock' | string;
@@ -419,7 +435,9 @@ export interface UpdateFileByIdRequestBodyLockField {
   readonly rawData?: SerializedData;
 }
 export type UpdateFileByIdRequestBodyPermissionsCanDownloadField =
-  'open' | 'company' | string;
+  | 'open'
+  | 'company'
+  | string;
 export interface UpdateFileByIdRequestBodyPermissionsField {
   /**
    * Defines who is allowed to download this file. The possible
@@ -485,7 +503,8 @@ export interface UpdateFileByIdRequestBody {
    *
    * [1]: https://developer.box.com/reference/get-collections */
   readonly collections?:
-    readonly UpdateFileByIdRequestBodyCollectionsField[] | null;
+    | readonly UpdateFileByIdRequestBodyCollectionsField[]
+    | null;
   /**
    * The tags for this item. These tags are shown in
    * the Box web app and mobile apps next to an item.
@@ -1265,6 +1284,10 @@ export function serializeUpdateFileByIdRequestBodySharedLinkField(
         : serializeUpdateFileByIdRequestBodySharedLinkPermissionsField(
             val.permissions
           ),
+    ['one_time_passcode']:
+      val.oneTimePasscode == void 0
+        ? val.oneTimePasscode
+        : serializeSharedLinkOtpWritable(val.oneTimePasscode),
   };
 }
 export function deserializeUpdateFileByIdRequestBodySharedLinkField(
@@ -1304,18 +1327,24 @@ export function deserializeUpdateFileByIdRequestBodySharedLinkField(
   const unsharedAt: undefined | DateTime =
     val.unshared_at == void 0 ? void 0 : deserializeDateTime(val.unshared_at);
   const permissions:
-    undefined | UpdateFileByIdRequestBodySharedLinkPermissionsField =
+    | undefined
+    | UpdateFileByIdRequestBodySharedLinkPermissionsField =
     val.permissions == void 0
       ? void 0
       : deserializeUpdateFileByIdRequestBodySharedLinkPermissionsField(
           val.permissions
         );
+  const oneTimePasscode: undefined | SharedLinkOtpWritable =
+    val.one_time_passcode == void 0
+      ? void 0
+      : deserializeSharedLinkOtpWritable(val.one_time_passcode);
   return {
     access: access,
     password: password,
     vanityName: vanityName,
     unsharedAt: unsharedAt,
     permissions: permissions,
+    oneTimePasscode: oneTimePasscode,
   } satisfies UpdateFileByIdRequestBodySharedLinkField;
 }
 export function serializeUpdateFileByIdRequestBodyLockAccessField(
@@ -1432,7 +1461,8 @@ export function deserializeUpdateFileByIdRequestBodyPermissionsField(
     });
   }
   const canDownload:
-    undefined | UpdateFileByIdRequestBodyPermissionsCanDownloadField =
+    | undefined
+    | UpdateFileByIdRequestBodyPermissionsCanDownloadField =
     val.can_download == void 0
       ? void 0
       : deserializeUpdateFileByIdRequestBodyPermissionsCanDownloadField(
@@ -1573,7 +1603,8 @@ export function deserializeUpdateFileByIdRequestBody(
     });
   }
   const collections:
-    undefined | readonly UpdateFileByIdRequestBodyCollectionsField[] =
+    | undefined
+    | readonly UpdateFileByIdRequestBodyCollectionsField[] =
     val.collections == void 0
       ? void 0
       : sdIsList(val.collections)
