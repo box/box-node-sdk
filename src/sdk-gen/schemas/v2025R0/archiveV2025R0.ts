@@ -39,7 +39,7 @@ export class ArchiveV2025R0 {
   readonly description?: string | null;
   /**
    * The part of an archive API response that describes the user who owns the archive. */
-  readonly ownedBy?: ArchiveV2025R0OwnedByField;
+  readonly ownedBy!: ArchiveV2025R0OwnedByField;
   readonly rawData?: SerializedData;
   constructor(
     fields: Omit<ArchiveV2025R0, 'type'> & Partial<Pick<ArchiveV2025R0, 'type'>>
@@ -90,7 +90,7 @@ export interface ArchiveV2025R0Input {
   readonly description?: string | null;
   /**
    * The part of an archive API response that describes the user who owns the archive. */
-  readonly ownedBy?: ArchiveV2025R0OwnedByField;
+  readonly ownedBy: ArchiveV2025R0OwnedByField;
   readonly rawData?: SerializedData;
 }
 export function serializeArchiveV2025R0TypeField(
@@ -155,10 +155,7 @@ export function serializeArchiveV2025R0(val: ArchiveV2025R0): SerializedData {
     ['name']: val.name,
     ['size']: val.size,
     ['description']: val.description,
-    ['owned_by']:
-      val.ownedBy == void 0
-        ? val.ownedBy
-        : serializeArchiveV2025R0OwnedByField(val.ownedBy),
+    ['owned_by']: serializeArchiveV2025R0OwnedByField(val.ownedBy),
   };
 }
 export function deserializeArchiveV2025R0(val: SerializedData): ArchiveV2025R0 {
@@ -213,10 +210,13 @@ export function deserializeArchiveV2025R0(val: SerializedData): ArchiveV2025R0 {
   }
   const description: undefined | string =
     val.description == void 0 ? void 0 : val.description;
-  const ownedBy: undefined | ArchiveV2025R0OwnedByField =
-    val.owned_by == void 0
-      ? void 0
-      : deserializeArchiveV2025R0OwnedByField(val.owned_by);
+  if (val.owned_by == void 0) {
+    throw new BoxSdkError({
+      message: 'Expecting "owned_by" of type "ArchiveV2025R0" to be defined',
+    });
+  }
+  const ownedBy: ArchiveV2025R0OwnedByField =
+    deserializeArchiveV2025R0OwnedByField(val.owned_by);
   return {
     id: id,
     type: type,
@@ -238,10 +238,7 @@ export function serializeArchiveV2025R0Input(
     ['name']: val.name,
     ['size']: val.size,
     ['description']: val.description,
-    ['owned_by']:
-      val.ownedBy == void 0
-        ? val.ownedBy
-        : serializeArchiveV2025R0OwnedByField(val.ownedBy),
+    ['owned_by']: serializeArchiveV2025R0OwnedByField(val.ownedBy),
   };
 }
 export function deserializeArchiveV2025R0Input(
@@ -295,10 +292,14 @@ export function deserializeArchiveV2025R0Input(
   }
   const description: undefined | string =
     val.description == void 0 ? void 0 : val.description;
-  const ownedBy: undefined | ArchiveV2025R0OwnedByField =
-    val.owned_by == void 0
-      ? void 0
-      : deserializeArchiveV2025R0OwnedByField(val.owned_by);
+  if (val.owned_by == void 0) {
+    throw new BoxSdkError({
+      message:
+        'Expecting "owned_by" of type "ArchiveV2025R0Input" to be defined',
+    });
+  }
+  const ownedBy: ArchiveV2025R0OwnedByField =
+    deserializeArchiveV2025R0OwnedByField(val.owned_by);
   return {
     id: id,
     type: type,
