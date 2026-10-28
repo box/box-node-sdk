@@ -127,7 +127,7 @@ export class KeywordSkillCard {
    * which instance of a service applied the metadata. */
   readonly invocation!: KeywordSkillCardInvocationField;
   /**
-   * An list of entries in the metadata card. */
+   * A list of entries in the metadata card. */
   readonly entries!: readonly KeywordSkillCardEntriesField[];
   readonly rawData?: SerializedData;
   constructor(
@@ -181,7 +181,7 @@ export interface KeywordSkillCardInput {
    * which instance of a service applied the metadata. */
   readonly invocation: KeywordSkillCardInvocationField;
   /**
-   * An list of entries in the metadata card. */
+   * A list of entries in the metadata card. */
   readonly entries: readonly KeywordSkillCardEntriesField[];
   readonly rawData?: SerializedData;
 }
