@@ -7,13 +7,9 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleReportCreateRequestV2026R0FormatField =
-  | 'xlsx'
-  | 'csv'
-  | string;
+  'xlsx' | 'csv' | string;
 export type ShuttleReportCreateRequestV2026R0UsersScopeField =
-  | 'migrated'
-  | 'all'
-  | string;
+  'migrated' | 'all' | string;
 export interface ShuttleReportCreateRequestV2026R0 {
   /**
    * The unique identifier of the shuttle run to generate a report for. */
@@ -149,8 +145,7 @@ export function deserializeShuttleReportCreateRequestV2026R0(
       }) as readonly any[])
     : [];
   const usersScope:
-    | undefined
-    | ShuttleReportCreateRequestV2026R0UsersScopeField =
+    undefined | ShuttleReportCreateRequestV2026R0UsersScopeField =
     val.users_scope == void 0
       ? void 0
       : deserializeShuttleReportCreateRequestV2026R0UsersScopeField(

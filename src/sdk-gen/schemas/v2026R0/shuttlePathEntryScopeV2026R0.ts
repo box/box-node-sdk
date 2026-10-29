@@ -13,8 +13,7 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttlePathEntryScopeV2026R0 =
-  | ShuttlePathEntryAccountScopeV2026R0
-  | ShuttlePathEntrySharedSpaceScopeV2026R0;
+  ShuttlePathEntryAccountScopeV2026R0 | ShuttlePathEntrySharedSpaceScopeV2026R0;
 export function serializeShuttlePathEntryScopeV2026R0(
   val: any
 ): SerializedData {

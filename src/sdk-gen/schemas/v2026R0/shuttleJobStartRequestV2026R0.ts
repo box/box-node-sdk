@@ -7,11 +7,7 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleJobStartRequestV2026R0ModeField =
-  | 'transfer'
-  | 'simulation'
-  | 'scan'
-  | 'analysis'
-  | string;
+  'transfer' | 'simulation' | 'scan' | 'analysis' | string;
 export interface ShuttleJobStartRequestV2026R0 {
   /**
    * The run mode. Defaults to simulation when omitted. */

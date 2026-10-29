@@ -7,10 +7,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestCreateSignerRoleField =
-  | 'signer'
-  | 'approver'
-  | 'final_copy_reader'
-  | string;
+  'signer' | 'approver' | 'final_copy_reader' | string;
 export interface SignRequestCreateSigner {
   /**
    * Email address of the signer.

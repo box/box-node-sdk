@@ -8,12 +8,7 @@ import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleJobScheduleTriggerByTimeV2026R0TypeField = 'by_time';
 export type ShuttleJobScheduleTriggerByTimeV2026R0RepeatField =
-  | 'none'
-  | 'daily'
-  | 'weekly'
-  | 'weekdays'
-  | 'weekends'
-  | string;
+  'none' | 'daily' | 'weekly' | 'weekdays' | 'weekends' | string;
 export class ShuttleJobScheduleTriggerByTimeV2026R0 {
   /**
    * The value will always be `by_time`. */

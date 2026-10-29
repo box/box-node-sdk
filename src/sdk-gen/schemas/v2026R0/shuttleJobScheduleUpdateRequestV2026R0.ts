@@ -16,14 +16,9 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleJobScheduleUpdateRequestV2026R0StateField =
-  | 'enabled'
-  | 'paused'
-  | string;
+  'enabled' | 'paused' | string;
 export type ShuttleJobScheduleUpdateRequestV2026R0RunModeField =
-  | 'transfer'
-  | 'simulation'
-  | 'analysis'
-  | string;
+  'transfer' | 'simulation' | 'analysis' | string;
 export interface ShuttleJobScheduleUpdateRequestV2026R0 {
   /**
    * Whether the schedule is active. */
@@ -119,8 +114,7 @@ export function deserializeShuttleJobScheduleUpdateRequestV2026R0(
       ? void 0
       : deserializeShuttleJobScheduleUpdateRequestV2026R0StateField(val.state);
   const runMode:
-    | undefined
-    | ShuttleJobScheduleUpdateRequestV2026R0RunModeField =
+    undefined | ShuttleJobScheduleUpdateRequestV2026R0RunModeField =
     val.run_mode == void 0
       ? void 0
       : deserializeShuttleJobScheduleUpdateRequestV2026R0RunModeField(

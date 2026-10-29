@@ -8,10 +8,7 @@ import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleSystemV2026R0TypeField = 'shuttle_system';
 export type ShuttleSystemV2026R0StateField =
-  | 'connected'
-  | 'disconnected'
-  | 'unknown'
-  | string;
+  'connected' | 'disconnected' | 'unknown' | string;
 export class ShuttleSystemV2026R0 {
   /**
    * The unique identifier for the shuttle system. */

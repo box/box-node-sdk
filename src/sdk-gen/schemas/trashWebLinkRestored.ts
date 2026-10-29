@@ -26,10 +26,7 @@ export interface TrashWebLinkRestoredPathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type TrashWebLinkRestoredItemStatusField =
-  | 'active'
-  | 'trashed'
-  | 'deleted'
-  | string;
+  'active' | 'trashed' | 'deleted' | string;
 export interface TrashWebLinkRestored {
   /**
    * The value will always be `web_link`. */

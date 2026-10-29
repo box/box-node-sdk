@@ -7,8 +7,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputZip4ValidationValidationTypeField =
-  | 'zip_4'
-  | string;
+  'zip_4' | string;
 export class SignRequestSignerInputZip4Validation {
   /**
    * Validates that the text input is a ZIP+4 code. */
@@ -106,8 +105,7 @@ export function deserializeSignRequestSignerInputZip4ValidationInput(
     });
   }
   const validationType:
-    | undefined
-    | SignRequestSignerInputZip4ValidationValidationTypeField =
+    undefined | SignRequestSignerInputZip4ValidationValidationTypeField =
     val.validationType == void 0
       ? void 0
       : deserializeSignRequestSignerInputZip4ValidationValidationTypeField(

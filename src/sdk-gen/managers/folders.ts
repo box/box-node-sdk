@@ -245,11 +245,7 @@ export interface CopyFolderOptionalsInput {
   readonly cancellationToken?: CancellationToken;
 }
 export type GetFolderByIdQueryParamsSortField =
-  | 'id'
-  | 'name'
-  | 'date'
-  | 'size'
-  | string;
+  'id' | 'name' | 'date' | 'size' | string;
 export type GetFolderByIdQueryParamsDirectionField = 'ASC' | 'DESC' | string;
 export interface GetFolderByIdQueryParams {
   /**
@@ -383,10 +379,7 @@ export interface GetFolderByIdHeadersInput {
   };
 }
 export type UpdateFolderByIdRequestBodySyncStateField =
-  | 'synced'
-  | 'not_synced'
-  | 'partially_synced'
-  | string;
+  'synced' | 'not_synced' | 'partially_synced' | string;
 export interface UpdateFolderByIdRequestBodyParentField {
   /**
    * The ID of parent item. */
@@ -397,10 +390,7 @@ export interface UpdateFolderByIdRequestBodyParentField {
   readonly rawData?: SerializedData;
 }
 export type UpdateFolderByIdRequestBodySharedLinkAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export interface UpdateFolderByIdRequestBodySharedLinkPermissionsField {
   /**
    * If the shared link allows for downloading of files.
@@ -449,9 +439,7 @@ export interface UpdateFolderByIdRequestBodySharedLinkField {
   readonly rawData?: SerializedData;
 }
 export type UpdateFolderByIdRequestBodyFolderUploadEmailAccessField =
-  | 'open'
-  | 'collaborators'
-  | string;
+  'open' | 'collaborators' | string;
 export interface UpdateFolderByIdRequestBodyFolderUploadEmailField {
   /**
    * When this parameter has been set, users can email files
@@ -535,8 +523,7 @@ export interface UpdateFolderByIdRequestBody {
    *
    * [1]: https://developer.box.com/reference/get-collections */
   readonly collections?:
-    | readonly UpdateFolderByIdRequestBodyCollectionsField[]
-    | null;
+    readonly UpdateFolderByIdRequestBodyCollectionsField[] | null;
   /**
    * Restricts collaborators who are not the owner of
    * this folder from viewing other collaborations on
@@ -657,11 +644,7 @@ export interface DeleteFolderByIdHeadersInput {
   };
 }
 export type GetFolderItemsQueryParamsSortField =
-  | 'id'
-  | 'name'
-  | 'date'
-  | 'size'
-  | string;
+  'id' | 'name' | 'date' | 'size' | string;
 export type GetFolderItemsQueryParamsDirectionField = 'ASC' | 'DESC' | string;
 export interface GetFolderItemsQueryParams {
   /**
@@ -795,9 +778,7 @@ export interface CreateFolderRequestBodyParentField {
   readonly rawData?: SerializedData;
 }
 export type CreateFolderRequestBodyFolderUploadEmailAccessField =
-  | 'open'
-  | 'collaborators'
-  | string;
+  'open' | 'collaborators' | string;
 export interface CreateFolderRequestBodyFolderUploadEmailField {
   /**
    * When this parameter has been set, users can email files
@@ -817,10 +798,7 @@ export interface CreateFolderRequestBodyFolderUploadEmailField {
   readonly rawData?: SerializedData;
 }
 export type CreateFolderRequestBodySyncStateField =
-  | 'synced'
-  | 'not_synced'
-  | 'partially_synced'
-  | string;
+  'synced' | 'not_synced' | 'partially_synced' | string;
 export interface CreateFolderRequestBody {
   /**
    * The name for the new folder.
@@ -1583,8 +1561,7 @@ export function deserializeUpdateFolderByIdRequestBodySharedLinkField(
   const unsharedAt: undefined | DateTime =
     val.unshared_at == void 0 ? void 0 : deserializeDateTime(val.unshared_at);
   const permissions:
-    | undefined
-    | UpdateFolderByIdRequestBodySharedLinkPermissionsField =
+    undefined | UpdateFolderByIdRequestBodySharedLinkPermissionsField =
     val.permissions == void 0
       ? void 0
       : deserializeUpdateFolderByIdRequestBodySharedLinkPermissionsField(
@@ -1647,8 +1624,7 @@ export function deserializeUpdateFolderByIdRequestBodyFolderUploadEmailField(
     });
   }
   const access:
-    | undefined
-    | UpdateFolderByIdRequestBodyFolderUploadEmailAccessField =
+    undefined | UpdateFolderByIdRequestBodyFolderUploadEmailAccessField =
     val.access == void 0
       ? void 0
       : deserializeUpdateFolderByIdRequestBodyFolderUploadEmailAccessField(
@@ -1782,8 +1758,7 @@ export function deserializeUpdateFolderByIdRequestBody(
       ? void 0
       : deserializeUpdateFolderByIdRequestBodySharedLinkField(val.shared_link);
   const folderUploadEmail:
-    | undefined
-    | UpdateFolderByIdRequestBodyFolderUploadEmailField =
+    undefined | UpdateFolderByIdRequestBodyFolderUploadEmailField =
     val.folder_upload_email == void 0
       ? void 0
       : deserializeUpdateFolderByIdRequestBodyFolderUploadEmailField(
@@ -1828,8 +1803,7 @@ export function deserializeUpdateFolderByIdRequestBody(
     });
   }
   const collections:
-    | undefined
-    | readonly UpdateFolderByIdRequestBodyCollectionsField[] =
+    undefined | readonly UpdateFolderByIdRequestBodyCollectionsField[] =
     val.collections == void 0
       ? void 0
       : sdIsList(val.collections)
@@ -1987,8 +1961,7 @@ export function deserializeCreateFolderRequestBodyFolderUploadEmailField(
     });
   }
   const access:
-    | undefined
-    | CreateFolderRequestBodyFolderUploadEmailAccessField =
+    undefined | CreateFolderRequestBodyFolderUploadEmailAccessField =
     val.access == void 0
       ? void 0
       : deserializeCreateFolderRequestBodyFolderUploadEmailAccessField(
@@ -2069,8 +2042,7 @@ export function deserializeCreateFolderRequestBody(
   const parent: CreateFolderRequestBodyParentField =
     deserializeCreateFolderRequestBodyParentField(val.parent);
   const folderUploadEmail:
-    | undefined
-    | CreateFolderRequestBodyFolderUploadEmailField =
+    undefined | CreateFolderRequestBodyFolderUploadEmailField =
     val.folder_upload_email == void 0
       ? void 0
       : deserializeCreateFolderRequestBodyFolderUploadEmailField(

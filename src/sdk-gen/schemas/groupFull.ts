@@ -25,15 +25,9 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type GroupFullInvitabilityLevelField =
-  | 'admins_only'
-  | 'admins_and_members'
-  | 'all_managed_users'
-  | string;
+  'admins_only' | 'admins_and_members' | 'all_managed_users' | string;
 export type GroupFullMemberViewabilityLevelField =
-  | 'admins_only'
-  | 'admins_and_members'
-  | 'all_managed_users'
-  | string;
+  'admins_only' | 'admins_and_members' | 'all_managed_users' | string;
 export interface GroupFullPermissionsField {
   /**
    * Specifies if the user can invite the group to collaborate on any items. */
@@ -211,8 +205,7 @@ export function deserializeGroupFull(val: SerializedData): GroupFull {
       ? void 0
       : deserializeGroupFullInvitabilityLevelField(val.invitability_level);
   const memberViewabilityLevel:
-    | undefined
-    | GroupFullMemberViewabilityLevelField =
+    undefined | GroupFullMemberViewabilityLevelField =
     val.member_viewability_level == void 0
       ? void 0
       : deserializeGroupFullMemberViewabilityLevelField(

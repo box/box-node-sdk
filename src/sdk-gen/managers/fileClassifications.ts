@@ -194,8 +194,7 @@ export interface AddClassificationToFileHeadersInput {
 }
 export type UpdateClassificationOnFileRequestBodyOpField = 'replace' | string;
 export type UpdateClassificationOnFileRequestBodyPathField =
-  | '/Box__Security__Classification__Key'
-  | string;
+  '/Box__Security__Classification__Key' | string;
 export class UpdateClassificationOnFileRequestBody {
   /**
    * The value will always be `replace`. */

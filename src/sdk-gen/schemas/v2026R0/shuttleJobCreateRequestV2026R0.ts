@@ -10,9 +10,7 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleJobCreateRequestV2026R0JobTypeField =
-  | 'transfer'
-  | 'analysis'
-  | string;
+  'transfer' | 'analysis' | string;
 export interface ShuttleJobCreateRequestV2026R0AccountMappingField {
   /**
    * Whether account mapping is enabled for the shuttle job. Defaults to
@@ -148,8 +146,7 @@ export function deserializeShuttleJobCreateRequestV2026R0AccountMappingField(
   const isEnabled: undefined | boolean =
     val.is_enabled == void 0 ? void 0 : val.is_enabled;
   const permissionConflictStrategy:
-    | ShuttleJobPermissionConflictStrategyV2026R0
-    | undefined =
+    ShuttleJobPermissionConflictStrategyV2026R0 | undefined =
     val.permission_conflict_strategy == void 0
       ? void 0
       : deserializeShuttleJobPermissionConflictStrategyV2026R0(
@@ -433,8 +430,7 @@ export function deserializeShuttleJobCreateRequestV2026R0(
           }) as readonly any[])
         : [];
   const accountMapping:
-    | undefined
-    | ShuttleJobCreateRequestV2026R0AccountMappingField =
+    undefined | ShuttleJobCreateRequestV2026R0AccountMappingField =
     val.account_mapping == void 0
       ? void 0
       : deserializeShuttleJobCreateRequestV2026R0AccountMappingField(

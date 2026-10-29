@@ -8,9 +8,7 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type RetentionPolicyMaxExtensionLengthRequestEnum = 'none' | string;
 export type RetentionPolicyMaxExtensionLengthRequest =
-  | RetentionPolicyMaxExtensionLengthRequestEnum
-  | string
-  | number;
+  RetentionPolicyMaxExtensionLengthRequestEnum | string | number;
 export function serializeRetentionPolicyMaxExtensionLengthRequestEnum(
   val: RetentionPolicyMaxExtensionLengthRequestEnum
 ): SerializedData {

@@ -469,8 +469,7 @@ export function deserializeCreateFolderLockRequestBody(
     });
   }
   const lockedOperations:
-    | undefined
-    | CreateFolderLockRequestBodyLockedOperationsField =
+    undefined | CreateFolderLockRequestBodyLockedOperationsField =
     val.locked_operations == void 0
       ? void 0
       : deserializeCreateFolderLockRequestBodyLockedOperationsField(
