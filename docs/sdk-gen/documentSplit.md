@@ -26,7 +26,10 @@ This operation is performed by calling function `createDocumentSplitV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-document-splits/).
 
-*Currently we don't have an example for calling `createDocumentSplitV2026R0` in integration tests*
+<!-- sample post_document_splits_v2026.0 -->
+```ts
+await client.documentSplit.createDocumentSplitV2026R0({ sourceFileId: file.id, destinationFolderId: folder.id, inputSource: "api" as DocumentSplitCreateRequestV2026R0InputSourceField, splitInput: new DocumentSplitCreateRequestManualV2026R0({ splitType: "manual" as DocumentSplitCreateRequestManualV2026R0SplitTypeField, splitDefinition: [{ start: 1, end: 1 } satisfies DocumentSplitPageRangeV2026R0] }), externalId: externalId } satisfies DocumentSplitCreateRequestV2026R0)
+```
 
 ### Arguments
 
@@ -54,7 +57,10 @@ This operation is performed by calling function `getDocumentSplitsV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-document-splits/).
 
-*Currently we don't have an example for calling `getDocumentSplitsV2026R0` in integration tests*
+<!-- sample get_document_splits_v2026.0 -->
+```ts
+await client.documentSplit.getDocumentSplitsV2026R0({ limit: 10 } satisfies GetDocumentSplitsV2026R0QueryParams)
+```
 
 ### Arguments
 
@@ -84,7 +90,10 @@ This operation is performed by calling function `getDocumentSplitByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-document-splits-id/).
 
-*Currently we don't have an example for calling `getDocumentSplitByIdV2026R0` in integration tests*
+<!-- sample get_document_splits_id_v2026.0 -->
+```ts
+await client.documentSplit.getDocumentSplitByIdV2026R0(createdDocumentSplit.id)
+```
 
 ### Arguments
 
