@@ -103,6 +103,7 @@ export * from './keywordSkillCard';
 export * from './legalHoldPolicyMini';
 export * from './legalHoldPolicyAssignedItem';
 export * from './legalHoldPolicyAssignmentBase';
+export * from './legalHoldPolicyAssignmentFilterField';
 export * from './metadataBase';
 export * from './metadata';
 export * from './metadatas';
