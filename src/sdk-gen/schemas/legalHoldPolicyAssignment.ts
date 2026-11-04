@@ -8,6 +8,8 @@ import { serializeLegalHoldPolicyAssignedItem } from './legalHoldPolicyAssignedI
 import { deserializeLegalHoldPolicyAssignedItem } from './legalHoldPolicyAssignedItem';
 import { serializeUserMini } from './userMini';
 import { deserializeUserMini } from './userMini';
+import { serializeLegalHoldPolicyAssignmentFilterField } from './legalHoldPolicyAssignmentFilterField';
+import { deserializeLegalHoldPolicyAssignmentFilterField } from './legalHoldPolicyAssignmentFilterField';
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
 import { LegalHoldPolicyAssignmentBaseTypeField } from './legalHoldPolicyAssignmentBase';
@@ -15,6 +17,7 @@ import { LegalHoldPolicyAssignmentBase } from './legalHoldPolicyAssignmentBase';
 import { LegalHoldPolicyMini } from './legalHoldPolicyMini';
 import { LegalHoldPolicyAssignedItem } from './legalHoldPolicyAssignedItem';
 import { UserMini } from './userMini';
+import { LegalHoldPolicyAssignmentFilterField } from './legalHoldPolicyAssignmentFilterField';
 import { BoxSdkError } from '../box/errors';
 import { DateTime } from '../internal/utils';
 import { SerializedData } from '../serialization/json';
@@ -39,6 +42,9 @@ export type LegalHoldPolicyAssignment = LegalHoldPolicyAssignmentBase & {
    * assignment is fully deleted). If null, Assignment
    * was not deleted. */
   readonly deletedAt?: DateTime;
+  /**
+   * List of metadata template field filters. Only present when `assigned_to.type` is `metadata_template`. */
+  readonly filterFields?: readonly LegalHoldPolicyAssignmentFilterField[];
 };
 export function serializeLegalHoldPolicyAssignment(
   val: LegalHoldPolicyAssignment
@@ -72,6 +78,14 @@ export function serializeLegalHoldPolicyAssignment(
         val.deletedAt == void 0
           ? val.deletedAt
           : serializeDateTime(val.deletedAt),
+      ['filter_fields']:
+        val.filterFields == void 0
+          ? val.filterFields
+          : (val.filterFields.map(function (
+              item: LegalHoldPolicyAssignmentFilterField
+            ): SerializedData {
+              return serializeLegalHoldPolicyAssignmentFilterField(item);
+            }) as readonly any[]),
     },
   };
 }
@@ -109,6 +123,23 @@ export function deserializeLegalHoldPolicyAssignment(
   }
   const deletedAt: undefined | DateTime =
     val.deleted_at == void 0 ? void 0 : deserializeDateTime(val.deleted_at);
+  if (!(val.filter_fields == void 0) && !sdIsList(val.filter_fields)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "filter_fields" of type "LegalHoldPolicyAssignment"',
+    });
+  }
+  const filterFields:
+    undefined | readonly LegalHoldPolicyAssignmentFilterField[] =
+    val.filter_fields == void 0
+      ? void 0
+      : sdIsList(val.filter_fields)
+        ? (val.filter_fields.map(function (
+            itm: SerializedData
+          ): LegalHoldPolicyAssignmentFilterField {
+            return deserializeLegalHoldPolicyAssignmentFilterField(itm);
+          }) as readonly any[])
+        : [];
   if (!(val.id == void 0) && !sdIsString(val.id)) {
     throw new BoxSdkError({
       message: 'Expecting string for "id" of type "LegalHoldPolicyAssignment"',
@@ -125,6 +156,7 @@ export function deserializeLegalHoldPolicyAssignment(
     assignedBy: assignedBy,
     assignedAt: assignedAt,
     deletedAt: deletedAt,
+    filterFields: filterFields,
     id: id,
     type: type,
   } satisfies LegalHoldPolicyAssignment;
