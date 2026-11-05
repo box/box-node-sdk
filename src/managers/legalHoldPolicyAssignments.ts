@@ -4,12 +4,15 @@ import { serializeClientError } from '../schemas/clientError';
 import { deserializeClientError } from '../schemas/clientError';
 import { serializeLegalHoldPolicyAssignment } from '../schemas/legalHoldPolicyAssignment';
 import { deserializeLegalHoldPolicyAssignment } from '../schemas/legalHoldPolicyAssignment';
+import { serializeLegalHoldPolicyAssignmentFilterField } from '../schemas/legalHoldPolicyAssignmentFilterField';
+import { deserializeLegalHoldPolicyAssignmentFilterField } from '../schemas/legalHoldPolicyAssignmentFilterField';
 import { serializeFilesOnHold } from '../schemas/filesOnHold';
 import { deserializeFilesOnHold } from '../schemas/filesOnHold';
 import { ResponseFormat } from '../networking/fetchOptions';
 import { LegalHoldPolicyAssignments } from '../schemas/legalHoldPolicyAssignments';
 import { ClientError } from '../schemas/clientError';
 import { LegalHoldPolicyAssignment } from '../schemas/legalHoldPolicyAssignment';
+import { LegalHoldPolicyAssignmentFilterField } from '../schemas/legalHoldPolicyAssignmentFilterField';
 import { FilesOnHold } from '../schemas/filesOnHold';
 import { BoxSdkError } from '../box/errors';
 import { Authentication } from '../networking/auth';
@@ -181,6 +184,7 @@ export type GetLegalHoldPolicyAssignmentsQueryParamsAssignToTypeField =
   | 'user'
   | 'ownership'
   | 'interactions'
+  | 'metadata_template'
   | string;
 export interface GetLegalHoldPolicyAssignmentsQueryParams {
   /**
@@ -238,7 +242,13 @@ export interface GetLegalHoldPolicyAssignmentsHeadersInput {
   };
 }
 export type CreateLegalHoldPolicyAssignmentRequestBodyAssignToTypeField =
-  'file' | 'file_version' | 'folder' | 'user' | 'ownership' | 'interactions';
+  | 'file'
+  | 'file_version'
+  | 'folder'
+  | 'user'
+  | 'ownership'
+  | 'interactions'
+  | 'metadata_template';
 export interface CreateLegalHoldPolicyAssignmentRequestBodyAssignToField {
   /**
    * The type of item to assign the policy to. */
@@ -255,6 +265,9 @@ export interface CreateLegalHoldPolicyAssignmentRequestBody {
   /**
    * The item to assign the policy to. */
   readonly assignTo: CreateLegalHoldPolicyAssignmentRequestBodyAssignToField;
+  /**
+   * List of metadata template field filters. Only required when `assign_to.type` is `metadata_template`. */
+  readonly filterFields?: readonly LegalHoldPolicyAssignmentFilterField[];
   readonly rawData?: SerializedData;
 }
 export class CreateLegalHoldPolicyAssignmentHeaders {
@@ -448,7 +461,7 @@ export class LegalHoldPolicyAssignmentsManager {
     };
   }
   /**
-   * Assign a legal hold to an item type of: file, file version, folder, user, ownership, or interactions.
+   * Assign a legal hold to an item type of: file, file version, folder, user, ownership, interactions, or metadata template.
    * @param {CreateLegalHoldPolicyAssignmentRequestBody} requestBody Request body of createLegalHoldPolicyAssignment method
    * @param {CreateLegalHoldPolicyAssignmentOptionalsInput} optionalsInput
    * @returns {Promise<LegalHoldPolicyAssignment>}
@@ -679,6 +692,9 @@ export function deserializeGetLegalHoldPolicyAssignmentsQueryParamsAssignToTypeF
   if (val == 'interactions') {
     return val;
   }
+  if (val == 'metadata_template') {
+    return val;
+  }
   if (sdIsString(val)) {
     return val;
   }
@@ -711,6 +727,9 @@ export function deserializeCreateLegalHoldPolicyAssignmentRequestBodyAssignToTyp
     return val;
   }
   if (val == 'interactions') {
+    return val;
+  }
+  if (val == 'metadata_template') {
     return val;
   }
   throw new BoxSdkError({
@@ -775,6 +794,14 @@ export function serializeCreateLegalHoldPolicyAssignmentRequestBody(
       serializeCreateLegalHoldPolicyAssignmentRequestBodyAssignToField(
         val.assignTo,
       ),
+    ['filter_fields']:
+      val.filterFields == void 0
+        ? val.filterFields
+        : (val.filterFields.map(function (
+            item: LegalHoldPolicyAssignmentFilterField,
+          ): SerializedData {
+            return serializeLegalHoldPolicyAssignmentFilterField(item);
+          }) as readonly any[]),
   };
 }
 export function deserializeCreateLegalHoldPolicyAssignmentRequestBody(
@@ -809,8 +836,26 @@ export function deserializeCreateLegalHoldPolicyAssignmentRequestBody(
     deserializeCreateLegalHoldPolicyAssignmentRequestBodyAssignToField(
       val.assign_to,
     );
+  if (!(val.filter_fields == void 0) && !sdIsList(val.filter_fields)) {
+    throw new BoxSdkError({
+      message:
+        'Expecting array for "filter_fields" of type "CreateLegalHoldPolicyAssignmentRequestBody"',
+    });
+  }
+  const filterFields:
+    undefined | readonly LegalHoldPolicyAssignmentFilterField[] =
+    val.filter_fields == void 0
+      ? void 0
+      : sdIsList(val.filter_fields)
+        ? (val.filter_fields.map(function (
+            itm: SerializedData,
+          ): LegalHoldPolicyAssignmentFilterField {
+            return deserializeLegalHoldPolicyAssignmentFilterField(itm);
+          }) as readonly any[])
+        : [];
   return {
     policyId: policyId,
     assignTo: assignTo,
+    filterFields: filterFields,
   } satisfies CreateLegalHoldPolicyAssignmentRequestBody;
 }

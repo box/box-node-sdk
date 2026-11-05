@@ -50,7 +50,11 @@ This operation is performed by calling function `getShuttleSystemsV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-systems/).
 
-_Currently we don't have an example for calling `getShuttleSystemsV2026R0` in integration tests_
+<!-- sample get_shuttle_systems_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleSystemsV2026R0();
+```
 
 ### Arguments
 
@@ -78,7 +82,14 @@ This operation is performed by calling function `createShuttleSystemV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-systems/).
 
-_Currently we don't have an example for calling `createShuttleSystemV2026R0` in integration tests_
+<!-- sample post_shuttle_systems_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleSystemV2026R0({
+  name: systemName,
+  systemType: 'windows' as ShuttleSystemCreateRequestV2026R0SystemTypeField,
+} satisfies ShuttleSystemCreateRequestV2026R0Input);
+```
 
 ### Arguments
 
@@ -102,7 +113,11 @@ This operation is performed by calling function `getShuttleSystemByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-systems-id/).
 
-_Currently we don't have an example for calling `getShuttleSystemByIdV2026R0` in integration tests_
+<!-- sample get_shuttle_systems_id_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleSystemByIdV2026R0(createdSystem.id);
+```
 
 ### Arguments
 
@@ -126,7 +141,13 @@ This operation is performed by calling function `updateShuttleSystemByIdV2026R0`
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/put-shuttle-systems-id/).
 
-_Currently we don't have an example for calling `updateShuttleSystemByIdV2026R0` in integration tests_
+<!-- sample put_shuttle_systems_id_v2026.0 -->
+
+```ts
+await client.shuttle.updateShuttleSystemByIdV2026R0(createdSystem.id, {
+  name: updatedSystemName,
+} satisfies ShuttleSystemUpdateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -152,7 +173,11 @@ This operation is performed by calling function `deleteShuttleSystemByIdV2026R0`
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/delete-shuttle-systems-id/).
 
-_Currently we don't have an example for calling `deleteShuttleSystemByIdV2026R0` in integration tests_
+<!-- sample delete_shuttle_systems_id_v2026.0 -->
+
+```ts
+await client.shuttle.deleteShuttleSystemByIdV2026R0(createdSystem.id);
+```
 
 ### Arguments
 
@@ -178,7 +203,13 @@ This operation is performed by calling function `createShuttleSystemIssueRegistr
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-systems-id-issue-registration-token/).
 
-_Currently we don't have an example for calling `createShuttleSystemIssueRegistrationTokenV2026R0` in integration tests_
+<!-- sample post_shuttle_systems_id_issue_registration_token_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleSystemIssueRegistrationTokenV2026R0(
+  createdSystem.id,
+);
+```
 
 ### Arguments
 
@@ -202,7 +233,11 @@ This operation is performed by calling function `getShuttleJobsV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-jobs/).
 
-_Currently we don't have an example for calling `getShuttleJobsV2026R0` in integration tests_
+<!-- sample get_shuttle_jobs_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleJobsV2026R0();
+```
 
 ### Arguments
 
@@ -229,7 +264,15 @@ This operation is performed by calling function `createShuttleJobV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-jobs/).
 
-_Currently we don't have an example for calling `createShuttleJobV2026R0` in integration tests_
+<!-- sample post_shuttle_jobs_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleJobV2026R0({
+  name: getUuid(),
+  jobType: 'transfer' as ShuttleJobCreateRequestV2026R0JobTypeField,
+  sourceSystemId: resourceId,
+} satisfies ShuttleJobCreateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -253,7 +296,11 @@ This operation is performed by calling function `getShuttleJobByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-jobs-id/).
 
-_Currently we don't have an example for calling `getShuttleJobByIdV2026R0` in integration tests_
+<!-- sample get_shuttle_jobs_id_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleJobByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -277,7 +324,13 @@ This operation is performed by calling function `updateShuttleJobByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/put-shuttle-jobs-id/).
 
-_Currently we don't have an example for calling `updateShuttleJobByIdV2026R0` in integration tests_
+<!-- sample put_shuttle_jobs_id_v2026.0 -->
+
+```ts
+await client.shuttle.updateShuttleJobByIdV2026R0(resourceId, {
+  name: getUuid(),
+} satisfies ShuttleJobUpdateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -303,7 +356,11 @@ This operation is performed by calling function `deleteShuttleJobByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/delete-shuttle-jobs-id/).
 
-_Currently we don't have an example for calling `deleteShuttleJobByIdV2026R0` in integration tests_
+<!-- sample delete_shuttle_jobs_id_v2026.0 -->
+
+```ts
+await client.shuttle.deleteShuttleJobByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -327,7 +384,11 @@ This operation is performed by calling function `createShuttleJobStartV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-jobs-id-start/).
 
-_Currently we don't have an example for calling `createShuttleJobStartV2026R0` in integration tests_
+<!-- sample post_shuttle_jobs_id_start_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleJobStartV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -352,7 +413,11 @@ This operation is performed by calling function `createShuttleJobStopV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-jobs-id-stop/).
 
-_Currently we don't have an example for calling `createShuttleJobStopV2026R0` in integration tests_
+<!-- sample post_shuttle_jobs_id_stop_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleJobStopV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -376,7 +441,11 @@ This operation is performed by calling function `createShuttleJobPrepareMigratio
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-jobs-id-prepare-migration/).
 
-_Currently we don't have an example for calling `createShuttleJobPrepareMigrationV2026R0` in integration tests_
+<!-- sample post_shuttle_jobs_id_prepare_migration_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleJobPrepareMigrationV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -400,7 +469,13 @@ This operation is performed by calling function `getShuttleRunsV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-runs/).
 
-_Currently we don't have an example for calling `getShuttleRunsV2026R0` in integration tests_
+<!-- sample get_shuttle_runs_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleRunsV2026R0({
+  jobId: resourceId,
+} satisfies GetShuttleRunsV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -424,7 +499,11 @@ This operation is performed by calling function `getShuttleRunByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-runs-id/).
 
-_Currently we don't have an example for calling `getShuttleRunByIdV2026R0` in integration tests_
+<!-- sample get_shuttle_runs_id_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleRunByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -448,7 +527,13 @@ This operation is performed by calling function `getShuttleJobSchedulesV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-job-schedules/).
 
-_Currently we don't have an example for calling `getShuttleJobSchedulesV2026R0` in integration tests_
+<!-- sample get_shuttle_job_schedules_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleJobSchedulesV2026R0({
+  jobId: resourceId,
+} satisfies GetShuttleJobSchedulesV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -474,7 +559,21 @@ This operation is performed by calling function `createShuttleJobScheduleV2026R0
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-job-schedules/).
 
-_Currently we don't have an example for calling `createShuttleJobScheduleV2026R0` in integration tests_
+<!-- sample post_shuttle_job_schedules_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleJobScheduleV2026R0({
+  jobId: resourceId,
+  runMode: 'transfer' as ShuttleJobScheduleCreateRequestV2026R0RunModeField,
+  state: 'paused' as ShuttleJobScheduleCreateRequestV2026R0StateField,
+  trigger: new ShuttleJobScheduleTriggerByTimeV2026R0({
+    type: 'by_time' as ShuttleJobScheduleTriggerByTimeV2026R0TypeField,
+    startAt: '2030-01-01T09:00:00',
+    timeZone: 'America/Los_Angeles',
+    repeat: 'daily' as ShuttleJobScheduleTriggerByTimeV2026R0RepeatField,
+  }),
+} satisfies ShuttleJobScheduleCreateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -497,7 +596,11 @@ This operation is performed by calling function `getShuttleJobScheduleByIdV2026R
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-job-schedules-id/).
 
-_Currently we don't have an example for calling `getShuttleJobScheduleByIdV2026R0` in integration tests_
+<!-- sample get_shuttle_job_schedules_id_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleJobScheduleByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -522,7 +625,13 @@ This operation is performed by calling function `updateShuttleJobScheduleByIdV20
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/put-shuttle-job-schedules-id/).
 
-_Currently we don't have an example for calling `updateShuttleJobScheduleByIdV2026R0` in integration tests_
+<!-- sample put_shuttle_job_schedules_id_v2026.0 -->
+
+```ts
+await client.shuttle.updateShuttleJobScheduleByIdV2026R0(resourceId, {
+  runMode: 'simulation' as ShuttleJobScheduleUpdateRequestV2026R0RunModeField,
+} satisfies ShuttleJobScheduleUpdateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -548,7 +657,11 @@ This operation is performed by calling function `deleteShuttleJobScheduleByIdV20
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/delete-shuttle-job-schedules-id/).
 
-_Currently we don't have an example for calling `deleteShuttleJobScheduleByIdV2026R0` in integration tests_
+<!-- sample delete_shuttle_job_schedules_id_v2026.0 -->
+
+```ts
+await client.shuttle.deleteShuttleJobScheduleByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -573,7 +686,13 @@ This operation is performed by calling function `getShuttlePathMappingsV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-path-mappings/).
 
-_Currently we don't have an example for calling `getShuttlePathMappingsV2026R0` in integration tests_
+<!-- sample get_shuttle_path_mappings_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttlePathMappingsV2026R0({
+  jobId: resourceId,
+} satisfies GetShuttlePathMappingsV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -597,7 +716,20 @@ This operation is performed by calling function `createShuttlePathMappingV2026R0
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-path-mappings/).
 
-_Currently we don't have an example for calling `createShuttlePathMappingV2026R0` in integration tests_
+<!-- sample post_shuttle_path_mappings_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttlePathMappingV2026R0({
+  jobId: resourceId,
+  source: new ShuttlePathMappingAccountLocationInputV2026R0({
+    type: 'account' as ShuttlePathMappingAccountLocationInputV2026R0TypeField,
+    path: '/finance',
+    account: {
+      email: 'user@example.com',
+    } satisfies ShuttlePathMappingAccountInputV2026R0,
+  }),
+} satisfies ShuttlePathMappingCreateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -621,7 +753,11 @@ This operation is performed by calling function `getShuttlePathMappingByIdV2026R
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-path-mappings-id/).
 
-_Currently we don't have an example for calling `getShuttlePathMappingByIdV2026R0` in integration tests_
+<!-- sample get_shuttle_path_mappings_id_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttlePathMappingByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -646,7 +782,13 @@ This operation is performed by calling function `updateShuttlePathMappingByIdV20
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/put-shuttle-path-mappings-id/).
 
-_Currently we don't have an example for calling `updateShuttlePathMappingByIdV2026R0` in integration tests_
+<!-- sample put_shuttle_path_mappings_id_v2026.0 -->
+
+```ts
+await client.shuttle.updateShuttlePathMappingByIdV2026R0(resourceId, {
+  isPathSkipped: true,
+} satisfies ShuttlePathMappingUpdateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -672,7 +814,11 @@ This operation is performed by calling function `deleteShuttlePathMappingByIdV20
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/delete-shuttle-path-mappings-id/).
 
-_Currently we don't have an example for calling `deleteShuttlePathMappingByIdV2026R0` in integration tests_
+<!-- sample delete_shuttle_path_mappings_id_v2026.0 -->
+
+```ts
+await client.shuttle.deleteShuttlePathMappingByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -710,7 +856,14 @@ This operation is performed by calling function `createShuttlePathMappingImportV
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-path-mapping-imports/).
 
-_Currently we don't have an example for calling `createShuttlePathMappingImportV2026R0` in integration tests_
+<!-- sample post_shuttle_path_mapping_imports_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttlePathMappingImportV2026R0({
+  jobId: resourceId,
+  fileId: resourceId,
+} satisfies ShuttlePathMappingImportCreateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -767,7 +920,14 @@ This operation is performed by calling function `createShuttleSubjectMappingImpo
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-subject-mapping-imports/).
 
-_Currently we don't have an example for calling `createShuttleSubjectMappingImportV2026R0` in integration tests_
+<!-- sample post_shuttle_subject_mapping_imports_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleSubjectMappingImportV2026R0({
+  jobId: resourceId,
+  fileId: resourceId,
+} satisfies ShuttleSubjectMappingImportCreateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -796,7 +956,13 @@ This operation is performed by calling function `getShuttleSubjectMappingsV2026R
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-subject-mappings/).
 
-_Currently we don't have an example for calling `getShuttleSubjectMappingsV2026R0` in integration tests_
+<!-- sample get_shuttle_subject_mappings_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleSubjectMappingsV2026R0({
+  jobId: resourceId,
+} satisfies GetShuttleSubjectMappingsV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -820,7 +986,14 @@ This operation is performed by calling function `createShuttleSubjectMappingV202
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-subject-mappings/).
 
-_Currently we don't have an example for calling `createShuttleSubjectMappingV2026R0` in integration tests_
+<!-- sample post_shuttle_subject_mappings_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleSubjectMappingV2026R0({
+  jobId: resourceId,
+  discoveredSubjectId: resourceId,
+} satisfies ShuttleSubjectMappingCreateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -844,7 +1017,11 @@ This operation is performed by calling function `getShuttleSubjectMappingByIdV20
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-subject-mappings-id/).
 
-_Currently we don't have an example for calling `getShuttleSubjectMappingByIdV2026R0` in integration tests_
+<!-- sample get_shuttle_subject_mappings_id_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleSubjectMappingByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -869,7 +1046,13 @@ This operation is performed by calling function `updateShuttleSubjectMappingById
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/put-shuttle-subject-mappings-id/).
 
-_Currently we don't have an example for calling `updateShuttleSubjectMappingByIdV2026R0` in integration tests_
+<!-- sample put_shuttle_subject_mappings_id_v2026.0 -->
+
+```ts
+await client.shuttle.updateShuttleSubjectMappingByIdV2026R0(resourceId, {
+  isSubjectSkipped: true,
+} satisfies ShuttleSubjectMappingUpdateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -894,7 +1077,11 @@ This operation is performed by calling function `deleteShuttleSubjectMappingById
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/delete-shuttle-subject-mappings-id/).
 
-_Currently we don't have an example for calling `deleteShuttleSubjectMappingByIdV2026R0` in integration tests_
+<!-- sample delete_shuttle_subject_mappings_id_v2026.0 -->
+
+```ts
+await client.shuttle.deleteShuttleSubjectMappingByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
@@ -919,7 +1106,13 @@ This operation is performed by calling function `getShuttleDiscoveredSubjectsV20
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-discovered-subjects/).
 
-_Currently we don't have an example for calling `getShuttleDiscoveredSubjectsV2026R0` in integration tests_
+<!-- sample get_shuttle_discovered_subjects_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleDiscoveredSubjectsV2026R0({
+  jobId: resourceId,
+} satisfies GetShuttleDiscoveredSubjectsV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -947,7 +1140,14 @@ This operation is performed by calling function `getShuttlePathEntriesV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-path-entries/).
 
-_Currently we don't have an example for calling `getShuttlePathEntriesV2026R0` in integration tests_
+<!-- sample get_shuttle_path_entries_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttlePathEntriesV2026R0({
+  jobId: resourceId,
+  side: 'source' as GetShuttlePathEntriesV2026R0QueryParamsSideField,
+} satisfies GetShuttlePathEntriesV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -972,7 +1172,13 @@ This operation is performed by calling function `getShuttleMappingErrorsV2026R0`
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-mapping-errors/).
 
-_Currently we don't have an example for calling `getShuttleMappingErrorsV2026R0` in integration tests_
+<!-- sample get_shuttle_mapping_errors_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleMappingErrorsV2026R0({
+  jobId: resourceId,
+} satisfies GetShuttleMappingErrorsV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -996,7 +1202,13 @@ This operation is performed by calling function `getShuttleReportsV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-reports/).
 
-_Currently we don't have an example for calling `getShuttleReportsV2026R0` in integration tests_
+<!-- sample get_shuttle_reports_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleReportsV2026R0({
+  runId: resourceId,
+} satisfies GetShuttleReportsV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -1024,7 +1236,15 @@ This operation is performed by calling function `createShuttleReportV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/post-shuttle-reports/).
 
-_Currently we don't have an example for calling `createShuttleReportV2026R0` in integration tests_
+<!-- sample post_shuttle_reports_v2026.0 -->
+
+```ts
+await client.shuttle.createShuttleReportV2026R0({
+  runId: resourceId,
+  format: 'csv' as ShuttleReportCreateRequestV2026R0FormatField,
+  sections: ['summary'],
+} satisfies ShuttleReportCreateRequestV2026R0);
+```
 
 ### Arguments
 
@@ -1052,7 +1272,11 @@ This operation is performed by calling function `getShuttleReportByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-shuttle-reports-id/).
 
-_Currently we don't have an example for calling `getShuttleReportByIdV2026R0` in integration tests_
+<!-- sample get_shuttle_reports_id_v2026.0 -->
+
+```ts
+await client.shuttle.getShuttleReportByIdV2026R0(resourceId);
+```
 
 ### Arguments
 
