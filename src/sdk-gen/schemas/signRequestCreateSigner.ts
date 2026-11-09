@@ -1,3 +1,15 @@
+import { serializeSignRequestSignerVerificationMethodLogin } from './signRequestSignerVerificationMethodLogin';
+import { deserializeSignRequestSignerVerificationMethodLogin } from './signRequestSignerVerificationMethodLogin';
+import { serializeSignRequestSignerVerificationMethodPhoneSms } from './signRequestSignerVerificationMethodPhoneSms';
+import { deserializeSignRequestSignerVerificationMethodPhoneSms } from './signRequestSignerVerificationMethodPhoneSms';
+import { serializeSignRequestSignerVerificationMethodCacPiv } from './signRequestSignerVerificationMethodCacPiv';
+import { deserializeSignRequestSignerVerificationMethodCacPiv } from './signRequestSignerVerificationMethodCacPiv';
+import { serializeSignRequestSignerVerificationMethod } from './signRequestSignerVerificationMethod';
+import { deserializeSignRequestSignerVerificationMethod } from './signRequestSignerVerificationMethod';
+import { SignRequestSignerVerificationMethodLogin } from './signRequestSignerVerificationMethodLogin';
+import { SignRequestSignerVerificationMethodPhoneSms } from './signRequestSignerVerificationMethodPhoneSms';
+import { SignRequestSignerVerificationMethodCacPiv } from './signRequestSignerVerificationMethodCacPiv';
+import { SignRequestSignerVerificationMethod } from './signRequestSignerVerificationMethod';
 import { BoxSdkError } from '../box/errors';
 import { SerializedData } from '../serialization/json';
 import { sdIsEmpty } from '../serialization/json';
@@ -77,6 +89,9 @@ export interface SignRequestCreateSigner {
    * The language of the user, formatted in modified version of the
    * [ISO 639-1](https://developer.box.com/guides/api-calls/language-codes) format. */
   readonly language?: string | null;
+  /**
+   * The verification method for the signer. */
+  readonly verificationMethod?: SignRequestSignerVerificationMethod;
   readonly rawData?: SerializedData;
 }
 export function serializeSignRequestCreateSignerRoleField(
@@ -123,6 +138,10 @@ export function serializeSignRequestCreateSigner(
     ['signer_group_id']: val.signerGroupId,
     ['suppress_notifications']: val.suppressNotifications,
     ['language']: val.language,
+    ['verification_method']:
+      val.verificationMethod == void 0
+        ? val.verificationMethod
+        : serializeSignRequestSignerVerificationMethod(val.verificationMethod),
   };
 }
 export function deserializeSignRequestCreateSigner(
@@ -245,6 +264,10 @@ export function deserializeSignRequestCreateSigner(
   }
   const language: undefined | string =
     val.language == void 0 ? void 0 : val.language;
+  const verificationMethod: SignRequestSignerVerificationMethod | undefined =
+    val.verification_method == void 0
+      ? void 0
+      : deserializeSignRequestSignerVerificationMethod(val.verification_method);
   return {
     email: email,
     role: role,
@@ -259,5 +282,6 @@ export function deserializeSignRequestCreateSigner(
     signerGroupId: signerGroupId,
     suppressNotifications: suppressNotifications,
     language: language,
+    verificationMethod: verificationMethod,
   } satisfies SignRequestCreateSigner;
 }
