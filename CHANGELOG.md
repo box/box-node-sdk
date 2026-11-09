@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.18.0](https://github.com/box/box-node-sdk/compare/v10.17.0...v10.18.0) (2026-11-09)
+
+
+### Bug Fixes
+
+* escape `repeat` keyword in Swift field names (box/box-codegen[#998](https://github.com/box/box-node-sdk/issues/998)) ([ac03862](https://github.com/box/box-node-sdk/commit/ac03862e2f08b951662912afabaa47b6a38b8d5e))
+
+
+### New Features and Enhancements
+
+* add `DocumentSplitManager` and document split APIs + OTP for shared links (box/box-openapi[#621](https://github.com/box/box-node-sdk/issues/621)) ([ab81af7](https://github.com/box/box-node-sdk/commit/ab81af752a9d65077590127c3987c7e9ef9fdfbb))
+* add `metadata_template` support and `filter_fields` to legal hold assignments (box/box-openapi[#625](https://github.com/box/box-node-sdk/issues/625)) ([a9377d9](https://github.com/box/box-node-sdk/commit/a9377d9b4bd953fc2c8d0d5c293b2163ea7701e4))
+* add `ShuttleManager`, shuttle schemas, and docs (box/box-openapi[#622](https://github.com/box/box-node-sdk/issues/622)) ([0b25fda](https://github.com/box/box-node-sdk/commit/0b25fdad5455c60dce857dc4d9badd9fea23b724))
+* add `verificationMethod` for Sign Request signer (box/box-openapi[#626](https://github.com/box/box-node-sdk/issues/626)) ([07afdc9](https://github.com/box/box-node-sdk/commit/07afdc9a49b6c35773069514f76870eb178d392a))
+* update chunked upload to support `sha512` and add `external_id` to DocGen (box/box-openapi[#620](https://github.com/box/box-node-sdk/issues/620)) ([52ba9cc](https://github.com/box/box-node-sdk/commit/52ba9cc6c2b49cfb6953120dd3e07dca2ad0c48b))
+
 ## [10.17.0](https://github.com/box/box-node-sdk/compare/v10.16.0...v10.17.0) (2026-10-01)
 
 ### ⚠ BREAKING CHANGES
