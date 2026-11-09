@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.19.0](https://github.com/box/box-node-sdk/compare/v4.18.0...v4.19.0) (2026-11-09)
+
+
+### New Features and Enhancements
+
+* **boxsdkgen:** add `DocumentSplitManager` and `document_splits` SDK APIs (box/box-openapi[#621](https://github.com/box/box-node-sdk/issues/621)) ([783d258](https://github.com/box/box-node-sdk/commit/783d258757f1d97687031591b2ab9a43f76bafd2))
+* **boxsdkgen:** add `metadata_template` assign target and `filterFields` support to legal hold assignments (box/box-openapi[#625](https://github.com/box/box-node-sdk/issues/625)) ([646f895](https://github.com/box/box-node-sdk/commit/646f895ecf2ccf8b1e7eb6c5b9cb14b8de666ac4))
+* **boxsdkgen:** add `ShuttleManager` and generate shuttle API models/docs (box/box-openapi[#622](https://github.com/box/box-node-sdk/issues/622)) ([2d317ea](https://github.com/box/box-node-sdk/commit/2d317ea56a10a0a9ec860ee815490e64e946358d))
+* **boxsdkgen:** add `verificationMethod` union to BoxSign signer schemas (box/box-openapi[#626](https://github.com/box/box-node-sdk/issues/626)) ([04713d4](https://github.com/box/box-node-sdk/commit/04713d4803e96bbd793637d5514be2d32dd4a093))
+
 ## [4.18.0](https://github.com/box/box-node-sdk/compare/v4.17.0...v4.18.0) (2026-10-15)
 
 
