@@ -1,5 +1,13 @@
 import { serializeSignRequestCreateSignerRoleField } from './signRequestCreateSigner';
 import { deserializeSignRequestCreateSignerRoleField } from './signRequestCreateSigner';
+import { serializeSignRequestSignerVerificationMethodLogin } from './signRequestSignerVerificationMethodLogin';
+import { deserializeSignRequestSignerVerificationMethodLogin } from './signRequestSignerVerificationMethodLogin';
+import { serializeSignRequestSignerVerificationMethodPhoneSms } from './signRequestSignerVerificationMethodPhoneSms';
+import { deserializeSignRequestSignerVerificationMethodPhoneSms } from './signRequestSignerVerificationMethodPhoneSms';
+import { serializeSignRequestSignerVerificationMethodCacPiv } from './signRequestSignerVerificationMethodCacPiv';
+import { deserializeSignRequestSignerVerificationMethodCacPiv } from './signRequestSignerVerificationMethodCacPiv';
+import { serializeSignRequestSignerVerificationMethod } from './signRequestSignerVerificationMethod';
+import { deserializeSignRequestSignerVerificationMethod } from './signRequestSignerVerificationMethod';
 import { serializeSignRequestCreateSigner } from './signRequestCreateSigner';
 import { deserializeSignRequestCreateSigner } from './signRequestCreateSigner';
 import { serializeSignRequestSignerInput } from './signRequestSignerInput';
@@ -9,6 +17,10 @@ import { deserializeSignRequestSignerAttachment } from './signRequestSignerAttac
 import { serializeDateTime } from '../internal/utils';
 import { deserializeDateTime } from '../internal/utils';
 import { SignRequestCreateSignerRoleField } from './signRequestCreateSigner';
+import { SignRequestSignerVerificationMethodLogin } from './signRequestSignerVerificationMethodLogin';
+import { SignRequestSignerVerificationMethodPhoneSms } from './signRequestSignerVerificationMethodPhoneSms';
+import { SignRequestSignerVerificationMethodCacPiv } from './signRequestSignerVerificationMethodCacPiv';
+import { SignRequestSignerVerificationMethod } from './signRequestSignerVerificationMethod';
 import { SignRequestCreateSigner } from './signRequestCreateSigner';
 import { SignRequestSignerInput } from './signRequestSignerInput';
 import { SignRequestSignerAttachment } from './signRequestSignerAttachment';
@@ -343,6 +355,10 @@ export function deserializeSignRequestSigner(
   }
   const language: undefined | string =
     val.language == void 0 ? void 0 : val.language;
+  const verificationMethod: SignRequestSignerVerificationMethod | undefined =
+    val.verification_method == void 0
+      ? void 0
+      : deserializeSignRequestSignerVerificationMethod(val.verification_method);
   return {
     hasViewedDocument: hasViewedDocument,
     signerDecision: signerDecision,
@@ -363,5 +379,6 @@ export function deserializeSignRequestSigner(
     signerGroupId: signerGroupId,
     suppressNotifications: suppressNotifications,
     language: language,
+    verificationMethod: verificationMethod,
   } satisfies SignRequestSigner;
 }

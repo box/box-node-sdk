@@ -1,6 +1,18 @@
+import { serializeTemplateSignerVerificationMethodLogin } from './templateSignerVerificationMethodLogin';
+import { deserializeTemplateSignerVerificationMethodLogin } from './templateSignerVerificationMethodLogin';
+import { serializeTemplateSignerVerificationMethodPhoneSms } from './templateSignerVerificationMethodPhoneSms';
+import { deserializeTemplateSignerVerificationMethodPhoneSms } from './templateSignerVerificationMethodPhoneSms';
+import { serializeTemplateSignerVerificationMethodCacPiv } from './templateSignerVerificationMethodCacPiv';
+import { deserializeTemplateSignerVerificationMethodCacPiv } from './templateSignerVerificationMethodCacPiv';
 import { serializeTemplateSignerInput } from './templateSignerInput';
 import { deserializeTemplateSignerInput } from './templateSignerInput';
+import { serializeTemplateSignerVerificationMethod } from './templateSignerVerificationMethod';
+import { deserializeTemplateSignerVerificationMethod } from './templateSignerVerificationMethod';
+import { TemplateSignerVerificationMethodLogin } from './templateSignerVerificationMethodLogin';
+import { TemplateSignerVerificationMethodPhoneSms } from './templateSignerVerificationMethodPhoneSms';
+import { TemplateSignerVerificationMethodCacPiv } from './templateSignerVerificationMethodCacPiv';
 import { TemplateSignerInput } from './templateSignerInput';
+import { TemplateSignerVerificationMethod } from './templateSignerVerificationMethod';
 import { BoxSdkError } from '../box/errors';
 import { SerializedData } from '../serialization/json';
 import { sdIsEmpty } from '../serialization/json';
@@ -53,6 +65,9 @@ export interface TemplateSigner {
   /**
    * If true, the signer is required to login to access the document. */
   readonly loginRequired?: boolean | null;
+  /**
+   * The verification method for the signer. */
+  readonly verificationMethod?: TemplateSignerVerificationMethod;
   readonly rawData?: SerializedData;
 }
 export function serializeTemplateSignerRoleField(
@@ -100,6 +115,10 @@ export function serializeTemplateSigner(val: TemplateSigner): SerializedData {
     ['is_password_required']: val.isPasswordRequired,
     ['is_phone_number_required']: val.isPhoneNumberRequired,
     ['login_required']: val.loginRequired,
+    ['verification_method']:
+      val.verificationMethod == void 0
+        ? val.verificationMethod
+        : serializeTemplateSignerVerificationMethod(val.verificationMethod),
   };
 }
 export function deserializeTemplateSigner(val: SerializedData): TemplateSigner {
@@ -193,6 +212,10 @@ export function deserializeTemplateSigner(val: SerializedData): TemplateSigner {
   }
   const loginRequired: undefined | boolean =
     val.login_required == void 0 ? void 0 : val.login_required;
+  const verificationMethod: TemplateSignerVerificationMethod | undefined =
+    val.verification_method == void 0
+      ? void 0
+      : deserializeTemplateSignerVerificationMethod(val.verification_method);
   return {
     inputs: inputs,
     email: email,
@@ -205,5 +228,6 @@ export function deserializeTemplateSigner(val: SerializedData): TemplateSigner {
     isPasswordRequired: isPasswordRequired,
     isPhoneNumberRequired: isPhoneNumberRequired,
     loginRequired: loginRequired,
+    verificationMethod: verificationMethod,
   } satisfies TemplateSigner;
 }
