@@ -39,6 +39,9 @@ export interface LegalHoldPolicyAssignmentCountsField {
   /**
    * The number of users this policy is applied to with the `interactions` type assignment. */
   readonly interactions?: number;
+  /**
+   * The number of metadata templates this policy is applied to. */
+  readonly metadataTemplate?: number;
   readonly rawData?: SerializedData;
 }
 export class LegalHoldPolicy extends LegalHoldPolicyMini {
@@ -127,6 +130,7 @@ export function serializeLegalHoldPolicyAssignmentCountsField(
     ['file_version']: val.fileVersion,
     ['ownership']: val.ownership,
     ['interactions']: val.interactions,
+    ['metadata_template']: val.metadataTemplate,
   };
 }
 export function deserializeLegalHoldPolicyAssignmentCountsField(
@@ -182,6 +186,17 @@ export function deserializeLegalHoldPolicyAssignmentCountsField(
   }
   const interactions: undefined | number =
     val.interactions == void 0 ? void 0 : val.interactions;
+  if (
+    !(val.metadata_template == void 0) &&
+    !sdIsNumber(val.metadata_template)
+  ) {
+    throw new BoxSdkError({
+      message:
+        'Expecting number for "metadata_template" of type "LegalHoldPolicyAssignmentCountsField"',
+    });
+  }
+  const metadataTemplate: undefined | number =
+    val.metadata_template == void 0 ? void 0 : val.metadata_template;
   return {
     user: user,
     folder: folder,
@@ -189,6 +204,7 @@ export function deserializeLegalHoldPolicyAssignmentCountsField(
     fileVersion: fileVersion,
     ownership: ownership,
     interactions: interactions,
+    metadataTemplate: metadataTemplate,
   } satisfies LegalHoldPolicyAssignmentCountsField;
 }
 export function serializeLegalHoldPolicy(val: LegalHoldPolicy): SerializedData {
