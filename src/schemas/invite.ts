@@ -47,6 +47,15 @@ export class Invite {
   /**
    * When the invite was modified. */
   readonly modifiedAt?: DateTime;
+  /**
+   * The date and time when the user is added to the enterprise
+   * automatically, or `null` if the user has to accept the invite. */
+  readonly autoRollInAt?: DateTime | null;
+  /**
+   * Whether the user is added to the enterprise automatically, without
+   * having to accept the invite. When `true`, `auto_roll_in_at` contains
+   * the date and time of the roll-in. */
+  readonly isAutoRollIn?: boolean;
   readonly rawData?: SerializedData;
   constructor(fields: Omit<Invite, 'type'> & Partial<Pick<Invite, 'type'>>) {
     if (fields.id !== undefined) {
@@ -72,6 +81,12 @@ export class Invite {
     }
     if (fields.modifiedAt !== undefined) {
       this.modifiedAt = fields.modifiedAt;
+    }
+    if (fields.autoRollInAt !== undefined) {
+      this.autoRollInAt = fields.autoRollInAt;
+    }
+    if (fields.isAutoRollIn !== undefined) {
+      this.isAutoRollIn = fields.isAutoRollIn;
     }
     if (fields.rawData !== undefined) {
       this.rawData = fields.rawData;
@@ -99,6 +114,15 @@ export interface InviteInput {
   /**
    * When the invite was modified. */
   readonly modifiedAt?: DateTime;
+  /**
+   * The date and time when the user is added to the enterprise
+   * automatically, or `null` if the user has to accept the invite. */
+  readonly autoRollInAt?: DateTime | null;
+  /**
+   * Whether the user is added to the enterprise automatically, without
+   * having to accept the invite. When `true`, `auto_roll_in_at` contains
+   * the date and time of the roll-in. */
+  readonly isAutoRollIn?: boolean;
   readonly rawData?: SerializedData;
 }
 export function serializeInviteTypeField(val: InviteTypeField): SerializedData {
@@ -188,6 +212,11 @@ export function serializeInvite(val: Invite): SerializedData {
       val.modifiedAt == void 0
         ? val.modifiedAt
         : serializeDateTime(val.modifiedAt),
+    ['auto_roll_in_at']:
+      val.autoRollInAt == void 0
+        ? val.autoRollInAt
+        : serializeDateTime(val.autoRollInAt),
+    ['is_auto_roll_in']: val.isAutoRollIn,
   };
 }
 export function deserializeInvite(val: SerializedData): Invite {
@@ -241,6 +270,22 @@ export function deserializeInvite(val: SerializedData): Invite {
   }
   const modifiedAt: undefined | DateTime =
     val.modified_at == void 0 ? void 0 : deserializeDateTime(val.modified_at);
+  if (!(val.auto_roll_in_at == void 0) && !sdIsString(val.auto_roll_in_at)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "auto_roll_in_at" of type "Invite"',
+    });
+  }
+  const autoRollInAt: undefined | DateTime =
+    val.auto_roll_in_at == void 0
+      ? void 0
+      : deserializeDateTime(val.auto_roll_in_at);
+  if (!(val.is_auto_roll_in == void 0) && !sdIsBoolean(val.is_auto_roll_in)) {
+    throw new BoxSdkError({
+      message: 'Expecting boolean for "is_auto_roll_in" of type "Invite"',
+    });
+  }
+  const isAutoRollIn: undefined | boolean =
+    val.is_auto_roll_in == void 0 ? void 0 : val.is_auto_roll_in;
   return {
     id: id,
     type: type,
@@ -250,6 +295,8 @@ export function deserializeInvite(val: SerializedData): Invite {
     status: status,
     createdAt: createdAt,
     modifiedAt: modifiedAt,
+    autoRollInAt: autoRollInAt,
+    isAutoRollIn: isAutoRollIn,
   } satisfies Invite;
 }
 export function serializeInviteInput(val: InviteInput): SerializedData {
@@ -278,6 +325,11 @@ export function serializeInviteInput(val: InviteInput): SerializedData {
       val.modifiedAt == void 0
         ? val.modifiedAt
         : serializeDateTime(val.modifiedAt),
+    ['auto_roll_in_at']:
+      val.autoRollInAt == void 0
+        ? val.autoRollInAt
+        : serializeDateTime(val.autoRollInAt),
+    ['is_auto_roll_in']: val.isAutoRollIn,
   };
 }
 export function deserializeInviteInput(val: SerializedData): InviteInput {
@@ -327,6 +379,22 @@ export function deserializeInviteInput(val: SerializedData): InviteInput {
   }
   const modifiedAt: undefined | DateTime =
     val.modified_at == void 0 ? void 0 : deserializeDateTime(val.modified_at);
+  if (!(val.auto_roll_in_at == void 0) && !sdIsString(val.auto_roll_in_at)) {
+    throw new BoxSdkError({
+      message: 'Expecting string for "auto_roll_in_at" of type "InviteInput"',
+    });
+  }
+  const autoRollInAt: undefined | DateTime =
+    val.auto_roll_in_at == void 0
+      ? void 0
+      : deserializeDateTime(val.auto_roll_in_at);
+  if (!(val.is_auto_roll_in == void 0) && !sdIsBoolean(val.is_auto_roll_in)) {
+    throw new BoxSdkError({
+      message: 'Expecting boolean for "is_auto_roll_in" of type "InviteInput"',
+    });
+  }
+  const isAutoRollIn: undefined | boolean =
+    val.is_auto_roll_in == void 0 ? void 0 : val.is_auto_roll_in;
   return {
     id: id,
     type: type,
@@ -336,5 +404,7 @@ export function deserializeInviteInput(val: SerializedData): InviteInput {
     status: status,
     createdAt: createdAt,
     modifiedAt: modifiedAt,
+    autoRollInAt: autoRollInAt,
+    isAutoRollIn: isAutoRollIn,
   } satisfies InviteInput;
 }
