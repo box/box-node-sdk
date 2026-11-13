@@ -8,10 +8,16 @@
 
 Invites an existing external user to join an enterprise.
 
-The existing user can not be part of another enterprise and
-must already have a Box account. Once invited, the user will receive an
-email and are prompted to accept the invitation within the
-Box web application.
+The user must already have a Box account and cannot be
+part of another enterprise. Once invited, the user receives
+an email and is prompted to accept the invitation in
+the Box web application.
+
+If `is_auto_roll_in_enabled` is set to `true`, the user does not have to
+accept the invitation and is added to the enterprise automatically after
+14 days. Only unmanaged users can be invited this way. An unmanaged user
+is a free user whose email domain matches one of the enterprise's
+domains. Availability depends on the enterprise's plan.
 
 This method requires the "Manage An Enterprise" scope enabled for
 the application, which can be enabled within the developer console.
