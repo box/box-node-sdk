@@ -683,6 +683,7 @@ export class BoxClient {
       params: fetchOptionsInput.params,
       headers: fetchOptionsInput.headers,
       data: fetchOptionsInput.data,
+      dataFactory: fetchOptionsInput.dataFactory,
       fileStream: fetchOptionsInput.fileStream,
       multipartData: fetchOptionsInput.multipartData,
       contentType: fetchOptionsInput.contentType,

@@ -136,6 +136,7 @@ export class InterceptorChangingResponse implements Interceptor {
       params: optionsInput.params,
       headers: optionsInput.headers,
       data: optionsInput.data,
+      dataFactory: optionsInput.dataFactory,
       fileStream: optionsInput.fileStream,
       multipartData: optionsInput.multipartData,
       contentType: optionsInput.contentType,
