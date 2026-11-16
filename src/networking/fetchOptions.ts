@@ -21,6 +21,13 @@ export interface MultipartItem {
    * Content type of the part */
   readonly contentType?: string;
 }
+export interface RequestDataFactory {
+  /**
+   * Creates a new request body
+   * @returns {Promise<SerializedData>}
+   */
+  create(): Promise<SerializedData>;
+}
 export class FetchOptions {
   /**
    * URL of the request */
@@ -41,6 +48,9 @@ export class FetchOptions {
   /**
    * Request body of the request */
   readonly data?: SerializedData;
+  /**
+   * Factory that builds a request body when `data` is not provided and rebuilds it for each retry. */
+  readonly dataFactory?: RequestDataFactory;
   /**
    * Stream data of the request */
   readonly fileStream?: ByteStream;
@@ -89,6 +99,9 @@ export class FetchOptions {
     if (fields.data !== undefined) {
       this.data = fields.data;
     }
+    if (fields.dataFactory !== undefined) {
+      this.dataFactory = fields.dataFactory;
+    }
     if (fields.fileStream !== undefined) {
       this.fileStream = fields.fileStream;
     }
@@ -135,6 +148,9 @@ export interface FetchOptionsInput {
   /**
    * Request body of the request */
   readonly data?: SerializedData;
+  /**
+   * Factory that builds a request body when `data` is not provided and rebuilds it for each retry. */
+  readonly dataFactory?: RequestDataFactory;
   /**
    * Stream data of the request */
   readonly fileStream?: ByteStream;

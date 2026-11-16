@@ -8,6 +8,8 @@ import { serializeUploadFileRequestBodyAttributesParentField } from '@/managers/
 import { deserializeUploadFileRequestBodyAttributesParentField } from '@/managers/uploads';
 import { serializeFileFull } from '@/schemas/fileFull';
 import { deserializeFileFull } from '@/schemas/fileFull';
+import { serializeAccessToken } from '@/schemas/accessToken';
+import { deserializeAccessToken } from '@/schemas/accessToken';
 import { serializeUpdateFileByIdRequestBody } from '@/managers/files';
 import { deserializeUpdateFileByIdRequestBody } from '@/managers/files';
 import { serializeFolderFull } from '@/schemas/folderFull';

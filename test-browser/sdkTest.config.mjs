@@ -20,6 +20,11 @@ export const testConfig = {
   testGetEventStream: 'skip',
   testMetadataTaxonomiesCRUD: 'skip',
   testMetadataTaxonomiesNodes: 'skip',
+  'network exception retry regenerates request data': 'skip',
+  '500 retry regenerates request data': 'skip',
+  'retry strategy receives regenerated request data': 'skip',
+  'retry without data factory resends same request data': 'skip',
+  'BoxJwtAuth regenerates JWT assertion on token request retry': 'skip',
 };
 
 export const testEnvList = [
