@@ -91,6 +91,7 @@ test('test_change_download_url_with_interceptor', async function test_change_dow
       params: optionsInput.params,
       headers: optionsInput.headers,
       data: optionsInput.data,
+      dataFactory: optionsInput.dataFactory,
       fileStream: optionsInput.fileStream,
       multipartData: optionsInput.multipartData,
       contentType: optionsInput.contentType,

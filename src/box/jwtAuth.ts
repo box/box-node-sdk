@@ -1,3 +1,7 @@
+import { serializeAccessToken } from '../schemas/accessToken';
+import { deserializeAccessToken } from '../schemas/accessToken';
+import { serializePostOAuth2Token } from '../schemas/postOAuth2Token';
+import { deserializePostOAuth2Token } from '../schemas/postOAuth2Token';
 import { PostOAuth2TokenGrantTypeField } from '../schemas/postOAuth2Token';
 import { PostOAuth2TokenSubjectTokenTypeField } from '../schemas/postOAuth2Token';
 import { Authentication } from '../networking/auth';
@@ -9,6 +13,10 @@ import { TokenStorage } from './tokenStorage';
 import { InMemoryTokenStorage } from './tokenStorage';
 import { jsonToSerializedData } from '../serialization/json';
 import { SerializedData } from '../serialization/json';
+import { FetchOptions } from '../networking/fetchOptions';
+import { RequestDataFactory } from '../networking/fetchOptions';
+import { ResponseFormat } from '../networking/fetchOptions';
+import { FetchResponse } from '../networking/fetchResponse';
 import { getUuid } from '../internal/utils';
 import { readTextFromFile } from '../internal/utils';
 import { isBrowser } from '../internal/utils';
@@ -216,6 +224,69 @@ export interface JwtConfigInput {
   readonly tokenStorage?: TokenStorage;
   readonly privateKeyDecryptor?: PrivateKeyDecryptor;
 }
+export class JwtAccessTokenDataFactory implements RequestDataFactory {
+  /**
+   * JWT configuration used to sign the assertion */
+  readonly config!: JwtConfig;
+  /**
+   * The ID of the user or enterprise to authenticate as */
+  readonly subjectId?: string;
+  /**
+   * The type of the subject ID, either 'user' or 'enterprise' */
+  readonly subjectType?: string;
+  constructor(fields: Omit<JwtAccessTokenDataFactory, 'create'>) {
+    if (fields.config !== undefined) {
+      this.config = fields.config;
+    }
+    if (fields.subjectId !== undefined) {
+      this.subjectId = fields.subjectId;
+    }
+    if (fields.subjectType !== undefined) {
+      this.subjectType = fields.subjectType;
+    }
+  }
+  /**
+   * Creates the access token request body with a newly signed JWT assertion.
+   * @returns {Promise<SerializedData>}
+   */
+  async create(): Promise<SerializedData> {
+    const alg: JwtAlgorithm = !(this.config.algorithm == void 0)
+      ? this.config.algorithm!
+      : ('RS256' as JwtAlgorithm);
+    const claims: {
+      readonly [key: string]: any;
+    } = {
+      ['exp']: getEpochTimeInSeconds() + 30,
+      ['box_sub_type']: this.subjectType,
+    };
+    const jwtOptions: JwtSignOptions = {
+      algorithm: alg,
+      audience: 'https://api.box.com/oauth2/token',
+      subject: this.subjectId,
+      issuer: this.config.clientId,
+      jwtid: getUuid(),
+      keyid: this.config.jwtKeyId,
+      privateKeyDecryptor: this.config.privateKeyDecryptor,
+    } satisfies JwtSignOptions;
+    const jwtKey: JwtKey = {
+      key: this.config.privateKey,
+      passphrase: this.config.privateKeyPassphrase,
+    } satisfies JwtKey;
+    const assertion: string = await createJwtAssertion(
+      claims,
+      jwtKey,
+      jwtOptions,
+    );
+    const requestBody: PostOAuth2Token = {
+      grantType:
+        'urn:ietf:params:oauth:grant-type:jwt-bearer' as PostOAuth2TokenGrantTypeField,
+      assertion: assertion,
+      clientId: this.config.clientId,
+      clientSecret: this.config.clientSecret,
+    } satisfies PostOAuth2Token;
+    return serializePostOAuth2Token(requestBody);
+  }
+}
 export class BoxJwtAuth implements Authentication {
   /**
    * An object containing all JWT configuration to use for authentication */
@@ -266,45 +337,33 @@ export class BoxJwtAuth implements Authentication {
         message: 'JWT auth is not supported in browser environment.',
       });
     }
-    const alg: JwtAlgorithm = !(this.config.algorithm == void 0)
-      ? this.config.algorithm!
-      : ('RS256' as JwtAlgorithm);
-    const claims: {
-      readonly [key: string]: any;
-    } = {
-      ['exp']: getEpochTimeInSeconds() + 30,
-      ['box_sub_type']: this.subjectType,
+    const networkSessionToUse: NetworkSession = !(networkSession == void 0)
+      ? networkSession!
+      : new NetworkSession({});
+    const dataFactory: JwtAccessTokenDataFactory =
+      new JwtAccessTokenDataFactory({
+        config: this.config,
+        subjectId: this.subjectId,
+        subjectType: this.subjectType,
+      });
+    const response: FetchResponse =
+      await networkSessionToUse.networkClient.fetch(
+        new FetchOptions({
+          url: ''.concat(
+            networkSessionToUse.baseUrls.baseUrl,
+            '/oauth2/token',
+          ) as string,
+          method: 'POST',
+          dataFactory: dataFactory,
+          contentType: 'application/x-www-form-urlencoded',
+          responseFormat: 'json' as ResponseFormat,
+          networkSession: networkSessionToUse,
+        }),
+      );
+    const token: AccessToken = {
+      ...deserializeAccessToken(response.data!),
+      rawData: response.data!,
     };
-    const jwtOptions: JwtSignOptions = {
-      algorithm: alg,
-      audience: 'https://api.box.com/oauth2/token',
-      subject: this.subjectId,
-      issuer: this.config.clientId,
-      jwtid: getUuid(),
-      keyid: this.config.jwtKeyId,
-      privateKeyDecryptor: this.config.privateKeyDecryptor,
-    } satisfies JwtSignOptions;
-    const jwtKey: JwtKey = {
-      key: this.config.privateKey,
-      passphrase: this.config.privateKeyPassphrase,
-    } satisfies JwtKey;
-    const assertion: string = await createJwtAssertion(
-      claims,
-      jwtKey,
-      jwtOptions,
-    );
-    const authManager: AuthorizationManager = new AuthorizationManager({
-      networkSession: !(networkSession == void 0)
-        ? networkSession!
-        : new NetworkSession({}),
-    });
-    const token: AccessToken = await authManager.requestAccessToken({
-      grantType:
-        'urn:ietf:params:oauth:grant-type:jwt-bearer' as PostOAuth2TokenGrantTypeField,
-      assertion: assertion,
-      clientId: this.config.clientId,
-      clientSecret: this.config.clientSecret,
-    } satisfies PostOAuth2Token);
     await this.tokenStorage.store(token);
     return token;
   }
