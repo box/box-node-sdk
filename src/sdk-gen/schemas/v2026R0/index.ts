@@ -96,3 +96,5 @@ export * from './automateWorkflowActionV2026R0';
 export * from './automateWorkflowsV2026R0';
 export * from './shuttleRunV2026R0';
 export * from './shuttleRunsV2026R0';
+export * from './aiSessionV2026R0';
+export * from './aiSessionsV2026R0';
