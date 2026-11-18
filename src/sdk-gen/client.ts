@@ -90,6 +90,7 @@ import { NotesManager } from './managers/notes';
 import { DocumentSplitManager } from './managers/documentSplit';
 import { QueryManager } from './managers/query';
 import { ShuttleManager } from './managers/shuttle';
+import { AiSessionsManager } from './managers/aiSessions';
 import { Authentication } from './networking/auth';
 import { NetworkSession } from './networking/network';
 import { BoxSdkError } from './box/errors';
@@ -200,6 +201,7 @@ export class BoxClient {
   readonly documentSplit: DocumentSplitManager;
   readonly query: QueryManager;
   readonly shuttle: ShuttleManager;
+  readonly aiSessions: AiSessionsManager;
   constructor(
     fields: Omit<
       BoxClient,
@@ -291,6 +293,7 @@ export class BoxClient {
       | 'documentSplit'
       | 'query'
       | 'shuttle'
+      | 'aiSessions'
       | 'networkSession'
       | 'makeRequest'
       | 'withAsUserHeader'
@@ -665,6 +668,10 @@ export class BoxClient {
       networkSession: this.networkSession,
     });
     this.shuttle = new ShuttleManager({
+      auth: this.auth,
+      networkSession: this.networkSession,
+    });
+    this.aiSessions = new AiSessionsManager({
       auth: this.auth,
       networkSession: this.networkSession,
     });
