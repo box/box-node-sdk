@@ -14,6 +14,7 @@ General explanations of the available functionality and examples of how to use
 the SDK are available by topic:
 
 - [Ai](ai.md)
+- [Ai sessions](aiSessions.md)
 - [Ai studio](aiStudio.md)
 - [App item associations](appItemAssociations.md)
 - [Archives](archives.md)
