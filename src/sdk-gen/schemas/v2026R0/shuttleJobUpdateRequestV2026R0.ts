@@ -115,8 +115,7 @@ export function deserializeShuttleJobUpdateRequestV2026R0AccountMappingField(
   const isEnabled: undefined | boolean =
     val.is_enabled == void 0 ? void 0 : val.is_enabled;
   const permissionConflictStrategy:
-    | ShuttleJobPermissionConflictStrategyV2026R0
-    | undefined =
+    ShuttleJobPermissionConflictStrategyV2026R0 | undefined =
     val.permission_conflict_strategy == void 0
       ? void 0
       : deserializeShuttleJobPermissionConflictStrategyV2026R0(
@@ -369,8 +368,7 @@ export function deserializeShuttleJobUpdateRequestV2026R0(
           }) as readonly any[])
         : [];
   const accountMapping:
-    | undefined
-    | ShuttleJobUpdateRequestV2026R0AccountMappingField =
+    undefined | ShuttleJobUpdateRequestV2026R0AccountMappingField =
     val.account_mapping == void 0
       ? void 0
       : deserializeShuttleJobUpdateRequestV2026R0AccountMappingField(

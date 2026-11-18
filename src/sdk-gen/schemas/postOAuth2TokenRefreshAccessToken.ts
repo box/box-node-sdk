@@ -7,8 +7,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type PostOAuth2TokenRefreshAccessTokenGrantTypeField =
-  | 'refresh_token'
-  | string;
+  'refresh_token' | string;
 export class PostOAuth2TokenRefreshAccessToken {
   /**
    * The type of request being made, in this case a refresh request. */

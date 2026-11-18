@@ -41,17 +41,9 @@ import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type DocumentSplitV2026R0TypeField = 'document_split';
 export type DocumentSplitV2026R0StatusField =
-  | 'submitted'
-  | 'completed'
-  | 'failed'
-  | 'completed_with_error'
-  | string;
+  'submitted' | 'completed' | 'failed' | 'completed_with_error' | string;
 export type DocumentSplitV2026R0InputSourceField =
-  | 'api'
-  | 'box'
-  | 'relay'
-  | 'salesforce'
-  | string;
+  'api' | 'box' | 'relay' | 'salesforce' | string;
 export class DocumentSplitV2026R0 {
   /**
    * The unique identifier for the Document Split job. */

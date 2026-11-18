@@ -1226,8 +1226,7 @@ export function deserializeUpdateWebhookByIdRequestBody(
     });
   }
   const triggers:
-    | undefined
-    | readonly UpdateWebhookByIdRequestBodyTriggersField[] =
+    undefined | readonly UpdateWebhookByIdRequestBodyTriggersField[] =
     val.triggers == void 0
       ? void 0
       : sdIsList(val.triggers)

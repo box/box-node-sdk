@@ -265,13 +265,7 @@ export interface CreateFileMetadataByIdHeadersInput {
 }
 export type UpdateFileMetadataByIdScope = 'global' | 'enterprise' | string;
 export type UpdateFileMetadataByIdRequestBodyOpField =
-  | 'add'
-  | 'replace'
-  | 'remove'
-  | 'test'
-  | 'move'
-  | 'copy'
-  | string;
+  'add' | 'replace' | 'remove' | 'test' | 'move' | 'copy' | string;
 export interface UpdateFileMetadataByIdRequestBody {
   /**
    * The type of change to perform on the template. Some

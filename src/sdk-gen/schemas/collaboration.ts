@@ -48,10 +48,7 @@ export type CollaborationRoleField =
   | 'owner'
   | string;
 export type CollaborationStatusField =
-  | 'accepted'
-  | 'pending'
-  | 'rejected'
-  | string;
+  'accepted' | 'pending' | 'rejected' | string;
 export interface CollaborationAcceptanceRequirementsStatusTermsOfServiceRequirementField {
   /**
    * Whether or not the terms of service have been accepted.  The
@@ -382,8 +379,7 @@ export function deserializeCollaborationAcceptanceRequirementsStatusStrongPasswo
     });
   }
   const enterpriseHasStrongPasswordRequiredForExternalUsers:
-    | undefined
-    | boolean =
+    undefined | boolean =
     val.enterprise_has_strong_password_required_for_external_users == void 0
       ? void 0
       : val.enterprise_has_strong_password_required_for_external_users;
@@ -654,8 +650,7 @@ export function deserializeCollaboration(val: SerializedData): Collaboration {
   const modifiedAt: undefined | DateTime =
     val.modified_at == void 0 ? void 0 : deserializeDateTime(val.modified_at);
   const acceptanceRequirementsStatus:
-    | undefined
-    | CollaborationAcceptanceRequirementsStatusField =
+    undefined | CollaborationAcceptanceRequirementsStatusField =
     val.acceptance_requirements_status == void 0
       ? void 0
       : deserializeCollaborationAcceptanceRequirementsStatusField(
@@ -818,8 +813,7 @@ export function deserializeCollaborationInput(
   const modifiedAt: undefined | DateTime =
     val.modified_at == void 0 ? void 0 : deserializeDateTime(val.modified_at);
   const acceptanceRequirementsStatus:
-    | undefined
-    | CollaborationAcceptanceRequirementsStatusField =
+    undefined | CollaborationAcceptanceRequirementsStatusField =
     val.acceptance_requirements_status == void 0
       ? void 0
       : deserializeCollaborationAcceptanceRequirementsStatusField(
