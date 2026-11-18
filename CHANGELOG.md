@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.20.0](https://github.com/box/box-node-sdk/compare/v10.19.0...v10.20.0) (2026-11-18)
+
+
+### Bug Fixes
+
+* Regenerate JWT assertions on token request retries (box/box-codegen[#1001](https://github.com/box/box-node-sdk/issues/1001)) ([3227052](https://github.com/box/box-node-sdk/commit/3227052bc406a6cd1ff2e2a596a1a9ccc0b9d72f))
+
+
+### New Features and Enhancements
+
+* add `is_auto_roll_in` and `auto_roll_in_at` to Invite API and invite creation (box/box-openapi[#627](https://github.com/box/box-node-sdk/issues/627)) ([9e9d3af](https://github.com/box/box-node-sdk/commit/9e9d3afb241ce211d2bd5f03a2cb2feba0277469))
+
 ## [10.19.0](https://github.com/box/box-node-sdk/compare/v10.18.0...v10.19.0) (2026-11-09)
 
 ## [10.18.0](https://github.com/box/box-node-sdk/compare/v10.17.0...v10.18.0) (2026-11-09)
