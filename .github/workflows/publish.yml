@@ -48,4 +48,4 @@ jobs:
           rm -rf ./lib-esm/test
 
       - name: Publish package
-        run: npm publish --provenance --tag v4
+        run: npm publish --provenance --tag latest-v4
