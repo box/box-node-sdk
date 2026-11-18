@@ -1,9 +1,9 @@
 import http from 'http';
 import crypto from 'crypto';
-import { BoxJwtAuth, JwtConfig } from '../box';
-import { BoxNetworkClient } from '../networking/boxNetworkClient';
-import { NetworkSession } from '../networking/network';
-import type { SerializedData } from '../serialization/json';
+import { BoxJwtAuth, JwtConfig } from '@/box';
+import { BoxNetworkClient } from '@/networking/boxNetworkClient';
+import { NetworkSession } from '@/networking/network';
+import type { SerializedData } from '@/serialization/json';
 
 type RequestDataFactory = {
   create(): Promise<SerializedData>;
