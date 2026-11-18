@@ -7,7 +7,10 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type ZipDownloadStatusStateField =
-  'in_progress' | 'failed' | 'succeeded' | string;
+  | 'in_progress'
+  | 'failed'
+  | 'succeeded'
+  | string;
 export interface ZipDownloadStatus {
   /**
    * The total number of files in the archive. */

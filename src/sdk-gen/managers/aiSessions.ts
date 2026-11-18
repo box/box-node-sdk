@@ -80,9 +80,14 @@ export interface DeleteAiSessionByIdV2026R0OptionalsInput {
 }
 export type GetAiSessionsV2026R0QueryParamsSourceField = 'api' | string;
 export type GetAiSessionsV2026R0QueryParamsSortField =
-  'created_at' | 'updated_at' | 'name' | string;
+  | 'created_at'
+  | 'updated_at'
+  | 'name'
+  | string;
 export type GetAiSessionsV2026R0QueryParamsDirectionField =
-  'asc' | 'desc' | string;
+  | 'asc'
+  | 'desc'
+  | string;
 export interface GetAiSessionsV2026R0QueryParams {
   /**
    * Restricts the list to AI sessions with this origin. The only supported

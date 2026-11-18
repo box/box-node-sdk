@@ -210,7 +210,11 @@ export interface CreateAiTextGenHeadersInput {
   };
 }
 export type GetAiAgentDefaultConfigQueryParamsModeField =
-  'ask' | 'text_gen' | 'extract' | 'extract_structured' | string;
+  | 'ask'
+  | 'text_gen'
+  | 'extract'
+  | 'extract_structured'
+  | string;
 export interface GetAiAgentDefaultConfigQueryParams {
   /**
    * The mode to filter the agent config to return. */

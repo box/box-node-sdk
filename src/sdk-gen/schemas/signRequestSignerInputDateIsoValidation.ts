@@ -7,7 +7,8 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputDateIsoValidationValidationTypeField =
-  'date_iso' | string;
+  | 'date_iso'
+  | string;
 export interface SignRequestSignerInputDateIsoValidation {
   /**
    * Validates that the text input uses the ISO date format `YYYY-MM-DD`. */
@@ -54,7 +55,8 @@ export function deserializeSignRequestSignerInputDateIsoValidation(
     });
   }
   const validationType:
-    undefined | SignRequestSignerInputDateIsoValidationValidationTypeField =
+    | undefined
+    | SignRequestSignerInputDateIsoValidationValidationTypeField =
     val.validation_type == void 0
       ? void 0
       : deserializeSignRequestSignerInputDateIsoValidationValidationTypeField(

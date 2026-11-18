@@ -7,7 +7,10 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type MetadataInstanceValue =
-  string | number | number | readonly string[];
+  | string
+  | number
+  | number
+  | readonly string[];
 export function serializeMetadataInstanceValue(val: any): SerializedData {
   return val;
 }

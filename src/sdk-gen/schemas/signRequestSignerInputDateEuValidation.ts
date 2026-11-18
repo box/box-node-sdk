@@ -7,7 +7,8 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputDateEuValidationValidationTypeField =
-  'date_eu' | string;
+  | 'date_eu'
+  | string;
 export interface SignRequestSignerInputDateEuValidation {
   /**
    * Validates that the text input uses the European date format `DD/MM/YYYY`. */
@@ -54,7 +55,8 @@ export function deserializeSignRequestSignerInputDateEuValidation(
     });
   }
   const validationType:
-    undefined | SignRequestSignerInputDateEuValidationValidationTypeField =
+    | undefined
+    | SignRequestSignerInputDateEuValidationValidationTypeField =
     val.validation_type == void 0
       ? void 0
       : deserializeSignRequestSignerInputDateEuValidationValidationTypeField(

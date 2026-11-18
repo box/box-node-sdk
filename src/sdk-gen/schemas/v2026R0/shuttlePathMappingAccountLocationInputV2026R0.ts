@@ -187,7 +187,8 @@ export function deserializeShuttlePathMappingAccountLocationInputV2026R0Input(
     });
   }
   const type:
-    undefined | ShuttlePathMappingAccountLocationInputV2026R0TypeField =
+    | undefined
+    | ShuttlePathMappingAccountLocationInputV2026R0TypeField =
     val.type == void 0
       ? void 0
       : deserializeShuttlePathMappingAccountLocationInputV2026R0TypeField(
