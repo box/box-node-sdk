@@ -23,7 +23,10 @@ import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type HubCollaborationV2025R0TypeField = 'hub_collaboration';
 export type HubCollaborationV2025R0StatusField =
-  'accepted' | 'pending' | 'rejected' | string;
+  | 'accepted'
+  | 'pending'
+  | 'rejected'
+  | string;
 export interface HubCollaborationV2025R0AcceptanceRequirementsStatusTermsOfServiceRequirementField {
   /**
    * Whether or not the terms of service have been accepted.  The
@@ -240,7 +243,8 @@ export function deserializeHubCollaborationV2025R0AcceptanceRequirementsStatusSt
     });
   }
   const enterpriseHasStrongPasswordRequiredForExternalUsers:
-    undefined | boolean =
+    | undefined
+    | boolean =
     val.enterprise_has_strong_password_required_for_external_users == void 0
       ? void 0
       : val.enterprise_has_strong_password_required_for_external_users;
@@ -445,7 +449,8 @@ export function deserializeHubCollaborationV2025R0(
       ? void 0
       : deserializeHubCollaborationV2025R0StatusField(val.status);
   const acceptanceRequirementsStatus:
-    undefined | HubCollaborationV2025R0AcceptanceRequirementsStatusField =
+    | undefined
+    | HubCollaborationV2025R0AcceptanceRequirementsStatusField =
     val.acceptance_requirements_status == void 0
       ? void 0
       : deserializeHubCollaborationV2025R0AcceptanceRequirementsStatusField(
@@ -531,7 +536,8 @@ export function deserializeHubCollaborationV2025R0Input(
       ? void 0
       : deserializeHubCollaborationV2025R0StatusField(val.status);
   const acceptanceRequirementsStatus:
-    undefined | HubCollaborationV2025R0AcceptanceRequirementsStatusField =
+    | undefined
+    | HubCollaborationV2025R0AcceptanceRequirementsStatusField =
     val.acceptance_requirements_status == void 0
       ? void 0
       : deserializeHubCollaborationV2025R0AcceptanceRequirementsStatusField(

@@ -7,7 +7,8 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputCustomValidationValidationTypeField =
-  'custom' | string;
+  | 'custom'
+  | string;
 export class SignRequestSignerInputCustomValidation {
   /**
    * Defines the validation format for the text input as custom.
@@ -150,7 +151,8 @@ export function deserializeSignRequestSignerInputCustomValidationInput(
     });
   }
   const validationType:
-    undefined | SignRequestSignerInputCustomValidationValidationTypeField =
+    | undefined
+    | SignRequestSignerInputCustomValidationValidationTypeField =
     val.validationType == void 0
       ? void 0
       : deserializeSignRequestSignerInputCustomValidationValidationTypeField(

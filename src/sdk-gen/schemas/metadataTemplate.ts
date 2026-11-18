@@ -8,7 +8,13 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type MetadataTemplateTypeField = 'metadata_template';
 export type MetadataTemplateFieldsTypeField =
-  'string' | 'float' | 'date' | 'enum' | 'multiSelect' | 'taxonomy' | 'integer';
+  | 'string'
+  | 'float'
+  | 'date'
+  | 'enum'
+  | 'multiSelect'
+  | 'taxonomy'
+  | 'integer';
 export interface MetadataTemplateFieldsOptionsField {
   /**
    * The text value of the option. This represents both the display name of the

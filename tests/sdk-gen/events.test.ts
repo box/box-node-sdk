@@ -79,10 +79,12 @@ test('testEventUpload', async function testEventUpload(): Promise<any> {
     throw new Error('Assertion failed');
   }
   const source: EventSource = firstEvent.source! as EventSource;
-  if (!(
-    (toString(source.itemType) as string) == 'file' ||
-    (toString(source.itemType) as string) == 'folder'
-  )) {
+  if (
+    !(
+      (toString(source.itemType) as string) == 'file' ||
+      (toString(source.itemType) as string) == 'folder'
+    )
+  ) {
     throw new Error('Assertion failed');
   }
   if (!!(source.itemId == '')) {

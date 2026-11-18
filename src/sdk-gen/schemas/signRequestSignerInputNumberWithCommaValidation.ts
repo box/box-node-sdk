@@ -7,7 +7,8 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type SignRequestSignerInputNumberWithCommaValidationValidationTypeField =
-  'number_with_comma' | string;
+  | 'number_with_comma'
+  | string;
 export interface SignRequestSignerInputNumberWithCommaValidation {
   /**
    * Validates that the text input uses a number format with a comma as the decimal separator (for example, 1,23). */
