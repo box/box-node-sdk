@@ -19,7 +19,11 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type DocumentSplitCreateRequestV2026R0InputSourceField =
-  'api' | 'box' | 'relay' | 'salesforce' | string;
+  | 'api'
+  | 'box'
+  | 'relay'
+  | 'salesforce'
+  | string;
 export interface DocumentSplitCreateRequestV2026R0 {
   /**
    * The ID of the source file to split. */

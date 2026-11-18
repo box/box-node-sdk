@@ -8,13 +8,16 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type ClassificationTemplateTypeField = 'metadata_template';
 export type ClassificationTemplateTemplateKeyField =
-  'securityClassification-6VMVochwUWo' | string;
+  | 'securityClassification-6VMVochwUWo'
+  | string;
 export type ClassificationTemplateDisplayNameField = 'Classification' | string;
 export type ClassificationTemplateFieldsTypeField = 'enum';
 export type ClassificationTemplateFieldsKeyField =
-  'Box__Security__Classification__Key' | string;
+  | 'Box__Security__Classification__Key'
+  | string;
 export type ClassificationTemplateFieldsDisplayNameField =
-  'Classification' | string;
+  | 'Classification'
+  | string;
 export interface ClassificationTemplateFieldsOptionsStaticConfigClassificationField {
   /**
    * A longer description of the classification. */
@@ -475,7 +478,8 @@ export function deserializeClassificationTemplateFieldsOptionsField(
   }
   const key: string = val.key;
   const staticConfig:
-    undefined | ClassificationTemplateFieldsOptionsStaticConfigField =
+    | undefined
+    | ClassificationTemplateFieldsOptionsStaticConfigField =
     val.staticConfig == void 0
       ? void 0
       : deserializeClassificationTemplateFieldsOptionsStaticConfigField(

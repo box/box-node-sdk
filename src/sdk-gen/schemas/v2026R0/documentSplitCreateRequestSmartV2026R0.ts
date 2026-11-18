@@ -7,7 +7,8 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type DocumentSplitCreateRequestSmartV2026R0SplitTypeField =
-  'smart' | string;
+  | 'smart'
+  | string;
 export class DocumentSplitCreateRequestSmartV2026R0 {
   /**
    * Discriminator. Must be `smart` for this variant. */
@@ -130,7 +131,8 @@ export function deserializeDocumentSplitCreateRequestSmartV2026R0Input(
     });
   }
   const splitType:
-    undefined | DocumentSplitCreateRequestSmartV2026R0SplitTypeField =
+    | undefined
+    | DocumentSplitCreateRequestSmartV2026R0SplitTypeField =
     val.splitType == void 0
       ? void 0
       : deserializeDocumentSplitCreateRequestSmartV2026R0SplitTypeField(

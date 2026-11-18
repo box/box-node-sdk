@@ -17,7 +17,9 @@ import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type RetentionPolicyAssignmentTypeField = 'retention_policy_assignment';
 export type RetentionPolicyAssignmentAssignedToTypeField =
-  'folder' | 'enterprise' | 'metadata_template';
+  | 'folder'
+  | 'enterprise'
+  | 'metadata_template';
 export interface RetentionPolicyAssignmentAssignedToField {
   /**
    * The ID of the folder, enterprise, or metadata template
@@ -57,7 +59,8 @@ export class RetentionPolicyAssignment {
    * An array of field objects. Values are only returned if the `assigned_to`
    * type is `metadata_template`. Otherwise, the array is blank. */
   readonly filterFields?:
-    readonly RetentionPolicyAssignmentFilterFieldsField[] | null;
+    | readonly RetentionPolicyAssignmentFilterFieldsField[]
+    | null;
   readonly assignedBy?: UserMini;
   /**
    * When the retention policy assignment object was
@@ -119,7 +122,8 @@ export interface RetentionPolicyAssignmentInput {
    * An array of field objects. Values are only returned if the `assigned_to`
    * type is `metadata_template`. Otherwise, the array is blank. */
   readonly filterFields?:
-    readonly RetentionPolicyAssignmentFilterFieldsField[] | null;
+    | readonly RetentionPolicyAssignmentFilterFieldsField[]
+    | null;
   readonly assignedBy?: UserMini;
   /**
    * When the retention policy assignment object was
@@ -312,7 +316,8 @@ export function deserializeRetentionPolicyAssignment(
     });
   }
   const filterFields:
-    undefined | readonly RetentionPolicyAssignmentFilterFieldsField[] =
+    | undefined
+    | readonly RetentionPolicyAssignmentFilterFieldsField[] =
     val.filter_fields == void 0
       ? void 0
       : sdIsList(val.filter_fields)
@@ -427,7 +432,8 @@ export function deserializeRetentionPolicyAssignmentInput(
     });
   }
   const filterFields:
-    undefined | readonly RetentionPolicyAssignmentFilterFieldsField[] =
+    | undefined
+    | readonly RetentionPolicyAssignmentFilterFieldsField[] =
     val.filter_fields == void 0
       ? void 0
       : sdIsList(val.filter_fields)
