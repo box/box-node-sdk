@@ -251,13 +251,17 @@ export class BoxNetworkClient implements NetworkClient {
       options.networkSession?.retryStrategy ?? new BoxRetryStrategy({});
     const dataSanitizer: DataSanitizer =
       options.networkSession?.dataSanitizer ?? new DataSanitizer({});
+    const attemptOptions: typeof options =
+      options.data === undefined && options.dataFactory
+        ? { ...options, data: await options.dataFactory.create() }
+        : options;
     const fetchOptions: typeof options = interceptors.length
       ? interceptors.reduce(
           (modifiedOptions: FetchOptions, interceptor: Interceptor) =>
             interceptor.beforeRequest(modifiedOptions),
-          options
+          attemptOptions
         )
-      : options;
+      : attemptOptions;
     const fileStreamBuffer = fetchOptions.fileStream
       ? await readByteStream(fetchOptions.fileStream)
       : void 0;
@@ -389,8 +393,12 @@ export class BoxNetworkClient implements NetworkClient {
         attemptForRetry
       );
       await new Promise((resolve) => setTimeout(resolve, retryTimeout * 1000));
+      const dataFactory = fetchOptions.dataFactory ?? options.dataFactory;
       return this.fetch({
         ...options,
+        ...(dataFactory
+          ? { data: await dataFactory.create(), dataFactory }
+          : {}),
         attemptNumber: attemptNumber + 1,
         numberOfRetriesOnException: numberOfRetriesOnException,
         fileStream: fileStreamBuffer
