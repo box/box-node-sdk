@@ -2,20 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [4.20.1](https://github.com/box/box-node-sdk/compare/v4.19.0...v4.20.1) (2026-11-18)
-
-
-### Bug Fixes
-
-* **boxsdkgen:** Regenerate JWT assertions on token request retries (box/box-codegen[#1001](https://github.com/box/box-node-sdk/issues/1001)) ([73a76f3](https://github.com/box/box-node-sdk/commit/73a76f3703a49164fcccfac54081ab11c5247fc8))
-
-
-### New Features and Enhancements
-
-* **boxsdkgen:** add `isAutoRollIn`/`autoRollInAt` support to invites API and request body (box/box-openapi[#627](https://github.com/box/box-node-sdk/issues/627)) ([6975689](https://github.com/box/box-node-sdk/commit/6975689339c0f068d999676388ca949260866517))
-
-## [4.20.0](https://github.com/box/box-node-sdk/compare/v4.19.0...v4.20.0) (2026-11-18)
-
+## [4.20.1](https://github.com/box/box-node-sdk/compare/v4.19.0...v4.20.1) (2026-11-18)
 
 ### Bug Fixes
 
