@@ -2552,9 +2552,7 @@ export interface GetShuttleDiscoveredSubjectsV2026R0HeadersInput {
   };
 }
 export type GetShuttlePathEntriesV2026R0QueryParamsSideField =
-  | 'source'
-  | 'target'
-  | string;
+  'source' | 'target' | string;
 export interface GetShuttlePathEntriesV2026R0QueryParams {
   /**
    * The unique identifier of the shuttle job whose path entries to list. */

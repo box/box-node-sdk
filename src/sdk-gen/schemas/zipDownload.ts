@@ -197,8 +197,7 @@ export function deserializeZipDownload(val: SerializedData): ZipDownload {
     });
   }
   const nameConflicts:
-    | undefined
-    | readonly (readonly ZipDownloadNameConflictsField[])[] =
+    undefined | readonly (readonly ZipDownloadNameConflictsField[])[] =
     val.name_conflicts == void 0
       ? void 0
       : sdIsList(val.name_conflicts)

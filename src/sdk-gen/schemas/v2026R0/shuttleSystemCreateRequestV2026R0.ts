@@ -7,8 +7,7 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleSystemCreateRequestV2026R0SystemTypeField =
-  | 'windows'
-  | string;
+  'windows' | string;
 export class ShuttleSystemCreateRequestV2026R0 {
   /**
    * The display name for the new shuttle system. */
@@ -144,8 +143,7 @@ export function deserializeShuttleSystemCreateRequestV2026R0Input(
   }
   const name: string = val.name;
   const systemType:
-    | undefined
-    | ShuttleSystemCreateRequestV2026R0SystemTypeField =
+    undefined | ShuttleSystemCreateRequestV2026R0SystemTypeField =
     val.systemType == void 0
       ? void 0
       : deserializeShuttleSystemCreateRequestV2026R0SystemTypeField(

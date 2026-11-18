@@ -251,10 +251,7 @@ export interface GetSharedLinkForFileHeadersInput {
   };
 }
 export type AddShareLinkToFileRequestBodySharedLinkAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export interface AddShareLinkToFileRequestBodySharedLinkPermissionsField {
   /**
    * If the shared link allows for downloading of files.
@@ -353,10 +350,7 @@ export interface AddShareLinkToFileHeadersInput {
   };
 }
 export type UpdateSharedLinkOnFileRequestBodySharedLinkAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export interface UpdateSharedLinkOnFileRequestBodySharedLinkPermissionsField {
   /**
    * If the shared link allows for downloading of files.
@@ -959,8 +953,7 @@ export function deserializeAddShareLinkToFileRequestBodySharedLinkField(
   const unsharedAt: undefined | DateTime =
     val.unshared_at == void 0 ? void 0 : deserializeDateTime(val.unshared_at);
   const permissions:
-    | undefined
-    | AddShareLinkToFileRequestBodySharedLinkPermissionsField =
+    undefined | AddShareLinkToFileRequestBodySharedLinkPermissionsField =
     val.permissions == void 0
       ? void 0
       : deserializeAddShareLinkToFileRequestBodySharedLinkPermissionsField(
@@ -1116,8 +1109,7 @@ export function deserializeUpdateSharedLinkOnFileRequestBodySharedLinkField(
     });
   }
   const access:
-    | undefined
-    | UpdateSharedLinkOnFileRequestBodySharedLinkAccessField =
+    undefined | UpdateSharedLinkOnFileRequestBodySharedLinkAccessField =
     val.access == void 0
       ? void 0
       : deserializeUpdateSharedLinkOnFileRequestBodySharedLinkAccessField(
@@ -1148,8 +1140,7 @@ export function deserializeUpdateSharedLinkOnFileRequestBodySharedLinkField(
   const unsharedAt: undefined | DateTime =
     val.unshared_at == void 0 ? void 0 : deserializeDateTime(val.unshared_at);
   const permissions:
-    | undefined
-    | UpdateSharedLinkOnFileRequestBodySharedLinkPermissionsField =
+    undefined | UpdateSharedLinkOnFileRequestBodySharedLinkPermissionsField =
     val.permissions == void 0
       ? void 0
       : deserializeUpdateSharedLinkOnFileRequestBodySharedLinkPermissionsField(
@@ -1189,8 +1180,7 @@ export function deserializeUpdateSharedLinkOnFileRequestBody(
     });
   }
   const sharedLink:
-    | undefined
-    | UpdateSharedLinkOnFileRequestBodySharedLinkField =
+    undefined | UpdateSharedLinkOnFileRequestBodySharedLinkField =
     val.shared_link == void 0
       ? void 0
       : deserializeUpdateSharedLinkOnFileRequestBodySharedLinkField(
@@ -1235,8 +1225,7 @@ export function deserializeRemoveSharedLinkFromFileRequestBody(
     });
   }
   const sharedLink:
-    | undefined
-    | RemoveSharedLinkFromFileRequestBodySharedLinkField =
+    undefined | RemoveSharedLinkFromFileRequestBodySharedLinkField =
     val.shared_link == void 0
       ? void 0
       : deserializeRemoveSharedLinkFromFileRequestBodySharedLinkField(

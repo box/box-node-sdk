@@ -312,9 +312,7 @@ export interface CreateGroupMembershipRequestBodyGroupField {
   readonly rawData?: SerializedData;
 }
 export type CreateGroupMembershipRequestBodyRoleField =
-  | 'member'
-  | 'admin'
-  | string;
+  'member' | 'admin' | string;
 export interface CreateGroupMembershipRequestBody {
   /**
    * The user to add to the group. */
@@ -412,9 +410,7 @@ export interface GetGroupMembershipByIdHeadersInput {
   };
 }
 export type UpdateGroupMembershipByIdRequestBodyRoleField =
-  | 'member'
-  | 'admin'
-  | string;
+  'member' | 'admin' | string;
 export interface UpdateGroupMembershipByIdRequestBody {
   /**
    * The role of the user in the group. */

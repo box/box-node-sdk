@@ -843,8 +843,7 @@ export function deserializeCreateLegalHoldPolicyAssignmentRequestBody(
     });
   }
   const filterFields:
-    | undefined
-    | readonly LegalHoldPolicyAssignmentFilterField[] =
+    undefined | readonly LegalHoldPolicyAssignmentFilterField[] =
     val.filter_fields == void 0
       ? void 0
       : sdIsList(val.filter_fields)

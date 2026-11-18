@@ -10,11 +10,9 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type DocumentSplitCreateRequestManualV2026R0SplitTypeField =
-  | 'manual'
-  | string;
+  'manual' | string;
 export type DocumentSplitCreateRequestManualV2026R0VersionField =
-  | 'v_1'
-  | string;
+  'v_1' | string;
 export class DocumentSplitCreateRequestManualV2026R0 {
   /**
    * Discriminator. Must be `manual` for this variant. */
@@ -139,8 +137,7 @@ export function deserializeDocumentSplitCreateRequestManualV2026R0(
       val.split_type
     );
   const version:
-    | undefined
-    | DocumentSplitCreateRequestManualV2026R0VersionField =
+    undefined | DocumentSplitCreateRequestManualV2026R0VersionField =
     val.version == void 0
       ? void 0
       : deserializeDocumentSplitCreateRequestManualV2026R0VersionField(
@@ -206,16 +203,14 @@ export function deserializeDocumentSplitCreateRequestManualV2026R0Input(
     });
   }
   const splitType:
-    | undefined
-    | DocumentSplitCreateRequestManualV2026R0SplitTypeField =
+    undefined | DocumentSplitCreateRequestManualV2026R0SplitTypeField =
     val.splitType == void 0
       ? void 0
       : deserializeDocumentSplitCreateRequestManualV2026R0SplitTypeField(
           val.splitType
         );
   const version:
-    | undefined
-    | DocumentSplitCreateRequestManualV2026R0VersionField =
+    undefined | DocumentSplitCreateRequestManualV2026R0VersionField =
     val.version == void 0
       ? void 0
       : deserializeDocumentSplitCreateRequestManualV2026R0VersionField(

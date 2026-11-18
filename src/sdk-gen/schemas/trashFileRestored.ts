@@ -29,10 +29,7 @@ export interface TrashFileRestoredPathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type TrashFileRestoredItemStatusField =
-  | 'active'
-  | 'trashed'
-  | 'deleted'
-  | string;
+  'active' | 'trashed' | 'deleted' | string;
 export class TrashFileRestored {
   /**
    * The unique identifier that represent a file.

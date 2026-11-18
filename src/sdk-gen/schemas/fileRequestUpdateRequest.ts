@@ -10,9 +10,7 @@ import { sdIsString } from '../serialization/json';
 import { sdIsList } from '../serialization/json';
 import { sdIsMap } from '../serialization/json';
 export type FileRequestUpdateRequestStatusField =
-  | 'active'
-  | 'inactive'
-  | string;
+  'active' | 'inactive' | string;
 export interface FileRequestUpdateRequest {
   /**
    * An optional new title for the file request. This can be

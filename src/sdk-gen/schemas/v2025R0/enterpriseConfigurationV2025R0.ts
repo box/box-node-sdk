@@ -101,8 +101,7 @@ export function deserializeEnterpriseConfigurationV2025R0(
       ? void 0
       : deserializeEnterpriseConfigurationSecurityV2025R0(val.security);
   const contentAndSharing:
-    | EnterpriseConfigurationContentAndSharingV2025R0
-    | undefined =
+    EnterpriseConfigurationContentAndSharingV2025R0 | undefined =
     val.content_and_sharing == void 0
       ? void 0
       : deserializeEnterpriseConfigurationContentAndSharingV2025R0(

@@ -13,11 +13,9 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type DocumentSplitCreateRequestPageSelectionV2026R0SplitTypeField =
-  | 'page_selection'
-  | string;
+  'page_selection' | string;
 export type DocumentSplitCreateRequestPageSelectionV2026R0VersionField =
-  | 'v_2'
-  | string;
+  'v_2' | string;
 export class DocumentSplitCreateRequestPageSelectionV2026R0 {
   /**
    * Discriminator. Must be `page_selection` for this variant. */
@@ -135,8 +133,7 @@ export function deserializeDocumentSplitCreateRequestPageSelectionV2026R0(
       val.split_type
     );
   const version:
-    | undefined
-    | DocumentSplitCreateRequestPageSelectionV2026R0VersionField =
+    undefined | DocumentSplitCreateRequestPageSelectionV2026R0VersionField =
     val.version == void 0
       ? void 0
       : deserializeDocumentSplitCreateRequestPageSelectionV2026R0VersionField(
@@ -187,16 +184,14 @@ export function deserializeDocumentSplitCreateRequestPageSelectionV2026R0Input(
     });
   }
   const splitType:
-    | undefined
-    | DocumentSplitCreateRequestPageSelectionV2026R0SplitTypeField =
+    undefined | DocumentSplitCreateRequestPageSelectionV2026R0SplitTypeField =
     val.splitType == void 0
       ? void 0
       : deserializeDocumentSplitCreateRequestPageSelectionV2026R0SplitTypeField(
           val.splitType
         );
   const version:
-    | undefined
-    | DocumentSplitCreateRequestPageSelectionV2026R0VersionField =
+    undefined | DocumentSplitCreateRequestPageSelectionV2026R0VersionField =
     val.version == void 0
       ? void 0
       : deserializeDocumentSplitCreateRequestPageSelectionV2026R0VersionField(

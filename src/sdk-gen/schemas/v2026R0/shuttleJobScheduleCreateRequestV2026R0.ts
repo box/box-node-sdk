@@ -16,14 +16,9 @@ import { sdIsString } from '../../serialization/json';
 import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleJobScheduleCreateRequestV2026R0RunModeField =
-  | 'transfer'
-  | 'simulation'
-  | 'analysis'
-  | string;
+  'transfer' | 'simulation' | 'analysis' | string;
 export type ShuttleJobScheduleCreateRequestV2026R0StateField =
-  | 'enabled'
-  | 'paused'
-  | string;
+  'enabled' | 'paused' | string;
 export interface ShuttleJobScheduleCreateRequestV2026R0 {
   /**
    * The unique identifier of the shuttle job this schedule belongs to. */

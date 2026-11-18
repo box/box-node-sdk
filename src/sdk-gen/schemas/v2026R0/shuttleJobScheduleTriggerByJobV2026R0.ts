@@ -8,10 +8,7 @@ import { sdIsList } from '../../serialization/json';
 import { sdIsMap } from '../../serialization/json';
 export type ShuttleJobScheduleTriggerByJobV2026R0TypeField = 'by_job';
 export type ShuttleJobScheduleTriggerByJobV2026R0LastRunConditionField =
-  | 'always'
-  | 'on_success'
-  | 'on_finish'
-  | string;
+  'always' | 'on_success' | 'on_finish' | string;
 export class ShuttleJobScheduleTriggerByJobV2026R0 {
   /**
    * The value will always be `by_job`. */

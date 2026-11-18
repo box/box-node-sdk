@@ -40,21 +40,11 @@ export interface WebLinkPathCollectionField {
   readonly rawData?: SerializedData;
 }
 export type WebLinkSharedLinkAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export type WebLinkSharedLinkEffectiveAccessField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export type WebLinkSharedLinkEffectivePermissionField =
-  | 'can_edit'
-  | 'can_download'
-  | 'can_preview'
-  | 'no_access'
-  | string;
+  'can_edit' | 'can_download' | 'can_preview' | 'no_access' | string;
 export interface WebLinkSharedLinkPermissionsField {
   /**
    * Defines if the shared link allows for the item to be downloaded. For
@@ -176,10 +166,7 @@ export interface WebLinkSharedLinkField {
 }
 export type WebLinkItemStatusField = 'active' | 'trashed' | 'deleted' | string;
 export type WebLinkAllowedSharedLinkAccessLevelsField =
-  | 'open'
-  | 'company'
-  | 'collaborators'
-  | string;
+  'open' | 'company' | 'collaborators' | string;
 export class WebLink extends WebLinkMini {
   readonly parent?: FolderMini;
   readonly description?: string;
@@ -857,8 +844,7 @@ export function deserializeWebLink(val: SerializedData): WebLink {
     });
   }
   const allowedSharedLinkAccessLevels:
-    | undefined
-    | readonly WebLinkAllowedSharedLinkAccessLevelsField[] =
+    undefined | readonly WebLinkAllowedSharedLinkAccessLevelsField[] =
     val.allowed_shared_link_access_levels == void 0
       ? void 0
       : sdIsList(val.allowed_shared_link_access_levels)

@@ -21,10 +21,7 @@ import { sdIsMap } from '../../serialization/json';
 export type ShuttleJobScheduleV2026R0TypeField = 'shuttle_job_schedule';
 export type ShuttleJobScheduleV2026R0StateField = 'enabled' | 'paused' | string;
 export type ShuttleJobScheduleV2026R0RunModeField =
-  | 'transfer'
-  | 'simulation'
-  | 'analysis'
-  | string;
+  'transfer' | 'simulation' | 'analysis' | string;
 export class ShuttleJobScheduleV2026R0 {
   /**
    * The unique identifier for the shuttle job schedule. */
