@@ -335,7 +335,7 @@ export interface SearchForContentQueryParams {
    * any of the users, an empty result set is returned.
    *
    * Data available from 2023-02-01 onwards. */
-  readonly deletedUserIds?: readonly string[];
+  readonly deleterUserIds?: readonly string[];
   /**
    * Limits the search results to any items deleted within a given
    * date range.
@@ -508,8 +508,8 @@ export class SearchManager {
         ? queryParams.fields.map(toString).join(',')
         : undefined,
       ['offset']: toString(queryParams.offset) as string,
-      ['deleted_user_ids']: queryParams.deletedUserIds
-        ? queryParams.deletedUserIds.map(toString).join(',')
+      ['deleter_user_ids']: queryParams.deleterUserIds
+        ? queryParams.deleterUserIds.map(toString).join(',')
         : undefined,
       ['deleted_at_range']: queryParams.deletedAtRange
         ? queryParams.deletedAtRange.map(toString).join(',')
