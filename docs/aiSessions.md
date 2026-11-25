@@ -21,7 +21,13 @@ This operation is performed by calling function `getAiSessionsV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/get-ai-sessions/).
 
-_Currently we don't have an example for calling `getAiSessionsV2026R0` in integration tests_
+<!-- sample get_ai_sessions_v2026.0 -->
+
+```ts
+await client.aiSessions.getAiSessionsV2026R0({
+  source: 'api' as GetAiSessionsV2026R0QueryParamsSourceField,
+} satisfies GetAiSessionsV2026R0QueryParams);
+```
 
 ### Arguments
 
@@ -51,7 +57,11 @@ This operation is performed by calling function `deleteAiSessionByIdV2026R0`.
 See the endpoint docs at
 [API Reference](https://developer.box.com/reference/v2026.0/delete-ai-sessions-id/).
 
-_Currently we don't have an example for calling `deleteAiSessionByIdV2026R0` in integration tests_
+<!-- sample delete_ai_sessions_id_v2026.0 -->
+
+```ts
+await client.aiSessions.deleteAiSessionByIdV2026R0(aiSessionId);
+```
 
 ### Arguments
 
