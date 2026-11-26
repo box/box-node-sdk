@@ -12,7 +12,8 @@
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "proxy-agent": ["./node_modules/proxy-agent/dist/index.d.ts"]
     }
   },
   "include": ["src/**/*"],
